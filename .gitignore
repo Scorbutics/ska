@@ -1,0 +1,13 @@
+﻿/.vs/
+*.dll
+*.exe
+*.tmp
+*.lib
+*.pdb
+*.ilk
+*.tlog
+*.obj
+*.o
+*.log
+*.idb
+*.layout
