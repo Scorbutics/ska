@@ -27,7 +27,6 @@
     <ClInclude Include="Core\State\StateHolder.h" />
     <ClInclude Include="Core\State\State.h" />
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\BasicGameCore.h" />
     <ClInclude Include="Data\BlockContainer.h" />
     <ClInclude Include="Data\Events\CollisionEvent.h" />
     <ClInclude Include="Data\Events\EventDispatcher.h" />

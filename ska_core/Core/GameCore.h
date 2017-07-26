@@ -10,8 +10,9 @@
 #include "../Utils/TimeUtils.h"
 #include "Window.h"
 #include "../GameApp.h"
-#include "../../Game/Utils/IDs.h"
 #include "State/StateData.h"
+#include "../Inputs/Readers/IniReader.h"
+#include "Exceptions/FileException.h"
 
 namespace ska {
     template <class EntityManager, class EventDispatcher, class DrawableContainer, class SoundManager>
@@ -26,10 +27,17 @@ namespace ska {
             m_playerICM(m_rawInputListener, m_eventDispatcher),
 			m_stateHolder(m_eventDispatcher) {
 
-			IniReader reader("gamesettings.ini");
-			auto widthBlocks = reader.get<int>("Window width_blocks");
-			auto heightBlocks = reader.get<int>("Window height_blocks");
-			const auto& title = reader.get<std::string>("Window title");
+			int widthBlocks = 30;
+			int heightBlocks = 20;
+			std::string title = "Default title";
+			try {
+				IniReader reader("gamesettings.ini");
+				widthBlocks = reader.get<int>("Window width_blocks");
+				heightBlocks = reader.get<int>("Window height_blocks");
+				title = reader.get<std::string>("Window title");
+			} catch (FileException& fe) {
+				std::cerr << "Error while loading game settings : " << fe.what() << std::endl;
+			}
 
 			createWindow(title, widthBlocks, heightBlocks);
 
@@ -69,7 +77,8 @@ namespace ska {
 
     private:
 		void createWindow(const std::string& title, unsigned int wBlocks, unsigned int hBlocks) {
-			m_mainWindow = std::make_unique<Window>(title, wBlocks * TAILLEBLOC, hBlocks * TAILLEBLOC);
+			static constexpr auto taillebloc = 32;
+			m_mainWindow = std::make_unique<Window>(title, wBlocks * taillebloc, hBlocks * taillebloc);
 		}
 
         bool refreshInternal() {

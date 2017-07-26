@@ -6,12 +6,12 @@
 
 ska::SDLFont::SDLFont() {
 	m_fontC = nullptr;
-	open(FileUtils::getExecutablePath() + DEFAULT_FONT_FILE, 12);
+	open(DEFAULT_FONT_FILE, 12);
 }
 
 ska::SDLFont::SDLFont(unsigned int fontSize) {
 	m_fontC = nullptr;
-	open(FileUtils::getExecutablePath() + DEFAULT_FONT_FILE, fontSize);
+	open(DEFAULT_FONT_FILE, fontSize);
 }
 
 void ska::SDLFont::open(const std::string& fontFile, unsigned int fontSize) {

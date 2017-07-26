@@ -4,12 +4,12 @@
 #include "SoundRenderer.h"
 #include "Logging/Logger.h"
 
-ska::SoundRenderer::SoundRenderer(unsigned int channels) :
+ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ed) :
 	ska::Observer<SoundEvent>(bind(&SoundRenderer::handleSoundEvent, this, std::placeholders::_1)),
 	ska::Observer<WorldEvent>(bind(&SoundRenderer::handleWorldEvent, this, std::placeholders::_1)),
 	m_currentPlayed(nullptr) {
 
-	if(Mix_AllocateChannels(channels) != static_cast<int>(channels)) {
+	if(Mix_AllocateChannels(10) != static_cast<int>(10)) {
 		SKA_LOG_ERROR("SoundManager error : ", Mix_GetError());
 	}
 }
