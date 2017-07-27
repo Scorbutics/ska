@@ -37,6 +37,7 @@ namespace ska {
 		void hide(bool x);
 		void display() const override;
 
+        static std::string MENU_DEFAULT_THEME_PATH;
 
 	private:
 		bool onGameEvent(ska::GameEvent & ge);

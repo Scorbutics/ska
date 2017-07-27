@@ -15,8 +15,6 @@ namespace ska {
 		virtual void display() const override;
 		virtual ~Button();
 
-		static const std::string& MENU_DEFAULT_THEME_PATH;
-
 		void forceState(ButtonState::Enum e);
 
 	protected:

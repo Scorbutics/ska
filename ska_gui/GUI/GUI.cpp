@@ -1,13 +1,13 @@
 #include "Core/Window.h"
 #include "Inputs/InputContextManager.h"
 #include "GUI.h"
-#include "Components/Concrete/Button.h"
 #include "Windows/GUIScrollButtonWindowIG.h"
 #include "Events/FocusEvent.h"
 #include "Data/Events/GUIEvent.h"
 #include "Windows/BalloonDialog.h"
 
 #define SCROLL_BUTTON_SPEED 3
+std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "." FILE_SEPARATOR "Menu" FILE_SEPARATOR "default_theme" FILE_SEPARATOR;
 
 ska::GUI::GUI(GameEventDispatcher& ged) :
 	ska::Observer<GUIEvent>(std::bind(&GUI::onGUIEvent, this, std::placeholders::_1)),
@@ -15,7 +15,7 @@ ska::GUI::GUI(GameEventDispatcher& ged) :
 	ska::Observer<InputMouseEvent>(std::bind(&GUI::refreshMouse, this, std::placeholders::_1)),
 	ska::Observer<InputKeyEvent>(std::bind(&GUI::refreshKeyboard, this, std::placeholders::_1)),
     m_hide(false),
-    m_mouseCursor(Button::MENU_DEFAULT_THEME_PATH + "mouse_cursor"),
+    m_mouseCursor(MENU_DEFAULT_THEME_PATH + "mouse_cursor"),
     m_ged(ged),
     m_hovered(nullptr),
     m_clicked(nullptr),

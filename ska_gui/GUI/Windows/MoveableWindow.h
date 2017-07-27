@@ -3,6 +3,7 @@
 #include "../Components/Concrete/Button.h"
 #include "../Components/Concrete/ButtonQuit.h"
 #include "../Events/HoverEvent.h"
+#include "../GUI.h"
 
 namespace ska {
 
@@ -24,7 +25,7 @@ namespace ska {
 	private:
 		void initHandlers() {
 			const auto& clip = Rectangle{ 0, 0, this->getBox().w, TAILLEBLOCFENETRE / 2 };
-			auto& button = this->template addWidget<Button>(Point<int>(), Button::MENU_DEFAULT_THEME_PATH + "button", &clip, [&](Widget* tthis, ClickEvent& e) {
+			auto& button = this->template addWidget<Button>(Point<int>(), GUI::MENU_DEFAULT_THEME_PATH + "button", &clip, [&](Widget* tthis, ClickEvent& e) {
 				if (e.getState() == MOUSE_CLICK) {
 					m_moving = true;
 					m_offsetWindowOrigin = e.getPosition(*tthis);
@@ -43,7 +44,7 @@ namespace ska {
 				}
 			});
 
-			auto& buttonQuit = this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - TAILLEBLOCFENETRE / 2, 0), Button::MENU_DEFAULT_THEME_PATH + "close_button");
+			auto& buttonQuit = this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - TAILLEBLOCFENETRE / 2, 0), GUI::MENU_DEFAULT_THEME_PATH + "close_button");
 			buttonQuit.setPriority(std::numeric_limits<int>::max() - 1);
 
 			button.setPriority(std::numeric_limits<int>::max());

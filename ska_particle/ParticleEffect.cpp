@@ -4,8 +4,8 @@
 #include "ParticleGenerator.h"
 
 ska::ParticleEffect::ParticleEffect(unsigned int density, std::size_t systemSize) :
+    m_density(density),
     m_factory(m_builder),
-	m_density(density),
 	m_group(systemSize) {
 }
 

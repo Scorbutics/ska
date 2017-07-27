@@ -9,7 +9,7 @@
 #include "BasicVelocityGenerator.h"
 
 
-std::unique_ptr<ska::ParticleEffect> ska::SpreadingParticleEffectFactory::createEffect(SDLRenderer& renderer, const SpreadingParticleSystemData & data) {
+std::unique_ptr<ska::ParticleEffect> ska::SpreadingParticleEffectFactory::createEffect(SDLRenderer&, const SpreadingParticleSystemData & data) {
 	auto particleSystem = std::make_unique<ParticleEffect>(data.density, data.maxParticles);
 
 	particleSystem->addGenerator<BoxParticleGenerator>(data.origin, data.originalBoxSize);

@@ -5,10 +5,10 @@
 #include <iostream>
 
 ska::ParticleFactory::ParticleFactory(ParticleBuilder& builder):
-    m_group(nullptr),
-    m_lastActiveIndex(0),
     m_needsCounterUpdate(false),
-    m_builder(builder) {}
+    m_builder(builder),
+    m_group(nullptr),
+    m_lastActiveIndex(0) {}
 
 ska::ParticleBuilder& ska::ParticleFactory::prepareNextParticles(ParticleGroup& group, unsigned int density, unsigned int ellapsedTime)  {
 	m_group = &group;

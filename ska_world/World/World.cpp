@@ -7,11 +7,16 @@
 #include "LayerE.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
+#include "Exceptions/FileException.h"
 
-ska::World::World(const unsigned int tailleBloc) : m_windDirection(0), m_nbrBlockX(0), m_nbrBlockY(0),
-                                                                                           m_blockSize(tailleBloc),
-	m_autoScriptsPlayed(false), m_cameraSystem(nullptr),
-                                                                                           m_lBot(*this),
+ska::World::World(const unsigned int tailleBloc) :
+    m_windDirection(0),
+    m_nbrBlockX(0),
+    m_nbrBlockY(0),
+    m_blockSize(tailleBloc),
+	m_autoScriptsPlayed(false),
+	m_cameraSystem(nullptr),
+    m_lBot(*this),
 	m_lMid(*this, &m_lBot),
 	m_lTop(*this, &m_lMid),
 	m_layerE(*this),
@@ -392,10 +397,14 @@ void ska::World::getMobSettingsFromData() {
 	m_mobSettings.clear();
 
 	unsigned int i = 0;
-	do  {
-		m_mobSettings.push_back(IniReader( "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "Monsters" FILE_SEPARATOR "" + StringUtils::intToStr(i) + ".ini"));
-		i++;
-	} while(m_mobSettings[i-1].isLoaded());
+	try {
+        do  {
+            m_mobSettings.push_back(IniReader( "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "Monsters" FILE_SEPARATOR "" + StringUtils::intToStr(i) + ".ini"));
+            i++;
+        } while(m_mobSettings[i-1].isLoaded());
+    } catch (ska::FileException& fe) {
+        SKA_LOG_INFO("Number of monsters found on map : ", i);
+    }
 
 	//le dernier élément est invalide, on le supprime donc
 	m_mobSettings.pop_back();

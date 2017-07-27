@@ -1,17 +1,17 @@
-
-
 #include <SDL.h>
 #include "Input.h"
+#include "Label.h"
+#include "Button.h"
 #include "../../Events/KeyEvent.h"
 #include "../../Events/ValueChangedEvent.h"
 #include "Utils/StringUtils.h"
-
+#include "../../GUI.h"
 
 ska::Input::Input(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) :
 	WidgetPanel<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener>(parent, relativePos),
 	m_keyFocus(false) {
 
-	auto& button = addWidget<Button>(relativePos, Button::MENU_DEFAULT_THEME_PATH + "textfield", nullptr, [&](Widget* tthis, ClickEvent& e) {
+	auto& button = addWidget<Button>(relativePos, ska::GUI::MENU_DEFAULT_THEME_PATH + "textfield", nullptr, [&](Widget* tthis, ClickEvent& e) {
 		if (!m_keyFocus && e.getState() == MOUSE_CLICK) {
 			m_keyFocus = true;
 			SDL_StartTextInput();
