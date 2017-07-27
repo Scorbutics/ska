@@ -142,6 +142,7 @@
     <ClInclude Include="Utils\Observer.h" />
     <ClInclude Include="Utils\OSSpecific\FileUtilsUnix.h" />
     <ClInclude Include="Utils\OSSpecific\FileUtilsWin.h" />
+    <ClInclude Include="Utils\OutputUtils.h" />
     <ClInclude Include="Utils\PhysicUtils.h" />
     <ClInclude Include="Utils\RectangleUtils.h" />
     <ClInclude Include="Utils\Refreshable.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Utils\SkaConstants.h" />
     <ClInclude Include="Utils\SpritePath.h" />
     <ClInclude Include="Utils\StringUtils.h" />
+    <ClInclude Include="Utils\SubObserver.h" />
     <ClInclude Include="Utils\TimeUtils.h" />
     <ClInclude Include="Utils\TupleUtils.h" />
     <ClInclude Include="Utils\ununique.h" />

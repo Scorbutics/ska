@@ -12,18 +12,20 @@ namespace ska{
 	public:
 		WindowIG(Widget& parent, const Rectangle& box, const std::string& styleName) :
 			WidgetPanel<HL...>(parent),
-			m_drawStyle(!styleName.empty()),
-			m_menuTiles(styleName + ".png") {
-
+			m_drawStyle(!styleName.empty()) {
+			if(m_drawStyle) {
+				m_menuTiles.load(styleName + ".png");
+			}
 			this->move(box);
 			this->setWidth(box.w);
 			this->setHeight(box.h);
 		}
 
 		WindowIG(const Rectangle& box, const std::string& styleName) :
-			m_drawStyle(!styleName.empty()),
-			m_menuTiles(styleName + ".png") {
-
+			m_drawStyle(!styleName.empty()) {
+			if (m_drawStyle) {
+				m_menuTiles.load(styleName + ".png");
+			}
 			this->move(box);
 			this->setWidth(box.w);
 			this->setHeight(box.h);

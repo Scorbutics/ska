@@ -3,9 +3,8 @@
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "Ticked.h"
 
-ska::MovementSystem::MovementSystem(ska::EntityManager& entityManager, Ticked& ticked) :
-	System(entityManager),
-	m_ticks(ticked.ticksWanted()) {
+ska::MovementSystem::MovementSystem(ska::EntityManager& entityManager) :
+	System(entityManager) {
 }
 
 void ska::MovementSystem::refresh(unsigned int) {

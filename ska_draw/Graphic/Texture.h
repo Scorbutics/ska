@@ -25,6 +25,7 @@ namespace ska {
 		void operator=(const Texture& text);
 		void setAlpha(Uint8 alpha) const;
 		int render(int x, int y, const Rectangle* clip = nullptr) const;
+		void resize(unsigned int width, unsigned int height);
 
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;

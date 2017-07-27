@@ -64,7 +64,7 @@ int ska::Texture::render(int x, int y, const Rectangle* clip) const {
 
 	checkRenderer();
 
-	Rectangle destBuf = { x, y, static_cast<int>(m_value->m_w), static_cast<int>(m_value->m_h) };
+	Rectangle destBuf = { x, y, m_value->m_w, m_value->m_h };
 
 	if( clip != nullptr ) {
 		destBuf.w = clip->w;
@@ -72,6 +72,11 @@ int ska::Texture::render(int x, int y, const Rectangle* clip) const {
 	}
 
 	return m_renderer->renderCopy(*m_value.get(), clip, destBuf);
+}
+
+void ska::Texture::resize(unsigned int width, unsigned int height) {
+	m_value->m_w = width;
+	m_value->m_h = height;
 }
 
 void ska::Texture::checkRenderer() {

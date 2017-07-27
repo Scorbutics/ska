@@ -39,37 +39,9 @@ namespace ska {
 
         static std::string MENU_DEFAULT_THEME_PATH;
 
-	private:
-		bool onGameEvent(ska::GameEvent & ge);
-	    Widget* frontWindow();
-		bool refreshMouse(InputMouseEvent& ime);
-		bool refreshKeyboard(InputKeyEvent& ike);
-		void windowSorter(Widget* tthis, ClickEvent& e);
-
-		bool onGUIEvent(GUIEvent& ge);
-
-		//GUI data
-		bool m_hide;
-        MouseCursor m_mouseCursor;
-        GameEventDispatcher& m_ged;
-
-        //Internal states
-		Widget* m_hovered;
-		Widget* m_clicked;
-		Widget* m_lastFocused;
-        Point<int> m_lastLastMousePos;
-
-		//Widgets
-		std::unordered_map<std::string, Widget*> m_windowAnnuary;
-		std::vector<std::string> m_windowsToDelete;
-        std::vector<std::unique_ptr<Widget>> m_topWindowWidgets;
-        TimeScrollableWindowIG<KeyEventListener> m_wMaster;
-        TimeScrollableWindowIG<KeyEventListener>* m_wFocusable;
-
-	protected:
 		template <class L, class EH>
 		void addMasterHandler(const EH& handler) {
-		    m_wMaster.template addHandler<L>(handler);
+			m_wMaster.template addHandler<L>(handler);
 		}
 
 		template <class Win, class ... WinArgs>
@@ -97,7 +69,7 @@ namespace ska {
 
 		BaseHandledWidget* removeWindow(const std::string& name) {
 			auto wPtr = m_windowAnnuary[name];
-			if(wPtr == nullptr) {
+			if (wPtr == nullptr) {
 				throw ska::IllegalStateException("The window name '" + name + "' doesn't exists in annuary");
 			}
 
@@ -116,6 +88,37 @@ namespace ska {
 			return m_windowAnnuary[name];
 		}
 
+	private:
+		bool onGameEvent(ska::GameEvent & ge);
+	    Widget* frontWindow();
+		bool refreshMouse(InputMouseEvent& ime);
+		bool refreshKeyboard(InputKeyEvent& ike);
+		void windowSorter(Widget* tthis, ClickEvent& e);
+
+		bool onGUIEvent(GUIEvent& ge);
+
+		//GUI data
+		bool m_hide;
+        MouseCursor m_mouseCursor;
+        GameEventDispatcher& m_ged;
+
+        //Internal states
+		Widget* m_hovered;
+		Widget* m_clicked;
+		Widget* m_lastFocused;
+        Point<int> m_lastLastMousePos;
+
+		//Widgets
+		std::unordered_map<std::string, Widget*> m_windowAnnuary;
+		std::vector<std::string> m_windowsToDelete;
+        std::vector<std::unique_ptr<Widget>> m_topWindowWidgets;
+        TimeScrollableWindowIG<KeyEventListener> m_wMaster;
+        TimeScrollableWindowIG<KeyEventListener>* m_wFocusable;
+
+	
+		
+
+	protected:
 		virtual bool onScreenResized(unsigned int width, unsigned int height);
 
 		unsigned int getMaxHeight() const;

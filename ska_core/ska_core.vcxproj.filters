@@ -142,6 +142,8 @@
     <ClInclude Include="Data\Events\InputMouseEvent.h" />
     <ClInclude Include="Inputs\WindowInput.h" />
     <ClInclude Include="Core\State\StateBuilder.h" />
+    <ClInclude Include="Utils\OutputUtils.h" />
+    <ClInclude Include="Utils\SubObserver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />

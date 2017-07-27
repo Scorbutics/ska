@@ -12,13 +12,6 @@ ska::Image::Image(Widget& parent, const std::string& imagePath, Point<int> relat
 	} else {
 		m_clip = *clip;
 	}
-	
-	if (m_clip.h == std::numeric_limits<int>::max()) {
-		m_clip.h = m_img.getHeight();
-	}
-	if (m_clip.w == std::numeric_limits<int>::max()) {
-		m_clip.w = m_img.getWidth();
-	}
 
 	/* It's the Widget one which is called : polymorphism doesn't work in constructor */
 	Image::setWidth(m_clip.w);
@@ -39,16 +32,12 @@ void ska::Image::replaceWith(const std::string& imagePath, const unsigned int pa
 
 void ska::Image::setWidth(unsigned int w) {
 	Widget::setWidth(w);
-	if (m_clip.w == std::numeric_limits<int>::max()) {
-		m_clip.w = m_img.getWidth();
-	}
+	m_img.resize(w, m_img.getHeight());
 }
 
 void ska::Image::setHeight(unsigned int h) {
 	Widget::setHeight(h);
-	if (m_clip.h == std::numeric_limits<int>::max()) {
-		m_clip.h = m_img.getHeight();
-	}
+	m_img.resize(m_img.getWidth(), h);
 }
 
 void ska::Image::display() const {

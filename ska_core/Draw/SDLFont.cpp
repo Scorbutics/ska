@@ -4,6 +4,8 @@
 #include "../Exceptions/FileException.h"
 #include "../Utils/FileUtils.h"
 
+std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts" FILE_SEPARATOR "FiraSans-Medium.ttf";
+
 ska::SDLFont::SDLFont() {
 	m_fontC = nullptr;
 	open(DEFAULT_FONT_FILE, 12);
