@@ -229,6 +229,7 @@
 		<Unit filename="Utils/SpritePath.h" />
 		<Unit filename="Utils/StringUtils.cpp" />
 		<Unit filename="Utils/StringUtils.h" />
+		<Unit filename="Utils/SubObserver.h" />
 		<Unit filename="Utils/TimeUtils.cpp" />
 		<Unit filename="Utils/TimeUtils.h" />
 		<Unit filename="Utils/TupleUtils.h" />

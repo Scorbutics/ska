@@ -4,11 +4,11 @@
 namespace ska {
 
 	template <class T, class ...Args>
-	class SubObserver : 
+	class SubObserver :
 		public Observer<T, Args...> {
 	public:
-		explicit SubObserver(std::function<bool(T&, Args...)> const& handler, Observable<T, Args...>& observable) : 
-			Observer(handler),
+		explicit SubObserver(std::function<bool(T&, Args...)> const& handler, Observable<T, Args...>& observable) :
+			Observer<T, Args...>(handler),
 			m_observable(observable) {
 			m_observable.addObserver(*this);
 		}
