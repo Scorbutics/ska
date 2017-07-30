@@ -7,6 +7,7 @@ namespace ska {
 	public:
 		CollidableComponent();
 		~CollidableComponent() = default;
+		
 		std::unordered_set<int> authorizedBlockIds;
 	};
 }

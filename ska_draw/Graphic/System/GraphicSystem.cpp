@@ -36,7 +36,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 		for (auto& sprite : gc.sprite) {
 			if (!(static_cast<int>(relPosX + sprite.getWidth()) < 0 || (camera != nullptr && relPosX >= camera->w) ||
 				static_cast<int>(relPosY + sprite.getHeight()) < 0 || (camera != nullptr && relPosY >= camera->h))) {
-				m_topLayerPriority = ska::NumberUtils::maximum(pos.y, m_topLayerPriority);
+				m_topLayerPriority = ska::NumberUtils::maximum<int>(pos.y, m_topLayerPriority);
 				const auto priority = gc.desiredPriority > std::numeric_limits<int>::min() ? gc.desiredPriority : pos.y + (camera == nullptr ? 0 : camera->h * pos.z);
 				m_pgd.push_back(ska::PositionnedGraphicDrawable(sprite, relPosX, relPosY, priority, m_topLayerPriority));
 			}

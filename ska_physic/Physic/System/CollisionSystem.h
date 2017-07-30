@@ -10,7 +10,6 @@
 #include "Data/Events/GameEventDispatcher.h"
 
 namespace ska {
-	class CollisionComponent;
 	class WorldCollisionComponent;
     class CollisionProfile;
 
@@ -22,7 +21,7 @@ namespace ska {
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
 	private:
-		inline Rectangle createHitBox(EntityId entityId, bool xaxis) const;
+		inline Rectangle createHitBox(EntityId entityId, bool xaxis, bool noMove) const;
 		CollisionProfile& m_collisionProfile;
 		GameEventDispatcher& m_ged;
 	};

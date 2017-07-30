@@ -1,6 +1,7 @@
 #include <iostream>
 #include "RectangleUtils.h"
 #include "NumberUtils.h"
+#include <algorithm>
 
 ska::RectangleUtils::RectangleUtils()
 {
@@ -22,10 +23,10 @@ bool ska::RectangleUtils::collisionBoxABoxB(const Rectangle& rectA, const Rectan
 
 ska::Rectangle ska::RectangleUtils::intersect(const Rectangle& r1, const Rectangle& r2) {
 	Rectangle output;
-	output.x = NumberUtils::maximum(r1.x, r2.x);
-	output.y = NumberUtils::maximum(r1.y, r2.y);
-	int xmax = NumberUtils::minimum(r1.x + r1.w, r2.x + r2.w);
-	int ymax = NumberUtils::minimum(r1.y + r1.h, r2.y + r2.h);
+	output.x = std::max(r1.x, r2.x);
+	output.y = std::max(r1.y, r2.y);
+	const auto xmax = std::min(r1.x + r1.w, r2.x + r2.w);
+	const auto ymax = std::min(r1.y + r1.h, r2.y + r2.h);
 	if (xmax >= output.x && ymax >= output.y) {
 		output.w = xmax - output.x;
 		output.h = ymax - output.y;
@@ -44,7 +45,7 @@ int ska::RectangleUtils::getDirectionFromPos(const Point<int>& posHero, const Po
 	double pente;
 
 	if (mousePos.x != posHero.x) {
-		pente = NumberUtils::absolute((mousePos.y - posHero.y) / ((double)mousePos.x - posHero.x));
+		pente = NumberUtils::absolute((mousePos.y - posHero.y) / (static_cast<double>(mousePos.x) - posHero.x));
 	} else {
 		if (mousePos.y > posHero.y){
 			return 0;
@@ -92,7 +93,6 @@ int ska::RectangleUtils::getDirectionFromPos(const Point<int>& posHero, const Po
 
 	return direction;
 }
-
 
 ska::Rectangle ska::RectangleUtils::posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground)
 {

@@ -12,5 +12,6 @@ namespace ska {
 		float z;
 
 		float weight;
+		float bounciness;
 	};
 }

@@ -32,8 +32,8 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		const auto finalMovement = Point<float>::cartesian(polarVectorMovement.radius, polarVectorMovement.angle);
 
 		/* Either the time is up, or the goal is reached (if we are going farer and farer from the target pos, goal is reached) */
-		const auto distanceSquaredToTarget = RectangleUtils::distanceSquared(centerPos, targetPoint);
-		const auto nextDistanceSquaredToTarget = RectangleUtils::distanceSquared(centerPos + finalMovement, targetPoint);
+		const auto distanceSquaredToTarget = RectangleUtils::distanceSquared<float>(centerPos, targetPoint);
+		const auto nextDistanceSquaredToTarget = RectangleUtils::distanceSquared<float>(centerPos + finalMovement, targetPoint);
 		const auto directionChanged = distanceSquaredToTarget < nextDistanceSquaredToTarget;
 
 		bool collisioned;

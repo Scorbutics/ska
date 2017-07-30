@@ -4,7 +4,6 @@
 
 namespace ska {
 	struct CollisionEvent;
-	class CollisionComponent;
 	class CollidableComponent;
 	class EntityManager;
 	using EntityCollisionObserver = Observer<CollisionEvent>;
@@ -13,15 +12,14 @@ namespace ska {
 	public:
 		EntityCollisionResponse(GameEventDispatcher& colSys, EntityManager& em);
 		EntityCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, GameEventDispatcher& colSys, EntityManager& em);
-		EntityCollisionResponse& operator=(const EntityCollisionResponse&) = delete;
-		virtual bool onEntityCollision(CollisionEvent&);
 		~EntityCollisionResponse();
+		
+		EntityCollisionResponse& operator=(const EntityCollisionResponse&) = delete;
 
-	protected:
-		EntityManager& m_entityManager;
-
+		virtual bool onEntityCollision(CollisionEvent&);
 	private:
+		bool calculateNormalAndPenetration(ska::CollisionComponent& col) const;
 		GameEventDispatcher& m_ged;
-
+		EntityManager& m_entityManager;
 	};
 }

@@ -1,4 +1,3 @@
 #include "GravityAffectedComponent.h"
 
-ska::GravityAffectedComponent::GravityAffectedComponent() {
-}
+ska::GravityAffectedComponent::GravityAffectedComponent(): friction(0.05F){}

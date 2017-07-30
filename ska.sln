@@ -60,6 +60,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_world", "ska_world\ska_
 		{FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65} = {FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_simulation", "ska_physic_simulation\ska_physic_simulation.vcxproj", "{BF471140-848F-40C0-AB8B-D53FFD45723D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A8719202-D043-4D78-A1C5-3EC97CFB2B8A} = {A8719202-D043-4D78-A1C5-3EC97CFB2B8A}
+		{509EC505-134A-4CD9-A230-7DCB8DE36695} = {509EC505-134A-4CD9-A230-7DCB8DE36695}
+		{DFF1D027-750D-4245-A5CC-CE8A53181C3D} = {DFF1D027-750D-4245-A5CC-CE8A53181C3D}
+		{FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65} = {FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -164,6 +172,14 @@ Global
 		{66688DD9-292E-419F-BEA7-AE706BA382B4}.Release|x64.Build.0 = Release|x64
 		{66688DD9-292E-419F-BEA7-AE706BA382B4}.Release|x86.ActiveCfg = Release|Win32
 		{66688DD9-292E-419F-BEA7-AE706BA382B4}.Release|x86.Build.0 = Release|Win32
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Debug|x64.ActiveCfg = Debug|x64
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Debug|x64.Build.0 = Debug|x64
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Debug|x86.ActiveCfg = Debug|Win32
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Debug|x86.Build.0 = Debug|Win32
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Release|x64.ActiveCfg = Release|x64
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Release|x64.Build.0 = Release|x64
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Release|x86.ActiveCfg = Release|Win32
+		{BF471140-848F-40C0-AB8B-D53FFD45723D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

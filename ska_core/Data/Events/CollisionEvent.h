@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../ECS/ECSDefines.h"
+#include "../../Point.h"
 
 
 namespace ska {
@@ -13,8 +14,8 @@ namespace ska {
 			entity(e),
 			collisionComponent(colComp),
 			wcollisionComponent(wcolComp),
-			collidableComponent(colliComp) {
-		}
+			collidableComponent(colliComp)
+			{ }
 
 		void operator=(const CollisionEvent&) = delete;
 

@@ -117,7 +117,7 @@ void ska::World::update() {
 	m_lTop.getRenderable().update();
 }
 
-bool ska::World::canMoveToPos(const Rectangle& hitbox, std::vector<Point<int>>& output) const {
+bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point<int>>& outputX, std::vector<Point<int>>& outputY) const {
 	Point<int> chd, chg, cbg;
 
 	//position coin haut droit hitbox
@@ -138,13 +138,22 @@ bool ska::World::canMoveToPos(const Rectangle& hitbox, std::vector<Point<int>>& 
 	bool col = false;
 	for (int y = chg.y / m_blockSize; y <= yLimit; y++) {
 		for (int x = chg.x / m_blockSize; x <= xLimit; x++) {
-			if (getCollision(x, y) /*&& !isBlockDodgeable(i, j)*/) {
-				output.push_back(Point<int>(x * m_blockSize, y * m_blockSize));
-				col = true;
+			if (getCollision(x, y)) {
+				Rectangle hitboxBlock{ x * m_blockSize, y * m_blockSize, m_blockSize, m_blockSize };
+				const auto& intersection = RectangleUtils::intersect(hitboxBlock, hitbox);
+				if(intersection.x != 0) {
+					outputX.push_back(hitboxBlock);
+					col = true;
+				}
+				
+				if (intersection.y != 0) {
+					outputY.push_back(hitboxBlock);
+					col = true;
+				}
 			}
 		}
 	}
-	return !col;
+	return col;
 }
 
 const ska::Rectangle* ska::World::getView() const {

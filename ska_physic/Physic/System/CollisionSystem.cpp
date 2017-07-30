@@ -29,24 +29,20 @@ void ska::CollisionSystem::refresh(unsigned int) {
 			refreshEntity(entityId);
 		}
 
-		const auto entityHitboxX = createHitBox(entityId, true);
-		const auto entityHitboxY = createHitBox(entityId, false);
+		const auto entityHitbox = createHitBox(entityId, false, true);
 
 		auto entityCollided = false;
 		CollisionComponent col;
 		for (auto itEntity : processed) {
 			if (itEntity != entityId) {
-				if (RectangleUtils::collisionBoxABoxB(entityHitboxX, createHitBox(itEntity, true))) {
+				const auto& intersection = RectangleUtils::intersect(entityHitbox, createHitBox(itEntity, true, true));
+				if (intersection.w != 0 && intersection.h != 0) {
 					col.origin = entityId;
 					col.target = itEntity;
 					entityCollided = true;
-					col.xaxis = true;
-				}
-				if (RectangleUtils::collisionBoxABoxB(entityHitboxY, createHitBox(itEntity, false))) {
-					col.origin = entityId;
-					col.target = itEntity;
-					entityCollided = true;
-					col.yaxis = true;
+					col.xaxis = intersection.h > 1;
+					col.yaxis = intersection.w > 1;
+					col.overlap = ska::Rectangle{ 0, 0, intersection.w, intersection.h };
 				}
 
 			}
@@ -57,32 +53,24 @@ void ska::CollisionSystem::refresh(unsigned int) {
 
 		}
 
-		//auto& movementComponent = m_componentAccessor.get<MovementComponent>(entityId);
-
 		WorldCollisionComponent wcol;
 		auto collided = false;
-		Rectangle nextPosX = { entityHitboxX.x, entityHitboxX.y, entityHitboxX.w, entityHitboxX.h };
-		Rectangle nextPosY = { entityHitboxY.x, entityHitboxY.y, entityHitboxY.w, entityHitboxY.h };
+		Rectangle nextPos = { entityHitbox.x, entityHitbox.y, entityHitbox.w, entityHitbox.h };
 
 		wcol.blockColPosX.clear();
-		if (!m_collisionProfile.canMoveToPos(nextPosX, wcol.blockColPosX)){
+		wcol.blockColPosY.clear();
+		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(nextPos, wcol.blockColPosX, wcol.blockColPosY);
+		if (intersect) {
 			collided = true;
 			wcol.xaxis = true;
-			wcol.lastBlockColPosX = lastBlockColPosX;
-		}
-
-		wcol.blockColPosY.clear();
-		if (!m_collisionProfile.canMoveToPos(nextPosY, wcol.blockColPosY)){
-			collided = true;
 			wcol.yaxis = true;
+			wcol.lastBlockColPosX = lastBlockColPosX;
 			wcol.lastBlockColPosY = lastBlockColPosY;
 		}
 
 		if (collided) {
 			CollisionEvent ce(entityId, &wcol, nullptr, m_componentAccessor.get<CollidableComponent>(entityId));
 			m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
-
-
 		}
 
 		if (entityCollided) {
@@ -94,16 +82,16 @@ void ska::CollisionSystem::refresh(unsigned int) {
 	}
 }
 
-ska::Rectangle ska::CollisionSystem::createHitBox(EntityId entityId, bool xaxis) const{
+ska::Rectangle ska::CollisionSystem::createHitBox(EntityId entityId, bool xaxis, bool noMove) const{
 	auto& positionComponent = m_componentAccessor.get<PositionComponent>(entityId);
 	auto& hitboxComponent = m_componentAccessor.get<HitboxComponent>(entityId);
 	auto& movementComponent = m_componentAccessor.get<MovementComponent>(entityId);
 
 	Rectangle hitBox;
-	hitBox.x = ska::NumberUtils::round(positionComponent.x + (xaxis ? (movementComponent.vx) : 0) + hitboxComponent.xOffset);
-	hitBox.y = ska::NumberUtils::round(positionComponent.y + (!xaxis ? (movementComponent.vy) : 0) + hitboxComponent.yOffset);
-	hitBox.w = hitboxComponent.width;
-	hitBox.h = hitboxComponent.height;
+	hitBox.x = ska::NumberUtils::round(positionComponent.x + movementComponent.vx + movementComponent.ax + hitboxComponent.xOffset);
+	hitBox.y = ska::NumberUtils::round(positionComponent.y + movementComponent.vy + movementComponent.ay + hitboxComponent.yOffset);
+	hitBox.w = hitboxComponent.width + 1;
+	hitBox.h = hitboxComponent.height + 1;
 	return hitBox;
 }
 

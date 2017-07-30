@@ -12,12 +12,12 @@ ska::PositionComponent::PositionComponent() {
     x = y = z = 0;
 }
 
-ska::PositionComponent::PositionComponent(const Point<int>& p) {
+ska::PositionComponent::PositionComponent(const Point<float>& p) {
     operator=(p);
 }
 
 
-void ska::PositionComponent::operator=(const Point<int>& p) {
+void ska::PositionComponent::operator=(const Point<float>& p) {
     x = p.x;
     y = p.y;
     z = 0;

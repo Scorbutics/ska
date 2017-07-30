@@ -1,4 +1,4 @@
 #include "InputComponent.h"
 
-ska::InputComponent::InputComponent(): movePower(0), jumpPower(0){
+ska::InputComponent::InputComponent(): movePower(1.F), jumpPower(1.F){
 }

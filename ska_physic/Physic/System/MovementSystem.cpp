@@ -14,23 +14,25 @@ void ska::MovementSystem::refresh(unsigned int) {
 		auto& moveComponent = m_componentAccessor.get<MovementComponent>(entityId);
 		auto& forceComponent = m_componentAccessor.get<ForceComponent>(entityId);
 
+		auto lastMoveComponent = moveComponent;
+
 		//Position vector is the current position of the object (i.e. the last position + the last velocity with a delta time taken)
 		//(x(t) - x(t-1))/(t - (t-1)) = dx/dt (t) = vx(t)
-		posComponent.x += static_cast<int>(moveComponent.vx);
-		posComponent.y += static_cast<int>(moveComponent.vy);
-		posComponent.z += static_cast<int>(moveComponent.vz);
-
-		//Velocity vector ALWAYS means the NEXT velocity and not the current one
-		//(v(t) - v(t-1))/(t - (t-1)) = dv/dt (t) = a(t)
-		moveComponent.vx += moveComponent.ax;
-		moveComponent.vy += moveComponent.ay;
-		moveComponent.vz += moveComponent.az;
+		posComponent.x += moveComponent.vx;
+		posComponent.y += moveComponent.vy;
+		posComponent.z += moveComponent.vz;
 
 		//Acceleration vector ALWAYS means the next acceleration, and not the current one
 		/* sum(F) = m*a */
 		moveComponent.ax = (forceComponent.x / forceComponent.weight);
 		moveComponent.ay = (forceComponent.y / forceComponent.weight);
 		moveComponent.az = (forceComponent.z / forceComponent.weight);
+
+		//Velocity vector ALWAYS means the NEXT velocity and not the current one
+		//(v(t) - v(t-1))/(t - (t-1)) = dv/dt (t) = a(t)
+		moveComponent.vx += (moveComponent.ax + lastMoveComponent.ax) / 2;
+		moveComponent.vy += (moveComponent.ay + lastMoveComponent.ay) / 2;
+		moveComponent.vz += (moveComponent.az + lastMoveComponent.az) / 2;
 
 		/* (Don't forget to reset the current forces applied to, because once forces are used, they do) */
 		forceComponent.x = 0;

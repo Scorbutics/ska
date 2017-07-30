@@ -20,7 +20,14 @@ namespace ska {
 		static Rectangle posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground);
 		static bool collisionBoxABoxB(const Rectangle& rectA, const Rectangle& rectB);
 		static int getDirectionFromPos(const Point<int>& posHero, const Point<int>& mousePos);
+		
+		template <class T>
+		static T projection(const Point<T>& vector, const Point<T>& axis) {
+			return vector.x * axis.x + vector.y * axis.y;
+		}
+
 		~RectangleUtils();
+		
 
 	private:
 		RectangleUtils();

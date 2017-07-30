@@ -136,8 +136,8 @@ namespace ska {
 		template<class U>
 		static PolarPoint<T> polar(const U x, const U y) {
 			return std::move(PolarPoint<T> (
-				NumberUtils::squareroot(static_cast<double>(x * x + y * y)),
-				static_cast<float>(NumberUtils::arctan(x, y))));
+				static_cast<float>(NumberUtils::squareroot(static_cast<double>(x * x + y * y))),
+				static_cast<float>(NumberUtils::arctan(static_cast<float>(x), static_cast<float>(y)))));
 		}
 	};
 
