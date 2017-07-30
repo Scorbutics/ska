@@ -32,16 +32,13 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	auto colX = false;
 	if (wcol.xaxis) {
 		for (const auto& p : wcol.blockColPosX) {
-			colX |= !m_collisionProfile.canMoveOnBlock(p, colE.collidableComponent.authorizedBlockIds, 0);
-			//colX |= !m_world.canMoveOnBlock(p, cc.authorizedBlockIds, 1);
+			colX |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
 			if (colX) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
 				movementComponent.vx = 0;
 				movementComponent.ax = 0;
 				forceComponent.x = 0;
-
-
 				break;
 			}
 		}
@@ -50,8 +47,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	auto colY = false;
 	if (wcol.yaxis) {
 		for (const auto& p : wcol.blockColPosY) {
-			colY |= !m_collisionProfile.canMoveOnBlock(p, colE.collidableComponent.authorizedBlockIds, 0);
-			//colY |= !m_world.canMoveOnBlock(p, cc.authorizedBlockIds, 1);
+			colY |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);			
 			if (colY) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);

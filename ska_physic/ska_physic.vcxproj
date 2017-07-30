@@ -25,6 +25,7 @@
     <ClCompile Include="Physic\System\GravitySystem.cpp" />
     <ClCompile Include="Physic\System\MovementSystem.cpp" />
     <ClCompile Include="Physic\System\WorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physic\PhysicDefines.h" />
@@ -34,6 +35,7 @@
     <ClInclude Include="Physic\System\GravitySystem.h" />
     <ClInclude Include="Physic\System\MovementSystem.h" />
     <ClInclude Include="Physic\System\WorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\WorldCollisionSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{509EC505-134A-4CD9-A230-7DCB8DE36695}</ProjectGuid>

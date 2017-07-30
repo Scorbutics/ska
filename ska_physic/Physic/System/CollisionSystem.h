@@ -10,19 +10,16 @@
 #include "Data/Events/GameEventDispatcher.h"
 
 namespace ska {
-	class WorldCollisionComponent;
-    class CollisionProfile;
 
-	class CollisionSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
+	class CollisionSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<>> {
 	public:
-		CollisionSystem(EntityManager& entityManager, CollisionProfile& w, GameEventDispatcher& ged);
+		CollisionSystem(EntityManager& entityManager, GameEventDispatcher& ged);
 		CollisionSystem& operator=(const CollisionSystem&) = delete;
 		virtual ~CollisionSystem();
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
 	private:
-		inline Rectangle createHitBox(EntityId entityId, bool xaxis, bool noMove) const;
-		CollisionProfile& m_collisionProfile;
+		inline Rectangle createHitBox(EntityId entityId) const;
 		GameEventDispatcher& m_ged;
 	};
 }

@@ -1,7 +1,7 @@
 #include "ForceComponent.h"
 
 ska::ForceComponent::ForceComponent() : 
-	bounciness(0.7F) {
+	bounciness(1.F) {
     x = 0;
     y = 0;
     z = 0;

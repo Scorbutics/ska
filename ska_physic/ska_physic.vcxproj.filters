@@ -13,6 +13,7 @@
     <ClCompile Include="Physic\System\GravitySystem.cpp" />
     <ClCompile Include="Physic\System\MovementSystem.cpp" />
     <ClCompile Include="Physic\System\WorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physic\PhysicDefines.h" />
@@ -22,5 +23,6 @@
     <ClInclude Include="Physic\System\GravitySystem.h" />
     <ClInclude Include="Physic\System\MovementSystem.h" />
     <ClInclude Include="Physic\System\WorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\WorldCollisionSystem.h" />
   </ItemGroup>
 </Project>
