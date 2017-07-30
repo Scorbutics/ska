@@ -7,9 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Physic\PhysicObject.cpp" />
-    <ClCompile Include="Physic\RainParticle.cpp" />
-    <ClCompile Include="Physic\RainParticleManager.cpp" />
     <ClCompile Include="Physic\System\CollisionSystem.cpp" />
     <ClCompile Include="Physic\System\DebugWorldCollisionResponse.cpp" />
     <ClCompile Include="Physic\System\EntityCollisionResponse.cpp" />
@@ -19,9 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physic\PhysicDefines.h" />
-    <ClInclude Include="Physic\PhysicObject.h" />
-    <ClInclude Include="Physic\RainParticle.h" />
-    <ClInclude Include="Physic\RainParticleManager.h" />
     <ClInclude Include="Physic\System\CollisionSystem.h" />
     <ClInclude Include="Physic\System\DebugWorldCollisionResponse.h" />
     <ClInclude Include="Physic\System\EntityCollisionResponse.h" />

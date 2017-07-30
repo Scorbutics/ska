@@ -49,7 +49,7 @@ void ska::MovementSystem::refresh(unsigned int) {
 		}
 
 		/* Ignore low values */
-		if (NumberUtils::absolute(moveComponent.vx) < 0.001) {
+		/*if (NumberUtils::absolute(moveComponent.vx) < 0.001) {
 			moveComponent.vx = 0;
 		}
 
@@ -59,7 +59,7 @@ void ska::MovementSystem::refresh(unsigned int) {
 
 		if (NumberUtils::absolute(moveComponent.vz) < 0.001) {
 			moveComponent.vz = 0;
-		}
+		}*/
 	}
 }
 
