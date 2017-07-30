@@ -61,26 +61,14 @@ bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int l
 	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->getID() == b2->getID()));
 }
 
-bool ska::World::canMoveOnBlock(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks, int layerIndex) const {
+bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
 	const Layer* l;
-	switch (layerIndex) {
-	case 0:
 		l = &m_lBot;
-		break;
-	case 1:
-		l = &m_lMid;
-		break;
-	case 2:
-		l = &m_lTop;
-		break;
-	default:
-		return true;;
-	}
 	const Point<int> blockPos = pos / m_blockSize;
 	if (blockPos.x >= m_nbrBlockX || blockPos.y >= m_nbrBlockY ) {
 		return true;
 	}
-	Block* b = layerIndex == -1 ? getHigherBlock(blockPos.x, blockPos.y) : l->getBlock(blockPos.x, blockPos.y);
+	Block* b = l->getBlock(blockPos.x, blockPos.y);
 	const bool result = b != nullptr ? (authorizedBlocks.find(b->getID()) != authorizedBlocks.end()) : false;
 	return result;
 }
@@ -416,7 +404,9 @@ void ska::World::getMobSettingsFromData() {
     }
 
 	//le dernier élément est invalide, on le supprime donc
-	m_mobSettings.pop_back();
+	if (!m_mobSettings.empty()) {
+		m_mobSettings.pop_back();
+	}
 
 }
 

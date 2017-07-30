@@ -12,6 +12,7 @@ namespace ska {
 	public:
 		PositionComponent();
 		PositionComponent(const Point<float>& p);
+		PositionComponent(const Point<int>& p);
         void operator=(const Point<float>& p);
 
 		static Point<float> getCenterPosition(const PositionComponent& pc, const HitboxComponent& hc) {

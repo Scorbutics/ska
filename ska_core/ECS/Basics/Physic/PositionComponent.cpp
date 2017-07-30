@@ -16,6 +16,9 @@ ska::PositionComponent::PositionComponent(const Point<float>& p) {
     operator=(p);
 }
 
+ska::PositionComponent::PositionComponent(const Point<int>& p) {
+	operator=(ska::Point<float>(p.x, p.y));
+}
 
 void ska::PositionComponent::operator=(const Point<float>& p) {
     x = p.x;
