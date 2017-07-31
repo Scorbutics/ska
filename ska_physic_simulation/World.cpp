@@ -4,6 +4,6 @@ bool World::intersectBlocksAtPos(const ska::Rectangle& hitbox, std::vector<ska::
 	return false;
 }
 
-bool World::canMoveOnBlock(const ska::Point<int>& pos, const std::unordered_set<int>& blocksAuthorized, int i) const {
+bool World::isBlockAuthorizedAtPos(const ska::Point<int>& pos, const std::unordered_set<int>& blocksAuthorized) const {
 	return true;
 }

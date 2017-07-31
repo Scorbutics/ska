@@ -57,7 +57,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addGraphic<ska::GraphicSystem>(m_eventDispatcher, m_cameraSystem);
 
 		addLogic<ska::MovementSystem>();
-		addLogic<ska::CollisionSystem>(m_world, m_eventDispatcher);
+		addLogic<ska::CollisionSystem>(m_eventDispatcher);
 		addLogic<ska::GravitySystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
 

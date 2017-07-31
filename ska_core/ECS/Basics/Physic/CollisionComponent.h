@@ -11,9 +11,10 @@ namespace ska {
 		EntityId target;
 		bool xaxis;
 		bool yaxis;
-		
+		Rectangle overlap;
+
 		float penetration;
 		Point<float> normal;
-		Rectangle overlap;
+		
 	};
 }

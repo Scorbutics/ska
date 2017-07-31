@@ -25,7 +25,7 @@ void ska::CollisionSystem::refresh(unsigned int) {
 					entityCollided = true;
 					col.xaxis = intersection.h > 1;
 					col.yaxis = intersection.w > 1;
-					col.overlap = ska::Rectangle{ 0, 0, intersection.w, intersection.h };
+					col.overlap = intersection;
 				}
 
 			}
