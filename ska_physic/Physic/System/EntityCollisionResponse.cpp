@@ -8,15 +8,15 @@
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
 	EntityCollisionObserver(bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1)),
-	m_entityManager(em),
-	m_ged(ged) {
+	m_ged(ged),
+	m_entityManager(em) {
 	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
 }
 
 ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, GameEventDispatcher& ged, EntityManager& em) :
-EntityCollisionObserver(onEntityCollision),
-m_entityManager(em),
-m_ged(ged) {
+    EntityCollisionObserver(onEntityCollision),
+    m_ged(ged),
+    m_entityManager(em) {
 	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
 }
 
@@ -53,7 +53,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 
 	auto& mtarget = m_entityManager.getComponent<MovementComponent>(col.target);
 	auto& morigin = m_entityManager.getComponent<MovementComponent>(col.origin);
-	
+
 	auto& ftarget = m_entityManager.getComponent<ForceComponent>(col.target);
 	auto& forigin = m_entityManager.getComponent<ForceComponent>(col.origin);
 
@@ -61,13 +61,26 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 
 	calculateNormalAndPenetration(col);
 
-	const auto invMassOrigin = 1 / forigin.weight;
-	const auto invMassTarget = 1 / ftarget.weight;
+	const auto invMassOrigin = forigin.weight == std::numeric_limits<float>::max() ? 0 : 1 / forigin.weight;
+	const auto invMassTarget = ftarget.weight == std::numeric_limits<float>::max() ? 0 : 1 / ftarget.weight;
+
+	if(invMassOrigin == 0 && invMassTarget == 0) {
+        if (col.xaxis) {
+            mtarget.vx = 0;
+            morigin.vx = 0;
+        }
+
+        if (col.yaxis) {
+            mtarget.vy = 0;
+            morigin.vy = 0;
+        }
+        return true;
+	}
 
 	const Point<float> velocityDiffVector(mtarget.vx - morigin.vx, mtarget.vy - morigin.vy);
 	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.normal);
 	const auto j = (-(1 + bounciness) * diffVelocityOnNormal) / (invMassOrigin + invMassTarget) ;
-	
+
 	//impulse = j . normal
 	Point<float> impulse(j * col.normal.x, j * col.normal.y);
 

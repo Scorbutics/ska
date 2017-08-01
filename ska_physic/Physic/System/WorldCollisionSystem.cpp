@@ -52,7 +52,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 	}
 }
 
-ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool xaxis, bool noMove) const{
+ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool , bool ) const{
 	auto& positionComponent = m_componentAccessor.get<PositionComponent>(entityId);
 	auto& hitboxComponent = m_componentAccessor.get<HitboxComponent>(entityId);
 	auto& movementComponent = m_componentAccessor.get<MovementComponent>(entityId);

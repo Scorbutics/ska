@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="ska_physic_simulation/ska_physic_simulation.cbp">
+			<Depends filename="ska_audio/ska_audio.cbp" />
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
+			<Depends filename="ska_physic/ska_physic.cbp" />
+		</Project>
+		<Project filename="ska_audio/ska_audio.cbp" />
+		<Project filename="ska_core/ska_core.cbp" />
+		<Project filename="ska_draw/ska_draw.cbp" />
+		<Project filename="ska_physic/ska_physic.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

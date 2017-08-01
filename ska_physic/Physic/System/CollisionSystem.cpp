@@ -53,8 +53,8 @@ ska::Rectangle ska::CollisionSystem::createHitBox(EntityId entityId) const{
 	Rectangle hitBox;
 	hitBox.x = ska::NumberUtils::round(positionComponent.x + movementComponent.vx + movementComponent.ax + hitboxComponent.xOffset);
 	hitBox.y = ska::NumberUtils::round(positionComponent.y + movementComponent.vy + movementComponent.ay + hitboxComponent.yOffset);
-	hitBox.w = hitboxComponent.width + 1;
-	hitBox.h = hitboxComponent.height + 1;
+	hitBox.w = hitboxComponent.width;
+	hitBox.h = hitboxComponent.height;
 	return hitBox;
 }
 
