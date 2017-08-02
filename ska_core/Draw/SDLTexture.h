@@ -12,7 +12,7 @@ namespace ska {
 
 	public:
 		SDLTexture();
-		SDLTexture(TextureData& p);
+		explicit SDLTexture(TextureData& p);
 		
 		SDLTexture(SDLTexture&) = delete;
 		SDLTexture& operator=(const SDLTexture&) = delete;

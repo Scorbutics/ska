@@ -19,7 +19,7 @@ namespace ska {
 		static Rectangle intersect(const Rectangle& r1, const Rectangle& r2);
 		static Rectangle posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground);
 		static bool collisionBoxABoxB(const Rectangle& rectA, const Rectangle& rectB);
-		static int getDirectionFromPos(const Point<int>& posHero, const Point<int>& mousePos);
+		static int getDirectionFromPos(const Point<float>& center, const Point<float>& destination);
 		
 		template <class T>
 		static T projection(const Point<T>& vector, const Point<T>& axis) {

@@ -12,19 +12,19 @@ m_animBlocks(375, 4, true, 0, 0, blockSize, blockSize) {
 }
 
 void ska::ChipsetRenderable::render(ska::Point<int> pos, const BlockRenderable& block) const {
-    auto clip = m_animBlocks.getOffsetAndFrameSize();
-	Rectangle chipsetPartRender = block.determineFrame(pos, &clip);
+    auto clip = m_animBlocks.getCurrentFrame();
+	auto chipsetPartRender = block.determineFrame(pos, &clip);
 	m_chipset.render(pos.x, pos.y, &chipsetPartRender);
 }
 
 void ska::ChipsetRenderable::update(BlockRenderable& block) {
 	block.refresh();
-	m_animBlocks.getRectOfCurrentFrame();
+	m_animBlocks.updateFrame();
 }
 
 ska::BlockRenderablePtr& ska::ChipsetRenderable::generateBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) {
 	if (m_blocks[id] == nullptr) {
-		m_blocks[id] = std::move(BlockRenderablePtr(new BlockRenderable(blockSize, posCorr, auto_anim)));
+		m_blocks[id] = std::move(std::make_unique<BlockRenderable>(blockSize, posCorr, auto_anim));
 	}
 	return m_blocks[id];
 }

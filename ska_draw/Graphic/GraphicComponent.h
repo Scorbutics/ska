@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <limits>
 #include "ECS/Component.h"
 #include "AnimatedTexture.h"
 
@@ -12,7 +11,5 @@ namespace ska {
 
 		int desiredPriority;
 		std::vector<AnimatedTexture> sprite;
-
-
 	};
 }

@@ -23,10 +23,9 @@
     <ClCompile Include="FpsRenderable.cpp" />
     <ClCompile Include="Graphic\AnimatedTexture.cpp" />
     <ClCompile Include="Graphic\Animation.cpp" />
+    <ClCompile Include="Graphic\GifTexture.cpp" />
     <ClCompile Include="Graphic\GraphicComponent.cpp" />
     <ClCompile Include="Graphic\HasShadowComponent.cpp" />
-    <ClCompile Include="Graphic\SpriteAnimation.cpp" />
-    <ClCompile Include="Graphic\SpriteAnimationManager.cpp" />
     <ClCompile Include="Graphic\System\AbstractGraphicSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFixedSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFollowSystem.cpp" />
@@ -43,11 +42,10 @@
     <ClInclude Include="FpsRenderable.h" />
     <ClInclude Include="Graphic\AnimatedTexture.h" />
     <ClInclude Include="Graphic\Animation.h" />
+    <ClInclude Include="Graphic\GifTexture.h" />
     <ClInclude Include="Graphic\GraphicComponent.h" />
     <ClInclude Include="Graphic\HasShadowComponent.h" />
     <ClInclude Include="Graphic\PositionnedGraphicDrawable.h" />
-    <ClInclude Include="Graphic\SpriteAnimation.h" />
-    <ClInclude Include="Graphic\SpriteAnimationManager.h" />
     <ClInclude Include="Graphic\System\AbstractGraphicSystem.h" />
     <ClInclude Include="Graphic\System\CameraFixedSystem.h" />
     <ClInclude Include="Graphic\System\CameraFollowSystem.h" />
@@ -127,6 +125,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -151,6 +150,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

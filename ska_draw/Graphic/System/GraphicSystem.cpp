@@ -30,13 +30,13 @@ void ska::GraphicSystem::refresh(unsigned int) {
 	for (const auto& entityId : processed) {
 		auto& gc = m_componentAccessor.get<ska::GraphicComponent>(entityId);
 		auto& pos = m_componentAccessor.get<ska::PositionComponent>(entityId);
-		const int relPosX = pos.x - cameraX;
-		const int relPosY = pos.y - cameraY - pos.z;
+		const auto relPosX = pos.x - cameraX;
+		const auto relPosY = pos.y - cameraY - pos.z;
 
 		for (auto& sprite : gc.sprite) {
 			if (!(static_cast<int>(relPosX + sprite.getWidth()) < 0 || (camera != nullptr && relPosX >= camera->w) ||
 				static_cast<int>(relPosY + sprite.getHeight()) < 0 || (camera != nullptr && relPosY >= camera->h))) {
-				m_topLayerPriority = ska::NumberUtils::maximum<int>(pos.y, m_topLayerPriority);
+				m_topLayerPriority = ska::NumberUtils::maximum<int>(static_cast<int>(pos.y), m_topLayerPriority);
 				const auto priority = gc.desiredPriority > std::numeric_limits<int>::min() ? gc.desiredPriority : pos.y + (camera == nullptr ? 0 : camera->h * pos.z);
 				m_pgd.push_back(ska::PositionnedGraphicDrawable(sprite, relPosX, relPosY, priority, m_topLayerPriority));
 			}

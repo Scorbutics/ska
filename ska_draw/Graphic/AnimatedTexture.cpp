@@ -1,25 +1,32 @@
 #include "AnimatedTexture.h"
 
-
-ska::AnimatedTexture::AnimatedTexture() {
-
+ska::AnimatedTexture::AnimatedTexture()
+	: m_gifMode(false) {
+	
 }
 
-void ska::AnimatedTexture::loadFromText(unsigned fontSize, std::string text, ska::Color c, const unsigned horizontalFrames, const unsigned verticalFrames, const unsigned animatedFrames, bool isVertical) {
+void ska::AnimatedTexture::loadFromText(unsigned fontSize, const std::string& text, ska::Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical) {
+	m_gifMode = false;
 	m_sprite.loadFromText(fontSize, text, c);
 	recalculateFrames(horizontalFrames, verticalFrames, animatedFrames, isVertical);
 }
 
-void ska::AnimatedTexture::load(std::string id, const unsigned int horizontalFrames, const unsigned int verticalFrames, const unsigned int animatedFrames, bool isVertical, int r, int g, int b, int a) {
-	m_sprite.load(id, r, g, b, a);
+void ska::AnimatedTexture::load(const std::string& spritePath, unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical, int r, int g, int b, int a) {
+	if (spritePath.find_last_of(".gif") != std::string::npos) {
+		m_gifMode = true;
+		m_gif.load(spritePath);
+	} else {
+		m_gifMode = false;
+		m_sprite.load(spritePath, r, g, b, a);
+	}
 	recalculateFrames(horizontalFrames, verticalFrames, animatedFrames, isVertical);
 }
 
-void ska::AnimatedTexture::recalculateFrames(const unsigned int horizontalFrames, const unsigned int verticalFrames, const unsigned int animatedFrames, const bool isVertical) {
+void ska::AnimatedTexture::recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, const bool isVertical) {
 	m_anim.setFrames(animatedFrames);
 	m_anim.setVertical(isVertical);
-	const unsigned int width = m_sprite.getWidth() / horizontalFrames;
-	const unsigned int height = m_sprite.getHeight() / verticalFrames;
+	const auto width = (m_gifMode ? m_gif.getWidth() : m_sprite.getWidth()) / horizontalFrames;
+	const auto height = (m_gifMode ? m_gif.getHeight() : m_sprite.getHeight()) / verticalFrames;
 	Rectangle frame = { 0, 0, static_cast<int>(width), static_cast<int>(height) };
 	m_anim.setOffsetAndFrameSize(frame);
 }
@@ -33,7 +40,7 @@ void ska::AnimatedTexture::setRelativePosition(const Point<int>& p) {
 }
 
 void ska::AnimatedTexture::setOffset(const Point<int>& offset) {
-	Rectangle tmp = m_anim.getOffsetAndFrameSize();
+	Rectangle tmp = m_anim.getCurrentFrame();
 	tmp.x = offset.x;
 	tmp.y = offset.y;
 	m_anim.setOffsetAndFrameSize(tmp);
@@ -42,6 +49,7 @@ void ska::AnimatedTexture::setOffset(const Point<int>& offset) {
 void ska::AnimatedTexture::operator=(const AnimatedTexture& text) {
 	m_anim = text.m_anim;
 	m_sprite = text.m_sprite;
+	m_gifMode = text.m_gifMode;
 }
 
 void ska::AnimatedTexture::setAlpha(int alpha) {
@@ -52,39 +60,44 @@ void ska::AnimatedTexture::setColor(int red, int green, int blue) {
 	m_sprite.setColor(static_cast<Uint8>(red), static_cast<Uint8>(green), static_cast<Uint8>(blue));
 }
 
-void ska::AnimatedTexture::setDelay(const unsigned int delay) {
+void ska::AnimatedTexture::setDelay(unsigned int delay) {
 	m_anim.setDelay(delay);
+	m_gif.setDelay(delay);
 }
 
 int ska::AnimatedTexture::render(int x, int y) {
-	Rectangle tmp = m_anim.getRectOfCurrentFrame();
-	return m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);
+	Rectangle tmp = m_anim.updateFrame();
+	return m_gifMode ? m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp) :
+		m_gif.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);
 }
 
 unsigned int ska::AnimatedTexture::getWidth() const {
-	return m_anim.getOffsetAndFrameSize().w;
+	return m_gifMode ? m_gif.getWidth() : m_anim.getCurrentFrame().w;
 }
 
 unsigned int ska::AnimatedTexture::getHeight() const {
-	return m_anim.getOffsetAndFrameSize().h;
+	return m_gifMode ? m_gif.getHeight() : m_anim.getCurrentFrame().h;
 }
 
 unsigned int ska::AnimatedTexture::getFullWidth() const {
-	return m_sprite.getWidth();
+	return m_gifMode ? m_gif.getWidth() : m_sprite.getWidth();
 }
 
 unsigned int ska::AnimatedTexture::getFullHeight() const {
-	return m_sprite.getHeight();
+	return m_gifMode ? m_gif.getHeight() : m_sprite.getHeight();
 }
 
 void ska::AnimatedTexture::stop(const bool x) {
 	m_anim.stop(x);
+	m_gif.stop(x);
 }
 
 void ska::AnimatedTexture::reset() {
-	m_anim.setCurrentFrame(1);
+	m_anim.switchToFrame(1);
+	m_gif.reset();
 }
 
 void ska::AnimatedTexture::nextFrame() {
 	m_anim.nextFrame();
+	m_gif.nextFrame();
 }

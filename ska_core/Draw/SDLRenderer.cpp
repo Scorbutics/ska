@@ -38,6 +38,10 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
     }
 }
 
+SDL_Renderer * ska::SDLRenderer::unwrap() const {
+	return m_renderer;
+}
+
 void ska::SDLRenderer::renderClear() const {
     SDL_RenderClear(m_renderer);
 }

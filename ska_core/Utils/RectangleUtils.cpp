@@ -1,11 +1,8 @@
-#include <iostream>
+#include <algorithm>
 #include "RectangleUtils.h"
 #include "NumberUtils.h"
-#include <algorithm>
 
-ska::RectangleUtils::RectangleUtils()
-{
-}
+ska::RectangleUtils::RectangleUtils() {}
 
 bool ska::RectangleUtils::collisionBoxABoxB(const Rectangle& rectA, const Rectangle& rectB) {
 
@@ -40,16 +37,15 @@ ska::Rectangle ska::RectangleUtils::intersect(const Rectangle& r1, const Rectang
 
 }
 
-//divise l'écran en 8 directions possibles en fonction de la position de la souris
-int ska::RectangleUtils::getDirectionFromPos(const Point<int>& posHero, const Point<int>& mousePos) {
+int ska::RectangleUtils::getDirectionFromPos(const Point<float>& center, const Point<float>& destination) {
 	double pente;
 
-	if (mousePos.x != posHero.x) {
-		pente = NumberUtils::absolute((mousePos.y - posHero.y) / (static_cast<double>(mousePos.x) - posHero.x));
+	if (destination.x != center.x) {
+		pente = NumberUtils::absolute((destination.y - center.y) / (static_cast<double>(destination.x) - center.x));
 	} else {
-		if (mousePos.y > posHero.y){
+		if (destination.y > center.y){
 			return 0;
-		} else if (mousePos.y < posHero.y) {
+		} else if (destination.y < center.y) {
 			return 2;
 		} else {
 			return -1;
@@ -67,24 +63,24 @@ int ska::RectangleUtils::getDirectionFromPos(const Point<int>& posHero, const Po
 	const double penteDiago2 = 3.;
 
 	if (pente > penteDiago2) {
-		if (mousePos.y > posHero.y) {
+		if (destination.y > center.y) {
 			direction = 0;
 		} else {
 			direction = 2;
 		}
 	} else if (pente > penteDiago1) {
-		if (mousePos.x > posHero.x && mousePos.y > posHero.y) {
+		if (destination.x > center.x && destination.y > center.y) {
 			direction = 4;
-		} else if (mousePos.x > posHero.x && mousePos.y < posHero.y) {
+		} else if (destination.x > center.x && destination.y < center.y) {
 			direction = 5;
-		} else if (mousePos.x < posHero.x && mousePos.y < posHero.y) {
+		} else if (destination.x < center.x && destination.y < center.y) {
 			direction = 6;
 		} else {
 			direction = 7;
 		}
 
 	} else {
-		if (mousePos.x > posHero.x) {
+		if (destination.x > center.x) {
 			direction = 1;
 		} else {
 			direction = 3;
@@ -94,8 +90,7 @@ int ska::RectangleUtils::getDirectionFromPos(const Point<int>& posHero, const Po
 	return direction;
 }
 
-ska::Rectangle ska::RectangleUtils::posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground)
-{
+ska::Rectangle ska::RectangleUtils::posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground) {
 	Rectangle posCenter;
 	posCenter.x = imageBackground.x + (imageBackground.w + 1) / 2 - (imageToCenter.w + 1) / 2;
 	posCenter.y = imageBackground.y + (imageBackground.h + 1) / 2 - (imageToCenter.h + 1) / 2;
@@ -105,6 +100,4 @@ ska::Rectangle ska::RectangleUtils::posToCenterPicture(const Rectangle& imageToC
 	return posCenter;
 }
 
-ska::RectangleUtils::~RectangleUtils()
-{
-}
+ska::RectangleUtils::~RectangleUtils() {}

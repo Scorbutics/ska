@@ -3,23 +3,24 @@
 #include "Texture.h"
 #include "Rectangle.h"
 #include "Point.h"
-#include <memory>
+#include "GifTexture.h"
 
 namespace ska {
 	class AnimatedTexture {
 	public:
 		AnimatedTexture();
+		~AnimatedTexture() = default;
 
-		void loadFromText(unsigned fontSize, std::string text, Color c, const unsigned horizontalFrames, const unsigned verticalFrames, const unsigned animatedFrames, bool isVertical = false);
-		void load(std::string id, const unsigned int horizontalFrames, const unsigned int verticalFrames, const unsigned int animatedFrames, bool isVertical = false, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
+		void loadFromText(unsigned fontSize, const std::string& text, Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical = false);
+		void load(const std::string& spritePath, unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical = false, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
 
-		void stop(const bool x);
+		void stop(bool x);
 		void reset();
 		void nextFrame();
 
 		int render(int x, int y);
 
-		void setDelay(const unsigned int delay);
+		void setDelay(unsigned int delay);
 		void setAlpha(int alpha);
 		void setColor(int red, int green, int blue);
 		void setOffset(const Point<int>& offset);
@@ -36,11 +37,15 @@ namespace ska {
 		void operator=(const AnimatedTexture& text);
 
 	private:
-		void recalculateFrames(const unsigned int horizontalFrames, const unsigned int verticalFrames, const unsigned int animatedFrames, const bool isVertical);
+
+		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
+		
 		Point<int> m_relativePos;
 		Animation m_anim;
+
+		bool m_gifMode;
+		GifTexture m_gif;
 		Texture m_sprite;
 	};
-	typedef std::unique_ptr<AnimatedTexture> AnimatedTexturePtr;
 }
 

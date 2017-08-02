@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-
 #include "Texture.h"
 #include "Draw/Color.h"
 #include "Draw/SDLRenderer.h"

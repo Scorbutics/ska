@@ -35,6 +35,7 @@ namespace ska {
 
 		void load(SDL_Window * window, int index, Uint32 flags);
 
+		SDL_Renderer* unwrap() const;
 	private:
 	    void free();
 		SDL_Renderer* m_renderer;

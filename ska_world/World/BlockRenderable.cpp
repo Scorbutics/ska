@@ -12,13 +12,13 @@ ska::BlockRenderable::BlockRenderable(const unsigned int blockSize, Point<int> p
 }
 
 void ska::BlockRenderable::setSpriteFrame(unsigned int x) {
-	m_anim.setCurrentFrame(x);
+	m_anim.switchToFrame(x);
 	m_anim.stop(true);
 }
 
 void ska::BlockRenderable::refresh() {
 	if (m_auto_animation) {
-		m_anim.getRectOfCurrentFrame();
+		m_anim.updateFrame();
 	}
 }
 
@@ -31,7 +31,7 @@ ska::Rectangle ska::BlockRenderable::determineFrame(ska::Point<int>, const Recta
 		if (rectAnim != nullptr) {
 			bufRectAnim = *rectAnim;
 		} else  {
-			bufRectAnim = m_anim.getOffsetAndFrameSize();
+			bufRectAnim = m_anim.getCurrentFrame();
 		}
 
 		buf.x += bufRectAnim.x;
