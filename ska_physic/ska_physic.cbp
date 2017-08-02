@@ -49,12 +49,6 @@
 			<Add directory="../../" />
 		</Linker>
 		<Unit filename="Physic/PhysicDefines.h" />
-		<Unit filename="Physic/PhysicObject.cpp" />
-		<Unit filename="Physic/PhysicObject.h" />
-		<Unit filename="Physic/RainParticle.cpp" />
-		<Unit filename="Physic/RainParticle.h" />
-		<Unit filename="Physic/RainParticleManager.cpp" />
-		<Unit filename="Physic/RainParticleManager.h" />
 		<Unit filename="Physic/System/CollisionSystem.cpp" />
 		<Unit filename="Physic/System/CollisionSystem.h" />
 		<Unit filename="Physic/System/DebugWorldCollisionResponse.cpp" />
@@ -69,6 +63,8 @@
 		<Unit filename="Physic/System/MovementSystem.h" />
 		<Unit filename="Physic/System/WorldCollisionResponse.cpp" />
 		<Unit filename="Physic/System/WorldCollisionResponse.h" />
+		<Unit filename="Physic/System/WorldCollisionSystem.cpp" />
+		<Unit filename="Physic/System/WorldCollisionSystem.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
