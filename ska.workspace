@@ -6,10 +6,14 @@
 			<Depends filename="ska_core/ska_core.cbp" />
 			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_physic/ska_physic.cbp" />
+			<Depends filename="external/SDL2_gif/SDL2_gif.cbp" />
 		</Project>
 		<Project filename="ska_audio/ska_audio.cbp" />
 		<Project filename="ska_core/ska_core.cbp" />
-		<Project filename="ska_draw/ska_draw.cbp" />
+		<Project filename="ska_draw/ska_draw.cbp">
+			<Depends filename="external/SDL2_gif/SDL2_gif.cbp" />
+		</Project>
 		<Project filename="ska_physic/ska_physic.cbp" />
+		<Project filename="external/SDL2_gif/SDL2_gif.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

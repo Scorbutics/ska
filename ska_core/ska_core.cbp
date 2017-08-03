@@ -189,6 +189,7 @@
 		<Unit filename="Inputs/System/InputSystem.h" />
 		<Unit filename="Inputs/WindowInput.cpp" />
 		<Unit filename="Inputs/WindowInput.h" />
+		<Unit filename="Logging/Logger.h" />
 		<Unit filename="Point.cpp" />
 		<Unit filename="Point.h" />
 		<Unit filename="Rectangle.h" />

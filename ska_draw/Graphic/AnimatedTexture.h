@@ -6,6 +6,8 @@
 #include "GifTexture.h"
 
 namespace ska {
+    //TODO : ne plus placer GifTexture ET Texture + Animation
+    //Traiter la différence entre Gif et PNG séparé + bas niveau au moment du décodage (load)
 	class AnimatedTexture {
 	public:
 		AnimatedTexture();
@@ -39,7 +41,7 @@ namespace ska {
 	private:
 
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
-		
+
 		Point<int> m_relativePos;
 		Animation m_anim;
 

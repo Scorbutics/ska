@@ -165,7 +165,7 @@
 	<SDL.h>
 	"../Draw/SDLRenderer.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\draw\sdlrenderer.h
+1501744813 c:\documents\perso\dev\c++\ska\ska_core\draw\sdlrenderer.h
 	<SDL.h>
 	"../Rectangle.h"
 	"../Point.h"
@@ -233,7 +233,7 @@
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\utils\demangle.h
 	<string>
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\logging\logger.h
+1501774661 c:\documents\perso\dev\c++\ska\ska_core\logging\logger.h
 	<iostream>
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\draw\vectordrawablecontainer.h
@@ -328,7 +328,7 @@
 	"Utils/Observer.h"
 	"Data/Events/GameEventDispatcher.h"
 
-1501603170 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
+1501766589 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
 	"StateSandbox.h"
 	"../ska_draw/Graphic/System/GraphicSystem.h"
 	"../ska_draw/Graphic/System/CameraFixedSystem.h"
@@ -348,9 +348,8 @@
 	<Data/Events/GameEventDispatcher.h>
 	"ECS/Basics/Graphic/DialogComponent.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_draw\graphic\graphiccomponent.h
+1501744813 c:\documents\perso\dev\c++\ska\ska_draw\graphic\graphiccomponent.h
 	<vector>
-	<limits>
 	"ECS/Component.h"
 	"AnimatedTexture.h"
 
@@ -358,14 +357,14 @@
 	<unordered_map>
 	"ComponentHandler.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animatedtexture.h
+1501765890 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animatedtexture.h
 	"Animation.h"
 	"Texture.h"
 	"Rectangle.h"
 	"Point.h"
-	<memory>
+	"GifTexture.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animation.h
+1501744813 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animation.h
 	"Rectangle.h"
 
 1501224288 c:\documents\perso\dev\c++\ska\ska_draw\graphic\texture.h
@@ -381,7 +380,7 @@
 	<memory>
 	<unordered_map>
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\draw\sdltexture.h
+1501744813 c:\documents\perso\dev\c++\ska\ska_core\draw\sdltexture.h
 	"Color.h"
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\draw\color.h
@@ -527,4 +526,8 @@
 
 1501569627 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\world.cpp
 	"World.h"
+
+1501767937 c:\documents\perso\dev\c++\ska\ska_draw\graphic\giftexture.h
+	<string>
+	"Rectangle.h"
 

@@ -24,7 +24,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
 	auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
 	ska::AnimatedTexture at;
-	at.load(RESOURCES_FOLDER + "0.png", 1, 1, 1);
+	at.load(RESOURCES_FOLDER + "giphy.gif", 1, 1, 1);
 	gc.sprite.push_back(at);
 	m_entityManager.addComponent<ska::GraphicComponent>(entity, gc);
 	m_entityManager.addComponent<ska::GravityAffectedComponent>(entity, ska::GravityAffectedComponent());

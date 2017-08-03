@@ -67,12 +67,12 @@ namespace ska {
 
 }
 
-#ifdef _DEBUG
-#define SKA_LOG_INFO ska::Logger::info
-#define SKA_LOG_MESSAGE ska::Logger::log
-#define SKA_LOG_ERROR ska::Logger::error
-#else
+#ifdef NDEBUG
 #define SKA_LOG_INFO true ? (void)0 : ska::Logger::info
 #define SKA_LOG_MESSAGE true ? (void)0 : ska::Logger::log
 #define SKA_LOG_ERROR true ? (void)0 : ska::Logger::error
+#else
+#define SKA_LOG_INFO ska::Logger::info
+#define SKA_LOG_MESSAGE ska::Logger::log
+#define SKA_LOG_ERROR ska::Logger::error
 #endif

@@ -3,18 +3,35 @@
 #include "Exceptions/IllegalStateException.h"
 #include "Draw/SDLRenderer.h"
 #include "Exceptions/FileException.h"
+#include "Logging/Logger.h"
 #include <iostream>
 
 ska::SDLRenderer* ska::GifTexture::m_renderer = nullptr;
 
 ska::GifTexture::GifTexture()
-	: m_animation(nullptr),
-	  m_actTexture(nullptr), 
-	  m_width(0), 
+	: m_animation(NULL),
+	  m_actTexture(NULL),
+	  m_width(0),
 	  m_height(0) { }
 
 ska::GifTexture::~GifTexture() {
 	free();
+}
+
+ska::GifTexture::GifTexture(const GifTexture& t) :
+    m_animation(NULL),
+	m_actTexture(NULL),
+	m_width(0),
+	m_height(0) {
+    operator=(t);
+}
+
+ska::GifTexture& ska::GifTexture::operator=(const GifTexture& t) {
+    m_spriteName = t.m_spriteName;
+    if(!m_spriteName.empty()) {
+        load(m_spriteName);
+    }
+    return *this;
 }
 
 void ska::GifTexture::setDelay(unsigned delay) const {
@@ -33,26 +50,29 @@ void ska::GifTexture::load(const std::string& spriteName) {
 	checkRenderer();
 	free();
 	m_animation = CEV_gifAnimLoad(spriteName.c_str(), m_renderer->unwrap());
-	
-	if(m_animation == nullptr) {
+
+	if(m_animation == NULL) {
 		throw ska::FileException("unable to load gif file : " + spriteName);
 	}
+    SKA_LOG_INFO("Loaded GIF file ", spriteName, " (0x", m_animation, ")");
 
 	m_actTexture = CEV_gifTexture(m_animation);
-	if(m_actTexture == nullptr) {
+	if(m_actTexture == NULL) {
 		CEV_gifAnimFree(m_animation);
-		m_animation = nullptr;
+		m_animation = NULL;
 		throw ska::FileException("unable to create texture from gif file : " + spriteName);
 	}
+    SKA_LOG_INFO("Loaded Texture GIF file ", spriteName, " (0x", m_actTexture, ")");
 
 	int w, h;
-	if (SDL_QueryTexture(m_actTexture, nullptr, nullptr, &w, &h)) {
+	if (!SDL_QueryTexture(m_actTexture, NULL, NULL, &w, &h)) {
 		m_width = static_cast<unsigned int>(w);
 		m_height = static_cast<unsigned int>(h);
 	} else {
-		std::cerr << "unable to query texture : file " << spriteName << std::endl;
+		std::cerr << "unable to query texture : file " << spriteName << " : " << SDL_GetError() << std::endl;
 	}
 
+    m_spriteName = spriteName;
 	stop(false);
 }
 
@@ -65,7 +85,7 @@ unsigned int ska::GifTexture::getHeight() const {
 }
 
 int ska::GifTexture::render(int x, int y, const Rectangle* clip) const{
-	
+
 	checkRenderer();
 	CEV_gifAnimAuto(m_animation);
 
@@ -87,10 +107,12 @@ void ska::GifTexture::nextFrame() const{
 }
 
 void ska::GifTexture::free() {
+    SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
 	CEV_gifAnimFree(m_animation);
-	m_animation = nullptr;
+	m_animation = NULL;
+	SKA_LOG_INFO("Freeing Texture GIF file ", m_spriteName, " (0x", m_actTexture, ")");
 	SDL_DestroyTexture(m_actTexture);
-	m_actTexture = nullptr;
+	m_actTexture = NULL;
 }
 
 void ska::GifTexture::checkRenderer() {

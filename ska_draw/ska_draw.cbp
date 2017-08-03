@@ -48,6 +48,7 @@
 		</Build>
 		<Compiler>
 			<Add directory="../ska_core/" />
+			<Add directory="../external/SDL2_gif/src" />
 		</Compiler>
 		<Unit filename="FpsCalculator.cpp" />
 		<Unit filename="FpsCalculator.h" />
@@ -57,15 +58,13 @@
 		<Unit filename="Graphic/AnimatedTexture.h" />
 		<Unit filename="Graphic/Animation.cpp" />
 		<Unit filename="Graphic/Animation.h" />
+		<Unit filename="Graphic/GifTexture.cpp" />
+		<Unit filename="Graphic/GifTexture.h" />
 		<Unit filename="Graphic/GraphicComponent.cpp" />
 		<Unit filename="Graphic/GraphicComponent.h" />
 		<Unit filename="Graphic/HasShadowComponent.cpp" />
 		<Unit filename="Graphic/HasShadowComponent.h" />
 		<Unit filename="Graphic/PositionnedGraphicDrawable.h" />
-		<Unit filename="Graphic/SpriteAnimation.cpp" />
-		<Unit filename="Graphic/SpriteAnimation.h" />
-		<Unit filename="Graphic/SpriteAnimationManager.cpp" />
-		<Unit filename="Graphic/SpriteAnimationManager.h" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.cpp" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.h" />
 		<Unit filename="Graphic/System/CameraFixedSystem.cpp" />

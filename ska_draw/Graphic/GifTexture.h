@@ -10,10 +10,13 @@ namespace ska {
 	class GifTexture {
 	public:
 		GifTexture();
+		GifTexture(const GifTexture& t);
 		~GifTexture();
 
+		GifTexture& operator=(const GifTexture& t);
+
 		void load(const std::string& spriteName);
-		
+
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 
@@ -32,6 +35,8 @@ namespace ska {
 
 		unsigned int m_width;
 		unsigned int m_height;
+
+        std::string m_spriteName;
 
 		static void checkRenderer();
 		static SDLRenderer* m_renderer;

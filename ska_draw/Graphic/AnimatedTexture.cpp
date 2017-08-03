@@ -2,7 +2,6 @@
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {
-	
 }
 
 void ska::AnimatedTexture::loadFromText(unsigned fontSize, const std::string& text, ska::Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical) {
@@ -12,7 +11,7 @@ void ska::AnimatedTexture::loadFromText(unsigned fontSize, const std::string& te
 }
 
 void ska::AnimatedTexture::load(const std::string& spritePath, unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical, int r, int g, int b, int a) {
-	if (spritePath.find_last_of(".gif") != std::string::npos) {
+	if (spritePath.find(".gif") != std::string::npos) {
 		m_gifMode = true;
 		m_gif.load(spritePath);
 	} else {
@@ -67,8 +66,9 @@ void ska::AnimatedTexture::setDelay(unsigned int delay) {
 
 int ska::AnimatedTexture::render(int x, int y) {
 	Rectangle tmp = m_anim.updateFrame();
-	return m_gifMode ? m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp) :
-		m_gif.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);
+	return m_gifMode ?
+		m_gif.render(x + m_relativePos.x, y + m_relativePos.y, &tmp) :
+		    m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);
 }
 
 unsigned int ska::AnimatedTexture::getWidth() const {
