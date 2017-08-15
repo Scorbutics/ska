@@ -1,8 +1,6 @@
 #include "DirectionalAnimationSystem.h"
 #include "Utils/RectangleUtils.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "Logging/Logger.h"
 
 ska::DirectionalAnimationSystem::DirectionalAnimationSystem(EntityManager& entityManager) : System(entityManager) {
 }
@@ -14,12 +12,12 @@ void ska::DirectionalAnimationSystem::refresh(unsigned int) {
 		auto& dac = m_componentAccessor.get<DirectionalAnimationComponent>(entityId);
 		auto& mov = m_componentAccessor.get<MovementComponent>(entityId);
 
-		if (gc.sprite.empty()) {
+		if (gc.animatedSprites.empty()) {
 			break;
 		}
 
 		//ska::Rectangle base de l'animation
-		auto& texture = gc.sprite[0];
+		auto& texture = gc.animatedSprites[0];
 		auto spritePos = texture.getOffsetBase();
 		const int spriteHeight = texture.getHeight();
 

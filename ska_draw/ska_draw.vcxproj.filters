@@ -44,5 +44,6 @@
     <ClInclude Include="Graphic\System\ShadowSystem.h" />
     <ClInclude Include="Graphic\Texture.h" />
     <ClInclude Include="Graphic\GifTexture.h" />
+    <ClInclude Include="Graphic\Renderable.h" />
   </ItemGroup>
 </Project>

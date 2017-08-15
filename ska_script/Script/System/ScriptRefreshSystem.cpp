@@ -127,8 +127,8 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		for (const ScriptSleepComponent* ssc : worldScripts) {
 			if (ssc != nullptr) {
 				EntityId script = ScriptRefreshSystemBase::createEntity();
-				components.add<PositionComponent>(script, pc);
-				components.add<ScriptSleepComponent>(script, *ssc);
+				components.add<PositionComponent>(script, std::move(PositionComponent(pc)));
+				components.add<ScriptSleepComponent>(script, std::move(ScriptSleepComponent(*ssc)));
 				componentsSP.get<ScriptSleepComponent>(script).deleteEntityWhenFinished = true;
 				startScript(script, entityId);
 				if (ssc->triggeringType == EnumScriptTriggerType::AUTO) {

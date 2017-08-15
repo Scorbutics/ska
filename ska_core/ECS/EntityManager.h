@@ -36,9 +36,9 @@ namespace ska {
 		void addComponent(const EntityId entity, const std::string& component);
 
         template <class T>
-		void addComponent(EntityId entity, const T& component) {
+		void addComponent(EntityId entity, T&& component) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
-			commonAddComponent(entity, components.add(entity, component));
+			commonAddComponent(entity, components.add(entity, std::forward<T>(component)));
 		}
 
 		template <class T>

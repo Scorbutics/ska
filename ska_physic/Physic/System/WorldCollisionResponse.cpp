@@ -60,7 +60,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	}
 
 	if (colX || colY) {
-		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, wcol);
+		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
 	}
 	return true;
 }

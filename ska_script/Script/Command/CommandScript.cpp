@@ -46,7 +46,7 @@ std::string ska::CommandScript::execute(ScriptComponent& script, std::vector<std
 	ssc.deleteEntityWhenFinished = true;
 	ssc.triggeringType = EnumScriptTriggerType::AUTO;
 	ssc.name = scriptName;
-	m_entityManager.addComponent<ScriptSleepComponent>(newScript, ssc);
+	m_entityManager.addComponent<ScriptSleepComponent>(newScript, std::move(ssc));
 	script.parent->registerScript(&script, newScript, script.getOrigin());
 	return StringUtils::intToStr(newScript);
 

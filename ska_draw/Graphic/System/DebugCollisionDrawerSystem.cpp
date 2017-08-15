@@ -52,14 +52,14 @@ void ska::DebugCollisionDrawerSystem::refresh(unsigned int) {
 ska::EntityId ska::DebugCollisionDrawerSystem::createDebugCollisionEntity(const Point<int>& p, int offset) {
 	EntityId e = createEntity();
 	GraphicComponent gc;
-	gc.sprite.resize(1);
-	gc.sprite[0].load(SpritePath::getInstance().getPath(SPRITEBANK_ANIMATION, 18 + offset), 2, 1, 2, false, DEFAULT_T_RED, DEFAULT_T_GREEN, DEFAULT_T_BLUE, offset == 0 ? 40 : 100);
-	gc.sprite[0].setDelay(500);
-	m_componentAccessor.add<GraphicComponent>(e, gc);
+	gc.animatedSprites.resize(1);
+	gc.animatedSprites[0].load(SpritePath::getInstance().getPath(SPRITEBANK_ANIMATION, 18 + offset), 2, 1, 2, false, DEFAULT_T_RED, DEFAULT_T_GREEN, DEFAULT_T_BLUE, offset == 0 ? 40 : 100);
+	gc.animatedSprites[0].setDelay(500);
+	m_componentAccessor.add<GraphicComponent>(e, std::move(gc));
 	DeleterComponent dc;
 	dc.delay = 3000;
-	m_componentAccessor.add<DeleterComponent>(e, dc);
+	m_componentAccessor.add<DeleterComponent>(e, std::move(dc));
 	PositionComponent pc = p;
-	m_componentAccessor.add<PositionComponent>(e, pc);
+	m_componentAccessor.add<PositionComponent>(e, std::move(pc));
 	return e;
 }

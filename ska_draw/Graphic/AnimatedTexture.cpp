@@ -2,6 +2,7 @@
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {
+	m_anim.setDelay(300);
 }
 
 void ska::AnimatedTexture::loadFromText(unsigned fontSize, const std::string& text, ska::Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical) {
@@ -64,8 +65,12 @@ void ska::AnimatedTexture::setDelay(unsigned int delay) {
 	m_gif.setDelay(delay);
 }
 
-int ska::AnimatedTexture::render(int x, int y) {
-	Rectangle tmp = m_anim.updateFrame();
+void ska::AnimatedTexture::update() {
+	m_anim.updateFrame();
+}
+
+int ska::AnimatedTexture::render(int x, int y, const Rectangle* clip) const {
+	const ska::Rectangle& tmp = m_anim.getCurrentFrame();
 	return m_gifMode ?
 		m_gif.render(x + m_relativePos.x, y + m_relativePos.y, &tmp) :
 		    m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);

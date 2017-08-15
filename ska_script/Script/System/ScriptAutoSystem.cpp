@@ -143,7 +143,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 		i++;
 	}
 
-	m_componentAccessor.add<ScriptComponent>(scriptSleepEntity, sc);
+	m_componentAccessor.add<ScriptComponent>(scriptSleepEntity, std::move(sc));
 }
 
 void ska::ScriptAutoSystem::registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity) {

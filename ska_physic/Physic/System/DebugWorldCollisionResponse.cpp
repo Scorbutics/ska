@@ -17,7 +17,7 @@ WorldCollisionObserver(bind(&DebugWorldCollisionResponse::onWorldCollision, this
 bool ska::DebugWorldCollisionResponse::onWorldCollision(CollisionEvent& e) const{
 	DebugGraphicComponent dgc;
 	dgc.typeMask = COLLISION;
-	m_entityManager.addComponent<DebugGraphicComponent>(e.entity, dgc);
+	m_entityManager.addComponent<DebugGraphicComponent>(e.entity, std::move(dgc));
 	return true;
 }
 

@@ -28,14 +28,11 @@ void ska::CameraSystem::focusOn(Rectangle& pos, EntityId* entityId) {
 	m_cameraRect.x = pos.x - m_cameraRect.w / 2;
 	m_cameraRect.y = pos.y - m_cameraRect.h / 2;
 
-	const auto& graphicComponentPtr = entityId == nullptr ? nullptr : m_componentPossibleAccessor.get<GraphicComponent>(*entityId);
-	if (entityId != nullptr && graphicComponentPtr != nullptr) {
-		auto& gc = *graphicComponentPtr;
-		if (!gc.sprite.empty()) {
-			auto& texture = gc.sprite[0];
-			m_cameraRect.x += texture.getWidth() / 2;
-			m_cameraRect.y += texture.getHeight() / 2;
-		}
+	const auto& hitboxComponentPtr = entityId == nullptr ? nullptr : m_componentPossibleAccessor.get<HitboxComponent>(*entityId);
+	if (entityId != nullptr && hitboxComponentPtr != nullptr) {
+		auto& hc = *hitboxComponentPtr;
+		m_cameraRect.x += (hc.width + hc.xOffset) / 2;
+		m_cameraRect.y += (hc.height + hc.yOffset) / 2;
 	}
 
 	if (m_cameraRect.x < 0) {

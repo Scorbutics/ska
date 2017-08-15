@@ -1,13 +1,13 @@
 #pragma once
 #include "GraphicComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
 #include "Draw/Drawable.h"
+#include "Renderable.h"
 
 namespace ska {
 	class PositionnedGraphicDrawable : public Drawable {
 
 	public:
-		PositionnedGraphicDrawable(AnimatedTexture& gc, int posx, int posy, int priority, int priority2D) :
+		PositionnedGraphicDrawable(Renderable& gc, int posx, int posy, int priority, int priority2D) :
 			m_graphic(gc),
 			m_priority(priority),
 			m_priority2D(priority2D)  {
@@ -35,7 +35,7 @@ namespace ska {
 		virtual ~PositionnedGraphicDrawable(){}
 
 	private:
-		AnimatedTexture& m_graphic;
+		Renderable& m_graphic;
 		int m_positionx;
 		int m_positiony;
 		int m_priority;

@@ -5,7 +5,8 @@ ska::GraphicComponent::GraphicComponent() {
 }
 
 void ska::GraphicComponent::operator=(const GraphicComponent& gc) {
-    sprite = gc.sprite;
+	animatedSprites = gc.animatedSprites;
+	sprites = gc.sprites;
     desiredPriority = gc.desiredPriority;
 }
 

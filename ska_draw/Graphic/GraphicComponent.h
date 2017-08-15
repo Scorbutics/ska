@@ -10,6 +10,7 @@ namespace ska {
 		void operator=(const GraphicComponent& gc);
 
 		int desiredPriority;
-		std::vector<AnimatedTexture> sprite;
+		std::vector<AnimatedTexture> animatedSprites;
+		std::vector<Texture> sprites;
 	};
 }

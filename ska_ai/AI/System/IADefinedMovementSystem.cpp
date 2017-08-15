@@ -57,7 +57,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 					//TODO Event pour remplacer ça
 					/* triggers callback */
 					auto scriptEntity = createEntity();
-					m_componentAccessor.add<ScriptSleepComponent>(scriptEntity, iamc.callback);
+					m_componentAccessor.add<ScriptSleepComponent>(scriptEntity, std::move(iamc.callback));
 					m_scriptSystem->registerScript(nullptr, scriptEntity, entityId);
 				}
 				/* removes component */

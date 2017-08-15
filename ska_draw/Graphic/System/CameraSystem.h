@@ -10,7 +10,7 @@ namespace ska {
 	template <class T>
 	struct Point;
 
-	class CameraSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, CameraFocusedComponent>, PossibleComponent<GraphicComponent>> {
+	class CameraSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, CameraFocusedComponent>, PossibleComponent<HitboxComponent>> {
 	public:
 		CameraSystem(EntityManager& entityManager, const unsigned int screenW, const unsigned int screenH);
 		CameraSystem& operator=(const CameraSystem&) = delete;

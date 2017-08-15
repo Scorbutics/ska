@@ -23,10 +23,11 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
 	auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
-	ska::AnimatedTexture at;
-	at.load(RESOURCES_FOLDER + "giphy.gif", 1, 1, 1);
-	gc.sprite.push_back(at);
-	m_entityManager.addComponent<ska::GraphicComponent>(entity, gc);
+	gc.animatedSprites.resize(1);
+	auto& at = gc.animatedSprites[0];
+	//at.load(RESOURCES_FOLDER + "giphy.gif");
+	at.load(RESOURCES_FOLDER + "0.png", 6, 8, 3);
+	m_entityManager.addComponent<ska::GraphicComponent>(entity, std::move(gc));
 	m_entityManager.addComponent<ska::GravityAffectedComponent>(entity, ska::GravityAffectedComponent());
 	ska::ForceComponent fc;
 	static int one = 0;
@@ -35,20 +36,20 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
 		fc.bounciness = 0;
 	}
 	one++;
-	m_entityManager.addComponent<ska::ForceComponent>(entity, fc);
+	m_entityManager.addComponent<ska::ForceComponent>(entity, std::move(fc));
 	ska::MovementComponent mc;
-	m_entityManager.addComponent<ska::MovementComponent>(entity, mc);
+	m_entityManager.addComponent<ska::MovementComponent>(entity, std::move(mc));
 	ska::PositionComponent pc;
 	pc.x = pos.x;
 	pc.y = pos.y;
 	pc.z = 0;
-	m_entityManager.addComponent<ska::PositionComponent>(entity, pc);
+	m_entityManager.addComponent<ska::PositionComponent>(entity, std::move(pc));
 
 	m_entityManager.addComponent<ska::CollidableComponent>(entity, ska::CollidableComponent());
 	ska::HitboxComponent hc;
 	hc.height = at.getHeight();
 	hc.width = at.getWidth();
-	m_entityManager.addComponent<ska::HitboxComponent>(entity, hc);
+	m_entityManager.addComponent<ska::HitboxComponent>(entity, std::move(hc));
 	return entity;
 }
 
@@ -66,14 +67,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));
 
 		ska::InputComponent ic;
-		//ic.movePower = std::numeric_limits<float>::max()*0.5F;
-		m_entityManager.addComponent<ska::InputComponent>(blockA, ic);
-
-		//m_entityManager.addComponent<ska::InputComponent>(blockB, ska::InputComponent());
-
-		auto& gac = m_entityManager.getComponent<ska::GravityAffectedComponent>(blockA);
-		//gac.friction = std::numeric_limits<float>::max()*0.03F;
-
+		m_entityManager.addComponent<ska::InputComponent>(blockA, std::move(ic));
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
 		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);
 	}

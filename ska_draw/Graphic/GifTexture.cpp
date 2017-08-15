@@ -110,9 +110,6 @@ void ska::GifTexture::free() {
     SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
 	CEV_gifAnimFree(m_animation);
 	m_animation = NULL;
-	SKA_LOG_INFO("Freeing Texture GIF file ", m_spriteName, " (0x", m_actTexture, ")");
-	SDL_DestroyTexture(m_actTexture);
-	m_actTexture = NULL;
 }
 
 void ska::GifTexture::checkRenderer() {

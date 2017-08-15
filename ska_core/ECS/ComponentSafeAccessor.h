@@ -25,8 +25,8 @@ namespace ska {
 		}
 
 		template <class T>
-		void add(EntityId entity, const T& component) {
-			m_entityManager.addComponent<T>(entity, component);
+		void add(EntityId entity, T&& component) {
+			m_entityManager.addComponent<T>(entity, std::forward<T>(component));
         }
 
 		void add(const EntityId entity, const std::string& componentName) const {
@@ -43,8 +43,8 @@ namespace ska {
 		}
 
 		template <class T>
-		std::string serialize(const EntityId entity, const T& component, const std::string& field) const {
-			return m_entityManager.serializeComponent(entity, component, field);
+		std::string serialize(const EntityId entity, T&& component, const std::string& field) const {
+			return m_entityManager.serializeComponent(entity, std::forward<T>(component), field);
 		}
 
     private:

@@ -26,8 +26,8 @@ namespace ska {
 			return m_mask;
 		}
 
-		unsigned int add(EntityId entityId, const T& comp) {
-			m_components[entityId] = comp;
+		unsigned int add(EntityId entityId, T&& comp) {
+			m_components[entityId] = std::forward<T>(comp);
 			return m_mask;
 		}
 
