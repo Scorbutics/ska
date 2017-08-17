@@ -6,8 +6,6 @@
 #include "GifTexture.h"
 
 namespace ska {
-    //TODO : ne plus placer GifTexture ET Texture + Animation
-    //Traiter la différence entre Gif et PNG séparé + bas niveau au moment du décodage (load)
 	class AnimatedTexture {
 	public:
 		AnimatedTexture();
