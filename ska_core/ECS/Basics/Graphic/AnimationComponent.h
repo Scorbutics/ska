@@ -9,9 +9,9 @@ namespace ska {
 		};
 	}
 
-	class DirectionalAnimationComponent : public Component {
+	class AnimationComponent : public Component {
 	public:
-		DirectionalAnimationComponent();
+		AnimationComponent();
 
 		int direction;
 		DirectionalAnimationType::Enum type;
@@ -19,7 +19,7 @@ namespace ska {
 
 	protected:
 		static std::string serializeDirection(const Component& component) {
-			return StringUtils::intToStr(static_cast<const DirectionalAnimationComponent&>(component).direction);
+			return StringUtils::intToStr(static_cast<const AnimationComponent&>(component).direction);
 		}
 
 	};

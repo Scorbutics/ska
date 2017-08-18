@@ -203,7 +203,7 @@
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\exceptions\fileexception.h
 	"InputException.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\ecs\entitymanager.h
+1502867175 c:\documents\perso\dev\c++\ska\ska_core\ecs\entitymanager.h
 	<bitset>
 	<unordered_set>
 	<array>
@@ -213,7 +213,7 @@
 	"../Utils/Observable.h"
 	"ComponentSerializer.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\ecs\componenthandler.h
+1502867175 c:\documents\perso\dev\c++\ska\ska_core\ecs\componenthandler.h
 	<iostream>
 	<vector>
 	<typeinfo>
@@ -279,9 +279,9 @@
 	<map>
 	<SDL_ttf.h>
 
-1501224288 c:\documents\perso\dev\c++\ska\ska_core\utils\skaconstants.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_core\utils\skaconstants.h
 
-1501490019 c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.h
+1503055203 c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.h
 	"Data/Events/ExtensibleGameEventDispatcher.h"
 	"ECS/EntityManager.h"
 	"Core/State/StateBase.h"
@@ -328,7 +328,7 @@
 	"Utils/Observer.h"
 	"Data/Events/GameEventDispatcher.h"
 
-1501766589 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
+1503055203 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
 	"StateSandbox.h"
 	"../ska_draw/Graphic/System/GraphicSystem.h"
 	"../ska_draw/Graphic/System/CameraFixedSystem.h"
@@ -348,7 +348,7 @@
 	<Data/Events/GameEventDispatcher.h>
 	"ECS/Basics/Graphic/DialogComponent.h"
 
-1501744813 c:\documents\perso\dev\c++\ska\ska_draw\graphic\graphiccomponent.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\graphiccomponent.h
 	<vector>
 	"ECS/Component.h"
 	"AnimatedTexture.h"
@@ -357,7 +357,7 @@
 	<unordered_map>
 	"ComponentHandler.h"
 
-1501765890 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animatedtexture.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animatedtexture.h
 	"Animation.h"
 	"Texture.h"
 	"Rectangle.h"
@@ -367,7 +367,7 @@
 1501744813 c:\documents\perso\dev\c++\ska\ska_draw\graphic\animation.h
 	"Rectangle.h"
 
-1501224288 c:\documents\perso\dev\c++\ska\ska_draw\graphic\texture.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\texture.h
 	<memory>
 	"Utils/ResourceTemplate.h"
 	"Draw/SDLTexture.h"
@@ -375,12 +375,13 @@
 	"Utils/SkaConstants.h"
 	"Rectangle.h"
 	"Draw/Color.h"
+	"Renderable.h"
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\utils\resourcetemplate.h
 	<memory>
 	<unordered_map>
 
-1501744813 c:\documents\perso\dev\c++\ska\ska_core\draw\sdltexture.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_core\draw\sdltexture.h
 	"Color.h"
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\draw\color.h
@@ -391,13 +392,13 @@
 	<string>
 	"Color.h"
 
-1501490019 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\physic\positioncomponent.h
+1503068413 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\physic\positioncomponent.h
 	"../../Component.h"
 	"../../../Utils/StringUtils.h"
 	"../../../Utils/PhysicUtils.h"
 	"../../../Point.h"
 	"HitboxComponent.h"
-	"../Graphic/DirectionalAnimationComponent.h"
+	"../Graphic/AnimationComponent.h"
 	"../../../Utils/NumberUtils.h"
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\utils\physicutils.h
@@ -431,7 +432,7 @@
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\exceptions\illegalstateexception.h
 	"GenericException.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\ecs\componentsafeaccessor.h
+1502867175 c:\documents\perso\dev\c++\ska\ska_core\ecs\componentsafeaccessor.h
 	"ECSDefines.h"
 	"EntityManager.h"
 	"../Utils/ContainsTypeTuple.h"
@@ -450,10 +451,10 @@
 	"Draw/IGraphicSystem.h"
 	"../PositionnedGraphicDrawable.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_draw\graphic\positionnedgraphicdrawable.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\positionnedgraphicdrawable.h
 	"GraphicComponent.h"
-	"ECS/Basics/Physic/PositionComponent.h"
 	"Draw/Drawable.h"
+	"Renderable.h"
 
 1501138064 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\dialogcomponent.h
 	"../../Component.h"
@@ -463,7 +464,7 @@
 	"CameraSystem.h"
 	"Rectangle.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_draw\graphic\system\camerasystem.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\system\camerasystem.h
 	<unordered_set>
 	"Rectangle.h"
 	"ECS/System.h"
@@ -471,8 +472,9 @@
 	"ECS/Basics/Graphic/CameraFocusedComponent.h"
 	"../GraphicComponent.h"
 
-1501138064 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\camerafocusedcomponent.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\camerafocusedcomponent.h
 	"../../Component.h"
+	"../../../Point.h"
 
 1501224289 c:\documents\perso\dev\c++\ska\ska_physic\physic\system\movementsystem.h
 	<unordered_set>
@@ -527,7 +529,13 @@
 1501569627 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\world.cpp
 	"World.h"
 
-1501767937 c:\documents\perso\dev\c++\ska\ska_draw\graphic\giftexture.h
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\giftexture.h
 	<string>
 	"Rectangle.h"
+
+1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\renderable.h
+
+1503068037 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\animationcomponent.h
+	"../../Component.h"
+	"../../../Utils/StringUtils.h"
 

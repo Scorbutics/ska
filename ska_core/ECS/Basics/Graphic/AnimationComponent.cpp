@@ -1,6 +1,6 @@
-#include "DirectionalAnimationComponent.h"
+#include "AnimationComponent.h"
 
-ska::DirectionalAnimationComponent::DirectionalAnimationComponent() :
+ska::AnimationComponent::AnimationComponent() :
     type(DirectionalAnimationType::MOVEMENT), looked(0) {
     static auto initialized = false;
     if (!initialized) {

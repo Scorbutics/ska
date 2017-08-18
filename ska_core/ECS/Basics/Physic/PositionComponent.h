@@ -4,7 +4,7 @@
 #include "../../../Utils/PhysicUtils.h"
 #include "../../../Point.h"
 #include "HitboxComponent.h"
-#include "../Graphic/DirectionalAnimationComponent.h"
+#include "../Graphic/AnimationComponent.h"
 #include "../../../Utils/NumberUtils.h"
 
 namespace ska {
@@ -23,7 +23,7 @@ namespace ska {
 		}
 
 		//TODO move vers ska_physic
-		static Point<float> getFrontPosition(const PositionComponent& pc, const HitboxComponent& hc, const DirectionalAnimationComponent& dac) {
+		static Point<float> getFrontPosition(const PositionComponent& pc, const HitboxComponent& hc, const AnimationComponent& dac) {
 			Point<float> result;
 			Rectangle absoluteHitbox;
 			absoluteHitbox.x = static_cast<int>((pc.x + static_cast<float>(hc.xOffset)));

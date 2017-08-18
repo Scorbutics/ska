@@ -9,7 +9,7 @@ void ska::DirectionalAnimationSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
 		auto& gc = m_componentAccessor.get<GraphicComponent>(entityId);
-		auto& dac = m_componentAccessor.get<DirectionalAnimationComponent>(entityId);
+		auto& dac = m_componentAccessor.get<AnimationComponent>(entityId);
 		auto& mov = m_componentAccessor.get<MovementComponent>(entityId);
 
 		if (gc.animatedSprites.empty()) {
