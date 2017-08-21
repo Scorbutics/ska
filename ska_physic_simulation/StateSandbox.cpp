@@ -3,6 +3,8 @@
 #include "../ska_draw/Graphic/System/CameraFixedSystem.h"
 #include "Physic/System/MovementSystem.h"
 #include "Physic/System/CollisionSystem.h"
+#include "Graphic/System/AnimationSystem.h"
+#include "Graphic/System/WalkAnimationStateMachine.h"
 #include "Inputs/System/InputSystem.h"
 #include "ECS/Basics/Physic/GravityAffectedComponent.h"
 #include "Physic/System/GravitySystem.h"
@@ -45,6 +47,8 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
 	pc.z = 0;
 	m_entityManager.addComponent<ska::PositionComponent>(entity, std::move(pc));
 
+	m_entityManager.addComponent<ska::AnimationComponent>(entity, ska::AnimationComponent());
+
 	m_entityManager.addComponent<ska::CollidableComponent>(entity, ska::CollidableComponent());
 	ska::HitboxComponent hc;
 	hc.height = at.getHeight();
@@ -62,6 +66,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic<ska::CollisionSystem>(m_eventDispatcher);
 		addLogic<ska::GravitySystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
+        auto animSystem = addLogic<ska::AnimationSystem>();
+        animSystem->addAnimationStateMachine(std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
 
 		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100));
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));

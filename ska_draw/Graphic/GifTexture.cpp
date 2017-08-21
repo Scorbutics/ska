@@ -35,7 +35,9 @@ ska::GifTexture& ska::GifTexture::operator=(const GifTexture& t) {
 }
 
 void ska::GifTexture::setDelay(unsigned delay) const {
-	CEV_gifTimeSet(m_animation, GIF_ALL, delay);
+    if(m_animation != nullptr) {
+        CEV_gifTimeSet(m_animation, GIF_ALL, delay);
+    }
 }
 
 void ska::GifTexture::stop(bool x) const {
@@ -43,7 +45,9 @@ void ska::GifTexture::stop(bool x) const {
 }
 
 void ska::GifTexture::setLoopMode(unsigned int loopMode) const {
-	CEV_gifLoopMode(m_animation, loopMode);
+    if(m_animation != nullptr) {
+        CEV_gifLoopMode(m_animation, loopMode);
+    }
 }
 
 void ska::GifTexture::load(const std::string& spriteName) {
@@ -99,7 +103,9 @@ int ska::GifTexture::render(int x, int y, const Rectangle* clip) const{
 }
 
 void ska::GifTexture::reset() const {
-	CEV_gifLoopReset(m_animation);
+    if(m_animation != nullptr) {
+        CEV_gifLoopReset(m_animation);
+    }
 }
 
 void ska::GifTexture::nextFrame() const{

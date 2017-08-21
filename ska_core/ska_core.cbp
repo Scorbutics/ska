@@ -93,6 +93,8 @@
 		<Unit filename="Draw/TextureData.h" />
 		<Unit filename="Draw/VectorDrawableContainer.cpp" />
 		<Unit filename="Draw/VectorDrawableContainer.h" />
+		<Unit filename="ECS/Basics/Graphic/AnimationComponent.cpp" />
+		<Unit filename="ECS/Basics/Graphic/AnimationComponent.h" />
 		<Unit filename="ECS/Basics/Graphic/CameraFocusedComponent.cpp" />
 		<Unit filename="ECS/Basics/Graphic/CameraFocusedComponent.h" />
 		<Unit filename="ECS/Basics/Graphic/DebugGraphicComponent.cpp" />
@@ -101,8 +103,6 @@
 		<Unit filename="ECS/Basics/Graphic/DeleterComponent.h" />
 		<Unit filename="ECS/Basics/Graphic/DialogComponent.cpp" />
 		<Unit filename="ECS/Basics/Graphic/DialogComponent.h" />
-		<Unit filename="ECS/Basics/Graphic/DirectionalAnimationComponent.cpp" />
-		<Unit filename="ECS/Basics/Graphic/DirectionalAnimationComponent.h" />
 		<Unit filename="ECS/Basics/Input/InputComponent.cpp" />
 		<Unit filename="ECS/Basics/Input/InputComponent.h" />
 		<Unit filename="ECS/Basics/Physic/CollidableComponent.cpp" />

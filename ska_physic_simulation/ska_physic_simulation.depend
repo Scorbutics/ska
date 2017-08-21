@@ -328,12 +328,14 @@
 	"Utils/Observer.h"
 	"Data/Events/GameEventDispatcher.h"
 
-1503055203 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
+1503320063 source:c:\documents\perso\dev\c++\ska\ska_physic_simulation\statesandbox.cpp
 	"StateSandbox.h"
 	"../ska_draw/Graphic/System/GraphicSystem.h"
 	"../ska_draw/Graphic/System/CameraFixedSystem.h"
 	"Physic/System/MovementSystem.h"
 	"Physic/System/CollisionSystem.h"
+	"Graphic/System/AnimationSystem.h"
+	"Graphic/System/WalkAnimationStateMachine.h"
 	"Inputs/System/InputSystem.h"
 	"ECS/Basics/Physic/GravityAffectedComponent.h"
 	"Physic/System/GravitySystem.h"
@@ -392,7 +394,7 @@
 	<string>
 	"Color.h"
 
-1503068413 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\physic\positioncomponent.h
+1503317941 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\physic\positioncomponent.h
 	"../../Component.h"
 	"../../../Utils/StringUtils.h"
 	"../../../Utils/PhysicUtils.h"
@@ -535,7 +537,22 @@
 
 1503055202 c:\documents\perso\dev\c++\ska\ska_draw\graphic\renderable.h
 
-1503068037 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\animationcomponent.h
+1503317073 c:\documents\perso\dev\c++\ska\ska_core\ecs\basics\graphic\animationcomponent.h
 	"../../Component.h"
 	"../../../Utils/StringUtils.h"
+
+1503317691 c:\documents\perso\dev\c++\ska\ska_draw\graphic\system\animationsystem.h
+	<unordered_set>
+	"../GraphicComponent.h"
+	"ECS/Basics/Graphic/AnimationComponent.h"
+	"ECS/Basics/Physic/MovementComponent.h"
+	"ECS/Basics/Physic/PositionComponent.h"
+	"ECS/System.h"
+	"AnimationStateMachine.h"
+
+1503318092 c:\documents\perso\dev\c++\ska\ska_draw\graphic\system\animationstatemachine.h
+	"ECS/ECSDefines.h"
+
+1503320010 c:\documents\perso\dev\c++\ska\ska_draw\graphic\system\walkanimationstatemachine.h
+	"AnimationStateMachine.h"
 

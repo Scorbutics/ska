@@ -67,6 +67,9 @@
 		<Unit filename="Graphic/PositionnedGraphicDrawable.h" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.cpp" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.h" />
+		<Unit filename="Graphic/System/AnimationStateMachine.h" />
+		<Unit filename="Graphic/System/AnimationSystem.cpp" />
+		<Unit filename="Graphic/System/AnimationSystem.h" />
 		<Unit filename="Graphic/System/CameraFixedSystem.cpp" />
 		<Unit filename="Graphic/System/CameraFixedSystem.h" />
 		<Unit filename="Graphic/System/CameraFollowSystem.cpp" />
@@ -77,12 +80,12 @@
 		<Unit filename="Graphic/System/DebugCollisionDrawerSystem.h" />
 		<Unit filename="Graphic/System/DeleterSystem.cpp" />
 		<Unit filename="Graphic/System/DeleterSystem.h" />
-		<Unit filename="Graphic/System/DirectionalAnimationSystem.cpp" />
-		<Unit filename="Graphic/System/DirectionalAnimationSystem.h" />
 		<Unit filename="Graphic/System/GraphicSystem.cpp" />
 		<Unit filename="Graphic/System/GraphicSystem.h" />
 		<Unit filename="Graphic/System/ShadowSystem.cpp" />
 		<Unit filename="Graphic/System/ShadowSystem.h" />
+		<Unit filename="Graphic/System/WalkAnimationStateMachine.cpp" />
+		<Unit filename="Graphic/System/WalkAnimationStateMachine.h" />
 		<Unit filename="Graphic/Texture.cpp" />
 		<Unit filename="Graphic/Texture.h" />
 		<Extensions>
