@@ -1,3 +1,4 @@
+/*
 #include "AnimationSystem.h"
 #include "ECS/Basics/Graphic/AnimationComponent.h"
 
@@ -23,3 +24,4 @@ void ska::AnimationSystem::refresh(unsigned int) {
 void ska::AnimationSystem::addAnimationStateMachine(std::unique_ptr<AnimationStateMachine>&& afsm) {
     m_animationFSM.push_back(std::forward<std::unique_ptr<AnimationStateMachine>>(afsm));
 }
+*/
