@@ -37,7 +37,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		ScriptAwareComponent& sac = components.get<ScriptAwareComponent>(entityId);
 		const PositionComponent& pc = components.get<PositionComponent>(entityId);
 		const HitboxComponent& hc = components.get<HitboxComponent>(entityId);
-		const DirectionalAnimationComponent& dac = components.get<DirectionalAnimationComponent>(entityId);
+		const auto& dac = components.get<AnimationComponent>(entityId);
 		
 		const Point<int>& frontPos = PositionComponent::getFrontPosition(pc, hc, dac);
 		const Point<int>& centerPos = PositionComponent::getCenterPosition(pc, hc);

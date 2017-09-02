@@ -6,6 +6,7 @@
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/System.h"
 #include "AnimationStateMachine.h"
+#include "ECS/Basics/Graphic/AnimationStateMachine.h"
 
 namespace ska {
     template <class ... ASM>
@@ -16,12 +17,14 @@ namespace ska {
       template <class T>
       using ASMPtr = std::unique_ptr<T>;
 
-    protected:
+    public:
       template<class ASM1, class ... Args>
-      void set(Args&&... args) {
+	  ASMPtr<ASM1>& setup(Args&&... args) {
           using animationStateMachineTypeFound = ska::meta::contains<ASM1, ASM...>;
           static_assert(animationStateMachineTypeFound::value, "Unable to locate animation state machine in the current animation system");
-          std::get<ASMPtr<ASM1>>(m_asm) = std::make_unique<ASM1>(std::forward<Args>(args)...);
+		  auto& toSet = std::get<ASMPtr<ASM1>>(m_asm);
+      	  toSet = std::make_unique<ASM1>(std::forward<Args>(args)...);
+		  return toSet;
       }
 
 
@@ -38,16 +41,6 @@ namespace ska {
                 throw std::runtime_error("asm1 or asm2 is not allocated");
             }
 
-         //example
-         /*static bool done = false;
-         if(!done) {
-                for(auto& c : m_components) {
-                    c.animationFiniteStateMachine = asm1.get();
-                    c.animationFiniteStateMachine->onEnter();
-                }
-         }*/
-         //end
-
         asm1->template to<ASM2>(asm2.get(), std::forward<Predicate>(cond));
       }
 
@@ -62,10 +55,10 @@ namespace ska {
         const auto& processed = getEntities();
         for (auto entityId : processed) {
           auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);
-          IAnimationStateMachine* next = c.animationFiniteStateMachine->animate(c, m_entity);
+		  auto afsm = c.getASM();
+	        auto next = afsm->animate(c, entityId);
           if(next != nullptr) {
-              c.animationFiniteStateMachine = next;
-              c.animationFiniteStateMachine->onEnter();
+              c.setASM(next);
           }
         }
       }

@@ -37,11 +37,11 @@ void ska::IARandomMovementSystem::refresh(unsigned int) {
                             iamc.direction = horizontalDir ? (sens ? 1 : 3) : (sens ? 0 : 2);
 
                             /* Change the direction the entity look at */
-							const auto& dacPtr = m_componentPossibleAccessor.get<DirectionalAnimationComponent>(entityId);
+							const auto& dacPtr = m_componentPossibleAccessor.get<AnimationComponent>(entityId);
                             if (dacPtr != nullptr) {
                                 auto& dac = *dacPtr;
-                                dac.looked = iamc.emitter;
-                                dac.type = DirectionalAnimationType::MOVEMENT_THEN_FOLLOWING;
+                                /*dac.looked = iamc.emitter;
+                                dac.type = DirectionalAnimationType::MOVEMENT_THEN_FOLLOWING;*/
                             }
 
                         } else {

@@ -33,7 +33,6 @@
     <ClInclude Include="ECS\Basics\Graphic\DebugGraphicComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DeleterComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DialogComponent.h" />
-    <ClInclude Include="ECS\Basics\Graphic\DirectionalAnimationComponent.h" />
     <ClInclude Include="ECS\Basics\Input\InputComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionComponent.h" />
@@ -144,6 +143,8 @@
     <ClInclude Include="Core\State\StateBuilder.h" />
     <ClInclude Include="Utils\OutputUtils.h" />
     <ClInclude Include="Utils\SubObserver.h" />
+    <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
+    <ClInclude Include="ECS\Basics\Graphic\AnimationStateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
@@ -160,7 +161,6 @@
     <ClCompile Include="ECS\Basics\Graphic\DebugGraphicComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DeleterComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DialogComponent.cpp" />
-    <ClCompile Include="ECS\Basics\Graphic\DirectionalAnimationComponent.cpp" />
     <ClCompile Include="ECS\Basics\Input\InputComponent.cpp" />
     <ClCompile Include="ECS\Basics\Physic\CollidableComponent.cpp" />
     <ClCompile Include="ECS\Basics\Physic\CollisionComponent.cpp" />
@@ -204,5 +204,6 @@
     <ClCompile Include="Draw\Color.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />
+    <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
   </ItemGroup>
 </Project>

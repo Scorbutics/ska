@@ -57,11 +57,12 @@
     <ClInclude Include="Draw\SDLTexture.h" />
     <ClInclude Include="Draw\TextureData.h" />
     <ClInclude Include="Draw\VectorDrawableContainer.h" />
+    <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\CameraFocusedComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DebugGraphicComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DeleterComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DialogComponent.h" />
-    <ClInclude Include="ECS\Basics\Graphic\DirectionalAnimationComponent.h" />
+    <ClInclude Include="ECS\Basics\Graphic\AnimationStateMachine.h" />
     <ClInclude Include="ECS\Basics\Input\InputComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionComponent.h" />
@@ -171,11 +172,11 @@
     <ClCompile Include="Draw\SDLTexture.cpp" />
     <ClCompile Include="Draw\TextureData.cpp" />
     <ClCompile Include="Draw\VectorDrawableContainer.cpp" />
+    <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\CameraFocusedComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DebugGraphicComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DeleterComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DialogComponent.cpp" />
-    <ClCompile Include="ECS\Basics\Graphic\DirectionalAnimationComponent.cpp" />
     <ClCompile Include="ECS\Basics\Input\InputComponent.cpp" />
     <ClCompile Include="ECS\Basics\Physic\CollidableComponent.cpp" />
     <ClCompile Include="ECS\Basics\Physic\CollisionComponent.cpp" />

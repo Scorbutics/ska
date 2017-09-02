@@ -27,14 +27,15 @@
     <ClCompile Include="Graphic\GraphicComponent.cpp" />
     <ClCompile Include="Graphic\HasShadowComponent.cpp" />
     <ClCompile Include="Graphic\System\AbstractGraphicSystem.cpp" />
+    <ClCompile Include="Graphic\System\AnimationSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFixedSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFollowSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraSystem.cpp" />
     <ClCompile Include="Graphic\System\DebugCollisionDrawerSystem.cpp" />
     <ClCompile Include="Graphic\System\DeleterSystem.cpp" />
-    <ClCompile Include="Graphic\System\DirectionalAnimationSystem.cpp" />
     <ClCompile Include="Graphic\System\GraphicSystem.cpp" />
     <ClCompile Include="Graphic\System\ShadowSystem.cpp" />
+    <ClCompile Include="Graphic\System\WalkAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -48,14 +49,16 @@
     <ClInclude Include="Graphic\PositionnedGraphicDrawable.h" />
     <ClInclude Include="Graphic\Renderable.h" />
     <ClInclude Include="Graphic\System\AbstractGraphicSystem.h" />
+    <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
+    <ClInclude Include="Graphic\System\AnimationSystem.h" />
     <ClInclude Include="Graphic\System\CameraFixedSystem.h" />
     <ClInclude Include="Graphic\System\CameraFollowSystem.h" />
     <ClInclude Include="Graphic\System\CameraSystem.h" />
     <ClInclude Include="Graphic\System\DebugCollisionDrawerSystem.h" />
     <ClInclude Include="Graphic\System\DeleterSystem.h" />
-    <ClInclude Include="Graphic\System\DirectionalAnimationSystem.h" />
     <ClInclude Include="Graphic\System\GraphicSystem.h" />
     <ClInclude Include="Graphic\System\ShadowSystem.h" />
+    <ClInclude Include="Graphic\System\WalkAnimationStateMachine.h" />
     <ClInclude Include="Graphic\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

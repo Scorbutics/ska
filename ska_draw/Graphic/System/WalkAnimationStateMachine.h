@@ -1,5 +1,6 @@
 #pragma once
 #include "AnimationStateMachine.h"
+#include "ECS/Basics/Graphic/AnimationStateMachine.h"
 
 namespace ska {
     class EntityManager;
@@ -7,10 +8,11 @@ namespace ska {
     class WalkAnimationStateMachine :
         public AnimationStateMachine {
 	public:
-		WalkAnimationStateMachine(EntityManager& em);
-		virtual ~WalkAnimationStateMachine() = default;
+		explicit WalkAnimationStateMachine(EntityManager& em);
+	    virtual ~WalkAnimationStateMachine() = default;
 
-		virtual void animate(EntityId& entityId, AnimationComponent& ac) override;
+		virtual void onEnter() override;
+		virtual AnimationStateMachine* animate(AnimationComponent& ac, EntityId& entityId) override;
 
     private:
         EntityManager& m_entityManager;

@@ -9,12 +9,15 @@ ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
     m_entityManager(em) {
 }
 
-void ska::WalkAnimationStateMachine::animate(EntityId& entityId, AnimationComponent& ac) {
+void ska::WalkAnimationStateMachine::onEnter() {
+}
+
+ska::AnimationStateMachine* ska::WalkAnimationStateMachine::animate(AnimationComponent& ac, EntityId& entityId) {
     auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
     auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
 
     if (gc.animatedSprites.empty()) {
-        return;
+        return nullptr;
     }
 
     //ska::Rectangle base de l'animation
@@ -37,6 +40,8 @@ void ska::WalkAnimationStateMachine::animate(EntityId& entityId, AnimationCompon
         ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
         const auto& delay = 700/ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
         texture.setDelay(delay > 200 ? 200 : delay);
+    } else {
+	    
     }
 
     /*const auto& pcPtr = m_entityManager.getComponent<PositionComponent>(ac.looked);
@@ -76,4 +81,5 @@ void ska::WalkAnimationStateMachine::animate(EntityId& entityId, AnimationCompon
 
 
     texture.setOffset(spritePos);
+	return nullptr;
 }

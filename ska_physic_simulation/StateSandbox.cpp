@@ -18,11 +18,12 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 	m_cameraSystem(nullptr),
 	m_eventDispatcher(data.m_eventDispatcher),
 	m_entityManager(data.m_entityManager),
-	m_entityCollision(data.m_eventDispatcher, data.m_entityManager){
+	m_entityCollision(data.m_eventDispatcher, data.m_entityManager), 
+	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
 
-ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
+ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
 	auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
 	gc.animatedSprites.resize(1);
@@ -47,7 +48,9 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const{
 	pc.z = 0;
 	m_entityManager.addComponent<ska::PositionComponent>(entity, std::move(pc));
 
-	m_entityManager.addComponent<ska::AnimationComponent>(entity, ska::AnimationComponent());
+	ska::AnimationComponent ac;
+	ac.setASM(m_walkASM);
+	m_entityManager.addComponent<ska::AnimationComponent>(entity, std::move(ac));
 
 	m_entityManager.addComponent<ska::CollidableComponent>(entity, ska::CollidableComponent());
 	ska::HitboxComponent hc;
@@ -66,8 +69,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic<ska::CollisionSystem>(m_eventDispatcher);
 		addLogic<ska::GravitySystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
-        auto animSystem = addLogic<ska::AnimationSystem>();
-        animSystem->addAnimationStateMachine(std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
+        auto animSystem = addLogic<ska::AnimationSystem<ska::WalkAnimationStateMachine>>();
+        m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(m_entityManager).get();
 
 		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100));
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));

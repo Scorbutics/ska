@@ -1,7 +1,8 @@
 #include "AnimationComponent.h"
+#include "AnimationStateMachine.h"
 
 ska::AnimationComponent::AnimationComponent() :
-    indexAnimationFiniteStateMachine(0),
+	animationFiniteStateMachine(nullptr),
     state(0) {
     /*type(DirectionalAnimationType::MOVEMENT), looked(0) {
     static auto initialized = false;
@@ -11,4 +12,13 @@ ska::AnimationComponent::AnimationComponent() :
         addFieldSerializer(serializeDirection, "direction", className);
     }
     direction = 0;*/
+}
+
+void ska::AnimationComponent::setASM(AnimationStateMachine* afsm){
+	animationFiniteStateMachine = afsm;
+	animationFiniteStateMachine->onEnter();
+}
+
+ska::AnimationStateMachine* ska::AnimationComponent::getASM() const{
+	return animationFiniteStateMachine;
 }
