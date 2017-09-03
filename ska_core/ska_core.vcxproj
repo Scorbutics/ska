@@ -62,7 +62,7 @@
     <ClInclude Include="ECS\Basics\Graphic\DebugGraphicComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DeleterComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DialogComponent.h" />
-    <ClInclude Include="ECS\Basics\Graphic\AnimationStateMachine.h" />
+    <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
     <ClInclude Include="ECS\Basics\Input\InputComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionComponent.h" />

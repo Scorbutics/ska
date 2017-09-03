@@ -37,6 +37,8 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
 	if (one == 1) {
 		fc.weight = std::numeric_limits<float>::max();
 		fc.bounciness = 0;
+	} else {
+		fc.weight = 0.2;
 	}
 	one++;
 	m_entityManager.addComponent<ska::ForceComponent>(entity, std::move(fc));
@@ -49,7 +51,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
 	m_entityManager.addComponent<ska::PositionComponent>(entity, std::move(pc));
 
 	ska::AnimationComponent ac;
-	ac.setASM(m_walkASM);
+	ac.setASM(m_walkASM, entity);
 	m_entityManager.addComponent<ska::AnimationComponent>(entity, std::move(ac));
 
 	m_entityManager.addComponent<ska::CollidableComponent>(entity, ska::CollidableComponent());
@@ -69,13 +71,25 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic<ska::CollisionSystem>(m_eventDispatcher);
 		addLogic<ska::GravitySystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
-        auto animSystem = addLogic<ska::AnimationSystem<ska::WalkAnimationStateMachine>>();
+        auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>();
         m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(m_entityManager).get();
+		animSystem->setup<ska::JumpAnimationStateMachine>(m_entityManager);
+
+		animSystem->link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
+			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
+			return ska::NumberUtils::absolute(mov.vz) > 0.1;
+		});
+
+		animSystem->link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
+			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
+			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
+		});
 
 		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100));
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));
 
 		ska::InputComponent ic;
+		ic.jumpPower = 10;
 		m_entityManager.addComponent<ska::InputComponent>(blockA, std::move(ic));
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
 		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);

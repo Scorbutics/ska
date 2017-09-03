@@ -1,20 +1,17 @@
-#include "WalkAnimationStateMachine.h"
+#pragma once
+#include "JumpAnimationStateMachine.h"
 #include "ECS/EntityManager.h"
+#include "Utils/NumberUtils.h"
 #include "../GraphicComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
 #include "Utils/RectangleUtils.h"
 #include "ECS/Basics/Graphic/AnimationComponent.h"
 
-ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
-    AnimationStateMachine(),
+ska::JumpAnimationStateMachine::JumpAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {
 }
 
-void ska::WalkAnimationStateMachine::onEnter(EntityId&) {
-	//auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(entityId);
-}
-
-void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
+void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
 	auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
 	auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
 
@@ -27,29 +24,15 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 	auto spritePos = texture.getOffsetBase();
 	const int spriteHeight = texture.getHeight();
 
-	if (static_cast<int>(mov.vx) == 0 &&
-		static_cast<int>(mov.vy) == 0) {
-		texture.stop(true);
-		texture.reset();
-	}
-	else {
-		texture.stop(false);
-	}
+	texture.stop(true);
+	texture.reset();
 
-	auto xMove = ska::NumberUtils::round(mov.vx);
-	auto yMove = ska::NumberUtils::round(mov.vy);
+	auto xMove = NumberUtils::round(mov.vx);
+	auto yMove = NumberUtils::round(mov.vy);
 
 	if (xMove != 0 || yMove != 0) {
 		ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
-		const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
-		texture.setDelay(delay > 200 ? 200 : delay);
 	}
-	
-	/*const auto& pcPtr = m_entityManager.getComponent<PositionComponent>(ac.looked);
-	if (pcPtr != nullptr) {
-	auto& pcLooked = *pcPtr;
-	ac.state = RectangleUtils::getDirectionFromPos(*pcPtr, pcLooked);
-	}*/
 
 	switch (ac.state) {
 	case 0:
@@ -79,7 +62,10 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 	default:
 		break;
 	}
-
-
 	texture.setOffset(spritePos);
 }
+
+void ska::JumpAnimationStateMachine::onEnter(EntityId& e) {
+	//auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(entityId);
+}
+

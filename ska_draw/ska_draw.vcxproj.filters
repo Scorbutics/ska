@@ -25,6 +25,8 @@
     <ClCompile Include="Graphic\GifTexture.cpp" />
     <ClCompile Include="Graphic\System\AnimationSystem.cpp" />
     <ClCompile Include="Graphic\System\WalkAnimationStateMachine.cpp" />
+    <ClCompile Include="Graphic\System\DirectionnalAnimationStateMachine.cpp" />
+    <ClCompile Include="Graphic\System\JumpAnimationStateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FpsCalculator.h" />
@@ -48,5 +50,7 @@
     <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\AnimationSystem.h" />
     <ClInclude Include="Graphic\System\WalkAnimationStateMachine.h" />
+    <ClInclude Include="Graphic\System\DirectionnalAnimationStateMachine.h" />
+    <ClInclude Include="Graphic\System\JumpAnimationStateMachine.h" />
   </ItemGroup>
 </Project>

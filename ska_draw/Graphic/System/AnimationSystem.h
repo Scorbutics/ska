@@ -6,13 +6,12 @@
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/System.h"
 #include "AnimationStateMachine.h"
-#include "ECS/Basics/Graphic/AnimationStateMachine.h"
 
 namespace ska {
     template <class ... ASM>
     class AnimationSystem :
         public System<std::unordered_set<EntityId>, RequiredComponent<GraphicComponent, MovementComponent, AnimationComponent>, PossibleComponent<PositionComponent>> {
-      using Predicate = std::function<bool()>;
+      using Predicate = std::function<bool(EntityId&)>;
 
       template <class T>
       using ASMPtr = std::unique_ptr<T>;
@@ -58,7 +57,7 @@ namespace ska {
 		  auto afsm = c.getASM();
 	        auto next = afsm->animate(c, entityId);
           if(next != nullptr) {
-              c.setASM(next);
+              c.setASM(next, entityId);
           }
         }
       }

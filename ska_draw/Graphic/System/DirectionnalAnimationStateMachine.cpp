@@ -1,20 +1,15 @@
-#include "WalkAnimationStateMachine.h"
-#include "ECS/EntityManager.h"
-#include "../GraphicComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
 #include "Utils/RectangleUtils.h"
-#include "ECS/Basics/Graphic/AnimationComponent.h"
+#include "ECS/EntityManager.h"
+#include "ECS/Basics/Physic/PositionComponent.h"
+#include "ECS/Basics/Physic/MovementComponent.h"
+#include "../GraphicComponent.h"
+#include "DirectionnalAnimationStateMachine.h"
 
-ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
-    AnimationStateMachine(),
+ska::DirectionnalAnimationStateMachine::DirectionnalAnimationStateMachine(ska::EntityManager& em) :
 	m_entityManager(em) {
 }
 
-void ska::WalkAnimationStateMachine::onEnter(EntityId&) {
-	//auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(entityId);
-}
-
-void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
+void ska::DirectionnalAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
 	auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
 	auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
 
@@ -44,7 +39,10 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 		const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
 		texture.setDelay(delay > 200 ? 200 : delay);
 	}
-	
+	else {
+
+	}
+
 	/*const auto& pcPtr = m_entityManager.getComponent<PositionComponent>(ac.looked);
 	if (pcPtr != nullptr) {
 	auto& pcLooked = *pcPtr;
@@ -82,4 +80,5 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 
 
 	texture.setOffset(spritePos);
+	return;
 }

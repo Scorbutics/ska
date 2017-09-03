@@ -1,22 +1,21 @@
 #pragma once
 #include "../../Component.h"
-#include "../../../Utils/StringUtils.h"
 namespace ska {
 		
-	class AnimationStateMachine;
+	class IAnimationStateMachine;
 	class AnimationComponent : 
 		public Component {
 	public:
 		AnimationComponent();
 		~AnimationComponent() = default;
 
-		void setASM(AnimationStateMachine* afsm);
-		AnimationStateMachine* getASM() const;
+		void setASM(IAnimationStateMachine* afsm, EntityId& entity);
+		IAnimationStateMachine* getASM() const;
 
 		long state;
 
 	private:
-		AnimationStateMachine* animationFiniteStateMachine;
+		IAnimationStateMachine* animationFiniteStateMachine;
 		//int direction;
 		//DirectionalAnimationType::Enum type;
 		/*EntityId looked;

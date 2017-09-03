@@ -19,14 +19,15 @@ namespace ska {
 		using SeqRange = typename Gens<ArgsSizeof>::type;
 
 		template<typename T, typename F, int... Is>
-		static void for_each(T&& t, F f, SeqList<Is...> seq) {
-			auto l = { (f(std::get<Is>(t)), 0)... };
+		static void for_each(T&& t, F&& f, SeqList<Is...> seq) {
+			int dummy[] = { 0, ((void)std::forward<F>(f)(std::get<Is>(t)), 0)... };
+			(void)dummy;
 		}
 
 
 		template<typename... Ts, typename F>
-		static void for_each_in_tuple(std::tuple<Ts...>& t, F f) {
-			for_each(t, f, SeqRange<sizeof...(Ts)>());
+		static void for_each_in_tuple(std::tuple<Ts...>& t, F&& f) {
+			for_each(t, std::forward<F>(f), SeqRange<sizeof...(Ts)>());
 		}
 
 		template<int Index, class Search, class First, class... Types>

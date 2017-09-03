@@ -1,5 +1,5 @@
 #include "AnimationComponent.h"
-#include "AnimationStateMachine.h"
+#include "IAnimationStateMachine.h"
 
 ska::AnimationComponent::AnimationComponent() :
 	animationFiniteStateMachine(nullptr),
@@ -14,11 +14,11 @@ ska::AnimationComponent::AnimationComponent() :
     direction = 0;*/
 }
 
-void ska::AnimationComponent::setASM(AnimationStateMachine* afsm){
+void ska::AnimationComponent::setASM(IAnimationStateMachine* afsm, EntityId& entityId){
 	animationFiniteStateMachine = afsm;
-	animationFiniteStateMachine->onEnter();
+	animationFiniteStateMachine->onEnter(entityId);
 }
 
-ska::AnimationStateMachine* ska::AnimationComponent::getASM() const{
+ska::IAnimationStateMachine* ska::AnimationComponent::getASM() const{
 	return animationFiniteStateMachine;
 }

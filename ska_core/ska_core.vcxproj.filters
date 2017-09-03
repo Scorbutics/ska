@@ -144,7 +144,7 @@
     <ClInclude Include="Utils\OutputUtils.h" />
     <ClInclude Include="Utils\SubObserver.h" />
     <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
-    <ClInclude Include="ECS\Basics\Graphic\AnimationStateMachine.h" />
+    <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
