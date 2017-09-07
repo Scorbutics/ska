@@ -1,6 +1,7 @@
 #pragma once
 #include "Utils/Observer.h"
 #include "Data/Events/GameEventDispatcher.h"
+#include "ECS/Basics/Physic/PositionComponent.h"
 
 namespace ska {
 	struct CollisionEvent;
@@ -19,6 +20,7 @@ namespace ska {
 		virtual bool onEntityCollision(CollisionEvent&);
 	private:
 		bool calculateNormalAndPenetration(ska::CollisionComponent& col) const;
+		static void correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n);
 		GameEventDispatcher& m_ged;
 		EntityManager& m_entityManager;
 	};

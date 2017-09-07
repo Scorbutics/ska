@@ -24,9 +24,6 @@ void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 	auto spritePos = texture.getOffsetBase();
 	const int spriteHeight = texture.getHeight();
 
-	texture.stop(true);
-	texture.reset();
-
 	auto xMove = NumberUtils::round(mov.vx);
 	auto yMove = NumberUtils::round(mov.vy);
 
@@ -66,6 +63,9 @@ void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 }
 
 void ska::JumpAnimationStateMachine::onEnter(EntityId& e) {
-	//auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(entityId);
+	auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(e);
+	gc.animatedSprites[0].setOffset(Point<int>(3 * 48, 0));
+	gc.animatedSprites[0].stop(true);
+	gc.animatedSprites[0].switchToFrame(0);
 }
 

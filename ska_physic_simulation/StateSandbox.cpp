@@ -29,11 +29,11 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
 	gc.animatedSprites.resize(1);
 	auto& at = gc.animatedSprites[0];
 	//at.load(RESOURCES_FOLDER + "giphy.gif");
-	at.load(RESOURCES_FOLDER + "0.png", 6, 8, 3);
+	at.load(RESOURCES_FOLDER + "1.png", 4, 8, 3);
 	m_entityManager.addComponent<ska::GraphicComponent>(entity, std::move(gc));
 	m_entityManager.addComponent<ska::GravityAffectedComponent>(entity, ska::GravityAffectedComponent());
 	ska::ForceComponent fc;
-	static int one = 0;
+	static auto one = 0;
 	if (one == 1) {
 		fc.weight = std::numeric_limits<float>::max();
 		fc.bounciness = 0;
@@ -89,7 +89,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));
 
 		ska::InputComponent ic;
-		ic.jumpPower = 10;
+		ic.jumpPower = 2;
+		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockA, std::move(ic));
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
 		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);

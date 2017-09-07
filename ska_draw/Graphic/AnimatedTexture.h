@@ -37,6 +37,7 @@ namespace ska {
 		unsigned int getFullHeight() const;
 
 		void operator=(const AnimatedTexture& text);
+		void switchToFrame(unsigned int index);
 
 	private:
 

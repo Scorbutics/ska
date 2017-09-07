@@ -10,8 +10,9 @@ ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {
 }
 
-void ska::WalkAnimationStateMachine::onEnter(EntityId&) {
-	//auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(entityId);
+void ska::WalkAnimationStateMachine::onEnter(EntityId& e) {
+	auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(e);
+	gc.animatedSprites[0].setOffset(Point<int>(0, 0));
 }
 
 void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
@@ -31,8 +32,7 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 		static_cast<int>(mov.vy) == 0) {
 		texture.stop(true);
 		texture.reset();
-	}
-	else {
+	} else {
 		texture.stop(false);
 	}
 

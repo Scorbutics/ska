@@ -1,4 +1,5 @@
 #include "AnimatedTexture.h"
+#include "Exceptions/IllegalStateException.h"
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {
@@ -52,6 +53,14 @@ void ska::AnimatedTexture::operator=(const AnimatedTexture& text) {
 	m_gifMode = text.m_gifMode;
 }
 
+void ska::AnimatedTexture::switchToFrame(unsigned int index) {
+	if(m_gifMode) {
+		throw ska::IllegalStateException("unimplemented");
+	}
+	
+	m_anim.switchToFrame(index);	
+}
+
 void ska::AnimatedTexture::setAlpha(int alpha) {
 	m_sprite.setAlpha(static_cast<Uint8>(alpha));
 }
@@ -103,6 +112,10 @@ void ska::AnimatedTexture::reset() {
 }
 
 void ska::AnimatedTexture::nextFrame() {
-	m_anim.nextFrame();
-	m_gif.nextFrame();
+	if (m_gifMode) {
+		m_gif.nextFrame();
+	} else {
+		m_anim.nextFrame();
+	}
+	
 }

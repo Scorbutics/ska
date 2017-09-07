@@ -44,6 +44,20 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 	return true;
 }
 
+void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n) {
+	const auto percent = 0.1F;
+	const auto slope = 0.005F;
+
+	ska::Point<float> correction;
+	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
+	correction.x = constCorrection * n.x;
+	correction.y = constCorrection * n.y;
+	target.x -= invMassTarget * correction.x;
+	target.y -= invMassTarget * correction.y;
+	origin.x += invMassOrigin * correction.x;
+	origin.y += invMassOrigin * correction.y;
+}
+
 bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	if (e.collisionComponent == nullptr) {
 		return false;
@@ -93,6 +107,8 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 		mtarget.vy += impulse.y * invMassTarget;
 		morigin.vy += -impulse.y * invMassOrigin;
 	}
+
+	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.penetration, col.normal);
 
 	return true;
 }
