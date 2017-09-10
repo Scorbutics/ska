@@ -205,5 +205,6 @@
     <ClCompile Include="Inputs\WindowInput.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
+    <ClCompile Include="Data\Events\ECSEvent.h" />
   </ItemGroup>
 </Project>

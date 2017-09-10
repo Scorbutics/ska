@@ -8,7 +8,8 @@
 #include "StateEvent.h"
 #include "InputKeyEvent.h"
 #include "InputMouseEvent.h"
+#include "ECSEvent.h"
 
 namespace ska {
-	using GameEventDispatcher = EventDispatcher<SoundEvent, WorldEvent, CollisionEvent, GUIEvent, GameEvent, StateEvent, InputKeyEvent, InputMouseEvent>;
+	using GameEventDispatcher = EventDispatcher<SoundEvent, WorldEvent, CollisionEvent, GUIEvent, GameEvent, StateEvent, InputKeyEvent, InputMouseEvent, ECSEvent>;
 }

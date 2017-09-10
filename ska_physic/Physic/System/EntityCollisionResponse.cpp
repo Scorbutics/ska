@@ -108,7 +108,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 		morigin.vy += -impulse.y * invMassOrigin;
 	}
 
-	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.penetration, col.normal);
+	//correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.penetration, col.normal);
 
 	return true;
 }

@@ -15,7 +15,8 @@ namespace ska {
 			density(2),
 			maxParticles(500),
 			particleDimension(3),
-			generationDelay(0) { }
+			generationDelay(0),
+			randomVelocityMultiplier(1.F) { }
 		Point<int> origin;
 		Color cStart;
 		Color cEnd;
@@ -29,6 +30,7 @@ namespace ska {
 		unsigned int particleDimension;
 		unsigned int generationDelay;
 		std::string spritePath;
+		float randomVelocityMultiplier;
 	};
 
 	class SpreadingParticleEffectFactory {

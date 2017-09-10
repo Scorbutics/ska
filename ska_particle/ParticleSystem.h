@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include "ParticleEffect.h"
 
 namespace ska {
     class ParticleEffect;

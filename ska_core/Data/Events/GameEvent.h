@@ -22,6 +22,7 @@ namespace ska {
 
 		unsigned int windowWidth;
 		unsigned int windowHeight;
+		std::unordered_set<ska::EntityId> entitiesRemoved;
 
 	private:
 		const GameEventType m_eventType;

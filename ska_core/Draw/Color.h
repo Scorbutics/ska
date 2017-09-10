@@ -10,6 +10,13 @@ namespace ska {
 		uint8_t b;
 		uint8_t a;
 
+		Color(Uint32 c) {
+			r = c >> 24;
+			g = c >> 16;
+			b = c >> 8;
+			a = c & 0x000000FF;
+		}
+
 		Color(uint8_t pr,
 		uint8_t pg,
 		uint8_t pb,

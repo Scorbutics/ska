@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "../Rectangle.h"
 #include "../Point.h"
+#include "Color.h"
 
 namespace ska {
 	struct Color;
@@ -17,7 +18,7 @@ namespace ska {
 		SDLRenderer& operator=(SDLRenderer&& r) = default;
 		SDLRenderer(const SDLRenderer& r) = delete;
         SDLRenderer& operator=(const SDLRenderer& r) = delete;
-		void setRenderColor(const ska::Color& c) const;
+		void setRenderColor(const ska::Color& c);
 
 		static void setDefaultRenderer(SDLRenderer* renderer);
         static SDLRenderer* getDefaultRenderer();
@@ -30,6 +31,7 @@ namespace ska {
 
 		void drawColorPoint(const Color& c, const Point<int>& pos) const;
 		void drawColorRect(const Color& c, const Rectangle& r) const;
+		void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const;
 
 		~SDLRenderer();
 
@@ -39,6 +41,7 @@ namespace ska {
 	private:
 	    void free();
 		SDL_Renderer* m_renderer;
+		Color m_currentRenderColor;
 		static SDLRenderer* m_currentDefaultRenderer;
 
 	};

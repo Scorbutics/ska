@@ -17,7 +17,7 @@ namespace ska {
 		void showMessageBox(Uint32 flags, const std::string& title, const std::string& message) const ;
 		void display() const;
 		SDLRenderer& getRenderer();
-		void setRenderColor(const Color& color) const;
+		void setRenderColor(const Color& color);
 
 	private:
 		unsigned int m_height;

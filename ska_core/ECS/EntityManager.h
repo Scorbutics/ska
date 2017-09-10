@@ -7,6 +7,8 @@
 #include "ComponentHandler.h"
 #include "../Utils/Observable.h"
 #include "ComponentSerializer.h"
+#include "../Data/Events/ECSEvent.h"
+#include "../Data/Events/GameEventDispatcher.h"
 
 namespace ska {
 
@@ -22,7 +24,7 @@ namespace ska {
 	class EntityManager :
 	    public Observable<const EntityEventType, const EntityComponentsMask&, EntityId> {
 	public:
-		EntityManager() : m_componentMask() { }
+		EntityManager(GameEventDispatcher& ged) : m_ged(ged), m_componentMask() { }
 
 		EntityId createEntity();
 		void removeEntity(EntityId entity);
@@ -75,12 +77,15 @@ namespace ska {
 		virtual ~EntityManager() = default;
 
 	private:
+		GameEventDispatcher& m_ged;
 		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
 		std::unordered_set<EntityId> m_entities;
 		std::unordered_set<EntityId> m_alteredEntities;
 		EntityIdContainer m_deletedEntities;
 
 		static std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
+
+		void innerRemoveEntity(EntityId entity, ECSEvent& ecsEvent);
 
 		template <class T>
 		static ComponentHandler<T>& getComponents() {

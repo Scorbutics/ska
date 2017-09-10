@@ -129,13 +129,13 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point
 			if (getCollision(x, y)) {
 				Rectangle hitboxBlock{ x * m_blockSize, y * m_blockSize, m_blockSize, m_blockSize };
 				const auto& intersection = RectangleUtils::intersect(hitboxBlock, hitbox);
-				if(intersection.x != 0) {
-					outputX.push_back(hitboxBlock);
+				if(intersection.w > 1) {
+					outputY.push_back(hitboxBlock);
 					col = true;
 				}
 				
-				if (intersection.y != 0) {
-					outputY.push_back(hitboxBlock);
+				if (intersection.h > 1) {
+					outputX.push_back(hitboxBlock);
 					col = true;
 				}
 			}

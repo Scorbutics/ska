@@ -16,7 +16,8 @@ ska::SDLRenderer::SDLRenderer() :
     m_renderer(nullptr) {
 }
 
-void ska::SDLRenderer::setRenderColor(const ska::Color & c) const{
+void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
+	m_currentRenderColor = c;
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
 }
 
@@ -30,7 +31,7 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
     }
 
     m_renderer = SDL_CreateRenderer(window, index, flags);
-    SDL_SetRenderDrawColor( m_renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
     if(m_renderer == nullptr) {
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDL_GetError());
@@ -65,11 +66,19 @@ int ska::SDLRenderer::renderCopy(const SDLTexture& t, const Rectangle* clip, con
 void ska::SDLRenderer::drawColorPoint(const Color& c, const Point<int>& pos) const {
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderDrawPoint(m_renderer, pos.x, pos.y);
+	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
 void ska::SDLRenderer::drawColorRect(const Color& c, const Rectangle& r) const {
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderFillRect(m_renderer, &r);
+	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+}
+
+void ska::SDLRenderer::drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const {
+	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
+	SDL_RenderDrawLine(m_renderer, p1.x, p1.y, p2.x, p2.y);
+	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
 void ska::SDLRenderer::free() {

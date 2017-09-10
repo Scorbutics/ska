@@ -11,6 +11,10 @@ namespace ska {
 		DeleterSystem& operator=(const DeleterSystem&) = delete;
 		virtual ~DeleterSystem();
 		virtual void refresh(unsigned int ellapsedTime) override;
+		bool wasLoopDeletedEntities(ska::EntityId& entity) const;
+	private:
+		std::unordered_set<ska::EntityId> m_toDelete;
+
 	};
 }
 

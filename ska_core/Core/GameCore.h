@@ -12,7 +12,7 @@
 #include "../GameApp.h"
 #include "State/StateData.h"
 #include "../Inputs/Readers/IniReader.h"
-#include "Exceptions/FileException.h"
+#include "../Exceptions/FileException.h"
 
 namespace ska {
     template <class EntityManager, class EventDispatcher, class DrawableContainer, class SoundManager>
@@ -23,7 +23,8 @@ namespace ska {
 
         GameCore() :
 			Observer<StateEvent>(std::bind(&GameCore::onStateEvent, this, std::placeholders::_1)),
-            m_soundManager(m_eventDispatcher),
+			m_entityManager(m_eventDispatcher),
+    		m_soundManager(m_eventDispatcher),
             m_playerICM(m_rawInputListener, m_eventDispatcher),
 			m_stateHolder(m_eventDispatcher) {
 
@@ -135,12 +136,11 @@ namespace ska {
 			return false;
 		}
 
-		EntityManager m_entityManager;
-
 	protected:
-        EventDispatcher m_eventDispatcher;
-
+		EventDispatcher m_eventDispatcher;
+		
 	private:
+		EntityManager m_entityManager;
         DrawableContainer m_drawables;
         SoundManager m_soundManager;
 

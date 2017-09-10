@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "Draw/Color.h"
 #include "Graphic/Texture.h"
+#include "Logging/Logger.h"
 
 namespace ska {
 
@@ -52,7 +53,7 @@ namespace ska {
 		void kill(std::size_t index) {
 			if (activeIndex > 0 && index < activeIndex - 1) {
 				swapParticles(index, --activeIndex);
-				std::cout << "Swaping particle " << index << " to " << activeIndex << std::endl;
+				//std::cout << "Swaping particle " << index << " to " << activeIndex << std::endl;
 			} else if (index < activeIndex) {
 			    --activeIndex;
 			}
@@ -62,7 +63,7 @@ namespace ska {
 			activeIndex += density;
 			if (activeIndex >= groupSize) {
 				activeIndex = groupSize;
-				std::cout << ("Particle group full. Cannot add another particle") << std::endl;
+				SKA_LOG_INFO("Particle group full. Cannot add another particle");
 			}
 		}
 

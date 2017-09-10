@@ -13,7 +13,7 @@ std::unique_ptr<ska::ParticleEffect> ska::SpreadingParticleEffectFactory::create
 	auto particleSystem = std::make_unique<ParticleEffect>(data.density, data.maxParticles);
 
 	particleSystem->addGenerator<BoxParticleGenerator>(data.origin, data.originalBoxSize);
-	particleSystem->addGenerator<BasicVelocityGenerator>(data.initialVelocity, data.spreading, data.spreadingSlices);
+	particleSystem->addGenerator<BasicVelocityGenerator>(data.initialVelocity, data.spreading, data.spreadingSlices, data.randomVelocityMultiplier);
 
 	particleSystem->addUpdater<TimeParticleUpdater>(data.lifetime);
 	particleSystem->addUpdater<PhysicParticleUpdater>();

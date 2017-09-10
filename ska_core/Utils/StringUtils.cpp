@@ -157,6 +157,12 @@ std::string ska::StringUtils::floatToStr(const float f) {
 	return oss.str();
 }
 
+std::string ska::StringUtils::charToStr(char letter) {
+	std::ostringstream oss;
+	oss << letter;
+	return oss.str();
+}
+
 std::string ska::StringUtils::toANSI(const std::wstring& ws) {
 	if (ws.empty()) {
 		return "";

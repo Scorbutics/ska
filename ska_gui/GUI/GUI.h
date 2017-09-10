@@ -67,6 +67,15 @@ namespace ska {
 			m_wMaster.resort();
 		}
 
+		void pushWindowToFront(Widget* w);
+		Widget* addTopWidget(std::unique_ptr<Widget>& w);
+
+
+		Widget* getWindow(const std::string& name) {
+			return m_windowAnnuary[name];
+		}
+
+	private:
 		BaseHandledWidget* removeWindow(const std::string& name) {
 			auto wPtr = m_windowAnnuary[name];
 			if (wPtr == nullptr) {
@@ -80,15 +89,6 @@ namespace ska {
 			return static_cast<BaseHandledWidget*>(wPtr);
 		}
 
-		void pushWindowToFront(Widget* w);
-		Widget* addTopWidget(std::unique_ptr<Widget>& w);
-
-
-		Widget* getWindow(const std::string& name) {
-			return m_windowAnnuary[name];
-		}
-
-	private:
 		bool onGameEvent(ska::GameEvent & ge);
 	    Widget* frontWindow();
 		bool refreshMouse(InputMouseEvent& ime);

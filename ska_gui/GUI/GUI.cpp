@@ -159,9 +159,12 @@ void ska::GUI::refresh(unsigned int ellapsedTime) {
 	}
 
 	for(auto& wName : m_windowsToDelete) {
-		auto windowRemoved = (removeWindow(wName));
-		if(windowRemoved == m_hovered) {
+		auto w = getWindow(wName);
+		auto wasAParent = w->isAParent(*m_hovered);
+		auto windowRemoved = removeWindow(wName);
+		if(m_hovered == windowRemoved || wasAParent) {
 			m_hovered = nullptr;
+			m_lastFocused = nullptr;
 		} else if (windowRemoved == m_clicked) {
 			m_clicked = nullptr;
 		}

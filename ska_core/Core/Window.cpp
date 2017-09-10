@@ -17,7 +17,7 @@ ska::Window::Window(const std::string& title, unsigned int w, unsigned int h) :
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		w, h,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 	if (m_screen == nullptr) {
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDL_GetError());
@@ -41,7 +41,7 @@ ska::SDLRenderer& ska::Window::getRenderer() {
 	return m_renderer;
 }
 
-void ska::Window::setRenderColor(const Color & color) const {
+void ska::Window::setRenderColor(const Color & color) {
 	m_renderer.setRenderColor(color);
 }
 

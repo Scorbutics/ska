@@ -23,9 +23,9 @@ ska::ParticleBuilder& ska::ParticleFactory::prepareNextParticles(ParticleGroup& 
         }
         m_needsCounterUpdate = true;
 
-        if(!m_builder.isEmpty()) {
+        /*if(!m_builder.isEmpty()) {
             std::cout << "Generating from " << m_lastActiveIndex << " to " << group.activeIndex<< std::endl;
-        }
+        }*/
 	} else {
 	    m_builder.target(group, 0, 0);
 	}

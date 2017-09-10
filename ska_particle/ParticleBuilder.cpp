@@ -26,11 +26,11 @@ const ska::ParticleBuilder& ska::ParticleBuilder::setAcceleration(Point<float> a
 	return *this;
 }
 
-const ska::ParticleBuilder& ska::ParticleBuilder::setVelocity(PolarPoint<float> velocity, float spreading, unsigned int slices) const {
+const ska::ParticleBuilder& ska::ParticleBuilder::setVelocity(PolarPoint<float> velocity, float spreading, unsigned int slices, float randomMultipler) const {
 	assert(m_group != nullptr);
 	if (slices == 0) {
 		for (auto i = m_indexStart; i < m_indexEnd; i++) {
-			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius, velocity.angle + ska::NumberUtils::random(-spreading, spreading));
+			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), velocity.angle + ska::NumberUtils::random(-spreading, spreading));
 		}
 	} else {
 		static const auto factor = 10000.F;
@@ -38,9 +38,10 @@ const ska::ParticleBuilder& ska::ParticleBuilder::setVelocity(PolarPoint<float> 
 			const auto factoredSpreading = 2 * spreading * factor;
 			const auto currentSlice = slices == 1 ? 1 : ska::NumberUtils::random(1, slices);
 			const auto spreadingAngle = ((factoredSpreading / slices) * currentSlice) / factor;
-			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius, velocity.angle + spreadingAngle);
+			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), velocity.angle + spreadingAngle);
 		}
 	}
+	
 	return *this;
 }
 

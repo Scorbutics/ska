@@ -38,8 +38,8 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(nextPos, wcol.blockColPosX, wcol.blockColPosY);
 		if (intersect) {
 			collided = true;
-			wcol.xaxis = true;
-			wcol.yaxis = true;
+			wcol.xaxis = !wcol.blockColPosX.empty();
+			wcol.yaxis = !wcol.blockColPosY.empty();
 			wcol.lastBlockColPosX = lastBlockColPosX;
 			wcol.lastBlockColPosY = lastBlockColPosY;
 		}

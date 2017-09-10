@@ -1,6 +1,8 @@
 #include "EntityManager.h"
 #include "../Exceptions/IllegalStateException.h"
 #include "../Utils/StringUtils.h"
+#include "../Data/Events/GameEvent.h"
+#include "../Data/Events/ECSEvent.h"
 
 std::unordered_map<std::string, ska::ComponentSerializer*> ska::EntityManager::NAME_MAPPED_COMPONENT;
 
@@ -13,7 +15,7 @@ void ska::EntityManager::commonRemoveComponent(EntityId entity, ComponentSeriali
 
 void ska::EntityManager::refresh() {
     for(const auto& entity : m_alteredEntities) {
-        notifyObservers(COMPONENT_ALTER, m_componentMask[entity], entity);
+		notifyObservers(COMPONENT_ALTER, m_componentMask[entity], entity);
     }
     m_alteredEntities.clear();
 }
@@ -73,32 +75,47 @@ ska::EntityId ska::EntityManager::createEntity() {
 }
 
 void ska::EntityManager::removeEntity(EntityId entity) {
-    if (m_entities.find(entity) == m_entities.end() || m_entities.count(entity) <= 0) {
-        auto startMessage = ("Unable to delete entity #" + StringUtils::intToStr(static_cast<int>(entity)));
-        throw IllegalArgumentException (startMessage + " : this entity doesn't exist or is already deleted");
-    }
+	ECSEvent ecsEvent(ENTITIES_REMOVED);
+	innerRemoveEntity(entity, ecsEvent);
+	m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+	
+	/* Reset all components */
+	m_componentMask[entity] &= 0;
+}
 
-    m_entities.erase(entity);
+void ska::EntityManager::innerRemoveEntity(EntityId entity, ECSEvent& ecsEvent) {
+	if (m_entities.find(entity) == m_entities.end() || m_entities.count(entity) <= 0) {
+		auto startMessage = ("Unable to delete entity #" + StringUtils::intToStr(static_cast<int>(entity)));
+		throw IllegalArgumentException(startMessage + " : this entity doesn't exist or is already deleted");
+	}
 
-    m_deletedEntities.push_back(entity);
+	m_entities.erase(entity);
 
-    /* Reset all components */
-    m_componentMask[entity] &= 0;
+	m_deletedEntities.push_back(entity);
 
 	m_alteredEntities.insert(entity);
+	
+	ecsEvent.entities.emplace(entity);
 }
 
 void ska::EntityManager::removeEntities(const std::unordered_set<EntityId>& exceptions) {
+	ECSEvent ecsEvent(ENTITIES_REMOVED);
 	auto entities = m_entities;
     for (const auto& entity : entities) {
         if (exceptions.find(entity) == exceptions.end()) {
-            removeEntity(entity);
+            innerRemoveEntity(entity, ecsEvent);
         }
     }
+	m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+
+	for(auto& entity : ecsEvent.entities) {
+		/* Reset all components */
+		m_componentMask[entity] &= 0;
+	}
 }
 
 void ska::EntityManager::refreshEntity(EntityId entity) {
-    notifyObservers(COMPONENT_ALTER, m_componentMask[entity], entity);
+	notifyObservers(COMPONENT_ALTER, m_componentMask[entity], entity);
 }
 
 void ska::EntityManager::refreshEntities() {
