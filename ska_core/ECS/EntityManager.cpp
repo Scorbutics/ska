@@ -86,7 +86,8 @@ void ska::EntityManager::removeEntity(EntityId entity) {
 void ska::EntityManager::innerRemoveEntity(EntityId entity, ECSEvent& ecsEvent) {
 	if (m_entities.find(entity) == m_entities.end() || m_entities.count(entity) <= 0) {
 		auto startMessage = ("Unable to delete entity #" + StringUtils::intToStr(static_cast<int>(entity)));
-		throw IllegalArgumentException(startMessage + " : this entity doesn't exist or is already deleted");
+		SKA_LOG_ERROR(startMessage + " : this entity doesn't exist or is already deleted");
+		return;
 	}
 
 	m_entities.erase(entity);

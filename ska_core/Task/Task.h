@@ -16,7 +16,7 @@ namespace ska {
 			m_f(f) {
 		}
 
-		virtual bool operator()() override {
+		virtual bool operator()() final override {
 			return run();
 		}
 

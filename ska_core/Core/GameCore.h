@@ -138,13 +138,12 @@ namespace ska {
 
 	protected:
 		EventDispatcher m_eventDispatcher;
-		
+		std::unique_ptr<Window> m_mainWindow;
+
 	private:
 		EntityManager m_entityManager;
         DrawableContainer m_drawables;
         SoundManager m_soundManager;
-
-        std::unique_ptr<Window> m_mainWindow;
 
         RawInputListener m_rawInputListener;
         InputContextManager m_playerICM;

@@ -4,9 +4,9 @@
 #include "SoundRenderer.h"
 #include "Logging/Logger.h"
 
-ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher&) :
-	ska::Observer<SoundEvent>(bind(&SoundRenderer::handleSoundEvent, this, std::placeholders::_1)),
-	ska::Observer<WorldEvent>(bind(&SoundRenderer::handleWorldEvent, this, std::placeholders::_1)),
+ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
+	ska::SubObserver<SoundEvent>(bind(&SoundRenderer::handleSoundEvent, this, std::placeholders::_1), ged),
+	ska::SubObserver<WorldEvent>(bind(&SoundRenderer::handleWorldEvent, this, std::placeholders::_1), ged),
 	m_currentPlayed(nullptr) {
 
 	if(Mix_AllocateChannels(10) != static_cast<int>(10)) {

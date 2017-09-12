@@ -144,7 +144,16 @@ namespace ska {
 
 		template<class State, class ...Args>
 		State* addSubState(Args&& ... args) {
-			return m_builder.template addSubState<State, Args...>(m_subStates, std::forward<Args>(args)...);
+			auto state = m_builder.template addSubState<State, Args...>(m_subStates, std::forward<Args>(args)...);
+			state->load(nullptr);
+			return state;
+		}
+
+		template<class StateT>
+		bool removeSubState(StateT& subState) {
+			auto removed = m_builder.template removeSubState<StateT>(m_subStates, subState);
+			removed->unload();
+			return true;
 		}
 
 		template<class State, class ... Args>

@@ -17,6 +17,7 @@ namespace ska {
 		void showMessageBox(Uint32 flags, const std::string& title, const std::string& message) const ;
 		void display() const;
 		SDLRenderer& getRenderer();
+		void setWindowIcon(const std::string& filename);
 		void setRenderColor(const Color& color);
 
 	private:
@@ -29,6 +30,7 @@ namespace ska {
 		SDLRenderer m_renderer;
 
 		bool m_containsDefaultRenderer;
+		SDL_Surface* m_iconFile;
 
 	};
 }

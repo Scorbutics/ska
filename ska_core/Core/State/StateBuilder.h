@@ -40,6 +40,17 @@ namespace ska {
 				return result;
 			}
 
+			template<class StateT>
+			std::unique_ptr<StateT> removeSubState(std::vector<std::unique_ptr<State>>& subStates, StateT& subState) {
+				auto it = std::remove_if(subStates.begin(), subStates.end(), [&subState](const auto& c) {
+					return c.get() == &subState;
+				});
+				
+				auto removedState = std::move(*it);
+				subStates.erase(it, subStates.end());
+				return std::move(removedState);
+			}
+
 			template<class System, class ...Args>
 			std::unique_ptr<System> createLogic(Args&&... args) {
 				return std::make_unique<System>(m_data.m_entityManager, std::forward<Args>(args)...);
