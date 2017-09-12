@@ -21,6 +21,7 @@
 BenchmarkerCore::BenchmarkerCore() :
 	m_window("ska Particle Benchmark", 1500, 900),
 	m_particles(400, 70000) {
+	m_window.setRenderColor(ska::Color(0, 0, 0, 255));
 	{
 		/*ska::Point<int> origin(950, 500);
 		ska::Point<int> maxDistance(300, 0);
@@ -45,7 +46,7 @@ BenchmarkerCore::BenchmarkerCore() :
 	}
 	/**********************************************************/
 
-	ska::SpreadingParticleSystemData effectData;
+	/*ska::SpreadingParticleSystemData effectData;
 	effectData.lifetime = 2000;
 	effectData.originalBoxSize.x = 15;
 	effectData.origin.x = 750;
@@ -58,7 +59,9 @@ BenchmarkerCore::BenchmarkerCore() :
 	effectData.maxParticles = 20;
 	effectData.spritePath = ska::FileUtils::getExecutablePath() + "Sprites/Particles/4.png";
 	auto& grassEffect = m_particleSystem.makeEffect<ska::SpreadingTextureParticleEffectFactory>(m_window.getRenderer(), effectData);
-	grassEffect.addUpdater<ska::SideBalancingParticleUpdater>(effectData.origin, 1.F, 1.F);
+	grassEffect.addUpdater<ska::SideBalancingParticleUpdater>(effectData.origin, 1.F, 1.F);*/
+
+	buildFireworks();
 
 }
 
@@ -125,7 +128,6 @@ void BenchmarkerCore::graphicUpdate(const unsigned long) const {
 	//m_particles.display();
 	m_particleSystem.display();
 	m_fpsCalculator.getRenderable().display();
-	m_window.setRenderColor(black);
 	m_window.display();
 }
 

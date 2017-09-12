@@ -58,10 +58,6 @@ public:
 		addMasterHandler<L, EH>(handler);
 	}
 
-	ska::BaseHandledWidget* mockRemoveWindow(const std::string& name) {
-		return removeWindow(name);
-	}
-
 	void mockPushWindowToFront(ska::Widget* w) {
 		return pushWindowToFront(w);
 	}
