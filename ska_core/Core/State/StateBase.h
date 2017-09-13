@@ -10,6 +10,22 @@ namespace ska {
 	class Window;
 	class InputContextManager;
 
+	/**
+	 * \brief Templated version of the base State class.
+	 * \tparam EM The EntityManager class
+	 * \tparam ED The EventDispatcher class
+	 * 
+	 * This class implements an easy way to manage transitions between states.
+	 * During class loading, it allows the user to queue a task. When he does it, the task end is waited before the State truly load.
+	 * More than State, StateBase can also have sub-states and manages it.
+	 * Rules about sub-states are those :
+	 *  - Its can be added / removed at any time
+	 *  - When added, a substate is loaded
+	 *  - When removed, a substate is unloaded
+	 *  - Main state is refresh, then sub-states are
+	 *  - Loading and unloading of its are done between befores and afters state parent load / unload function
+	 *  - You can transfer substates to another state when the state changes
+	 */
 	template <class EM, class ED>
 	class StateBase : public State {
 		

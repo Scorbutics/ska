@@ -11,3 +11,5 @@
 *.log
 *.idb
 *.layout
+*.iobj
+*.ipdb

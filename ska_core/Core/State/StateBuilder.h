@@ -5,6 +5,11 @@
 #include "../Priorized.h"
 
 namespace ska {
+	/**
+	 * \brief Internal helper class that builds states and sub-states, as a factory.
+	 * \tparam EntityManager 
+	 * \tparam EventDispatcher 
+	 */
 	template <class EntityManager, class EventDispatcher>
 	class StateBuilder {
 		public:

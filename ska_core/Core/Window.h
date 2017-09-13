@@ -4,6 +4,9 @@
 #include "../Draw/SDLRenderer.h"
 
 namespace ska {
+	/**
+	 * \brief Game window where graphics are rendered, and inputs listened.
+	 */
 	class Window {
 	public:
 		Window(const std::string& title, unsigned int w, unsigned int h);

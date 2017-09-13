@@ -15,6 +15,16 @@
 #include "../Exceptions/FileException.h"
 
 namespace ska {
+	/**
+     * \brief Main class of the engine that holds the game engine loop and instantiate every core systems.
+     * \tparam EntityManager The entity manager to use
+     * \tparam EventDispatcher The event dispatcher to use
+     * \tparam DrawableContainer The drawable container to use
+     * \tparam SoundManager The sound manager to use
+     * 
+     * This class holds an instance of each type template-specified and transmits its to every new game state.
+     * It's often a good idea to subclass it if you need accesses to the game window / event dispatcher outside of any state.
+     */
     template <class EntityManager, class EventDispatcher, class DrawableContainer, class SoundManager>
     class GameCore :
 		public GameApp,
