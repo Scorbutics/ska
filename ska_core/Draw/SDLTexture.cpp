@@ -13,7 +13,11 @@ ska::SDLTexture::SDLTexture() : m_r(0), m_g(0), m_b(0), m_texture(nullptr), m_w(
 }
 
 ska::SDLTexture::SDLTexture(TextureData& data) : m_texture(nullptr) {
-	load(data.getRenderer(), data.getData().first, data.getData().second.r, data.getData().second.g, data.getData().second.b, data.getData().second.a);
+	if(data.text) {
+		loadFromText(data.getRenderer(), data.fontSize, data.getData().first, data.getData().second);
+	} else {
+		load(data.getRenderer(), data.getData().first, data.getData().second.r, data.getData().second.g, data.getData().second.b, data.getData().second.a);
+	}
 }
 
 void ska::SDLTexture::load(const SDLRenderer& renderer, const std::string& fileName, int r, int g, int b, int a) {

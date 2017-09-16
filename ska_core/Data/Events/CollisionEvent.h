@@ -1,14 +1,15 @@
 #pragma once
 
 #include "../../ECS/ECSDefines.h"
-#include "../../Point.h"
-
 
 namespace ska {
 	class WorldCollisionComponent;
 	class CollisionComponent;
 	class CollidableComponent;
 
+	/**
+	 * \brief Declares an event struct that is sent to observers when a collision happen
+	 */
 	struct CollisionEvent {
 		CollisionEvent(const EntityId e, WorldCollisionComponent* wcolComp, CollisionComponent* colComp, const CollidableComponent& colliComp) :
 			entity(e),

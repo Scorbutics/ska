@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Utils/ResourceTemplate.h"
+#include "Utils/ManagedResource.h"
 #include "Draw/SDLTexture.h"
 #include "Draw/TextureData.h"
 #include "Utils/SkaConstants.h"
@@ -12,22 +12,20 @@
 namespace ska {
 	class SDLRenderer;
 	class Texture : 
-		public ResourceTemplate<SDLTexture, TextureData>,
+		public ManagedResource<SDLTexture, TextureData>,
 		public Renderable {
 
 	public:
 		explicit Texture(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
-		Texture();
+		Texture() = default;
 		void loadFromText(unsigned int fontSize, std::string text, Color c);
 		void load(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
-		static void freeAll();
-		virtual ~Texture();
+		virtual ~Texture() = default;
 
 		void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
 		void setBlendMode(SDL_BlendMode blending) const;
-		void operator=(const Texture& text);
 		void setAlpha(Uint8 alpha) const;
-		int render(int x, int y, const Rectangle* clip = nullptr) const;
+		virtual int render(int x, int y, const Rectangle* clip = nullptr) const override;
 		void resize(unsigned int width, unsigned int height);
 
 		unsigned int getWidth() const;

@@ -105,7 +105,6 @@
     <ClInclude Include="Utils\PhysicUtils.h" />
     <ClInclude Include="Utils\RectangleUtils.h" />
     <ClInclude Include="Utils\Refreshable.h" />
-    <ClInclude Include="Utils\ResourceTemplate.h" />
     <ClInclude Include="Utils\Singleton_template.h" />
     <ClInclude Include="Utils\SkaConstants.h" />
     <ClInclude Include="Utils\SpritePath.h" />
@@ -145,6 +144,7 @@
     <ClInclude Include="Utils\SubObserver.h" />
     <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
+    <ClInclude Include="Utils\ManagedResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />

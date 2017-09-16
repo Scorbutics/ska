@@ -8,7 +8,7 @@ namespace ska {
     };
 
 	struct StateEvent {
-		StateEvent(const StateEventType& t) : 
+		explicit StateEvent(const StateEventType& t) : 
 			type(t) {
 		}
 

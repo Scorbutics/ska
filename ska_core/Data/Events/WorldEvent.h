@@ -11,7 +11,9 @@ namespace ska {
 
 	class WorldEvent {
 	public:
-		WorldEvent(WorldEventType wet) : m_type(wet) {
+		explicit WorldEvent(WorldEventType wet) : 
+			m_type(wet), 
+			m_bgm(nullptr){
 		}
 
 		void setBgm(Music& m) {

@@ -18,6 +18,3 @@ void ska::Music::play(SoundRenderer& sndMgr) const{
 	}
 }
 
-ska::Music::~Music() {
-	free();
-}

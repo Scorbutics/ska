@@ -147,7 +147,7 @@
     <ClInclude Include="Utils\PhysicUtils.h" />
     <ClInclude Include="Utils\RectangleUtils.h" />
     <ClInclude Include="Utils\Refreshable.h" />
-    <ClInclude Include="Utils\ResourceTemplate.h" />
+    <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="Utils\Singleton_template.h" />
     <ClInclude Include="Utils\SkaConstants.h" />
     <ClInclude Include="Utils\SpritePath.h" />

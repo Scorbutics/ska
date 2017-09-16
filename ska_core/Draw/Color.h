@@ -4,6 +4,9 @@
 #include "../Utils/NumberUtils.h"
 
 namespace ska {
+	/**
+	 * \brief Represents a color on 32 bits
+	 */
 	struct Color {
 		uint8_t r;
 		uint8_t g;

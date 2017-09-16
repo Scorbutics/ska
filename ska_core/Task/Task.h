@@ -5,6 +5,12 @@
 
 namespace ska {
 	
+	/**
+	 * \brief Materializes a thing to do, in loop, until some requirement is met (by returning "true" or "false" when ran for example)
+	 * 
+	 * The main difference with its parent class Runnable is that it holds a lambda function that is executed as operator "()".
+	 * In other terms, it provides a way of implementing Runnable.
+	 */
 	class Task : 
 		public Runnable {
 	public:

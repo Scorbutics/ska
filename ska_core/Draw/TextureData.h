@@ -7,17 +7,20 @@ namespace ska {
 
 	class TextureData {
 	public:
-		TextureData(SDLRenderer& r, const std::string&, Color c);
+		TextureData(SDLRenderer& r, const std::string&, Color c, bool text, unsigned int fontSize);
         TextureData();
 
 		std::pair<std::string, Color> getData() const;
 		const SDLRenderer& getRenderer() const;
 
-		virtual ~TextureData();
+		virtual ~TextureData() = default;
+
+		bool text;
+		unsigned int fontSize;
 
 	private:
 		std::pair<std::string, Color> m_data;
-		SDLRenderer* m_renderer;
+		SDLRenderer* m_renderer;		
 	};
 }
 
@@ -30,8 +33,10 @@ namespace std {
 			using std::hash;
 
 			auto d = k.getData();
-			size_t hashSeed = hash<string>()(d.first);
+			auto hashSeed = hash<string>()(d.first);
 			ska::NumberUtils::hashCombine<ska::Color>(hashSeed, d.second);
+			ska::NumberUtils::hashCombine<unsigned int>(hashSeed, k.fontSize);
+			ska::NumberUtils::hashCombine<bool>(hashSeed, k.text);
 			return hashSeed;
 		}
 	};
@@ -39,7 +44,7 @@ namespace std {
 	template <>
 	struct equal_to<ska::TextureData> {
 		bool operator()(const ska::TextureData& t, const ska::TextureData& k) const {
-			return t.getData() == k.getData();
+			return t.getData() == k.getData() && t.text == k.text && t.fontSize == k.fontSize;
 		}
 	};
 }

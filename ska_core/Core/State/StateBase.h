@@ -22,7 +22,7 @@ namespace ska {
 	 *  - Its can be added / removed at any time
 	 *  - When added, a substate is loaded
 	 *  - When removed, a substate is unloaded
-	 *  - Main state is refresh, then sub-states are
+	 *  - Main state is refreshed, then sub-states are
 	 *  - Loading and unloading of its are done between befores and afters state parent load / unload function
 	 *  - You can transfer substates to another state when the state changes
 	 */

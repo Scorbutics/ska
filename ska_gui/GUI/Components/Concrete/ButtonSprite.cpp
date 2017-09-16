@@ -24,10 +24,6 @@ void ska::ButtonSprite::replaceWith(const std::string& path, const Rectangle& cl
 	m_clip = clip;
 }
 
-void ska::ButtonSprite::clear() {
-	m_img.free();
-}
-
 void ska::ButtonSprite::display() const {
 	if(!isVisible()) {
 		return;

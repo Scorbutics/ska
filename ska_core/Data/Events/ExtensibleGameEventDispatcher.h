@@ -4,6 +4,10 @@
 #include "../../Utils/Observable.h"
 
 namespace ska {
+	/**
+	 * \brief Variant of the GameEventDispatcher that also handles custom events
+	 * \tparam ET The custom events type to be added managed by this event dispatcher
+	 */
 	template <class ...ET>
 	class ExtensibleGameEventDispatcher :
 		public ska::GameEventDispatcher,

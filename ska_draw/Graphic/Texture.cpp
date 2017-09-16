@@ -5,18 +5,10 @@
 
 ska::SDLRenderer* ska::Texture::m_renderer = nullptr;
 
-ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) : ResourceTemplate() {
+ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) : 
+	ManagedResource() {
 	load(id, r, g, b, a);
 }
-
-
-ska::Texture::Texture() : ResourceTemplate() {
-}
-
-void ska::Texture::freeAll() {
-	m_container.clear();
-}
-
 
 void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	checkRenderer();
@@ -27,7 +19,7 @@ void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	finalColor.g = static_cast<Uint8>(g);
 	finalColor.r = static_cast<Uint8>(r);
 
-	loadFromKey(TextureData(*m_renderer, id, finalColor));
+	loadFromKey(TextureData(*m_renderer, id, finalColor, false, 0));
 }
 
 void ska::Texture::setColor(Uint8 r, Uint8 g, Uint8 b) const {
@@ -42,10 +34,7 @@ void ska::Texture::setBlendMode(SDL_BlendMode blending) const {
 	}
 }
 
-void ska::Texture::operator=(const Texture& text) {
-	m_key = std::move(text.m_key);
-	m_value = text.m_value;
-}
+
 
 void ska::Texture::setAlpha(Uint8 alpha) const{
 	if (m_value != nullptr) {
@@ -88,16 +77,7 @@ void ska::Texture::checkRenderer() {
 void ska::Texture::loadFromText(unsigned int fontSize, std::string text, Color c) {
 	checkRenderer();
 
-	m_key = TextureData(*m_renderer, text, c);
-	m_value = nullptr;
-	if (m_container.find(m_key) == m_container.end() || m_container[m_key].lock() == nullptr) {
-		m_value = std::make_shared<SDLTexture>();
-		m_container[m_key] = m_value;
-		m_value->loadFromText(*m_renderer, fontSize, text, c);
-	} else {
-		m_value = m_container[m_key].lock();
-	}
-
+	loadFromKey(TextureData(*m_renderer, text, c, true, fontSize));
 }
 
 unsigned int ska::Texture::getWidth() const {
@@ -108,9 +88,5 @@ unsigned int ska::Texture::getHeight() const {
 	return m_value == nullptr ? 0 : m_value->m_h;
 }
 
-
-ska::Texture::~Texture() {
-	free();
-}
 
 

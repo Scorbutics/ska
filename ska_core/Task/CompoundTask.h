@@ -1,9 +1,13 @@
 #pragma once
-#include <iostream>
+#include <memory>
 #include "Task.h"
 
 namespace ska {
 
+	/**
+     * \brief A task that decorates two others in order to make them coupled.
+     * The tasks are internally synchronized, meaning this task will not be considered as done until both of the two decorated tasks are done.
+     */
     class CompoundTask:
         public Task {
 

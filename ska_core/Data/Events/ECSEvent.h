@@ -7,6 +7,9 @@ namespace ska {
 		ENTITIES_REMOVED
 	};
 
+	/**
+	* \brief Declares an event struct that is sent to observers when the ECS core act on a group of entities
+	*/
 	struct ECSEvent {
 		explicit ECSEvent(const ECSEventType& ecs) : 
 			ecsEventType(ecs) {

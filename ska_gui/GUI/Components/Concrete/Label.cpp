@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Label.h"
 
 ska::Label::Label(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) : 
@@ -47,7 +45,6 @@ void ska::Label::display() const {
 }
 
 void ska::Label::clear() {
-	m_stext.free();
 	m_text = " ";
 }
 

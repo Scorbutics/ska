@@ -3,6 +3,10 @@
 #include "../Core/Priorized.h"
 
 namespace ska {
+	
+	/**
+	 * \brief A concrete Drawable that has a priority fixed during his whole lifetime.
+	 */
 	class DrawableFixedPriority :
         virtual public Drawable,
         public Priorized {
