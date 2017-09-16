@@ -1,10 +1,10 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
 #include "../../../Point.h"
 
 namespace ska {
-	class CollisionComponent : public Component {
+	class CollisionComponent : public SerializableComponent {
 	public:
 		CollisionComponent();
 		EntityId origin;

@@ -9,6 +9,9 @@ namespace ska {
 		WORLD_QUIT
 	};
 
+	/**
+	* \brief Declares an event struct that is sent to observers when the world is altered (world creation, world replacement ...)
+	*/
 	class WorldEvent {
 	public:
 		explicit WorldEvent(WorldEventType wet) : 

@@ -6,6 +6,9 @@ namespace ska {
 	class TextureData;
     class SDLRenderer;
 
+	/**
+	* \brief SDL specific, a RAII wrapper of a SDL_Texture instance
+	*/
 	class SDLTexture {
 		friend class Texture;
 		friend class SDLRenderer;

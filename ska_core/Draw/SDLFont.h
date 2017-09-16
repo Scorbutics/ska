@@ -4,6 +4,9 @@
 #include <SDL_ttf.h>
 
 namespace ska {
+	/**
+	 * \brief SDL specific, a RAII wrapper of a TTF_Font instance
+	 */
 	class SDLFont {
 	public:
 		SDLFont();

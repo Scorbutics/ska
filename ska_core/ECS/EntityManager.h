@@ -21,10 +21,16 @@ namespace ska {
 		COMPONENT_ALTER
 	};
 
+	/**
+	 * \brief Manages all the component changes to an entity
+	 */
 	class EntityManager :
 	    public Observable<const EntityEventType, const EntityComponentsMask&, EntityId> {
 	public:
-		EntityManager(GameEventDispatcher& ged) : m_ged(ged), m_componentMask() { }
+		explicit EntityManager(GameEventDispatcher& ged) : 
+			m_ged(ged), 
+			m_componentMask(), 
+			m_componentMaskCounter(0) { }
 
 		EntityId createEntity();
 		void removeEntity(EntityId entity);
@@ -44,14 +50,14 @@ namespace ska {
 		}
 
 		template <class T>
-		T& getComponent(EntityId entityId) const {
+		T& getComponent(EntityId entityId) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
 			T& result = components.getComponent(entityId);
 			return result;
 		}
 
 		template <class T>
-		bool hasComponent(EntityId entityId) const {
+		bool hasComponent(EntityId entityId) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
 			return m_componentMask[entityId][components.getMask()];
 		}
@@ -63,13 +69,13 @@ namespace ska {
 		}
 
 		template <class T>
-		unsigned int getMask() const {
+		unsigned int getMask() {
 			ComponentHandler<T>& components = this->template getComponents<T>();
 			return components.getMask();
 		}
 
         template <class T>
-		std::string getComponentName() const {
+		std::string getComponentName() {
 			ComponentHandler<T>& components = this->template getComponents<T>();
 			return components.getClassName();
 		}
@@ -82,20 +88,15 @@ namespace ska {
 		std::unordered_set<EntityId> m_entities;
 		std::unordered_set<EntityId> m_alteredEntities;
 		EntityIdContainer m_deletedEntities;
+		unsigned int m_componentMaskCounter;
 
-		static std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
+		std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
 
 		void innerRemoveEntity(EntityId entity, ECSEvent& ecsEvent);
 
 		template <class T>
-		static ComponentHandler<T>& getComponents() {
-			static ComponentHandler<T> components;
-			static auto initialized = false;
-			/* Correction performances issues du Profiling Very Sleepy : temps passé dans le hachage pour la table de noms de composants trop élevé */
-			if (!initialized) {
-				initialized = true;
-				NAME_MAPPED_COMPONENT.emplace(components.getClassName(), &components);
-			}
+		ComponentHandler<T>& getComponents() {
+			static ComponentHandler<T> components(m_componentMaskCounter++, NAME_MAPPED_COMPONENT);
 			return components;
 		}
 

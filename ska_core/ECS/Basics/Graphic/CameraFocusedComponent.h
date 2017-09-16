@@ -1,10 +1,10 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../../Point.h"
 
 namespace ska {
 	class CameraFocusedComponent :
-            public Component {
+            public SerializableComponent {
     public:
         CameraFocusedComponent();
         ~CameraFocusedComponent() = default;

@@ -1,11 +1,11 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../../Data/Events/GUIEvent.h"
 
 namespace ska {
 	class BalloonDialog;
 
-    class DialogComponent : public Component {
+    class DialogComponent : public SerializableComponent {
     public:
         DialogComponent();
         virtual ~DialogComponent() = default;

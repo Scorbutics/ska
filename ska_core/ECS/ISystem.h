@@ -2,6 +2,9 @@
 #include "../Core/Priorized.h"
 
 namespace ska {
+	/**
+	 * \brief Forces the implementation of an update function that refreshes the system.
+	 */
 	class ISystem :
 	    public Priorized {
 	public:

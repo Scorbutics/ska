@@ -1,7 +1,8 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
+
 namespace ska {
-	class InputComponent : public Component {
+	class InputComponent : public SerializableComponent {
 	public:
 	    InputComponent();
 	    ~InputComponent() = default;

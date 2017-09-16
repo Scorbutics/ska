@@ -1,8 +1,8 @@
 #pragma once
-#include "ECS/Component.h"
+#include "ECS/SerializableComponent.h"
 
 namespace ska {
-	class HasShadowComponent : public Component {
+	class HasShadowComponent : public SerializableComponent {
 	public:
 	    HasShadowComponent();
 	    ~HasShadowComponent() = default;

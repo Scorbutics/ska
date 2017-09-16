@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_set>
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 
 namespace ska {
-	class CollidableComponent : public Component {
+	class CollidableComponent : public SerializableComponent {
 	public:
 		CollidableComponent();
 		~CollidableComponent() = default;

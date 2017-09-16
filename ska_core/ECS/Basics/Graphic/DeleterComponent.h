@@ -1,9 +1,9 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../../Utils/TimeUtils.h"
 
 namespace ska {
-	class DeleterComponent: public Component {
+	class DeleterComponent: public SerializableComponent {
 	public:
 		DeleterComponent();
 

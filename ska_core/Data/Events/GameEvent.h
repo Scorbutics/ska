@@ -6,6 +6,9 @@ namespace ska {
 		GAME_WINDOW_RESIZED
 	};
 
+	/**
+	* \brief Declares an event struct that is sent to observers when a global game event happens
+	*/
 	class GameEvent {
 	public:
 		explicit GameEvent(GameEventType get) :

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../../Utils/StringUtils.h"
 #include "../../../Utils/PhysicUtils.h"
 #include "../../../Point.h"
@@ -8,7 +8,7 @@
 #include "../../../Utils/NumberUtils.h"
 
 namespace ska {
-	class PositionComponent : public Component {
+	class PositionComponent : public SerializableComponent {
 	public:
 		PositionComponent();
 		PositionComponent(const Point<float>& p);
@@ -39,15 +39,15 @@ namespace ska {
 		}
 
 	protected:
-		static std::string serializeX(const Component& component) {
+		static std::string serializeX(const SerializableComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).x));
 		}
 
-		static std::string serializeY(const Component& component) {
+		static std::string serializeY(const SerializableComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).y));
 		}
 
-		static std::string serializeZ(const Component& component) {
+		static std::string serializeZ(const SerializableComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).z));
 		}
 

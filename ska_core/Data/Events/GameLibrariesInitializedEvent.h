@@ -5,9 +5,12 @@ namespace ska {
 		ALL
 	};
 
+	/**
+	* \brief Declares an event struct that is sent to observers when a game library is ready
+	*/
 	class GameLibrariesInitializedEvent {
 	public:
-		GameLibrariesInitializedEvent(GameLibrariesInitializedEventType glit) : m_eventType(glit) {
+		explicit GameLibrariesInitializedEvent(GameLibrariesInitializedEventType glit) : m_eventType(glit) {
 		}
 		virtual ~GameLibrariesInitializedEvent() = default;
 

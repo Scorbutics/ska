@@ -9,6 +9,9 @@ namespace ska {
 	class SDLSurface;
     class SDLTexture;
 
+	/**
+	* \brief SDL specific, a RAII wrapper of a SDL_Renderer instance
+	*/
 	class SDLRenderer {
 	public:
 	    SDLRenderer();

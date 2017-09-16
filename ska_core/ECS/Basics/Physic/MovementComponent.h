@@ -1,7 +1,7 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 namespace ska {
-	struct MovementComponent : public Component {
+	struct MovementComponent : public SerializableComponent {
 		MovementComponent();
         ~MovementComponent() = default;
 

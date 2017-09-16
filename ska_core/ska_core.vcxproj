@@ -78,7 +78,7 @@
     <ClInclude Include="ECS\Basics\Script\ScriptRegisterer.h" />
     <ClInclude Include="ECS\Basics\Script\ScriptSleepComponent.h" />
     <ClInclude Include="ECS\Basics\Script\ScriptTriggerType.h" />
-    <ClInclude Include="ECS\Component.h" />
+    <ClInclude Include="ECS\SerializableComponent.h" />
     <ClInclude Include="ECS\ComponentHandler.h" />
     <ClInclude Include="ECS\ComponentSafeAccessor.h" />
     <ClInclude Include="ECS\ComponentSerializer.h" />
@@ -86,7 +86,6 @@
     <ClInclude Include="ECS\ECSDefines.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\ISystem.h" />
-    <ClInclude Include="ECS\StaticCounterGlobal.h" />
     <ClInclude Include="ECS\System.h" />
     <ClInclude Include="ECS\SystemMaskGenerator.h" />
     <ClInclude Include="Exceptions\CorruptedFileException.h" />
@@ -189,9 +188,8 @@
     <ClCompile Include="ECS\Basics\Physic\WorldCollisionComponent.cpp" />
     <ClCompile Include="ECS\Basics\Script\ScriptAwareComponent.cpp" />
     <ClCompile Include="ECS\Basics\Script\ScriptSleepComponent.cpp" />
-    <ClCompile Include="ECS\Component.cpp" />
+    <ClCompile Include="ECS\SerializableComponent.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
-    <ClCompile Include="ECS\StaticCounterGlobal.cpp" />
     <ClCompile Include="Exceptions\GenericException.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Inputs\InputContextManager.cpp" />

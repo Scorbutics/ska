@@ -5,7 +5,6 @@
 #include "ISystem.h"
 #include "../Utils/Observer.h"
 #include "../Utils/Refreshable.h"
-#include "../Logging/Logger.h"
 #include "ComponentUnsafeAccessor.h"
 
 namespace ska {
@@ -18,6 +17,20 @@ namespace ska {
 	template <class Storage, class RComponentType, class PComponentType>
 	class System;
 
+	/**
+     * \brief Base class of a system, where system is defined as the "S" of "Entity Component System" (ECS).
+     * \tparam Storage A storage class that indicates the way entities must be stored in the system
+     * \tparam RComponentType List of the required component types
+     * \tparam PComponentType List of the possible component types
+     * 
+     * Systems contain the logic part of an ECS. They act on a group of component (or entities), access to data and alter it.
+     * This class is template parametrized in order to describe which component will be mandatory, and which ones might be present.
+     * On top of that, every component access is generally done by using a ComponentSafeAccessor or a ComponentUnsafeAccessor, 
+     * that makes the user avoiding mistakes by accessing a component that is not managed by the system.
+     * 
+     * Entities are automatically added / removed to the internal Storage of the system depending on which (required) component they have.
+     * Possible components do not influate on this.
+     */
     template <class Storage, class ... RComponentType, class ... PComponentType>
     class System <Storage, RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>> :
         public Observer<const EntityEventType, const EntityComponentsMask&, EntityId>,
@@ -42,7 +55,7 @@ namespace ska {
 
         void operator=(const SystemType& sys) = delete;
 
-        void update(unsigned int ellapsedTime) override {
+	    virtual void update(unsigned int ellapsedTime) override {
             refresh(ellapsedTime);
             if (!m_toDelete.empty()) {
                 for (auto entity : m_toDelete) {

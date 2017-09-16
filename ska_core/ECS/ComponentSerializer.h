@@ -3,6 +3,9 @@
 #include "ECSDefines.h"
 
 namespace ska {
+	/**
+	 * \brief Serializes a component
+	 */
 	class ComponentSerializer {
 	public:
 		ComponentSerializer() = default;

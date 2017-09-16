@@ -9,6 +9,9 @@ namespace ska {
 		STOP_SOUND
 	};
 
+	/**
+	* \brief Declares an event struct that is sent to observers when playing / stopping a sound or a music is necessary
+	*/
 	class SoundEvent {
 	public:
 		SoundEvent(Music* music, SoundEventType set);

@@ -1,5 +1,5 @@
 #pragma once
-#include "ECS/Component.h"
+#include "ECS/SerializableComponent.h"
 #include "Point.h"
 
 namespace ska {
@@ -10,7 +10,8 @@ namespace ska {
 		};
 	}
 
-	class IARandomMovementComponent : public Component {
+	class IARandomMovementComponent : 
+		public SerializableComponent {
 	public:
 		IARandomMovementComponent() {
 			lastTimeStarted = 0;

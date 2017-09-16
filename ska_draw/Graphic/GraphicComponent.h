@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
 #include "AnimatedTexture.h"
-#include "ECS/Component.h"
+#include "ECS/SerializableComponent.h"
 
 namespace ska {
 	class GraphicComponent : 
-		public Component {
+		public SerializableComponent {
 	public:
 		GraphicComponent();
 		void operator=(const GraphicComponent& gc);

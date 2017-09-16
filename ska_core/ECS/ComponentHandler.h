@@ -1,24 +1,26 @@
 #pragma once
-#include <iostream>
 #include <vector>
 #include <typeinfo>
-#include <string>
 #include "ECSDefines.h"
-#include "StaticCounterGlobal.h"
 #include "ComponentSerializer.h"
 #include "../Utils/Demangle.h"
 #include "../Logging/Logger.h"
 
 namespace ska {
+	/**
+	 * \brief Holds an array of a specific component type and his associated mask.
+	 * \tparam T The component type held
+	 */
 	template <typename T>
 	class ComponentHandler :
-	    public StaticCounterGlobal,
         public ComponentSerializer {
 
 	public:
-		ComponentHandler(): m_mask(StaticCounterGlobal::increment()) {
+		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames): 
+			m_mask(mask) {
 			m_components.resize(SKA_ECS_MAX_ENTITIES);
 			SKA_LOG_MESSAGE("Initializing component type ", getClassName(), " with mask ", m_mask);
+			mapComponentNames.emplace(getClassName(), this);
 		}
 
 		unsigned int addEmpty(EntityId) override {

@@ -5,16 +5,22 @@
 #include "DrawableContainer.h"
 
 namespace ska {
+	
+	/**
+	 * \brief A vector based implementation of a container of Drawable
+	 * This implementation will have to trigger a sort before every draw in order to respect priorities.
+	 */
 	class VectorDrawableContainer :
-		public DrawableContainer
-	{
+		public DrawableContainer {
+		using VectorDrawable = std::vector<const Drawable*>;
+
 	public:
 		VectorDrawableContainer();
 		virtual void reserve(const unsigned int size);
-		std::vector<const Drawable*>::iterator begin();
-		std::vector<const Drawable*>::iterator end();
-		std::vector<const Drawable*>::const_iterator cbegin() const;
-		std::vector<const Drawable*>::const_iterator cend() const;
+		VectorDrawable::iterator begin();
+		VectorDrawable::iterator end();
+		VectorDrawable::const_iterator cbegin() const;
+		VectorDrawable::const_iterator cend() const;
 
 
 		virtual void clear() override;
@@ -25,6 +31,6 @@ namespace ska {
 		virtual void push(const Drawable& d) override;
 
 	private:
-		std::vector<const Drawable*> m_data;
+		VectorDrawable m_data;
 	};
 }

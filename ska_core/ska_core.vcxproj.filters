@@ -48,13 +48,11 @@
     <ClInclude Include="ECS\Basics\Script\ScriptRegisterer.h" />
     <ClInclude Include="ECS\Basics\Script\ScriptSleepComponent.h" />
     <ClInclude Include="ECS\Basics\Script\ScriptTriggerType.h" />
-    <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\ComponentHandler.h" />
     <ClInclude Include="ECS\ComponentSerializer.h" />
     <ClInclude Include="ECS\ECSDefines.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\ISystem.h" />
-    <ClInclude Include="ECS\StaticCounterGlobal.h" />
     <ClInclude Include="ECS\System.h" />
     <ClInclude Include="Exceptions\CorruptedFileException.h" />
     <ClInclude Include="Exceptions\FileException.h" />
@@ -145,6 +143,7 @@
     <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
     <ClInclude Include="Utils\ManagedResource.h" />
+    <ClInclude Include="ECS\SerializableComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
@@ -172,9 +171,7 @@
     <ClCompile Include="ECS\Basics\Physic\WorldCollisionComponent.cpp" />
     <ClCompile Include="ECS\Basics\Script\ScriptAwareComponent.cpp" />
     <ClCompile Include="ECS\Basics\Script\ScriptSleepComponent.cpp" />
-    <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
-    <ClCompile Include="ECS\StaticCounterGlobal.cpp" />
     <ClCompile Include="Exceptions\GenericException.cpp" />
     <ClCompile Include="Inputs\InputContextManager.cpp" />
     <ClCompile Include="Inputs\KeyboardInputContext.cpp" />
@@ -206,5 +203,6 @@
     <ClCompile Include="Core\State\StateHolder.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
     <ClCompile Include="Data\Events\ECSEvent.h" />
+    <ClCompile Include="ECS\SerializableComponent.cpp" />
   </ItemGroup>
 </Project>

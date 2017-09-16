@@ -1,21 +1,23 @@
 #pragma once
-#include <fstream>
-#include <string>
 #include <vector>
 #include <limits>
 #include <unordered_map>
-#include "ECS/Component.h"
+#include "ECS/SerializableComponent.h"
 #include "ScriptState.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/ECSDefines.h"
 
 namespace ska {
     class ScriptAutoSystem;
-	class ScriptComponent : public Component {
+	class ScriptComponent : public SerializableComponent {
 		friend class ScriptAutoSystem;
 
 	public:
-		ScriptComponent() {
+		ScriptComponent(): 
+			deleteEntityWhenFinished(false), 
+			scriptPeriod(0), 
+			triggeringType(0), 
+			origin(0) {
 			state = EnumScriptState::STOPPED;
 			lastTimeStarted = 0;
 			commandsPlayed = 0;

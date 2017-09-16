@@ -7,6 +7,9 @@ namespace ska {
 		STATE_CHANGED
     };
 
+	/**
+	* \brief Declares an event struct that is sent to observers when the current state has a modification
+	*/
 	struct StateEvent {
 		explicit StateEvent(const StateEventType& t) : 
 			type(t) {

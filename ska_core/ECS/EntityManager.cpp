@@ -4,8 +4,6 @@
 #include "../Data/Events/GameEvent.h"
 #include "../Data/Events/ECSEvent.h"
 
-std::unordered_map<std::string, ska::ComponentSerializer*> ska::EntityManager::NAME_MAPPED_COMPONENT;
-
 void ska::EntityManager::commonRemoveComponent(EntityId entity, ComponentSerializer& components) {
 	auto removedComponentMask = components.remove(entity);
     m_componentMask[entity][removedComponentMask] = false;
@@ -30,21 +28,21 @@ void ska::EntityManager::commonAddComponent(EntityId entity, const unsigned int 
 
 const std::string ska::EntityManager::serializeComponent(const EntityId entityId, const std::string& component, const std::string& field) const {
     if (NAME_MAPPED_COMPONENT.find(component) != NAME_MAPPED_COMPONENT.end()) {
-        return NAME_MAPPED_COMPONENT[component]->getComponentField(entityId, field);
+        return NAME_MAPPED_COMPONENT.at(component)->getComponentField(entityId, field);
     }
     return "";
 }
 
 void ska::EntityManager::removeComponent(const EntityId entity, const std::string& component) {
     if (NAME_MAPPED_COMPONENT.find(component) != NAME_MAPPED_COMPONENT.end()) {
-	    auto components = NAME_MAPPED_COMPONENT[component];
+	    auto components = NAME_MAPPED_COMPONENT.at(component);
         commonRemoveComponent(entity, *components);
     }
 }
 
 void ska::EntityManager::addComponent(const EntityId entity, const std::string& component) {
     if (NAME_MAPPED_COMPONENT.find(component) != NAME_MAPPED_COMPONENT.end()) {
-        ComponentSerializer * components = NAME_MAPPED_COMPONENT[component];
+        ComponentSerializer * components = NAME_MAPPED_COMPONENT.at(component);
         commonAddComponent(entity, components->addEmpty(entity));
     }
 }

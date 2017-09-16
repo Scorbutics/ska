@@ -1,8 +1,8 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 
 namespace ska {
-	class ForceComponent : public Component{
+	class ForceComponent : public SerializableComponent {
 	public:
 		ForceComponent();
 		~ForceComponent() = default;

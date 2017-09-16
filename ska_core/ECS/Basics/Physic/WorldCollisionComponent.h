@@ -1,9 +1,9 @@
 #pragma once
-#include "../../Component.h"
+#include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
 #include "../../../Point.h"
 namespace ska {
-	class WorldCollisionComponent : public Component {
+	class WorldCollisionComponent : public SerializableComponent {
 	public:
         WorldCollisionComponent();
 		~WorldCollisionComponent() = default;

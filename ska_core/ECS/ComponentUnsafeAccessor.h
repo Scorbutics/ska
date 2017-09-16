@@ -4,6 +4,11 @@
 #include "../Utils/ContainsTypeTuple.h"
 
 namespace ska {
+	/**
+	* \brief Provides a statically type check when accessing to a component of the entity manager.
+	* In contrary to ComponentSafeAccessor that simply disallow access, it returns a null pointer when the entity has no component.
+	* \tparam ComponentType The component type list to access through this class
+	*/
     template <class ... ComponentType>
     class ComponentUnsafeAccessor {
     public:

@@ -6,6 +6,9 @@
 namespace ska {
 	class Font;
 
+	/**
+	* \brief SDL specific, a RAII wrapper of a SDL_Surface instance
+	*/
 	class SDLSurface {
 	    friend class SDLRenderer;
 

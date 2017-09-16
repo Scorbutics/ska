@@ -4,6 +4,11 @@
 #include "../Utils/ContainsTypeTuple.h"
 
 namespace ska {
+	/**
+     * \brief Provides a statically type check when accessing to a component of the entity manager.
+     * This is useful to ensure that when you access to a component, it is initialized.
+     * \tparam ComponentType The component type list safe to access through this class
+     */
     template <class ... ComponentType>
     class ComponentSafeAccessor {
     public:

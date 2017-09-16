@@ -11,5 +11,8 @@
 #include "ECSEvent.h"
 
 namespace ska {
+	/**
+	* \brief Defines a basic list of common events in a game.
+	*/
 	using GameEventDispatcher = EventDispatcher<SoundEvent, WorldEvent, CollisionEvent, GUIEvent, GameEvent, StateEvent, InputKeyEvent, InputMouseEvent, ECSEvent>;
 }
