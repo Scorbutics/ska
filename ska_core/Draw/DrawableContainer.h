@@ -1,19 +1,20 @@
 #pragma once
+#include <limits>
 #include "DrawableFixedPriority.h"
 
 namespace ska {
 	/**
 	 * \brief Container that is used to sort any layerable component of the game, that inherits Drawable.
-	 * 
+	 *
 	 * This container is provided to every part of the engine that has the power to make things appear on the screen (mainly states and systems).
 	 * It also tracks the maximum priority of added elements, in order to allow the user to be able to add an element on "top" of every others.
 	 */
 	class DrawableContainer {
 	public:
-		DrawableContainer() : 
-			m_topPriority2D(std::numeric_limits<int>::min()), 
+		DrawableContainer() :
+			m_topPriority2D(std::numeric_limits<int>::min()),
 			m_topPriority(std::numeric_limits<int>::min()) {}
-		
+
 		/**
 		 * \brief Adds a Drawable element to the container
 		 * \param d The drawable to add

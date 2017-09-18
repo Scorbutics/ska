@@ -11,15 +11,15 @@ namespace ska {
 int main(int argc, char * argv[]) {
 	(void)argc;
 	(void)argv;
-	
-	auto& gameApp = ska::GameApp::get();
+
+	std::unique_ptr<ska::GameApp> gameApp{ ska::GameApp::get() };
 
 	try {
-		gameApp.run();
+		gameApp->run();
 	} catch (ska::TerminateProcessException& tpe) {
-		return gameApp.onTerminate(tpe);
+		return gameApp->onTerminate(tpe);
 	} catch (ska::GenericException& e) {
-		return gameApp.onException(e);
+		return gameApp->onException(e);
 	}
 
 	return 0;

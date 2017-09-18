@@ -21,7 +21,7 @@ namespace ska {
      * \tparam EventDispatcher The event dispatcher to use
      * \tparam DrawableContainer The drawable container to use
      * \tparam SoundManager The sound manager to use
-     * 
+     *
      * This class holds an instance of each type template-specified and transmits its to every new game state.
      * It's often a good idea to subclass it if you need accesses to the game window / event dispatcher outside of any state.
      */
@@ -31,6 +31,9 @@ namespace ska {
 		public Observer<StateEvent> {
     public:
 
+        /**
+         * \brief No-arg constructor that builds a basic context from a file.
+         */
         GameCore() :
 			Observer<StateEvent>(std::bind(&GameCore::onStateEvent, this, std::placeholders::_1)),
 			m_entityManager(m_eventDispatcher),
@@ -59,6 +62,9 @@ namespace ska {
 			m_eventDispatcher.template removeMultipleObservers<SoundEvent, WorldEvent, StateEvent>(m_soundManager, m_soundManager, *this);
         }
 
+        /**
+         * \brief Loop on an internal refresh to know if we need to continue to run the application or not.
+         */
         void run() override {
             auto continuer = true;
             while (continuer) {
@@ -66,12 +72,26 @@ namespace ska {
             }
         }
 
+		/**
+		 * \brief Creates a state and returns without adding it to the state queue.
+         * \tparam StateT state type
+         * \tparam Args additional parameters to the state constructor
+         * \param args Args&&... additional parameters to the state constructor
+         * \return std::unique_ptr<StateT> The resulting state
+         */
 		template<class StateT, class ... Args>
-		std::unique_ptr<StateT> makeState(Args&&... args) {
+        std::unique_ptr<StateT> makeState(Args&&... args) {
 			StateData<EntityManager, EventDispatcher> data(m_entityManager, m_eventDispatcher);
 			return std::make_unique<StateT>(data, m_stateHolder, std::forward<Args>(args)...);
         }
 
+        /**
+		 * \brief Creates a state and navigates to it.
+         * \tparam StateT state type
+         * \tparam Args additional parameters to the state constructor
+         * \param args Args&&... additional parameters to the state constructor
+         * \return StateT& The resulting state reference
+         */
 		template<class StateT, class ... Args>
 		StateT& navigateToState(Args&&... args) {
 			auto sc = makeState<StateT, Args...>(std::forward<Args>(args)...);
@@ -82,6 +102,15 @@ namespace ska {
 
     protected:
 		template<class I, class ... Args>
+        /**
+         * \brief Adds an input context to the game.
+         * \tparam I input context type
+         * \tparam Args additional parameters to the input context constructor
+         * \param em EnumContextManager
+         * \param args Args&&... additional parameters to the input context constructor
+         *
+         * Having multiple input contexts in a game allow to have specific ways to query inputs depending from where we are in the game.
+         */
         void addInputContext(EnumContextManager em, Args&&... args) {
             m_playerICM.addContext(em, std::make_unique<I>(m_rawInputListener, std::forward<Args>(args)...));
         }

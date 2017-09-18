@@ -5,10 +5,10 @@
 #include "Utils/SkaConstants.h"
 #include "StateSandbox.h"
 
-ska::GameApp& ska::GameApp::get() {
-	static Game wgc;
-	wgc.init();
-	return wgc;
+std::unique_ptr<ska::GameApp> ska::GameApp::get() {
+	std::unique_ptr<Game> wgc = std::make_unique<Game>();
+	wgc->init();
+	return std::move(wgc);
 }
 
 void Game::init() {

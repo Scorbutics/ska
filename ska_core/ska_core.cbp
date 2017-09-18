@@ -52,7 +52,6 @@
 		<Unit filename="Core/State/StateBase.h" />
 		<Unit filename="Core/State/StateHolder.cpp" />
 		<Unit filename="Core/State/StateHolder.h" />
-		<Unit filename="Core/State/StateType.h" />
 		<Unit filename="Core/Window.cpp" />
 		<Unit filename="Core/Window.h" />
 		<Unit filename="Data/BlockContainer.h" />
@@ -129,8 +128,6 @@
 		<Unit filename="ECS/Basics/Script/ScriptSleepComponent.cpp" />
 		<Unit filename="ECS/Basics/Script/ScriptSleepComponent.h" />
 		<Unit filename="ECS/Basics/Script/ScriptTriggerType.h" />
-		<Unit filename="ECS/Component.cpp" />
-		<Unit filename="ECS/Component.h" />
 		<Unit filename="ECS/ComponentHandler.h" />
 		<Unit filename="ECS/ComponentSafeAccessor.h" />
 		<Unit filename="ECS/ComponentSerializer.h" />
@@ -139,8 +136,8 @@
 		<Unit filename="ECS/EntityManager.cpp" />
 		<Unit filename="ECS/EntityManager.h" />
 		<Unit filename="ECS/ISystem.h" />
-		<Unit filename="ECS/StaticCounterGlobal.cpp" />
-		<Unit filename="ECS/StaticCounterGlobal.h" />
+		<Unit filename="ECS/SerializableComponent.cpp" />
+		<Unit filename="ECS/SerializableComponent.h" />
 		<Unit filename="ECS/System.h" />
 		<Unit filename="ECS/SystemMaskGenerator.h" />
 		<Unit filename="Exceptions/CorruptedFileException.h" />
