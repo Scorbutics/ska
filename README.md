@@ -10,11 +10,13 @@ Pokémon Smash & Dash - long term fan game of a Pokémon with real time battles
 
 https://github.com/Scorbutics/SmashAndDash
 
-
 Point of attraction - created during 48 secret september 2017 jam
 ![Point of attraction](https://img.itch.zone/aW1hZ2UvMTc0NTk5LzgxNDgyMy5wbmc=/original/59b2aV.png)
 
 https://scorbutics.itch.io/point-of-attraction
+
+ska Pong - basic Pong game as a beginner tutorial
+https://github.com/Scorbutics/SkaPong
 
 # Tutorials
 (Coming soon, will be on the Wiki page)
