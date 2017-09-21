@@ -19,4 +19,5 @@ ska Pong - basic Pong game as a beginner tutorial
 https://github.com/Scorbutics/SkaPong
 
 # Tutorials
-(Coming soon, will be on the Wiki page)
+
+https://github.com/Scorbutics/ska/wiki/Basic-game-example
