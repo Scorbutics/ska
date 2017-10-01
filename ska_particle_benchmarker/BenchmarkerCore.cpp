@@ -164,7 +164,6 @@ float BenchmarkerCore::ticksWanted() const{
 }
 
 
-ska::GameApp& ska::GameApp::get() {
-	static BenchmarkerCore app;
-	return app;
+std::unique_ptr<ska::GameApp> ska::GameApp::get() {
+	return std::make_unique<BenchmarkerCore>();
 }

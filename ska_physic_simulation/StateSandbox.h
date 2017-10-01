@@ -21,7 +21,7 @@ public:
 
 private:
 	bool onGameEvent(ska::GameEvent& ge);
-	ska::EntityId createPhysicAABBEntity(ska::Point<int> pos) const;
+	ska::EntityId createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const;
 
 	ska::CameraSystem* m_cameraSystem;
 	World m_world;

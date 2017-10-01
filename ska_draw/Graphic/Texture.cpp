@@ -28,13 +28,11 @@ void ska::Texture::setColor(Uint8 r, Uint8 g, Uint8 b) const {
 	}
 }
 
-void ska::Texture::setBlendMode(SDL_BlendMode blending) const {
+void ska::Texture::setBlendMode(int blending) const {
 	if (m_value != nullptr) {
-		SDL_SetTextureBlendMode(m_value->m_texture, blending);
+		SDL_SetTextureBlendMode(m_value->m_texture, static_cast<SDL_BlendMode>(blending));
 	}
 }
-
-
 
 void ska::Texture::setAlpha(Uint8 alpha) const{
 	if (m_value != nullptr) {

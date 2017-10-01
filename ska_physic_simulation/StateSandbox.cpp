@@ -8,6 +8,7 @@
 #include "Inputs/System/InputSystem.h"
 #include "ECS/Basics/Physic/GravityAffectedComponent.h"
 #include "Physic/System/GravitySystem.h"
+#include "Draw/SDLRenderer.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
@@ -23,13 +24,17 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
 
-ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
+ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const {
 	auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
 	gc.animatedSprites.resize(1);
 	auto& at = gc.animatedSprites[0];
 	//at.load(RESOURCES_FOLDER + "giphy.gif");
-	at.load(RESOURCES_FOLDER + "1.png", 4, 8, 3);
+	if (spritesheet) {
+		at.load(RESOURCES_FOLDER + sprite + ".png", 4, 8, 3);
+	} else {
+		at.load(RESOURCES_FOLDER + sprite + ".png");
+	}
 	m_entityManager.addComponent<ska::GraphicComponent>(entity, std::move(gc));
 	m_entityManager.addComponent<ska::GravityAffectedComponent>(entity, ska::GravityAffectedComponent());
 	ska::ForceComponent fc;
@@ -49,10 +54,6 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos) const {
 	pc.y = pos.y;
 	pc.z = 0;
 	m_entityManager.addComponent<ska::PositionComponent>(entity, std::move(pc));
-
-	ska::AnimationComponent ac;
-	ac.setASM(m_walkASM, entity);
-	m_entityManager.addComponent<ska::AnimationComponent>(entity, std::move(ac));
 
 	m_entityManager.addComponent<ska::CollidableComponent>(entity, ska::CollidableComponent());
 	ska::HitboxComponent hc;
@@ -85,13 +86,31 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
 		});
 
-		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100));
-		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150));
+		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100), "1", true);
+		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150), "0", false);
+		auto blockC = createPhysicAABBEntity(ska::Point<int>(200, 300), "0", false);
+
+
+
+		auto& graphicComponentC = m_entityManager.getComponent<ska::GraphicComponent>(blockC);
+		auto& asC = graphicComponentC.animatedSprites[0];
+		asC.lifetimeSeparation();
+
+		ska::SDLRenderer::getDefaultRenderer()->setRenderColor(ska::Color(70, 70, 0, 255));
+		asC.setAlpha(70);
+		asC.setBlendMode(SDL_BLENDMODE_ADD);
+
+		asC.setColor(180, 255, 255);
+
+		ska::AnimationComponent ac;
+		ac.setASM(m_walkASM, blockA);
+		m_entityManager.addComponent<ska::AnimationComponent>(blockA, std::move(ac));
 
 		ska::InputComponent ic;
 		ic.jumpPower = 2;
 		ic.movePower = 0.2F;
-		m_entityManager.addComponent<ska::InputComponent>(blockA, std::move(ic));
+		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
+
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
 		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);
 	}

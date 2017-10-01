@@ -61,6 +61,14 @@ void ska::AnimatedTexture::switchToFrame(unsigned int index) {
 	m_anim.switchToFrame(index);	
 }
 
+void ska::AnimatedTexture::setBlendMode(int blendMode) {
+	m_sprite.setBlendMode(blendMode);
+}
+
+void ska::AnimatedTexture::lifetimeSeparation() {
+	m_sprite.lifetimeSeparation();
+}
+
 void ska::AnimatedTexture::setAlpha(int alpha) {
 	m_sprite.setAlpha(static_cast<Uint8>(alpha));
 }

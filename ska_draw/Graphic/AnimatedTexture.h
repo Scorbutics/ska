@@ -38,7 +38,8 @@ namespace ska {
 
 		void operator=(const AnimatedTexture& text);
 		void switchToFrame(unsigned int index);
-
+		void setBlendMode(int blendMode);
+		void lifetimeSeparation();
 	private:
 
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);

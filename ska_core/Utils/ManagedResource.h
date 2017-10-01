@@ -16,11 +16,15 @@ namespace ska {
 		void loadFromKey(const Key& key) {
 			m_key = key;
 			if (m_container.find(m_key) == m_container.end() || m_container[m_key].lock() == nullptr) {
-				m_value = std::make_shared<Value>(m_key);
+				lifetimeSeparation();
 				m_container[m_key] = m_value;
 			} else {
 				m_value = m_container[m_key].lock();
 			}
+		}
+
+		void lifetimeSeparation() {
+			m_value = std::make_shared<Value>(m_key);
 		}
 
 		virtual ~ManagedResource() {

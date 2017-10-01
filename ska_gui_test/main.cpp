@@ -16,8 +16,7 @@ public:
 	};
 };
 
-ska::GameApp& ska::GameApp::get(){
-	static AppTest app;
-	return app;
+std::unique_ptr<ska::GameApp> ska::GameApp::get(){
+	return std::make_unique<AppTest>();
 }
 

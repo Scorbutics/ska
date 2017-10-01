@@ -23,7 +23,7 @@ namespace ska {
 		virtual ~Texture() = default;
 
 		void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
-		void setBlendMode(SDL_BlendMode blending) const;
+		void setBlendMode(int blending) const;
 		void setAlpha(Uint8 alpha) const;
 		virtual int render(int x, int y, const Rectangle* clip = nullptr) const override;
 		void resize(unsigned int width, unsigned int height);
