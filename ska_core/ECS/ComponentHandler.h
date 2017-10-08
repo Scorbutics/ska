@@ -53,7 +53,7 @@ namespace ska {
 		virtual ~ComponentHandler() = default;
 
 		static const std::string& getClassName() {
-			static const auto fullClassName = std::string(ska::demangle(typeid(T).name()));
+			static const auto fullClassName = std::string(/*ska::demangle(typeid(T).name())*/ "");
 			static const auto startPos = fullClassName.find_last_of(':');
 			static const auto& name = fullClassName.substr((startPos == std::string::npos ? -1 : startPos) + 1);
 			return name;

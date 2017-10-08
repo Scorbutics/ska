@@ -108,7 +108,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		ska::InputComponent ic;
 		ic.jumpPower = 2;
-		ic.movePower = 0.2F;
+		ic.movePower = 2.F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {

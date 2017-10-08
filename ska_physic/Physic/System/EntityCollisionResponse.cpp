@@ -7,7 +7,7 @@
 #include "Utils/RectangleUtils.h"
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
-	EntityCollisionObserver(bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1)),
+	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1)),
 	m_ged(ged),
 	m_entityManager(em) {
 	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
@@ -45,7 +45,7 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 }
 
 void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n) {
-	const auto percent = 0.03F;
+	const auto percent = 0.05F;
 	const auto slope = 0.01F;
 
 	ska::Point<float> correction;

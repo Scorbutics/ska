@@ -8,7 +8,7 @@
 #include "ECS/Basics/Physic/MovementComponent.h"
 
 ska::WorldCollisionResponse::WorldCollisionResponse(CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
-	WorldCollisionObserver(bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1)),
+	WorldCollisionObserver(std::bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1)),
 	m_entityManager(em),
 	m_ged(ged),
 	m_collisionProfile(cp) {

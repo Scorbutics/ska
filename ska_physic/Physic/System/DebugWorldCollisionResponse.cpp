@@ -8,7 +8,7 @@
 #include "CollisionSystem.h"
 
 ska::DebugWorldCollisionResponse::DebugWorldCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
-WorldCollisionObserver(bind(&DebugWorldCollisionResponse::onWorldCollision, this, std::placeholders::_1)),
+WorldCollisionObserver(std::bind(&DebugWorldCollisionResponse::onWorldCollision, this, std::placeholders::_1)),
 	m_entityManager(em),
 	m_ged(ged) {
 	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);

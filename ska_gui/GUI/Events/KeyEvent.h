@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "WidgetEvent.h"
 #include "KeyEventListener.h"
 

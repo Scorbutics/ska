@@ -70,7 +70,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 
 		}
 
-		//TODO Déclencher un évènement
+		//TODO Dï¿½clencher un ï¿½vï¿½nement
 		/* World based events */
 		std::vector<ScriptSleepComponent*> worldScripts;
 		std::vector<ScriptTriggerType> reasons;
@@ -87,7 +87,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 			worldScripts.insert(worldScripts.end(), tmp2.begin(), tmp2.end());
 		}
 
-		//TODO ajouter vérification de changement de bloc ? pour éviter de détecter tous les lancements d'évènements de collisions
+		//TODO ajouter vï¿½rification de changement de bloc ? pour ï¿½viter de dï¿½tecter tous les lancements d'ï¿½vï¿½nements de collisions
 		const auto& wccPtr = componentsPossible.get<WorldCollisionComponent>(entityId);
 		if (wccPtr != nullptr) {
 			const auto& wcc = *wccPtr;
@@ -120,10 +120,11 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		}
 
 		if (oldCenterPos / blockSize != centerPos / blockSize) {
-			sac.lastBlockPos = centerPos;
+			sac.lastBlockPos.x = centerPos.x;
+			sac.lastBlockPos.y = centerPos.y;
 		}
 
-		//TODO réception d'un évènement
+		//TODO rï¿½ception d'un ï¿½vï¿½nement
 		for (const ScriptSleepComponent* ssc : worldScripts) {
 			if (ssc != nullptr) {
 				EntityId script = ScriptRefreshSystemBase::createEntity();

@@ -314,7 +314,7 @@ ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBo
 		}
 	}
 
-	std::sort(blocksPos.begin(), blocksPos.end(), [hitBoxBlock](const decltype(*blocksPos.begin())& it1, decltype(*blocksPos.begin())& it2) -> bool {
+	std::sort(blocksPos.begin(), blocksPos.end(), [hitBoxBlock](decltype(*blocksPos.begin())& it1, decltype(*blocksPos.begin())& it2) -> bool {
 		return RectangleUtils::distanceSquared<int>(it1, hitBoxBlock) < RectangleUtils::distanceSquared<int>(it2, hitBoxBlock);
 	});
 
@@ -403,7 +403,7 @@ void ska::World::getMobSettingsFromData() {
         SKA_LOG_INFO("Number of monsters found on map : ", i);
     }
 
-	//le dernier élément est invalide, on le supprime donc
+	//le dernier ï¿½lï¿½ment est invalide, on le supprime donc
 	if (!m_mobSettings.empty()) {
 		m_mobSettings.pop_back();
 	}
