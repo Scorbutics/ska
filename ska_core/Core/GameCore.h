@@ -41,8 +41,15 @@ namespace ska {
             m_playerICM(m_rawInputListener, m_eventDispatcher),
 			m_stateHolder(m_eventDispatcher) {
 
-			int widthBlocks = 30;
+            //TODO better handling
+#ifdef __ANDROID__
+            int widthBlocks = 34;
+            int heightBlocks = 53;
+#else
+            int widthBlocks = 30;
 			int heightBlocks = 20;
+#endif
+
 			std::string title = "Default title";
 			try {
 				IniReader reader("gamesettings.ini");

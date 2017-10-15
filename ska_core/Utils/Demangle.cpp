@@ -1,6 +1,7 @@
 #include "Demangle.h"
 #ifdef __GNUG__
 #include <memory>
+#include <cstdlib>
 #include <cxxabi.h>
 std::string ska::demangle(const std::string &s) {
 	struct default_free { void operator ()(char *p) const { free(p); } };

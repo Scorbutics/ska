@@ -4,12 +4,11 @@
 #include "ParticleGroup.h"
 #include "ParticleBuilder.h"
 #include "ParticleFactory.h"
+#include "ParticleGenerator.h"
+#include "ParticleUpdater.h"
+#include "ParticleRenderer.h"
 
 namespace ska {
-    class ParticleUpdater;
-    class ParticleRenderer;
-    class ParticleGenerator;
-
 	class ParticleEffect {
 	public:
 		ParticleEffect(unsigned int density, std::size_t systemSize);

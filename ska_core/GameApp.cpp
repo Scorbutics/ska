@@ -19,11 +19,11 @@ ska::GameApp::GameApp() {
 
 	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
 	if (!SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
-		SKA_LOG_MESSAGE("Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.");
+		SKA_LOG_MESSAGE("Attention : Windows nomme actuellement les threads crÃ©Ã©s par l'application alors que le programme tente de dÃ©sactiver cette fonctionnalitÃ©.");
 	}
 
 	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
-		SKA_LOG_MESSAGE("Attention : Linear texture filtering impossible à activer." );
+		SKA_LOG_MESSAGE("Attention : Linear texture filtering impossible Ã  activer." );
 	}
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
