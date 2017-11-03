@@ -1,6 +1,7 @@
 #include "EntityCollisionResponse.h"
 #include "ECS/Basics/Physic/ForceComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
+#include "ECS/Basics/Physic/HitboxComponent.h"
 #include "ECS/EntityManager.h"
 #include "CollisionSystem.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
@@ -97,6 +98,17 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 
 	//impulse = j . normal
 	Point<float> impulse(j * col.normal.x, j * col.normal.y);
+
+	#ifndef NDEBUG
+	//TODO static polymorphism trait collision logger ?
+	if(col.xaxis && col.yaxis) {
+        SKA_LOG_INFO("Collision deux axes");
+        const auto& intersection = col.overlap;
+        const auto& hcTarget = m_entityManager.getComponent<HitboxComponent>(col.target);
+        const auto& hcOrigin = m_entityManager.getComponent<HitboxComponent>(col.origin);
+        SKA_LOG_INFO(intersection.w, "/", (hcOrigin.width > hcTarget.width ? hcTarget.width : hcOrigin.width), ";", intersection.h, "/", (hcOrigin.height > hcTarget.height ? hcTarget.height : hcOrigin.height));
+	}
+    #endif
 
 	if (col.xaxis) {
 		mtarget.vx += impulse.x * invMassTarget;

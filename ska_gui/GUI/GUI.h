@@ -75,7 +75,7 @@ namespace ska {
 			return m_windowAnnuary[name];
 		}
 
-	private:
+	protected:
 		BaseHandledWidget* removeWindow(const std::string& name) {
 			auto wPtr = m_windowAnnuary[name];
 			if (wPtr == nullptr) {
@@ -88,7 +88,7 @@ namespace ska {
 			m_windowAnnuary.erase(name);
 			return static_cast<BaseHandledWidget*>(wPtr);
 		}
-
+    private:
 		bool onGameEvent(ska::GameEvent & ge);
 	    Widget* frontWindow();
 		bool refreshMouse(InputMouseEvent& ime);
@@ -115,8 +115,8 @@ namespace ska {
         TimeScrollableWindowIG<KeyEventListener> m_wMaster;
         TimeScrollableWindowIG<KeyEventListener>* m_wFocusable;
 
-	
-		
+
+
 
 	protected:
 		virtual bool onScreenResized(unsigned int width, unsigned int height);
