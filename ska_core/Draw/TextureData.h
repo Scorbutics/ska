@@ -1,16 +1,23 @@
 #pragma once
 #include <string>
 #include "Color.h"
+#include "../Rectangle.h"
 
 namespace ska {
     class SDLRenderer;
+
+	enum EnumTextureType {
+		SPRITE,
+		TEXT,
+		RECT
+	};
 
 	/**
 	 * \brief A key used to index every SDL_Texture in the memory map (see ManagedResource for more information)
 	 */
 	class TextureData {
 	public:
-		TextureData(SDLRenderer& r, const std::string&, Color c, bool text, unsigned int fontSize);
+		TextureData(SDLRenderer& r, const std::string& texturePath, Color col, const ska::Rectangle& rect, EnumTextureType type, unsigned int fs);
         TextureData();
 
 		std::pair<std::string, Color> getData() const;
@@ -18,12 +25,13 @@ namespace ska {
 
 		virtual ~TextureData() = default;
 
-		bool text;
+		EnumTextureType type;
 		unsigned int fontSize;
+		ska::Rectangle rect;
 
 	private:
 		std::pair<std::string, Color> m_data;
-		SDLRenderer* m_renderer;		
+		SDLRenderer* m_renderer;
 	};
 }
 
@@ -39,7 +47,7 @@ namespace std {
 			auto hashSeed = hash<string>()(d.first);
 			ska::NumberUtils::hashCombine<ska::Color>(hashSeed, d.second);
 			ska::NumberUtils::hashCombine<unsigned int>(hashSeed, k.fontSize);
-			ska::NumberUtils::hashCombine<bool>(hashSeed, k.text);
+			ska::NumberUtils::hashCombine<int>(hashSeed, static_cast<int>(k.type));
 			return hashSeed;
 		}
 	};
@@ -47,7 +55,7 @@ namespace std {
 	template <>
 	struct equal_to<ska::TextureData> {
 		bool operator()(const ska::TextureData& t, const ska::TextureData& k) const {
-			return t.getData() == k.getData() && t.text == k.text && t.fontSize == k.fontSize;
+			return t.getData() == k.getData() && t.type == k.type && t.fontSize == k.fontSize;
 		}
 	};
 }

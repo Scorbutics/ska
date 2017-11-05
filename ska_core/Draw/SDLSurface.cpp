@@ -8,8 +8,7 @@ SDL_Surface* LoadImage32(const std::string& fichier_image);
 
 SDL_Surface* LoadImage32(const std::string& fichier_image) {
 	SDL_Surface* result = nullptr;
-	SDL_Surface* imageRam;
-	imageRam = IMG_Load(fichier_image.c_str());
+	auto imageRam = IMG_Load(fichier_image.c_str());
     if(imageRam != nullptr) {
         result = SDL_CreateRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
         if (result == nullptr) {
@@ -48,6 +47,13 @@ void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Co
 	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), c.toNative());
 }
 
+void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& rect) {
+	free();
+	m_surface = SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
+	SDL_Rect sRect = { 0, 0, rect.w, rect.h };
+	SDL_FillRect(m_surface, &sRect, SDL_MapRGBA(m_surface->format, color.r, color.g, color.b, color.a));
+}
+
 void ska::SDLSurface::load(const std::string& file) {
 	free();
 	m_surface = IMG_Load(file.c_str());
@@ -65,7 +71,7 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 
 	Color c;
 	c.a = 0;
-	Uint32 pix = getPixel32(x, y);
+	auto pix = getPixel32(x, y);
 	SDL_GetRGB(pix, getFormat(), &c.r, &c.g, &c.b);
 	return c;
 }
@@ -74,7 +80,7 @@ Uint32 ska::SDLSurface::getPixel32(int x, int y) const {
 	if (m_surface == nullptr || x < 0 || x > m_surface->w - 1 || y < 0 || y > m_surface->h - 1) {
 		return 0;
 	}
-	return ((Uint32*)(m_surface->pixels))[y*(m_surface->pitch / 4) + x];
+	return static_cast<Uint32*>(m_surface->pixels)[y*(m_surface->pitch / 4) + x];
 }
 
 

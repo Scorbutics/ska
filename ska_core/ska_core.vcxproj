@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="Core\GameCore.h" />
     <ClInclude Include="Core\Priorized.h" />
     <ClInclude Include="Core\State\StateBase.h" />

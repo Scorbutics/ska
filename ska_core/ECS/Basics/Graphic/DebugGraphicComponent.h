@@ -12,6 +12,7 @@ namespace ska {
 	public:
 		DebugGraphicComponent();
 		virtual ~DebugGraphicComponent() = default;
+		
 		unsigned int typeMask;
 		std::queue<EntityId> collidedBlocks;
 	};

@@ -1,5 +1,6 @@
 #pragma once
 #include "Color.h"
+#include "../Rectangle.h"
 
 namespace ska {
 	class Texture;
@@ -15,12 +16,14 @@ namespace ska {
 
 	public:
 		SDLTexture();
+		
 		explicit SDLTexture(TextureData& p);
 		
 		SDLTexture(SDLTexture&) = delete;
 		SDLTexture& operator=(const SDLTexture&) = delete;
 
 		void load(const SDLRenderer& renderer, const std::string& id, int r = -1, int g = -1, int b = -1, int a = -1);
+		void loadFromColoredRect(const SDLRenderer& renderer, const Color& pair, const Rectangle& rect);
 		void loadFromText(const SDLRenderer& renderer, unsigned int fontSize, const std::string& text, Color c);
 		void free();
 		~SDLTexture();

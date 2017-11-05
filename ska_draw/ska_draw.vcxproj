@@ -23,6 +23,7 @@
     <ClCompile Include="FpsRenderable.cpp" />
     <ClCompile Include="Graphic\AnimatedTexture.cpp" />
     <ClCompile Include="Graphic\Animation.cpp" />
+    <ClCompile Include="Graphic\DebugEntityCollisionResponse.cpp" />
     <ClCompile Include="Graphic\GifTexture.cpp" />
     <ClCompile Include="Graphic\GraphicComponent.cpp" />
     <ClCompile Include="Graphic\HasShadowComponent.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="FpsRenderable.h" />
     <ClInclude Include="Graphic\AnimatedTexture.h" />
     <ClInclude Include="Graphic\Animation.h" />
+    <ClInclude Include="Graphic\DebugEntityCollisionResponse.h" />
     <ClInclude Include="Graphic\GifTexture.h" />
     <ClInclude Include="Graphic\GraphicComponent.h" />
     <ClInclude Include="Graphic\HasShadowComponent.h" />

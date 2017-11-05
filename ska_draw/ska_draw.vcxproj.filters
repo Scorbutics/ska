@@ -27,6 +27,7 @@
     <ClCompile Include="Graphic\System\WalkAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\System\DirectionnalAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\System\JumpAnimationStateMachine.cpp" />
+    <ClCompile Include="Graphic\DebugEntityCollisionResponse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FpsCalculator.h" />
@@ -52,5 +53,6 @@
     <ClInclude Include="Graphic\System\WalkAnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\DirectionnalAnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\JumpAnimationStateMachine.h" />
+    <ClInclude Include="Graphic\DebugEntityCollisionResponse.h" />
   </ItemGroup>
 </Project>

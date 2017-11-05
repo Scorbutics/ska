@@ -2,12 +2,14 @@
 #include "Utils/Observer.h"
 #include "Data/Events/GameEventDispatcher.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
+#include "ECS/Basics/Physic/MovementComponent.h"
+#include "Utils/SubObserver.h"
 
 namespace ska {
 	struct CollisionEvent;
 	class CollidableComponent;
 	class EntityManager;
-	using EntityCollisionObserver = Observer<CollisionEvent>;
+	using EntityCollisionObserver = SubObserver<CollisionEvent>;
 
 	class EntityCollisionResponse : public EntityCollisionObserver {
 	public:
@@ -17,6 +19,7 @@ namespace ska {
 		
 		EntityCollisionResponse& operator=(const EntityCollisionResponse&) = delete;
 
+		static bool handleInfiniteMasses(const CollisionComponent& col, float invMassOrigin, float invMassTarget, MovementComponent& mtarget, MovementComponent& morigin);
 		virtual bool onEntityCollision(CollisionEvent&);
 	private:
 		bool calculateNormalAndPenetration(ska::CollisionComponent& col) const;

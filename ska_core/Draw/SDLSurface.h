@@ -23,12 +23,14 @@ namespace ska {
 		void load(const std::string& file);
 		void load32(const std::string& file);
 		void loadFromText(const Font& font, const std::string& text, Color c);
+		void loadFromColoredRect(const Color& color, const SDL_Rect& rect);
 
 		Color getPixel32Color(int x, int y) const;
 		Uint32 getPixel32(int x, int y) const;
 		const SDL_PixelFormat * getFormat() const;
 
 		SDL_Surface* getInstance() const;
+		
 
 	private:
 		void free();

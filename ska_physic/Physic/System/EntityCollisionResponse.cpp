@@ -6,19 +6,18 @@
 #include "CollisionSystem.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
 #include "Utils/RectangleUtils.h"
+#include "Core/CodeDebug/CodeDebug.h"
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
-	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1)),
+	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1), ged),
 	m_ged(ged),
 	m_entityManager(em) {
-	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
 }
 
 ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, GameEventDispatcher& ged, EntityManager& em) :
-    EntityCollisionObserver(onEntityCollision),
+    EntityCollisionObserver(onEntityCollision, m_ged),
     m_ged(ged),
     m_entityManager(em) {
-	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
 }
 
 bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionComponent& col) const {
@@ -28,26 +27,33 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 	auto& pcA = m_entityManager.getComponent<ska::PositionComponent>(a);
 	auto& pcB = m_entityManager.getComponent<ska::PositionComponent>(b);
 
+	auto& mcA = m_entityManager.getComponent<ska::MovementComponent>(a);
+	auto& mcB = m_entityManager.getComponent<ska::MovementComponent>(b);
+
+	const Point<float> absoluteDiffVelocity(ska::NumberUtils::absolute(mcA.vx - mcB.vx), ska::NumberUtils::absolute(mcA.vy - mcB.vy));
+
 	const auto& intersection = col.overlap;
-	if (intersection.w < intersection.h) {
+	if (ska::NumberUtils::absolute(intersection.h - absoluteDiffVelocity.y) < ska::NumberUtils::absolute(intersection.w - absoluteDiffVelocity.x)) {
 		auto& normal = col.normal;
 		const auto vectorAToBX = pcA.x - pcB.x;
 		normal.x = vectorAToBX < 0  ? -1.F : 1.F;
 		normal.y = 0;
 		col.penetration = static_cast<float>(intersection.w);
+		SKA_LOG_INFO("horizontal normal");
 	} else {
 		auto& normal = col.normal;
 		const auto vectorAToBY = pcA.y - pcB.y;
 		normal.x = 0;
 		normal.y = vectorAToBY < 0  ? -1.F : 1.F;
 		col.penetration = static_cast<float>(intersection.h);
+		SKA_LOG_INFO("vertical normal");
 	}
 	return true;
 }
 
 void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n) {
-	const auto percent = 0.05F;
-	const auto slope = 0.01F;
+	const auto percent = 0.01F;
+	const auto slope = 0.02F;
 
 	ska::Point<float> correction;
 	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
@@ -57,6 +63,17 @@ void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origi
 	target.y -= invMassTarget * correction.y;
 	origin.x += invMassOrigin * correction.x;
 	origin.y += invMassOrigin * correction.y;
+}
+
+bool ska::EntityCollisionResponse::handleInfiniteMasses(const CollisionComponent& col, float invMassOrigin, float invMassTarget, MovementComponent& mtarget, MovementComponent& morigin) {
+	if (invMassOrigin == 0 && invMassTarget == 0) {
+		mtarget.vx = 0;
+		mtarget.vy = 0;
+		morigin.vx = 0;
+		morigin.vy = 0;
+		return true;
+	}
+	return false;
 }
 
 bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
@@ -79,46 +96,27 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	const auto invMassOrigin = forigin.weight == std::numeric_limits<float>::max() ? 0 : 1 / forigin.weight;
 	const auto invMassTarget = ftarget.weight == std::numeric_limits<float>::max() ? 0 : 1 / ftarget.weight;
 
-	if(invMassOrigin == 0 && invMassTarget == 0) {
-        if (col.xaxis) {
-            mtarget.vx = 0;
-            morigin.vx = 0;
-        }
-
-        if (col.yaxis) {
-            mtarget.vy = 0;
-            morigin.vy = 0;
-        }
-        return true;
+	if(handleInfiniteMasses(col, invMassOrigin, invMassTarget, mtarget, morigin)) {
+		return true;
 	}
 
 	const Point<float> velocityDiffVector(mtarget.vx - morigin.vx, mtarget.vy - morigin.vy);
 	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.normal);
 	const auto j = (-(1 + bounciness) * diffVelocityOnNormal) / (invMassOrigin + invMassTarget) ;
 
+	/*SKA_DBG_ONLY(
+		auto roundedVelocityTarget = ska::Point<float>(ska::NumberUtils::round(mtarget.vx), ska::NumberUtils::round(mtarget.vy));
+		SKA_LOG_INFO("velocity = ", roundedVelocityTarget.x, ";", roundedVelocityTarget.y, "\tJ coeff = ", j);
+	);*/
+
 	//impulse = j . normal
 	Point<float> impulse(j * col.normal.x, j * col.normal.y);
 
-	#ifndef NDEBUG
-	//TODO static polymorphism trait collision logger ?
-	if(col.xaxis && col.yaxis) {
-        SKA_LOG_INFO("Collision deux axes");
-        const auto& intersection = col.overlap;
-        const auto& hcTarget = m_entityManager.getComponent<HitboxComponent>(col.target);
-        const auto& hcOrigin = m_entityManager.getComponent<HitboxComponent>(col.origin);
-        SKA_LOG_INFO(intersection.w, "/", (hcOrigin.width > hcTarget.width ? hcTarget.width : hcOrigin.width), ";", intersection.h, "/", (hcOrigin.height > hcTarget.height ? hcTarget.height : hcOrigin.height));
-	}
-    #endif
-
-	if (col.xaxis) {
-		mtarget.vx += impulse.x * invMassTarget;
-		morigin.vx += -impulse.x * invMassOrigin;
-	}
-
-	if (col.yaxis) {
-		mtarget.vy += impulse.y * invMassTarget;
-		morigin.vy += -impulse.y * invMassOrigin;
-	}
+	mtarget.vx += impulse.x * invMassTarget;
+	mtarget.vy += impulse.y * invMassTarget;
+	
+	morigin.vx += -impulse.x * invMassOrigin;	
+	morigin.vy += -impulse.y * invMassOrigin;
 
 	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.penetration, col.normal);
 
@@ -126,5 +124,4 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 }
 
 ska::EntityCollisionResponse::~EntityCollisionResponse() {
-	m_ged.ska::Observable<CollisionEvent>::removeObserver(*this);
 }

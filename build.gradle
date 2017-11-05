@@ -1,0 +1,148 @@
+apply plugin: 'com.android.model.native'
+
+def lib_distribution_root = '../distribution'
+
+model {
+     repositories {
+        libs(PrebuiltLibraries) {
+            SDL2 {
+                headers.srcDir "../SDL2/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/SDL2/lib/${targetPlatform.getName()}/libSDL2.so")
+                }
+            }
+            SDL2_ttf {
+                headers.srcDir "../SDL2_ttf/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/SDL2_ttf/lib/${targetPlatform.getName()}/libSDL2_ttf.so")
+                }
+            }
+            SDL2_image {
+                headers.srcDir "../SDL2_image/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/SDL2_image/lib/${targetPlatform.getName()}/libSDL2_image.so")
+                }
+            }
+            smpeg2 {
+                headers.srcDir "../smpeg2/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/smpeg2/lib/${targetPlatform.getName()}/libsmpeg2.so")
+                }
+            }
+            zlib {
+                headers.srcDir "../zlib/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/zlib/lib/${targetPlatform.getName()}/libzlib.so")
+                }
+            }
+            libogg {
+                headers.srcDir "../libogg/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/libogg/lib/${targetPlatform.getName()}/liblibogg.so")
+                }
+            }
+            libpng {
+                headers.srcDir "../libpng/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/libpng/lib/${targetPlatform.getName()}/liblibpng.so")
+                }
+            }
+            libvorbis {
+                headers.srcDir "../libvorbis/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/libvorbis/lib/${targetPlatform.getName()}/liblibvorbis.so")
+                }
+            }
+            libvorbisidec {
+                headers.srcDir "../libvorbisidec/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/libvorbisidec/lib/${targetPlatform.getName()}/liblibvorbisidec.so")
+                }
+            }
+            SDL2_mixer {
+                headers.srcDir "../SDL2_mixer/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/SDL2_mixer/lib/${targetPlatform.getName()}/libSDL2_mixer.so")
+                }
+            }
+            SDL2_giflib {
+                headers.srcDir "../SDL2_giflib/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${lib_distribution_root}/SDL2_giflib/lib/${targetPlatform.getName()}/libSDL2_giflib.so")
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion = 24
+        buildToolsVersion = '23.0.3'
+
+        defaultConfig {
+            minSdkVersion.apiLevel = 13
+            targetSdkVersion.apiLevel = 24
+            versionCode = 1
+            versionName = '1.0'
+        }
+
+        ndk {
+            moduleName = 'ska'
+            cppFlags.addAll(["-I" + file("../SDL2/include/").absolutePath])
+            cppFlags.addAll(["-I" + file("../SDL2_ttf/include/").absolutePath])
+            cppFlags.addAll(["-I" + file("../SDL2_mixer/include/").absolutePath])
+            cppFlags.addAll(["-I" + file("../SDL2_image/include/").absolutePath])
+			
+			cppFlags.addAll(["-I" + file("ska_ai/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_audio/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_core/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_draw/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_gui/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_particle/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_physic/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_script/").absolutePath])
+			cppFlags.addAll(["-I" + file("ska_world/").absolutePath])
+			
+            stl "stlport_static"
+        }
+
+        sources {
+            main {
+                jni {
+                    dependencies {
+                        library 'SDL2' linkage 'shared'
+                        library 'SDL2_ttf' linkage 'shared'
+                        library 'SDL2_mixer' linkage 'shared'
+                        library 'SDL2_image' linkage 'shared'
+
+                        library 'smpeg2' linkage 'shared'
+                        library 'zlib' linkage 'shared'
+                        library 'libpng' linkage 'shared'
+                        library 'libogg' linkage 'shared'
+                        library 'libvorbis' linkage 'shared'
+                        library 'libvorbisidec' linkage 'shared'
+                        library 'SDL2_giflib' linkage 'shared'
+
+                    }
+                    source {
+			            srcDirs 'src/'
+                        srcDirs '../SDL2/src/main/android/'
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+// This is just copy out the header file and built lib into distribution
+// directory for clint application to use; it is a small overhead of this sample:
+//    both lib and app are put inside one project space [save maintenance time]
+task(distributeLib, type : Copy) {
+    // trigger build library
+    dependsOn assemble
+    into '../distribution/ska/'
+    from('build/outputs/native/release/lib') {
+        into 'lib/'
+    }
+}

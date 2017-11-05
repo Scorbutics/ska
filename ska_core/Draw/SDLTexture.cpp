@@ -13,10 +13,18 @@ ska::SDLTexture::SDLTexture() : m_r(0), m_g(0), m_b(0), m_texture(nullptr), m_w(
 }
 
 ska::SDLTexture::SDLTexture(TextureData& data) : m_texture(nullptr) {
-	if(data.text) {
+	switch (data.type) {
+	case TEXT:
 		loadFromText(data.getRenderer(), data.fontSize, data.getData().first, data.getData().second);
-	} else {
+		break;
+	case SPRITE:
 		load(data.getRenderer(), data.getData().first, data.getData().second.r, data.getData().second.g, data.getData().second.b, data.getData().second.a);
+		break;
+	case RECT:
+		loadFromColoredRect(data.getRenderer(), data.getData().second, data.rect);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -58,6 +66,22 @@ void ska::SDLTexture::load(const SDLRenderer& renderer, const std::string& fileN
 	m_texture = renderer.createTextureFromSurface(sprite);
 	m_w = sprite.getInstance()->w;
 	m_h = sprite.getInstance()->h;
+}
+
+void ska::SDLTexture::loadFromColoredRect(const SDLRenderer& renderer, const Color& color, const ska::Rectangle& rect) {
+	SDLSurface buffer;
+	buffer.loadFromColoredRect(color, rect);
+
+	if (buffer.getInstance() == nullptr) {
+		throw FileException("Erreur lors de la création de l'image rectangle coloree : " + std::string(TTF_GetError()));
+	}
+
+	free();
+	m_fileName = "";
+	m_texture = renderer.createTextureFromSurface(buffer);
+	m_h = buffer.getInstance()->h;
+	m_w = buffer.getInstance()->w;
+	m_alpha = color.a;
 }
 
 void ska::SDLTexture::loadFromText(const SDLRenderer& renderer, unsigned int fontSize, const std::string& text, Color c) {

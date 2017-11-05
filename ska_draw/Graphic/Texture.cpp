@@ -19,7 +19,7 @@ void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	finalColor.g = static_cast<Uint8>(g);
 	finalColor.r = static_cast<Uint8>(r);
 
-	loadFromKey(TextureData(*m_renderer, id, finalColor, false, 0));
+	loadFromKey(TextureData(*m_renderer, id, finalColor, ska::Rectangle{}, SPRITE, 0));
 }
 
 void ska::Texture::setColor(Uint8 r, Uint8 g, Uint8 b) const {
@@ -75,7 +75,15 @@ void ska::Texture::checkRenderer() {
 void ska::Texture::loadFromText(unsigned int fontSize, std::string text, Color c) {
 	checkRenderer();
 
-	loadFromKey(TextureData(*m_renderer, text, c, true, fontSize));
+	loadFromKey(TextureData(*m_renderer, text, c, ska::Rectangle{}, TEXT, fontSize));
+}
+
+void ska::Texture::loadFromColoredRect(unsigned int width, unsigned int height, Color c) {
+	checkRenderer();
+
+	loadFromKey(TextureData(*m_renderer, "", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, RECT, 0));
+	lifetimeSeparation();
+	resize(width, height);
 }
 
 unsigned int ska::Texture::getWidth() const {

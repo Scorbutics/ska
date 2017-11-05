@@ -1,9 +1,6 @@
-#include <iostream>
 #include "Data/Events/CollisionEvent.h"
 #include "DebugWorldCollisionResponse.h"
 #include "ECS/Basics/Graphic/DebugGraphicComponent.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "ECS/Basics/Physic/CollidableComponent.h"
 #include "ECS/EntityManager.h"
 #include "CollisionSystem.h"
 

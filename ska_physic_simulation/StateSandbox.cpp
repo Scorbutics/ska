@@ -9,6 +9,7 @@
 #include "ECS/Basics/Physic/GravityAffectedComponent.h"
 #include "Physic/System/GravitySystem.h"
 #include "Draw/SDLRenderer.h"
+#include "Graphic/System/DeleterSystem.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
@@ -19,6 +20,7 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 	m_cameraSystem(nullptr),
 	m_eventDispatcher(data.m_eventDispatcher),
 	m_entityManager(data.m_entityManager),
+	m_debugEntityCollision(data.m_eventDispatcher, data.m_entityManager),
 	m_entityCollision(data.m_eventDispatcher, data.m_entityManager), 
 	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
@@ -71,6 +73,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic<ska::MovementSystem>();
 		addLogic<ska::CollisionSystem>(m_eventDispatcher);
 		addLogic<ska::GravitySystem>();
+		addLogic<ska::DeleterSystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
         auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>();
         m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(m_entityManager).get();
@@ -108,7 +111,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		ska::InputComponent ic;
 		ic.jumpPower = 2;
-		ic.movePower = 2.F;
+		ic.movePower = 1.F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {

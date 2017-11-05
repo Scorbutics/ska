@@ -144,6 +144,7 @@
     <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
     <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="ECS\SerializableComponent.h" />
+    <ClInclude Include="Core\CodeDebug\CodeDebug.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
