@@ -33,20 +33,27 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 	const Point<float> absoluteDiffVelocity(ska::NumberUtils::absolute(mcA.vx - mcB.vx), ska::NumberUtils::absolute(mcA.vy - mcB.vy));
 
 	const auto& intersection = col.overlap;
-	if (ska::NumberUtils::absolute(intersection.h - absoluteDiffVelocity.y) < ska::NumberUtils::absolute(intersection.w - absoluteDiffVelocity.x)) {
+
+	const auto velocityOverlapX = absoluteDiffVelocity.x == 0 ? std::numeric_limits<float>::max() : ska::NumberUtils::absolute(intersection.w / absoluteDiffVelocity.x);
+	const auto velocityOverlapY = absoluteDiffVelocity.y == 0 ? std::numeric_limits<float>::max() : ska::NumberUtils::absolute(intersection.h / absoluteDiffVelocity.y);
+	if(velocityOverlapX == velocityOverlapY) {
+		return true;
+	}
+
+	if (velocityOverlapX < velocityOverlapY) {
 		auto& normal = col.normal;
 		const auto vectorAToBX = pcA.x - pcB.x;
 		normal.x = vectorAToBX < 0  ? -1.F : 1.F;
 		normal.y = 0;
 		col.penetration = static_cast<float>(intersection.w);
-		SKA_LOG_INFO("horizontal normal");
+		SKA_LOG_INFO((vectorAToBX < 0 ? "<" : ">"), "\t", a, " | ", b);
 	} else {
 		auto& normal = col.normal;
 		const auto vectorAToBY = pcA.y - pcB.y;
 		normal.x = 0;
-		normal.y = vectorAToBY < 0  ? -1.F : 1.F;
+		normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 		col.penetration = static_cast<float>(intersection.h);
-		SKA_LOG_INFO("vertical normal");
+		SKA_LOG_INFO((vectorAToBY < 0 ? "^" : "v"), "\t", a, " | ", b);
 	}
 	return true;
 }
