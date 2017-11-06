@@ -20,7 +20,7 @@ ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(Collisi
     m_entityManager(em) {
 }
 
-bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionComponent& col) const {
+bool ska::EntityCollisionResponse::calculateNormalAndPenetration(CollisionComponent& col) const {
 	auto& a = col.origin;
 	auto& b = col.target;
 
@@ -34,16 +34,15 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 
 	const auto& intersection = col.overlap;
 
-	const auto velocityOverlapX = absoluteDiffVelocity.x == 0 ? std::numeric_limits<float>::max() : ska::NumberUtils::absolute(intersection.w / absoluteDiffVelocity.x);
-	const auto velocityOverlapY = absoluteDiffVelocity.y == 0 ? std::numeric_limits<float>::max() : ska::NumberUtils::absolute(intersection.h / absoluteDiffVelocity.y);
-	if(velocityOverlapX == velocityOverlapY) {
-		return true;
-	}
+	const auto velocityOverlapX = intersection.w;
+		//absoluteDiffVelocity.x == 0 ? std::numeric_limits<float>::max() : intersection.w / absoluteDiffVelocity.x;
+	const auto velocityOverlapY = intersection.h;
+		//absoluteDiffVelocity.y == 0 ? std::numeric_limits<float>::max() : intersection.h / absoluteDiffVelocity.y;
 
 	if (velocityOverlapX < velocityOverlapY) {
 		auto& normal = col.normal;
 		const auto vectorAToBX = pcA.x - pcB.x;
-		normal.x = vectorAToBX < 0  ? -1.F : 1.F;
+		normal.x = vectorAToBX < 0 ? -1.F : 1.F;
 		normal.y = 0;
 		col.penetration = static_cast<float>(intersection.w);
 		SKA_LOG_INFO((vectorAToBX < 0 ? "<" : ">"), "\t", a, " | ", b);
@@ -59,8 +58,8 @@ bool ska::EntityCollisionResponse::calculateNormalAndPenetration(ska::CollisionC
 }
 
 void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n) {
-	const auto percent = 0.01F;
-	const auto slope = 0.02F;
+	const auto percent = 0.2F; // usually 20% to 80%
+	const auto slope = 0.01F; // usually 0.01 to 0.1
 
 	ska::Point<float> correction;
 	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
@@ -96,12 +95,13 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	auto& ftarget = m_entityManager.getComponent<ForceComponent>(col.target);
 	auto& forigin = m_entityManager.getComponent<ForceComponent>(col.origin);
 
-	const auto& bounciness = std::min(forigin.bounciness, ftarget.bounciness);
+	auto bounciness = std::min(forigin.bounciness, ftarget.bounciness);
+	bounciness = bounciness < 0.F ? -bounciness : bounciness;
 
 	calculateNormalAndPenetration(col);
 
-	const auto invMassOrigin = forigin.weight == std::numeric_limits<float>::max() ? 0 : 1 / forigin.weight;
-	const auto invMassTarget = ftarget.weight == std::numeric_limits<float>::max() ? 0 : 1 / ftarget.weight;
+	const auto invMassOrigin = forigin.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / forigin.weight;
+	const auto invMassTarget = ftarget.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / ftarget.weight;
 
 	if(handleInfiniteMasses(col, invMassOrigin, invMassTarget, mtarget, morigin)) {
 		return true;
@@ -109,11 +109,13 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 
 	const Point<float> velocityDiffVector(mtarget.vx - morigin.vx, mtarget.vy - morigin.vy);
 	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.normal);
-	const auto j = (-(1 + bounciness) * diffVelocityOnNormal) / (invMassOrigin + invMassTarget) ;
+	const auto j = (-(1.0 + bounciness) * (diffVelocityOnNormal)) / (invMassOrigin + invMassTarget) ;
 
 	/*SKA_DBG_ONLY(
-		auto roundedVelocityTarget = ska::Point<float>(ska::NumberUtils::round(mtarget.vx), ska::NumberUtils::round(mtarget.vy));
-		SKA_LOG_INFO("velocity = ", roundedVelocityTarget.x, ";", roundedVelocityTarget.y, "\tJ coeff = ", j);
+		//if (ska::NumberUtils::absolute(j) > 0.0001) {
+			auto roundedVelocityTarget = ska::Point<float>(mtarget.vx, mtarget.vy);
+			SKA_LOG_INFO("velocity = ", roundedVelocityTarget.x, ";", roundedVelocityTarget.y, "\tJ coeff = ", j);
+		//}
 	);*/
 
 	//impulse = j . normal

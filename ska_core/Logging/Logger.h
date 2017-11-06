@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <ctime>
+#include <iomanip>
 
 namespace ska {
     namespace loggerdetail {
@@ -8,21 +10,22 @@ namespace ska {
 
         template<class T1, class ...T>
         struct LoggerImpl<T1, T...> {
-
             static void log(const T1& message, const T&... remainingMessages) {
-                std::cout << message;
+            	std::cout << message;
                 LoggerImpl<T...>::log(std::forward<const T&>(remainingMessages)...);
             }
 
             static void error(const T1& message, const T&... remainingMessages) {
-                std::cerr << message;
+            	std::cerr << message;
                 LoggerImpl<T...>::error(std::forward<const T&>(remainingMessages)...);
             }
 
             static void info(const T1& message, const T&... remainingMessages) {
-                std::cout << message;
+            	std::cout << message;
                 LoggerImpl<T...>::info(std::forward<const T&>(remainingMessages)...);
             }
+
+
         };
 
         template<>
@@ -51,17 +54,32 @@ namespace ska {
 
 		template<class ...T>
 		static void log(const T&... message) {
+			printDateTime(std::cout);
 			loggerdetail::LoggerImpl<T...>::log(std::forward<const T&>(message)...);
 		}
 
 		template<class ...T>
 		static void info(const T&... message) {
+			printDateTime(std::cout);
 			loggerdetail::LoggerImpl<T...>::info(std::forward<const T&>(message)...);
 		}
 
 		template<class ...T>
 		static void error(const T&... message) {
+			printDateTime(std::cerr);
 			loggerdetail::LoggerImpl<T...>::error(std::forward<const T&>(message)...);
+		}
+
+	private:
+		static void printDateTime(std::ostream& os) {
+			auto t = std::time(nullptr);
+#ifdef _MSC_VER
+			struct tm buf;
+			localtime_s(&buf, &t);
+#else
+			struct tm buf = *std::localtime(&t);
+#endif
+			os << "[" << std::put_time(&buf, "%H:%M:%S") << "] ";
 		}
 	};
 

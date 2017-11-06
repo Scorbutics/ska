@@ -10,38 +10,33 @@ ska::CollisionSystem::CollisionSystem(EntityManager& entityManager, GameEventDis
 
 void ska::CollisionSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
-	for (auto entityId : processed) {
-
+	for (auto entityIdIt = processed.begin(); entityIdIt != processed.end(); ++entityIdIt) {
+		auto entityId = *entityIdIt;
 		const auto entityHitbox = createHitBox(entityId);
 
-		auto entityCollided = false;
-		CollisionComponent col;
-		for (auto itEntity : processed) {
+	
+		for (auto itEntityIt = entityIdIt; itEntityIt != processed.end(); ++itEntityIt) {
+			auto itEntity = *itEntityIt;
 			if (itEntity != entityId) {
 				const auto& intersection = RectangleUtils::intersect(entityHitbox, createHitBox(itEntity));
 				if (intersection.w != 0 && intersection.h != 0) {
+					CollisionComponent col;
 					col.origin = entityId;
-					col.target = itEntity;
-					entityCollided = true;
+					col.target = itEntity;					
 					col.xaxis = intersection.h > 1;
 					col.yaxis = intersection.w > 1;
 					col.overlap = intersection;
+
+					// When collision between entities is detected, we can do things as decreasing health,
+					//pushing entities, or any statistic interaction 
+					CollisionEvent ce(entityId, nullptr, &col, m_componentAccessor.get<CollidableComponent>(entityId));
+					m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
 				}
 
 			}
 
-			if (entityCollided) {
-				break;
-			}
-
 		}
 
-		if (entityCollided) {
-			/* When collision between entities is detected, we can do things as decreasing health,
-			pushing entities, or any statistic interaction */
-			CollisionEvent ce(entityId, nullptr, &col, m_componentAccessor.get<CollidableComponent>(entityId));
-			m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
-		}
 	}
 }
 
