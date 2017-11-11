@@ -12,6 +12,9 @@ ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
 
 void ska::WalkAnimationStateMachine::onEnter(EntityId& e) {
 	auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(e);
+	if (gc.animatedSprites.empty()) {
+		return;
+	}
 	gc.animatedSprites[0].setOffset(Point<int>(0, 0));
 }
 

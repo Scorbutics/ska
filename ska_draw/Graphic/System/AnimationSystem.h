@@ -55,9 +55,9 @@ namespace ska {
         for (auto entityId : processed) {
           auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);
 		  auto afsm = c.getASM();
-	        auto next = afsm->animate(c, entityId);
+	      auto next = afsm != nullptr ? afsm->animate(c, entityId) : nullptr;
           if(next != nullptr) {
-              c.setASM(next, entityId);
+              c.setASM(*next, entityId);
           }
         }
       }

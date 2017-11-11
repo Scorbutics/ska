@@ -10,7 +10,7 @@ namespace ska {
 		AnimationComponent();
 		~AnimationComponent() = default;
 
-		void setASM(IAnimationStateMachine* afsm, EntityId& entity);
+		void setASM(IAnimationStateMachine& afsm, EntityId& entity);
 		IAnimationStateMachine* getASM() const;
 
 		long state;

@@ -14,8 +14,8 @@ ska::AnimationComponent::AnimationComponent() :
     direction = 0;*/
 }
 
-void ska::AnimationComponent::setASM(IAnimationStateMachine* afsm, EntityId& entityId){
-	animationFiniteStateMachine = afsm;
+void ska::AnimationComponent::setASM(IAnimationStateMachine& afsm, EntityId& entityId){
+	animationFiniteStateMachine = &afsm;
 	animationFiniteStateMachine->onEnter(entityId);
 }
 
