@@ -1,12 +1,13 @@
 #pragma once
 #include "ECS/Basics/Physic/CollisionProfile.h"
+#include "../ska_world/World/World.h"
 
 class World : 
-	public ska::CollisionProfile {
+	public ska::World {
 public:
+	World();
+	virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) override;
 	virtual ~World() override = default;
-	virtual bool intersectBlocksAtPos(const ska::Rectangle& hitbox, std::vector<ska::Point<int>>& outputX, std::vector<ska::Point<int>>& outputY) const override;
-	virtual bool isBlockAuthorizedAtPos(const ska::Point<int>& pos, const std::unordered_set<int>& blocksAuthorized) const override;
 
 private:
 

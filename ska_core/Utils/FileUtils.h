@@ -3,6 +3,35 @@
 #include "SkaConstants.h"
 
 namespace ska {
+	struct FileNameData {	
+		explicit FileNameData(const std::string& fullFileName) :
+			FileNameData(build(fullFileName)) {
+		}
+
+		const std::string extension;
+		const std::string path;
+		const std::string name;
+		
+	private:
+		FileNameData(const std::string& fpath, const std::string& fname, const std::string& ext) :
+			extension(ext),
+			path(fpath),
+			name(fname) {
+		}
+
+		static FileNameData build(const std::string& fullFileName) {
+			auto lastSlash = fullFileName.find_last_of('/');
+			auto lastBackSlash = fullFileName.find_last_of('\\');
+			auto lastFileSeparator = (lastSlash != std::string::npos) ? (lastBackSlash > lastSlash ? lastBackSlash : lastSlash) : lastBackSlash;
+
+			auto fileNameWithExt = lastFileSeparator == std::string::npos ? fullFileName : fullFileName.substr(lastFileSeparator + 1);
+			auto extDotPos = fileNameWithExt.find_last_of('.');
+			auto fpath = fullFileName.substr(0, lastFileSeparator);
+			auto ext = (extDotPos != std::string::npos) ? fileNameWithExt.substr(extDotPos + 1) : "";
+			auto fname = (extDotPos != std::string::npos) ? fileNameWithExt.substr(0, extDotPos) : fileNameWithExt;
+			return FileNameData(fpath, fname, ext);
+		}
+	};
 
 	template <class T>
 	class FileUtilsTemplate {
@@ -27,6 +56,7 @@ namespace ska {
 		static void removeFile(const std::string& filename) {
 			remove(filename.c_str());
 		}
+
 	};
 
 	

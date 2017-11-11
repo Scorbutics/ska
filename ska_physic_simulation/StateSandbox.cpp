@@ -10,6 +10,8 @@
 #include "Physic/System/GravitySystem.h"
 #include "Draw/SDLRenderer.h"
 #include "Graphic/System/DeleterSystem.h"
+#include "Physic/System/WorldCollisionSystem.h"
+#include "Graphic/System/DebugCollisionDrawerSystem.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
@@ -22,7 +24,9 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 	m_entityManager(data.m_entityManager),
 	m_debugEntityCollision(data.m_eventDispatcher, data.m_entityManager),
 	m_entityCollision(data.m_eventDispatcher, data.m_entityManager), 
-	m_walkASM(nullptr) {
+	m_walkASM(nullptr),
+	m_worldCollisionResponse(m_world, data.m_eventDispatcher, data.m_entityManager),
+	m_debugWorldCollision(data.m_eventDispatcher, data.m_entityManager) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
 
@@ -72,12 +76,14 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		addLogic<ska::MovementSystem>();
 		addLogic<ska::CollisionSystem>(m_eventDispatcher);
+		addLogic<ska::WorldCollisionSystem>(m_world, m_eventDispatcher);
+		addLogic<ska::DebugCollisionDrawerSystem>();
 		addLogic<ska::GravitySystem>();
 		addLogic<ska::DeleterSystem>();
 		addLogic<ska::InputSystem>(m_eventDispatcher);
         auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>();
-        m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(m_entityManager).get();
-		animSystem->setup<ska::JumpAnimationStateMachine>(m_entityManager);
+        m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(true, m_entityManager).get();
+		animSystem->setup<ska::JumpAnimationStateMachine>(false, m_entityManager);
 
 		animSystem->link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
@@ -93,20 +99,12 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150), "0", false);
 		auto blockC = createPhysicAABBEntity(ska::Point<int>(200, 300), "0", false);
 
-
-
 		auto& graphicComponentC = m_entityManager.getComponent<ska::GraphicComponent>(blockC);
 		auto& asC = graphicComponentC.animatedSprites[0];
 		asC.lifetimeSeparation();
 
-		ska::SDLRenderer::getDefaultRenderer()->setRenderColor(ska::Color(70, 70, 0, 255));
-		asC.setAlpha(70);
-		asC.setBlendMode(SDL_BLENDMODE_ADD);
-
-		asC.setColor(180, 255, 255);
-
 		ska::AnimationComponent ac;
-		ac.setASM(m_walkASM, blockA);
+		ac.setASM(*m_walkASM, blockA);
 		m_entityManager.addComponent<ska::AnimationComponent>(blockA, std::move(ac));
 
 		ska::InputComponent ic;
@@ -114,13 +112,16 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
+		m_world.load("Resources\\Levels\\new_level", "Resources\\Chipsets\\chipset_platform.png");
+		m_world.linkCamera(m_cameraSystem);
 	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
 		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);
 	}
 	return true;
 }
 
-void StateSandbox::onGraphicUpdate(unsigned int, ska::DrawableContainer&) {
+void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {
+	m_world.graphicUpdate(ellapsedTime, drawables);
 }
 
 void StateSandbox::onEventUpdate(unsigned int) {

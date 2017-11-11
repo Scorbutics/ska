@@ -25,16 +25,12 @@ namespace ska {
 
 		LayerRenderable& getRenderable();
 
-		void changeLevel(std::string fname, std::string chipsetname);
 		void reset(std::string file, std::string chipsetName);
 
 		void clear();
 
 		Block* getBlock(unsigned int i, unsigned int j) const;
 		int getBlockCollision(const unsigned int i, const unsigned int j) const;
-		int getNbrBlocX();
-		int getNbrBlocY();
-		void getData();
 		Layer* getParent() const;
 
 

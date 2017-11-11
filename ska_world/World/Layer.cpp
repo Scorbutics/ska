@@ -8,6 +8,7 @@
 #include "Exceptions/IndexOutOfBoundsException.h"
 #include "Utils/StringUtils.h"
 #include "Exceptions/FileException.h"
+#include "Utils/FileUtils.h"
 
 //Constructeur ouvrant un monde déjà créé
 ska::Layer::Layer(World& w, std::string pathFile, std::string chipsetName, Layer* parent) : m_world(w), m_renderable(w) {
@@ -57,8 +58,9 @@ int ska::Layer::getBlockCollision(const unsigned int i, const unsigned int j) co
 
 void ska::Layer::reset(std::string pathFile, std::string) {
 
-    m_nomFichier = pathFile.substr(pathFile.find_last_of('/')+1, pathFile.size());
-    m_name = m_nomFichier.substr(0, m_nomFichier.find_last_of('.'));
+	FileNameData fnd(pathFile);
+	m_nomFichier = fnd.name + "." + fnd.extension;
+    m_name = fnd.name;
 
     SDLSurface fichierMPng;
 
@@ -86,7 +88,7 @@ void ska::Layer::reset(std::string pathFile, std::string) {
 		m_block.reserve(m_fileHeight);
 		renderableBlocks.reserve(m_fileHeight);
 		for (auto j = 0U; j < m_fileHeight; j++) {
-			Color c = fichierMPng.getPixel32Color(i, j);
+			auto c = fichierMPng.getPixel32Color(i, j);
 			BlockRenderable* brp = nullptr;
 			Block* bp = nullptr;
 			chipset.generateBlock(c, &bp, &brp);

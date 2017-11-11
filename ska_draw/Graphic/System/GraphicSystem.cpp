@@ -35,14 +35,16 @@ void ska::GraphicSystem::refresh(unsigned int) {
 
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(pos.y), m_topLayerPriority);
-			const auto priority = gc.desiredPriority > std::numeric_limits<int>::min() ? gc.desiredPriority : pos.y + (camera == nullptr ? 0 : camera->h * pos.z);
+			constexpr auto minInt = std::numeric_limits<int>::min(); 
+			const int priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + (camera == nullptr ? 0 : camera->h * pos.z));
 			m_pgd.push_back(PositionnedGraphicDrawable(sprite, relPosX, relPosY, priority, m_topLayerPriority));			
 		}
 
 		for (auto& sprite : gc.animatedSprites) {
 			sprite.update();
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(pos.y), m_topLayerPriority);
-			const auto priority = gc.desiredPriority > std::numeric_limits<int>::min() ? gc.desiredPriority : pos.y + (camera == nullptr ? 0 : camera->h * pos.z);
+			constexpr auto minInt = std::numeric_limits<int>::min();
+			const int priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + (camera == nullptr ? 0 : camera->h * pos.z));
 			m_pgd.push_back(PositionnedGraphicDrawable(sprite, relPosX, relPosY, priority, m_topLayerPriority));
 		}
 

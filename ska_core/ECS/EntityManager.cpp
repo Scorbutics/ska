@@ -47,29 +47,40 @@ void ska::EntityManager::addComponent(const EntityId entity, const std::string& 
     }
 }
 
+ska::EntityId ska::EntityManager::createEntityNoThrow() {
+	EntityId newId;
+
+	if(!checkEntitiesNumber()) {
+		m_entities.erase(std::begin(m_entities));
+	}
+
+	if (m_deletedEntities.empty()) {
+		newId = static_cast<EntityId>(m_entities.size());
+	} else {
+		newId = m_deletedEntities[m_deletedEntities.size() - 1];
+		m_deletedEntities.pop_back();		
+	}
+	m_entities.insert(newId);
+
+	/* Reset all components */
+	m_componentMask[newId] &= 0;
+
+	m_alteredEntities.insert(newId);
+
+	return newId;
+}
+
+bool ska::EntityManager::checkEntitiesNumber() const {
+	return static_cast<int>(m_entities.size() - m_deletedEntities.size()) < SKA_ECS_MAX_ENTITIES;
+}
 
 ska::EntityId ska::EntityManager::createEntity() {
-    EntityId newId;
-    if (static_cast<int>(m_entities.size() - m_deletedEntities.size()) >= SKA_ECS_MAX_ENTITIES) {
+    if (!checkEntitiesNumber()) {
         throw IllegalStateException("Too many entities are currently in use. Unable to create a new one. "
             "Increase SKA_ECS_MAX_ENTITIES at compile time to avoid the problem.");
     }
 
-    if (m_deletedEntities.empty()) {
-        newId = static_cast<EntityId>(m_entities.size());
-        m_entities.insert(newId);
-    } else {
-        newId = m_deletedEntities[m_deletedEntities.size() - 1];
-        m_deletedEntities.pop_back();
-        m_entities.insert(newId);
-    }
-
-    /* Reset all components */
-    m_componentMask[newId] &= 0;
-
-	m_alteredEntities.insert(newId);
-
-    return newId;
+	return createEntityNoThrow();
 }
 
 void ska::EntityManager::removeEntity(EntityId entity) {

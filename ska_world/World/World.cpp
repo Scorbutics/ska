@@ -8,6 +8,7 @@
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
 #include "Exceptions/FileException.h"
+#include "Utils/FileUtils.h"
 
 ska::World::World(const unsigned int tailleBloc) :
     m_windDirection(0),
@@ -180,18 +181,20 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 	bool chipsetChanged = m_chipset.attach(m_blockSize, chipsetName);
 
 	if (worldChanged) {
-		m_genericName = fileName.substr(0, fileName.find_last_of('.'));
-		m_worldName = m_genericName.substr(m_genericName.find_last_of('/') + 1, m_genericName.size());
+		ska::FileNameData fndata(fileName);
+		m_genericName = fndata.name;
+		m_worldName = fndata.path + "/" + fndata.name;
 		m_fileName = fileName;
 
 		getData();
 	}
 
 	if (worldChanged || chipsetChanged) {
-		const std::string& botLayerName = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + ".bmp";
-		const std::string& midLayerName = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + "M.bmp";
-		const std::string& topLayerName = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + "T.bmp";
-		const std::string& eventLayerName = m_genericName + "E.txt";
+		const auto fileNamePrefix = m_worldName + std::string(FILE_SEPARATOR) + m_genericName;
+		const std::string& botLayerName = fileNamePrefix + ".bmp";
+		const std::string& midLayerName = fileNamePrefix + "M.bmp";
+		const std::string& topLayerName = fileNamePrefix + "T.bmp";
+		const std::string& eventLayerName = fileNamePrefix + "E.txt";
 
 		m_lBot.clear();
 		m_lMid.clear();

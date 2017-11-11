@@ -32,7 +32,9 @@ namespace ska {
 			m_componentMask(), 
 			m_componentMaskCounter(0) { }
 
+		bool checkEntitiesNumber() const;
 		EntityId createEntity();
+		EntityId createEntityNoThrow();
 		void removeEntity(EntityId entity);
 		void removeEntities(const std::unordered_set<EntityId>& exceptions);
 		void refreshEntity(EntityId entity);
@@ -43,7 +45,7 @@ namespace ska {
 		void removeComponent(const EntityId entity, const std::string& component);
 		void addComponent(const EntityId entity, const std::string& component);
 
-        template <class T>
+		template <class T>
 		void addComponent(EntityId entity, T&& component) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
 			commonAddComponent(entity, components.add(entity, std::forward<T>(component)));

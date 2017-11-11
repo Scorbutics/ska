@@ -13,3 +13,5 @@
 *.layout
 *.iobj
 *.ipdb
+/ska_physic_simulation/Debug
+/ska_world/Debug

@@ -123,6 +123,10 @@ namespace ska {
 			return m_entityManager.createEntity();
 		}
 
+		EntityId createEntityNoThrow() const {
+			return m_entityManager.createEntityNoThrow();
+		}
+
 		void removeEntity(EntityId entity) const {
 			m_entityManager.removeEntity(entity);
         }

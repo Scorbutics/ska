@@ -12,6 +12,7 @@
 #include "Exceptions/CorruptedFileException.h"
 #include "Exceptions/NumberFormatException.h"
 #include "Logging/Logger.h"
+#include "Utils/FileUtils.h"
 
 //Constructeur ouvrant un monde déjà créé
 ska::LayerE::LayerE(World& world) : m_world(world) {
@@ -74,12 +75,13 @@ int ska::LayerE::getNbrLignes() const {
 }
 
 void ska::LayerE::changeLevel(const std::string& fichier) {
-    m_nomFichier = fichier;
-	const std::string folder = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_nomFichier.substr(0, m_nomFichier.find_last_of('E')) + "" FILE_SEPARATOR "" + m_nomFichier;
-	std::ifstream flux(folder.c_str());
+	ska::FileNameData fndata(fichier);
+	m_nomFichier = fichier;
+	const auto nomFichier = fndata.name.substr(0, fndata.name.find_last_of('E'));
+	std::ifstream flux(fichier.c_str());
 	std::stringstream ss;
 	if (flux.fail()) {
-		throw CorruptedFileException("Erreur (classe LayerE) : Impossible d'ouvrir le fichier event demandé: " + folder);
+		throw CorruptedFileException("Erreur (classe LayerE) : Impossible d'ouvrir le fichier event demandé: " + fichier);
 	}
 
 	m_coordBX.clear();

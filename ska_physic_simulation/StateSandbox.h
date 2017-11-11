@@ -7,6 +7,8 @@
 #include "Physic/System/EntityCollisionResponse.h"
 #include "Graphic/System/WalkAnimationStateMachine.h"
 #include "Graphic/DebugEntityCollisionResponse.h"
+#include "Physic/System/WorldCollisionResponse.h"
+#include "Physic/System/DebugWorldCollisionResponse.h"
 
 class StateSandbox :
 	public ska::StateBase<ska::EntityManager, ska::ExtensibleGameEventDispatcher<>>,
@@ -29,6 +31,8 @@ private:
 	ska::EntityManager& m_entityManager;
 	ska::DebugEntityCollisionResponse m_debugEntityCollision;
 	ska::EntityCollisionResponse m_entityCollision;
+	ska::DebugWorldCollisionResponse m_debugWorldCollision;
+	ska::WorldCollisionResponse m_worldCollisionResponse;
 	ska::WalkAnimationStateMachine* m_walkASM;
 };
 

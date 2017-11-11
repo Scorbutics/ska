@@ -1,9 +1,14 @@
 #include "World.h"
+#include "Draw/DrawableContainer.h"
 
-bool World::intersectBlocksAtPos(const ska::Rectangle& hitbox, std::vector<ska::Point<int>>& outputX, std::vector<ska::Point<int>>& outputY) const {
-	return false;
+World::World() :
+	ska::World(48) {
+	
 }
 
-bool World::isBlockAuthorizedAtPos(const ska::Point<int>& pos, const std::unordered_set<int>& blocksAuthorized) const {
-	return true;
+void World::graphicUpdate(unsigned ellapsedTime, ska::DrawableContainer& drawables) {
+	drawables.add(m_lBot.getRenderable());
+	drawables.add(m_lMid.getRenderable());
+	drawables.add(m_lTop.getRenderable());
 }
+

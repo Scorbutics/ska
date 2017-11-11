@@ -28,13 +28,13 @@ void ska::DebugCollisionDrawerSystem::refresh(unsigned int) {
 
 			if (wcol.xaxis) {
 				for (const auto& p : wcol.blockColPosX) {
-					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 0));
+					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
 				}
 			}
 
 			if (wcol.yaxis) {
 				for (const auto& p : wcol.blockColPosY) {
-					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 0));
+					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
 				}
 			}
 		}
@@ -52,9 +52,9 @@ void ska::DebugCollisionDrawerSystem::refresh(unsigned int) {
 ska::EntityId ska::DebugCollisionDrawerSystem::createDebugCollisionEntity(const Point<int>& p, int offset) {
 	EntityId e = createEntity();
 	GraphicComponent gc;
-	gc.animatedSprites.resize(1);
-	gc.animatedSprites[0].load(SpritePath::getInstance().getPath(SPRITEBANK_ANIMATION, 18 + offset), 2, 1, 2, false, DEFAULT_T_RED, DEFAULT_T_GREEN, DEFAULT_T_BLUE, offset == 0 ? 40 : 100);
-	gc.animatedSprites[0].setDelay(500);
+	gc.sprites.resize(1);
+	gc.sprites[0].loadFromColoredRect(48, 48, ska::Color(255, 0, 0, offset == 0 ? 40 : 100));
+	gc.desiredPriority = std::numeric_limits<int>::max() - 1;
 	m_componentAccessor.add<GraphicComponent>(e, std::move(gc));
 	DeleterComponent dc;
 	dc.delay = 3000;
