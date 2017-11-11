@@ -18,11 +18,14 @@ namespace ska {
 
     public:
       template<class ASM1, class ... Args>
-	  ASMPtr<ASM1>& setup(Args&&... args) {
+	  ASMPtr<ASM1>& setup(bool defaultASM, Args&&... args) {
           using animationStateMachineTypeFound = ska::meta::contains<ASM1, ASM...>;
           static_assert(animationStateMachineTypeFound::value, "Unable to locate animation state machine in the current animation system");
 		  auto& toSet = std::get<ASMPtr<ASM1>>(m_asm);
       	  toSet = std::make_unique<ASM1>(std::forward<Args>(args)...);
+		  if(defaultASM) {
+			  m_defaultASM = toSet.get();
+		  }
 		  return toSet;
       }
 
@@ -55,7 +58,11 @@ namespace ska {
         for (auto entityId : processed) {
           auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);
 		  auto afsm = c.getASM();
-	      auto next = afsm != nullptr ? afsm->animate(c, entityId) : nullptr;
+		  if(afsm == nullptr) {
+			afsm = m_defaultASM;
+			c.setASM(*afsm, entityId);
+		  }
+	      auto next =  afsm->animate(c, entityId);
           if(next != nullptr) {
               c.setASM(*next, entityId);
           }
@@ -65,6 +72,7 @@ namespace ska {
     private:
       std::tuple<ASMPtr<ASM>...> m_asm;
 
+	  IAnimationStateMachine* m_defaultASM;
     };
 
 }
