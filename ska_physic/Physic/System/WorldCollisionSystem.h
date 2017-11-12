@@ -19,6 +19,7 @@ namespace ska {
 		WorldCollisionSystem& operator=(const WorldCollisionSystem&) = delete;
 		virtual ~WorldCollisionSystem();
 	protected:
+		Rectangle calculateOverlap(Rectangle nextPos, const std::vector<Point<int>>& points);
 		virtual void refresh(unsigned int ellapsedTime) override;
 	private:
 		inline Rectangle createHitBox(EntityId entityId, bool xaxis, bool noMove) const;

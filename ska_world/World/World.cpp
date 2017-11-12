@@ -9,6 +9,7 @@
 #include "Graphic/System/CameraSystem.h"
 #include "Exceptions/FileException.h"
 #include "Utils/FileUtils.h"
+#include "ECS/Basics/Physic/CollisionContact.h"
 
 ska::World::World(const unsigned int tailleBloc) :
     m_windDirection(0),
@@ -26,7 +27,7 @@ ska::World::World(const unsigned int tailleBloc) :
 
 void ska::World::linkCamera(CameraSystem* cs) {
 	m_cameraSystem = cs;
-	if (m_cameraSystem != NULL) {
+	if (m_cameraSystem != nullptr) {
 		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
 	}
 }
@@ -46,6 +47,7 @@ bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int l
 		break;
 	case 2:
 		l = &m_lTop;
+		break;
 	default :
 		l = nullptr;
 		break;
@@ -63,14 +65,13 @@ bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int l
 }
 
 bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
-	const Layer* l;
-		l = &m_lBot;
-	const Point<int> blockPos = pos / m_blockSize;
+	auto l = &m_lBot;
+	const auto blockPos = pos / m_blockSize;
 	if (blockPos.x >= m_nbrBlockX || blockPos.y >= m_nbrBlockY ) {
 		return true;
 	}
-	Block* b = l->getBlock(blockPos.x, blockPos.y);
-	const bool result = b != nullptr ? (authorizedBlocks.find(b->getID()) != authorizedBlocks.end()) : false;
+	auto b = l->getBlock(blockPos.x, blockPos.y);
+	const auto result = b != nullptr ? (authorizedBlocks.find(b->getID()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
@@ -107,35 +108,27 @@ void ska::World::update() {
 }
 
 bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point<int>>& outputX, std::vector<Point<int>>& outputY) const {
-	Point<int> chd, chg, cbg;
+	Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
+	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
+	horizontalSegment /= m_blockSize;
+	verticalSegment /= m_blockSize;
 
-	//position coin haut droit hitbox
-	chd.x = hitbox.x + hitbox.w;
-	chd.y = hitbox.y ;
-
-	//position coin haut gauche hitbox
-	chg.x = hitbox.x;
-	chg.y = hitbox.y;
-
-	//position coin bas gauche hitbox
-	cbg.x = hitbox.x;
-	cbg.y = hitbox.y + hitbox.h;
-
-	const int yLimit = cbg.y / m_blockSize;
-	const int xLimit = chd.x / m_blockSize;
-
-	bool col = false;
-	for (int y = chg.y / m_blockSize; y <= yLimit; y++) {
-		for (int x = chg.x / m_blockSize; x <= xLimit; x++) {
+	auto col = false;
+	
+	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
+		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
 			if (getCollision(x, y)) {
-				Rectangle hitboxBlock{ x * m_blockSize, y * m_blockSize, m_blockSize, m_blockSize };
-				const auto& intersection = RectangleUtils::intersect(hitboxBlock, hitbox);
-				if(intersection.w > 1) {
+				const Rectangle hitboxBlock{ x * m_blockSize, y * m_blockSize, m_blockSize, m_blockSize };
+
+				//Vertical
+				const auto collisionContact = CollisionContact(hitbox, hitboxBlock);
+				if(collisionContact.normal().y != 0) {
 					outputY.push_back(hitboxBlock);
 					col = true;
 				}
-				
-				if (intersection.h > 1) {
+
+				//Horizontal
+				if (collisionContact.normal().x != 0) {
 					outputX.push_back(hitboxBlock);
 					col = true;
 				}
@@ -153,13 +146,10 @@ ska::LayerRenderable& ska::World::getLayerRenderable(int level) {
 	switch (level) {
 	case 0:
 		return m_lBot.getRenderable();
-		break;
 	case 1:
 		return m_lMid.getRenderable();
-		break;
 	default:
 		return m_lTop.getRenderable();
-		break;
 	}
 }
 
@@ -191,10 +181,10 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 
 	if (worldChanged || chipsetChanged) {
 		const auto fileNamePrefix = m_worldName + std::string(FILE_SEPARATOR) + m_genericName;
-		const std::string& botLayerName = fileNamePrefix + ".bmp";
-		const std::string& midLayerName = fileNamePrefix + "M.bmp";
-		const std::string& topLayerName = fileNamePrefix + "T.bmp";
-		const std::string& eventLayerName = fileNamePrefix + "E.txt";
+		const auto& botLayerName = fileNamePrefix + ".bmp";
+		const auto& midLayerName = fileNamePrefix + "M.bmp";
+		const auto& topLayerName = fileNamePrefix + "T.bmp";
+		const auto& eventLayerName = fileNamePrefix + "E.txt";
 
 		m_lBot.clear();
 		m_lMid.clear();
@@ -229,7 +219,7 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 	}
 
 	if (reason == EnumScriptTriggerType::AUTO) {
-		std::vector<ScriptSleepComponent*> tmp = m_chipset.getScript("", reason, m_autoScriptsPlayed);
+		auto tmp = m_chipset.getScript("", reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->context = getName();
@@ -239,12 +229,12 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 		return result;
 	}
 
-	const Point<int> newBlock = newPos / m_blockSize;
-	const Point<int> oldBlock = oldPos / m_blockSize;
-	Block* b = l->getBlock(posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
+	const auto newBlock = newPos / m_blockSize;
+	const auto oldBlock = oldPos / m_blockSize;
+	auto b = l->getBlock(posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
 	if (b != nullptr) {
-		const unsigned int id = b->getID();
-		std::vector<ScriptSleepComponent*> tmp = m_chipset.getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
+		const auto id = b->getID();
+		auto tmp = m_chipset.getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->args.clear();
@@ -402,7 +392,7 @@ void ska::World::getMobSettingsFromData() {
             m_mobSettings.push_back(IniReader( "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "Monsters" FILE_SEPARATOR "" + StringUtils::intToStr(i) + ".ini"));
             i++;
         } while(m_mobSettings[i-1].isLoaded());
-    } catch (ska::FileException& fe) {
+    } catch (FileException&) {
         SKA_LOG_INFO("Number of monsters found on map : ", i);
     }
 

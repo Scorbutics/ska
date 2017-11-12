@@ -1,11 +1,11 @@
 #pragma once
-#include "Utils/Observer.h"
 #include "Data/Events/GameEventDispatcher.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
 #include "Utils/SubObserver.h"
 
 namespace ska {
+	class CollisionContact;
 	struct CollisionEvent;
 	class CollidableComponent;
 	class EntityManager;
@@ -22,9 +22,7 @@ namespace ska {
 		static bool handleInfiniteMasses(const CollisionComponent& col, float invMassOrigin, float invMassTarget, MovementComponent& mtarget, MovementComponent& morigin);
 		virtual bool onEntityCollision(CollisionEvent&);
 	private:
-		bool calculateNormalAndPenetration(ska::CollisionComponent& col) const;
-		static void correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n);
-		GameEventDispatcher& m_ged;
+		static void correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, const CollisionContact& cc);
 		EntityManager& m_entityManager;
 	};
 }

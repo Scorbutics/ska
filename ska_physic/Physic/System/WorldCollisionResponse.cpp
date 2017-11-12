@@ -8,19 +8,15 @@
 #include "ECS/Basics/Physic/MovementComponent.h"
 
 ska::WorldCollisionResponse::WorldCollisionResponse(CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
-	WorldCollisionObserver(std::bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1)),
+	WorldCollisionObserver(std::bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1), ged),
 	m_entityManager(em),
-	m_ged(ged),
 	m_collisionProfile(cp) {
-	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
 }
 
 ska::WorldCollisionResponse::WorldCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
-WorldCollisionObserver(onEntityCollision),
-m_entityManager(em),
-m_ged(ged),
-m_collisionProfile(cp) {
-	m_ged.ska::Observable<CollisionEvent>::addObserver(*this);
+	WorldCollisionObserver(onEntityCollision, ged),
+	m_entityManager(em),
+	m_collisionProfile(cp) {
 }
 
 bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
@@ -59,12 +55,20 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 		}
 	}
 
-	if (colX || colY) {
+	if(colX) {
+		auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
+		movementComponent.vx += wcol.contactX.normal().x * wcol.contactX.overlap().w;
 		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
 	}
+
+	if(colY) {
+		auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
+		movementComponent.vy += wcol.contactY.normal().y * wcol.contactY.overlap().h;
+		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
+	}
+
 	return true;
 }
 
 ska::WorldCollisionResponse::~WorldCollisionResponse() {
-	m_ged.ska::Observable<CollisionEvent>::removeObserver(*this);
 }

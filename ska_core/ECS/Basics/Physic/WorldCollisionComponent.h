@@ -1,13 +1,16 @@
 #pragma once
 #include "../../SerializableComponent.h"
-#include "../../ECSDefines.h"
 #include "../../../Point.h"
+#include "CollisionContact.h"
+
 namespace ska {
 	class WorldCollisionComponent : public SerializableComponent {
 	public:
         WorldCollisionComponent();
 		~WorldCollisionComponent() = default;
 
+		CollisionContact contactX;
+		CollisionContact contactY;
 		bool xaxis;
 		bool yaxis;
 		std::vector<Point<int>> blockColPosX;

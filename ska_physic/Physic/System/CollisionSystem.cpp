@@ -18,14 +18,15 @@ void ska::CollisionSystem::refresh(unsigned int) {
 		for (auto itEntityIt = entityIdIt; itEntityIt != processed.end(); ++itEntityIt) {
 			auto itEntity = *itEntityIt;
 			if (itEntity != entityId) {
-				const auto& intersection = RectangleUtils::intersect(entityHitbox, createHitBox(itEntity));
+				const auto& otherEntityBox = createHitBox(itEntity);
+				const auto& intersection = RectangleUtils::intersect(entityHitbox, otherEntityBox);
 				if (intersection.w != 0 && intersection.h != 0) {
 					CollisionComponent col;
 					col.origin = entityId;
 					col.target = itEntity;					
 					col.xaxis = intersection.h > 1;
 					col.yaxis = intersection.w > 1;
-					col.overlap = intersection;
+					col.contact = CollisionContact(intersection, entityHitbox, otherEntityBox);
 
 					// When collision between entities is detected, we can do things as decreasing health,
 					//pushing entities, or any statistic interaction 

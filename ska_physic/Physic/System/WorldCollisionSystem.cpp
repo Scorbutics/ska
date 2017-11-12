@@ -2,12 +2,39 @@
 #include "ECS/Basics/Physic/CollisionProfile.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "ECS/Basics/Physic/CollisionContact.h"
+
+#include "Utils/RectangleUtils.h"
 
 ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, CollisionProfile& cp, GameEventDispatcher& ged) :
 	System(entityManager),
 	m_collisionProfile(cp),
 	m_ged(ged) {
 }
+
+ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, const std::vector<Point<int>>& points) {
+	//TODO taille bloc dynamique
+	constexpr auto blockSize = 48;
+
+	if(points.empty()) {
+		return Rectangle{0, 0, 0, 0};
+	}
+
+	Rectangle summedBlocksToOverlap;
+	auto first = true;
+	for (auto& p : points) {
+		const auto currentRect = Rectangle{ p.x, p.y, blockSize, blockSize };
+		if (first) {
+			summedBlocksToOverlap = currentRect;
+			first = false;
+		} else {
+			summedBlocksToOverlap = RectangleUtils::unionRect(summedBlocksToOverlap, currentRect);
+		}
+	}
+
+	return RectangleUtils::intersect(nextPos, summedBlocksToOverlap);
+}
+
 
 void ska::WorldCollisionSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
@@ -42,6 +69,10 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			wcol.yaxis = !wcol.blockColPosY.empty();
 			wcol.lastBlockColPosX = lastBlockColPosX;
 			wcol.lastBlockColPosY = lastBlockColPosY;
+			const auto& overlapX = calculateOverlap(nextPos, wcol.blockColPosX);
+			const auto& overlapY = calculateOverlap(nextPos, wcol.blockColPosY);
+			wcol.contactX = CollisionContact{ overlapX, nextPos, overlapX };
+			wcol.contactY = CollisionContact{ overlapY, nextPos, overlapY };
 		}
 
 		if (collided) {
@@ -60,8 +91,8 @@ ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool ,
 	Rectangle hitBox;
 	hitBox.x = ska::NumberUtils::round(positionComponent.x + movementComponent.vx + movementComponent.ax + hitboxComponent.xOffset);
 	hitBox.y = ska::NumberUtils::round(positionComponent.y + movementComponent.vy + movementComponent.ay + hitboxComponent.yOffset);
-	hitBox.w = hitboxComponent.width + 1;
-	hitBox.h = hitboxComponent.height + 1;
+	hitBox.w = hitboxComponent.width;
+	hitBox.h = hitboxComponent.height;
 	return hitBox;
 }
 

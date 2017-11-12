@@ -145,6 +145,7 @@
     <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="ECS\SerializableComponent.h" />
     <ClInclude Include="Core\CodeDebug\CodeDebug.h" />
+    <ClInclude Include="ECS\Basics\Physic\CollisionContact.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />

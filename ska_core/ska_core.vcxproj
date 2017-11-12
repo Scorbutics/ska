@@ -67,6 +67,7 @@
     <ClInclude Include="ECS\Basics\Input\InputComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionComponent.h" />
+    <ClInclude Include="ECS\Basics\Physic\CollisionContact.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionProfile.h" />
     <ClInclude Include="ECS\Basics\Physic\ForceComponent.h" />
     <ClInclude Include="ECS\Basics\Physic\GravityAffectedComponent.h" />

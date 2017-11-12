@@ -18,6 +18,15 @@ bool ska::RectangleUtils::collisionBoxABoxB(const Rectangle& rectA, const Rectan
 
 }
 
+ska::Rectangle ska::RectangleUtils::unionRect(const Rectangle& rect1, const Rectangle& rect2) {
+	ska::Rectangle unioned; 
+	unioned.x = NumberUtils::minimum(rect1.x, rect2.x);
+	unioned.y = NumberUtils::minimum(rect1.y, rect2.y);
+	unioned.w = NumberUtils::maximum(rect1.x + rect1.w, rect2.x + rect2.w) - unioned.x;
+	unioned.h = NumberUtils::maximum(rect1.y + rect1.h, rect2.y + rect2.h) - unioned.y;
+	return unioned;
+}
+
 ska::Rectangle ska::RectangleUtils::intersect(const Rectangle& r1, const Rectangle& r2) {
 	Rectangle output;
 	output.x = std::max(r1.x, r2.x);

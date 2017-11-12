@@ -10,54 +10,18 @@
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
 	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1), ged),
-	m_ged(ged),
 	m_entityManager(em) {
 }
 
 ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, GameEventDispatcher& ged, EntityManager& em) :
-    EntityCollisionObserver(onEntityCollision, m_ged),
-    m_ged(ged),
+    EntityCollisionObserver(onEntityCollision, ged),
     m_entityManager(em) {
 }
 
-bool ska::EntityCollisionResponse::calculateNormalAndPenetration(CollisionComponent& col) const {
-	auto& a = col.origin;
-	auto& b = col.target;
+void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, const CollisionContact& cc) {
+	auto penetration = cc.penetration();
+	const auto& n = cc.normal();
 
-	auto& pcA = m_entityManager.getComponent<ska::PositionComponent>(a);
-	auto& pcB = m_entityManager.getComponent<ska::PositionComponent>(b);
-
-	auto& mcA = m_entityManager.getComponent<ska::MovementComponent>(a);
-	auto& mcB = m_entityManager.getComponent<ska::MovementComponent>(b);
-
-	const Point<float> absoluteDiffVelocity(ska::NumberUtils::absolute(mcA.vx - mcB.vx), ska::NumberUtils::absolute(mcA.vy - mcB.vy));
-
-	const auto& intersection = col.overlap;
-
-	const auto velocityOverlapX = intersection.w;
-		//absoluteDiffVelocity.x == 0 ? std::numeric_limits<float>::max() : intersection.w / absoluteDiffVelocity.x;
-	const auto velocityOverlapY = intersection.h;
-		//absoluteDiffVelocity.y == 0 ? std::numeric_limits<float>::max() : intersection.h / absoluteDiffVelocity.y;
-
-	if (velocityOverlapX < velocityOverlapY) {
-		auto& normal = col.normal;
-		const auto vectorAToBX = pcA.x - pcB.x;
-		normal.x = vectorAToBX < 0 ? -1.F : 1.F;
-		normal.y = 0;
-		col.penetration = static_cast<float>(intersection.w);
-		SKA_LOG_INFO((vectorAToBX < 0 ? "<" : ">"), "\t", a, " | ", b);
-	} else {
-		auto& normal = col.normal;
-		const auto vectorAToBY = pcA.y - pcB.y;
-		normal.x = 0;
-		normal.y = vectorAToBY < 0 ? -1.F : 1.F;
-		col.penetration = static_cast<float>(intersection.h);
-		SKA_LOG_INFO((vectorAToBY < 0 ? "^" : "v"), "\t", a, " | ", b);
-	}
-	return true;
-}
-
-void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, float penetration, ska::Point<float>& n) {
 	const auto percent = 0.2F; // usually 20% to 80%
 	const auto slope = 0.01F; // usually 0.01 to 0.1
 
@@ -98,8 +62,6 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	auto bounciness = std::min(forigin.bounciness, ftarget.bounciness);
 	bounciness = bounciness < 0.F ? -bounciness : bounciness;
 
-	calculateNormalAndPenetration(col);
-
 	const auto invMassOrigin = forigin.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / forigin.weight;
 	const auto invMassTarget = ftarget.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / ftarget.weight;
 
@@ -108,7 +70,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	}
 
 	const Point<float> velocityDiffVector(mtarget.vx - morigin.vx, mtarget.vy - morigin.vy);
-	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.normal);
+	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.contact.normal());
 	const auto j = (-(1.0 + bounciness) * (diffVelocityOnNormal)) / (invMassOrigin + invMassTarget) ;
 
 	/*SKA_DBG_ONLY(
@@ -118,8 +80,8 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 		//}
 	);*/
 
-	//impulse = j . normal
-	Point<float> impulse(j * col.normal.x, j * col.normal.y);
+	//calcul vectoriel : impulse = j . normal
+	Point<float> impulse(j * col.contact.normal().x, j * col.contact.normal().y);
 
 	mtarget.vx += impulse.x * invMassTarget;
 	mtarget.vy += impulse.y * invMassTarget;
@@ -127,7 +89,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	morigin.vx += -impulse.x * invMassOrigin;	
 	morigin.vy += -impulse.y * invMassOrigin;
 
-	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.penetration, col.normal);
+	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.contact);
 
 	return true;
 }

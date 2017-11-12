@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Data/Events/GameEventDispatcher.h"
-#include "Utils/Observer.h"
+#include "Utils/SubObserver.h"
 
 namespace ska {
 	struct CollisionEvent;
 	class CollidableComponent;
 	class WorldCollisionComponent;
 	class CollisionProfile;
-	using WorldCollisionObserver = Observer<CollisionEvent>;
+	using WorldCollisionObserver = SubObserver<CollisionEvent>;
 	class EntityManager;
 	class CollisionSystem;
 
@@ -22,7 +22,6 @@ namespace ska {
 		~WorldCollisionResponse();
 	protected:
 		EntityManager& m_entityManager;
-		GameEventDispatcher& m_ged;
 		CollisionProfile& m_collisionProfile;
 	};
 }

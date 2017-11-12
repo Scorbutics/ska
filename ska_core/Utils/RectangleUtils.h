@@ -16,6 +16,7 @@ namespace ska {
 			return((pos.x >= box.x) && (pos.x < box.x + box.w) && (pos.y >= box.y) && (pos.y < box.y + box.h));
 		}
 
+		static Rectangle unionRect(const Rectangle& intersection, const Rectangle& overlap);
 		static Rectangle intersect(const Rectangle& r1, const Rectangle& r2);
 		static Rectangle posToCenterPicture(const Rectangle& imageToCenter, const Rectangle& imageBackground);
 		static bool collisionBoxABoxB(const Rectangle& rectA, const Rectangle& rectB);
@@ -27,7 +28,6 @@ namespace ska {
 		}
 
 		~RectangleUtils();
-		
 
 	private:
 		RectangleUtils();

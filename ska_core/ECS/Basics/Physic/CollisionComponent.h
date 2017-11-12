@@ -1,7 +1,7 @@
 #pragma once
 #include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
-#include "../../../Point.h"
+#include "CollisionContact.h"
 
 namespace ska {
 	class CollisionComponent : public SerializableComponent {
@@ -11,10 +11,6 @@ namespace ska {
 		EntityId target;
 		bool xaxis;
 		bool yaxis;
-		Rectangle overlap;
-
-		float penetration;
-		Point<float> normal;
-		
+		CollisionContact contact;
 	};
 }

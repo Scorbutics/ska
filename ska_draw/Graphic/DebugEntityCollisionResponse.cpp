@@ -20,12 +20,12 @@ bool ska::DebugEntityCollisionResponse::onEntityCollision(CollisionEvent& e) con
 		auto entity = m_entityManager.createEntity();
 		GraphicComponent gc;
 		gc.sprites.resize(1);
-		gc.sprites[0].loadFromColoredRect(col.overlap.w, col.overlap.h, ska::Color(255, 0, 0, 4));
+		gc.sprites[0].loadFromColoredRect(col.contact.overlap().w, col.contact.overlap().h, ska::Color(255, 0, 0, 4));
 		m_entityManager.addComponent<GraphicComponent>(entity, std::move(gc));
 		DeleterComponent dc;
 		dc.delay = 2000;
 		m_entityManager.addComponent<DeleterComponent>(entity, std::move(dc));
-		PositionComponent pc(ska::Point<float>(col.overlap.x, col.overlap.y));
+		PositionComponent pc(ska::Point<float>(col.contact.overlap().x, col.contact.overlap().y));
 		m_entityManager.addComponent<PositionComponent>(entity, std::move(pc));
 
 		/*SKA_DBG_ONLY(

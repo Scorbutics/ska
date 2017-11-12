@@ -83,6 +83,16 @@ namespace ska {
 			y -= p.y;
 		}
 
+		void operator/=(const Point<T>& p) {
+			x /= p.x;
+			y /= p.y;
+		}
+
+		void operator/=(const unsigned int i) {
+			x /= i;
+			y /= i;
+		}
+
 		static Point<T> cartesian(const T radius, const double angle) {
 			return Point<T>(radius * static_cast<float>(ska::NumberUtils::cosinus(angle)),
 							radius * static_cast<float>(ska::NumberUtils::sinus(angle)));
