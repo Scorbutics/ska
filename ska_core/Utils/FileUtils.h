@@ -22,7 +22,7 @@ namespace ska {
 		static FileNameData build(const std::string& fullFileName) {
 			auto lastSlash = fullFileName.find_last_of('/');
 			auto lastBackSlash = fullFileName.find_last_of('\\');
-			auto lastFileSeparator = (lastSlash != std::string::npos) ? (lastBackSlash > lastSlash ? lastBackSlash : lastSlash) : lastBackSlash;
+			auto lastFileSeparator = (lastSlash != std::string::npos) ? (lastBackSlash != std::string::npos ? (lastBackSlash > lastSlash ? lastBackSlash : lastSlash) : lastSlash) : lastBackSlash;
 
 			auto fileNameWithExt = lastFileSeparator == std::string::npos ? fullFileName : fullFileName.substr(lastFileSeparator + 1);
 			auto extDotPos = fileNameWithExt.find_last_of('.');

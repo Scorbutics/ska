@@ -9,5 +9,6 @@ namespace ska {
 		~CollidableComponent() = default;
 		
 		std::unordered_set<int> authorizedBlockIds;
+		bool ghost;
 	};
 }

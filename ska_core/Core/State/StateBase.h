@@ -46,11 +46,6 @@ namespace ska {
 			onGraphicUpdate(ellapsedTime, drawables);
 
 			/* Graphics */
-			for (auto& s : m_graphics) {
-				s->setDrawables(drawables);
-				s->update(ellapsedTime);
-			}
-
 			for (auto& s : m_subStates) {
 				s->graphicUpdate(ellapsedTime, drawables);
 			}
@@ -59,16 +54,16 @@ namespace ska {
 				s->graphicUpdate(ellapsedTime, drawables);
 			}
 
+			for (auto& s : m_graphics) {
+				s->setDrawables(drawables);
+				s->update(ellapsedTime);
+			}
 		}
 
 		virtual void eventUpdate(unsigned int ellapsedTime) override final {
 			onEventUpdate(ellapsedTime);
 
 			/* Logics */
-			for (auto& s : m_logics) {
-				s->update(ellapsedTime);
-			}
-
 			for (auto& s : m_subStates) {
 				s->eventUpdate(ellapsedTime);
 			}
@@ -77,6 +72,9 @@ namespace ska {
 				s->eventUpdate(ellapsedTime);
 			}
 
+			for (auto& s : m_logics) {
+				s->update(ellapsedTime);
+			}
 		}
 
 		void load(std::unique_ptr<State>* lastState) override final {

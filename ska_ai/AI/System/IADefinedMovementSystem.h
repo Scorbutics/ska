@@ -10,7 +10,7 @@
 
 namespace ska {
     class ScriptRegisterer;
-	class IADefinedMovementSystem : public System<std::unordered_set<EntityId>, RequiredComponent<IADefinedMovementComponent, MovementComponent, PositionComponent, HitboxComponent>, PossibleComponent<WorldCollisionComponent>> {
+	class IADefinedMovementSystem : public System<std::unordered_set<EntityId>, RequiredComponent<IADefinedMovementComponent, MovementComponent, PositionComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
 		explicit IADefinedMovementSystem(EntityManager& entityManager, ScriptRegisterer* scriptSystem = nullptr);
 		virtual ~IADefinedMovementSystem();

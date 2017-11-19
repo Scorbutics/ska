@@ -3,6 +3,7 @@
 #include "Utils/RectangleUtils.h"
 #include "ECS/Basics/Script/ScriptRegisterer.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "ECS/Basics/Physic/CollidableComponent.h"
 
 ska::IADefinedMovementSystem::IADefinedMovementSystem(EntityManager& entityManager, ScriptRegisterer* scriptSystem) : System(entityManager), m_scriptSystem(scriptSystem) {
 }
@@ -11,10 +12,11 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 	std::vector<EntityId> entityWithComponentsToDelete;
 
 	const auto& processed = getEntities();
-	for (EntityId entityId : processed) {
+	for (auto entityId : processed) {
 		auto& mc = m_componentAccessor.get<MovementComponent>(entityId);
 		auto& pc = m_componentAccessor.get<PositionComponent>(entityId);
 		auto& iamc = m_componentAccessor.get<IADefinedMovementComponent>(entityId);
+		auto& cc = m_componentAccessor.get<CollidableComponent>(entityId);
 		const auto& hc = m_componentAccessor.get<HitboxComponent>(entityId);
 		const auto& centerPos = PositionComponent::getCenterPosition(pc, hc);
 
@@ -37,11 +39,13 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		const auto directionChanged = distanceSquaredToTarget < nextDistanceSquaredToTarget;
 
 		bool collisioned;
-		if (iamc.ghost) {
+		if (cc.ghost) {
+			SKA_LOG_INFO("Reset world collision");
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
 			collisioned = false;
 		} else {
 			collisioned = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId) != nullptr;
+			SKA_LOG_INFO("World collision ", collisioned);
 		}
 		auto finished = false;
 		if (TimeUtils::getTicks() - iamc.lastTimeStarted >= iamc.delay || directionChanged || collisioned) {
@@ -68,17 +72,22 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		}
 
 		if (!finished) {
-			mc.vx = finalMovement.x;
-			mc.vy = finalMovement.y;
+			SKA_LOG_INFO("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
+			mc.ax = finalMovement.x;
+			mc.ay = finalMovement.y;
 		} else if (directionChanged) {
 			mc.vx = 0;
 			mc.vy = 0;
 			mc.ay = 0;
 			mc.ax = 0;
+		} 
+		
+		if (finished) {
+			cc.ghost = false;
 		}
 	}
 
-	for (EntityId id : entityWithComponentsToDelete) {
+	for (auto& id : entityWithComponentsToDelete) {
 		m_componentAccessor.remove<IADefinedMovementComponent>(id);
 	}
 }

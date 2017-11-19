@@ -11,13 +11,11 @@ namespace ska {
 			delay = 0;
 			directionIndex = 0;
 			loop = false;
-			ghost = false;
 			callbackActive = false;
 			lastTimeStarted = TimeUtils::getTicks();
 		}
 
 		bool loop;
-		bool ghost;
 		unsigned int directionIndex;
 		std::vector<Point<int>> directions;
 		unsigned int delay;

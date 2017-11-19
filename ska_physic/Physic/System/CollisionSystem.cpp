@@ -21,17 +21,20 @@ void ska::CollisionSystem::refresh(unsigned int) {
 				const auto& otherEntityBox = createHitBox(itEntity);
 				const auto& intersection = RectangleUtils::intersect(entityHitbox, otherEntityBox);
 				if (intersection.w != 0 && intersection.h != 0) {
-					CollisionComponent col;
-					col.origin = entityId;
-					col.target = itEntity;					
-					col.xaxis = intersection.h > 1;
-					col.yaxis = intersection.w > 1;
-					col.contact = CollisionContact(intersection, entityHitbox, otherEntityBox);
+					const auto& cc = m_componentAccessor.get<CollidableComponent>(entityId);
+					if (!cc.ghost) {
+						CollisionComponent col;
+						col.origin = entityId;
+						col.target = itEntity;
+						col.xaxis = intersection.h > 1;
+						col.yaxis = intersection.w > 1;
+						col.contact = CollisionContact(intersection, entityHitbox, otherEntityBox);
 
-					// When collision between entities is detected, we can do things as decreasing health,
-					//pushing entities, or any statistic interaction 
-					CollisionEvent ce(entityId, nullptr, &col, m_componentAccessor.get<CollidableComponent>(entityId));
-					m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
+						// When collision between entities is detected, we can do things as decreasing health,
+						//pushing entities, or any statistic interaction 
+						CollisionEvent ce(entityId, nullptr, &col, cc);
+						m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
+					}
 				}
 
 			}

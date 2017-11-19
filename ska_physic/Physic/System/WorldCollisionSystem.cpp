@@ -39,6 +39,10 @@ ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, co
 void ska::WorldCollisionSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
+		const auto& cc = m_componentAccessor.get<CollidableComponent>(entityId);
+		if (cc.ghost) {
+			continue;
+		}
 
 		std::vector<Point<int>> lastBlockColPosX;
 		std::vector<Point<int>> lastBlockColPosY;

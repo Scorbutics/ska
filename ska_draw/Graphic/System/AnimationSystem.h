@@ -48,8 +48,8 @@ namespace ska {
 
     public:
         explicit AnimationSystem(EntityManager& entityManager) :
-            System(entityManager) {
-        }
+		    System(entityManager), m_defaultASM(nullptr){ }
+
         AnimationSystem& operator=(const AnimationSystem&) = delete;
         virtual ~AnimationSystem() = default;
 

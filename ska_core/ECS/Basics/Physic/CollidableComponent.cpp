@@ -1,3 +1,3 @@
 #include "CollidableComponent.h"
 
-ska::CollidableComponent::CollidableComponent() {}
+ska::CollidableComponent::CollidableComponent(): ghost(false){}
