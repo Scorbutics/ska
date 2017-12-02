@@ -6,7 +6,7 @@
 
 namespace ska {
 
-	enum EnumLogLevel {		
+	enum EnumLogLevel {
 		DEBUG = 0,
 		INFO = 1,
 		MESSAGE = 2,
@@ -73,8 +73,24 @@ namespace ska {
 	class Logger : public LoggerLogLevel, public NonCopyable {
 		friend class LoggerFactory;
 	private:
-		Logger() :
-			m_logLevel(EnumLogLevel::DEBUG) {
+		static std::string prettifyClassName(const std::string& cs){
+			static const std::string classKeyword = "class ";
+			static const auto paddedLength = 20;
+			
+			auto formattedCs = cs;
+			if(classKeyword == cs.substr(0, classKeyword.size())) {
+				formattedCs = cs.substr(classKeyword.size());
+			}
+			formattedCs = formattedCs.substr(0, paddedLength);
+			if (paddedLength - formattedCs.size() > 0) {
+				formattedCs += std::string(paddedLength - formattedCs.size(), ' ');
+			}
+			return "(" + formattedCs + ") ";
+		}
+
+		explicit Logger(const std::string& className) :
+			m_logLevel(EnumLogLevel::DEBUG),
+			m_className(prettifyClassName(className)) {
 		}
 
 	public:
@@ -82,7 +98,7 @@ namespace ska {
 		void debug(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::DEBUG) {
 				printDateTime(std::cout);
-				loggerdetail::LoggerImpl<T...>::debug(std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::debug(m_className, std::forward<const T&>(message)...);
 			}
 		}
 
@@ -90,7 +106,7 @@ namespace ska {
 		void info(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::INFO) {
 				printDateTime(std::cout);
-				loggerdetail::LoggerImpl<T...>::info(std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::info(m_className, std::forward<const T&>(message)...);
 			}
 		}
 
@@ -98,7 +114,7 @@ namespace ska {
 		void log(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::MESSAGE) {
 				printDateTime(std::cout);
-				loggerdetail::LoggerImpl<T...>::log(std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_className, std::forward<const T&>(message)...);
 			}
 		}
 
@@ -106,7 +122,7 @@ namespace ska {
 		void error(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::ERROR) {
 				printDateTime(std::cerr);
-				loggerdetail::LoggerImpl<T...>::error(std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::error(m_className, std::forward<const T&>(message)...);
 			}
 		}
 
@@ -119,6 +135,7 @@ namespace ska {
 
 	private:
 		EnumLogLevel m_logLevel;
+		const std::string m_className;
 
 		static void printDateTime(std::ostream& os) {
 			auto t = std::time(nullptr);
@@ -135,38 +152,52 @@ namespace ska {
 	class LoggerFactory {
 	private:
 		LoggerFactory() = default;
-		
+
 	public:
 		~LoggerFactory() = default;
 
 		template <class T>
 		static Logger& staticAccess() {
-			static Logger logger;
+			return staticAccess<T>(typeid(T).name());
+		}
+
+		template <class T>
+		static Logger& staticAccess(const std::string& className) {
+			static Logger logger(className);
 			return logger;
 		}
 
 		template <class T>
-		static Logger& access(T* dummy){
-			return staticAccess<T>();
+		static Logger& access(const std::string& className, T* dummy) {
+			return staticAccess<T>(className);
 		}
 	};
 	
-
 }
 
-#if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
-#define SKA_LOG_DEBUG true ? (void)0 : ska::LoggerFactory::access(this).debug
-#define SKA_LOG_INFO true ? (void)0 : ska::LoggerFactory::access(this).info
-#define SKA_LOG_MESSAGE true ? (void)0 : ska::LoggerFactory::access(this).log
-#define SKA_LOG_ERROR true ? (void)0 : ska::LoggerFactory::access(this).error
-#else
-#define SKA_LOG_DEBUG ska::LoggerFactory::access(this).debug
-#define SKA_LOG_INFO ska::LoggerFactory::access(this).info
-#define SKA_LOG_MESSAGE ska::LoggerFactory::access(this).log
-#define SKA_LOG_ERROR ska::LoggerFactory::access(this).error
+#define SKA_REGISTER_PARSE_TYPE(X) #X 
+#define SKA_LOG_COMMON_PART_DEF_RTTI ska::LoggerFactory::access(typeid(*this).name(), this)
+#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>(SKA_REGISTER_PARSE_TYPE(loggerClass))
 
-#define SKA_STATIC_LOG_DEBUG(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>().debug
-#define SKA_STATIC_LOG_INFO(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>().info
-#define SKA_STATIC_LOG_MESSAGE(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>().log
-#define SKA_STATIC_LOG_ERROR(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>().error
+
+#if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
+#define SKA_LOG_DEBUG true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.debug
+#define SKA_LOG_INFO true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.info
+#define SKA_LOG_MESSAGE true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.log
+#define SKA_LOG_ERROR true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.error
+
+#define SKA_STATIC_LOG_DEBUG(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
+#define SKA_STATIC_LOG_INFO(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
+#define SKA_STATIC_LOG_MESSAGE(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).log
+#define SKA_STATIC_LOG_ERROR(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
+#else
+#define SKA_LOG_DEBUG SKA_LOG_COMMON_PART_DEF_RTTI.debug
+#define SKA_LOG_INFO SKA_LOG_COMMON_PART_DEF_RTTI.info
+#define SKA_LOG_MESSAGE SKA_LOG_COMMON_PART_DEF_RTTI.log
+#define SKA_LOG_ERROR SKA_LOG_COMMON_PART_DEF_RTTI.error
+
+#define SKA_STATIC_LOG_DEBUG(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
+#define SKA_STATIC_LOG_INFO(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
+#define SKA_STATIC_LOG_MESSAGE(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).log
+#define SKA_STATIC_LOG_ERROR(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
 #endif
