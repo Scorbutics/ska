@@ -151,7 +151,7 @@ namespace ska {
 
 }
 
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
 #define SKA_LOG_DEBUG true ? (void)0 : ska::Logger::debug
 #define SKA_LOG_INFO true ? (void)0 : ska::Logger::info
 #define SKA_LOG_MESSAGE true ? (void)0 : ska::Logger::log
