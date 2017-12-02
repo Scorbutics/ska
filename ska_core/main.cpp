@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
 	(void)argc;
 	(void)argv;
 
-	std::unique_ptr<ska::GameApp> gameApp{ ska::GameApp::get() };
+	auto gameApp{ ska::GameApp::get() };
 
 	try {
 		gameApp->run();

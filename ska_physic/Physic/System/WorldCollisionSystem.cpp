@@ -62,7 +62,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 
 		WorldCollisionComponent wcol;
 		auto collided = false;
-		Rectangle nextPos = { entityHitbox.x, entityHitbox.y, entityHitbox.w, entityHitbox.h };
+		const Rectangle nextPos = { entityHitbox.x, entityHitbox.y, entityHitbox.w, entityHitbox.h };
 
 		wcol.blockColPosX.clear();
 		wcol.blockColPosY.clear();

@@ -15,7 +15,7 @@ ska::WorldCollisionResponse::WorldCollisionResponse(CollisionProfile& cp, GameEv
 	m_collisionProfile(cp) {
 }
 
-ska::WorldCollisionResponse::WorldCollisionResponse(std::function<bool(CollisionEvent&)> onEntityCollision, CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
+ska::WorldCollisionResponse::WorldCollisionResponse(const std::function<bool(CollisionEvent&)>& onEntityCollision, CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
 	WorldCollisionObserver(onEntityCollision, ged),
 	m_entityManager(em),
 	m_collisionProfile(cp) {
