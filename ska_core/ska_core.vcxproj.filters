@@ -146,6 +146,7 @@
     <ClInclude Include="ECS\SerializableComponent.h" />
     <ClInclude Include="Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionContact.h" />
+    <ClInclude Include="Utils\NonCopyable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
@@ -206,5 +207,6 @@
     <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
     <ClCompile Include="Data\Events\ECSEvent.h" />
     <ClCompile Include="ECS\SerializableComponent.cpp" />
+    <ClCompile Include="Logging\Logger.cpp" />
   </ItemGroup>
 </Project>

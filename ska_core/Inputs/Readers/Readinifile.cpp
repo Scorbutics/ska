@@ -8,6 +8,7 @@
 
 #include "Readinifile.h"
 #include "../../Logging/Logger.h"
+#include "IniReader.h"
 
 
 bool isReadable(const std::string& fileName) {
@@ -23,7 +24,7 @@ int FindInFile(const std::string& stringFile, const std::string& s) {
 
 	std::ifstream f(stringFile.c_str(), std::ios::binary);
     if(f.fail()) {
-		SKA_LOG_ERROR("Erreur lors de l'ouverture du fichier " + stringFile);
+		SKA_STATIC_LOG_ERROR(ska::IniReader)("Erreur lors de l'ouverture du fichier " + stringFile);
         return -1;
     }
 
@@ -46,7 +47,7 @@ std::string GetINIValueFromFile(const std::string& stringFile, const std::string
 	std::ifstream f(stringFile.c_str(), std::ios::binary);
 
 	if(f.fail())
-		SKA_LOG_ERROR("Erreur lors de l'ouverture du fichier " + stringFile);
+		SKA_STATIC_LOG_ERROR(ska::IniReader)("Erreur lors de l'ouverture du fichier " + stringFile);
 
     if(startPos != -1)
         f.seekg(startPos + from.length());
@@ -79,7 +80,7 @@ std::string SetINIValueToFile(const std::string& stringFile, const std::string& 
 
 
     if(fr.fail())
-		SKA_LOG_ERROR("Erreur lors de l'ouverture du fichier " + stringFile);
+		SKA_STATIC_LOG_ERROR(ska::IniReader)("Erreur lors de l'ouverture du fichier " + stringFile);
 
     if(startPos != -1) {
         startPos += static_cast<int>(to.length());
@@ -124,7 +125,7 @@ void ReplaceStringInFile(const std::string& fileName, std::size_t pos, const std
     streamContent << fr.rdbuf();
 
     if(fr.fail())
-		SKA_LOG_ERROR("Erreur lors de l'ouverture en lecture du fichier " + fileName);
+		SKA_STATIC_LOG_ERROR(ska::IniReader)("Erreur lors de l'ouverture en lecture du fichier " + fileName);
 
     buf = streamContent.str();
     buf = buf.substr(0, pos - oldValue.size());

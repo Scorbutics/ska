@@ -139,6 +139,7 @@
     <ClInclude Include="Utils\FormalCalculation\CalculOperators.h" />
     <ClInclude Include="Utils\FormalCalculation\FormalCalculator.h" />
     <ClInclude Include="Utils\Identity.h" />
+    <ClInclude Include="Utils\NonCopyable.h" />
     <ClInclude Include="Utils\NumberUtils.h" />
     <ClInclude Include="Utils\Observable.h" />
     <ClInclude Include="Utils\Observer.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="Inputs\Readers\Readinifile.cpp" />
     <ClCompile Include="Inputs\System\InputSystem.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
+    <ClCompile Include="Logging\Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Task\TaskQueue.cpp" />

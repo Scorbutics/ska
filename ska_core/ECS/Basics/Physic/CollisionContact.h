@@ -50,13 +50,13 @@ namespace ska {
 				normal.x = vectorAToBX < 0 ? -1.F : 1.F;
 				normal.y = 0;
 				penetration = static_cast<float>(overlap.w);
-				SKA_LOG_INFO((vectorAToBX < 0 ? "<" : ">"));
+				SKA_STATIC_LOG_INFO(CollisionContact)((vectorAToBX < 0 ? "<" : ">"));
 			} else {
 				const auto vectorAToBY = pcA.y - pcB.y;
 				normal.x = 0;
 				normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 				penetration = static_cast<float>(overlap.h);
-				SKA_LOG_INFO((vectorAToBY < 0 ? "^" : "v"));
+				SKA_STATIC_LOG_INFO(CollisionContact)((vectorAToBY < 0 ? "^" : "v"));
 			}
 			return CollisionContact(overlap, penetration, normal);
 		}
