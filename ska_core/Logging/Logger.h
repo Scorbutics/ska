@@ -6,12 +6,12 @@
 
 namespace ska {
 
-	enum EnumLogLevel {
-		DISABLED = -1,
+	enum EnumLogLevel {		
 		DEBUG = 0,
 		INFO = 1,
 		MESSAGE = 2,
-		ERROR = 3
+		ERROR = 3,
+		DISABLED = 100
 	};
 
 	class LoggerLogLevel {

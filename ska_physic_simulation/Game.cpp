@@ -11,10 +11,16 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	return std::move(wgc);
 }
 
+void LogsConfiguration() {
+	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::DISABLED);
+}
+
 void Game::init() {
 	/* Configure inputs types */
 	addInputContext<ska::KeyboardInputMapContext>(ska::EnumContextManager::CONTEXT_MAP);
 	addInputContext<ska::KeyboardInputGUIContext>(ska::EnumContextManager::CONTEXT_GUI);
+
+	LogsConfiguration();
 
 	ska::SDLFont::DEFAULT_FONT_FILE = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Fonts" FILE_SEPARATOR "FiraSans-Medium.ttf";
 	navigateToState<StateSandbox>();
