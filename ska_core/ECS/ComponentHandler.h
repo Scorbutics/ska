@@ -19,7 +19,7 @@ namespace ska {
 		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames): 
 			m_mask(mask) {
 			m_components.resize(SKA_ECS_MAX_ENTITIES);
-			SKA_LOG_MESSAGE("Initializing component type ", getClassName(), " with mask ", m_mask);
+			SKA_LOG_DEBUG("Initializing component type ", getClassName(), " with mask ", m_mask);
 			mapComponentNames.emplace(getClassName(), this);
 		}
 

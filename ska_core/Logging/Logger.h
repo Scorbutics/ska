@@ -3,15 +3,16 @@
 #include <ctime>
 #include <iomanip>
 #include "../Utils/NonCopyable.h"
+#include "ColorStream.h"
 
 namespace ska {
 
 	enum EnumLogLevel {
-		DEBUG = 0,
-		INFO = 1,
-		MESSAGE = 2,
-		ERROR = 3,
-		DISABLED = 100
+		SKA_DEBUG = 0,
+		SKA_INFO = 1,
+		SKA_MESSAGE = 2,
+		SKA_ERROR = 3,
+		SKA_DISABLED = 100
 	};
 
 	class LoggerLogLevel {
@@ -52,11 +53,11 @@ namespace ska {
 		template<>
 		struct LoggerImpl<> {
 			static void log() {
-				std::cout << std::endl;
+				std::cout << '\n';
 			}
 
 			static void info() {
-				std::cout << std::endl;
+				std::cout << '\n';
 			}
 
 			static void error() {
@@ -64,7 +65,7 @@ namespace ska {
 			}
 
 			static void debug() {
-				std::cout << std::endl;
+				std::cout << '\n';
 			}
 		};
 
@@ -89,40 +90,48 @@ namespace ska {
 		}
 
 		explicit Logger(const std::string& className) :
-			m_logLevel(EnumLogLevel::DEBUG),
+			m_logLevel(EnumLogLevel::SKA_DEBUG),
 			m_className(prettifyClassName(className)) {
 		}
 
 	public:
 		template<class ...T>
 		void debug(const T&... message) {
-			if (m_logLevel <= EnumLogLevel::DEBUG) {
+			if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
 				printDateTime(std::cout);
+				std::cout << EnumColorStream::LIGHTGREEN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::debug(m_className, std::forward<const T&>(message)...);
+				std::cout << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void info(const T&... message) {
-			if (m_logLevel <= EnumLogLevel::INFO) {
+			if (m_logLevel <= EnumLogLevel::SKA_INFO) {
 				printDateTime(std::cout);
+				std::cout << EnumColorStream::CYAN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::info(m_className, std::forward<const T&>(message)...);
+				std::cout << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void log(const T&... message) {
-			if (m_logLevel <= EnumLogLevel::MESSAGE) {
+			if (m_logLevel <= EnumLogLevel::SKA_MESSAGE) {
 				printDateTime(std::cout);
+				std::cout << EnumColorStream::YELLOW;
 				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_className, std::forward<const T&>(message)...);
+				std::cout << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void error(const T&... message) {
-			if (m_logLevel <= EnumLogLevel::ERROR) {
+			if (m_logLevel <= EnumLogLevel::SKA_ERROR) {
 				printDateTime(std::cerr);
+				std::cerr << EnumColorStream::RED;
 				loggerdetail::LoggerImpl<const std::string&, T...>::error(m_className, std::forward<const T&>(message)...);
+				std::cerr << EnumColorStream::WHITE;
 			}
 		}
 
@@ -145,6 +154,7 @@ namespace ska {
 #else
 			struct tm buf = *std::localtime(&t);
 #endif
+			std::cout << EnumColorStream::LIGHTMAGENTA;
 			os << "[" << std::put_time(&buf, "%H:%M:%S") << "] ";
 		}
 	};

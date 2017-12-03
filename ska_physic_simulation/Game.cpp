@@ -6,13 +6,13 @@
 #include "StateSandbox.h"
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	std::unique_ptr<Game> wgc = std::make_unique<Game>();
+	auto wgc = std::make_unique<Game>();
 	wgc->init();
 	return std::move(wgc);
 }
 
 void LogsConfiguration() {
-	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::DISABLED);
+	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
 }
 
 void Game::init() {

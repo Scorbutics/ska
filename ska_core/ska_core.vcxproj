@@ -123,6 +123,7 @@
     <ClInclude Include="Inputs\Readers\Readinifile.h" />
     <ClInclude Include="Inputs\System\InputSystem.h" />
     <ClInclude Include="Inputs\WindowInput.h" />
+    <ClInclude Include="Logging\ColorStream.h" />
     <ClInclude Include="Logging\Logger.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Rectangle.h" />
@@ -206,7 +207,7 @@
     <ClCompile Include="Inputs\Readers\Readinifile.cpp" />
     <ClCompile Include="Inputs\System\InputSystem.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
-    <ClCompile Include="Logging\Logger.cpp" />
+    <ClCompile Include="Logging\ColorStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Task\TaskQueue.cpp" />
