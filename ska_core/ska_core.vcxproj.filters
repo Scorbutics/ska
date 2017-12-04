@@ -209,5 +209,6 @@
     <ClCompile Include="Data\Events\ECSEvent.h" />
     <ClCompile Include="ECS\SerializableComponent.cpp" />
     <ClCompile Include="Logging\ColorStream.cpp" />
+    <ClCompile Include="Logging\Logger.cpp" />
   </ItemGroup>
 </Project>

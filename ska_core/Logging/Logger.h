@@ -74,9 +74,9 @@ namespace ska {
 	class Logger : public LoggerLogLevel, public NonCopyable {
 		friend class LoggerFactory;
 	private:
-		static std::string prettifyClassName(const std::string& cs){
+		static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
 			static const std::string classKeyword = "class ";
-			static const auto paddedLength = 20;
+			const auto paddedLength = maxLength;
 			
 			auto formattedCs = cs;
 			if(classKeyword == cs.substr(0, classKeyword.size())) {
@@ -89,9 +89,9 @@ namespace ska {
 			return "(" + formattedCs + ") ";
 		}
 
-		explicit Logger(const std::string& className) :
+		Logger(const std::string& className, unsigned int classNameMaxLength) :
 			m_logLevel(EnumLogLevel::SKA_DEBUG),
-			m_className(prettifyClassName(className)) {
+			m_className(prettifyClassName(className, classNameMaxLength)){
 		}
 
 	public:
@@ -99,7 +99,7 @@ namespace ska {
 		void debug(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
 				printDateTime(std::cout);
-				std::cout << EnumColorStream::LIGHTGREEN;
+				std::cout << EnumColorStream::CYAN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::debug(m_className, std::forward<const T&>(message)...);
 				std::cout << EnumColorStream::WHITE;
 			}
@@ -109,7 +109,7 @@ namespace ska {
 		void info(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_INFO) {
 				printDateTime(std::cout);
-				std::cout << EnumColorStream::CYAN;
+				std::cout << EnumColorStream::LIGHTGREEN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::info(m_className, std::forward<const T&>(message)...);
 				std::cout << EnumColorStream::WHITE;
 			}
@@ -129,7 +129,7 @@ namespace ska {
 		void error(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_ERROR) {
 				printDateTime(std::cerr);
-				std::cerr << EnumColorStream::RED;
+				std::cerr << EnumColorStream::LIGHTRED;
 				loggerdetail::LoggerImpl<const std::string&, T...>::error(m_className, std::forward<const T&>(message)...);
 				std::cerr << EnumColorStream::WHITE;
 			}
@@ -162,9 +162,14 @@ namespace ska {
 	class LoggerFactory {
 	private:
 		LoggerFactory() = default;
+		static unsigned int m_classNameMaxLength;
 
 	public:
 		~LoggerFactory() = default;
+
+		static void setMaxLengthClassName(unsigned int classNameMaxLength) {
+			m_classNameMaxLength = classNameMaxLength;
+		}
 
 		template <class T>
 		static Logger& staticAccess() {
@@ -173,7 +178,7 @@ namespace ska {
 
 		template <class T>
 		static Logger& staticAccess(const std::string& className) {
-			static Logger logger(className);
+			static Logger logger(className, m_classNameMaxLength);
 			return logger;
 		}
 
@@ -182,6 +187,8 @@ namespace ska {
 			return staticAccess<T>(className);
 		}
 	};
+
+	
 	
 }
 

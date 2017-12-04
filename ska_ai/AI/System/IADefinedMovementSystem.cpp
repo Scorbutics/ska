@@ -4,6 +4,7 @@
 #include "ECS/Basics/Script/ScriptRegisterer.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Physic/CollidableComponent.h"
+#include "Core/CodeDebug/CodeDebug.h"
 
 ska::IADefinedMovementSystem::IADefinedMovementSystem(EntityManager& entityManager, ScriptRegisterer* scriptSystem) : System(entityManager), m_scriptSystem(scriptSystem) {
 }
@@ -40,12 +41,14 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 
 		bool collisioned;
 		if (cc.ghost) {
-			SKA_LOG_INFO("Reset world collision");
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
 			collisioned = false;
 		} else {
 			collisioned = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId) != nullptr;
-			SKA_LOG_INFO("World collision ", collisioned);
+			
+			SKA_DBG_ONLY(if (collisioned) {
+				SKA_LOG_DEBUG("World collision ", collisioned);
+			});
 		}
 		auto finished = false;
 		if (TimeUtils::getTicks() - iamc.lastTimeStarted >= iamc.delay || directionChanged || collisioned) {
@@ -72,7 +75,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		}
 
 		if (!finished) {
-			SKA_LOG_INFO("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
+			SKA_LOG_DEBUG("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
 			mc.ax = finalMovement.x;
 			mc.ay = finalMovement.y;
 		} else if (directionChanged) {

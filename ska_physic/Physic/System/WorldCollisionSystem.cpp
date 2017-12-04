@@ -51,6 +51,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			const auto& wcc = *wccPtr;
 			lastBlockColPosX = wcc.blockColPosX;
 			lastBlockColPosY = wcc.blockColPosY;
+			SKA_LOG_DEBUG("Suppression collision monde ", entityId);
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
 			/* Il faut rafraîchir l'ensemble des systèmes directement ici (au travers de l'EntityManager),
 			car il est possible de créer un autre WorldCollisionComponent dans le même tour de boucle.

@@ -30,7 +30,7 @@ std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstre
 	num1 = StringUtils::strToInt(varNumber);
 	num2 = StringUtils::strToInt(valeur);
 
-	if (!((op == "==" && num1 == num2) || (op == "<" && num1 < num2) || (op == ">" && num1 > num2) || (op == "<=" && num1 <= num2) || (op == ">=" && num1 >= num2)))
+	if (!((op == "==" && num1 == num2) || (op == "!=" && num1 != num2) || (op == "<" && num1 < num2) || (op == ">" && num1 > num2) || (op == "<=" && num1 <= num2) || (op == ">=" && num1 >= num2)))
 	{
 
 		while (ifEnd > 0 && !script.parent->eof(script))
@@ -41,10 +41,12 @@ std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstre
 			ss >> line;
 			StringUtils::trim(line);
 
-			if (line == getCommandIf())
+			if (line == getCommandIf()) {
 				ifEnd++;
-			else if (line == getCommandEndIf() || line == getCommandElse())
-				ifEnd--;
+			} else if (line == getCommandEndIf() || line == getCommandElse() && ifEnd == 1) {
+				ifEnd--;				
+			}
+				
 		}
 
 		if (script.parent->eof(script)) {

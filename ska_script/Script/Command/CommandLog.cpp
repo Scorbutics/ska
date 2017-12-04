@@ -7,11 +7,7 @@ ska::CommandLog::CommandLog(EntityManager& entityManager) : AbstractFunctionComm
 }
 
 std::string ska::CommandLog::execute(ScriptComponent&, std::vector<std::string>& args) {
-
-	std::string& message = args[0];
-
-	SKA_LOG_MESSAGE(message);
-
+	SKA_LOG_MESSAGE(args[0]);
 	return "";
 }
 

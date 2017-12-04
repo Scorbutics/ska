@@ -5,6 +5,7 @@
 #include "Exceptions/FileException.h"
 #include "Logging/Logger.h"
 #include <iostream>
+#include "Core/CodeDebug/CodeDebug.h"
 
 ska::SDLRenderer* ska::GifTexture::m_renderer = nullptr;
 
@@ -113,7 +114,10 @@ void ska::GifTexture::nextFrame() const{
 }
 
 void ska::GifTexture::free() {
-    SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
+	SKA_DBG_ONLY(
+	if (m_animation != nullptr) {
+		SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
+	});
 	CEV_gifAnimFree(m_animation);
 	m_animation = NULL;
 }

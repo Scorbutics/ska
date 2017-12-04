@@ -8,11 +8,11 @@ namespace ska {
 		Savegame() {}
 
 		virtual std::string getSaveName() const = 0;
-		virtual int getGameVariable(const unsigned int x) const = 0;
-		virtual bool getGameSwitch(const unsigned int x) const = 0;
+		virtual int getGameVariable(const std::string& var) const = 0;
+		virtual bool getGameSwitch(const std::string& swi) const = 0;
 
-		virtual void setGameVariable(const unsigned int x, const int value) = 0;
-		virtual void setGameSwitch(const unsigned int x, const bool value) = 0;
+		virtual void setGameVariable(const std::string& var, const int value) = 0;
+		virtual void setGameSwitch(const std::string& swi, const bool value) = 0;
 
 		virtual ~Savegame() {}
 	};

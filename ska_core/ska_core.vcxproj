@@ -208,6 +208,7 @@
     <ClCompile Include="Inputs\System\InputSystem.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
     <ClCompile Include="Logging\ColorStream.cpp" />
+    <ClCompile Include="Logging\Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Task\TaskQueue.cpp" />
