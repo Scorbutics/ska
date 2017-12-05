@@ -7,7 +7,8 @@
 namespace ska {
 	class IADefinedMovementComponent : public SerializableComponent {
 	public:
-		IADefinedMovementComponent() {
+		IADefinedMovementComponent(): 
+			speed(5.F) {
 			delay = 0;
 			directionIndex = 0;
 			loop = false;
@@ -24,5 +25,6 @@ namespace ska {
 
 		bool callbackActive;
 		ScriptSleepComponent callback;
+		float speed;
 	};
 }

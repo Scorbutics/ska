@@ -29,7 +29,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		auto polarVectorMovement = PolarPoint<float>::polar(targetVector.x, targetVector.y);
 
 		/* speed */
-		polarVectorMovement.radius = 5.F;
+		polarVectorMovement.radius = iamc.speed;
 
 		const auto targetPoint = targetVector + iamc.origin;
 		const auto finalMovement = Point<float>::cartesian(polarVectorMovement.radius, polarVectorMovement.angle);
@@ -76,8 +76,10 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 
 		if (!finished) {
 			SKA_LOG_DEBUG("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
-			mc.ax = finalMovement.x;
-			mc.ay = finalMovement.y;
+			mc.vx = finalMovement.x;
+			mc.vy = finalMovement.y;
+			mc.ay = 0;
+			mc.ax = 0;
 		} else if (directionChanged) {
 			mc.vx = 0;
 			mc.vy = 0;

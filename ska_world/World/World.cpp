@@ -166,12 +166,12 @@ std::string ska::World::getGenericName() const {
 }
 
 void ska::World::load(const std::string& fileName, const std::string& chipsetName) {
-	bool worldChanged = fileName != m_fileName;
+	const auto worldChanged = fileName != m_fileName;
 	m_autoScriptsPlayed = false;
-	bool chipsetChanged = m_chipset.attach(m_blockSize, chipsetName);
+	const auto chipsetChanged = m_chipset.attach(m_blockSize, chipsetName);
 
 	if (worldChanged) {
-		ska::FileNameData fndata(fileName);
+		const ska::FileNameData fndata(fileName);
 		m_genericName = fndata.name;
 		m_worldName = fndata.path + "/" + fndata.name;
 		m_fileName = fileName;
@@ -253,22 +253,21 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 }
 
 ska::Point<int> ska::World::alignOnBlock(const Rectangle& hitbox) const {
-	Point<int> hitBoxBlock = (Point<int>(hitbox) / m_blockSize) * m_blockSize;
+	const auto hitBoxBlock = (Point<int>(hitbox) / m_blockSize) * m_blockSize;
 	return Point<int>(hitbox) - hitBoxBlock;
 }
 
 ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const {
 	std::vector<Rectangle> blocksPos;
-	Point<int> hitBoxBlock = (Point<int>(hitBox) + Point<int>(hitBox.w, hitBox.h) / 2) / m_blockSize;
-	Rectangle result = hitBox;
-
+	auto hitBoxBlock = (Point<int>(hitBox) + Point<int>(hitBox.w, hitBox.h) / 2) / m_blockSize;
+	auto result = hitBox;
 
 	if (radius == 0) {
 		return result;
 	}
 
-	const unsigned int maxWidth = getNbrBlocX();
-	const unsigned int maxHeight = getNbrBlocY();
+	const auto maxWidth = getNbrBlocX();
+	const auto maxHeight = getNbrBlocY();
 
 	Rectangle blockArea;
 	blockArea.x = hitBoxBlock.x - radius;
@@ -302,7 +301,7 @@ ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBo
 
 	for (unsigned int x = 0; x != static_cast<unsigned int>(blockArea.w); x++) {
 		for (unsigned int y = 0; y != static_cast<unsigned int>(blockArea.h); y++) {
-			Rectangle rect{ static_cast<int>(x + blockArea.x), static_cast<int>(y + blockArea.y), hitBox.w, hitBox.h};
+			const Rectangle rect{ static_cast<int>(x + blockArea.x), static_cast<int>(y + blockArea.y), hitBox.w, hitBox.h};
 			blocksPos.push_back(rect);
 		}
 	}
@@ -404,7 +403,7 @@ void ska::World::getMobSettingsFromData() {
 }
 
 void ska::World::getData() {
-    std::string stringDataFile = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + ".ini";
+	const auto stringDataFile = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + ".ini";
 
     getRainFromData(stringDataFile);
 	getMobSettingsFromData();

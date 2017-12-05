@@ -17,11 +17,9 @@ int ska::CommandAssignSwitch::argumentsNumber() {
 }
 
 std::string ska::CommandAssignSwitch::execute(ScriptComponent& script, std::vector<std::string>& args) {
-	std::string valeur, varNumber, line, commandCall;
+	const auto varValue = args[0];
+	const auto varNumber = args[1];
 
-	valeur = args[0];
-	varNumber = args[1];
-
-	ScriptUtils::setValueFromVarOrSwitchNumber(script.parent->getSavegame(), script.extendedName, ScriptSymbolsConstants::SWITCH_LEFT + varNumber + ScriptSymbolsConstants::SWITCH_RIGHT, valeur, script.varMap);
+	ScriptUtils::setValueFromVarOrSwitchNumber(script.parent->getSavegame(), script.extendedName, ScriptSymbolsConstants::SWITCH_LEFT + varNumber + ScriptSymbolsConstants::SWITCH_RIGHT, varValue, script.varMap);
 	return "";
 }

@@ -55,14 +55,15 @@ unsigned int ska::StringUtils::strToUint(const std::string& str) {
 }
 
 bool ska::StringUtils::isDecimal(const std::string& s) {
-	if (s.empty() || std::isspace(s[0])) {
+	if (s.empty()) {
 		return false;
 	}
-	char * p1;
-	char * p2;
-	strtof(s.c_str(), &p1);
-	strtol(s.c_str(), &p2, 10);
-	return (*p1 == 0) && (*p2 == 0);
+
+	std::istringstream iss(s);
+	float f;
+	iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
+						  // Check the entire string was consumed and if either failbit or badbit is set
+	return iss.eof() && !iss.fail();
 }
 
 float ska::StringUtils::strToFloat(const std::string& str) {
