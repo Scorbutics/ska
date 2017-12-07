@@ -9,7 +9,7 @@ class ObservableTest : public ska::MouseObservable, public ska::KeyObservable {
 
 
 TEST_CASE("[MoveableWindow]Déplacement") {
-	//GetWindow();
+	GetWindow();
 	ObservableTest obs;
 	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 }, "nostyle");
 
@@ -34,7 +34,7 @@ TEST_CASE("[MoveableWindow]Déplacement") {
 }
 
 TEST_CASE("[MoveableWindow]Clic sur le bouton de fermeture") {
-	//GetWindow();
+	GetWindow();
 	ObservableTest obs;
 	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 }, "nostyle");
 

@@ -62,7 +62,7 @@ namespace ska {
 			afsm = m_defaultASM;
 			c.setASM(*afsm, entityId);
 		  }
-	      auto next =  afsm->animate(c, entityId);
+	        const auto next =  afsm->animate(c, entityId);
           if(next != nullptr) {
               c.setASM(*next, entityId);
           }

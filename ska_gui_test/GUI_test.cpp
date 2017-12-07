@@ -74,6 +74,7 @@ public:
 
 
 TEST_CASE("[GUI]Affichage fenetre") {
+	GetWindow();
     SubGUIMock gui;
     auto displayed = false;
 
@@ -212,6 +213,7 @@ TEST_CASE("[GUI]Evenements : Mouse ENTER, OVER, OUT") {
 }
 
 TEST_CASE("[GUI]Evenements : CLICK et RELEASE") {
+	
 	resetMouse();
 
 	SubGUIMock gui;

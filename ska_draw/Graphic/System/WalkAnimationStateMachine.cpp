@@ -39,8 +39,8 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 		texture.stop(false);
 	}
 
-	auto xMove = ska::NumberUtils::round(mov.vx);
-	auto yMove = ska::NumberUtils::round(mov.vy);
+	const auto xMove = ska::NumberUtils::round(mov.vx);
+	const auto yMove = ska::NumberUtils::round(mov.vy);
 
 	if (xMove != 0 || yMove != 0) {
 		ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));

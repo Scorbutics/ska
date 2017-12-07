@@ -113,7 +113,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 	}
     m_lastLastMousePos = lastMousePos;
 
-	auto click = in[LClic];
+	const auto click = in[LClic];
 	if (click) {
 		Point<int> pMp (mousePos);
 		ClickEvent ce(MOUSE_CLICK, pMp);
@@ -159,9 +159,9 @@ void ska::GUI::refresh(unsigned int ellapsedTime) {
 	}
 
 	for(auto& wName : m_windowsToDelete) {
-		auto w = getWindow(wName);
-		auto wasAParent = w->isAParent(*m_hovered);
-		auto windowRemoved = removeWindow(wName);
+		const auto* w = getWindow(wName);
+		const auto wasAParent = w->isAParent(*m_hovered);
+		const auto* windowRemoved = removeWindow(wName);
 		if(m_hovered == windowRemoved || wasAParent) {
 			m_hovered = nullptr;
 			m_lastFocused = nullptr;
@@ -235,8 +235,8 @@ ska::Widget* ska::GUI::frontWindow() {
 void ska::GUI::pushWindowToFront(Widget* w) {
 	auto firstWidget = frontWindow();
 	if (w != firstWidget) {
-		auto firstPriority = firstWidget->getPriority();
-		auto priority = w->getPriority();
+		const auto firstPriority = firstWidget->getPriority();
+		const auto priority = w->getPriority();
 		firstWidget->setPriority(priority);
 		w->setPriority(firstPriority);
 		w->focus(true);

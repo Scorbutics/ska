@@ -9,10 +9,10 @@
 
 namespace ska {
 	class World;
-	class LayerE : public Refreshable {
+	class LayerEvent : public Refreshable {
 	public:
-		LayerE(World& world);
-		void operator=(const LayerE&) = delete;
+		LayerEvent(World& world);
+		void operator=(const LayerEvent&) = delete;
 
 		virtual void refresh(unsigned int ellapsedTime) override;
 
@@ -34,6 +34,6 @@ namespace ska {
 		std::vector<std::string> m_action, m_param, m_path;
 		World& m_world;
 	};
-	using LayerEPtr = std::unique_ptr<LayerE>;
+	using LayerEPtr = std::unique_ptr<LayerEvent>;
 }
 

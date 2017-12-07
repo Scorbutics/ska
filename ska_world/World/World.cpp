@@ -4,7 +4,7 @@
 #include "Block.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
-#include "LayerE.h"
+#include "LayerEvent.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
 #include "Exceptions/FileException.h"
@@ -153,7 +153,7 @@ ska::LayerRenderable& ska::World::getLayerRenderable(int level) {
 	}
 }
 
-ska::LayerE& ska::World::getLayerEvent() {
+ska::LayerEvent& ska::World::getLayerEvent() {
 	return m_layerE;
 }
 

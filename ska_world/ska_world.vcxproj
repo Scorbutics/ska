@@ -25,7 +25,7 @@
     <ClCompile Include="World\ChipsetHolder.cpp" />
     <ClCompile Include="World\ChipsetRenderable.cpp" />
     <ClCompile Include="World\Layer.cpp" />
-    <ClCompile Include="World\LayerE.cpp" />
+    <ClCompile Include="World\LayerEvent.cpp" />
     <ClCompile Include="World\LayerRenderable.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
@@ -36,7 +36,7 @@
     <ClInclude Include="World\ChipsetHolder.h" />
     <ClInclude Include="World\ChipsetRenderable.h" />
     <ClInclude Include="World\Layer.h" />
-    <ClInclude Include="World\LayerE.h" />
+    <ClInclude Include="World\LayerEvent.h" />
     <ClInclude Include="World\LayerRenderable.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>

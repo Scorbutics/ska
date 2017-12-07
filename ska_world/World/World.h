@@ -7,7 +7,7 @@
 #include "Draw/CameraAware.h"
 #include "ChipsetHolder.h"
 #include "Layer.h"
-#include "LayerE.h"
+#include "LayerEvent.h"
 #include "ECS/Basics/Physic/CollisionProfile.h"
 #include "Data/BlockContainer.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
@@ -49,7 +49,7 @@ namespace ska {
 		void setNbrBlocY(unsigned int nbrBlockY);
 
 		LayerRenderable& getLayerRenderable(int level);
-		LayerE& getLayerEvent();
+		LayerEvent& getLayerEvent();
 		unsigned int getNumberLayers() const;
 
 		const Rectangle* getView() const;
@@ -96,7 +96,7 @@ namespace ska {
 		Layer m_lBot;
 		Layer m_lMid;
 		Layer m_lTop;
-		LayerE m_layerE;
+		LayerEvent m_layerE;
 		ChipsetHolder m_chipset;
 	};
 }
