@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include "Draw/Color.h"
-#include "Draw/SDLRenderer.h"
+#include "Draw/Renderer.h"
+#include "Draw/TextureData.h"
 
 ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) : 
 	ManagedResource() {
@@ -57,6 +58,14 @@ unsigned int ska::Texture::getWidth() const {
 
 unsigned int ska::Texture::getHeight() const {
 	return m_value == nullptr ? 0 : m_value->getHeight();
+}
+
+ska::SDLTexture* ska::Texture::getInstance() const {
+	return m_value.get();
+}
+
+void ska::Texture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
+	renderer.render(*this, posX, posY, clip);
 }
 
 

@@ -8,13 +8,13 @@
 #include "../Inputs/RawInputListener.h"
 #include "../Inputs/InputContextManager.h"
 #include "../Utils/TimeUtils.h"
-#include "Window.h"
 #include "../GameApp.h"
 #include "State/StateData.h"
-#include "../Inputs/Readers/IniReader.h"
-#include "../Exceptions/FileException.h"
 
 namespace ska {
+	class Window;
+	class Renderer;
+
 	/**
      * \brief Main class of the engine that holds the game engine loop and instantiate every core systems.
      * \tparam EntityManager The entity manager to use
@@ -29,38 +29,25 @@ namespace ska {
     class GameCore :
 		public GameApp,
 		public Observer<StateEvent> {
-    public:
+
+	    public:
+			using RendererPtr = std::unique_ptr<Renderer>;
+			using WindowPtr = std::unique_ptr<Window>;
+			using DrawableContainerPtr = std::unique_ptr<DrawableContainer>;
 
         /**
-         * \brief No-arg constructor that builds a basic context from a file.
+         * \brief Constructor that builds a basic context from a file.
          */
-        GameCore() :
+	    explicit GameCore(RendererPtr&& renderer, WindowPtr&& window) :
 			Observer<StateEvent>(std::bind(&GameCore::onStateEvent, this, std::placeholders::_1)),
-			m_entityManager(m_eventDispatcher),
-    		m_soundManager(m_eventDispatcher),
-            m_playerICM(m_rawInputListener, m_eventDispatcher),
-			m_stateHolder(m_eventDispatcher) {
+			m_mainWindow(std::forward<WindowPtr>(window)),
+    		m_entityManager(m_eventDispatcher),
+            m_soundManager(m_eventDispatcher),
+			m_playerICM(m_rawInputListener, m_eventDispatcher),
+    		m_stateHolder(m_eventDispatcher),
+			m_renderer(std::forward<RendererPtr>(renderer)) {
 
-            //TODO better handling
-#ifdef __ANDROID__
-            int widthBlocks = 34;
-            int heightBlocks = 53;
-#else
-            int widthBlocks = 30;
-			int heightBlocks = 20;
-#endif
-
-			std::string title = "Default title";
-			try {
-				IniReader reader("gamesettings.ini");
-				widthBlocks = reader.get<int>("Window width_blocks");
-				heightBlocks = reader.get<int>("Window height_blocks");
-				title = reader.get<std::string>("Window title");
-			} catch (FileException& fe) {
-				std::cerr << "Error while loading game settings : " << fe.what() << std::endl;
-			}
-
-			createWindow(title, widthBlocks, heightBlocks);
+			m_drawables = std::make_unique<DrawableContainer>(*m_renderer);
 
             m_eventDispatcher.template addMultipleObservers<SoundEvent, WorldEvent, StateEvent>(m_soundManager, m_soundManager, *this);
         }
@@ -123,19 +110,14 @@ namespace ska {
         }
 
     private:
-		void createWindow(const std::string& title, unsigned int wBlocks, unsigned int hBlocks) {
-			static constexpr auto taillebloc = 32;
-			m_mainWindow = std::make_unique<Window>(title, wBlocks * taillebloc, hBlocks * taillebloc);
-		}
-
         bool refreshInternal() {
-	        unsigned long t0 = ska::TimeUtils::getTicks();
+	        unsigned long t0 = TimeUtils::getTicks();
 			const auto ti = ticksWanted();
 			auto accumulator = ti;
 
 			try {
                 for (;;) {
-                    unsigned long t = ska::TimeUtils::getTicks();
+	                const unsigned long t = TimeUtils::getTicks();
 
 					const auto ellapsedTime = t - t0;
 					t0 = t;
@@ -149,17 +131,17 @@ namespace ska {
 
 					graphicUpdate(ellapsedTime);
                 }
-            } catch (ska::StateDiedException&) {
+            } catch (StateDiedException&) {
                 return true;
             }
         }
 
         void graphicUpdate(unsigned int ellapsedTime) {
-        	m_stateHolder.graphicUpdate(ellapsedTime, m_drawables);
-            m_drawables.draw();
-            m_drawables.clear();
+        	m_stateHolder.graphicUpdate(ellapsedTime, *m_drawables);
+            m_drawables->draw();
+            m_drawables->clear();
 
-			m_mainWindow->display();
+			m_renderer->update();
         }
 
         void eventUpdate(unsigned int ellapsedTime) {
@@ -184,17 +166,19 @@ namespace ska {
 
 	protected:
 		EventDispatcher m_eventDispatcher;
-		std::unique_ptr<Window> m_mainWindow;
+		WindowPtr m_mainWindow;
 
 	private:
 		EntityManager m_entityManager;
-        DrawableContainer m_drawables;
+		DrawableContainerPtr m_drawables;
         SoundManager m_soundManager;
 
         RawInputListener m_rawInputListener;
         InputContextManager m_playerICM;
 
         StateHolder m_stateHolder;
+
+		RendererPtr m_renderer;
 
     };
 }

@@ -32,7 +32,7 @@ namespace ska {
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 		void resize(unsigned width, unsigned height);
-		int load(const Renderer& renderer);
+		void load(const Renderer& renderer);
 
 	private:
 		void loadFromRenderer(const Renderer& renderer);

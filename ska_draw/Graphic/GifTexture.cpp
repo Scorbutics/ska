@@ -1,13 +1,10 @@
+#include <iostream>
 #include <CEV_gif.h>
+
 #include "GifTexture.h"
-#include "Exceptions/IllegalStateException.h"
-#include "Draw/SDLRenderer.h"
 #include "Exceptions/FileException.h"
 #include "Logging/Logger.h"
-#include <iostream>
 #include "Core/CodeDebug/CodeDebug.h"
-
-ska::SDLRenderer* ska::GifTexture::m_renderer = nullptr;
 
 ska::GifTexture::GifTexture()
 	: m_animation(NULL),
@@ -56,9 +53,8 @@ void ska::GifTexture::setLoopMode(unsigned int loopMode) const {
 }
 
 void ska::GifTexture::load(const std::string& spriteName) {
-	checkRenderer();
 	free();
-	m_animation = CEV_gifAnimLoad(spriteName.c_str(), m_renderer->unwrap());
+	m_animation = nullptr;//CEV_gifAnimLoad(spriteName.c_str(), m_renderer->unwrap());
 
 	if(m_animation == NULL) {
 		throw ska::FileException("unable to load gif file : " + spriteName);
@@ -112,11 +108,3 @@ void ska::GifTexture::free() {
 	m_animation = NULL;
 }
 
-void ska::GifTexture::checkRenderer() {
-	if (m_renderer == nullptr) {
-		m_renderer = SDLRenderer::getDefaultRenderer();
-		if (m_renderer == nullptr) {
-			throw IllegalStateException("The Texture's default window is not set");
-		}
-	}
-}

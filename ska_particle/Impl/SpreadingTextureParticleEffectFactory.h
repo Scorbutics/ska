@@ -7,7 +7,7 @@ namespace ska {
 	class SpreadingTextureParticleEffectFactory {
 	public:
 		~SpreadingTextureParticleEffectFactory() = default;
-		static std::unique_ptr<ParticleEffect> createEffect(SDLRenderer& renderer, const SpreadingParticleSystemData& data);
+		static std::unique_ptr<ParticleEffect> createEffect(Renderer& renderer, const SpreadingParticleSystemData& data);
 		
 	private:
 		SpreadingTextureParticleEffectFactory() = default;

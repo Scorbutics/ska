@@ -1,28 +1,17 @@
 #include <iostream>
 #include "SDLRenderer.h"
-#include "SDLSurface.h"
-#include "SDLTexture.h"
-#include "../Exceptions/IllegalArgumentException.h"
-#include "../Logging/Logger.h"
+#include "Logging/Logger.h"
+#include "Core/Window.h"
+#include "AnimatedTexture.h"
 
-ska::SDLRenderer* ska::SDLRenderer::m_currentDefaultRenderer = nullptr;
-
-ska::SDLRenderer::SDLRenderer(SDL_Window * window, int index, Uint32 flags) :
+ska::SDLRenderer::SDLRenderer(Window& window, int index, Uint32 flags) :
     m_renderer(nullptr) {
-    load(window, index, flags);
-}
-
-ska::SDLRenderer::SDLRenderer() :
-    m_renderer(nullptr) {
+	load(window.getInstance() , index, flags);
 }
 
 void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
 	m_currentRenderColor = c;
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
-}
-
-void ska::SDLRenderer::setDefaultRenderer(SDLRenderer* r) {
-	m_currentDefaultRenderer = r;
 }
 
 void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
@@ -55,10 +44,6 @@ SDL_Texture* ska::SDLRenderer::createTextureFromSurface(const SDLSurface& s) con
     return SDL_CreateTextureFromSurface(m_renderer, s.m_surface);
 }
 
-ska::SDLRenderer* ska::SDLRenderer::getDefaultRenderer() {
-    return m_currentDefaultRenderer;
-}
-
 void ska::SDLRenderer::drawColorPoint(const Color& c, const Point<int>& pos) const {
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderDrawPoint(m_renderer, pos.x, pos.y);
@@ -82,30 +67,48 @@ void ska::SDLRenderer::free() {
 	m_renderer = nullptr;
 }
 
-void ska::SDLRenderer::render(SDLTexture& t, int posX, int posY, Rectangle const* clip) const {
-	t.load(*this);
-
-	Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
-
-	if (clip != nullptr) {
-		destBuf.w = clip->w;
-		destBuf.h = clip->h;
-	}
-
-	SDL_RenderCopy(m_renderer, t.m_texture, clip, &destBuf);
+void ska::SDLRenderer::update() const {
+	renderPresent();
+	renderClear();
 }
 
-void ska::SDLRenderer::render(GifTexture& t, int posX, int posY, Rectangle const* clip) const {
-	t.refresh();
+void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip) const {	
+	auto instance = t.getInstance();
+	if (instance != nullptr) {
+		instance->load(*this);
 
-	Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
+		Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
 
-	if (clip != nullptr) {
-		destBuf.w = clip->w;
-		destBuf.h = clip->h;
+		if (clip != nullptr) {
+			destBuf.w = clip->w;
+			destBuf.h = clip->h;
+		}
+
+		SDL_RenderCopy(m_renderer, instance->m_texture, clip, &destBuf);
+	}
+}
+
+void ska::SDLRenderer::render(AnimatedTexture& at, int posX, int posY, Rectangle const* clip) const {
+	at.refresh();
+	const auto& tmp = at.m_anim.getCurrentFrame();
+
+	if(at.m_gifMode) {
+		
+		at.m_gif.refresh();
+
+		Rectangle destBuf = { posX + at.m_relativePos.x, posX + at.m_relativePos.y, at.m_gif.getWidth(), at.m_gif.getHeight() };
+
+		if (clip != nullptr) {
+			destBuf.w = clip->w;
+			destBuf.h = clip->h;
+		}
+
+		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip, &tmp);
+	} else {
+		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp);
 	}
 
-	SDL_RenderCopy(m_renderer, t.m_actTexture, clip, &destBuf);
+	
 }
 
 ska::SDLRenderer::~SDLRenderer() {

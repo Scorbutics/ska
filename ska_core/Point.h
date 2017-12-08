@@ -28,8 +28,8 @@ namespace ska {
 
 		template <class U>
 		Point(const U& r) {
-			x = r.x;
-			y = r.y;
+			x = static_cast<T>(r.x);
+			y = static_cast<T>(r.y);
 		}
 
 		Point<T>(const int& r);

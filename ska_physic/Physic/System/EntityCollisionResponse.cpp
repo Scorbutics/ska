@@ -81,7 +81,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	);*/
 
 	//calcul vectoriel : impulse = j . normal
-	Point<float> impulse(j * col.contact.normal().x, j * col.contact.normal().y);
+	Point<double> impulse(j * col.contact.normal().x, j * col.contact.normal().y);
 
 	mtarget.vx += impulse.x * invMassTarget;
 	mtarget.vy += impulse.y * invMassTarget;

@@ -3,6 +3,7 @@
 
 #include "World.h"
 #include "LayerRenderable.h"
+#include "Draw/Renderer.h"
 
 ska::LayerRenderable::LayerRenderable(World& w) : 
 	m_world(w) {
@@ -29,8 +30,8 @@ void ska::LayerRenderable::update() {
 
 	for (auto i = cameraPositionStartBlockX; i <= cameraPositionEndBlockX; i++) {
 		for (auto j = cameraPositionStartBlockY; j <= cameraPositionEndBlockY; j++) {
-			auto currentXBlock = i * m_world.getBlockSize();
-			auto currentYBlock = j * m_world.getBlockSize();
+			const auto currentXBlock = i * m_world.getBlockSize();
+			const auto currentYBlock = j * m_world.getBlockSize();
 
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
 				auto b = m_block[i][j];
@@ -43,7 +44,15 @@ void ska::LayerRenderable::update() {
 	}
 }
 
-void ska::LayerRenderable::display() const {
+bool ska::LayerRenderable::isVisible() const {
+	return !m_block.empty();
+}
+
+void ska::LayerRenderable::clear() {
+	m_block.clear();
+}
+
+void ska::LayerRenderable::render(const Renderer& renderer) const {
 	const auto* cameraPos = m_world.getView();
 
 	if (cameraPos == nullptr) {
@@ -63,26 +72,18 @@ void ska::LayerRenderable::display() const {
 
 	for (auto i = cameraPositionStartBlockX; i <= cameraPositionEndBlockX; i++) {
 		for (auto j = cameraPositionStartBlockY; j <= cameraPositionEndBlockY; j++) {
-			auto currentXBlock = i * m_world.getBlockSize();
-			auto currentYBlock = j * m_world.getBlockSize();
+			const auto currentXBlock = i * m_world.getBlockSize();
+			const auto currentYBlock = j * m_world.getBlockSize();
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
-				auto b = m_block[i][j];
+				const auto b = m_block[i][j];
 				if (b != nullptr) {
 					const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
 					/* TODO passer la propriété BLOCK_PROP_WIND_SENSITIVITY en script de chipset */
-					m_world.getChipset().render(absoluteCurrentPos, *b);
+					m_world.getChipset().render(renderer, absoluteCurrentPos, *b);
 				}
 			}
 		}
 	}
-}
-
-bool ska::LayerRenderable::isVisible() const {
-	return !m_block.empty();
-}
-
-void ska::LayerRenderable::clear() {
-	m_block.clear();
 }
 
 ska::BlockRenderable* ska::LayerRenderable::getBlock(const unsigned int i, const unsigned int j) {

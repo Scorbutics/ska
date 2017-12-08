@@ -6,13 +6,15 @@
 #include "Utils/SkaConstants.h"
 #include "Rectangle.h"
 #include "Draw/Color.h"
+#include "Draw/Renderable.h"
 
 namespace ska {
-	class SDLRenderer;
-	class Texture : 
-		public ManagedResource<SDLTexture, TextureData> {
-		
-		friend class Renderer;
+	class Renderer;
+	class Texture :
+		public ManagedResource<SDLTexture, TextureData>,
+		public Renderable {
+
+		friend class SDLRenderer;
 
 	public:
 		explicit Texture(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
@@ -31,12 +33,9 @@ namespace ska {
 		unsigned int getHeight() const;
 
 	private:
-		SDLTexture* getInstance() const {
-			return m_value.get();
-		}
+		SDLTexture* getInstance() const;
 
+	public:
+		void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const override;
 	};
 }
-
-
-

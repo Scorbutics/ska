@@ -2,12 +2,13 @@
 
 namespace ska {
 	class ParticleGroup;
+	class Renderer;
 
 	class ParticleRenderer {
 	protected:
 		ParticleRenderer() = default;
 	public:
-		virtual void display(const ParticleGroup& m_group) const = 0;
+		virtual void render(const Renderer& renderer, const ParticleGroup& group) const = 0;
 		virtual ~ParticleRenderer() = default;
 	};
 }

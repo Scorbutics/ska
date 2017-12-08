@@ -1,15 +1,11 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
 #include <memory>
 
 #include "Block.h"
 #include "LayerRenderable.h"
-
-#include "Draw/DrawableFixedPriority.h"
 
 class ParticleManager;
 
@@ -45,8 +41,8 @@ namespace ska {
 		unsigned int m_fileWidth, m_fileHeight;
 
 	};
-	typedef std::unique_ptr<Layer> LayerPtr;
 
+	using LayerPtr = std::unique_ptr<Layer>;
 
 }
 

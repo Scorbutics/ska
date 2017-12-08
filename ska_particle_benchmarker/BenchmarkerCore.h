@@ -6,6 +6,7 @@
 #include "FpsCalculator.h"
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "ParticleSystem.h"
+#include "Graphic/SDLRenderer.h"
 
 class BenchmarkerCore : 
 	public ska::GameApp {
@@ -29,5 +30,6 @@ private:
 	ska::ParticleSystem m_particleSystem;
 	ska::EulerAttractorParticleUpdater* m_attractor;
 	ska::FpsCalculator m_fpsCalculator;
+	ska::SDLRenderer m_renderer;
 };
 

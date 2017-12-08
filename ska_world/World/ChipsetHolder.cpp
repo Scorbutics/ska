@@ -7,7 +7,6 @@
 #include "Utils/SkaConstants.h"
 #include "Chipset.h"
 #include "ChipsetHolder.h"
-#include "Graphic/Animation.h"
 
 ska::ChipsetHolder::ChipsetHolder(const std::string&) {
 	SDLSurface fichierMCorr;
@@ -57,18 +56,18 @@ void ska::ChipsetHolder::generateBlock(Color& key, Block** outputBlock, BlockRen
 	return m_chipset->generateBlock(key, outputBlock, outputRenderable);
 }
 
-void ska::ChipsetHolder::render(ska::Point<int> pos, const BlockRenderable& block) const {
-	m_chipset->getRenderable().render(pos, block);
+void ska::ChipsetHolder::render(const ska::Renderer& renderer, ska::Point<int> pos, const BlockRenderable& block) const {
+	m_chipset->getRenderable().render(renderer, pos, block);
 }
 
 void ska::ChipsetHolder::buildCorrMap(const SDLSurface& fichierMCorr) {
-	for (int x = 0; x < fichierMCorr.getInstance()->w; x++) {
-		for (int y = 0; y < fichierMCorr.getInstance()->h; y++) {
-			Color c = fichierMCorr.getPixel32Color(x, y);
+	for (auto x = 0; x < fichierMCorr.getInstance()->w; x++) {
+		for (auto y = 0; y < fichierMCorr.getInstance()->h; y++) {
+			auto c = fichierMCorr.getPixel32Color(x, y);
 			if (m_corr.find(c) == m_corr.end()) {
 				m_corr.insert(std::make_pair(c, Point<int>(x, y)));
 			} else {
-				Point<int>& pos2 = m_corr[c];
+				auto& pos2 = m_corr[c];
 				throw CorruptedFileException("Chipset correspondance file (\"corr.png\") has several tiles with same color at ("
 					+ StringUtils::intToStr(pos2.x) + "; " + StringUtils::intToStr(pos2.y) + ") and (" + StringUtils::intToStr(x) + "; " + StringUtils::intToStr(y)
 					+ "). Please keep only one color correspondance per tile");

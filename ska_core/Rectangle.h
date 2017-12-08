@@ -3,5 +3,4 @@
 
 namespace ska {
     using Rectangle = SDL_Rect;
-
 }

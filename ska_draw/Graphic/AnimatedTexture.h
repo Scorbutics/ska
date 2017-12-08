@@ -5,12 +5,13 @@
 #include "Point.h"
 #include "GifTexture.h"
 #include "Utils/SkaConstants.h"
+#include "Draw/Renderable.h"
 
 namespace ska {
 	struct Color;
 
-	class AnimatedTexture {
-		friend class Renderer;
+	class AnimatedTexture : public Renderable {
+		friend class SDLRenderer;
 	public:
 		AnimatedTexture();
 		~AnimatedTexture() = default;
@@ -45,6 +46,8 @@ namespace ska {
 		void refresh() const;
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
 
+	public:
+		void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const override;
 	private:
 		Point<int> m_relativePos;
 		Animation m_anim;

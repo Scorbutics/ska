@@ -39,7 +39,5 @@ namespace ska {
 
         std::string m_spriteName;
 
-		static void checkRenderer();
-		static SDLRenderer* m_renderer;
 	};
 }

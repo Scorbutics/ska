@@ -3,6 +3,8 @@
 #include "Draw/Renderer.h"
 
 namespace ska {
+	class Renderable;
+
 	class PositionnedGraphicDrawable : public Drawable {
 
 	public:

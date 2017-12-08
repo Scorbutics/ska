@@ -1,11 +1,11 @@
 #pragma once
 #include <SDL.h>
-#include "../Rectangle.h"
-#include "../Point.h"
-#include "Color.h"
-#include "Renderer.h"
+#include "Draw/Renderer.h"
+#include "Point.h"
+#include "Draw/Color.h"
 
 namespace ska {
+	class Window;
 	struct Color;
 	class SDLSurface;
     class SDLTexture;
@@ -15,24 +15,21 @@ namespace ska {
 	*/
 	class SDLRenderer : public Renderer {
 	public:
-	    SDLRenderer();
-		SDLRenderer(SDL_Window * window, int index, Uint32 flags);
+		SDLRenderer(Window& window, int index, Uint32 flags);
 		
 		SDLRenderer(SDLRenderer&& r) = default;
 		SDLRenderer& operator=(SDLRenderer&& r) = default;
 		SDLRenderer(const SDLRenderer& r) = delete;
         SDLRenderer& operator=(const SDLRenderer& r) = delete;
-		void setRenderColor(const ska::Color& c);
 
-		static void setDefaultRenderer(SDLRenderer* renderer);
-        static SDLRenderer* getDefaultRenderer();
-
-        void renderClear() const;
+		/**
+		* \brief Changes the current default rendering color
+		* \param color New color to set
+		*/
+		void setRenderColor(const Color& c);
 
         SDL_Texture* createTextureFromSurface(const SDLSurface& s) const override;
-        void renderPresent() const;
         
-
 		void drawColorPoint(const Color& c, const Point<int>& pos) const;
 		void drawColorRect(const Color& c, const Rectangle& r) const;
 		void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const;
@@ -42,17 +39,26 @@ namespace ska {
 		void load(SDL_Window * window, int index, Uint32 flags);
 
 		SDL_Renderer* unwrap() const;
-	private:
-	    void free();
-	
-		protected:
-		void render(SDLTexture& t, int posX, int posY, Rectangle const*) const override;
-		void render(GifTexture& t, int posX, int posY, Rectangle const*) const override;
+
+		/**
+		* \brief Makes the renderer renders
+		*/
+		void render(const Texture& t, int posX, int posY, Rectangle const*) const override;
+		
+		/**
+		* \brief Makes the renderer renders
+		*/
+		void render(AnimatedTexture& t, int posX, int posY, Rectangle const*) const override;
+
+		void update() const override;
 
 	private:
+	    void free();
+		void renderPresent() const;
+		void renderClear() const;
+		
 		SDL_Renderer* m_renderer;
 		Color m_currentRenderColor;
-		static SDLRenderer* m_currentDefaultRenderer;
 
 	};
 }

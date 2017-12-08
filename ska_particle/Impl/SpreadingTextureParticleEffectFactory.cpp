@@ -5,8 +5,7 @@
 #include "GenerationDelayProperty.h"
 #include "TextureAlphaParticleUpdater.h"
 
-
-std::unique_ptr<ska::ParticleEffect> ska::SpreadingTextureParticleEffectFactory::createEffect(SDLRenderer& renderer, const SpreadingParticleSystemData & data) {
+std::unique_ptr<ska::ParticleEffect> ska::SpreadingTextureParticleEffectFactory::createEffect(Renderer& renderer, const SpreadingParticleSystemData & data) {
 	auto particleSystem = SpreadingParticleEffectFactory::createEffect(renderer, data);
 	particleSystem->applyGroupProperty<SpritePathProperty>(data.spritePath);
 	particleSystem->applyGroupProperty<GenerationDelayProperty>(data.generationDelay);

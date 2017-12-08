@@ -5,7 +5,7 @@
 #include "BasicColorGenerator.h"
 
 
-std::unique_ptr<ska::ParticleEffect> ska::SpreadingColorParticleEffectFactory::createEffect(SDLRenderer& renderer, const SpreadingParticleSystemData & data) {
+std::unique_ptr<ska::ParticleEffect> ska::SpreadingColorParticleEffectFactory::createEffect(Renderer& renderer, const SpreadingParticleSystemData & data) {
 	auto particleSystem = SpreadingParticleEffectFactory::createEffect(renderer, data);
 
 	particleSystem->addGenerator<BasicColorGenerator>(data.cStart, data.cEnd);

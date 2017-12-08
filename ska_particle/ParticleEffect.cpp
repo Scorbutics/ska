@@ -30,8 +30,8 @@ void ska::ParticleEffect::refresh(unsigned int dt) {
 	update(dt);
 }
 
-void ska::ParticleEffect::display() const {
+void ska::ParticleEffect::render(const Renderer& renderer) const {
 	for (const auto& u : m_renderers) {
-		u->display(m_group);
+		u->render(renderer, m_group);
 	}
 }

@@ -1,12 +1,13 @@
 #include "ColoredRectGraphicParticleRenderer.h"
 #include "../ParticleGroup.h"
+#include "Graphic/SDLRenderer.h"
 
-ska::ColoredRectGraphicParticleRenderer::ColoredRectGraphicParticleRenderer(SDLRenderer& renderer, unsigned int particleDimensions) :
+ska::ColoredRectGraphicParticleRenderer::ColoredRectGraphicParticleRenderer(Renderer& renderer, unsigned int particleDimensions) :
 	m_renderer(renderer),
 	m_particleDimensions(particleDimensions) {
 }
 
-void ska::ColoredRectGraphicParticleRenderer::display(const ParticleGroup& group) const {
+void ska::ColoredRectGraphicParticleRenderer::render(const ska::Renderer& , const ParticleGroup& group) const {
 
 	const auto& maxSize = group.getLength();
 

@@ -180,13 +180,13 @@ void ska::GUI::render(const Renderer& renderer) const {
 		return;
 	}
 
-	m_wMaster.display();
+	m_wMaster.render(renderer);
 
 	for (auto& w : m_topWindowWidgets) {
 		w->render(renderer);
 	}
 
-	m_mouseCursor.display();
+	m_mouseCursor.render(renderer);
 }
 
 bool ska::GUI::isVisible() const {

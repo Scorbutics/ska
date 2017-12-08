@@ -23,8 +23,8 @@ public:
 	StaticWindowTest(const ska::Rectangle& box, const std::string& styleName) : ska::WindowIG<T...>(box, styleName) {
 	}
 
-	virtual void render(const ska::Renderer&) const override {
-	    ska::WindowIG<T...>::display();
+	virtual void render(const ska::Renderer& r) const override {
+	    ska::WindowIG<T...>::render(r);
 	    m_callbackDisplay();
 	}
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL.h>
-#include "../Draw/SDLRenderer.h"
+#include <string>
 
 namespace ska {
 	/**
@@ -44,16 +44,6 @@ namespace ska {
 		 */
 		void showMessageBox(Uint32 flags, const std::string& title, const std::string& message) const ;
 
-		/**
-		 * \brief Makes the renderer renders on the window
-		 */
-		void display() const;
-
-		/**
-		 * \brief Current renderer that acts on this window accessor
-		 * \return the current renderer of this window
-		 */
-		SDLRenderer& getRenderer();
 
 		/**
 		 * \brief Changes the current top-left program icon
@@ -61,11 +51,9 @@ namespace ska {
 		 */
 		void setWindowIcon(const std::string& filename);
 
-		/**
-		 * \brief Changes the current default rendering color
-		 * \param color New color to set
-		 */
-		void setRenderColor(const Color& color);
+		SDL_Window* getInstance() const{
+			return m_screen;
+		}
 
 	private:
 		unsigned int m_height;
@@ -74,9 +62,6 @@ namespace ska {
 		const std::string m_wName;
 
 		SDL_Window * m_screen;
-		SDLRenderer m_renderer;
-
-		bool m_containsDefaultRenderer;
 		SDL_Surface* m_iconFile;
 
 	};

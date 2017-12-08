@@ -8,7 +8,6 @@
 #include "Inputs/System/InputSystem.h"
 #include "ECS/Basics/Physic/GravityAffectedComponent.h"
 #include "Physic/System/GravitySystem.h"
-#include "Draw/SDLRenderer.h"
 #include "Graphic/System/DeleterSystem.h"
 #include "Physic/System/WorldCollisionSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
@@ -49,7 +48,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 		fc.weight = std::numeric_limits<float>::max();
 		fc.bounciness = 0;
 	} else {
-		fc.weight = 0.2;
+		fc.weight = 0.2F;
 	}
 	one++;
 	m_entityManager.addComponent<ska::ForceComponent>(entity, std::move(fc));

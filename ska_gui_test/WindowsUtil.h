@@ -11,11 +11,14 @@ ska::InputContextManager& GetICM();
 void GetWindow();
 
 struct MockRenderer : public ska::Renderer {
-	SDL_Texture* createTextureFromSurface(const ska::SDLSurface& surface) const override {}
+	SDL_Texture* createTextureFromSurface(const ska::SDLSurface& surface) const override { return 0; }
 
-protected:
-	void render(ska::SDLTexture& t, int posX, int posY, ska::Rectangle const*) const override {}
-	void render(ska::GifTexture& t, int posX, int posY, ska::Rectangle const*) const override {}
+	void render(const ska::Texture& t, int posX, int posY, ska::Rectangle const*) const override {}
+	void render(ska::AnimatedTexture& t, int posX, int posY, ska::Rectangle const*) const override {}
+	void update() const override{}
+	void drawColorPoint(const ska::Color& c, const ska::Point<int>& pos) const override {}
+	void drawColorRect(const ska::Color& c, const ska::Rectangle& r) const override {}
+	void drawColorLine(const ska::Color& c, const ska::Point<int>& p1, const ska::Point<int>& p2) const override {}
 };
 
-MockRenderer MakeMockRenderer();
+MockRenderer& MakeMockRenderer();

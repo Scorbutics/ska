@@ -1,4 +1,3 @@
-#include "SDLRenderer.h"
 #include "SDLTexture.h"
 #include "SDLSurface.h"
 #include "TextureData.h"
@@ -71,39 +70,39 @@ ska::SDLTexture::~SDLTexture() {
 }
 
 void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
-	auto action = std::make_unique<Runnable>([&]() {
+	auto action = [&]() {
 		SDL_SetTextureColorMod(m_texture, r, g, b);
 		return false;
-	});
+	};
 
 	if (isInitialized()) {
-		(*action)();
+		(action)();
 	} else {
-		m_whenLoadedTasks->queueTask(std::move(action));
+		m_whenLoadedTasks->queueTask(action);
 	}
 }
 
 void ska::SDLTexture::setBlendMode(int blending) const {
-	auto action = std::make_unique<Runnable>([&]() {
+	auto action = [&]() {
 		SDL_SetTextureBlendMode(m_texture, static_cast<SDL_BlendMode>(blending));
 		return false;
-	});
+	};
 
 	if (isInitialized()) {
-		(*action)();
+		(action)();
 	} else {
 		m_whenLoadedTasks->queueTask(std::move(action));
 	}
 }
 
 void ska::SDLTexture::setAlpha(Uint8 alpha) const {
-	auto action = std::make_unique<Runnable>([&]() {
+	auto action = [&]() {
 		SDL_SetTextureAlphaMod(m_texture, alpha);
 		return false;
-	});
+	};
 
 	if (isInitialized()) {
-		(*action)();
+		(action)();
 	} else {
 		m_whenLoadedTasks->queueTask(std::move(action));
 	}
@@ -122,7 +121,7 @@ void ska::SDLTexture::resize(unsigned width, unsigned height) {
 	m_h = height;
 }
 
-int ska::SDLTexture::load(const Renderer& renderer) {
+void ska::SDLTexture::load(const Renderer& renderer) {
 	if(!isInitialized()) {
 		loadFromRenderer(renderer);
 	}

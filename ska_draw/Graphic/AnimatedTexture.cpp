@@ -127,3 +127,7 @@ void ska::AnimatedTexture::nextFrame() {
 	}
 	
 }
+
+void ska::AnimatedTexture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
+	render(renderer, posX, posY, clip);
+}

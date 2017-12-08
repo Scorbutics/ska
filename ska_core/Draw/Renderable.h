@@ -8,6 +8,6 @@ namespace ska {
 		Renderable() = default;
 		virtual ~Renderable() = default;
 
-		virtual int render(const Renderer& renderer, int posX, int posY, const Rectangle* clip = nullptr) const = 0;
+		virtual void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip = nullptr) const = 0;
 	};
 }

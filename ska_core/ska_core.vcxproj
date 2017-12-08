@@ -55,7 +55,6 @@
     <ClInclude Include="Draw\Renderable.h" />
     <ClInclude Include="Draw\Renderer.h" />
     <ClInclude Include="Draw\SDLFont.h" />
-    <ClInclude Include="Draw\SDLRenderer.h" />
     <ClInclude Include="Draw\SDLSurface.h" />
     <ClInclude Include="Draw\SDLTexture.h" />
     <ClInclude Include="Draw\TextureData.h" />
@@ -142,6 +141,7 @@
     <ClInclude Include="Utils\FormalCalculation\CalculOperators.h" />
     <ClInclude Include="Utils\FormalCalculation\FormalCalculator.h" />
     <ClInclude Include="Utils\Identity.h" />
+    <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="Utils\NonCopyable.h" />
     <ClInclude Include="Utils\NumberUtils.h" />
     <ClInclude Include="Utils\Observable.h" />
@@ -152,7 +152,6 @@
     <ClInclude Include="Utils\PhysicUtils.h" />
     <ClInclude Include="Utils\RectangleUtils.h" />
     <ClInclude Include="Utils\Refreshable.h" />
-    <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="Utils\Singleton_template.h" />
     <ClInclude Include="Utils\SkaConstants.h" />
     <ClInclude Include="Utils\SpritePath.h" />
@@ -173,7 +172,6 @@
     <ClCompile Include="Draw\Font.cpp" />
     <ClCompile Include="Draw\PriorityQueueDrawableContainer.cpp" />
     <ClCompile Include="Draw\SDLFont.cpp" />
-    <ClCompile Include="Draw\SDLRenderer.cpp" />
     <ClCompile Include="Draw\SDLSurface.cpp" />
     <ClCompile Include="Draw\SDLTexture.cpp" />
     <ClCompile Include="Draw\TextureData.cpp" />

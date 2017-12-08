@@ -43,7 +43,7 @@ namespace ska {
 		}
 
 		void refresh(unsigned int dt);
-		void display() const;
+		void render(const Renderer& renderer) const;
 		virtual ~ParticleEffect() = default;
 
 
