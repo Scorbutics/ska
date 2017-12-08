@@ -1,6 +1,8 @@
 #pragma once
 #include "../Components/WidgetPanel.h"
 #include "Graphic/Texture.h"
+#include "Utils/SkaConstants.h"
+#include "Draw/Renderer.h"
 
 
 namespace ska{
@@ -31,7 +33,7 @@ namespace ska{
 			this->setHeight(box.h);
 		}
 
-		void display() const override {
+		void render(const ska::Renderer& r) const override {
 			if (!this->isVisible()) {
 				return;
 			}
@@ -55,11 +57,11 @@ namespace ska{
 						backgroundTileClip.x = xcondition1 * backgroundTileClip.w + xcondition2 * backgroundTileClip.w;
 						backgroundTileClip.y = ycondition1 * backgroundTileClip.h + ycondition2 * backgroundTileClip.h;
 
-						m_menuTiles.render(backgroundTilePos.x, backgroundTilePos.y, &backgroundTileClip);
+						r.render(m_menuTiles, backgroundTilePos.x, backgroundTilePos.y, &backgroundTileClip);
 					}
 				}
 			}
-			WidgetPanel<HL...>::display();
+			WidgetPanel<HL...>::render(r);
 		}
 
 		virtual ~WindowIG() = default;

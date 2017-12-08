@@ -4,6 +4,7 @@
 #include "../Components/Concrete/ButtonQuit.h"
 #include "../Events/HoverEvent.h"
 #include "../GUI.h"
+#include "Utils/SkaConstants.h"
 
 namespace ska {
 

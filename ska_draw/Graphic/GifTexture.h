@@ -8,6 +8,7 @@ namespace ska {
 	class SDLRenderer;
 
 	class GifTexture {
+		friend class SDLRenderer;
 	public:
 		GifTexture();
 		GifTexture(const GifTexture& t);
@@ -20,11 +21,11 @@ namespace ska {
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 
-		int render(int x, int y, const Rectangle* clip = nullptr) const;
 		void reset() const;
 		void nextFrame() const;
 		void setDelay(unsigned delay) const;
 		void stop(bool x) const;
+		void refresh() const;
 
 	private:
 		void setLoopMode(unsigned int loopMode) const;

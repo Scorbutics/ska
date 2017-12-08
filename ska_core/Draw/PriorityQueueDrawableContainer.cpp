@@ -1,8 +1,8 @@
 #include "PriorityQueueDrawableContainer.h"
 
 
-ska::PriorityQueueDrawableContainer::PriorityQueueDrawableContainer()
-{
+ska::PriorityQueueDrawableContainer::PriorityQueueDrawableContainer(Renderer& renderer) : 
+	m_renderer(renderer) {
 }
 
 void ska::PriorityQueueDrawableContainer::push(const Drawable& d) {
@@ -16,13 +16,12 @@ void ska::PriorityQueueDrawableContainer::clear() {
 }
 
 void ska::PriorityQueueDrawableContainer::draw() {
-	for (const Drawable* d = m_data.top(); !m_data.empty(); m_data.pop()) {
+	for (const auto d = m_data.top(); !m_data.empty(); m_data.pop()) {
 		if (d != nullptr) {
-			d->display();
+			d->render(m_renderer);
 		}
 	}
 }
 
-ska::PriorityQueueDrawableContainer::~PriorityQueueDrawableContainer()
-{
+ska::PriorityQueueDrawableContainer::~PriorityQueueDrawableContainer() {
 }

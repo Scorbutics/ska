@@ -148,6 +148,8 @@
     <ClInclude Include="ECS\Basics\Physic\CollisionContact.h" />
     <ClInclude Include="Utils\NonCopyable.h" />
     <ClInclude Include="Logging\ColorStream.h" />
+    <ClInclude Include="Draw\Renderer.h" />
+    <ClInclude Include="Draw\Renderable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />

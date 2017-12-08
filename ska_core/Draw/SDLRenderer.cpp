@@ -59,10 +59,6 @@ ska::SDLRenderer* ska::SDLRenderer::getDefaultRenderer() {
     return m_currentDefaultRenderer;
 }
 
-int ska::SDLRenderer::renderCopy(const SDLTexture& t, const Rectangle* clip, const Rectangle& dest) const {
-    return SDL_RenderCopy(m_renderer, t.m_texture, clip, &dest);
-}
-
 void ska::SDLRenderer::drawColorPoint(const Color& c, const Point<int>& pos) const {
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderDrawPoint(m_renderer, pos.x, pos.y);
@@ -84,6 +80,32 @@ void ska::SDLRenderer::drawColorLine(const Color& c, const Point<int>& p1, const
 void ska::SDLRenderer::free() {
     SDL_DestroyRenderer(m_renderer);
 	m_renderer = nullptr;
+}
+
+void ska::SDLRenderer::render(SDLTexture& t, int posX, int posY, Rectangle const* clip) const {
+	t.load(*this);
+
+	Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
+
+	if (clip != nullptr) {
+		destBuf.w = clip->w;
+		destBuf.h = clip->h;
+	}
+
+	SDL_RenderCopy(m_renderer, t.m_texture, clip, &destBuf);
+}
+
+void ska::SDLRenderer::render(GifTexture& t, int posX, int posY, Rectangle const* clip) const {
+	t.refresh();
+
+	Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
+
+	if (clip != nullptr) {
+		destBuf.w = clip->w;
+		destBuf.h = clip->h;
+	}
+
+	SDL_RenderCopy(m_renderer, t.m_actTexture, clip, &destBuf);
 }
 
 ska::SDLRenderer::~SDLRenderer() {

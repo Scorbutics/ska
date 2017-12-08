@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "../Widget.h"
 #include "../../Events/ClickEventListener.h"
+#include "Draw/Renderer.h"
 
 ska::Button::Button(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback) :
 Hoverable<ValueChangedEventListener<bool>, ClickEventListener>(parent),
@@ -114,16 +115,17 @@ void ska::Button::forceState(ButtonState::Enum e) {
 	switchTextureAndMemorize();
 }
 
-void ska::Button::display() const {
+void ska::Button::render(const Renderer& renderer) const {
+
 	if (!m_drawStyle || m_textureSelector == nullptr) {
 		return;
 	}
 
 	const auto& pos = getAbsolutePosition();
 	if (m_clip.w == std::numeric_limits<int>().max()) {
-		m_textureSelector->render(pos.x, pos.y);
+		renderer.render(*m_textureSelector, pos.x, pos.y);
 	} else {
-		m_textureSelector->render(pos.x, pos.y, &m_clip);
+		renderer.render(*m_textureSelector, pos.x, pos.y, &m_clip);
 	}
 }
 

@@ -1,6 +1,9 @@
 #pragma once
+#include "Renderable.h"
 
 namespace ska {
+	class Renderer;
+
 	/**
 	 * \brief Forces classes to implement a way to be rendered in a certain order (by priority)
 	 */
@@ -8,10 +11,12 @@ namespace ska {
 	public:
 		Drawable() = default;
 		virtual ~Drawable() = default;
+		
+		virtual void render(const Renderer& renderer) const = 0;
 
 		static bool staticOperatorInf(const Drawable* a, const Drawable* b) {
-			auto p1 = a->getPriority();
-			auto p2 = b->getPriority();
+			const auto p1 = a->getPriority();
+			const auto p2 = b->getPriority();
 			return p1 < p2;
 		}
 
@@ -21,14 +26,14 @@ namespace ska {
 		 * \return true if the current Drawable has less priority than the parameter, false otherwise
 		 */
 		bool operator< (const Drawable &id) const {
-			auto p1 = getPriority();
-			auto p2 = id.getPriority();
+			const auto p1 = getPriority();
+			const auto p2 = id.getPriority();
 			return p1 < p2;
 		}
 		
 		static bool staticOperatorSup(const Drawable* a, const Drawable* b) {
-			auto p1 = a->getPriority();
-			auto p2 = b->getPriority();
+			const auto p1 = a->getPriority();
+			const auto p2 = b->getPriority();
 			return p1 > p2;
 		}
 
@@ -38,8 +43,8 @@ namespace ska {
 		* \return true if the current Drawable has more priority than the parameter, false otherwise
 		*/
 		bool operator> (const Drawable &id) const {
-			auto p1 = getPriority();
-			auto p2 = id.getPriority();
+			const auto p1 = getPriority();
+			const auto p2 = id.getPriority();
 			return p1 > p2;
 		}
 
@@ -54,10 +59,6 @@ namespace ska {
 			return getPriority();
 		}
 
-		/**
-		 * \brief A Drawable is renderered on the screen when this function is called
-		 */
-		virtual void display() const = 0;
 
 		/**
 		* \brief Gets the priority of the current Drawable.

@@ -52,6 +52,8 @@
     <ClInclude Include="Draw\Font.h" />
     <ClInclude Include="Draw\IGraphicSystem.h" />
     <ClInclude Include="Draw\PriorityQueueDrawableContainer.h" />
+    <ClInclude Include="Draw\Renderable.h" />
+    <ClInclude Include="Draw\Renderer.h" />
     <ClInclude Include="Draw\SDLFont.h" />
     <ClInclude Include="Draw\SDLRenderer.h" />
     <ClInclude Include="Draw\SDLSurface.h" />

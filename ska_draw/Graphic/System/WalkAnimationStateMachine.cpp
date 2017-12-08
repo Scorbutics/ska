@@ -45,7 +45,7 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 	if (xMove != 0 || yMove != 0) {
 		ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
 		const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
-		texture.setDelay(delay > 200 ? 200 : delay);
+		texture.setDelay(delay > 200 ? 200 : static_cast<unsigned int>(delay));
 	}
 	
 	/*const auto& pcPtr = m_entityManager.getComponent<PositionComponent>(ac.looked);

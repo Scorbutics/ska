@@ -1,9 +1,6 @@
 #include "Texture.h"
 #include "Draw/Color.h"
 #include "Draw/SDLRenderer.h"
-#include "Exceptions/IllegalStateException.h"
-
-ska::SDLRenderer* ska::Texture::m_renderer = nullptr;
 
 ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) : 
 	ManagedResource() {
@@ -11,87 +8,55 @@ ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) :
 }
 
 void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
-	checkRenderer();
-
 	Color finalColor;
 	finalColor.a = static_cast<Uint8>(a);
 	finalColor.b = static_cast<Uint8>(b);
 	finalColor.g = static_cast<Uint8>(g);
 	finalColor.r = static_cast<Uint8>(r);
 
-	loadFromKey(TextureData(*m_renderer, id, finalColor, ska::Rectangle{}, SPRITE, 0));
+	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, SPRITE, 0));
 }
 
 void ska::Texture::setColor(Uint8 r, Uint8 g, Uint8 b) const {
 	if (m_value != nullptr) {
-		SDL_SetTextureColorMod(m_value->m_texture, r, g, b);
+		m_value->setColor(r, g, b);
 	}
 }
 
 void ska::Texture::setBlendMode(int blending) const {
 	if (m_value != nullptr) {
-		SDL_SetTextureBlendMode(m_value->m_texture, static_cast<SDL_BlendMode>(blending));
+		m_value->setBlendMode(blending);
 	}
 }
 
 void ska::Texture::setAlpha(Uint8 alpha) const{
 	if (m_value != nullptr) {
-		SDL_SetTextureAlphaMod(m_value->m_texture, alpha);
-		m_value->m_alpha = alpha;
+		m_value->setBlendMode(alpha);
 	}
-}
-
-int ska::Texture::render(int x, int y, const Rectangle* clip) const {
-	if (m_value == nullptr) {
-		return -1;
-	}
-
-	checkRenderer();
-
-	Rectangle destBuf = { x, y, m_value->m_w, m_value->m_h };
-
-	if( clip != nullptr ) {
-		destBuf.w = clip->w;
-		destBuf.h = clip->h;
-	}
-
-	return m_renderer->renderCopy(*m_value.get(), clip, destBuf);
 }
 
 void ska::Texture::resize(unsigned int width, unsigned int height) {
-	m_value->m_w = width;
-	m_value->m_h = height;
-}
-
-void ska::Texture::checkRenderer() {
-	if (m_renderer == nullptr) {
-        m_renderer = SDLRenderer::getDefaultRenderer();
-        if(m_renderer == nullptr) {
-            throw IllegalStateException("The Texture's default window is not set");
-        }
+	if (m_value != nullptr) {
+		m_value->resize(width, height);
 	}
 }
 
 void ska::Texture::loadFromText(unsigned int fontSize, std::string text, Color c) {
-	checkRenderer();
-
-	loadFromKey(TextureData(*m_renderer, text, c, ska::Rectangle{}, TEXT, fontSize));
+	loadFromKey(TextureData(text, c, ska::Rectangle{}, TEXT, fontSize));
 }
 
 void ska::Texture::loadFromColoredRect(unsigned int width, unsigned int height, Color c) {
-	checkRenderer();
-
-	loadFromKey(TextureData(*m_renderer, "", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, RECT, 0));
+	loadFromKey(TextureData("", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, RECT, 0));
 	lifetimeSeparation();
 	resize(width, height);
 }
 
 unsigned int ska::Texture::getWidth() const {
-	return m_value == nullptr ? 0 : m_value->m_w;
+	return m_value == nullptr ? 0 : m_value->getWidth();
 }
 
 unsigned int ska::Texture::getHeight() const {
-	return m_value == nullptr ? 0 : m_value->m_h;
+	return m_value == nullptr ? 0 : m_value->getHeight();
 }
 
 

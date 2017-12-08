@@ -20,7 +20,8 @@ namespace ska {
 
 		~SDLSurface();
 
-		void load(const std::string& file);
+		void load(const std::string& file, Color const* colorKey);
+		void checkSurfaceValidity(const std::string& fileName);
 		void load32(const std::string& file);
 		void loadFromText(const Font& font, const std::string& text, Color c);
 		void loadFromColoredRect(const Color& color, const SDL_Rect& rect);
@@ -30,10 +31,16 @@ namespace ska {
 		const SDL_PixelFormat * getFormat() const;
 
 		SDL_Surface* getInstance() const;
-		
 
 	private:
 		void free();
+		
+		Uint8 m_r;
+		Uint8 m_g;
+		Uint8 m_b;
+		Uint8 m_a;
+
 		SDL_Surface* m_surface;
+		
 	};
 }

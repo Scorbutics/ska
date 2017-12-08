@@ -95,9 +95,9 @@ namespace ska {
 			return HandledWidget<HL...>::notify(e);
 		}
 
-		void display() const override {
+		void render(const Renderer& renderer) const override {
 			for (auto w = m_globalList.cbegin(); w != m_globalList.cend(); ++w) {
-				(*w)->display();
+				(*w)->render(renderer);
 			}
 		}
 

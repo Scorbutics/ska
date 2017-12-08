@@ -51,7 +51,6 @@
     <ClInclude Include="Graphic\GraphicComponent.h" />
     <ClInclude Include="Graphic\HasShadowComponent.h" />
     <ClInclude Include="Graphic\PositionnedGraphicDrawable.h" />
-    <ClInclude Include="Graphic\Renderable.h" />
     <ClInclude Include="Graphic\System\AbstractGraphicSystem.h" />
     <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\AnimationSystem.h" />

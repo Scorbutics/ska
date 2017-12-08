@@ -45,6 +45,10 @@ void ska::GifTexture::stop(bool x) const {
 	setLoopMode(x ? GIF_STOP : GIF_REPEAT_FOR);
 }
 
+void ska::GifTexture::refresh() const {
+	CEV_gifAnimAuto(m_animation);
+}
+
 void ska::GifTexture::setLoopMode(unsigned int loopMode) const {
     if(m_animation != nullptr) {
         CEV_gifLoopMode(m_animation, loopMode);
@@ -87,20 +91,6 @@ unsigned int ska::GifTexture::getWidth() const {
 
 unsigned int ska::GifTexture::getHeight() const {
 	return m_height;
-}
-
-int ska::GifTexture::render(int x, int y, const Rectangle* clip) const{
-
-	checkRenderer();
-	CEV_gifAnimAuto(m_animation);
-
-	Rectangle destBuf = { x, y, m_width, m_height };
-	if (clip != nullptr) {
-		destBuf.w = clip->w;
-		destBuf.h = clip->h;
-	}
-
-	return SDL_RenderCopy(m_renderer->unwrap(), m_actTexture, clip, &destBuf);
 }
 
 void ska::GifTexture::reset() const {

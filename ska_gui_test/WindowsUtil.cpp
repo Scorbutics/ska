@@ -20,6 +20,10 @@ InputContextTest* SetICT(InputContextTest* ict) {
 	return rIct;
 }
 
+MockRenderer MakeMockRenderer() {
+	return MockRenderer();
+}
+
 //TODO meilleure conception pour éviter de dépendre d'une fenêtre
 void GetWindow(){
 	static auto initialized = false;

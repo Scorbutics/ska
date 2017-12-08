@@ -4,7 +4,7 @@
 #include "Runnable.h"
 
 namespace ska {
-	typedef std::unique_ptr<Runnable> RunnablePtr;
+	using RunnablePtr = std::unique_ptr<Runnable>;
 
 	/**
 	 * \brief Holds and executes tasks.

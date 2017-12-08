@@ -35,7 +35,7 @@ namespace ska {
 		void refresh(unsigned int ellapsedTime);
 		bool isVisible() const override;
 		void hide(bool x);
-		void display() const override;
+		void render(const Renderer& renderer) const override;
 
         static std::string MENU_DEFAULT_THEME_PATH;
 

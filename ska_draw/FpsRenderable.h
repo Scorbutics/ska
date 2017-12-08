@@ -14,7 +14,7 @@ namespace ska {
 		void update(const double value);
 
 		bool isVisible() const override;
-		void display() const override;
+		void render(const Renderer& renderer) const override;
 
 	private:
 		static const int DELAY = 200;

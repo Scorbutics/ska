@@ -1,4 +1,3 @@
-#include "../ParticleGenerator.h"
 #include "SpreadingTextureParticleEffectFactory.h"
 #include "SpreadingParticleEffectFactory.h"
 #include "TextureGraphicParticleRenderer.h"
@@ -13,6 +12,6 @@ std::unique_ptr<ska::ParticleEffect> ska::SpreadingTextureParticleEffectFactory:
 	particleSystem->applyGroupProperty<GenerationDelayProperty>(data.generationDelay);
 
 	particleSystem->addUpdater<TextureAlphaParticleUpdater>(data.lifetime);
-	particleSystem->addRenderer<TextureGraphicParticleRenderer>();
+	particleSystem->addRenderer<TextureGraphicParticleRenderer>(static_cast<Renderer&>(renderer));
 	return std::move(particleSystem);
 }

@@ -31,7 +31,7 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		const int priority = static_cast<int>(pos.y - (camera == nullptr ? 0 : camera->h) - 10);
 		if (!((((static_cast<int>(relPosX + m_shadow.getWidth())) < 0) || (camera != nullptr && relPosX >= camera->w)) ||
 			((static_cast<int>(relPosY + m_shadow.getHeight()) < 0) || (camera != nullptr && relPosY >= camera->h)))) {
-			m_pgd.push_back(ska::PositionnedGraphicDrawable(m_shadow, relPosX, relPosY, priority, priority));
+			m_pgd.push_back(ska::PositionnedGraphicDrawable{ m_shadow, relPosX, relPosY, priority, priority });
 		}
 	}
 

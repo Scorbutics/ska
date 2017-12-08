@@ -96,6 +96,15 @@ namespace ska {
 		SDL_Color toNative() const {
 			return SDL_Color{ r, g, b, a };
 		}
+
+		void fill(Uint8& r_, Uint8& g_, Uint8& b_, Uint8* a_ = nullptr) const {
+			r_ = r;
+			g_ = g;
+			b_ = b;
+			if(a_ != nullptr) {
+				*a_ = a;
+			}
+		}
 	};
 
     template<>

@@ -1,6 +1,8 @@
 #include "FpsRenderable.h"
 #include "Utils/StringUtils.h"
 #include "Utils/TimeUtils.h"
+#include "Draw/Color.h"
+#include "Draw/Renderer.h"
 
 ska::FpsRenderable::FpsRenderable() :
 	m_t0(0), m_toggleVisible(true) {
@@ -27,6 +29,6 @@ void ska::FpsRenderable::setVisible(bool v) {
 	m_toggleVisible = v;
 }
 
-void ska::FpsRenderable::display() const {
-	m_fps.render(0, 0);
+void ska::FpsRenderable::render(const ska::Renderer& renderer) const {
+	renderer.render(m_fps, 0, 0);
 }

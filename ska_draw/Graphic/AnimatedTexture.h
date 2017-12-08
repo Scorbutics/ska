@@ -4,10 +4,13 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "GifTexture.h"
+#include "Utils/SkaConstants.h"
 
 namespace ska {
-	class AnimatedTexture :
-		public Renderable {
+	struct Color;
+
+	class AnimatedTexture {
+		friend class Renderer;
 	public:
 		AnimatedTexture();
 		~AnimatedTexture() = default;
@@ -18,8 +21,6 @@ namespace ska {
 		void stop(bool x);
 		void reset();
 		void nextFrame();
-
-		int render(int x, int y, const Rectangle* clip = nullptr) const override;
 
 		void setDelay(unsigned int delay);
 		void update();
@@ -41,9 +42,10 @@ namespace ska {
 		void setBlendMode(int blendMode);
 		void lifetimeSeparation();
 	private:
-
+		void refresh() const;
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
 
+	private:
 		Point<int> m_relativePos;
 		Animation m_anim;
 

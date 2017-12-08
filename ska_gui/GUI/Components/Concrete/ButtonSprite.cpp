@@ -2,6 +2,7 @@
 #include "ButtonSprite.h"
 
 #include "Utils/SpritePath.h"
+#include "Draw/Renderer.h"
 
 ska::ButtonSprite::ButtonSprite(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, unsigned int id, ClickEventHandler const& callback) :
 Button(parent, relativePos, placeHolderStyleName, nullptr, callback),
@@ -24,15 +25,16 @@ void ska::ButtonSprite::replaceWith(const std::string& path, const Rectangle& cl
 	m_clip = clip;
 }
 
-void ska::ButtonSprite::display() const {
-	if(!isVisible()) {
+void ska::ButtonSprite::render(const Renderer& renderer) const {
+	if (!isVisible()) {
 		return;
 	}
-	Button::display();
+	Button::render(renderer);
 
 	const auto& pos = getAbsolutePosition();
-	m_img.render(pos.x + m_rect.x, pos.y + m_rect.y, std::numeric_limits<int>().max() == m_clip.w ? nullptr : &m_clip);
+	renderer.render(m_img, pos.x + m_rect.x, pos.y + m_rect.y, std::numeric_limits<int>().max() == m_clip.w ? nullptr : &m_clip);
 }
+
 
 void ska::ButtonSprite::move(const Point<int>& pos) {
 	const auto& box = getBox();
