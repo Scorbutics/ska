@@ -10,6 +10,8 @@
 #include "../Utils/TimeUtils.h"
 #include "../GameApp.h"
 #include "State/StateData.h"
+#include "Window.h"
+#include "../Draw/Renderer.h"
 
 namespace ska {
 	class Window;
@@ -47,6 +49,7 @@ namespace ska {
     		m_stateHolder(m_eventDispatcher),
 			m_renderer(std::forward<RendererPtr>(renderer)) {
 
+			m_mainWindow->show();
 			m_drawables = std::make_unique<DrawableContainer>(*m_renderer);
 
             m_eventDispatcher.template addMultipleObservers<SoundEvent, WorldEvent, StateEvent>(m_soundManager, m_soundManager, *this);
@@ -139,9 +142,8 @@ namespace ska {
         void graphicUpdate(unsigned int ellapsedTime) {
         	m_stateHolder.graphicUpdate(ellapsedTime, *m_drawables);
             m_drawables->draw();
-            m_drawables->clear();
-
 			m_renderer->update();
+			m_drawables->clear();
         }
 
         void eventUpdate(unsigned int ellapsedTime) {

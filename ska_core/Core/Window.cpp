@@ -11,17 +11,25 @@ ska::Window::Window(const std::string& title, unsigned int w, unsigned int h) :
 	m_height(h < TAILLEECRANMINY ? TAILLEECRANMINY : h),
 	m_width(w < TAILLEECRANMINX ? TAILLEECRANMINX : w),
 	m_wName(title),
-	m_iconFile(nullptr){
-	m_screen = SDL_CreateWindow(title.c_str(),
-	                            SDL_WINDOWPOS_UNDEFINED,
-	                            SDL_WINDOWPOS_UNDEFINED,
-	                            w, h,
-	                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	m_iconFile(nullptr) {
+	m_screen = SDL_CreateWindow(m_wName.c_str(),
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		m_width, m_height,
+		SDL_WINDOW_OPENGL);
 
 	if (m_screen == nullptr)
 	{
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDL_GetError());
-		throw IllegalArgumentException("Bad instanciation : screen cannot be null");
+		throw IllegalArgumentException("Bad instanciation : screen is null");
+	}
+}
+
+void ska::Window::show() {
+	if (m_screen != nullptr) {
+		SDL_ShowWindow(m_screen);
+	} else {
+		SKA_LOG_INFO("Window already shown");
 	}
 }
 

@@ -14,6 +14,7 @@ namespace ska {
 	class Window {
 	public:
 		Window(const std::string& title, unsigned int w, unsigned int h);
+		void show();
 		Window& operator=(const Window&) = delete;
 		virtual ~Window();
 

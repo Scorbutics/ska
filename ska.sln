@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_ai", "ska_ai\ska_ai.vcxproj", "{8332DD40-918C-426F-AFF0-2F8BEAC20F67}"
 EndProject
@@ -66,6 +66,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_simulation", "sk
 		{509EC505-134A-4CD9-A230-7DCB8DE36695} = {509EC505-134A-4CD9-A230-7DCB8DE36695}
 		{DFF1D027-750D-4245-A5CC-CE8A53181C3D} = {DFF1D027-750D-4245-A5CC-CE8A53181C3D}
 		{FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65} = {FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65}
+		{66688DD9-292E-419F-BEA7-AE706BA382B4} = {66688DD9-292E-419F-BEA7-AE706BA382B4}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2_gif", "external\SDL2_gif\SDL2_gif.vcxproj", "{36EE709E-0EF9-45B8-8EAC-88D568C54C13}"
@@ -193,5 +194,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BAEA28C-E632-4EA1-BD92-42629E8596A2}
 	EndGlobalSection
 EndGlobal

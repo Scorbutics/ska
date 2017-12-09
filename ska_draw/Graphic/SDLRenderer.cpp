@@ -88,20 +88,16 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 	}
 }
 
-void ska::SDLRenderer::render(AnimatedTexture& at, int posX, int posY, Rectangle const* clip) const {
+void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rectangle const* clip) const {
 	at.refresh();
-	const auto& tmp = at.m_anim.getCurrentFrame();
 
-	if(at.m_gifMode) {
-		
+	auto tmp = at.m_anim.getCurrentFrame();
+
+	if(at.m_gifMode) {		
 		at.m_gif.refresh();
-
-		Rectangle destBuf = { posX + at.m_relativePos.x, posX + at.m_relativePos.y, at.m_gif.getWidth(), at.m_gif.getHeight() };
-
-		if (clip != nullptr) {
-			destBuf.w = clip->w;
-			destBuf.h = clip->h;
-		}
+				
+		tmp.x = posX + at.m_relativePos.x;
+		tmp.y = posY + at.m_relativePos.y;
 
 		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip, &tmp);
 	} else {

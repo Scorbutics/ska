@@ -30,9 +30,9 @@ namespace ska {
 
         SDL_Texture* createTextureFromSurface(const SDLSurface& s) const override;
         
-		void drawColorPoint(const Color& c, const Point<int>& pos) const;
-		void drawColorRect(const Color& c, const Rectangle& r) const;
-		void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const;
+		void drawColorPoint(const Color& c, const Point<int>& pos) const override;
+		void drawColorRect(const Color& c, const Rectangle& r) const override;
+		void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const override;
 
 		~SDLRenderer();
 
@@ -48,7 +48,7 @@ namespace ska {
 		/**
 		* \brief Makes the renderer renders
 		*/
-		void render(AnimatedTexture& t, int posX, int posY, Rectangle const*) const override;
+		void render(const AnimatedTexture& t, int posX, int posY, Rectangle const*) const override;
 
 		void update() const override;
 

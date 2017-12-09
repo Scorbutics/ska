@@ -14,7 +14,7 @@ struct MockRenderer : public ska::Renderer {
 	SDL_Texture* createTextureFromSurface(const ska::SDLSurface& surface) const override { return 0; }
 
 	void render(const ska::Texture& t, int posX, int posY, ska::Rectangle const*) const override {}
-	void render(ska::AnimatedTexture& t, int posX, int posY, ska::Rectangle const*) const override {}
+	void render(const ska::AnimatedTexture& t, int posX, int posY, ska::Rectangle const*) const override {}
 	void update() const override{}
 	void drawColorPoint(const ska::Color& c, const ska::Point<int>& pos) const override {}
 	void drawColorRect(const ska::Color& c, const ska::Rectangle& r) const override {}

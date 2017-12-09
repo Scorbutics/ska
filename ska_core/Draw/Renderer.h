@@ -16,7 +16,7 @@ namespace ska {
 		virtual ~Renderer() = default;
 
 		virtual void render(const Texture& t, int posX, int posY, Rectangle const * clip = nullptr) const = 0;
-		virtual void render(AnimatedTexture& at, int x, int y, Rectangle const * clip = nullptr) const = 0;
+		virtual void render(const AnimatedTexture& at, int x, int y, Rectangle const * clip = nullptr) const = 0;
 
 		virtual SDL_Texture* createTextureFromSurface(const SDLSurface& surface) const = 0;
 		virtual void update() const = 0;

@@ -6,6 +6,8 @@
 #include "Exceptions/FileException.h"
 #include "Graphic/SDLRenderer.h"
 #include "Core/Window.h"
+#include <SDL_image.h>
+#include "Exceptions/IllegalStateException.h"
 
 namespace ska {
 	class FileException;

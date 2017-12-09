@@ -1,6 +1,7 @@
 #include "AnimatedTexture.h"
 #include "Exceptions/IllegalStateException.h"
 #include "Draw/Color.h"
+#include "Draw/Renderer.h"
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {
@@ -129,5 +130,5 @@ void ska::AnimatedTexture::nextFrame() {
 }
 
 void ska::AnimatedTexture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
-	render(renderer, posX, posY, clip);
+	renderer.render(*this, posX, posY, clip);
 }
