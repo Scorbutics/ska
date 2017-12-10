@@ -52,6 +52,7 @@ namespace ska {
          */
         template<class S>
 		void nextState(std::unique_ptr<S>&& state) {
+			static_assert(std::is_convertible<S, State>::value, "You must provide a state type / subtype as the next state of the state holder");
 			m_nextState = std::move(state);
 		}
 

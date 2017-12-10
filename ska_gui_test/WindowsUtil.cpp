@@ -1,5 +1,4 @@
 #include "WindowsUtil.h"
-#include "Core/Window.h"
 #include <Data/Events/GameEventDispatcher.h>
 #include "Inputs/InputContextManager.h"
 #include "InputContextTest.h"

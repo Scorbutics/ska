@@ -210,7 +210,6 @@
     <ClCompile Include="Logging\ColorStream.cpp" />
     <ClCompile Include="Logging\Logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Task\TaskQueue.cpp" />
     <ClCompile Include="Utils\Demangle.cpp" />
     <ClCompile Include="Utils\FormalCalculation\FormalCalculator.cpp" />

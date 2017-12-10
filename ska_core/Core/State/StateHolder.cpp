@@ -1,6 +1,5 @@
 #include "StateHolder.h"
 #include "../../Exceptions/StateDiedException.h"
-#include "../../Utils/Observer.h"
 
 ska::StateHolder::StateHolder(GameEventDispatcher& ged) :
 	m_eventDispatcher(ged),
