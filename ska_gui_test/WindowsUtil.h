@@ -8,7 +8,6 @@ ska::GameEventDispatcher& GetGED();
 ska::RawInputListener& GetRawInputListener();
 InputContextTest* GetICT();
 ska::InputContextManager& GetICM();
-void GetWindow();
 
 struct MockRenderer : public ska::Renderer {
 	SDL_Texture* createTextureFromSurface(const ska::SDLSurface& surface) const override { return 0; }

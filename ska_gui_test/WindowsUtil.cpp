@@ -24,18 +24,8 @@ MockRenderer& MakeMockRenderer() {
 	return mr;
 }
 
-//TODO meilleure conception pour éviter de dépendre d'une fenêtre
-void GetWindow(){
-	static auto initialized = false;
-	if (!initialized) {
-		static ska::Window window("ska_gui_test", 100, 100);
-		initialized = true;
-	}
-}
-
 InputContextTest* GetICT() {
 	GetICM();
-	GetWindow();
     return SetICT(nullptr);
 }
 

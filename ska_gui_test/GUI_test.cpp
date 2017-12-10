@@ -73,8 +73,7 @@ public:
 };
 
 
-TEST_CASE("[GUI]Affichage fenetre") {
-	GetWindow();
+TEST_CASE("[GUI]Affichage fenetre") {	
 	auto mockRenderer = MakeMockRenderer();
 
     SubGUIMock gui;
