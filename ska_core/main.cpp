@@ -3,7 +3,6 @@
 //We need this include to define "main" as "SDL_main"
 
 #include "GameApp.h"
-#include "Utils/OutputUtils.h"
 
 namespace ska {
 	class TerminateProcessException;
@@ -12,8 +11,8 @@ namespace ska {
 int main(int argc, char * argv[]) {
 	(void)argc;
 	(void)argv;
-
-	auto gameApp{ ska::GameApp::get() };
+	
+	auto gameApp{ ska::GameApp::instantiate() };
 
 	try {
 		gameApp->run();

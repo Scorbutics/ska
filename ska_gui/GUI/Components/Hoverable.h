@@ -87,7 +87,7 @@ namespace ska {
 			HandledWidget<HoverEventListener, HL...>(parent) {
 			}
 
-		virtual void display() const override {
+		virtual void render(const Renderer& renderer) const override {
 		}
 
 		virtual ~Hoverable() = default;

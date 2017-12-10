@@ -5,6 +5,7 @@
 #include "Events/FocusEvent.h"
 #include "Data/Events/GUIEvent.h"
 #include "Windows/BalloonDialog.h"
+#include "Utils/SkaConstants.h"
 
 #define SCROLL_BUTTON_SPEED 3
 std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "." FILE_SEPARATOR "Menu" FILE_SEPARATOR "default_theme" FILE_SEPARATOR;
@@ -42,19 +43,6 @@ ska::GUI::~GUI() {
 	m_ged.removeMultipleObservers<GUIEvent, GameEvent, InputMouseEvent, InputKeyEvent>(*this, *this, *this, *this);
 }
 
-void ska::GUI::display() const {
-	if (m_hide) {
-		return;
-	}
-
-	m_wMaster.display();
-
-	for (auto& w : m_topWindowWidgets) {
-		w->display();
-	}
-
-	m_mouseCursor.display();
-}
 
 bool ska::GUI::refreshKeyboard(InputKeyEvent& ike) {
 	const auto& playerIcm = ike.icm;
@@ -185,6 +173,20 @@ void ska::GUI::refresh(unsigned int ellapsedTime) {
 //TODO
 void ska::GUI::hide(bool x) {
     m_hide = x;
+}
+
+void ska::GUI::render(const Renderer& renderer) const {
+	if (m_hide) {
+		return;
+	}
+
+	m_wMaster.render(renderer);
+
+	for (auto& w : m_topWindowWidgets) {
+		w->render(renderer);
+	}
+
+	m_mouseCursor.render(renderer);
 }
 
 bool ska::GUI::isVisible() const {

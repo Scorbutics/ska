@@ -5,10 +5,11 @@ namespace ska {
 	public:
 		CheckBox(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip);
 		virtual ~CheckBox() = default;
-		virtual void display() const override;
+		
 		bool getValue() const;
 		void forceValue(bool b);
 
+		void render(const Renderer& renderer) const override;
 	private:
 		bool m_value;
 		Texture m_check;

@@ -24,7 +24,6 @@
     <ClInclude Include="Draw\IGraphicSystem.h" />
     <ClInclude Include="Draw\PriorityQueueDrawableContainer.h" />
     <ClInclude Include="Draw\SDLFont.h" />
-    <ClInclude Include="Draw\SDLRenderer.h" />
     <ClInclude Include="Draw\SDLSurface.h" />
     <ClInclude Include="Draw\SDLTexture.h" />
     <ClInclude Include="Draw\TextureData.h" />
@@ -142,12 +141,14 @@
     <ClInclude Include="Utils\SubObserver.h" />
     <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\IAnimationStateMachine.h" />
-    <ClInclude Include="Utils\ManagedResource.h" />
     <ClInclude Include="ECS\SerializableComponent.h" />
     <ClInclude Include="Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="ECS\Basics\Physic\CollisionContact.h" />
     <ClInclude Include="Utils\NonCopyable.h" />
     <ClInclude Include="Logging\ColorStream.h" />
+    <ClInclude Include="Draw\Renderer.h" />
+    <ClInclude Include="Draw\Renderable.h" />
+    <ClInclude Include="Utils\ManagedResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
@@ -155,7 +156,6 @@
     <ClCompile Include="Draw\Font.cpp" />
     <ClCompile Include="Draw\PriorityQueueDrawableContainer.cpp" />
     <ClCompile Include="Draw\SDLFont.cpp" />
-    <ClCompile Include="Draw\SDLRenderer.cpp" />
     <ClCompile Include="Draw\SDLSurface.cpp" />
     <ClCompile Include="Draw\SDLTexture.cpp" />
     <ClCompile Include="Draw\TextureData.cpp" />

@@ -1,9 +1,10 @@
 #pragma once
-#include "GraphicComponent.h"
 #include "Draw/Drawable.h"
-#include "Renderable.h"
+#include "Draw/Renderer.h"
 
 namespace ska {
+	class Renderable;
+
 	class PositionnedGraphicDrawable : public Drawable {
 
 	public:
@@ -17,8 +18,8 @@ namespace ska {
 
 		void operator=(const PositionnedGraphicDrawable&) = delete;
 
-		virtual void display() const override {
-			m_graphic.render(m_positionx, m_positiony);
+		virtual void render(const Renderer& renderer) const override {
+			m_graphic.render(renderer, m_positionx, m_positiony);
 		}
 
 		virtual int getPriority() const override {

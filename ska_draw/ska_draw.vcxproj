@@ -27,6 +27,7 @@
     <ClCompile Include="Graphic\GifTexture.cpp" />
     <ClCompile Include="Graphic\GraphicComponent.cpp" />
     <ClCompile Include="Graphic\HasShadowComponent.cpp" />
+    <ClCompile Include="Graphic\SDLRenderer.cpp" />
     <ClCompile Include="Graphic\System\AbstractGraphicSystem.cpp" />
     <ClCompile Include="Graphic\System\AnimationSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFixedSystem.cpp" />
@@ -51,7 +52,7 @@
     <ClInclude Include="Graphic\GraphicComponent.h" />
     <ClInclude Include="Graphic\HasShadowComponent.h" />
     <ClInclude Include="Graphic\PositionnedGraphicDrawable.h" />
-    <ClInclude Include="Graphic\Renderable.h" />
+    <ClInclude Include="Graphic\SDLRenderer.h" />
     <ClInclude Include="Graphic\System\AbstractGraphicSystem.h" />
     <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\AnimationSystem.h" />

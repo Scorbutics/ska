@@ -1,4 +1,5 @@
 #undef main
+#include <SDL.h>
 #include "BenchmarkerCore.h"
 #include "../ska_core/Logging/Logger.h"
 #include "../ska_core/Utils/TimeUtils.h"
@@ -20,10 +21,11 @@
 
 BenchmarkerCore::BenchmarkerCore() :
 	m_window("ska Particle Benchmark", 1500, 900),
-	m_particles(400, 70000) {
-	m_window.setRenderColor(ska::Color(0, 0, 0, 255));
+	m_particles(400, 70000),
+	m_renderer(m_window, 0, SDL_RENDERER_ACCELERATED) {
+	m_renderer.setRenderColor(ska::Color(0, 0, 0, 255));
 	{
-		/*ska::Point<int> origin(950, 500);
+		ska::Point<int> origin(950, 500);
 		ska::Point<int> maxDistance(300, 0);
 		m_particles.addGenerator<ska::BoxParticleGenerator>(origin, maxDistance);
 		ska::Color cEnd(110, 10, 140, 255);
@@ -40,8 +42,8 @@ BenchmarkerCore::BenchmarkerCore() :
 		m_particles.addUpdater<ska::ColorParticleUpdater>(lifetime);
 		m_particles.addUpdater<ska::TimeParticleUpdater>(lifetime);
 
-		m_particles.addRenderer<ska::ColoredRectGraphicParticleRenderer>(m_window.getRenderer(), 1);
-		m_particles.addRenderer<ska::ConsoleParticleCountRenderer>(500);*/
+		m_particles.addRenderer<ska::ColoredRectGraphicParticleRenderer>(m_renderer, 1);
+		m_particles.addRenderer<ska::ConsoleParticleCountRenderer>(500);
 
 	}
 	/**********************************************************/
@@ -61,7 +63,7 @@ BenchmarkerCore::BenchmarkerCore() :
 	auto& grassEffect = m_particleSystem.makeEffect<ska::SpreadingTextureParticleEffectFactory>(m_window.getRenderer(), effectData);
 	grassEffect.addUpdater<ska::SideBalancingParticleUpdater>(effectData.origin, 1.F, 1.F);*/
 
-	buildFireworks();
+	//buildFireworks();
 
 }
 
@@ -80,7 +82,7 @@ void BenchmarkerCore::buildFireworks() {
 	effectData.spreadingSlices = 10;
 	effectData.density = 5;
 	effectData.maxParticles = 50;
-	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_window.getRenderer(), effectData);
+	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_renderer, effectData);
 
 	effectData.lifetime = 2000;
 	effectData.cEnd = ska::Color(110, 30, 40, 255);
@@ -88,7 +90,7 @@ void BenchmarkerCore::buildFireworks() {
 	effectData.initialVelocity.radius = 4.F;
 	effectData.origin.x = 950;
 	effectData.origin.y = 650;
-	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_window.getRenderer(), effectData);
+	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_renderer, effectData);
 
 	effectData.lifetime = 3500;
 	effectData.cEnd = ska::Color(20, 30, 140, 255);
@@ -96,7 +98,7 @@ void BenchmarkerCore::buildFireworks() {
 	effectData.initialVelocity.radius = 3.F;
 	effectData.origin.x = 1050;
 	effectData.origin.y = 350;
-	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_window.getRenderer(), effectData);
+	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_renderer, effectData);
 
 	effectData.lifetime = 2700;
 	effectData.cEnd = ska::Color(120, 30, 70, 255);
@@ -104,7 +106,7 @@ void BenchmarkerCore::buildFireworks() {
 	effectData.initialVelocity.radius = 5.F;
 	effectData.origin.x = 200;
 	effectData.origin.y = 250;
-	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_window.getRenderer(), effectData);
+	m_particleSystem.makeEffect<ska::SpreadingColorParticleEffectFactory>(m_renderer, effectData);
 }
 
 int BenchmarkerCore::onTerminate(ska::TerminateProcessException&) {
@@ -118,17 +120,19 @@ int BenchmarkerCore::onException(ska::GenericException& e) {
 
 void BenchmarkerCore::eventUpdate(const float ti) {
 	m_inputListener.update();
-	//m_attractor->move(m_inputListener.getMouseInput().getMousePos());
-	//m_particles.refresh(static_cast<unsigned>(ti));
-	m_particleSystem.refresh(static_cast<unsigned>(ti));
+	m_attractor->move(m_inputListener.getMouseInput().getMousePos());
+	m_particles.refresh(static_cast<unsigned>(ti));
+	//m_particleSystem.refresh(static_cast<unsigned>(ti));
 }
 
 void BenchmarkerCore::graphicUpdate(const unsigned long) const {
 	static const ska::Color black(0,0,0,255);
-	//m_particles.display();
-	m_particleSystem.display();
-	m_fpsCalculator.getRenderable().display();
-	m_window.display();
+	
+	m_particles.render(m_renderer);
+	//m_particleSystem.render(m_renderer);
+	m_fpsCalculator.getRenderable().render(m_renderer);
+	m_renderer.update();
+	
 }
 
 void BenchmarkerCore::run() {

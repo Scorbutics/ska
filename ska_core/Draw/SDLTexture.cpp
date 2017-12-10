@@ -1,106 +1,60 @@
-#include <iostream>
-#include <SDL_ttf.h>
-#include "SDLRenderer.h"
-#include "../Utils/SkaConstants.h"
 #include "SDLTexture.h"
 #include "SDLSurface.h"
-#include "Font.h"
 #include "TextureData.h"
-#include "../Exceptions/FileException.h"
-#include "../Logging/Logger.h"
+#include "Font.h"
+#include "../Task/WorkNode.h"
+#include "../Task/TaskQueue.h"
+#include "Renderer.h"
 
-ska::SDLTexture::SDLTexture() : m_r(0), m_g(0), m_b(0), m_texture(nullptr), m_w(0), m_h(0), m_alpha(0){
+ska::SDLTexture::SDLTexture() : 
+	m_texture(nullptr),
+	m_w(0), 
+	m_h(0) {
+	m_whenLoadedTasks = std::make_unique<TaskQueue>();
 }
 
-ska::SDLTexture::SDLTexture(TextureData& data) : m_texture(nullptr) {
+ska::SDLTexture::SDLTexture(TextureData& data) :
+	m_texture(nullptr),
+	m_w(0), 
+	m_h(0) {
+
+	m_surface = std::make_unique<SDLSurface>();
+
+	const auto& color = data.getData().second;
+
 	switch (data.type) {
 	case TEXT:
-		loadFromText(data.getRenderer(), data.fontSize, data.getData().first, data.getData().second);
+		m_surface->loadFromText(Font(data.fontSize), data.getData().first, data.getData().second);
 		break;
 	case SPRITE:
-		load(data.getRenderer(), data.getData().first, data.getData().second.r, data.getData().second.g, data.getData().second.b, data.getData().second.a);
+		m_surface->load(data.getData().first, &color);
 		break;
 	case RECT:
-		loadFromColoredRect(data.getRenderer(), data.getData().second, data.rect);
+		m_surface->loadFromColoredRect(data.getData().second, data.rect);
 		break;
 	default:
 		break;
 	}
+	m_h = m_surface->getInstance()->h;
+	m_w = m_surface->getInstance()->w;
+	m_whenLoadedTasks = std::make_unique<TaskQueue>();
 }
 
-void ska::SDLTexture::load(const SDLRenderer& renderer, const std::string& fileName, int r, int g, int b, int a) {
-	SDLSurface sprite;
-	m_texture = nullptr;
-	m_fileName = fileName;
-	m_r = static_cast<Uint8>(r);
-	m_g = static_cast<Uint8>(g);
-	m_b = static_cast<Uint8>(b);
 
-	m_w = m_h = 0;
-	m_alpha = static_cast<Uint8>((a > 0 && a < 255) ? a : 255);
-
-	sprite.load(m_fileName);
-
-	if (sprite.getInstance() == nullptr) {
-		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", m_fileName, "\" : ", SDL_GetError());
-	} else {
-		SDL_SetColorKey(sprite.getInstance(), SDL_TRUE, SDL_MapRGBA(sprite.getFormat(), m_r, m_g, m_b, m_alpha));
-	}
-
-	//255 : opaque, donc pas besoin d'appliquer de l'alpha
-	//si négatif, cela veut dire qu'on ne veut pas d'alpha non plus
-	if (m_alpha < 255) {
-		SDL_SetSurfaceAlphaMod(sprite.getInstance(), m_alpha);
-	}
-
-	if (sprite.getInstance() == nullptr) {
-		sprite.load(NOSUCHFILE);
-	}
-
-	if (sprite.getInstance() == nullptr) {
-		throw FileException("Erreur du chargement de l'image " + m_fileName + ". Après tentative de récupération, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
-	}
-
+void ska::SDLTexture::loadFromRenderer(const Renderer& renderer) {
 	free();
-	m_fileName = fileName;
-	m_texture = renderer.createTextureFromSurface(sprite);
-	m_w = sprite.getInstance()->w;
-	m_h = sprite.getInstance()->h;
+
+	m_texture = renderer.createTextureFromSurface(*m_surface);
+	m_surface = nullptr;
+
+	while (m_whenLoadedTasks->hasRunningTask()) {
+		m_whenLoadedTasks->refresh();
+	}
+	
 }
 
-void ska::SDLTexture::loadFromColoredRect(const SDLRenderer& renderer, const Color& color, const ska::Rectangle& rect) {
-	SDLSurface buffer;
-	buffer.loadFromColoredRect(color, rect);
-
-	if (buffer.getInstance() == nullptr) {
-		throw FileException("Erreur lors de la création de l'image rectangle coloree : " + std::string(TTF_GetError()));
-	}
-
-	free();
-	m_fileName = "";
-	m_texture = renderer.createTextureFromSurface(buffer);
-	m_h = buffer.getInstance()->h;
-	m_w = buffer.getInstance()->w;
-	m_alpha = color.a;
-}
-
-void ska::SDLTexture::loadFromText(const SDLRenderer& renderer, unsigned int fontSize, const std::string& text, Color c) {
-	SDLSurface buffer;
-	Font f(fontSize);
-
-	buffer.loadFromText(f, text, c);
-
-	if (buffer.getInstance() == nullptr) {
-		throw FileException("Erreur lors de la création de l'image-texte : " + std::string(TTF_GetError()));
-	}
-
-	free();
-	m_fileName = text;
-	m_texture = renderer.createTextureFromSurface(buffer);
-	m_h = buffer.getInstance()->h;
-	m_w = buffer.getInstance()->w;
-	m_alpha = c.a;
-
+bool ska::SDLTexture::isInitialized() const {
+	return m_texture != nullptr && m_surface == nullptr;
 }
 
 void ska::SDLTexture::free() {
@@ -108,11 +62,69 @@ void ska::SDLTexture::free() {
 		SDL_DestroyTexture(m_texture);
 		m_texture = nullptr;
 	}
-	m_fileName = NOSUCHFILE;
-	m_h = m_w = 0;
-	m_alpha = 255;
+	m_h = m_w = 0;	
 }
 
 ska::SDLTexture::~SDLTexture() {
 	free();
 }
+
+void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
+	auto action = [&]() {
+		SDL_SetTextureColorMod(m_texture, r, g, b);
+		return false;
+	};
+
+	if (isInitialized()) {
+		(action)();
+	} else {
+		m_whenLoadedTasks->queueTask(action);
+	}
+}
+
+void ska::SDLTexture::setBlendMode(int blending) const {
+	auto action = [&]() {
+		SDL_SetTextureBlendMode(m_texture, static_cast<SDL_BlendMode>(blending));
+		return false;
+	};
+
+	if (isInitialized()) {
+		(action)();
+	} else {
+		m_whenLoadedTasks->queueTask(std::move(action));
+	}
+}
+
+void ska::SDLTexture::setAlpha(Uint8 alpha) const {
+	auto action = [&]() {
+		SDL_SetTextureAlphaMod(m_texture, alpha);
+		return false;
+	};
+
+	if (isInitialized()) {
+		(action)();
+	} else {
+		m_whenLoadedTasks->queueTask(std::move(action));
+	}
+}
+
+unsigned ska::SDLTexture::getWidth() const{
+	 return m_w;	
+}
+
+unsigned ska::SDLTexture::getHeight() const{	
+	return m_h;
+}
+
+void ska::SDLTexture::resize(unsigned width, unsigned height) {
+	m_w = width;
+	m_h = height;
+}
+
+void ska::SDLTexture::load(const Renderer& renderer) {
+	if(!isInitialized()) {
+		loadFromRenderer(renderer);
+	}
+}
+
+

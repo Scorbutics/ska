@@ -6,6 +6,7 @@
 #include "GUI/Events/KeyEvent.h"
 #include "HandledWidgetTest.h"
 #include "WidgetTest.h"
+#include "WindowsUtil.h"
 
 unsigned int DisplayCounter::displayCounter = 0;
 std::vector<const DisplayCounter*> DisplayCounter::instances;
@@ -33,6 +34,7 @@ TEST_CASE("[WidgetPanel]Vidage de widgets") {
 }
 
 TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
+	auto renderer = MockRenderer();
 	ska::WidgetPanel<ska::ClickEventListener> wp;
 
 	wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
@@ -40,13 +42,13 @@ TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
 	wp.addWidget<WidgetTest>();
 	DisplayCounter::reset();
 
-	wp.display();
+	wp.render(renderer);
 	CHECK(DisplayCounter::getDisplayCounter() == 2);
 
 	DisplayCounter::reset();
 	wp.showWidgets(false);
 
-	wp.display();
+	wp.render(renderer);
 	CHECK(DisplayCounter::getDisplayCounter() == 0);
 }
 
@@ -247,6 +249,9 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 	SUBCASE("Avec un resort avant") {
 		DisplayCounter::reset();
+
+		auto renderer = MockRenderer();
+
 		//Trié par ordre de priorité décroissant
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt);
@@ -257,7 +262,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 		wp.resort();
 
-		wp.display();
+		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
 
 
@@ -294,13 +299,15 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 	SUBCASE("Sans resort"){
 		DisplayCounter::reset();
 
+		auto renderer = MockRenderer();
+
 		//Trié par ordre d'ajout
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt2);
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt3);
 
-		wp.display();
+		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
 	}
 

@@ -23,8 +23,8 @@ public:
 	StaticWindowTest(const ska::Rectangle& box, const std::string& styleName) : ska::WindowIG<T...>(box, styleName) {
 	}
 
-	virtual void display() const override {
-	    ska::WindowIG<T...>::display();
+	virtual void render(const ska::Renderer& r) const override {
+	    ska::WindowIG<T...>::render(r);
 	    m_callbackDisplay();
 	}
 
@@ -75,6 +75,8 @@ public:
 
 TEST_CASE("[GUI]Affichage fenetre") {
 	GetWindow();
+	auto mockRenderer = MakeMockRenderer();
+
     SubGUIMock gui;
     auto displayed = false;
 
@@ -83,7 +85,7 @@ TEST_CASE("[GUI]Affichage fenetre") {
         displayed = true;
     });
 
-    gui.display();
+    gui.render(mockRenderer);
 
 	CHECK(displayed);
 }

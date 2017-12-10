@@ -2,9 +2,10 @@
 #include <queue>
 #include <memory>
 #include "Runnable.h"
+#include <functional>
 
 namespace ska {
-	typedef std::unique_ptr<Runnable> RunnablePtr;
+	using RunnablePtr = std::unique_ptr<Runnable>;
 
 	/**
 	 * \brief Holds and executes tasks.
@@ -35,9 +36,14 @@ namespace ska {
 		 * \return The added task materialized by a Runnable instance
 		 */
 		template<typename T>
-		ska::Runnable& queueTask(std::unique_ptr<T>&& t) {
+		Runnable& queueTask(std::unique_ptr<T>&& t) {
             m_tasks.push(move(t));
             return *m_tasks.back();
+		}
+
+		Runnable& queueTask(std::function<bool()>&& t) {
+			m_tasks.push(std::make_unique<RunnableLambda>(std::forward<std::function<bool()>>(t)));
+			return *m_tasks.back();
 		}
 
 		/**

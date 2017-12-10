@@ -1,4 +1,5 @@
 #include "Label.h"
+#include "Draw/Renderer.h"
 
 ska::Label::Label(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) : 
 	Widget(parent, relativePos), 
@@ -35,13 +36,13 @@ void ska::Label::setClip(Rectangle* r) {
 	m_clip = r;
 }
 
-void ska::Label::display() const {
+void ska::Label::render(const ska::Renderer& renderer) const {
 	if (!isVisible()) {
 		return;
 	}
 
 	const auto& pos = getAbsolutePosition();
-	m_stext.render(pos.x, pos.y, m_clip);
+	renderer.render(m_stext, pos.x, pos.y, m_clip);
 }
 
 void ska::Label::clear() {

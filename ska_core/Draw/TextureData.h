@@ -4,8 +4,7 @@
 #include "../Rectangle.h"
 
 namespace ska {
-    class SDLRenderer;
-
+    
 	enum EnumTextureType {
 		SPRITE,
 		TEXT,
@@ -17,11 +16,10 @@ namespace ska {
 	 */
 	class TextureData {
 	public:
-		TextureData(SDLRenderer& r, const std::string& texturePath, Color col, const ska::Rectangle& rect, EnumTextureType type, unsigned int fs);
+		TextureData(const std::string& texturePath, Color col, const ska::Rectangle& rect, EnumTextureType type, unsigned int fs);
         TextureData();
 
 		std::pair<std::string, Color> getData() const;
-		const SDLRenderer& getRenderer() const;
 
 		virtual ~TextureData() = default;
 
@@ -31,7 +29,6 @@ namespace ska {
 
 	private:
 		std::pair<std::string, Color> m_data;
-		SDLRenderer* m_renderer;
 	};
 }
 

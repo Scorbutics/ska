@@ -1,13 +1,13 @@
-#include <iostream>
 #include "TextureGraphicParticleRenderer.h"
 #include "../ParticleGroup.h"
+#include "Draw/Renderer.h"
 
-ska::TextureGraphicParticleRenderer::TextureGraphicParticleRenderer() {
+ska::TextureGraphicParticleRenderer::TextureGraphicParticleRenderer(Renderer& nativeRenderer) : m_renderer(nativeRenderer) {
 }
 
-void ska::TextureGraphicParticleRenderer::display(const ParticleGroup& group) const {
+void ska::TextureGraphicParticleRenderer::render(const Renderer& nativeRenderer, const ParticleGroup& group) const {
 	const auto& maxSize = group.getLength();
 	for (std::size_t i = 0; i < maxSize; i++) {
-		group.appearance.render(group.pos[i].x, group.pos[i].y);
+		m_renderer.render(group.appearance, group.pos[i].x, group.pos[i].y);
 	}
 }

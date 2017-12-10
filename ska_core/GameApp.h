@@ -14,20 +14,30 @@ namespace ska {
      */
 	class GameApp : public Ticked {
 	protected:
+		using GameAppPtr = std::unique_ptr<GameApp>;
 		GameApp();
 
+		/**
+		* \brief User provided static method to inject game application dependency into the main function.
+		* \return The created game application.
+		*/
+		static GameAppPtr get();
+
 	public:
-        /**
-         * \brief Instantiates and returns a game application.
-         * \return The created game application.
-         */
-		static std::unique_ptr<GameApp> get();
+		/**
+		* \brief Instantiates and returns a game application.
+		* \return The created game application.
+		*/
+		static GameAppPtr instantiate() {
+			initialize();
+			return get();
+		}
 
         /**
          * \brief Callback function called when a TerminateProcessException occurs and is not caught.
          * \return A return value coded on an int.
          */
-		virtual int onTerminate(TerminateProcessException&) { return 0; };
+		virtual int onTerminate(TerminateProcessException&) { return 0; }
 
 		/**
          * \brief Callback function called when a GenericException occurs and is not caught.
@@ -47,5 +57,8 @@ namespace ska {
 		}
 
 		virtual ~GameApp();
+
+	private:
+		static void initialize();
 	};
 }

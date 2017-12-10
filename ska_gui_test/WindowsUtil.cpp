@@ -1,4 +1,3 @@
-#include <doctest.h>
 #include "WindowsUtil.h"
 #include "Core/Window.h"
 #include <Data/Events/GameEventDispatcher.h>
@@ -20,12 +19,16 @@ InputContextTest* SetICT(InputContextTest* ict) {
 	return rIct;
 }
 
+MockRenderer& MakeMockRenderer() {
+	static MockRenderer mr;
+	return mr;
+}
+
 //TODO meilleure conception pour éviter de dépendre d'une fenêtre
 void GetWindow(){
 	static auto initialized = false;
 	if (!initialized) {
 		static ska::Window window("ska_gui_test", 100, 100);
-		ska::SDLRenderer::setDefaultRenderer(window.getRenderer().getDefaultRenderer());
 		initialized = true;
 	}
 }

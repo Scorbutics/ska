@@ -10,8 +10,8 @@ public:
 	MoveableWindowTest(ska::MouseObservable& mo, ska::KeyObservable& ko, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(mo, ko, box, styleName) {
 	}
 
-	virtual void display() const override {
-		ska::MoveableWindow<T...>::display();
+	virtual void render(const ska::Renderer& r) const override {
+		ska::MoveableWindow<T...>::render(r);
 		m_callbackDisplay();
 	}
 

@@ -7,7 +7,7 @@ namespace ska {
 		public DrawableContainer
 	{
 	public:
-		PriorityQueueDrawableContainer();
+		PriorityQueueDrawableContainer(Renderer& renderer);
 	
 		virtual void clear() override;
 		virtual void draw() override;
@@ -20,5 +20,6 @@ namespace ska {
 			Il faut par exemple utiliser unique_ptr et surcharger l'operator< de comparaison entre
 			unique_ptr */
 		std::priority_queue<const Drawable*> m_data;
+		Renderer& m_renderer;
 	};
 }

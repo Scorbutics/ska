@@ -2,7 +2,7 @@
 #include "../World/BlockRenderable.h"
 #include "Utils/StringUtils.h"
 #include "ChipsetRenderable.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Draw/Renderer.h"
 
 
 ska::ChipsetRenderable::ChipsetRenderable(const unsigned int corrFileSize, const int blockSize, const std::string& chipsetName) :
@@ -11,10 +11,10 @@ m_animBlocks(375, 4, true, 0, 0, blockSize, blockSize) {
 	m_blocks.resize(corrFileSize);
 }
 
-void ska::ChipsetRenderable::render(ska::Point<int> pos, const BlockRenderable& block) const {
-    auto clip = m_animBlocks.getCurrentFrame();
+void ska::ChipsetRenderable::render(const Renderer& renderer, Point<int> pos, const BlockRenderable& block) const{
+	auto clip = m_animBlocks.getCurrentFrame();
 	auto chipsetPartRender = block.determineFrame(pos, &clip);
-	m_chipset.render(pos.x, pos.y, &chipsetPartRender);
+	renderer.render(m_chipset, pos.x, pos.y, &chipsetPartRender);
 }
 
 void ska::ChipsetRenderable::update(BlockRenderable& block) {

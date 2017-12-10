@@ -28,6 +28,7 @@
     <ClCompile Include="Graphic\System\DirectionnalAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\System\JumpAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\DebugEntityCollisionResponse.cpp" />
+    <ClCompile Include="Graphic\SDLRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FpsCalculator.h" />
@@ -45,14 +46,14 @@
     <ClInclude Include="Graphic\System\DeleterSystem.h" />
     <ClInclude Include="Graphic\System\GraphicSystem.h" />
     <ClInclude Include="Graphic\System\ShadowSystem.h" />
-    <ClInclude Include="Graphic\Texture.h" />
     <ClInclude Include="Graphic\GifTexture.h" />
-    <ClInclude Include="Graphic\Renderable.h" />
     <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\AnimationSystem.h" />
     <ClInclude Include="Graphic\System\WalkAnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\DirectionnalAnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\JumpAnimationStateMachine.h" />
     <ClInclude Include="Graphic\DebugEntityCollisionResponse.h" />
+    <ClInclude Include="Graphic\Texture.h" />
+    <ClInclude Include="Graphic\SDLRenderer.h" />
   </ItemGroup>
 </Project>

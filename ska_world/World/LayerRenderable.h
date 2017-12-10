@@ -27,7 +27,7 @@ namespace ska {
 		void update();
 		void clear();
 
-		void display() const override;
+		void render(const Renderer& renderer) const override;
 		bool isVisible() const override;
 
 		BlockRenderable* getBlock(unsigned int i, unsigned int j);

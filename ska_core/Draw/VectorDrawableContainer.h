@@ -15,7 +15,7 @@ namespace ska {
 		using VectorDrawable = std::vector<const Drawable*>;
 
 	public:
-		VectorDrawableContainer();
+		VectorDrawableContainer(const Renderer& renderer);
 		virtual void reserve(const unsigned int size);
 		VectorDrawable::iterator begin();
 		VectorDrawable::iterator end();
@@ -32,5 +32,6 @@ namespace ska {
 
 	private:
 		VectorDrawable m_data;
+		const Renderer& m_renderer;
 	};
 }

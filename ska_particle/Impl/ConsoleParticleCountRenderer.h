@@ -8,7 +8,7 @@ namespace ska {
 		explicit ConsoleParticleCountRenderer(unsigned int frequency);
 		virtual ~ConsoleParticleCountRenderer() = default;
 
-		void display(const ParticleGroup& group) const override;
+		void render(const Renderer& renderer, const ParticleGroup& group) const override;
 	private:
 		const unsigned int m_frequency;
 

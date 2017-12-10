@@ -1,5 +1,6 @@
 #include <limits>
 #include "Image.h"
+#include "Draw/Renderer.h"
 
 ska::Image::Image(Widget& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip) :
 	Widget(parent, relativePos),
@@ -40,11 +41,11 @@ void ska::Image::setHeight(unsigned int h) {
 	m_img.resize(m_img.getWidth(), h);
 }
 
-void ska::Image::display() const {
+void ska::Image::render(const Renderer& renderer) const {
 	if(!isVisible()) {
 		return;
 	}
-	const Point<int>& pos = getAbsolutePosition();
-	m_img.render(pos.x, pos.y, m_clip.w == std::numeric_limits<int>::max() ? nullptr : &m_clip);
+	const auto& pos = getAbsolutePosition();
+	renderer.render(m_img, pos.x, pos.y, m_clip.w == std::numeric_limits<int>::max() ? nullptr : &m_clip);
 }
 

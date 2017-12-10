@@ -5,6 +5,7 @@
 #include "../HasShadowComponent.h"
 #include "ECS/Basics/Physic/HitboxComponent.h"
 #include "AbstractGraphicSystem.h"
+#include "../AnimatedTexture.h"
 
 namespace ska {
     class ShadowSystem :

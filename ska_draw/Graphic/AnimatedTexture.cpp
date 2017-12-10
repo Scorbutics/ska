@@ -1,5 +1,7 @@
 #include "AnimatedTexture.h"
 #include "Exceptions/IllegalStateException.h"
+#include "Draw/Color.h"
+#include "Draw/Renderer.h"
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {
@@ -69,6 +71,12 @@ void ska::AnimatedTexture::lifetimeSeparation() {
 	m_sprite.lifetimeSeparation();
 }
 
+void ska::AnimatedTexture::refresh() const {
+	if(m_gifMode) {
+		m_gif.refresh();
+	}
+}
+
 void ska::AnimatedTexture::setAlpha(int alpha) {
 	m_sprite.setAlpha(static_cast<Uint8>(alpha));
 }
@@ -84,13 +92,6 @@ void ska::AnimatedTexture::setDelay(unsigned int delay) {
 
 void ska::AnimatedTexture::update() {
 	m_anim.updateFrame();
-}
-
-int ska::AnimatedTexture::render(int x, int y, const Rectangle* clip) const {
-	const ska::Rectangle& tmp = m_anim.getCurrentFrame();
-	return m_gifMode ?
-		m_gif.render(x + m_relativePos.x, y + m_relativePos.y, &tmp) :
-		    m_sprite.render(x + m_relativePos.x, y + m_relativePos.y, &tmp);
 }
 
 unsigned int ska::AnimatedTexture::getWidth() const {
@@ -126,4 +127,8 @@ void ska::AnimatedTexture::nextFrame() {
 		m_anim.nextFrame();
 	}
 	
+}
+
+void ska::AnimatedTexture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
+	renderer.render(*this, posX, posY, clip);
 }

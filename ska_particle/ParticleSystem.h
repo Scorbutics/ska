@@ -24,13 +24,14 @@ namespace ska {
 			}
 		}
 
-		void display() const {
+		void render(const Renderer& sdlRenderer) const{
 			for (const auto& e : m_effects) {
-				e->display();
+				e->render(sdlRenderer);
 			}
 		}
 
 		virtual ~ParticleSystem() = default;
+		
 
 	private:
 		std::vector<std::unique_ptr<ParticleEffect>> m_effects;

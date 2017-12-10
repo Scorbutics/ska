@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include "MouseCursor.h"
+#include "Draw/Renderer.h"
 
 ska::MouseCursor::MouseCursor(const std::string& styleName) :
 	m_basicCursor(styleName + ".png"),
@@ -27,8 +28,8 @@ void ska::MouseCursor::basic(){
 
 ska::MouseCursor::~MouseCursor(){}
 
-void ska::MouseCursor::display() const{
+void ska::MouseCursor::render(const Renderer& renderer) const{
 	if (m_currentCursor != nullptr) {
-		m_currentCursor->render(m_mousePos.x, m_mousePos.y);
+		renderer.render(*m_currentCursor, m_mousePos.x, m_mousePos.y);
 	}
 }

@@ -11,7 +11,7 @@ namespace ska {
 		void replaceWith(const std::string& imagePath, const unsigned int partsOfWidth, const unsigned int partsOfHeight, unsigned int xBlock, unsigned int yBlock);
 		virtual void setWidth(unsigned int w) override;
 		virtual void setHeight(unsigned int h) override;
-		void display() const override;
+		void render(const Renderer& renderer) const override;
 
 	private:
 		Texture m_img;
