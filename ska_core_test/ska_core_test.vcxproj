@@ -157,6 +157,7 @@
     <ClCompile Include="RectangleUtils_test.cpp" />
     <ClCompile Include="StateHolder_test.cpp" />
     <ClCompile Include="StateListener.cpp" />
+    <ClCompile Include="TaskQueue_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MockRenderer.h" />

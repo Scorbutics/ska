@@ -200,7 +200,6 @@
     <ClCompile Include="Utils\TimeUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameApp.cpp" />
-    <ClCompile Include="Core\State\State.cpp" />
     <ClCompile Include="Draw\Color.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />

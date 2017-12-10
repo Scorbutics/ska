@@ -5,7 +5,7 @@ ska::TaskQueue::TaskQueue() : m_previous(nullptr), m_current(nullptr) {
 }
 
 bool ska::TaskQueue::hasRunningTask() const {
-	return !m_tasks.empty();
+	return m_current != nullptr || !m_tasks.empty();
 }
 
 void ska::TaskQueue::refresh() {

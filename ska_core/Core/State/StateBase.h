@@ -31,14 +31,14 @@ namespace ska {
 		
 	public:
 		StateBase(EM& em, ED& ed, StateHolder& sh) :
-			State(sh),
+			m_holder(sh),
 			m_builder(sh, em, ed),
 			m_state(0) {
 		}
 
 		StateBase(EM& em, ED& ed, State& oldState) :
-			State(oldState),
-			m_builder(oldState.m_holder, em, ed),
+			m_holder(oldState.getHolder()),
+			m_builder(oldState.getHolder(), em, ed),
 			m_state(0) {
 		}
 
@@ -77,7 +77,7 @@ namespace ska {
 			}
 		}
 
-		void load(std::unique_ptr<State>* lastState) override final {
+		void load(StatePtr* lastState) override final {
 			beforeLoad(lastState);
 			m_state = 1;
 
@@ -185,6 +185,10 @@ namespace ska {
 			return m_builder.template createLogic<System>(std::forward<Args>(args)...);
 		}
 
+		StateHolder& getHolder() override {
+			return m_holder;
+		}
+
 		virtual ~StateBase() = default;
 
     protected:
@@ -215,10 +219,10 @@ namespace ska {
 			return m_builder.queueTask(std::forward<std::unique_ptr<T>>(t));
 		}
 
-		virtual void beforeLoad(std::unique_ptr<State>*) {
+		virtual void beforeLoad(StatePtr*) {
 		}
 
-		virtual void afterLoad(std::unique_ptr<State>*) {
+		virtual void afterLoad(StatePtr*) {
 		}
 
 		virtual bool beforeUnload() {
@@ -241,6 +245,8 @@ namespace ska {
 			return !m_builder.hasRunningTask();
 		}
 
+	private:
+		StateHolder& m_holder;
 		StateBuilder<EM, ED> m_builder;
 
 		std::vector<std::unique_ptr<ISystem>> m_logics;
@@ -249,7 +255,6 @@ namespace ska {
 		std::vector<std::unique_ptr<State>> m_subStates;
 		std::unordered_set<State*> m_linkedSubStates;
         int m_state;
-		
-		
+				
 	};
 }

@@ -163,7 +163,6 @@
     <ClInclude Include="Utils\VectorUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\State\State.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Data\Events\ECSEvent.h" />

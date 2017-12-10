@@ -1,23 +1,32 @@
 #include "MockState.h"
 
-MockState::MockState(ska::StateHolder& sh) : 
-	ska::State(sh) {
+MockState::MockState(fakeit::Mock<ska::State>& instance) :
+	m_instance(instance) {
+
+	fakeit::Fake(Method(m_instance, graphicUpdate));
+	fakeit::Fake(Method(m_instance, eventUpdate));
+	fakeit::Fake(Method(m_instance, load));
+	Method(m_instance, unload) = false;
 }
 
-void MockState::graphicUpdate(unsigned ellapsedTime, ska::DrawableContainer& drawables){
-	
+void MockState::graphicUpdate(unsigned ellapsedTime, ska::DrawableContainer& drawables) {
+	return m_instance().graphicUpdate(ellapsedTime, drawables);
 }
 
-void MockState::eventUpdate(unsigned){
-	
+void MockState::eventUpdate(unsigned ellapsedTime) {
+	return m_instance().eventUpdate(ellapsedTime);
 }
 
-void MockState::load(std::unique_ptr<State>* lastState){
-	
+void MockState::load(ska::StatePtr* lastState) {
+	return m_instance().load(lastState);
 }
 
-bool MockState::unload(){
-	return false;
+bool MockState::unload() {
+	return m_instance().unload();
+}
+
+ska::StateHolder& MockState::getHolder() {
+	return m_instance().getHolder();
 }
 
 
