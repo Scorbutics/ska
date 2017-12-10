@@ -15,7 +15,6 @@ namespace ska {
 		friend class SDLRenderer;
 		friend class Renderer;
 	public:
-		SDLTexture();
 		
 		explicit SDLTexture(TextureData& p);
 

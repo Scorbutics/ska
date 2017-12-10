@@ -6,13 +6,6 @@
 #include "../Task/TaskQueue.h"
 #include "Renderer.h"
 
-ska::SDLTexture::SDLTexture() : 
-	m_texture(nullptr),
-	m_w(0), 
-	m_h(0) {
-	m_whenLoadedTasks = std::make_unique<TaskQueue>();
-}
-
 ska::SDLTexture::SDLTexture(TextureData& data) :
 	m_texture(nullptr),
 	m_w(0), 
@@ -62,7 +55,6 @@ void ska::SDLTexture::free() {
 		SDL_DestroyTexture(m_texture);
 		m_texture = nullptr;
 	}
-	m_h = m_w = 0;	
 }
 
 ska::SDLTexture::~SDLTexture() {
