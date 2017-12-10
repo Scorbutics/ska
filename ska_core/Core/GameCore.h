@@ -142,8 +142,9 @@ namespace ska {
         void graphicUpdate(unsigned int ellapsedTime) {
         	m_stateHolder.graphicUpdate(ellapsedTime, *m_drawables);
             m_drawables->draw();
-			m_renderer->update();
+			
 			m_drawables->clear();
+			m_renderer->update();
         }
 
         void eventUpdate(unsigned int ellapsedTime) {
