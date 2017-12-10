@@ -1,7 +1,7 @@
 #pragma once
+#include <memory>
 #include "Data/Events/StateEvent.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include <memory>
 #include "Utils/SubObserver.h"
 
 class StateListener :

@@ -24,9 +24,6 @@
     <ClCompile Include="StateHolder_test.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="MockRenderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="StateListener.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -36,11 +33,11 @@
     <ClCompile Include="TaskQueue_test.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="WorkNode_test.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MockRenderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="StateListener.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
