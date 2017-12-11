@@ -59,8 +59,8 @@
 		<Unit filename="World/ChipsetRenderable.h" />
 		<Unit filename="World/Layer.cpp" />
 		<Unit filename="World/Layer.h" />
-		<Unit filename="World/LayerE.cpp" />
-		<Unit filename="World/LayerE.h" />
+		<Unit filename="World/LayerEvent.cpp" />
+		<Unit filename="World/LayerEvent.h" />
 		<Unit filename="World/LayerRenderable.cpp" />
 		<Unit filename="World/LayerRenderable.h" />
 		<Unit filename="World/World.cpp" />

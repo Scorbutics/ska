@@ -58,6 +58,8 @@
 		<Unit filename="Graphic/AnimatedTexture.h" />
 		<Unit filename="Graphic/Animation.cpp" />
 		<Unit filename="Graphic/Animation.h" />
+		<Unit filename="Graphic/DebugEntityCollisionResponse.cpp" />
+		<Unit filename="Graphic/DebugEntityCollisionResponse.h" />
 		<Unit filename="Graphic/GifTexture.cpp" />
 		<Unit filename="Graphic/GifTexture.h" />
 		<Unit filename="Graphic/GraphicComponent.cpp" />
@@ -65,6 +67,8 @@
 		<Unit filename="Graphic/HasShadowComponent.cpp" />
 		<Unit filename="Graphic/HasShadowComponent.h" />
 		<Unit filename="Graphic/PositionnedGraphicDrawable.h" />
+		<Unit filename="Graphic/SDLRenderer.cpp" />
+		<Unit filename="Graphic/SDLRenderer.h" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.cpp" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.h" />
 		<Unit filename="Graphic/System/AnimationStateMachine.h" />

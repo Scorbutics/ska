@@ -45,17 +45,20 @@
 		<Compiler>
 			<Add option="-std=c++14" />
 		</Compiler>
+		<Unit filename="Core/CodeDebug/CodeDebug.h" />
 		<Unit filename="Core/GameCore.h" />
 		<Unit filename="Core/Priorized.h" />
-		<Unit filename="Core/State/State.cpp" />
 		<Unit filename="Core/State/State.h" />
 		<Unit filename="Core/State/StateBase.h" />
+		<Unit filename="Core/State/StateBuilder.h" />
+		<Unit filename="Core/State/StateData.h" />
 		<Unit filename="Core/State/StateHolder.cpp" />
 		<Unit filename="Core/State/StateHolder.h" />
 		<Unit filename="Core/Window.cpp" />
 		<Unit filename="Core/Window.h" />
 		<Unit filename="Data/BlockContainer.h" />
 		<Unit filename="Data/Events/CollisionEvent.h" />
+		<Unit filename="Data/Events/ECSEvent.h" />
 		<Unit filename="Data/Events/EventDispatcher.h" />
 		<Unit filename="Data/Events/ExtensibleGameEventDispatcher.h" />
 		<Unit filename="Data/Events/GUIEvent.h" />
@@ -80,10 +83,10 @@
 		<Unit filename="Draw/IGraphicSystem.h" />
 		<Unit filename="Draw/PriorityQueueDrawableContainer.cpp" />
 		<Unit filename="Draw/PriorityQueueDrawableContainer.h" />
+		<Unit filename="Draw/Renderable.h" />
+		<Unit filename="Draw/Renderer.h" />
 		<Unit filename="Draw/SDLFont.cpp" />
 		<Unit filename="Draw/SDLFont.h" />
-		<Unit filename="Draw/SDLRenderer.cpp" />
-		<Unit filename="Draw/SDLRenderer.h" />
 		<Unit filename="Draw/SDLSurface.cpp" />
 		<Unit filename="Draw/SDLSurface.h" />
 		<Unit filename="Draw/SDLTexture.cpp" />
@@ -102,12 +105,14 @@
 		<Unit filename="ECS/Basics/Graphic/DeleterComponent.h" />
 		<Unit filename="ECS/Basics/Graphic/DialogComponent.cpp" />
 		<Unit filename="ECS/Basics/Graphic/DialogComponent.h" />
+		<Unit filename="ECS/Basics/Graphic/IAnimationStateMachine.h" />
 		<Unit filename="ECS/Basics/Input/InputComponent.cpp" />
 		<Unit filename="ECS/Basics/Input/InputComponent.h" />
 		<Unit filename="ECS/Basics/Physic/CollidableComponent.cpp" />
 		<Unit filename="ECS/Basics/Physic/CollidableComponent.h" />
 		<Unit filename="ECS/Basics/Physic/CollisionComponent.cpp" />
 		<Unit filename="ECS/Basics/Physic/CollisionComponent.h" />
+		<Unit filename="ECS/Basics/Physic/CollisionContact.h" />
 		<Unit filename="ECS/Basics/Physic/CollisionProfile.h" />
 		<Unit filename="ECS/Basics/Physic/ForceComponent.cpp" />
 		<Unit filename="ECS/Basics/Physic/ForceComponent.h" />
@@ -156,6 +161,7 @@
 		<Unit filename="Exceptions/ScriptNotActivatedException.h" />
 		<Unit filename="Exceptions/ScriptSyntaxError.h" />
 		<Unit filename="Exceptions/ScriptUnknownCommandException.h" />
+		<Unit filename="Exceptions/StateDiedException.h" />
 		<Unit filename="Exceptions/TerminateProcessException.h" />
 		<Unit filename="GameApp.cpp" />
 		<Unit filename="GameApp.h" />
@@ -186,8 +192,10 @@
 		<Unit filename="Inputs/System/InputSystem.h" />
 		<Unit filename="Inputs/WindowInput.cpp" />
 		<Unit filename="Inputs/WindowInput.h" />
+		<Unit filename="Logging/ColorStream.cpp" />
+		<Unit filename="Logging/ColorStream.h" />
+		<Unit filename="Logging/Logger.cpp" />
 		<Unit filename="Logging/Logger.h" />
-		<Unit filename="Point.cpp" />
 		<Unit filename="Point.h" />
 		<Unit filename="Rectangle.h" />
 		<Unit filename="Task/CompoundTask.h" />
@@ -206,6 +214,8 @@
 		<Unit filename="Utils/FormalCalculation/FormalCalculator.cpp" />
 		<Unit filename="Utils/FormalCalculation/FormalCalculator.h" />
 		<Unit filename="Utils/Identity.h" />
+		<Unit filename="Utils/ManagedResource.h" />
+		<Unit filename="Utils/NonCopyable.h" />
 		<Unit filename="Utils/NumberUtils.cpp" />
 		<Unit filename="Utils/NumberUtils.h" />
 		<Unit filename="Utils/OSSpecific/FileUtilsUnix.cpp" />

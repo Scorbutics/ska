@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <ctime>
+#include <typeinfo>
 #include <iomanip>
 #include "../Utils/NonCopyable.h"
 #include "ColorStream.h"
@@ -77,7 +78,7 @@ namespace ska {
 		static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
 			static const std::string classKeyword = "class ";
 			const auto paddedLength = maxLength;
-			
+
 			auto formattedCs = cs;
 			if(classKeyword == cs.substr(0, classKeyword.size())) {
 				formattedCs = cs.substr(classKeyword.size());
@@ -183,16 +184,16 @@ namespace ska {
 		}
 
 		template <class T>
-		static Logger& access(const std::string& className, T* dummy) {
+		static Logger& access(const std::string& className, T*) {
 			return staticAccess<T>(className);
 		}
 	};
 
-	
-	
+
+
 }
 
-#define SKA_REGISTER_PARSE_TYPE(X) #X 
+#define SKA_REGISTER_PARSE_TYPE(X) #X
 #define SKA_LOG_COMMON_PART_DEF_RTTI ska::LoggerFactory::access(typeid(*this).name(), this)
 #define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>(SKA_REGISTER_PARSE_TYPE(loggerClass))
 
