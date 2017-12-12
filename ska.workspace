@@ -4,9 +4,10 @@
 		<Project filename="ska_physic_simulation/ska_physic_simulation.cbp">
 			<Depends filename="ska_audio/ska_audio.cbp" />
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_physic/ska_physic.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="external/SDL2_gif/SDL2_gif.cbp" />
+			<Depends filename="ska_world/ska_world.cbp" />
 		</Project>
 		<Project filename="ska_audio/ska_audio.cbp" />
 		<Project filename="ska_core/ska_core.cbp" />
@@ -29,5 +30,6 @@
 			<Depends filename="ska_particle/ska_particle.cbp" />
 		</Project>
 		<Project filename="ska_gui/ska_gui.cbp" />
+		<Project filename="ska_world/ska_world.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

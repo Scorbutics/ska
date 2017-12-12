@@ -114,11 +114,11 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point
 	verticalSegment /= m_blockSize;
 
 	auto col = false;
-	
+
 	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
 		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
 			if (getCollision(x, y)) {
-				const Rectangle hitboxBlock{ x * m_blockSize, y * m_blockSize, m_blockSize, m_blockSize };
+				const Rectangle hitboxBlock{ static_cast<int>(x * m_blockSize), static_cast<int>(y * m_blockSize), static_cast<int>(m_blockSize), static_cast<int>(m_blockSize) };
 
 				//Vertical
 				const auto collisionContact = CollisionContact(hitbox, hitboxBlock);

@@ -11,7 +11,7 @@ namespace ska {
 int main(int argc, char * argv[]) {
 	(void)argc;
 	(void)argv;
-	
+
 	auto gameApp{ ska::GameApp::instantiate() };
 
 	try {

@@ -9,7 +9,7 @@ ska::ConsoleParticleCountRenderer::ConsoleParticleCountRenderer(unsigned int fre
 	m_frequency(frequency) {
 }
 
-void ska::ConsoleParticleCountRenderer::render(const Renderer& renderer, const ParticleGroup& group) const {
+void ska::ConsoleParticleCountRenderer::render(const Renderer&, const ParticleGroup& group) const {
 	static unsigned int lastTime = ska::TimeUtils::getTicks();
 	if(ska::TimeUtils::getTicks() - lastTime >= m_frequency) {
 		std::cout << "Particle count : " << group.getLength() << std::endl;

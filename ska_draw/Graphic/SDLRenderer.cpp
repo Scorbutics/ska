@@ -72,12 +72,12 @@ void ska::SDLRenderer::update() const {
 	renderClear();
 }
 
-void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip) const {	
+void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip) const {
 	auto instance = t.getInstance();
 	if (instance != nullptr) {
 		instance->load(*this);
 
-		Rectangle destBuf = { posX, posY, t.getWidth(), t.getHeight() };
+		Rectangle destBuf = { posX, posY, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
 
 		if (clip != nullptr) {
 			destBuf.w = clip->w;
@@ -93,9 +93,9 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 
 	auto tmp = at.m_anim.getCurrentFrame();
 
-	if(at.m_gifMode) {		
+	if(at.m_gifMode) {
 		at.m_gif.refresh();
-				
+
 		tmp.x = posX + at.m_relativePos.x;
 		tmp.y = posY + at.m_relativePos.y;
 
@@ -104,7 +104,7 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp);
 	}
 
-	
+
 }
 
 ska::SDLRenderer::~SDLRenderer() {

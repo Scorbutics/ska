@@ -21,30 +21,44 @@ ska::GameApp::~GameApp() {
 	SDL_Quit();
 }
 
-void ska::GameApp::initialize() {
-	// Chargement des images, de l'audio et du texte
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
-	}
+void ska::GameApp::require(const GameEngineDependency& ged) {
+    switch(ged) {
 
-	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
-	if (!SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
-		SKA_STATIC_LOG_MESSAGE(GameApp)("Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.");
-	}
+    case CORE:
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
+        }
 
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
-		SKA_STATIC_LOG_MESSAGE(GameApp)("Attention : Linear texture filtering impossible à activer.");
-	}
+        /* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
+        if (!SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
+            SKA_STATIC_LOG_MESSAGE(GameApp)("Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.");
+        }
 
-	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-		throw ska::IllegalStateException("Erreur lors de l'initialisation de SDL_image : " + std::string(IMG_GetError()));
-	}
+        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
+            SKA_STATIC_LOG_MESSAGE(GameApp)("Attention : Linear texture filtering impossible à activer.");
+        }
+        break;
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
-		SKA_STATIC_LOG_ERROR(GameApp)("Impossible d'initialiser SDL_mixer : ", Mix_GetError());
-	}
+    case GRAPHIC:
+        if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+            throw ska::IllegalStateException("Erreur lors de l'initialisation de SDL_image : " + std::string(IMG_GetError()));
+        }
+        break;
 
-	if (TTF_Init() == -1) {
-		SKA_STATIC_LOG_ERROR(GameApp)("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
-	}
+    case TEXT_GRAPHIC:
+        if (TTF_Init() == -1) {
+            SKA_STATIC_LOG_ERROR(GameApp)("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
+        }
+        break;
+
+    case AUDIO:
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
+            SKA_STATIC_LOG_ERROR(GameApp)("Impossible d'initialiser SDL_mixer : ", Mix_GetError());
+        }
+        break;
+
+    default:
+        SKA_STATIC_LOG_ERROR(GameApp)("Unsupported game engine dependency : ", ged);
+        break;
+    }
 }

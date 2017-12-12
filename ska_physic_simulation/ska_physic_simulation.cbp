@@ -39,6 +39,7 @@
 			<Add directory="../ska_draw" />
 			<Add directory="../ska_audio" />
 			<Add directory="../ska_physic" />
+			<Add directory="../ska_world" />
 		</Compiler>
 		<Linker>
 			<Add option="-lSDL2_gif" />
@@ -46,11 +47,13 @@
 			<Add option="-lska_draw" />
 			<Add option="-lska_audio" />
 			<Add option="-lska_physic" />
+			<Add option="-lska_world" />
 			<Add library="libSDL2_gif.a" />
 			<Add library="libska_core.a" />
 			<Add library="libska_draw.a" />
 			<Add library="libska_audio.a" />
 			<Add library="libska_physic.a" />
+			<Add library="libska_world.a" />
 		</Linker>
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.h" />

@@ -53,7 +53,7 @@ namespace ska {
         AnimationSystem& operator=(const AnimationSystem&) = delete;
         virtual ~AnimationSystem() = default;
 
-      virtual void refresh(unsigned int ellapsedTime) override {
+      virtual void refresh(unsigned int ) override {
         const auto& processed = getEntities();
         for (auto entityId : processed) {
           auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);

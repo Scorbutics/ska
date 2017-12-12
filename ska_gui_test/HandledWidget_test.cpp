@@ -21,7 +21,7 @@ TEST_CASE("[HandledWidget]Dimensions par defaut") {
 TEST_CASE("[HandledWidget]Evenement de clic direct") {
     HandledWidgetTest<ska::ClickEventListener> t;
     auto clicked = false;
-    t.addHandler<ska::ClickEventListener>([&](ska::Widget* tthis, ska::ClickEvent& ce) {
+    t.addHandler<ska::ClickEventListener>([&](ska::Widget*, ska::ClickEvent& ) {
         clicked = true;
     });
 
@@ -45,15 +45,15 @@ TEST_CASE("[HandledWidget]Handlers ordonnes par ordre d'ajout") {
     expected.push_back(0);
     expected.push_back(1);
 
-    t.addHandler<ska::ClickEventListener>([&](ska::Widget* tthis, ska::ClickEvent& ce) {
+    t.addHandler<ska::ClickEventListener>([&](ska::Widget*, ska::ClickEvent&) {
         eventList.push_back(0);
     });
 
-    t.addHandler<ska::ClickEventListener>([&](ska::Widget* tthis, ska::ClickEvent& ce) {
+    t.addHandler<ska::ClickEventListener>([&](ska::Widget*, ska::ClickEvent&) {
         eventList.push_back(1);
     });
 
-    t.addHeadHandler<ska::ClickEventListener>([&](ska::Widget* tthis, ska::ClickEvent& ce) {
+    t.addHeadHandler<ska::ClickEventListener>([&](ska::Widget*, ska::ClickEvent&) {
         eventList.push_back(2);
     });
 

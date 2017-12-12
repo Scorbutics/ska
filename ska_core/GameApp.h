@@ -4,6 +4,13 @@
 #include "Ticked.h"
 
 namespace ska {
+    enum GameEngineDependency {
+        CORE = 0,
+        GRAPHIC = 1 << 0,
+        TEXT_GRAPHIC = 1 << 1,
+        AUDIO = 1 << 2
+    };
+
 	class GenericException;
 
     /**
@@ -23,13 +30,15 @@ namespace ska {
 		*/
 		static GameAppPtr get();
 
+		static void require(const GameEngineDependency& ged);
+
 	public:
 		/**
 		* \brief Instantiates and returns a game application.
 		* \return The created game application.
 		*/
 		static GameAppPtr instantiate() {
-			initialize();
+			//require(GameEngineDependency::CORE);
 			return get();
 		}
 
@@ -58,7 +67,5 @@ namespace ska {
 
 		virtual ~GameApp();
 
-	private:
-		static void initialize();
 	};
 }

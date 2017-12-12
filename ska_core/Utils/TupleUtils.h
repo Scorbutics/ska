@@ -19,7 +19,7 @@ namespace ska {
 		using SeqRange = typename Gens<ArgsSizeof>::type;
 
 		template<typename T, typename F, int... Is>
-		static void for_each(T&& t, F&& f, SeqList<Is...> seq) {
+		static void for_each(T&& t, F&& f, SeqList<Is...>) {
 			int dummy[] = { 0, ((void)std::forward<F>(f)(std::get<Is>(t)), 0)... };
 			(void)dummy;
 		}

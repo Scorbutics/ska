@@ -2,8 +2,8 @@
 #include "IAnimationStateMachine.h"
 
 ska::AnimationComponent::AnimationComponent() :
-	animationFiniteStateMachine(nullptr),
-    state(0) {
+	state(0),
+    animationFiniteStateMachine(nullptr) {
     /*type(DirectionalAnimationType::MOVEMENT), looked(0) {
     static auto initialized = false;
     if (!initialized) {

@@ -22,10 +22,10 @@ StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
 	m_eventDispatcher(data.m_eventDispatcher),
 	m_entityManager(data.m_entityManager),
 	m_debugEntityCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_entityCollision(data.m_eventDispatcher, data.m_entityManager), 
-	m_walkASM(nullptr),
+	m_entityCollision(data.m_eventDispatcher, data.m_entityManager),
+	m_debugWorldCollision(data.m_eventDispatcher, data.m_entityManager),
 	m_worldCollisionResponse(m_world, data.m_eventDispatcher, data.m_entityManager),
-	m_debugWorldCollision(data.m_eventDispatcher, data.m_entityManager) {
+	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
 

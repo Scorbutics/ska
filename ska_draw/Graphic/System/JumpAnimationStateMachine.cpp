@@ -1,4 +1,3 @@
-#pragma once
 #include "JumpAnimationStateMachine.h"
 #include "ECS/EntityManager.h"
 #include "Utils/NumberUtils.h"
