@@ -1,9 +1,9 @@
 #include <SDL_image.h>
 #include "Font.h"
 #include "SDLSurface.h"
-#include "../Exceptions/FileException.h"
-#include "../Logging/Logger.h"
-#include "../Utils/SkaConstants.h"
+#include "Exceptions/FileException.h"
+#include "Logging/Logger.h"
+#include "Utils/SkaConstants.h"
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
 	m_surface = nullptr;

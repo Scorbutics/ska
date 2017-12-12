@@ -1,8 +1,7 @@
 #pragma once
-#include <iostream>
 #include <vector>
 #include "Point.h"
-#include "Draw/Color.h"
+#include "Graphic/Color.h"
 #include "Graphic/Texture.h"
 #include "Logging/Logger.h"
 

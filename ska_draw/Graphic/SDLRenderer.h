@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "Draw/Renderer.h"
 #include "Point.h"
-#include "Draw/Color.h"
+#include "Color.h"
 
 namespace ska {
 	class Window;

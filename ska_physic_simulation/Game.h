@@ -10,7 +10,7 @@ class Game :
 	public GameBase {
 
 public:
-	Game(RendererPtr&& renderer, WindowPtr&& window);
+	Game(ska::GameConfiguration&& gc, RendererPtr&& renderer, WindowPtr&& window);
 	virtual ~Game() = default;
 
 private:

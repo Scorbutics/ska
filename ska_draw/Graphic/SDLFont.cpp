@@ -1,8 +1,8 @@
 #include <iostream>
 #include "SDLFont.h"
-#include "../Utils/SkaConstants.h"
-#include "../Exceptions/FileException.h"
-#include "../Utils/FileUtils.h"
+#include "Utils/SkaConstants.h"
+#include "Exceptions/FileException.h"
+#include "Utils/FileUtils.h"
 
 std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts" FILE_SEPARATOR "FiraSans-Medium.ttf";
 

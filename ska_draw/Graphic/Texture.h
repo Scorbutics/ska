@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Utils/ManagedResource.h"
-#include "Draw/SDLTexture.h"
-#include "Draw/TextureData.h"
+
 #include "Utils/SkaConstants.h"
 #include "Rectangle.h"
-#include "Draw/Color.h"
 #include "Draw/Renderable.h"
+#include "SDLTexture.h"
+#include "TextureData.h"
 
 namespace ska {
 	class Renderer;

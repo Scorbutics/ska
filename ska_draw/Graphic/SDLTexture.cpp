@@ -2,9 +2,9 @@
 #include "SDLSurface.h"
 #include "TextureData.h"
 #include "Font.h"
-#include "../Task/WorkNode.h"
-#include "../Task/TaskQueue.h"
-#include "Renderer.h"
+#include "Task/WorkNode.h"
+#include "Task/TaskQueue.h"
+#include "Draw/Renderer.h"
 
 ska::SDLTexture::SDLTexture(TextureData& data) :
 	m_texture(nullptr),

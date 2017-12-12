@@ -2,8 +2,9 @@
 #include <unordered_map>
 #include <memory>
 #include "Point.h"
-#include "Draw/Color.h"
+#include "Graphic/Color.h"
 #include "Chipset.h"
+
 namespace ska {
 	class Block;
 	typedef std::unique_ptr<Block> BlockPtr;

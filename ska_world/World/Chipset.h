@@ -1,12 +1,10 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
-#include "Draw/Color.h"
+#include "Graphic/Color.h"
 #include "Point.h"
-#include "Draw/SDLSurface.h"
-#include "Graphic/Texture.h"
+#include "Graphic/SDLSurface.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "Graphic/Animation.h"
 #include "ChipsetRenderable.h"
 
 namespace ska {

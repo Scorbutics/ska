@@ -1,15 +1,11 @@
 #pragma once
 #include <memory>
+
 #include "Exceptions/TerminateProcessException.h"
 #include "Ticked.h"
+#include "Core/GameConfiguration.h"
 
 namespace ska {
-    enum GameEngineDependency {
-        CORE = 0,
-        GRAPHIC = 1 << 0,
-        TEXT_GRAPHIC = 1 << 1,
-        AUDIO = 1 << 2
-    };
 
 	class GenericException;
 
@@ -20,9 +16,10 @@ namespace ska {
      * Instead of creating a "main" function, you have to define this "get" function and also, a GameApp instance.
      */
 	class GameApp : public Ticked {
+
 	protected:
 		using GameAppPtr = std::unique_ptr<GameApp>;
-		GameApp();
+		explicit GameApp(ska::GameConfiguration&& gc);
 
 		/**
 		* \brief User provided static method to inject game application dependency into the main function.
@@ -30,15 +27,12 @@ namespace ska {
 		*/
 		static GameAppPtr get();
 
-		static void require(const GameEngineDependency& ged);
-
 	public:
 		/**
 		* \brief Instantiates and returns a game application.
 		* \return The created game application.
 		*/
 		static GameAppPtr instantiate() {
-			//require(GameEngineDependency::CORE);
 			return get();
 		}
 
@@ -61,11 +55,13 @@ namespace ska {
 
 		virtual float ticksWanted() const override {
 			const static auto FPS = 60U;
-			const static float TICKS = 1000.F / FPS;
+			const static auto TICKS = 1000.F / FPS;
 			return TICKS;
 		}
 
-		virtual ~GameApp();
-
+		virtual ~GameApp() = default;
+	
+	private:
+		GameConfiguration&& m_gameConfig;
 	};
 }

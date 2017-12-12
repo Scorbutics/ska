@@ -23,12 +23,14 @@
     <ClCompile Include="Audio\SDLMusic.cpp" />
     <ClCompile Include="Audio\SDLSound.cpp" />
     <ClCompile Include="Audio\SoundRenderer.cpp" />
+    <ClCompile Include="SoundModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Music.h" />
     <ClInclude Include="Audio\SDLMusic.h" />
     <ClInclude Include="Audio\SDLSound.h" />
     <ClInclude Include="Audio\SoundRenderer.h" />
+    <ClInclude Include="SoundModule.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DFF1D027-750D-4245-A5CC-CE8A53181C3D}</ProjectGuid>

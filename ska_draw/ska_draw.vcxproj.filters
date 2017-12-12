@@ -29,6 +29,13 @@
     <ClCompile Include="Graphic\System\JumpAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\DebugEntityCollisionResponse.cpp" />
     <ClCompile Include="Graphic\SDLRenderer.cpp" />
+    <ClCompile Include="GraphicModule.cpp" />
+    <ClCompile Include="Graphic\SDLFont.cpp" />
+    <ClCompile Include="Graphic\SDLSurface.cpp" />
+    <ClCompile Include="Graphic\SDLTexture.cpp" />
+    <ClCompile Include="Graphic\Color.cpp" />
+    <ClCompile Include="Graphic\Font.cpp" />
+    <ClCompile Include="Graphic\TextureData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FpsCalculator.h" />
@@ -55,5 +62,12 @@
     <ClInclude Include="Graphic\DebugEntityCollisionResponse.h" />
     <ClInclude Include="Graphic\Texture.h" />
     <ClInclude Include="Graphic\SDLRenderer.h" />
+    <ClInclude Include="GraphicModule.h" />
+    <ClInclude Include="Graphic\SDLFont.h" />
+    <ClInclude Include="Graphic\SDLSurface.h" />
+    <ClInclude Include="Graphic\SDLTexture.h" />
+    <ClInclude Include="Graphic\Font.h" />
+    <ClInclude Include="Graphic\Color.h" />
+    <ClInclude Include="Graphic\TextureData.h" />
   </ItemGroup>
 </Project>

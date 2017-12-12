@@ -12,7 +12,7 @@ class BenchmarkerCore :
 	public ska::GameApp {
 
 public:
-	BenchmarkerCore();
+	BenchmarkerCore(ska::GameConfiguration&& gc);
 	virtual ~BenchmarkerCore() = default;
 	int onTerminate(ska::TerminateProcessException&) override;
 	int onException(ska::GenericException&) override;

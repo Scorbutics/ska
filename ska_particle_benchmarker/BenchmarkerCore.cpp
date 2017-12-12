@@ -18,8 +18,11 @@
 #include "Impl/SpreadingTextureParticleEffectFactory.h"
 #include "Utils/FileUtils.h"
 #include "Impl/SideBalancingParticleUpdater.h"
+#include "CoreModule.h"
+#include "GraphicModule.h"
 
-BenchmarkerCore::BenchmarkerCore() :
+BenchmarkerCore::BenchmarkerCore(ska::GameConfiguration&& gc) :
+	ska::GameApp(std::forward<ska::GameConfiguration>(gc)),
 	m_window("ska Particle Benchmark", 1500, 900),
 	m_particles(400, 70000),
 	m_renderer(m_window, 0, SDL_RENDERER_ACCELERATED) {
@@ -169,5 +172,8 @@ float BenchmarkerCore::ticksWanted() const{
 
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	return std::make_unique<BenchmarkerCore>();
+	ska::GameConfiguration gc;
+	gc.requireModule<CoreModule>("Core");
+	gc.requireModule<GraphicModule>("Graphics");
+	return std::make_unique<BenchmarkerCore>(std::move(gc));
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <string>
 #include "Color.h"
 
 namespace ska {

@@ -40,7 +40,8 @@ namespace ska {
         /**
          * \brief Constructor that builds a basic context from a file.
          */
-	    explicit GameCore(RendererPtr&& renderer, WindowPtr&& window) :
+	    explicit GameCore(GameConfiguration&& gc, RendererPtr&& renderer, WindowPtr&& window) :
+    		GameApp(std::forward<GameConfiguration>(gc)),
 			Observer<StateEvent>(std::bind(&GameCore::onStateEvent, this, std::placeholders::_1)),
 			m_mainWindow(std::forward<WindowPtr>(window)),
     		m_entityManager(m_eventDispatcher),

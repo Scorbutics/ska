@@ -7,6 +7,10 @@
 class AppTest : public ska::GameApp {
 public:
 
+	explicit AppTest(ska::GameConfiguration&& gc)
+		: ska::GameApp(std::forward<ska::GameConfiguration>(gc)) {
+	}
+
 	virtual int onTerminate(ska::TerminateProcessException&) { std::cout << "Terminate process" << std::endl; return 0; };
 	virtual int onException(ska::GenericException&) { std::cout << "Terminate process" << std::endl; return 0; }
 
@@ -25,10 +29,14 @@ public:
 		if (context.shouldExit()) {
 			throw ska::TerminateProcessException("Context exit");
 		}
-	};
+	}
+
+	virtual ~AppTest() override {}
 };
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get(){
-	return std::make_unique<AppTest>();
+	ska::GameConfiguration gc;
+	return std::make_unique<AppTest>(std::move(gc));
 }
+
 

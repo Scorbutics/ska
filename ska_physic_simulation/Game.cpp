@@ -1,13 +1,14 @@
 #include "Game.h"
 #include "Inputs/KeyboardInputMapContext.h"
 #include "Inputs/KeyboardInputGUIContext.h"
-#include "Draw/SDLFont.h"
+#include "Graphic/SDLFont.h"
 #include "StateSandbox.h"
 #include "Exceptions/FileException.h"
 #include "Graphic/SDLRenderer.h"
 #include "Core/Window.h"
-#include <SDL_image.h>
 #include "Exceptions/IllegalStateException.h"
+#include "CoreModule.h"
+#include "GraphicModule.h"
 
 namespace ska {
 	class FileException;
@@ -30,15 +31,19 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	static constexpr auto tailleblocFenetre = 32;
 	auto window = std::make_unique<Window>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
-	return std::make_unique<Game>(std::move(renderer), std::move(window));
+
+	ska::GameConfiguration gc;
+	gc.requireModule<CoreModule>("Core");
+	gc.requireModule<GraphicModule>("Graphics");
+	return std::make_unique<Game>(std::move(gc), std::move(renderer), std::move(window));
 }
 
 void LogsConfiguration() {
 	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
 }
 
-Game::Game(RendererPtr&& renderer, WindowPtr&& window) : 
-	GameCore(std::forward<RendererPtr>(renderer), std::forward<WindowPtr>(window)) {
+Game::Game(ska::GameConfiguration&& gc, RendererPtr&& renderer, WindowPtr&& window) : 
+	GameCore(std::forward<ska::GameConfiguration>(gc), std::forward<RendererPtr>(renderer), std::forward<WindowPtr>(window)) {
 	
 	/* Configure inputs types */
 	addInputContext<ska::KeyboardInputMapContext>(ska::EnumContextManager::CONTEXT_MAP);

@@ -16,17 +16,11 @@
     <ClInclude Include="Data\GameEventDispatcher.h" />
     <ClInclude Include="Data\Savegame.h" />
     <ClInclude Include="Draw\CameraAware.h" />
-    <ClInclude Include="Draw\Color.h" />
     <ClInclude Include="Draw\Drawable.h" />
     <ClInclude Include="Draw\DrawableContainer.h" />
     <ClInclude Include="Draw\DrawableFixedPriority.h" />
-    <ClInclude Include="Draw\Font.h" />
     <ClInclude Include="Draw\IGraphicSystem.h" />
     <ClInclude Include="Draw\PriorityQueueDrawableContainer.h" />
-    <ClInclude Include="Draw\SDLFont.h" />
-    <ClInclude Include="Draw\SDLSurface.h" />
-    <ClInclude Include="Draw\SDLTexture.h" />
-    <ClInclude Include="Draw\TextureData.h" />
     <ClInclude Include="Draw\VectorDrawableContainer.h" />
     <ClInclude Include="ECS\Basics\Graphic\CameraFocusedComponent.h" />
     <ClInclude Include="ECS\Basics\Graphic\DebugGraphicComponent.h" />
@@ -149,16 +143,14 @@
     <ClInclude Include="Draw\Renderer.h" />
     <ClInclude Include="Draw\Renderable.h" />
     <ClInclude Include="Utils\ManagedResource.h" />
+    <ClInclude Include="CoreModule.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="Core\GameConfiguration.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Data\Events\SoundEvent.cpp" />
-    <ClCompile Include="Draw\Font.cpp" />
     <ClCompile Include="Draw\PriorityQueueDrawableContainer.cpp" />
-    <ClCompile Include="Draw\SDLFont.cpp" />
-    <ClCompile Include="Draw\SDLSurface.cpp" />
-    <ClCompile Include="Draw\SDLTexture.cpp" />
-    <ClCompile Include="Draw\TextureData.cpp" />
     <ClCompile Include="Draw\VectorDrawableContainer.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\CameraFocusedComponent.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\DebugGraphicComponent.cpp" />
@@ -200,7 +192,6 @@
     <ClCompile Include="Utils\TimeUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameApp.cpp" />
-    <ClCompile Include="Draw\Color.cpp" />
     <ClCompile Include="Inputs\WindowInput.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />
     <ClCompile Include="ECS\Basics\Graphic\AnimationComponent.cpp" />
@@ -208,5 +199,7 @@
     <ClCompile Include="ECS\SerializableComponent.cpp" />
     <ClCompile Include="Logging\ColorStream.cpp" />
     <ClCompile Include="Logging\Logger.cpp" />
+    <ClCompile Include="CoreModule.cpp" />
+    <ClCompile Include="Module.cpp" />
   </ItemGroup>
 </Project>

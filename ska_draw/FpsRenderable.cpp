@@ -1,7 +1,6 @@
 #include "FpsRenderable.h"
 #include "Utils/StringUtils.h"
 #include "Utils/TimeUtils.h"
-#include "Draw/Color.h"
 #include "Draw/Renderer.h"
 
 ska::FpsRenderable::FpsRenderable() :

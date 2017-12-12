@@ -1,6 +1,6 @@
 #pragma once
 #include "SDLFont.h"
-#include "../Utils/ManagedResource.h"
+#include "Utils/ManagedResource.h"
 
 namespace ska {
 	class Font : public ManagedResource<SDLFont, int> {

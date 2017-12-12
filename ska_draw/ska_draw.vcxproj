@@ -19,15 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graphic\Color.cpp" />
+    <ClCompile Include="Graphic\Font.cpp" />
     <ClCompile Include="FpsCalculator.cpp" />
     <ClCompile Include="FpsRenderable.cpp" />
+    <ClCompile Include="GraphicModule.cpp" />
     <ClCompile Include="Graphic\AnimatedTexture.cpp" />
     <ClCompile Include="Graphic\Animation.cpp" />
     <ClCompile Include="Graphic\DebugEntityCollisionResponse.cpp" />
     <ClCompile Include="Graphic\GifTexture.cpp" />
     <ClCompile Include="Graphic\GraphicComponent.cpp" />
     <ClCompile Include="Graphic\HasShadowComponent.cpp" />
+    <ClCompile Include="Graphic\SDLFont.cpp" />
     <ClCompile Include="Graphic\SDLRenderer.cpp" />
+    <ClCompile Include="Graphic\SDLSurface.cpp" />
+    <ClCompile Include="Graphic\SDLTexture.cpp" />
     <ClCompile Include="Graphic\System\AbstractGraphicSystem.cpp" />
     <ClCompile Include="Graphic\System\AnimationSystem.cpp" />
     <ClCompile Include="Graphic\System\CameraFixedSystem.cpp" />
@@ -41,10 +47,14 @@
     <ClCompile Include="Graphic\System\ShadowSystem.cpp" />
     <ClCompile Include="Graphic\System\WalkAnimationStateMachine.cpp" />
     <ClCompile Include="Graphic\Texture.cpp" />
+    <ClCompile Include="Graphic\TextureData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphic\Color.h" />
+    <ClInclude Include="Graphic\Font.h" />
     <ClInclude Include="FpsCalculator.h" />
     <ClInclude Include="FpsRenderable.h" />
+    <ClInclude Include="GraphicModule.h" />
     <ClInclude Include="Graphic\AnimatedTexture.h" />
     <ClInclude Include="Graphic\Animation.h" />
     <ClInclude Include="Graphic\DebugEntityCollisionResponse.h" />
@@ -52,7 +62,10 @@
     <ClInclude Include="Graphic\GraphicComponent.h" />
     <ClInclude Include="Graphic\HasShadowComponent.h" />
     <ClInclude Include="Graphic\PositionnedGraphicDrawable.h" />
+    <ClInclude Include="Graphic\SDLFont.h" />
     <ClInclude Include="Graphic\SDLRenderer.h" />
+    <ClInclude Include="Graphic\SDLSurface.h" />
+    <ClInclude Include="Graphic\SDLTexture.h" />
     <ClInclude Include="Graphic\System\AbstractGraphicSystem.h" />
     <ClInclude Include="Graphic\System\AnimationStateMachine.h" />
     <ClInclude Include="Graphic\System\AnimationSystem.h" />
@@ -67,6 +80,7 @@
     <ClInclude Include="Graphic\System\ShadowSystem.h" />
     <ClInclude Include="Graphic\System\WalkAnimationStateMachine.h" />
     <ClInclude Include="Graphic\Texture.h" />
+    <ClInclude Include="Graphic\TextureData.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FC4EB4A0-2033-47EA-B5E9-EFB0DAE59A65}</ProjectGuid>
