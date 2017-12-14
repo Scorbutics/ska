@@ -7,58 +7,13 @@
 namespace ska {
 	/**
 	 * \brief Internal helper class that builds states and sub-states, as a factory.
-	 * \tparam EntityManager 
-	 * \tparam EventDispatcher 
+	 * \tparam EntityManager
 	 */
-	template <class EntityManager, class EventDispatcher>
+	template <class EntityManager>
 	class StateBuilder {
 		public:
-			StateBuilder(StateHolder& holder, EntityManager& em, EventDispatcher& ed) :
-				m_data(em, ed), 
-				m_holder(holder) {
-			}
-
-			template<class State, class ... Args>
-			State* makeNextState(Args&&... args) {
-				auto nState = std::make_unique<State>(m_data, m_holder, std::forward<Args>(args)...);
-				auto result = nState.get();
-				m_holder.nextState(std::move(nState));
-				m_holder.update();
-				return result;
-			}
-
-			template<class StateT, class SubState, class ... Args>
-			SubState* makeNextStateAndTransmitLinkedSubstates(StateT& oldState, Args&&... args) {
-				auto nState = std::make_unique<SubState>(m_data, oldState, std::forward<Args>(args)...);
-				auto result = nState.get();
-				m_holder.nextState(std::move(nState));
-				result->transmitLinkedSubstates(oldState);
-				m_holder.update();
-				return result;
-			}
-
-			template<class StateT, class ...Args>
-			StateT* addSubState(std::vector<std::unique_ptr<State>>& subStates, Args&& ... args) {
-				auto s = std::make_unique<StateT>(m_data, m_holder, std::forward<Args>(args)...);
-				auto result = static_cast<StateT*>(s.get());			
-				subStates.push_back(std::move(s));
-				return result;
-			}
-
-			template<class StateT>
-			std::unique_ptr<StateT> removeSubState(std::vector<std::unique_ptr<State>>& subStates, StateT& subState) {
-				auto it = std::remove_if(subStates.begin(), subStates.end(), [&subState](const auto& c) {
-					return c.get() == &subState;
-				});
-				
-				auto removedState = std::move(*it);
-				subStates.erase(it, subStates.end());
-				return std::move(removedState);
-			}
-
-			template<class System, class ...Args>
-			std::unique_ptr<System> createLogic(Args&&... args) {
-				return std::make_unique<System>(m_data.m_entityManager, std::forward<Args>(args)...);
+			StateBuilder(EntityManager& em) :
+				m_entityManager(em) {
 			}
 
 			template<class System, class ...Args>
@@ -73,7 +28,7 @@ namespace ska {
 
 			template<class System, class ...Args>
 			System* addPriorizedGraphic(std::vector<std::unique_ptr<IGraphicSystem>>& graphics, int priority, Args&& ... args) {
-				auto system = std::make_unique<System>(m_data.m_entityManager, std::forward<Args>(args)...);
+				auto system = std::make_unique<System>(m_entityManager, std::forward<Args>(args)...);
 				auto result = static_cast<System*>(system.get());
 				graphics.push_back(std::move(system));
 				std::sort(graphics.begin(), graphics.end(), Priorized::comparatorInf<std::unique_ptr<IGraphicSystem>>);
@@ -81,18 +36,12 @@ namespace ska {
 				return result;
 			}
 
-			template <class Task>
-			ska::Runnable& queueTask(std::unique_ptr<Task>&& t){
-				return m_holder.queueTask(std::forward<std::unique_ptr<Task>>(t));
-			}
-
-			bool hasRunningTask() const {
-				return m_holder.hasRunningTask();
-			}
-
 	private:
-		using StateData = StateData<EntityManager, EventDispatcher>;
-		StateData m_data;
-		StateHolder& m_holder;
+        template<class System, class ...Args>
+        std::unique_ptr<System> createLogic(Args&&... args) {
+            return std::make_unique<System>(m_entityManager, std::forward<Args>(args)...);
+        }
+
+		ska::EntityManager& m_entityManager;
 	};
 }

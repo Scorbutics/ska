@@ -11,13 +11,13 @@
 #include "Physic/System/DebugWorldCollisionResponse.h"
 
 class StateSandbox :
-	public ska::StateBase<ska::EntityManager, ska::ExtensibleGameEventDispatcher<>>,
+	public ska::StateBase<ska::EntityManager>,
 	public ska::SubObserver<ska::GameEvent> {
 public:
-	StateSandbox(StateData& data, ska::StateHolder& sh);
-	
+	StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>&);
+
 	virtual ~StateSandbox() = default;
-	
+
 	virtual void onGraphicUpdate(unsigned int, ska::DrawableContainer&) override;
 	virtual void onEventUpdate(unsigned int) override;
 

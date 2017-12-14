@@ -15,16 +15,16 @@
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
 
-StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
-	StateBase(data.m_entityManager, data.m_eventDispatcher, sh),
-	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), data.m_eventDispatcher),
+StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
+	StateBase(em),
+	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	m_cameraSystem(nullptr),
-	m_eventDispatcher(data.m_eventDispatcher),
-	m_entityManager(data.m_entityManager),
-	m_debugEntityCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_entityCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_debugWorldCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_worldCollisionResponse(m_world, data.m_eventDispatcher, data.m_entityManager),
+	m_eventDispatcher(ed),
+	m_entityManager(em),
+	m_debugEntityCollision(ed, em),
+	m_entityCollision(ed, em),
+	m_debugWorldCollision(ed, em),
+	m_worldCollisionResponse(m_world, ed, em),
 	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }

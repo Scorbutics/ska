@@ -14,7 +14,7 @@ namespace ska {
 		template <class Module>
 		void requireModule(const std::string& moduleName) {
 			static_assert(std::is_base_of<ska::Module, Module>::value, "The module to load must inherit from Module");
-			//m_modules.push_back(std::move(ModulePtr(new Module(moduleName))));
+			m_modules.push_back(std::move(ModulePtr(new Module(moduleName))));
 		}
 
 	private:
