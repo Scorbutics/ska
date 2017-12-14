@@ -45,7 +45,10 @@
 		<Compiler>
 			<Add option="-std=c++14" />
 		</Compiler>
+		<Unit filename="CoreModule.cpp" />
+		<Unit filename="CoreModule.h" />
 		<Unit filename="Core/CodeDebug/CodeDebug.h" />
+		<Unit filename="Core/GameConfiguration.h" />
 		<Unit filename="Core/GameCore.h" />
 		<Unit filename="Core/Priorized.h" />
 		<Unit filename="Core/State/State.h" />
@@ -73,26 +76,14 @@
 		<Unit filename="Data/Events/WorldEvent.h" />
 		<Unit filename="Data/Savegame.h" />
 		<Unit filename="Draw/CameraAware.h" />
-		<Unit filename="Draw/Color.cpp" />
-		<Unit filename="Draw/Color.h" />
 		<Unit filename="Draw/Drawable.h" />
 		<Unit filename="Draw/DrawableContainer.h" />
 		<Unit filename="Draw/DrawableFixedPriority.h" />
-		<Unit filename="Draw/Font.cpp" />
-		<Unit filename="Draw/Font.h" />
 		<Unit filename="Draw/IGraphicSystem.h" />
 		<Unit filename="Draw/PriorityQueueDrawableContainer.cpp" />
 		<Unit filename="Draw/PriorityQueueDrawableContainer.h" />
 		<Unit filename="Draw/Renderable.h" />
 		<Unit filename="Draw/Renderer.h" />
-		<Unit filename="Draw/SDLFont.cpp" />
-		<Unit filename="Draw/SDLFont.h" />
-		<Unit filename="Draw/SDLSurface.cpp" />
-		<Unit filename="Draw/SDLSurface.h" />
-		<Unit filename="Draw/SDLTexture.cpp" />
-		<Unit filename="Draw/SDLTexture.h" />
-		<Unit filename="Draw/TextureData.cpp" />
-		<Unit filename="Draw/TextureData.h" />
 		<Unit filename="Draw/VectorDrawableContainer.cpp" />
 		<Unit filename="Draw/VectorDrawableContainer.h" />
 		<Unit filename="ECS/Basics/Graphic/AnimationComponent.cpp" />
@@ -196,6 +187,8 @@
 		<Unit filename="Logging/ColorStream.h" />
 		<Unit filename="Logging/Logger.cpp" />
 		<Unit filename="Logging/Logger.h" />
+		<Unit filename="Module.cpp" />
+		<Unit filename="Module.h" />
 		<Unit filename="Point.h" />
 		<Unit filename="Rectangle.h" />
 		<Unit filename="Task/CompoundTask.h" />

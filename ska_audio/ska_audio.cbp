@@ -51,6 +51,8 @@
 		<Unit filename="Audio/SDLSound.h" />
 		<Unit filename="Audio/SoundRenderer.cpp" />
 		<Unit filename="Audio/SoundRenderer.h" />
+		<Unit filename="SoundModule.cpp" />
+		<Unit filename="SoundModule.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
