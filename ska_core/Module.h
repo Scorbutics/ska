@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <vector>
 
 namespace ska {
 	class Module {
@@ -8,11 +7,12 @@ namespace ska {
 
 	public:
 		virtual ~Module();
+		Module(Module&&) = default;
 
 	protected:
 		explicit Module(const std::string& name);
 	
 	private:
-		std::string m_name;
+		const std::string m_name;
 	};
 }

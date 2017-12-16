@@ -25,7 +25,7 @@ namespace ska {
 		* \brief User provided static method to inject game application dependency into the main function.
 		* \return The created game application.
 		*/
-		static GameAppPtr get();
+		static std::unique_ptr<ska::GameApp> get();
 
 	public:
 		/**
@@ -33,7 +33,7 @@ namespace ska {
 		* \return The created game application.
 		*/
 		static GameAppPtr instantiate() {
-			return get();
+			return std::move(get());
 		}
 
         /**
@@ -59,9 +59,9 @@ namespace ska {
 			return TICKS;
 		}
 
-		virtual ~GameApp() = default;
+		virtual ~GameApp();
 	
 	private:
-		GameConfiguration&& m_gameConfig;
+		GameConfiguration m_gameConfig;
 	};
 }

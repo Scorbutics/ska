@@ -15,6 +15,10 @@ namespace ska {
 }
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
+	ska::GameConfiguration gc;
+	gc.requireModule<CoreModule>("Core");
+	gc.requireModule<GraphicModule>("Graphics");
+
 	auto widthBlocks = 30;
 	auto heightBlocks = 20;
 
@@ -32,9 +36,6 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	auto window = std::make_unique<Window>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
 
-	ska::GameConfiguration gc;
-	gc.requireModule<CoreModule>("Core");
-	gc.requireModule<GraphicModule>("Graphics");
 	return std::make_unique<Game>(std::move(gc), std::move(renderer), std::move(window));
 }
 

@@ -114,7 +114,7 @@ namespace ska {
 
     private:
         bool refreshInternal() {
-	        unsigned long t0 = TimeUtils::getTicks();
+  	        unsigned long t0 = TimeUtils::getTicks();
 			const auto ti = ticksWanted();
 			auto accumulator = ti;
 

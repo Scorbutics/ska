@@ -6,6 +6,6 @@ namespace ska {
 		public ska::Module {
 	public:
 		explicit GraphicModule(const std::string& name);
-		~GraphicModule();
+		virtual ~GraphicModule();
 	};
 }
