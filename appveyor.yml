@@ -48,7 +48,7 @@ before_build:
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\bin\*.dll %PREFIX%\lib > nul
 
   # Fixup SDL bug
-  #- |-
+  - |-
     #%DEPENDS% appveyor DownloadFile https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h
     #%DEPENDS% copy SDL_platform.h %PREFIX%\include\SDL2
 
