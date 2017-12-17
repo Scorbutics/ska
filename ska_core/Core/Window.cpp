@@ -16,10 +16,9 @@ ska::Window::Window(const std::string& title, unsigned int w, unsigned int h) :
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		m_width, m_height,
-		SDL_WINDOW_OPENGL);
+		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
-	if (m_screen == nullptr)
-	{
+	if (m_screen == nullptr) {
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDL_GetError());
 		throw IllegalArgumentException("Bad instanciation : screen is null");
 	}

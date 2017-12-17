@@ -4,17 +4,14 @@
 #include "StateHolder.h"
 #include "../../Draw/IGraphicSystem.h"
 #include "../../ECS/ISystem.h"
-#include "StateBuilder.h"
+#include "SystemBuilder.h"
+#include <cassert>
 
 namespace ska {
-	class Window;
-	class InputContextManager;
 
 	/**
-	 * \brief Templated version of the base State class.
-	 * \tparam EM The EntityManager class
-	 * \tparam ED The EventDispatcher class
-	 * 
+	 * \brief Base State class.
+	 *
 	 * This class implements an easy way to manage transitions between states.
 	 * During class loading, it allows the user to queue a task. When he does it, the task end is waited before the State truly load.
 	 * More than State, StateBase can also have sub-states and manages it.
@@ -26,130 +23,19 @@ namespace ska {
 	 *  - Loading and unloading of its are done between befores and afters state parent load / unload function
 	 *  - You can transfer substates to another state when the state changes
 	 */
-	template <class EM, class ED>
 	class StateBase : public State {
-		
+
 	public:
-		StateBase(EM& em, ED& ed, StateHolder& sh) :
-			m_holder(sh),
-			m_builder(sh, em, ed),
-			m_state(0) {
-		}
+		StateBase();
+		
+		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) override final;
+		virtual void eventUpdate(unsigned int ellapsedTime) override final;
 
-		StateBase(EM& em, ED& ed, State& oldState) :
-			m_holder(oldState.getHolder()),
-			m_builder(oldState.getHolder(), em, ed),
-			m_state(0) {
-		}
+		void load(StatePtr* lastState) override final;
+		bool unload() override final;
 
-		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) override final {
-			onGraphicUpdate(ellapsedTime, drawables);
-
-			/* Graphics */
-			for (auto& s : m_subStates) {
-				s->graphicUpdate(ellapsedTime, drawables);
-			}
-
-			for (auto& s : m_linkedSubStates) {
-				s->graphicUpdate(ellapsedTime, drawables);
-			}
-
-			for (auto& s : m_graphics) {
-				s->setDrawables(drawables);
-				s->update(ellapsedTime);
-			}
-		}
-
-		virtual void eventUpdate(unsigned int ellapsedTime) override final {
-			onEventUpdate(ellapsedTime);
-
-			/* Logics */
-			for (auto& s : m_subStates) {
-				s->eventUpdate(ellapsedTime);
-			}
-
-			for (auto& s : m_linkedSubStates) {
-				s->eventUpdate(ellapsedTime);
-			}
-
-			for (auto& s : m_logics) {
-				s->update(ellapsedTime);
-			}
-		}
-
-		void load(StatePtr* lastState) override final {
-			beforeLoad(lastState);
-			m_state = 1;
-
-			for (auto& s : m_subStates) {
-				s->load(lastState);
-			}
-
-			for (auto& s : m_linkedSubStates) {
-				s->load(lastState);
-			}
-
-			m_state = 2;
-			afterLoad(lastState);
-			m_state = 3;
-		}
-
-		bool unload() override final {
-			if (m_state == 3) {
-				auto beforeUnloaded = !beforeUnload();
-				if(beforeUnloaded) {
-					m_state = 2;
-				}
-			}
-
-			//If main scene beforeUnload is finished, THEN we can unload subscenes
-			if (m_state == 2) {
-				auto wTransitions = waitTransitions();
-				if (wTransitions) {
-					m_state = 1;
-				}
-			}
-
-			if(m_state == 1) {
-				auto subscenesUnloaded = true;
-				for (auto& s : m_subStates) {
-					subscenesUnloaded &= !s->unload();
-				}
-
-				for (auto& s : m_linkedSubStates) {
-					subscenesUnloaded &= !s->unload();
-				}
-
-				if (subscenesUnloaded) {
-					m_state = 0;
-				}
-			}
-
-			//If everything is unloaded, THEN we can call main scene afterUnload
-			if(m_state == 0) {
-				auto afterUnloaded = !afterUnload();
-				if (afterUnloaded) {
-					m_state = -1;
-				}
-			}
-
-			if(m_state == -1) {
-				auto wTransitions = waitTransitions();
-				if (wTransitions) {
-					m_state = -2;
-				}
-			}
-
-			return m_state != -2;
-		}
-
-		void linkSubState(State& subState) {
-			m_linkedSubStates.insert(&subState);
-		}
-
-		void unlinkSubState(State& subState) {
-			m_linkedSubStates.erase(&subState);
-		}
+		void linkSubState(State& subState);
+		void unlinkSubState(State& subState);
 
 		template<class State>
 		void transmitLinkedSubstates(State& state) {
@@ -158,96 +44,86 @@ namespace ska {
 
 		template<class State, class ...Args>
 		State* addSubState(Args&& ... args) {
-			auto state = m_builder.template addSubState<State, Args...>(m_subStates, std::forward<Args>(args)...);
-			state->load(nullptr);
+			auto s = std::make_unique<State>(std::forward<Args>(args)...);
+            auto result = static_cast<State*>(s.get());
+            m_subStates.push_back(std::move(s));
+            auto state = result;
+			
+			//manages the case that this current state isn't loaded yet : then substate should be loaded after the state is loaded
+			if (m_active) {
+				state->load(nullptr);
+			}
+
 			return state;
 		}
 
 		template<class StateT>
 		bool removeSubState(StateT& subState) {
-			auto removed = m_builder.template removeSubState<StateT>(m_subStates, subState);
+            auto it = std::remove_if(m_subStates.begin(), m_subStates.end(), [&subState](const auto& c) {
+                return c.get() == &subState;
+            });
+
+            auto removedState = std::move(*it);
+            m_subStates.erase(it, m_subStates.end());
+            auto removed = std::move(removedState);
 			removed->unload();
 			return true;
-		}
-
-		template<class State, class ... Args>
-		State* makeNextState(Args&&... args) {
-			return m_builder.template makeNextState<State, Args...>(std::forward<Args>(args)...);
-		}
-
-		template<class SubState, class ... Args>
-		State* makeNextStateAndTransmitLinkedSubstates(Args&&... args) {
-			return m_builder.template makeNextStateAndTransmitLinkedSubstates<decltype(*this), SubState, Args...>(*this, std::forward<Args>(args)...);
-		}
-
-		template<class System, class ...Args>
-		std::unique_ptr<System> createLogic(Args&&... args) {
-			return m_builder.template createLogic<System>(std::forward<Args>(args)...);
-		}
-
-		StateHolder& getHolder() override {
-			return m_holder;
 		}
 
 		virtual ~StateBase() = default;
 
     protected:
-		using StateData = StateData<EM, ED>;
-
 		template<class System, class ...Args>
 		System* addPriorizedLogic(int priority, Args&& ... args) {
+			checkActiveState();
 			return m_builder.addPriorizedLogic<System, Args...>(m_logics, priority, std::forward<Args>(args)...);
 		}
 
 		template<class System, class ...Args>
 		System* addLogic(Args&& ... args) {
+			checkActiveState();
 			return this->m_builder.addPriorizedLogic<System, Args...>(m_logics, static_cast<int>(m_logics.size()), std::forward<Args>(args)...);
 		}
 
 		template<class System, class ...Args>
 		System* addPriorizedGraphic(int priority, Args&& ... args) {
+			checkActiveState();
 			return m_builder.addPriorizedGraphic<System, Args...>(m_graphics, priority, std::forward<Args>(args)...);
 		}
-		
+
 		template<class System, class ...Args>
 		System* addGraphic(Args&& ... args) {
+			checkActiveState();
 			return this->m_builder.addPriorizedGraphic<System, Args...>(m_graphics, static_cast<int>(m_graphics.size()), std::forward<Args>(args)...);
 		}
 
 		template <class T>
 		ska::Runnable& queueTask(std::unique_ptr<T>&& t) {
-			return m_builder.queueTask(std::forward<std::unique_ptr<T>>(t));
+			return m_tasks.queueTask(std::forward<std::unique_ptr<T>>(t));
 		}
 
-		virtual void beforeLoad(StatePtr*) {
-		}
+		virtual void beforeLoad(StatePtr*) {}
+		virtual void afterLoad(StatePtr*) {}
 
-		virtual void afterLoad(StatePtr*) {
-		}
+		virtual bool beforeUnload() { return false; }
+		virtual bool afterUnload() { return false; }
 
-		virtual bool beforeUnload() {
-			return false;
-		}
+		virtual void onGraphicUpdate(unsigned int, DrawableContainer& ) {}
+		virtual void onEventUpdate(unsigned int ) {}
 
-		virtual bool afterUnload() {
-			return false;
-		}
 
-		virtual void onGraphicUpdate(unsigned int, DrawableContainer& ) {
-		}
-
-		virtual void onEventUpdate(unsigned int ) {
-		}
-
-		
     private:
-        bool waitTransitions() const {
-			return !m_builder.hasRunningTask();
+        inline bool waitTransitions() const {
+			return !m_tasks.hasRunningTask();
 		}
 
-	private:
-		StateHolder& m_holder;
-		StateBuilder<EM, ED> m_builder;
+
+		inline void checkActiveState() const {
+			assert(m_active && "State must be active before adding any system (put your code that adds systems in loads functions)");
+        }
+
+	    ska::TaskQueue m_tasks;
+		SystemBuilder m_builder;
 
 		std::vector<std::unique_ptr<ISystem>> m_logics;
 		std::vector<std::unique_ptr<IGraphicSystem>> m_graphics;
@@ -255,6 +131,7 @@ namespace ska {
 		std::vector<std::unique_ptr<State>> m_subStates;
 		std::unordered_set<State*> m_linkedSubStates;
         int m_state;
-				
+		bool m_active;
+
 	};
 }

@@ -54,12 +54,18 @@
 		<Unit filename="FpsCalculator.h" />
 		<Unit filename="FpsRenderable.cpp" />
 		<Unit filename="FpsRenderable.h" />
+		<Unit filename="GraphicModule.cpp" />
+		<Unit filename="GraphicModule.h" />
 		<Unit filename="Graphic/AnimatedTexture.cpp" />
 		<Unit filename="Graphic/AnimatedTexture.h" />
 		<Unit filename="Graphic/Animation.cpp" />
 		<Unit filename="Graphic/Animation.h" />
+		<Unit filename="Graphic/Color.cpp" />
+		<Unit filename="Graphic/Color.h" />
 		<Unit filename="Graphic/DebugEntityCollisionResponse.cpp" />
 		<Unit filename="Graphic/DebugEntityCollisionResponse.h" />
+		<Unit filename="Graphic/Font.cpp" />
+		<Unit filename="Graphic/Font.h" />
 		<Unit filename="Graphic/GifTexture.cpp" />
 		<Unit filename="Graphic/GifTexture.h" />
 		<Unit filename="Graphic/GraphicComponent.cpp" />
@@ -67,8 +73,14 @@
 		<Unit filename="Graphic/HasShadowComponent.cpp" />
 		<Unit filename="Graphic/HasShadowComponent.h" />
 		<Unit filename="Graphic/PositionnedGraphicDrawable.h" />
+		<Unit filename="Graphic/SDLFont.cpp" />
+		<Unit filename="Graphic/SDLFont.h" />
 		<Unit filename="Graphic/SDLRenderer.cpp" />
 		<Unit filename="Graphic/SDLRenderer.h" />
+		<Unit filename="Graphic/SDLSurface.cpp" />
+		<Unit filename="Graphic/SDLSurface.h" />
+		<Unit filename="Graphic/SDLTexture.cpp" />
+		<Unit filename="Graphic/SDLTexture.h" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.cpp" />
 		<Unit filename="Graphic/System/AbstractGraphicSystem.h" />
 		<Unit filename="Graphic/System/AnimationStateMachine.h" />
@@ -96,6 +108,8 @@
 		<Unit filename="Graphic/System/WalkAnimationStateMachine.h" />
 		<Unit filename="Graphic/Texture.cpp" />
 		<Unit filename="Graphic/Texture.h" />
+		<Unit filename="Graphic/TextureData.cpp" />
+		<Unit filename="Graphic/TextureData.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

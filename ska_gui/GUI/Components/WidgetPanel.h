@@ -10,12 +10,13 @@
 #include "../Events/IWidgetEvent.h"
 #include "Utils/VectorUtils.h"
 
-#define GUI_DEFAULT_DISPLAY_PRIORITY 65535
-
 namespace ska {
 
 	template <class ... HL>
 	class WidgetPanel : public HandledWidget<HL...> {
+	private:
+		static constexpr auto guiDefaultDisplayPriority = 65535;
+
 	public:
 		WidgetPanel() = default;
 
@@ -30,7 +31,7 @@ namespace ska {
 		template <class SubWidget, class ... Args>
 		SubWidget& addWidget(Args&&... args) {
 			auto w = std::make_unique<SubWidget>(*this, std::forward<Args>(args)...);
-			w->setPriority(GUI_DEFAULT_DISPLAY_PRIORITY - 1 - static_cast<int>(m_globalList.size()));
+			w->setPriority(guiDefaultDisplayPriority - 1 - static_cast<int>(m_globalList.size()));
 			auto& result = static_cast<SubWidget&>(*w.get());
 			WidgetHandlingTrait<SubWidget>::manageHandledAdd(std::move(w), m_handledWidgets, m_widgets, m_globalList);
 			m_addedSortedWidgets.push_back(&result);

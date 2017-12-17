@@ -13,8 +13,6 @@ public:
 	void load(ska::StatePtr* lastState) override;
 	bool unload() override;
 
-	ska::StateHolder& getHolder() override;
-
 private:
 	fakeit::Mock<ska::State>& m_instance;
 };

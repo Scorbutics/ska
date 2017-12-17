@@ -9,11 +9,10 @@
 	"ParticleFactory.h"
 	"ParticleBuilder.h"
 
-1505308503 c:\documents\perso\dev\c++\ska\ska_particle\\particlegroup.h
-	<iostream>
+1513154482 c:\documents\perso\dev\c++\ska\ska_particle\\particlegroup.h
 	<vector>
 	"Point.h"
-	"Draw/Color.h"
+	"Graphic/Color.h"
 	"Graphic/Texture.h"
 	"Logging/Logger.h"
 
@@ -41,14 +40,13 @@
 	<SDL.h>
 	"../Utils/NumberUtils.h"
 
-1512993878 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\texture.h
+1513154482 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\texture.h
 	"Utils/ManagedResource.h"
-	"Draw/SDLTexture.h"
-	"Draw/TextureData.h"
 	"Utils/SkaConstants.h"
 	"Rectangle.h"
-	"Draw/Color.h"
 	"Draw/Renderable.h"
+	"SDLTexture.h"
+	"TextureData.h"
 
 1509625400 c:\documents\perso\dev\c++\ska\ska_core\\utils\managedresource.h
 	<memory>
@@ -82,7 +80,8 @@
 1512993878 c:\documents\perso\dev\c++\ska\ska_core\\draw\renderable.h
 	"../Rectangle.h"
 
-1513007311 c:\documents\perso\dev\c++\ska\ska_core\\logging\logger.h
+1513154481 c:\documents\perso\dev\c++\ska\ska_core\\logging\logger.h
+	<string>
 	<iostream>
 	<ctime>
 	<typeinfo>
@@ -101,4 +100,23 @@
 1505308503 c:\documents\perso\dev\c++\ska\ska_particle\\particlebuilder.h
 	"Point.h"
 	"ParticleBuilder.h"
+
+1513154482 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\color.h
+	<SDL.h>
+	"Utils/NumberUtils.h"
+
+1513154482 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\sdltexture.h
+	<memory>
+	"SDLSurface.h"
+	"Task/TaskQueue.h"
+
+1513154482 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\sdlsurface.h
+	<SDL.h>
+	<string>
+	"Color.h"
+
+1513154482 c:\documents\perso\dev\c++\ska\ska_draw\\graphic\texturedata.h
+	<string>
+	"Color.h"
+	"Rectangle.h"
 

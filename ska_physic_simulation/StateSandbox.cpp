@@ -15,16 +15,15 @@
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
 
-StateSandbox::StateSandbox(StateData & data, ska::StateHolder & sh) :
-	StateBase(data.m_entityManager, data.m_eventDispatcher, sh),
-	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), data.m_eventDispatcher),
+StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
+	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	m_cameraSystem(nullptr),
-	m_eventDispatcher(data.m_eventDispatcher),
-	m_entityManager(data.m_entityManager),
-	m_debugEntityCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_entityCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_debugWorldCollision(data.m_eventDispatcher, data.m_entityManager),
-	m_worldCollisionResponse(m_world, data.m_eventDispatcher, data.m_entityManager),
+	m_eventDispatcher(ed),
+	m_entityManager(em),
+	m_debugEntityCollision(ed, em),
+	m_entityCollision(ed, em),
+	m_debugWorldCollision(ed, em),
+	m_worldCollisionResponse(m_world, ed, em),
 	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
@@ -70,17 +69,17 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
-		m_cameraSystem = addLogic<ska::CameraFixedSystem>(ge.windowWidth, ge.windowHeight, ska::Point<int>());
-		addGraphic<ska::GraphicSystem>(m_eventDispatcher, m_cameraSystem);
+		m_cameraSystem = addLogic<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		addGraphic<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem);
 
-		addLogic<ska::MovementSystem>();
-		addLogic<ska::CollisionSystem>(m_eventDispatcher);
-		addLogic<ska::WorldCollisionSystem>(m_world, m_eventDispatcher);
-		addLogic<ska::DebugCollisionDrawerSystem>();
-		addLogic<ska::GravitySystem>();
-		addLogic<ska::DeleterSystem>();
-		addLogic<ska::InputSystem>(m_eventDispatcher);
-        auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>();
+		addLogic<ska::MovementSystem>(m_entityManager);
+		addLogic<ska::CollisionSystem>(m_entityManager, m_eventDispatcher);
+		addLogic<ska::WorldCollisionSystem>(m_entityManager, m_world, m_eventDispatcher);
+		addLogic<ska::DebugCollisionDrawerSystem>(m_entityManager);
+		addLogic<ska::GravitySystem>(m_entityManager);
+		addLogic<ska::DeleterSystem>(m_entityManager);
+		addLogic<ska::InputSystem>(m_entityManager, m_eventDispatcher);
+        auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>(m_entityManager);
         m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(true, m_entityManager).get();
 		animSystem->setup<ska::JumpAnimationStateMachine>(false, m_entityManager);
 
@@ -113,8 +112,6 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_world.load("Resources\\Levels\\new_level", "Resources\\Chipsets\\chipset_platform.png");
 		m_world.linkCamera(m_cameraSystem);
-	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
-		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);
 	}
 	return true;
 }

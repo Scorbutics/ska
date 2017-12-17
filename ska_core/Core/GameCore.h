@@ -79,8 +79,7 @@ namespace ska {
          */
 		template<class StateT, class ... Args>
         std::unique_ptr<StateT> makeState(Args&&... args) {
-			StateData<EntityManager, EventDispatcher> data(m_entityManager, m_eventDispatcher);
-			return std::make_unique<StateT>(data, m_stateHolder, std::forward<Args>(args)...);
+			return std::make_unique<StateT>(m_entityManager, std::forward<Args>(args)...);
         }
 
         /**
@@ -115,7 +114,7 @@ namespace ska {
 
     private:
         bool refreshInternal() {
-	        unsigned long t0 = TimeUtils::getTicks();
+  	        unsigned long t0 = TimeUtils::getTicks();
 			const auto ti = ticksWanted();
 			auto accumulator = ti;
 
@@ -143,7 +142,7 @@ namespace ska {
         void graphicUpdate(unsigned int ellapsedTime) {
         	m_stateHolder.graphicUpdate(ellapsedTime, *m_drawables);
             m_drawables->draw();
-			
+
 			m_drawables->clear();
 			m_renderer->update();
         }

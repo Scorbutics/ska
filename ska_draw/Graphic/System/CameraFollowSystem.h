@@ -5,7 +5,7 @@
 namespace ska {
 	class CameraFollowSystem : public CameraSystem {
 	public:
-		CameraFollowSystem(EntityManager& entityManager, const unsigned int screenW, const unsigned int screenH);
+		CameraFollowSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW = 0, const unsigned int screenH = 0);
 		~CameraFollowSystem();
 
 		virtual void refresh(unsigned int ellapsedTime) override;

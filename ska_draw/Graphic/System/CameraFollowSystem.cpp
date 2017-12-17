@@ -1,14 +1,13 @@
-#include <iostream>
 #include "CameraFollowSystem.h"
-#include "Rectangle.h"
 #include "../GraphicComponent.h"
 
-ska::CameraFollowSystem::CameraFollowSystem(EntityManager& entityManager, const unsigned int screenW, const unsigned int screenH) : CameraSystem(entityManager, screenW, screenH) {
+ska::CameraFollowSystem::CameraFollowSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW, const unsigned int screenH) : 
+	CameraSystem(entityManager, ged, screenW, screenH) {
 }
 
 void ska::CameraFollowSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
-	auto mainEntityIt = processed.begin();
+	const auto mainEntityIt = processed.begin();
 	if(mainEntityIt != processed.end()) {
 		auto entityId = *mainEntityIt;
 		auto& pc = m_componentAccessor.get<PositionComponent>(entityId);

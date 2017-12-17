@@ -26,8 +26,4 @@ bool MockState::unload() {
 	return m_instance().unload();
 }
 
-ska::StateHolder& MockState::getHolder() {
-	return m_instance().getHolder();
-}
-
 
