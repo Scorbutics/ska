@@ -49,9 +49,6 @@ before_build:
 
   # Fixup SDL bug
   - |-
-    #%DEPENDS% appveyor DownloadFile https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h
-    #%DEPENDS% copy SDL_platform.h %PREFIX%\include\SDL2
-
     %DEPENDS% dir %PREFIX%\include
     %DEPENDS% dir %PREFIX%\lib
     
