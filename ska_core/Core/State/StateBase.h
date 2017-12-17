@@ -4,7 +4,7 @@
 #include "StateHolder.h"
 #include "../../Draw/IGraphicSystem.h"
 #include "../../ECS/ISystem.h"
-#include "StateBuilder.h"
+#include "SystemBuilder.h"
 #include <cassert>
 
 namespace ska {
@@ -123,7 +123,7 @@ namespace ska {
         }
 
 	    ska::TaskQueue m_tasks;
-		StateBuilder m_builder;
+		SystemBuilder m_builder;
 
 		std::vector<std::unique_ptr<ISystem>> m_logics;
 		std::vector<std::unique_ptr<IGraphicSystem>> m_graphics;

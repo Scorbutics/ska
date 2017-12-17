@@ -130,7 +130,6 @@
     <ClInclude Include="Data\Events\InputKeyEvent.h" />
     <ClInclude Include="Data\Events\InputMouseEvent.h" />
     <ClInclude Include="Inputs\WindowInput.h" />
-    <ClInclude Include="Core\State\StateBuilder.h" />
     <ClInclude Include="Utils\OutputUtils.h" />
     <ClInclude Include="Utils\SubObserver.h" />
     <ClInclude Include="ECS\Basics\Graphic\AnimationComponent.h" />
@@ -146,6 +145,7 @@
     <ClInclude Include="CoreModule.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="Core\GameConfiguration.h" />
+    <ClInclude Include="Core\State\SystemBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Window.cpp" />

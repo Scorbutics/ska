@@ -5,19 +5,10 @@
 namespace ska {
 	/**
 	 * \brief Internal helper class that builds states and sub-states, as a factory.
-	 * \tparam EntityManager 	 
 	 */
-	template <class EntityManager>
 	class SystemBuilder {
 		public:
-			explicit SystemBuilder(EntityManager& em) :
-				m_entityManager(em) {
-			}
-
-			template<class System, class ...Args>
-			std::unique_ptr<System> createLogic(Args&&... args) {
-				return std::make_unique<System>(m_entityManager, std::forward<Args>(args)...);
-			}
+			SystemBuilder() = default;
 
 			template<class System, class ...Args>
 			System* addPriorizedLogic(std::vector<std::unique_ptr<ISystem>>& logics, int priority, Args&& ... args) {
@@ -31,7 +22,7 @@ namespace ska {
 
 			template<class System, class ...Args>
 			System* addPriorizedGraphic(std::vector<std::unique_ptr<IGraphicSystem>>& graphics, int priority, Args&& ... args) {
-				auto system = std::make_unique<System>(m_entityManager, std::forward<Args>(args)...);
+				auto system = std::make_unique<System>(std::forward<Args>(args)...);
 				auto result = static_cast<System*>(system.get());
 				graphics.push_back(std::move(system));
 				std::sort(graphics.begin(), graphics.end(), Priorized::comparatorInf<std::unique_ptr<IGraphicSystem>>);
@@ -40,6 +31,10 @@ namespace ska {
 			}
 
 	private:
-		EntityManager& m_entityManager;
+        template<class System, class ...Args>
+        std::unique_ptr<System> createLogic(Args&&... args) {
+            return std::make_unique<System>(std::forward<Args>(args)...);
+        }
+
 	};
 }
