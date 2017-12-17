@@ -16,7 +16,6 @@ constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
-	StateBase(em),
 	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	m_cameraSystem(nullptr),
 	m_eventDispatcher(ed),
@@ -70,17 +69,17 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
-		m_cameraSystem = addLogic<ska::CameraFixedSystem>(ge.windowWidth, ge.windowHeight, ska::Point<int>());
-		addGraphic<ska::GraphicSystem>(m_eventDispatcher, m_cameraSystem);
+		m_cameraSystem = addLogic<ska::CameraFixedSystem>(m_entityManager, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		addGraphic<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem);
 
-		addLogic<ska::MovementSystem>();
-		addLogic<ska::CollisionSystem>(m_eventDispatcher);
-		addLogic<ska::WorldCollisionSystem>(m_world, m_eventDispatcher);
-		addLogic<ska::DebugCollisionDrawerSystem>();
-		addLogic<ska::GravitySystem>();
-		addLogic<ska::DeleterSystem>();
-		addLogic<ska::InputSystem>(m_eventDispatcher);
-        auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>();
+		addLogic<ska::MovementSystem>(m_entityManager);
+		addLogic<ska::CollisionSystem>(m_entityManager, m_eventDispatcher);
+		addLogic<ska::WorldCollisionSystem>(m_entityManager, m_world, m_eventDispatcher);
+		addLogic<ska::DebugCollisionDrawerSystem>(m_entityManager);
+		addLogic<ska::GravitySystem>(m_entityManager);
+		addLogic<ska::DeleterSystem>(m_entityManager);
+		addLogic<ska::InputSystem>(m_entityManager, m_eventDispatcher);
+        auto animSystem = addLogic<ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>>(m_entityManager);
         m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(true, m_entityManager).get();
 		animSystem->setup<ska::JumpAnimationStateMachine>(false, m_entityManager);
 

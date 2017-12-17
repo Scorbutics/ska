@@ -11,7 +11,7 @@
 #include "Physic/System/DebugWorldCollisionResponse.h"
 
 class StateSandbox :
-	public ska::StateBase<ska::EntityManager>,
+	public ska::StateBase,
 	public ska::SubObserver<ska::GameEvent> {
 public:
 	StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>&);

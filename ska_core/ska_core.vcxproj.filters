@@ -201,5 +201,6 @@
     <ClCompile Include="Logging\Logger.cpp" />
     <ClCompile Include="CoreModule.cpp" />
     <ClCompile Include="Module.cpp" />
+    <ClCompile Include="Core\State\StateBase.cpp" />
   </ItemGroup>
 </Project>

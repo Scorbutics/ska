@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreModule.cpp" />
+    <ClCompile Include="Core\State\StateBase.cpp" />
     <ClCompile Include="Core\State\StateHolder.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Data\Events\ECSEvent.h" />

@@ -11,8 +11,7 @@ namespace ska {
 	class InputContextManager;
 
 	/**
-	 * \brief Templated version of the base State class.
-	 * \tparam EM The EntityManager class
+	 * \brief Base State class.
 	 *
 	 * This class implements an easy way to manage transitions between states.
 	 * During class loading, it allows the user to queue a task. When he does it, the task end is waited before the State truly load.
@@ -25,124 +24,19 @@ namespace ska {
 	 *  - Loading and unloading of its are done between befores and afters state parent load / unload function
 	 *  - You can transfer substates to another state when the state changes
 	 */
-	template <class EM>
 	class StateBase : public State {
 
 	public:
-		StateBase(EM& em) :
-			m_builder(em),
-			m_entityManager(em),
-			m_state(0) {
-		}
-		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) override final {
-			onGraphicUpdate(ellapsedTime, drawables);
+		StateBase();
+		
+		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) override final;
+		virtual void eventUpdate(unsigned int ellapsedTime) override final;
 
-			/* Graphics */
-			for (auto& s : m_subStates) {
-				s->graphicUpdate(ellapsedTime, drawables);
-			}
+		void load(StatePtr* lastState) override final;
+		bool unload() override final;
 
-			for (auto& s : m_linkedSubStates) {
-				s->graphicUpdate(ellapsedTime, drawables);
-			}
-
-			for (auto& s : m_graphics) {
-				s->setDrawables(drawables);
-				s->update(ellapsedTime);
-			}
-		}
-
-		virtual void eventUpdate(unsigned int ellapsedTime) override final {
-			onEventUpdate(ellapsedTime);
-
-			/* Logics */
-			for (auto& s : m_subStates) {
-				s->eventUpdate(ellapsedTime);
-			}
-
-			for (auto& s : m_linkedSubStates) {
-				s->eventUpdate(ellapsedTime);
-			}
-
-			for (auto& s : m_logics) {
-				s->update(ellapsedTime);
-			}
-		}
-
-		void load(StatePtr* lastState) override final {
-			beforeLoad(lastState);
-			m_state = 1;
-
-			for (auto& s : m_subStates) {
-				s->load(lastState);
-			}
-
-			for (auto& s : m_linkedSubStates) {
-				s->load(lastState);
-			}
-
-			m_state = 2;
-			afterLoad(lastState);
-			m_state = 3;
-		}
-
-		bool unload() override final {
-		    m_tasks.refresh();
-			if (m_state == 3) {
-				auto beforeUnloaded = !beforeUnload();
-				if(beforeUnloaded) {
-					m_state = 2;
-				}
-			}
-
-			//If main scene beforeUnload is finished, THEN we can unload subscenes
-			if (m_state == 2) {
-				auto wTransitions = waitTransitions();
-				if (wTransitions) {
-					m_state = 1;
-				}
-			}
-
-			if(m_state == 1) {
-				auto subscenesUnloaded = true;
-				for (auto& s : m_subStates) {
-					subscenesUnloaded &= !s->unload();
-				}
-
-				for (auto& s : m_linkedSubStates) {
-					subscenesUnloaded &= !s->unload();
-				}
-
-				if (subscenesUnloaded) {
-					m_state = 0;
-				}
-			}
-
-			//If everything is unloaded, THEN we can call main scene afterUnload
-			if(m_state == 0) {
-				auto afterUnloaded = !afterUnload();
-				if (afterUnloaded) {
-					m_state = -1;
-				}
-			}
-
-			if(m_state == -1) {
-				auto wTransitions = waitTransitions();
-				if (wTransitions) {
-					m_state = -2;
-				}
-			}
-
-			return m_state != -2;
-		}
-
-		void linkSubState(State& subState) {
-			m_linkedSubStates.insert(&subState);
-		}
-
-		void unlinkSubState(State& subState) {
-			m_linkedSubStates.erase(&subState);
-		}
+		void linkSubState(State& subState);
+		void unlinkSubState(State& subState);
 
 		template<class State>
 		void transmitLinkedSubstates(State& state) {
@@ -200,35 +94,23 @@ namespace ska {
 			return m_tasks.queueTask(std::forward<std::unique_ptr<T>>(t));
 		}
 
-		virtual void beforeLoad(StatePtr*) {
-		}
+		virtual void beforeLoad(StatePtr*) {}
+		virtual void afterLoad(StatePtr*) {}
 
-		virtual void afterLoad(StatePtr*) {
-		}
+		virtual bool beforeUnload() { return false; }
+		virtual bool afterUnload() { return false; }
 
-		virtual bool beforeUnload() {
-			return false;
-		}
-
-		virtual bool afterUnload() {
-			return false;
-		}
-
-		virtual void onGraphicUpdate(unsigned int, DrawableContainer& ) {
-		}
-
-		virtual void onEventUpdate(unsigned int ) {
-		}
+		virtual void onGraphicUpdate(unsigned int, DrawableContainer& ) {}
+		virtual void onEventUpdate(unsigned int ) {}
 
 
     private:
-        bool waitTransitions() const {
+        inline bool waitTransitions() const {
 			return !m_tasks.hasRunningTask();
 		}
 
 	    ska::TaskQueue m_tasks;
-		StateBuilder<EM> m_builder;
-        EM& m_entityManager;
+		StateBuilder m_builder;
 
 		std::vector<std::unique_ptr<ISystem>> m_logics;
 		std::vector<std::unique_ptr<IGraphicSystem>> m_graphics;
