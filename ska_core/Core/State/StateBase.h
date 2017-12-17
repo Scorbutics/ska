@@ -5,6 +5,7 @@
 #include "../../Draw/IGraphicSystem.h"
 #include "../../ECS/ISystem.h"
 #include "StateBuilder.h"
+#include <cassert>
 
 namespace ska {
 
@@ -47,7 +48,12 @@ namespace ska {
             auto result = static_cast<State*>(s.get());
             m_subStates.push_back(std::move(s));
             auto state = result;
-			state->load(nullptr);
+			
+			//manages the case that this current state isn't loaded yet : then substate should be loaded after the state is loaded
+			if (m_active) {
+				state->load(nullptr);
+			}
+
 			return state;
 		}
 
@@ -69,21 +75,25 @@ namespace ska {
     protected:
 		template<class System, class ...Args>
 		System* addPriorizedLogic(int priority, Args&& ... args) {
+			checkActiveState();
 			return m_builder.addPriorizedLogic<System, Args...>(m_logics, priority, std::forward<Args>(args)...);
 		}
 
 		template<class System, class ...Args>
 		System* addLogic(Args&& ... args) {
+			checkActiveState();
 			return this->m_builder.addPriorizedLogic<System, Args...>(m_logics, static_cast<int>(m_logics.size()), std::forward<Args>(args)...);
 		}
 
 		template<class System, class ...Args>
 		System* addPriorizedGraphic(int priority, Args&& ... args) {
+			checkActiveState();
 			return m_builder.addPriorizedGraphic<System, Args...>(m_graphics, priority, std::forward<Args>(args)...);
 		}
 
 		template<class System, class ...Args>
 		System* addGraphic(Args&& ... args) {
+			checkActiveState();
 			return this->m_builder.addPriorizedGraphic<System, Args...>(m_graphics, static_cast<int>(m_graphics.size()), std::forward<Args>(args)...);
 		}
 
@@ -107,6 +117,11 @@ namespace ska {
 			return !m_tasks.hasRunningTask();
 		}
 
+
+		inline void checkActiveState() const {
+			assert(m_active && "State must be active before adding any system (put your code that adds systems in loads functions)");
+        }
+
 	    ska::TaskQueue m_tasks;
 		StateBuilder m_builder;
 
@@ -116,6 +131,7 @@ namespace ska {
 		std::vector<std::unique_ptr<State>> m_subStates;
 		std::unordered_set<State*> m_linkedSubStates;
         int m_state;
+		bool m_active;
 
 	};
 }

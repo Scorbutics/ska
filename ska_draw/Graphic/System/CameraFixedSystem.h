@@ -6,7 +6,7 @@ namespace ska {
 
 	class CameraFixedSystem : public CameraSystem {
 	public:
-		CameraFixedSystem(EntityManager& entityManager, const unsigned int screenW, const unsigned int screenH, Point<int> point);
+		CameraFixedSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW = 0, const unsigned int screenH = 0, Point<int> point = ska::Point<int>());
 		CameraFixedSystem& operator=(const CameraFixedSystem&) = delete;
 		~CameraFixedSystem();
 

@@ -69,7 +69,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
-		m_cameraSystem = addLogic<ska::CameraFixedSystem>(m_entityManager, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		m_cameraSystem = addLogic<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
 		addGraphic<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem);
 
 		addLogic<ska::MovementSystem>(m_entityManager);
@@ -112,8 +112,6 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_world.load("Resources\\Levels\\new_level", "Resources\\Chipsets\\chipset_platform.png");
 		m_world.linkCamera(m_cameraSystem);
-	} else if (ge.getEventType() == ska::GAME_WINDOW_RESIZED) {
-		m_cameraSystem->screenResized(ge.windowWidth, ge.windowHeight);
 	}
 	return true;
 }
