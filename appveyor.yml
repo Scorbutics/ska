@@ -52,6 +52,9 @@ before_build:
     #%DEPENDS% appveyor DownloadFile https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h
     #%DEPENDS% copy SDL_platform.h %PREFIX%\include\SDL2
 
+    dir %PREFIX%\include
+    dir %PREFIX%\lib
+	
   # Newer mingw is required, as older mingw32 does not support std::thread
   - |-
     %DEPENDS% appveyor DownloadFile "http://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win32/Personal Builds/mingw-builds/4.9.3/threads-posix/dwarf/i686-4.9.3-release-posix-dwarf-rt_v4-rev1.7z/download"
