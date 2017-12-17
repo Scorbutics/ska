@@ -66,7 +66,9 @@ build_script:
   # Build
   - |-
     cmake --version
+    cd ska_core
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DSTANDALONE=ON -DCMAKE_INSTALL_PREFIX="C:\projects\ska\ska_core" -G "MinGW Makefiles"
+    cd ../ska_core
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DSTANDALONE=ON -DCMAKE_INSTALL_PREFIX="C:\projects\ska\ska_core_test" -G "MinGW Makefiles"
 
   - |-
