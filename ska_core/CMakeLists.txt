@@ -3,8 +3,10 @@ project(ska_core)
 
 find_file(SDL2_INCLUDE_DIR NAME SDL.h)
 if(NOT SDL2_INCLUDE_DIR)
-	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH})
+	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
+
+include_directories(${SDL2_INCLUDE_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -21,4 +23,3 @@ add_library(ska_core STATIC ${SOURCES})
 set_target_properties(ska_core PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR}
                       ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR})
-include_directories(${SDL2_INCLUDE_DIR})
