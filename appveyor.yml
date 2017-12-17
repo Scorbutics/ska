@@ -69,7 +69,7 @@ build_script:
     cd ska_core
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DSTANDALONE=ON -G "MinGW Makefiles"
-	
+
   - |-
     mingw32-make
     mingw32-make install >nul
@@ -77,10 +77,10 @@ build_script:
     cd ../ska_core_test
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DSTANDALONE=ON -G "MinGW Makefiles"
-	
+
     mingw32-make
     mingw32-make install >nul
-	
+
   # Add needed libs
   - |-
     copy %MINGW32%\mingw32\bin\libgcc_s_dw2-1.dll C:\projects\ska
