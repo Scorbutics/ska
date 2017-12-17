@@ -16,7 +16,7 @@ before_build:
   - if exist %PREFIX% set DEPENDS=rem
 
   - |-
-    %DEPENDS% mkdir %PREFIX%\include\SDL2
+    %DEPENDS% mkdir %PREFIX%\include
     %DEPENDS% mkdir %PREFIX%\lib
     %DEPENDS% cd %TEMP%
 
@@ -25,7 +25,7 @@ before_build:
     %DEPENDS% appveyor DownloadFile http://www.libsdl.org/release/SDL2-devel-2.0.5-mingw.tar.gz
     %DEPENDS% 7z x SDL2-devel-2.0.5-mingw.tar.gz > nul
     %DEPENDS% 7z x SDL2-devel-2.0.5-mingw.tar > nul
-    %DEPENDS% copy SDL2-2.0.5\%ARCH%\include\SDL2\* %PREFIX%\include\SDL2 > nul
+    %DEPENDS% copy SDL2-2.0.5\%ARCH%\include\SDL2\* %PREFIX%\include\ > nul
     %DEPENDS% copy SDL2-2.0.5\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2-2.0.5\%ARCH%\bin\*.dll %PREFIX%\lib > nul
 
@@ -34,7 +34,7 @@ before_build:
     %DEPENDS% appveyor DownloadFile http://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz
     %DEPENDS% 7z x SDL2_image-devel-2.0.0-mingw.tar.gz > nul
     %DEPENDS% 7z x SDL2_image-devel-2.0.0-mingw.tar > nul
-    %DEPENDS% copy SDL2_image-2.0.0\%ARCH%\include\SDL2\* %PREFIX%\include\SDL2 > nul
+    %DEPENDS% copy SDL2_image-2.0.0\%ARCH%\include\SDL2\* %PREFIX%\include\ > nul
     %DEPENDS% copy SDL2_image-2.0.0\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2_image-2.0.0\%ARCH%\bin\*.dll %PREFIX%\lib > nul
 
@@ -43,7 +43,7 @@ before_build:
     %DEPENDS% appveyor DownloadFile https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
     %DEPENDS% 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz > nul
     %DEPENDS% 7z x SDL2_ttf-devel-2.0.12-mingw.tar > nul
-    %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\include\SDL2\* %PREFIX%\include\SDL2 > nul
+    %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\include\SDL2\* %PREFIX%\include\ > nul
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\bin\*.dll %PREFIX%\lib > nul
 
