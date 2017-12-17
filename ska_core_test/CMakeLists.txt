@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core_test)
 
-set(SDL2_INCLUDE_DIR "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.11.25503/include")
+find_file(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
 
 set(SKA_CORE_DIR "../ska_core")
 set(SKA_CORE_HEADER_FILES ${SKA_CORE_DIR}/*.h)
