@@ -15,3 +15,7 @@
 *.ipdb
 /ska_physic_simulation/Debug
 /ska_world/Debug
+/ska_core/.vs/Project/v15
+/ska_core/CMakeFiles
+/ska_draw/.vs/ska_draw/v15
+/ska_draw/CMakeFiles
