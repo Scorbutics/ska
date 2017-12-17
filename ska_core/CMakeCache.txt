@@ -175,6 +175,12 @@ Project_BINARY_DIR:STATIC=D:/Users/Brice/Source/Repos/ska/ska_core
 //Value Computed by CMake
 Project_SOURCE_DIR:STATIC=D:/Users/Brice/Source/Repos/ska/ska_core
 
+//Path to a file.
+SDL2_INCLUDE_DIR:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h
+
+//Path to a library.
+SDL2_LIBRARY:FILEPATH=SDL2_LIBRARY-NOTFOUND
+
 //Value Computed by CMake
 ska_core_BINARY_DIR:STATIC=D:/Users/Brice/Source/Repos/ska/ska_core
 
