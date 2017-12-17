@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -9,192 +9,484 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Impl\BoxAttractorParticleUpdater.cpp" />
-    <ClCompile Include="Impl\BasicColorGenerator.cpp" />
-    <ClCompile Include="Impl\BasicVelocityGenerator.cpp" />
-    <ClCompile Include="Impl\BoxParticleGenerator.cpp" />
-    <ClCompile Include="Impl\ColorParticleUpdater.cpp" />
-    <ClCompile Include="Impl\ConsoleParticleCountRenderer.cpp" />
-    <ClCompile Include="Impl\EulerAttractorParticleUpdater.cpp" />
-    <ClCompile Include="Impl\GenerationDelayProperty.cpp" />
-    <ClCompile Include="Impl\RandomColorGenerator.cpp" />
-    <ClCompile Include="Impl\ColoredRectGraphicParticleRenderer.cpp" />
-    <ClCompile Include="Impl\PhysicParticleUpdater.cpp" />
-    <ClCompile Include="Impl\SideBalancingParticleUpdater.cpp" />
-    <ClCompile Include="Impl\SphereAttractorParticleUpdater.cpp" />
-    <ClCompile Include="Impl\SpreadingColorParticleEffectFactory.cpp" />
-    <ClCompile Include="Impl\SpreadingParticleEffectFactory.cpp" />
-    <ClCompile Include="Impl\SpreadingTextureParticleEffectFactory.cpp" />
-    <ClCompile Include="Impl\SpritePathProperty.cpp" />
-    <ClCompile Include="Impl\TextureAlphaParticleUpdater.cpp" />
-    <ClCompile Include="Impl\TextureGraphicParticleRenderer.cpp" />
-    <ClCompile Include="Impl\TimeParticleUpdater.cpp" />
-    <ClCompile Include="ParticleBuilder.cpp" />
-    <ClCompile Include="ParticleFactory.cpp" />
-    <ClCompile Include="ParticleEffect.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Impl\ConsoleParticleCountRenderer.h" />
-    <ClInclude Include="Impl\GenerationDelayProperty.h" />
-    <ClInclude Include="Impl\SideBalancingParticleUpdater.h" />
-    <ClInclude Include="Impl\SpreadingColorParticleEffectFactory.h" />
-    <ClInclude Include="Impl\BoxAttractorParticleUpdater.h" />
-    <ClInclude Include="Impl\BasicColorGenerator.h" />
-    <ClInclude Include="Impl\BasicVelocityGenerator.h" />
-    <ClInclude Include="Impl\BoxParticleGenerator.h" />
-    <ClInclude Include="Impl\ColorParticleUpdater.h" />
-    <ClInclude Include="Impl\EulerAttractorParticleUpdater.h" />
-    <ClInclude Include="Impl\RandomColorGenerator.h" />
-    <ClInclude Include="Impl\ColoredRectGraphicParticleRenderer.h" />
-    <ClInclude Include="Impl\PhysicParticleUpdater.h" />
-    <ClInclude Include="Impl\SphereAttractorParticleUpdater.h" />
-    <ClInclude Include="Impl\SpreadingParticleEffectFactory.h" />
-    <ClInclude Include="Impl\SpreadingTextureParticleEffectFactory.h" />
-    <ClInclude Include="Impl\SpritePathProperty.h" />
-    <ClInclude Include="Impl\TextureAlphaParticleUpdater.h" />
-    <ClInclude Include="Impl\TextureGraphicParticleRenderer.h" />
-    <ClInclude Include="Impl\TimeParticleUpdater.h" />
-    <ClInclude Include="ParticleBuilder.h" />
-    <ClInclude Include="ParticleGenerator.h" />
-    <ClInclude Include="ParticleFactory.h" />
-    <ClInclude Include="ParticleGroup.h" />
-    <ClInclude Include="ParticleRenderer.h" />
-    <ClInclude Include="ParticleEffect.h" />
-    <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="ParticleUpdater.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{E822F236-8EDF-4F81-8AE2-C54A7D2A8950}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ska_particle</RootNamespace>
+    <ProjectGuid>{E9C91CA1-16CE-3E67-B833-0D04F076EBF0}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ska_particle</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\ska_core;..\ska_draw;$(IncludePath)</IncludePath>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_particle.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_particle</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_particle.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_particle</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_particle.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_particle</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_particle.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_particle</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\ska_core;..\ska_draw;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\ska_core;..\ska_draw;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\ska_core;..\ska_draw;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalOptions>/fp:fast %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_particle\..\ska_draw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_particle -BD:/Users/Brice/Source/Repos/ska/ska_particle --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystem.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompilerABI.c;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Internal\FeatureTesting.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\feature_tests.cxx;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_particle -BD:/Users/Brice/Source/Repos/ska/ska_particle --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystem.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompilerABI.c;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Internal\FeatureTesting.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\feature_tests.cxx;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_particle -BD:/Users/Brice/Source/Repos/ska/ska_particle --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystem.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompilerABI.c;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Internal\FeatureTesting.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\feature_tests.cxx;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_particle -BD:/Users/Brice/Source/Repos/ska/ska_particle --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Users/Brice/Source/Repos/ska/ska_particle/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystem.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeFindBinUtils.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompilerABI.c;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Internal\FeatureTesting.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\feature_tests.cxx;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompiler.cmake.in;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Priorized.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\State.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateData.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\BlockContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\CollisionEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ECSEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\EventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ExtensibleGameEventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GUIEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameLibrariesInitializedEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputKeyEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputMouseEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\StateEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\IGraphicSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\IAnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptPositionedGetter.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptRegisterer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptTriggerType.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentHandler.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSafeAccessor.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSerializer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentUnsafeAccessor.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ECSDefines.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SystemMaskGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\CorruptedFileException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\FileException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalArgumentException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalStateException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IndexOutOfBoundsException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InputException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InvalidPathException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\NumberFormatException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptDiedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptNotActivatedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptSyntaxError.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptUnknownCommandException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\StateDiedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\TerminateProcessException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\EnumContextManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputAction.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputRange.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Rectangle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\CompoundTask.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Runnable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Task.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\WorkNode.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Ticked.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ContainsTypeTuple.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FileUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Force.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\CalculOperators.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Identity.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OutputUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Refreshable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Singleton_template.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SkaConstants.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SubObserver.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsRenderable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\AnimatedTexture.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Font.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GifTexture.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GraphicComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\HasShadowComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\PositionnedGraphicDrawable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLFont.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLRenderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLSurface.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLTexture.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AbstractGraphicSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AnimationSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFixedSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFollowSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DebugCollisionDrawerSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\JumpAnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\ShadowSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\WalkAnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Texture.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\TextureData.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicColorGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicVelocityGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxAttractorParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxParticleGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColorParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColoredRectGraphicParticleRenderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ConsoleParticleCountRenderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\EulerAttractorParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\GenerationDelayProperty.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\PhysicParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\RandomColorGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SideBalancingParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SphereAttractorParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingColorParticleEffectFactory.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingParticleEffectFactory.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingTextureParticleEffectFactory.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpritePathProperty.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureAlphaParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureGraphicParticleRenderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TimeParticleUpdater.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleBuilder.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleEffect.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleFactory.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleGroup.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleRenderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleUpdater.h" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicColorGenerator.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicVelocityGenerator.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxAttractorParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxParticleGenerator.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColorParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColoredRectGraphicParticleRenderer.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ConsoleParticleCountRenderer.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\EulerAttractorParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\GenerationDelayProperty.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\PhysicParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\RandomColorGenerator.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SideBalancingParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SphereAttractorParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingColorParticleEffectFactory.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingParticleEffectFactory.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingTextureParticleEffectFactory.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpritePathProperty.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureAlphaParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureGraphicParticleRenderer.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TimeParticleUpdater.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleBuilder.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleEffect.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleFactory.cpp"  />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ZERO_CHECK.vcxproj">
+      <Project>{D8DBABFD-7695-38CD-995F-40528CC10CA5}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

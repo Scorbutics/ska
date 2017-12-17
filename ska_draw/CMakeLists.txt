@@ -12,11 +12,14 @@ include_directories(${SDL2_GIF_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 
 file(GLOB_RECURSE SOURCES
+	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 	${SDL2_GIF_INCLUDE_DIR}/*.h
 	${SKA_CORE_DIR}/*.h
     *.h
     *.cpp
 )
+
+string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 set(SKA_DEBUG_DIR "Debug")
 set(SKA_RELEASE_DIR "Release")
@@ -24,4 +27,4 @@ set(SKA_RELEASE_DIR "Release")
 add_library(ska_draw STATIC ${SOURCES})
 set_target_properties(ska_draw PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR}
-                      ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR})
+                      ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/../${SKA_RELEASE_DIR})

@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 project(ska_core)
 
 file(GLOB_RECURSE SOURCES
+	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     *.h
     *.cpp
 )
+
+string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 set(SKA_DEBUG_DIR "Debug")
 set(SKA_RELEASE_DIR "Release")

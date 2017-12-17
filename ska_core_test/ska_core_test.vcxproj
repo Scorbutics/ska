@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -9,160 +9,459 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{8FC49EE7-5BB9-4B27-8425-92C41B331705}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ska_core_test</RootNamespace>
+    <ProjectGuid>{3A627579-4F79-3455-B071-114EE1773FEF}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ska_core_test</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\ska_core;$(IncludePath)</IncludePath>
-    <ReferencePath>..\..\x64\Debug;$(ReferencePath)</ReferencePath>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_core_test.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_core_test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_core_test.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_core_test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_core_test.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_core_test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_core_test.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_core_test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\ska_core;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>../$(Configuration);../external/lib/MSVC/$(Configuration);$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\ska_core;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>../$(Configuration);../external/lib/MSVC/$(Configuration);$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\ska_core;$(IncludePath)</IncludePath>
-    <ReferencePath>..\..\x64\Release;$(ReferencePath)</ReferencePath>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\ska_gui;..\ska_draw;..\ska_core</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
     <Link>
+      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/Debug/ska_core_test.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/Debug/ska_core_test.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>ska_core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
     <Link>
+      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/Release/ska_core_test.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/Release/ska_core_test.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ska_core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\ska_gui;..\ska_draw;..\ska_core</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
     <Link>
+      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/MinSizeRel/ska_core_test.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/ska_core_test/MinSizeRel/ska_core_test.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/RelWithDebInfo/ska_core_test.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/ska_core_test/RelWithDebInfo/ska_core_test.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CompoundTask_test.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MockState.cpp" />
-    <ClCompile Include="RectangleUtils_test.cpp" />
-    <ClCompile Include="StateHolder_test.cpp" />
-    <ClCompile Include="StateListener.cpp" />
-    <ClCompile Include="TaskQueue_test.cpp" />
-    <ClCompile Include="WorkNode_test.cpp" />
+    <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_core_test -BD:/Users/Brice/Source/Repos/ska/ska_core_test --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_core_test -BD:/Users/Brice/Source/Repos/ska/ska_core_test --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_core_test -BD:/Users/Brice/Source/Repos/ska/ska_core_test --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/Users/Brice/Source/Repos/ska/ska_core_test -BD:/Users/Brice/Source/Repos/ska/ska_core_test --check-stamp-file D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Users/Brice/Source/Repos/ska/ska_core_test/CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCCompiler.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MockState.h" />
-    <ClInclude Include="StateListener.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Priorized.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\State.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateData.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\BlockContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\CollisionEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ECSEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\EventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ExtensibleGameEventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GUIEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEventDispatcher.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameLibrariesInitializedEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputKeyEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputMouseEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\StateEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\IGraphicSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\IAnimationStateMachine.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptPositionedGetter.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptRegisterer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptTriggerType.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentHandler.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSafeAccessor.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSerializer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentUnsafeAccessor.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ECSDefines.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SystemMaskGenerator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\CorruptedFileException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\FileException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalArgumentException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalStateException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IndexOutOfBoundsException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InputException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InvalidPathException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\NumberFormatException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptDiedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptNotActivatedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptSyntaxError.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptUnknownCommandException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\StateDiedException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\TerminateProcessException.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\EnumContextManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputAction.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputRange.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Rectangle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\CompoundTask.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Runnable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Task.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\WorkNode.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Ticked.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ContainsTypeTuple.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FileUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Force.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\CalculOperators.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Identity.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observer.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OutputUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Refreshable.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Singleton_template.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SkaConstants.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SubObserver.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockState.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateListener.h" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\CompoundTask_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockState.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\RectangleUtils_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateBase_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateHolder_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateListener.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\TaskQueue_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\WorkNode_test.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\main.cpp"  />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\ZERO_CHECK.vcxproj">
+      <Project>{2C457BE3-10EF-34F9-8836-515FC96D77C9}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

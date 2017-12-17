@@ -397,7 +397,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.cpp"  />
