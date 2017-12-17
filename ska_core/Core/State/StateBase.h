@@ -7,8 +7,6 @@
 #include "StateBuilder.h"
 
 namespace ska {
-	class Window;
-	class InputContextManager;
 
 	/**
 	 * \brief Base State class.
@@ -45,7 +43,7 @@ namespace ska {
 
 		template<class State, class ...Args>
 		State* addSubState(Args&& ... args) {
-			auto s = std::make_unique<State>(m_entityManager, std::forward<Args>(args)...);
+			auto s = std::make_unique<State>(std::forward<Args>(args)...);
             auto result = static_cast<State*>(s.get());
             m_subStates.push_back(std::move(s));
             auto state = result;
