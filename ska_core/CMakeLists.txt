@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core)
 
+find_file(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
+
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     *.h
@@ -11,8 +13,6 @@ string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 set(SKA_DEBUG_DIR "Debug")
 set(SKA_RELEASE_DIR "Release")
-
-set(SDL2_INCLUDE_DIR "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.11.25503/include")
 
 include_directories(${SDL2_INCLUDE_DIR})
 
