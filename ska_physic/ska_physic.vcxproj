@@ -60,7 +60,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_physic.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_physic</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_physic.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_physic</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
@@ -406,7 +406,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\CollisionSystem.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\DebugWorldCollisionResponse.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.cpp"  />

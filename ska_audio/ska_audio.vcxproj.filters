@@ -13,9 +13,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_audio\Audio\SoundRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_audio\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_audio\SoundModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

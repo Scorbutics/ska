@@ -60,7 +60,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_gui.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ska_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Users\Brice\Source\Repos\ska\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_gui.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ska_gui</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
@@ -484,7 +484,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\WindowIG.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessagePopup.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessageType.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Button.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonQuit.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonSprite.cpp"  />

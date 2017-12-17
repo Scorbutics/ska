@@ -13,9 +13,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IARandomMovementSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\CMakeFiles\3.10.1\CompilerIdCXX\CMakeCXXCompilerId.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h">
