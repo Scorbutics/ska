@@ -52,8 +52,8 @@ before_build:
     #%DEPENDS% appveyor DownloadFile https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h
     #%DEPENDS% copy SDL_platform.h %PREFIX%\include\SDL2
 
-    dir %PREFIX%\include
-    dir %PREFIX%\lib
+    %DEPENDS% dir %PREFIX%\include
+    %DEPENDS% dir %PREFIX%\lib
     
   # Newer mingw is required, as older mingw32 does not support std::thread
   - |-
