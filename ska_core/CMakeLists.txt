@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core)
 
-find_file(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
-find_library(SDL2_LIBRARY NAME SDL2)
+find_file(SDL2_INCLUDE_DIR NAME SDL.h)
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
