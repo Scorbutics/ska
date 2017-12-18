@@ -16,11 +16,6 @@ before_build:
   # depends are only fetched where there's no cache
 
 
-  - |-
-    rem mkdir %PREFIX%\include
-    rem mkdir %PREFIX%\lib
-    rem cd %TEMP%
-
   # SDL2
   - |-
     %DEPENDS% appveyor DownloadFile http://www.libsdl.org/release/SDL2-devel-2.0.5-mingw.tar.gz
@@ -52,7 +47,7 @@ before_build:
   - |-
     %DEPENDS% appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.2-mingw.tar.gz
     %DEPENDS% 7z x SDL2_mixer-devel-2.0.2-mingw.tar.gz > nul
-    %DEPENDS% 7z x SDL2_mixer-devel-2.0.2-mingw.tar.gz > nul
+    %DEPENDS% 7z x SDL2_mixer-devel-2.0.2-mingw.tar > nul
     %DEPENDS% copy SDL2_mixer-2.0.2\%ARCH%\include\SDL2\* %PREFIX%\include\ > nul
     %DEPENDS% copy SDL2_mixer-2.0.2\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2_mixer-2.0.2\%ARCH%\bin\*.dll %PREFIX%\lib > nul
