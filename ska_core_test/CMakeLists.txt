@@ -6,9 +6,9 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
-set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest")
-set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit")
-set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core")
+set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
+set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
+set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
 set(SKA_CORE_HEADER_FILES ${SKA_CORE_DIR}/*.h)
 
 include_directories(${SDL2_INCLUDE_DIR})
