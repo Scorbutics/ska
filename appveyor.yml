@@ -17,9 +17,9 @@ before_build:
 
 
   - |-
-    %DEPENDS% mkdir %PREFIX%\include
-    %DEPENDS% mkdir %PREFIX%\lib
-    %DEPENDS% cd %TEMP%
+    rem mkdir %PREFIX%\include
+    rem mkdir %PREFIX%\lib
+    rem cd %TEMP%
 
   # SDL2
   - |-
