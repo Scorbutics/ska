@@ -9,6 +9,7 @@ before_build:
     set PREFIX=C:\usr
     set MINGW32=C:\freshmingw
     set ARCH=i686-w64-mingw32
+    set PROJECT_PATH=C:\projects\ska
 
   - git submodule update --init --recursive
 
@@ -63,7 +64,7 @@ build_script:
     cmake --version
     cd ska_core
     del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_BINARY_DIR=%PROJECT_PATH%\ska_core -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
   - |-
     mingw32-make
@@ -75,21 +76,21 @@ build_script:
 
     cd ../ska_core_test
     del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_BINARY_DIR=%PROJECT_PATH%\ska_core -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
     mingw32-make
 
   # Add needed libs
   - |-
-    copy %MINGW32%\mingw32\bin\libgcc_s_dw2-1.dll C:\projects\ska
-    copy %MINGW32%\mingw32\bin\libwinpthread-1.dll C:\projects\ska
-    copy %MINGW32%\mingw32\bin\libstdc*.dll C:\projects\ska
-    copy %PREFIX%\lib\SDL2.dll C:\projects\ska
-    copy %PREFIX%\lib\SDL2_image.dll C:\projects\ska
-    copy %PREFIX%\lib\SDL2_ttf.dll C:\projects\ska
-    copy %PREFIX%\lib\libfreetype-6.dll C:\projects\ska
-    copy %PREFIX%\lib\zlib1.dll C:\projects\ska
-    copy %PREFIX%\lib\libpng16-16.dll C:\projects\ska
+    copy %MINGW32%\mingw32\bin\libgcc_s_dw2-1.dll %PROJECT_PATH%
+    copy %MINGW32%\mingw32\bin\libwinpthread-1.dll %PROJECT_PATH%
+    copy %MINGW32%\mingw32\bin\libstdc*.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2_image.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2_ttf.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\libfreetype-6.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\zlib1.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\libpng16-16.dll %PROJECT_PATH%
 
   # Create package
   - if "%APPVEYOR_REPO_TAG%"=="true" set PACKAGE=hoverboard-%APPVEYOR_REPO_TAG_NAME%-win32.zip
