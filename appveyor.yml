@@ -91,24 +91,7 @@ build_script:
     copy %PREFIX%\lib\libfreetype-6.dll %PROJECT_PATH%
     copy %PREFIX%\lib\zlib1.dll %PROJECT_PATH%
     copy %PREFIX%\lib\libpng16-16.dll %PROJECT_PATH%
-
-  # Create package
-  - if "%APPVEYOR_REPO_TAG%"=="true" set PACKAGE=hoverboard-%APPVEYOR_REPO_TAG_NAME%-win32.zip
-  - if "%APPVEYOR_REPO_TAG%"=="false" set PACKAGE=hoverboard-%APPVEYOR_BUILD_VERSION%.zip
-
-  - |-
-    cd C:\
-    7z a %PACKAGE% hoverboard >nul
-    appveyor PushArtifact %PACKAGE%
-
-deploy:
-- provider: GitHub
-  tag: $(APPVEYOR_REPO_TAG_NAME)
-  release: $(APPVEYOR_REPO_TAG_NAME)
-  description: (FILL ME)
-  artifact: /.*\.zip/
-  draft: true
-  prerelease: false
-  on:
-    branch: master
-    appveyor_repo_tag: true
+  
+  # Unit Tests
+    copy %PROJECT_PATH%\Debug\ska_core_test.exe %PROJECT_PATH%
+    ./ska_core_test.exe
