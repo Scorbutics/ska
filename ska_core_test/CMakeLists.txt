@@ -6,10 +6,14 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
-set(SKA_CORE_DIR "../ska_core")
+set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest")
+set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit")
+set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core")
 set(SKA_CORE_HEADER_FILES ${SKA_CORE_DIR}/*.h)
 
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${DOCTEST_DIR})
+include_directories(${FAKEIT_DIR})
 include_directories(${SKA_CORE_DIR})
 
 file(GLOB_RECURSE SOURCES
@@ -26,10 +30,11 @@ set(SKA_RELEASE_DIR "Release")
 
 add_executable(ska_core_test ${SOURCES})
 set_target_properties(ska_core_test PROPERTIES
-                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR}
-                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/../${SKA_RELEASE_DIR})
+					  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
+                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
+                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-find_library(SKA_CORE_LIB ska_core PATHS ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_CORE_LIB ska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_CORE_LIB)
   message(FATAL_ERROR "ska core library not found")
 endif()
