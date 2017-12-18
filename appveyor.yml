@@ -64,7 +64,7 @@ build_script:
     cmake --version
     cd ska_core
     del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_BINARY_DIR=%PROJECT_PATH%\ska_core -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
   - |-
     mingw32-make
@@ -76,7 +76,7 @@ build_script:
 
     cd ../ska_core_test
     del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_BINARY_DIR=%PROJECT_PATH%\ska_core -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
     mingw32-make
 
