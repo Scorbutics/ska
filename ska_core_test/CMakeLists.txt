@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core_test)
 
-find_file(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
+find_path(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
 if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()

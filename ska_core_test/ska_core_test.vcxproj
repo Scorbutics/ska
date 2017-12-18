@@ -68,13 +68,13 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_core_test.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ska_core_test</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\ska_core_test\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Users\Brice\Source\Repos\ska\Debug\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_core_test.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ska_core_test</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
@@ -83,7 +83,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -100,10 +100,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -126,7 +126,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -142,10 +142,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -168,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -184,10 +184,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -201,7 +201,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/MinSizeRel/ska_core_test.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/ska_core_test/MinSizeRel/ska_core_test.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/Debug/MinSizeRel/ska_core_test.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -210,7 +210,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -226,10 +226,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\SDL.h;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\doctest;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\external\fakeit;D:\Users\Brice\Source\Repos\ska\ska_core_test\..\ska_core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -243,7 +243,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Users/Brice/Source/Repos/ska/ska_core_test/RelWithDebInfo/ska_core_test.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/ska_core_test/RelWithDebInfo/ska_core_test.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Users/Brice/Source/Repos/ska/Debug/RelWithDebInfo/ska_core_test.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
