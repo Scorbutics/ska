@@ -46,12 +46,7 @@ before_build:
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\include\SDL2\* %PREFIX%\include\ > nul
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2_ttf-2.0.12\%ARCH%\bin\*.dll %PREFIX%\lib > nul
-
-  # Fixup SDL bug
-  - |-
-    %DEPENDS% dir %PREFIX%\include
-    %DEPENDS% dir %PREFIX%\lib
-    
+   
   # Newer mingw is required, as older mingw32 does not support std::thread
   - |-
     %DEPENDS% appveyor DownloadFile "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win32/Personal Builds/mingw-builds/7.2.0/threads-posix/dwarf/i686-7.2.0-release-posix-dwarf-rt_v5-rev1.7z/download"
@@ -71,6 +66,8 @@ build_script:
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DSTANDALONE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
   - |-
+    dir C:\projects\ska\Release
+    dir C:\projects\ska\Debug
     mingw32-make
 
     cd ../ska_core_test
