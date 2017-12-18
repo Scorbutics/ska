@@ -14,7 +14,12 @@ before_build:
   - git submodule update --init --recursive
 
   # depends are only fetched where there's no cache
+  - if exist %PREFIX% set DEPENDS=rem
 
+  - |-
+    %DEPENDS% mkdir %PREFIX%\include
+    %DEPENDS% mkdir %PREFIX%\lib
+    %DEPENDS% cd %TEMP%
 
   # SDL2
   - |-
@@ -89,8 +94,6 @@ build_script:
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
     mingw32-make
-
-
 
     cd ../ska_particle
     del CMakeCache.txt
