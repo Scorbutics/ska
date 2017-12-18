@@ -29,7 +29,7 @@ set_target_properties(ska_core_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/../${SKA_RELEASE_DIR})
 
-find_library(SKA_CORE_LIB ska_core PATHS ../${SKA_DEBUG_DIR})
+find_library(SKA_CORE_LIB ska_core PATHS ${CMAKE_BINARY_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_CORE_LIB)
   message(FATAL_ERROR "ska core library not found")
 endif()
