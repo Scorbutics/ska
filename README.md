@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/hxnab81os4noj270?svg=true)](https://ci.appveyor.com/project/Scorbutics/ska)
+
 # ska engine
 ska engine, a light and basic 2D engine to build simple games.
 
