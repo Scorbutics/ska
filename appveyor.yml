@@ -71,9 +71,6 @@ build_script:
     dir C:\projects\ska\Release
     dir C:\projects\ska\Debug
 
-    dir C:\projects\ska\ska_core
-    dir C:\projects\ska\
-
     cd ../ska_core_test
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
@@ -95,4 +92,4 @@ build_script:
   # Unit Tests
   - |-
     copy %PROJECT_PATH%\Debug\ska_core_test.exe %PROJECT_PATH%
-    ./ska_core_test.exe
+    ska_core_test.exe
