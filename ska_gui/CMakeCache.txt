@@ -159,6 +159,9 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+SDL2_INCLUDE_DIR:PATH=SDL2_INCLUDE_DIR-NOTFOUND
+
 //Value Computed by CMake
 ska_gui_BINARY_DIR:STATIC=D:/Users/Brice/Source/Repos/ska/ska_gui
 
