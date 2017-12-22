@@ -41,32 +41,32 @@ set_target_properties(ska_gui_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-find_library(SKA_CORE_LIB ska_core NAMES libska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_CORE_LIB NAMES libska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_CORE_LIB)
   message(FATAL_ERROR "ska core library not found")
 endif()
 
-find_library(SKA_DRAW_LIB ska_core NAMES libska_draw PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_DRAW_LIB NAMES libska_draw PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_DRAW_LIB)
   message(FATAL_ERROR "ska draw library not found")
 endif()
 
-find_library(SKA_GUI_LIB ska_core NAMES libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_GUI_LIB NAMES libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_GUI_LIB)
   message(FATAL_ERROR "ska gui library not found")
 endif()
 
-find_library(SDL2_LIB SDL2 NAMES SDL2 PATHS ${LIBRARY_DIR})
+find_library(SDL2_LIB NAMES SDL2 PATHS ${LIBRARY_DIR})
 if(NOT SDL2_LIB)
   message(FATAL_ERROR "SDL2 library not found")
 endif()
 
-find_library(SDL2_TTF_LIB SDL2_ttf NAMES SDL2_ttf PATHS ${LIBRARY_DIR})
+find_library(SDL2_TTF_LIB NAMES SDL2_ttf PATHS ${LIBRARY_DIR})
 if(NOT SDL2_TTF_LIB)
   message(FATAL_ERROR "SDL2 ttf library not found")
 endif()
 
-find_library(SDL2_IMG_LIB SDL2_image NAMES SDL2_image PATHS ${LIBRARY_DIR})
+find_library(SDL2_IMG_LIB NAMES SDL2_image PATHS ${LIBRARY_DIR})
 if(NOT SDL2_IMG_LIB)
   message(FATAL_ERROR "SDL2 image library not found")
 endif()
