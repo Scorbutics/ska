@@ -61,6 +61,11 @@ if(NOT SDL2_LIB)
   message(FATAL_ERROR "SDL2 library not found")
 endif()
 
+find_library(SDL2_MAIN_LIB NAMES SDL2main libSDL2main PATHS ${LIBRARY_DIR})
+if(NOT SDL2_MAIN_LIB)
+  message(FATAL_ERROR "SDL2 main library not found")
+endif()
+
 find_library(SDL2_TTF_LIB NAMES SDL2_ttf libSDL2_ttf PATHS ${LIBRARY_DIR})
 if(NOT SDL2_TTF_LIB)
   message(FATAL_ERROR "SDL2 ttf library not found")
@@ -73,6 +78,7 @@ endif()
 
 
 target_link_libraries(ska_gui_test ${SDL2_LIB})
+target_link_libraries(ska_gui_test ${SDL2_MAIN_LIB})
 target_link_libraries(ska_gui_test ${SDL2_TTF_LIB})
 target_link_libraries(ska_gui_test ${SDL2_IMG_LIB})
 target_link_libraries(ska_gui_test ${SKA_CORE_LIB})
