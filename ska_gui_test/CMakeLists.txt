@@ -6,6 +6,8 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
+set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
+
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
@@ -54,6 +56,25 @@ if(NOT SKA_GUI_LIB)
   message(FATAL_ERROR "ska gui library not found")
 endif()
 
+find_library(SDL2_LIB SDL2 NAMES SDL2 PATHS ${LIBRARY_DIR})
+if(NOT SDL2_LIB)
+  message(FATAL_ERROR "SDL2 library not found")
+endif()
+
+find_library(SDL2_TTF_LIB SDL2_ttf NAMES SDL2_ttf PATHS ${LIBRARY_DIR})
+if(NOT SDL2_TTF_LIB)
+  message(FATAL_ERROR "SDL2 ttf library not found")
+endif()
+
+find_library(SDL2_IMG_LIB SDL2_image NAMES SDL2_image PATHS ${LIBRARY_DIR})
+if(NOT SDL2_IMG_LIB)
+  message(FATAL_ERROR "SDL2 image library not found")
+endif()
+
+
+target_link_libraries(ska_core_test ${SDL2_LIB})
+target_link_libraries(ska_core_test ${SDL2_TTF_LIB})
+target_link_libraries(ska_core_test ${SDL2_IMG_LIB})
 target_link_libraries(ska_core_test ${SKA_CORE_LIB})
 target_link_libraries(ska_core_test ${SKA_DRAW_LIB})
 target_link_libraries(ska_core_test ${SKA_GUI_LIB})
