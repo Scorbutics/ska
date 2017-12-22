@@ -77,6 +77,12 @@ build_script:
 
     mingw32-make
 
+    cd ../ska_core_test
+    del CMakeCache.txt
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+
+    mingw32-make
+
     cd ../ska_draw
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
@@ -84,6 +90,12 @@ build_script:
     mingw32-make
 
     cd ../ska_gui
+    del CMakeCache.txt
+    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
+
+    mingw32-make
+
+    cd ../ska_gui_test
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
@@ -114,18 +126,6 @@ build_script:
     mingw32-make
 
     cd ../ska_world
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
-
-    mingw32-make
-
-    cd ../ska_core_test
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
-
-    mingw32-make
-
-    cd ../ska_gui_test
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-c++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 

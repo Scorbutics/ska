@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(ska_core_test)
+project(ska_gui_test)
 
 find_path(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
 if(NOT SDL2_INCLUDE_DIR)
@@ -35,8 +35,8 @@ string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 set(SKA_DEBUG_DIR "Debug")
 set(SKA_RELEASE_DIR "Release")
 
-add_executable(ska_core_test ${SOURCES})
-set_target_properties(ska_core_test PROPERTIES
+add_executable(ska_gui_test ${SOURCES})
+set_target_properties(ska_gui_test PROPERTIES
 					  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
@@ -72,9 +72,9 @@ if(NOT SDL2_IMG_LIB)
 endif()
 
 
-target_link_libraries(ska_core_test ${SDL2_LIB})
-target_link_libraries(ska_core_test ${SDL2_TTF_LIB})
-target_link_libraries(ska_core_test ${SDL2_IMG_LIB})
-target_link_libraries(ska_core_test ${SKA_CORE_LIB})
-target_link_libraries(ska_core_test ${SKA_DRAW_LIB})
-target_link_libraries(ska_core_test ${SKA_GUI_LIB})
+target_link_libraries(ska_gui_test ${SDL2_LIB})
+target_link_libraries(ska_gui_test ${SDL2_TTF_LIB})
+target_link_libraries(ska_gui_test ${SDL2_IMG_LIB})
+target_link_libraries(ska_gui_test ${SKA_CORE_LIB})
+target_link_libraries(ska_gui_test ${SKA_DRAW_LIB})
+target_link_libraries(ska_gui_test ${SKA_GUI_LIB})
