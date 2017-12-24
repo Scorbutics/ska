@@ -73,7 +73,7 @@ if(NOT SDL2_TTF_LIB)
   message(FATAL_ERROR "SDL2 ttf library not found")
 endif()
 
-find_library(SDL2_IMG_LIB NAMES SDL2_image.lib libSDL_image.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
+find_library(SDL2_IMG_LIB NAMES SDL2_image.lib libSDL2_image.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
 if(NOT SDL2_IMG_LIB)
   message(FATAL_ERROR "SDL2 image library not found")
 endif()
