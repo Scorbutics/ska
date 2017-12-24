@@ -8,6 +8,8 @@ endif()
 
 set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
 
+message("lib folder is " ${LIBRARY_DIR})
+
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
