@@ -63,7 +63,7 @@ if(NOT SDL2)
   message(FATAL_ERROR "SDL2 library not found")
 endif()
 
-find_library(SDL2_main NAMES SDL2main.lib libSDL2main.dll.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
+find_library(SDL2_main NAMES SDL2main.lib libSDL2main.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
 if(NOT SDL2_main)
   message(FATAL_ERROR "SDL2 main library not found")
 endif()
