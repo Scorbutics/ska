@@ -102,7 +102,7 @@ build_script:
     del CMakeCache.txt
     cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=14 -G "MinGW Makefiles"
 
-    mingw32-make
+    mingw32-make VERBOSE=1
 
     cd ../ska_ai
     del CMakeCache.txt
