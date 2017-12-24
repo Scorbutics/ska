@@ -6,10 +6,6 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
-set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
-
-message("lib folder is " ${LIBRARY_DIR})
-
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
@@ -57,6 +53,9 @@ find_library(SKA_GUI_LIB NAMES libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../$
 if(NOT SKA_GUI_LIB)
   message(FATAL_ERROR "ska gui library not found")
 endif()
+
+set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
+message("lib folder is " ${LIBRARY_DIR})
 
 find_library(SDL2 NAMES SDL2.lib libSDL2.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
 if(NOT SDL2)
