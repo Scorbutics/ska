@@ -79,4 +79,4 @@ if(NOT SDL2_image)
 endif()
 
 
-target_link_libraries(ska_gui_test SDL2 SDL2_main SDL2_ttf SDL2_image ${SKA_CORE_LIB} ${SKA_DRAW_LIB} ${SKA_GUI_LIB})
+target_link_libraries(ska_gui_test ${SDL2} ${SDL2_main} ${SDL2_ttf} ${SDL2_image} ${SKA_CORE_LIB} ${SKA_DRAW_LIB} ${SKA_GUI_LIB})
