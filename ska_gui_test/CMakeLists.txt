@@ -79,10 +79,4 @@ if(NOT SDL2_IMG_LIB)
 endif()
 
 
-target_link_libraries(ska_gui_test ${SDL2_LIB})
-target_link_libraries(ska_gui_test ${SDL2_MAIN_LIB})
-target_link_libraries(ska_gui_test ${SDL2_TTF_LIB})
-target_link_libraries(ska_gui_test ${SDL2_IMG_LIB})
-target_link_libraries(ska_gui_test ${SKA_CORE_LIB})
-target_link_libraries(ska_gui_test ${SKA_DRAW_LIB})
-target_link_libraries(ska_gui_test ${SKA_GUI_LIB})
+target_link_libraries(ska_gui_test ${SDL2_LIB} ${SDL2_MAIN_LIB} ${SDL2_TTF_LIB} ${SDL2_IMG_LIB} ${SKA_CORE_LIB} ${SKA_DRAW_LIB} ${SKA_GUI_LIB})
