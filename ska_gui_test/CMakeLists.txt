@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_gui_test)
 
-find_path(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
-if(NOT SDL2_INCLUDE_DIR)
+
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
-endif()
+
 
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
@@ -39,17 +38,17 @@ set_target_properties(ska_gui_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-find_library(SKA_CORE_LIB NAMES libska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_CORE_LIB NAMES ska_core libska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_CORE_LIB)
   message(FATAL_ERROR "ska core library not found")
 endif()
 
-find_library(SKA_DRAW_LIB NAMES libska_draw PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_DRAW_LIB NAMES ska_draw libska_draw PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_DRAW_LIB)
   message(FATAL_ERROR "ska draw library not found")
 endif()
 
-find_library(SKA_GUI_LIB NAMES libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+find_library(SKA_GUI_LIB NAMES ska_gui libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 if(NOT SKA_GUI_LIB)
   message(FATAL_ERROR "ska gui library not found")
 endif()
