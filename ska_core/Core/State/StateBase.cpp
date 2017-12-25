@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "StateBase.h"
 #include "../../Draw/IGraphicSystem.h"
 
@@ -142,7 +143,9 @@ bool ska::StateBase::removeSubState(State& subState) {
 	auto removedState = std::move(*it);
 	m_subStates.erase(it, m_subStates.end());
 	auto removed = std::move(removedState);
-	removed->unload();
+	if (m_active) {
+		removed->unload();
+	}
 	return true;	
 }
 

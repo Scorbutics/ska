@@ -27,7 +27,7 @@ TEST_CASE("[StateBase]") {
 		StateBaseTest sbt;
 		sbt.addSubState(std::make_unique<MockState>(mockState));
 		
-		SUBCASE("substate is not loaded") {
+		SUBCASE("parent not loaded : substate is not loaded") {
 			VerifyNoOtherInvocations(Method(mockState, load));
 		}
 
@@ -51,4 +51,22 @@ TEST_CASE("[StateBase]") {
 		Verify(Method(mockState, load));
 	}
 
+
+	SUBCASE("removeSubState"){
+		StateBaseTest sbt;
+		auto sPtr = std::make_unique<MockState>(mockState);
+		auto& state = *sPtr.get();
+		sbt.addSubState(std::move(sPtr));
+
+		SUBCASE("parent not loaded : substate is not unloaded") {
+			sbt.removeSubState(state);
+			VerifyNoOtherInvocations(Method(mockState, unload));
+		}
+
+		SUBCASE("loading parent after removing the substate") {
+			sbt.load(nullptr);
+			sbt.removeSubState(state);
+			Verify(Method(mockState, unload));
+		}
+	}
 }
