@@ -1,9 +1,16 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_gui_test)
 
+set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
+set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
 
-	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
+message("lib folder is " ${LIBRARY_DIR})
 
+set(SKA_DEBUG_DIR "Debug")
+set(SKA_RELEASE_DIR "Release")
+
+link_directories(${LIBRARY_DIR})
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
 
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
@@ -20,17 +27,11 @@ include_directories(${SKA_GUI_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	${SKA_CORE_DIR}/*.h
-	${SKA_DRAW_DIR}/*.h
-	${SKA_GUI_DIR}/*.h
     *.h
     *.cpp
 )
 
 string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
-
-set(SKA_DEBUG_DIR "Debug")
-set(SKA_RELEASE_DIR "Release")
 
 add_executable(ska_gui_test ${SOURCES})
 set_target_properties(ska_gui_test PROPERTIES
@@ -38,43 +39,5 @@ set_target_properties(ska_gui_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-find_library(SKA_CORE_LIB NAMES ska_core libska_core PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
-if(NOT SKA_CORE_LIB)
-  message(FATAL_ERROR "ska core library not found")
-endif()
-
-find_library(SKA_DRAW_LIB NAMES ska_draw libska_draw PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
-if(NOT SKA_DRAW_LIB)
-  message(FATAL_ERROR "ska draw library not found")
-endif()
-
-find_library(SKA_GUI_LIB NAMES ska_gui libska_gui PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
-if(NOT SKA_GUI_LIB)
-  message(FATAL_ERROR "ska gui library not found")
-endif()
-
-set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
-message("lib folder is " ${LIBRARY_DIR})
-
-find_library(SDL2 NAMES SDL2.lib libSDL2.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
-if(NOT SDL2)
-  message(FATAL_ERROR "SDL2 library not found")
-endif()
-
-find_library(SDL2_main NAMES SDL2main.lib libSDL2main.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
-if(NOT SDL2_main)
-  message(FATAL_ERROR "SDL2 main library not found")
-endif()
-
-find_library(SDL2_ttf NAMES SDL2_ttf.lib libSDL2_ttf.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
-if(NOT SDL2_ttf)
-  message(FATAL_ERROR "SDL2 ttf library not found")
-endif()
-
-find_library(SDL2_image NAMES SDL2_image.lib libSDL2_image.a PATHS ${LIBRARY_DIR} NO_DEFAULT_PATH)
-if(NOT SDL2_image)
-  message(FATAL_ERROR "SDL2 image library not found")
-endif()
-
-
-target_link_libraries(ska_gui_test ${SDL2} ${SDL2_main} ${SDL2_ttf} ${SDL2_image} ${SKA_CORE_LIB} ${SKA_DRAW_LIB} ${SKA_GUI_LIB})
+set(YOUR_APP_ALL_DEPS ska_gui ska_draw SDL2main ska_core SDL2_ttf SDL2_image SDL2)
+target_link_libraries(ska_gui_test ${YOUR_APP_ALL_DEPS})

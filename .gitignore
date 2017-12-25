@@ -37,3 +37,13 @@
 /ska_world/.vs/ska_world/v15
 /ska_world/CMakeFiles
 /ska_gui_test/CMakeFiles
+/Debug
+/ska_core/Makefile
+/ska_draw/Makefile
+/ska_gui/Makefile
+/ska_gui_test/.vs/ska_gui_test/v15
+/cmake_ska_gui_test.bat
+/ska_gui_test/cmake_.bat
+/ska_gui/cmake_.bat
+/ska_draw/cmake_.bat
+/ska_core/cmake_.bat
