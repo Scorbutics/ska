@@ -72,10 +72,6 @@ public:
 
 };
 
-TEST_CASE("FAIL"){
-	CHECK(false);
-}
-
 
 TEST_CASE("[GUI]Affichage fenetre") {	
 	auto mockRenderer = MakeMockRenderer();
