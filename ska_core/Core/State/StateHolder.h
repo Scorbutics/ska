@@ -14,6 +14,7 @@ namespace ska {
      */
     class StateHolder :
 		public TaskQueue {
+		using StatePtr = std::unique_ptr<State>;
     public:
 
 	    /**

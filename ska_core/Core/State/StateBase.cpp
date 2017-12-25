@@ -1,11 +1,12 @@
 #include "StateBase.h"
+#include "../../Draw/IGraphicSystem.h"
 
 ska::StateBase::StateBase():
 	m_state(0), 
 	m_active(false) {
 }
 
-void ska::StateBase::graphicUpdate(unsigned ellapsedTime, DrawableContainer& drawables){
+void ska::StateBase::graphicUpdate(const unsigned int ellapsedTime, DrawableContainer& drawables){
 	onGraphicUpdate(ellapsedTime, drawables);
 
 	/* Graphics */
@@ -14,7 +15,7 @@ void ska::StateBase::graphicUpdate(unsigned ellapsedTime, DrawableContainer& dra
 	}
 
 	for (auto& s : m_linkedSubStates) {
-		s->graphicUpdate(ellapsedTime, drawables);
+		s.get().graphicUpdate(ellapsedTime, drawables);
 	}
 
 	for (auto& s : m_graphics) {
@@ -23,7 +24,7 @@ void ska::StateBase::graphicUpdate(unsigned ellapsedTime, DrawableContainer& dra
 	}	
 }
 
-void ska::StateBase::eventUpdate(unsigned int ellapsedTime){
+void ska::StateBase::eventUpdate(const unsigned int ellapsedTime){
 	onEventUpdate(ellapsedTime);
 
 	/* Logics */
@@ -32,7 +33,7 @@ void ska::StateBase::eventUpdate(unsigned int ellapsedTime){
 	}
 
 	for (auto& s : m_linkedSubStates) {
-		s->eventUpdate(ellapsedTime);
+		s.get().eventUpdate(ellapsedTime);
 	}
 
 	for (auto& s : m_logics) {
@@ -40,7 +41,7 @@ void ska::StateBase::eventUpdate(unsigned int ellapsedTime){
 	}
 }
 
-void ska::StateBase::load(StatePtr* lastState) {
+void ska::StateBase::load(State* lastState) {
 	m_active = true;
 	beforeLoad(lastState);
 	m_state = 1;
@@ -110,10 +111,54 @@ bool ska::StateBase::unload() {
 }
 
 void ska::StateBase::linkSubState(State& subState) {
-	m_linkedSubStates.insert(&subState);
+	m_linkedSubStates.insert(subState);
 }
 
 void ska::StateBase::unlinkSubState(State& subState){
-	m_linkedSubStates.erase(&subState);
+	m_linkedSubStates.erase(subState);
+}
+
+void ska::StateBase::transmitLinkedSubstates(StateBase& state){
+	m_linkedSubStates = state.m_linkedSubStates;
+}
+
+ska::State& ska::StateBase::addSubState(StatePtr s) {
+	const auto stateRaw = s.get();
+	m_subStates.push_back(std::move(s));
+
+	//manages the case that this current state isn't loaded yet : then substate should be loaded after the state is loaded
+	if (m_active) {
+		stateRaw->load(nullptr);
+	}
+
+	return *stateRaw;
+}
+
+bool ska::StateBase::removeSubState(State& subState) {
+	auto it = std::remove_if(m_subStates.begin(), m_subStates.end(), [&subState](const auto& c) {
+		return c.get() == &subState;
+	});
+
+	auto removedState = std::move(*it);
+	m_subStates.erase(it, m_subStates.end());
+	auto removed = std::move(removedState);
+	removed->unload();
+	return true;	
+}
+
+ska::ISystem* ska::StateBase::addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const{
+	system->setPriority(priority);
+	const auto result = static_cast<ISystem*>(system.get());
+	logics.push_back(std::move(system));
+	std::sort(logics.begin(), logics.end(), Priorized::comparatorInf<ISystemPtr>);
+	return result;
+}
+
+ska::IGraphicSystem* ska::StateBase::addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const{
+	auto result = static_cast<IGraphicSystem*>(system.get());
+	graphics.push_back(std::move(system));
+	std::sort(graphics.begin(), graphics.end(), Priorized::comparatorInf<IGraphicSystemPtr>);
+	result->Priorized::setPriority(priority);
+	return result;		
 }
 

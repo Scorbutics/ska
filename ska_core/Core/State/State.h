@@ -1,15 +1,10 @@
 #pragma once
 #include <memory>
-#include <functional>
 
 namespace ska {
-	class StateHolder;
-	class ISystem;
-	class IGraphicSystem;
 	class DrawableContainer;
 
 	class State;
-	using StatePtr = std::unique_ptr<State>;
 
 	/**
 	 * \brief Represents a Game State.
@@ -33,7 +28,7 @@ namespace ska {
 
 		virtual void graphicUpdate(unsigned ellapsedTime, DrawableContainer& drawables) = 0;
 		virtual void eventUpdate(unsigned int) = 0;
-		virtual void load(StatePtr* lastState) = 0;
+		virtual void load(State* lastState) = 0;
 		virtual bool unload() = 0;
 
 		virtual ~State() = default;
@@ -41,5 +36,18 @@ namespace ska {
 	};
 
 
+	inline bool operator==(const State& val1, const State& val2) {
+		return &val1 == &val2;
+	}
+
 }
 
+namespace std {
+	template <>
+	struct hash<ska::State> {
+		size_t operator()(const ska::State& s) const {
+			return std::hash<size_t>()(reinterpret_cast<size_t>(&s));
+		}
+	};
+
+}

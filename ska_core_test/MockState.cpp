@@ -18,7 +18,7 @@ void MockState::eventUpdate(unsigned ellapsedTime) {
 	return m_instance().eventUpdate(ellapsedTime);
 }
 
-void MockState::load(ska::StatePtr* lastState) {
+void MockState::load(ska::State* lastState) {
 	return m_instance().load(lastState);
 }
 

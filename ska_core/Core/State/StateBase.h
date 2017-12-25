@@ -1,11 +1,11 @@
 #pragma once
 #include <unordered_set>
-#include "State.h"
-#include "StateHolder.h"
-#include "../../Draw/IGraphicSystem.h"
-#include "../../ECS/ISystem.h"
-#include "SystemBuilder.h"
 #include <cassert>
+#include "State.h"
+#include "../../Task/Runnable.h"
+#include "../../Task/TaskQueue.h"
+#include "../../ECS/ISystem.h"
+#include "../../Draw/IGraphicSystem.h"
 
 namespace ska {
 
@@ -24,77 +24,51 @@ namespace ska {
 	 *  - You can transfer substates to another state when the state changes
 	 */
 	class StateBase : public State {
+		using StatePtr = std::unique_ptr<State>;
+		using ISystemPtr = std::unique_ptr<ISystem>;
+		using IGraphicSystemPtr = std::unique_ptr<IGraphicSystem>;
+
+		using SystemContainer = std::vector<ISystemPtr>;
+		using GraphicSystemContainer = std::vector<IGraphicSystemPtr>;
 
 	public:
 		StateBase();
 		
-		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) override final;
-		virtual void eventUpdate(unsigned int ellapsedTime) override final;
+		virtual void graphicUpdate(const unsigned int ellapsedTime, DrawableContainer& drawables) override final;
+		virtual void eventUpdate(const unsigned int ellapsedTime) override final;
 
-		void load(StatePtr* lastState) override final;
+		void load(State* lastState) override final;
 		bool unload() override final;
 
 		void linkSubState(State& subState);
 		void unlinkSubState(State& subState);
 
-		template<class State>
-		void transmitLinkedSubstates(State& state) {
-			m_linkedSubStates = state.m_linkedSubStates;
-		}
+		void transmitLinkedSubstates(StateBase& state);
 
-		template<class State, class ...Args>
-		State* addSubState(Args&& ... args) {
-			auto s = std::make_unique<State>(std::forward<Args>(args)...);
-            auto result = static_cast<State*>(s.get());
-            m_subStates.push_back(std::move(s));
-            auto state = result;
-			
-			//manages the case that this current state isn't loaded yet : then substate should be loaded after the state is loaded
-			if (m_active) {
-				state->load(nullptr);
-			}
-
-			return state;
-		}
-
-		template<class StateT>
-		bool removeSubState(StateT& subState) {
-            auto it = std::remove_if(m_subStates.begin(), m_subStates.end(), [&subState](const auto& c) {
-                return c.get() == &subState;
-            });
-
-            auto removedState = std::move(*it);
-            m_subStates.erase(it, m_subStates.end());
-            auto removed = std::move(removedState);
-			removed->unload();
-			return true;
-		}
+		State& addSubState(StatePtr s);
+		bool removeSubState(State& subState);
 
 		virtual ~StateBase() = default;
 
     protected:
-		template<class System, class ...Args>
-		System* addPriorizedLogic(int priority, Args&& ... args) {
+		inline ISystem* addPriorizedLogic(const int priority, ISystemPtr system) {
 			checkActiveState();
-			return m_builder.addPriorizedLogic<System, Args...>(m_logics, priority, std::forward<Args>(args)...);
+			return addPriorizedLogic(m_logics, priority, std::move(system));
 		}
 
-		template<class System, class ...Args>
-		System* addLogic(Args&& ... args) {
+		inline ISystem* addLogic(ISystemPtr system) {
 			checkActiveState();
-			return this->m_builder.addPriorizedLogic<System, Args...>(m_logics, static_cast<int>(m_logics.size()), std::forward<Args>(args)...);
+			return addPriorizedLogic(m_logics, static_cast<int>(m_logics.size()), std::move(system));
+		}
+		
+		inline IGraphicSystem* addPriorizedGraphic(const int priority, IGraphicSystemPtr graphicSystem) {
+			checkActiveState();
+			return addPriorizedGraphic(m_graphics, priority, std::move(graphicSystem));
 		}
 
-		template<class System, class ...Args>
-		System* addPriorizedGraphic(int priority, Args&& ... args) {
+		inline IGraphicSystem* addGraphic(IGraphicSystemPtr graphicSystem) {
 			checkActiveState();
-			return m_builder.addPriorizedGraphic<System, Args...>(m_graphics, priority, std::forward<Args>(args)...);
-		}
-
-		template<class System, class ...Args>
-		System* addGraphic(Args&& ... args) {
-			checkActiveState();
-			return this->m_builder.addPriorizedGraphic<System, Args...>(m_graphics, static_cast<int>(m_graphics.size()), std::forward<Args>(args)...);
+			return addPriorizedGraphic(m_graphics, static_cast<int>(m_graphics.size()), std::move(graphicSystem));
 		}
 
 		template <class T>
@@ -102,8 +76,8 @@ namespace ska {
 			return m_tasks.queueTask(std::forward<std::unique_ptr<T>>(t));
 		}
 
-		virtual void beforeLoad(StatePtr*) {}
-		virtual void afterLoad(StatePtr*) {}
+		virtual void beforeLoad(State*) {}
+		virtual void afterLoad(State*) {}
 
 		virtual bool beforeUnload() { return false; }
 		virtual bool afterUnload() { return false; }
@@ -113,6 +87,10 @@ namespace ska {
 
 
     private:
+
+		ISystem* addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const;
+		IGraphicSystem* addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const;
+
         inline bool waitTransitions() const {
 			return !m_tasks.hasRunningTask();
 		}
@@ -123,13 +101,12 @@ namespace ska {
         }
 
 	    ska::TaskQueue m_tasks;
-		SystemBuilder m_builder;
 
-		std::vector<std::unique_ptr<ISystem>> m_logics;
-		std::vector<std::unique_ptr<IGraphicSystem>> m_graphics;
+		SystemContainer m_logics;
+		GraphicSystemContainer m_graphics;
 
-		std::vector<std::unique_ptr<State>> m_subStates;
-		std::unordered_set<State*> m_linkedSubStates;
+		std::vector<StatePtr> m_subStates;
+		std::unordered_set<std::reference_wrapper<State>, std::hash<State>> m_linkedSubStates;
         int m_state;
 		bool m_active;
 

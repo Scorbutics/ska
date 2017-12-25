@@ -111,8 +111,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;ska_core.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib;C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib/$(Configuration);D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug;D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -153,8 +153,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;ska_core.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib;C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib/$(Configuration);D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug;D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -195,8 +195,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;ska_core.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib;C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib/$(Configuration);D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug;D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -237,8 +237,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>D:\Users\Brice\Source\Repos\ska\Debug\ska_core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;ska_core.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib;C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include/SDL.h/../lib/$(Configuration);D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug;D:/Users/Brice/Source/Repos/ska/ska_core_test/../Debug/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -307,145 +307,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Priorized.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\State.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateData.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\BlockContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\CollisionEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ECSEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\EventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ExtensibleGameEventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GUIEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameLibrariesInitializedEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputKeyEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputMouseEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\StateEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\IGraphicSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\IAnimationStateMachine.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptPositionedGetter.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptRegisterer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptTriggerType.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentHandler.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSafeAccessor.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSerializer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentUnsafeAccessor.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ECSDefines.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SystemMaskGenerator.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\CorruptedFileException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\FileException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalArgumentException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalStateException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IndexOutOfBoundsException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InputException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InvalidPathException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\NumberFormatException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptDiedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptNotActivatedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptSyntaxError.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptUnknownCommandException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\StateDiedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\TerminateProcessException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\EnumContextManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputAction.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputRange.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Rectangle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\CompoundTask.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Runnable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Task.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\WorkNode.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Ticked.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ContainsTypeTuple.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FileUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Force.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\CalculOperators.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Identity.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OutputUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Refreshable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Singleton_template.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SkaConstants.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SubObserver.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockState.h" />
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockStateBase.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateListener.h" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\CompoundTask_test.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockState.cpp"  />

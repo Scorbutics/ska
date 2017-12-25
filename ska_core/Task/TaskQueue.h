@@ -31,12 +31,10 @@ namespace ska {
 
 		/**
 		 * \brief Adds a task after the last added one in the running pipe.
-		 * \tparam T Task subtype
 		 * \param t Task instance to queue (moved)
 		 * \return The added task materialized by a Runnable instance
 		 */
-		template<typename T>
-		Runnable& queueTask(std::unique_ptr<T>&& t) {
+		Runnable& queueTask(RunnablePtr t) {
             m_tasks.push(move(t));
             return *m_tasks.back();
 		}
