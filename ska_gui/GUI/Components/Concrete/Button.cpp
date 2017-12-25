@@ -14,8 +14,16 @@ m_drawStyle(!placeHolderStyleName.empty()) {
 
 	m_textureSelector = &m_placeHolder;
 	m_lastTextureSelector = nullptr;
-	Widget::setWidth(m_placeHolder.getWidth());
-	Widget::setHeight(m_placeHolder.getHeight());
+	
+	const auto width = m_placeHolder.getWidth();
+	const auto height = m_placeHolder.getHeight();
+	if (width != 0 && height != 0) {
+		Widget::setWidth(width);
+		Widget::setHeight(height);
+	} else {
+		Widget::setWidth(10);
+		Widget::setHeight(10);
+	}
 
 	initHandlers();
 	addHandler<ClickEventListener>(callback);

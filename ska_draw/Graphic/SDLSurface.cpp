@@ -4,6 +4,7 @@
 #include "Exceptions/FileException.h"
 #include "Logging/Logger.h"
 #include "Utils/SkaConstants.h"
+#include "Core/CodeDebug/CodeDebug.h"
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
 	m_surface = nullptr;
@@ -21,7 +22,9 @@ void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Co
 	free();
 	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), c.toNative());
 	
-	checkSurfaceValidity("(Text) : " + text);
+	if (!checkSurfaceValidity("(Text) : " + text)) {
+		return;
+	}
 
 	c.fill(m_r, m_g, m_b, &m_a);
 }
@@ -30,7 +33,9 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 	free();
 	m_surface = SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
 	
-	checkSurfaceValidity("(Rectangle)");
+	if (!checkSurfaceValidity("(Rectangle)")) {
+		return;
+	}
 
 	SDL_Rect sRect = { 0, 0, rect.w, rect.h };
 	color.fill(m_r, m_g, m_b, &m_a);
@@ -41,7 +46,9 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 	free();
 	m_surface = IMG_Load(file.c_str());
 
-	checkSurfaceValidity(file);
+	if(!checkSurfaceValidity(file)) {
+		return;
+	}
 
 	if (colorKey != nullptr) {
 		colorKey->fill(m_r, m_g, m_b, &m_a);
@@ -53,22 +60,24 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 	}
 }
 
-void ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
+bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
 	if(fileName == std::string(NOSUCHFILE)) {
-		return;
+		return true;
 	}
 
-	if (m_surface == nullptr) {
+	SKA_DBG_ONLY(if (m_surface == nullptr) {
 		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDL_GetError());
-	}
+	});
 	
 	if (m_surface == nullptr) {
 		load(NOSUCHFILE, nullptr);
 	}
 
-	if (m_surface == nullptr) {
-		throw FileException("Erreur du chargement de l'image " + fileName + ". Après tentative de récupération, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
-	}
+	SKA_DBG_ONLY(if (m_surface == nullptr) {
+		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Après tentative de récupération, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
+	});
+
+	return m_surface != nullptr;
 }
 
 void ska::SDLSurface::load32(const std::string& file) {

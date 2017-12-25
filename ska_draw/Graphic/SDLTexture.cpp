@@ -28,14 +28,22 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 	default:
 		break;
 	}
-	m_h = m_surface->getInstance()->h;
-	m_w = m_surface->getInstance()->w;
+	if (m_surface->getInstance() != nullptr) {
+		m_h = m_surface->getInstance()->h;
+		m_w = m_surface->getInstance()->w;
+	} else {
+		m_surface = nullptr;
+	}
 	m_whenLoadedTasks = std::make_unique<TaskQueue>();
 }
 
 
 void ska::SDLTexture::loadFromRenderer(const Renderer& renderer) {
 	free();
+
+	if(m_surface == nullptr) {
+		return;
+	}
 
 	m_texture = renderer.createTextureFromSurface(*m_surface);
 	m_surface = nullptr;

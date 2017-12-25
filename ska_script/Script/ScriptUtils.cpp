@@ -226,7 +226,6 @@ std::string ska::ScriptUtils::interpretVarName(const Savegame& saveGame, const S
 bool ska::ScriptUtils::isScriptActivated(const Savegame& saveGame, const std::string& scriptName)
 {
 	std::string s;
-	//WGameCore& wScreen = WGameCore::getInstance();
 	std::ifstream scriptList(("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + saveGame.getSaveName() + FILE_SEPARATOR "scripts.data").c_str(), std::ios::app);
 	std::ifstream tmpScriptList(("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + saveGame.getSaveName() + FILE_SEPARATOR "tmpscripts.data").c_str(), std::ios::app);
 
