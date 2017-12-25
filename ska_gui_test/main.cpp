@@ -11,8 +11,8 @@ public:
 		: ska::GameApp(std::forward<ska::GameConfiguration>(gc)) {
 	}
 
-	virtual int onTerminate(ska::TerminateProcessException&) { std::cout << "Terminate process" << std::endl; return 0; };
-	virtual int onException(ska::GenericException&) { std::cout << "Terminate process" << std::endl; return 0; }
+	virtual int onTerminate(ska::TerminateProcessException&) { std::cout << "Terminate process" << std::endl; return -1; };
+	virtual int onException(ska::GenericException&) { std::cout << "Terminate process" << std::endl; return -1; }
 
 	virtual void run() {
 		doctest::Context context;
