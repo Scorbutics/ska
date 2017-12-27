@@ -42,4 +42,7 @@ public:
 	void onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& dc) override { onGraphicUpdate_ = true; }
 	void onEventUpdate(unsigned int ellapsedTime) override { onEventUpdate_ = true; }
 
+	void task(ska::RunnablePtr task) {
+		queueTask(std::move(task));
+	}
 };

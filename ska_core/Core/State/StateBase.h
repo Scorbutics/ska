@@ -51,29 +51,28 @@ namespace ska {
 		virtual ~StateBase() = default;
 
     protected:
-		inline ISystem* addPriorizedLogic(const int priority, ISystemPtr system) {
+		inline void addPriorizedLogic(const int priority, ISystemPtr system) {
 			checkActiveState();
-			return addPriorizedLogic(m_logics, priority, std::move(system));
+			addPriorizedLogic(m_logics, priority, std::move(system));
 		}
 
-		inline ISystem* addLogic(ISystemPtr system) {
+		inline void addLogic(ISystemPtr system) {
 			checkActiveState();
-			return addPriorizedLogic(m_logics, static_cast<int>(m_logics.size()), std::move(system));
+			addPriorizedLogic(m_logics, static_cast<int>(m_logics.size()), std::move(system));
 		}
 		
-		inline IGraphicSystem* addPriorizedGraphic(const int priority, IGraphicSystemPtr graphicSystem) {
+		inline void addPriorizedGraphic(const int priority, IGraphicSystemPtr graphicSystem) {
 			checkActiveState();
-			return addPriorizedGraphic(m_graphics, priority, std::move(graphicSystem));
+			addPriorizedGraphic(m_graphics, priority, std::move(graphicSystem));
 		}
 
-		inline IGraphicSystem* addGraphic(IGraphicSystemPtr graphicSystem) {
+		inline void addGraphic(IGraphicSystemPtr graphicSystem) {
 			checkActiveState();
-			return addPriorizedGraphic(m_graphics, static_cast<int>(m_graphics.size()), std::move(graphicSystem));
+			addPriorizedGraphic(m_graphics, static_cast<int>(m_graphics.size()), std::move(graphicSystem));
 		}
 
-		template <class T>
-		ska::Runnable& queueTask(std::unique_ptr<T>&& t) {
-			return m_tasks.queueTask(std::forward<std::unique_ptr<T>>(t));
+		Runnable& queueTask(RunnablePtr t) {
+			return m_tasks.queueTask(std::move(t));
 		}
 
 		virtual void beforeLoad(State*) {}
@@ -88,8 +87,8 @@ namespace ska {
 
     private:
 
-		ISystem* addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const;
-		IGraphicSystem* addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const;
+		void addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const;
+		void addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const;
 
         inline bool waitTransitions() const {
 			return !m_tasks.hasRunningTask();

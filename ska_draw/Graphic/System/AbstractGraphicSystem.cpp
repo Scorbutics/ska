@@ -3,7 +3,8 @@
 #include "Draw/DrawableContainer.h"
 #include "../PositionnedGraphicDrawable.h"
 
-ska::AbstractGraphicSystem::AbstractGraphicSystem(ska::CameraSystem* camera) : m_camera(camera) {
+ska::AbstractGraphicSystem::AbstractGraphicSystem(ska::CameraSystem* camera) : 
+	m_camera(camera) {
 	m_drawables = nullptr;
 }
 

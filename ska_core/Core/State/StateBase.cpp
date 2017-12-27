@@ -140,28 +140,28 @@ bool ska::StateBase::removeSubState(State& subState) {
 		return c.get() == &subState;
 	});
 
+	if(it == m_subStates.end()) {
+		return false;
+	}
+
 	auto removedState = std::move(*it);
 	m_subStates.erase(it, m_subStates.end());
 	auto removed = std::move(removedState);
 	if (m_active) {
 		removed->unload();
 	}
-	return true;	
+	return true;
 }
 
-ska::ISystem* ska::StateBase::addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const{
+void ska::StateBase::addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const{
 	system->setPriority(priority);
-	const auto result = static_cast<ISystem*>(system.get());
 	logics.push_back(std::move(system));
 	std::sort(logics.begin(), logics.end(), Priorized::comparatorInf<ISystemPtr>);
-	return result;
 }
 
-ska::IGraphicSystem* ska::StateBase::addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const{
-	auto result = static_cast<IGraphicSystem*>(system.get());
+void ska::StateBase::addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const{
+	system->Priorized::setPriority(priority);
 	graphics.push_back(std::move(system));
 	std::sort(graphics.begin(), graphics.end(), Priorized::comparatorInf<IGraphicSystemPtr>);
-	result->Priorized::setPriority(priority);
-	return result;		
 }
 

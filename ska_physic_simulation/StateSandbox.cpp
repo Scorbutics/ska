@@ -70,7 +70,9 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	using GameAnimationSystem = ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>;
 	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
-		m_cameraSystem = reinterpret_cast<ska::CameraSystem*>(addLogic(std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>())));
+		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		m_cameraSystem = cameraSystemPtr.get();
+		addLogic(std::move(cameraSystemPtr));
 		addGraphic(std::make_unique<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem));
 
 		addLogic(std::make_unique<ska::MovementSystem>(m_entityManager));
@@ -80,16 +82,18 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::GravitySystem>(m_entityManager));
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
-        auto* animSystem = reinterpret_cast<GameAnimationSystem*>(addLogic(std::make_unique<GameAnimationSystem>(m_entityManager)));
-        m_walkASM = animSystem->setup<ska::WalkAnimationStateMachine>(true, m_entityManager).get();
-		animSystem->setup<ska::JumpAnimationStateMachine>(false, m_entityManager);
+		auto animSystemPtr = std::make_unique<GameAnimationSystem>(m_entityManager);
+		auto& animSystem = *animSystemPtr.get();
+        addLogic(std::move(animSystemPtr));
+        m_walkASM = &animSystem.setup<ska::WalkAnimationStateMachine>(true, std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
+		animSystem.setup<ska::JumpAnimationStateMachine>(false, std::make_unique<ska::JumpAnimationStateMachine>(m_entityManager));
 
-		animSystem->link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) > 0.1;
 		});
 
-		animSystem->link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
 		});
