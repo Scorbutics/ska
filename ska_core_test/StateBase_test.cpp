@@ -14,7 +14,7 @@ TEST_CASE("[StateBase]") {
 	ska::GameEventDispatcher ged;
 	//ska::EntityManager em(ged);
 
-	StateBaseTest stateBase;
+	MockStateBase stateBase;
 
 	ska::StateHolder sh(ged);
 	
@@ -24,7 +24,7 @@ TEST_CASE("[StateBase]") {
 	ska::VectorDrawableContainer drawableContainer(renderer.get());
 
 	SUBCASE("addSubState parent no active") {
-		StateBaseTest sbt;
+		MockStateBase sbt;
 		sbt.addSubState(std::make_unique<MockState>(mockState));
 		
 		SUBCASE("parent not loaded : substate is not loaded") {
@@ -41,7 +41,7 @@ TEST_CASE("[StateBase]") {
 	}
 
 	SUBCASE("addSubState parent active : substate automatically loaded") {
-		StateBaseTest sbt;
+		MockStateBase sbt;
 		
 		//sets the state active
 		sbt.load(nullptr);
@@ -53,7 +53,7 @@ TEST_CASE("[StateBase]") {
 
 
 	SUBCASE("removeSubState"){
-		StateBaseTest sbt;
+		MockStateBase sbt;
 		auto sPtr = std::make_unique<MockState>(mockState);
 		auto& state = *sPtr.get();
 		sbt.addSubState(std::move(sPtr));

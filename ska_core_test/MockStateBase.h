@@ -26,12 +26,12 @@ struct ImmutableStateBaseTracer {
 	bool onEventUpdate_;
 };
 
-class StateBaseTest : 
+class MockStateBase : 
 	public ska::StateBase, 
 	public ExposeImmutables<ImmutableStateBaseTracer> {
 public:
-	StateBaseTest() = default;
-	virtual ~StateBaseTest() = default;
+	MockStateBase() = default;
+	virtual ~MockStateBase() = default;
 
 	void beforeLoad(ska::State* s) override { beforeLoadState_ = s; beforeLoadStateDone_ = true; }
 	void afterLoad(ska::State* s) override { afterLoadState_ = s; afterLoadStateDone_ = true; }
