@@ -2,6 +2,8 @@
 #include "Core/State/State.h"
 #include "Core/State/StateBase.h"
 #include "ExposeImmutable.h"
+#include "MockGraphicSystem.h"
+#include "MockSystem.h"
 
 struct ImmutableStateBaseTracer {
 	ImmutableStateBaseTracer() : beforeLoadState_(nullptr),
@@ -28,7 +30,7 @@ struct ImmutableStateBaseTracer {
 
 class MockStateBase : 
 	public ska::StateBase, 
-	public ExposeImmutables<ImmutableStateBaseTracer> {
+	public ExposeImmutable<ImmutableStateBaseTracer> {
 public:
 	MockStateBase() = default;
 	virtual ~MockStateBase() = default;
@@ -44,5 +46,19 @@ public:
 
 	void task(ska::RunnablePtr task) {
 		queueTask(std::move(task));
+	}
+
+	MockGraphicSystem& addMockGraphicSystem() {
+		auto ptr = std::make_unique<MockGraphicSystem>();
+		auto& result = *ptr.get();
+		addGraphic(std::move(ptr));
+		return result;
+	}
+
+	MockSystem& addMockSystem() {
+		auto ptr = std::make_unique<MockSystem>();
+		auto& result = *ptr.get();
+		addLogic(std::move(ptr));
+		return result;
 	}
 };

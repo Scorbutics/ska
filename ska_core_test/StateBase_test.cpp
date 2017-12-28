@@ -4,6 +4,8 @@
 #include "Core/State/StateHolder.h"
 #include "MockState.h"
 #include "Task/Task.h"
+#include "Draw/VectorDrawableContainer.h"
+#include "../ska_gui_test/WindowsUtil.h"
 
 
 TEST_CASE("[StateBase]") {
@@ -71,6 +73,13 @@ TEST_CASE("[StateBase]") {
 			sbt.load(nullptr);
 			CHECK(sbt.read.beforeLoadStateDone_);
 			CHECK(sbt.read.afterLoadStateDone_);
+		}
+
+		SUBCASE("loading with a substate") {
+			sbt.addSubState(std::make_unique<MockState>(mockState));
+
+			sbt.load(nullptr);
+			Verify(Method(mockState, load));
 		}
 	}
 
@@ -164,6 +173,88 @@ TEST_CASE("[StateBase]") {
 
 				CHECK(sbt.read.afterUnload_);
 			}
+		}
+
+	}
+
+	SUBCASE("graphicUpdate") {
+		MockStateBase sbt;
+		MockRenderer mr;
+		ska::VectorDrawableContainer vdc(mr);
+		sbt.load(nullptr);
+		
+		SUBCASE("no substate") {
+			SUBCASE("basic") {
+				sbt.graphicUpdate(0, vdc);
+
+				CHECK(sbt.read.onGraphicUpdate_);
+			}
+
+			SUBCASE("with graphic system") {
+				auto& gs = sbt.addMockGraphicSystem();
+				sbt.graphicUpdate(0, vdc);
+
+				CHECK(gs.read.drawablesDone_);
+				CHECK(gs.read.drawables_ == &vdc);
+				CHECK(gs.read.update_);
+			}
+		}
+
+		SUBCASE("with substate") {
+			auto sPtr = std::make_unique<MockState>(mockState);
+			sbt.addSubState(std::move(sPtr));
+
+			sbt.graphicUpdate(0, vdc);
+
+			Verify(Method(mockState, graphicUpdate));
+		}
+
+		SUBCASE("with linked substate") {
+			MockState state { mockState };
+			sbt.linkSubState(state);
+
+			sbt.graphicUpdate(0, vdc);
+
+			Verify(Method(mockState, graphicUpdate));
+		}
+	}
+
+	SUBCASE("eventUpdate") {
+		MockStateBase sbt;
+		MockRenderer mr;
+		sbt.load(nullptr);
+
+		SUBCASE("no substate") {
+			SUBCASE("basic") {
+				sbt.eventUpdate(0);
+
+				CHECK(sbt.read.onEventUpdate_);
+			}
+
+			SUBCASE("with system") {
+				auto& s = sbt.addMockSystem();
+				sbt.eventUpdate(0);
+				
+				CHECK(s.read.update_);
+			}
+		}
+
+		SUBCASE("with substate") {
+			auto sPtr = std::make_unique<MockState>(mockState);
+			sbt.addSubState(std::move(sPtr));
+
+			sbt.eventUpdate(0);
+
+			Verify(Method(mockState, eventUpdate));
+		}
+
+		SUBCASE("with linked substate") {
+			MockState state{ mockState };
+			sbt.linkSubState(state);
+
+			sbt.eventUpdate(0);
+
+			Verify(Method(mockState, eventUpdate));
 		}
 	}
 }

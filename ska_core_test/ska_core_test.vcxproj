@@ -322,6 +322,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\WorkNode_test.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\main.cpp" />
     <ClInclude Include="ExposeImmutable.h" />
+    <ClInclude Include="MockGraphicSystem.h" />
+    <ClInclude Include="MockSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\ZERO_CHECK.vcxproj">

@@ -42,6 +42,12 @@
     <ClInclude Include="ExposeImmutable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MockGraphicSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MockSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\CMakeLists.txt" />
