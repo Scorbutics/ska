@@ -36,8 +36,8 @@ public:
 	void beforeLoad(ska::State* s) override { beforeLoadState_ = s; beforeLoadStateDone_ = true; }
 	void afterLoad(ska::State* s) override { afterLoadState_ = s; afterLoadStateDone_ = true; }
 
-	bool beforeUnload() override { beforeUnload_ = true; return false; }
-	bool afterUnload() override { afterUnload_ = true; return false; }
+	void beforeUnload() override { beforeUnload_ = true; }
+	void afterUnload() override { afterUnload_ = true; }
 
 	void onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& dc) override { onGraphicUpdate_ = true; }
 	void onEventUpdate(unsigned int ellapsedTime) override { onEventUpdate_ = true; }

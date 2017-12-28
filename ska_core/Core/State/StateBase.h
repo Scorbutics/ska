@@ -17,11 +17,11 @@ namespace ska {
 	 * More than State, StateBase can also have sub-states and manages it.
 	 * Rules about sub-states are those :
 	 *  - Its can be added / removed at any time
-	 *  - When added, a substate is loaded
-	 *  - When removed, a substate is unloaded
+	 *  - When added, a substate is loaded if the current state is active (loaded)
+	 *  - When removed, a substate is unloaded if the current state is active (loaded)
 	 *  - Main state is refreshed, then sub-states are
 	 *  - Loading and unloading of its are done between befores and afters state parent load / unload function
-	 *  - You can transfer substates to another state when the state changes
+	 *  - You can transfer linked substates to another state when the state changes (but their life cycle of loading/unloading is not managed by this state)
 	 */
 	class StateBase : public State {
 		using StatePtr = std::unique_ptr<State>;
@@ -78,8 +78,8 @@ namespace ska {
 		virtual void beforeLoad(State*) {}
 		virtual void afterLoad(State*) {}
 
-		virtual bool beforeUnload() { return false; }
-		virtual bool afterUnload() { return false; }
+		virtual void beforeUnload() { }
+		virtual void afterUnload() { }
 
 		virtual void onGraphicUpdate(unsigned int, DrawableContainer& ) {}
 		virtual void onEventUpdate(unsigned int ) {}

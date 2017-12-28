@@ -26,6 +26,11 @@ namespace ska {
 	public:
 		State() = default;
 
+		State(State&&) = default;
+
+		State(const State&) = delete;
+		bool operator=(const State&) = delete;
+
 		virtual void graphicUpdate(unsigned ellapsedTime, DrawableContainer& drawables) = 0;
 		virtual void eventUpdate(unsigned int) = 0;
 		virtual void load(State* lastState) = 0;
@@ -46,7 +51,7 @@ namespace std {
 	template <>
 	struct hash<ska::State> {
 		size_t operator()(const ska::State& s) const {
-			return std::hash<size_t>()(reinterpret_cast<size_t>(&s));
+			return std::hash<unsigned long>()(reinterpret_cast<unsigned long>(&s));
 		}
 	};
 

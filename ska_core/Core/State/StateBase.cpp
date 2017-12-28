@@ -51,10 +51,6 @@ void ska::StateBase::load(State* lastState) {
 		s->load(lastState);
 	}
 
-	/*for (auto& s : m_linkedSubStates) {
-		s->load(lastState);
-	}*/
-
 	m_state = 2;
 	afterLoad(lastState);
 	m_state = 3;
@@ -63,10 +59,8 @@ void ska::StateBase::load(State* lastState) {
 bool ska::StateBase::unload() {
 	m_tasks.refresh();
 	if (m_state == 3) {
-		const auto beforeUnloaded = !beforeUnload();
-		if (beforeUnloaded) {
-			m_state = 2;
-		}
+		beforeUnload();
+		m_state = 2;
 	}
 
 	//If main scene beforeUnload is finished, THEN we can unload subscenes
@@ -83,10 +77,6 @@ bool ska::StateBase::unload() {
 			subscenesUnloaded &= !s->unload();
 		}
 
-		/*for (auto& s : m_linkedSubStates) {
-			subscenesUnloaded &= !s->unload();
-		}*/
-
 		if (subscenesUnloaded) {
 			m_state = 0;
 		}
@@ -94,10 +84,8 @@ bool ska::StateBase::unload() {
 
 	//If everything is unloaded, THEN we can call main scene afterUnload
 	if (m_state == 0) {
-		const auto afterUnloaded = !afterUnload();
-		if (afterUnloaded) {
-			m_state = -1;
-		}
+		afterUnload();
+		m_state = -1;
 	}
 
 	if (m_state == -1) {
