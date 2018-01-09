@@ -1,10 +1,10 @@
 #include <iostream>
 #include "SDLRenderer.h"
 #include "Logging/Logger.h"
-#include "Core/Window.h"
+#include "SDLWindow.h"
 #include "AnimatedTexture.h"
 
-ska::SDLRenderer::SDLRenderer(Window& window, int index, Uint32 flags) :
+ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
     m_renderer(nullptr) {
 	load(window.getInstance() , index, flags);
 }

@@ -1,11 +1,10 @@
 #pragma once
-#include <SDL.h>
 #include "Draw/Renderer.h"
 #include "Point.h"
 #include "Color.h"
 
 namespace ska {
-	class Window;
+	class SDLWindow;
 	struct Color;
 	class SDLSurface;
     class SDLTexture;
@@ -15,8 +14,8 @@ namespace ska {
 	*/
 	class SDLRenderer : public Renderer {
 	public:
-		SDLRenderer(Window& window, int index, Uint32 flags);
-		
+		SDLRenderer(SDLWindow& window, int index, Uint32 flags);
+
 		SDLRenderer(SDLRenderer&& r) = default;
 		SDLRenderer& operator=(SDLRenderer&& r) = default;
 		SDLRenderer(const SDLRenderer& r) = delete;
@@ -29,7 +28,7 @@ namespace ska {
 		void setRenderColor(const Color& c);
 
         SDL_Texture* createTextureFromSurface(const SDLSurface& s) const override;
-        
+
 		void drawColorPoint(const Color& c, const Point<int>& pos) const override;
 		void drawColorRect(const Color& c, const Rectangle& r) const override;
 		void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const override;
@@ -44,7 +43,7 @@ namespace ska {
 		* \brief Makes the renderer renders
 		*/
 		void render(const Texture& t, int posX, int posY, Rectangle const*) const override;
-		
+
 		/**
 		* \brief Makes the renderer renders
 		*/
@@ -56,7 +55,7 @@ namespace ska {
 	    void free();
 		void renderPresent() const;
 		void renderClear() const;
-		
+
 		SDL_Renderer* m_renderer;
 		Color m_currentRenderColor;
 

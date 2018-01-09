@@ -6,12 +6,12 @@ namespace ska {
 		friend class GameConfiguration;
 
 	public:
-		virtual ~Module();
 		Module(Module&&) = default;
+		virtual ~Module();
 
 	protected:
 		explicit Module(const std::string& name);
-	
+
 	private:
 		const std::string m_name;
 	};

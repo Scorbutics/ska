@@ -1,3 +1,4 @@
+#include <SDL_mixer.h>
 #include "SDLMusic.h"
 
 ska::SDLMusic::SDLMusic(const std::string& musicPath) : m_volume(-1) {

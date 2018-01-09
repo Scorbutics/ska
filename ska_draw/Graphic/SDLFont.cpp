@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL_ttf.h>
 #include "SDLFont.h"
 #include "Utils/SkaConstants.h"
 #include "Exceptions/FileException.h"

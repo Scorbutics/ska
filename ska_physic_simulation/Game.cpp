@@ -5,7 +5,7 @@
 #include "StateSandbox.h"
 #include "Exceptions/FileException.h"
 #include "Graphic/SDLRenderer.h"
-#include "Core/Window.h"
+#include "Graphic/SDLWindow.h"
 #include "Exceptions/IllegalStateException.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
@@ -33,7 +33,7 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	}
 
 	static constexpr auto tailleblocFenetre = 32;
-	auto window = std::make_unique<Window>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
+	auto window = std::make_unique<SDLWindow>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
 
 	return std::make_unique<Game>(std::move(gc), std::move(renderer), std::move(window));

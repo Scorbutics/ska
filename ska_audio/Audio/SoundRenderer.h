@@ -1,11 +1,15 @@
 #pragma once
-#include <SDL_mixer.h>
 #include "Utils/Observer.h"
 #include "Data/Events/WorldEvent.h"
 #include "Data/Events/SoundEvent.h"
 #include "Data/Events/EventDispatcher.h"
 #include "Data/Events/GameEventDispatcher.h"
 #include "Utils/SubObserver.h"
+
+extern "C" {
+    struct _Mix_Music;
+    typedef _Mix_Music Mix_Music;
+}
 
 namespace ska {
 

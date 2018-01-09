@@ -1,6 +1,8 @@
 #pragma once
+
+#include <SDL.h>
+#include <Core/Window.h>
 #include <string>
-#include <cstdint>
 
 namespace ska {
 	/**
@@ -10,32 +12,33 @@ namespace ska {
 	 * Rendering and input listening are not covered by this class.
 	 *
 	 */
-	class Window {
+	class SDLWindow : public Window {
 	public:
-		Window() = default;
-		Window& operator=(const Window&) = delete;
-		virtual ~Window() = default;
+		SDLWindow(const std::string& title, unsigned int w, unsigned int h);
 
-		virtual void show() =0;
+		void show() override;
+
+		SDLWindow& operator=(const SDLWindow&) = delete;
+		virtual ~SDLWindow();
 
 		/**
          * \brief Window width accessor
          * \return the window width
          */
-        virtual unsigned int getWidth() const = 0;
+        unsigned int getWidth() const override;
 
 		/**
 		* \brief Window height accessor
 		* \return the window height
 		*/
-		virtual unsigned int getHeight() const = 0;
+		unsigned int getHeight() const override;
 
 		/**
 		 * \brief Resizes the window in pixels
 		 * \param w Window required width
 		 * \param h Window required height
 		 */
-		virtual void resize(unsigned int w, unsigned int h) = 0;
+		void resize(unsigned int w, unsigned int h) override;
 
 		/**
 		 * \brief Displays a native message box, blocking the thread
@@ -43,13 +46,27 @@ namespace ska {
 		 * \param title Message box window title
 		 * \param message Message to display in the box
 		 */
-		virtual void showMessageBox(uint32_t flags, const std::string& title, const std::string& message) const = 0;
+		void showMessageBox(uint32_t flags, const std::string& title, const std::string& message) const override;
+
 
 		/**
 		 * \brief Changes the current top-left program icon
 		 * \param filename Path to the image to display as a program icon
 		 */
-		virtual void setWindowIcon(const std::string& filename) = 0;
+		void setWindowIcon(const std::string& filename) override;
+
+		SDL_Window* getInstance() const {
+            return m_screen;
+		}
+
+	private:
+		unsigned int m_height;
+		unsigned int m_width;
+
+		const std::string m_wName;
+
+		SDL_Window * m_screen;
+		SDL_Surface* m_iconFile;
 
 	};
 }

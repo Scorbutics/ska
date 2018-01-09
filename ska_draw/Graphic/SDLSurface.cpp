@@ -1,4 +1,5 @@
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include "Font.h"
 #include "SDLSurface.h"
 #include "Exceptions/FileException.h"
@@ -21,7 +22,7 @@ SDL_Surface* ska::SDLSurface::getInstance() const {
 void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Color c) {
 	free();
 	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), c.toNative());
-	
+
 	if (!checkSurfaceValidity("(Text) : " + text)) {
 		return;
 	}
@@ -32,7 +33,7 @@ void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Co
 void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& rect) {
 	free();
 	m_surface = SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
-	
+
 	if (!checkSurfaceValidity("(Rectangle)")) {
 		return;
 	}
@@ -68,7 +69,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
 		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDL_GetError());
 	});
-	
+
 	if (m_surface == nullptr) {
 		load(NOSUCHFILE, nullptr);
 	}
@@ -97,7 +98,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 	loadImage32Free:
 		SDL_FreeSurface(imageRam);
 	}
-	
+
 	checkSurfaceValidity(file);
 
 }

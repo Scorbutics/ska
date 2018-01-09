@@ -4,26 +4,47 @@
 	<Project>
 		<Option title="ska_physic_simulation" />
 		<Option pch_mode="2" />
-		<Option compiler="gnu_gcc_compiler_x86_mode" />
+		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
 				<Option output="../Debug/ska_physic_simulation" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="gnu_gcc_compiler_x86_mode" />
+				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-g" />
+					<Add directory="../ska_core" />
+					<Add directory="../ska_draw" />
+					<Add directory="../ska_physic" />
+					<Add directory="../ska_world" />
 				</Compiler>
 				<Linker>
+					<Add library="libska_core.a" />
+					<Add library="libska_draw.a" />
+					<Add library="libska_physic.a" />
+					<Add library="libska_world.a" />
+					<Add library="libSDL2main.a" />
+					<Add library="libSDL2.a" />
+					<Add library="libSDL2_ttf.a" />
+					<Add library="libSDL2_image.a" />
+					<Add library="libSDL2_gif.a" />
+					<Add library="libSDL2_mixer" />
 					<Add directory="../Debug" />
 					<Add directory="../external/lib/G++/Debug" />
 				</Linker>
+				<MakeCommands>
+					<Build command="" />
+					<CompileFile command="" />
+					<Clean command="" />
+					<DistClean command="" />
+					<AskRebuildNeeded command="" />
+					<SilentBuild command=" &gt; $(CMD_NULL)" />
+				</MakeCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="../Release/ska_physic_simulation" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
-				<Option compiler="gnu_gcc_compiler_x86_mode" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>

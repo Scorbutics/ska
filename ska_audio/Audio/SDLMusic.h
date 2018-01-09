@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
-#include <SDL_mixer.h>
+
+extern "C" {
+    struct _Mix_Music;
+    typedef _Mix_Music Mix_Music;
+}
 
 namespace ska {
 	class SDLMusic {

@@ -11,17 +11,22 @@
 				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
 				<Option type="2" />
-				<Option compiler="gnu_gcc_compiler_x86_mode" />
+				<Option compiler="gcc" />
 				<Option createDefFile="1" />
+				<Option projectLinkerOptionsRelation="-1" />
+				<Option projectLibDirsRelation="-1" />
 				<Compiler>
-					<Add option="-Wall" />
-					<Add option="-g" />
-					<Add option="-DBUILD_DLL" />
+					<Add directory="../ska_core" />
+					<Add directory="../ska_draw" />
 				</Compiler>
-				<Linker>
-					<Add library="user32" />
-					<Add directory="../../" />
-				</Linker>
+				<MakeCommands>
+					<Build command="" />
+					<CompileFile command="" />
+					<Clean command="" />
+					<DistClean command="" />
+					<AskRebuildNeeded command="" />
+					<SilentBuild command=" &gt; $(CMD_NULL)" />
+				</MakeCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="ska_gui" prefix_auto="1" extension_auto="1" />

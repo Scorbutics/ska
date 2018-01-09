@@ -120,3 +120,134 @@
 	"Color.h"
 	"Rectangle.h"
 
+1514984342 source:c:\documents\perso\ska\ska_particle_test\main.cpp
+	<SDL.h>
+	<doctest.h>
+
+1514984340 c:\documents\perso\ska\external\doctest\doctest.h
+	<ciso646>
+	<iosfwd>
+	<iosfwd>
+	<cstddef>
+	"doctest_fwd.h"
+	<ctime>
+	<cmath>
+	<math.h>
+	<new>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<limits>
+	<utility>
+	<sstream>
+	<iomanip>
+	<vector>
+	<set>
+	<stdexcept>
+	<unistd.h>
+	<AfxWin.h>
+	<windows.h>
+	<io.h>
+	<sys/types.h>
+	<unistd.h>
+	<sys/sysctl.h>
+
+1514984342 source:c:\documents\perso\ska\ska_particle_test\particlefactory_test.cpp
+	<doctest.h>
+	"ParticleGroup.h"
+	"ParticleFactory.h"
+	"ParticleBuilder.h"
+
+1514984342 c:\documents\perso\ska\ska_particle\\particlegroup.h
+	<vector>
+	"Point.h"
+	"Graphic/Color.h"
+	"Graphic/Texture.h"
+	"Logging/Logger.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\point.h
+	"Utils/NumberUtils.h"
+	"Rectangle.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\numberutils.h
+	<functional>
+	<random>
+	"../Exceptions/IllegalArgumentException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\illegalargumentexception.h
+	<string>
+	"GenericException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\genericexception.h
+	<exception>
+	<string>
+
+1514984342 c:\documents\perso\ska\ska_core\\rectangle.h
+	<SDL.h>
+
+1514984342 c:\documents\perso\ska\ska_draw\\graphic\color.h
+	<SDL.h>
+	"Utils/NumberUtils.h"
+
+1514984342 c:\documents\perso\ska\ska_draw\\graphic\texture.h
+	"Utils/ManagedResource.h"
+	"Utils/SkaConstants.h"
+	"Rectangle.h"
+	"Draw/Renderable.h"
+	"SDLTexture.h"
+	"TextureData.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\managedresource.h
+	<memory>
+	<unordered_map>
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\skaconstants.h
+
+1514984340 c:\documents\perso\ska\ska_core\\draw\renderable.h
+	"../Rectangle.h"
+
+1514984342 c:\documents\perso\ska\ska_draw\\graphic\sdltexture.h
+	<memory>
+	"SDLSurface.h"
+	"Task/TaskQueue.h"
+
+1514984342 c:\documents\perso\ska\ska_draw\\graphic\sdlsurface.h
+	<SDL.h>
+	<string>
+	"Color.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\task\taskqueue.h
+	<queue>
+	<memory>
+	"Runnable.h"
+	<functional>
+
+1514984342 c:\documents\perso\ska\ska_core\\task\runnable.h
+	<functional>
+
+1514984342 c:\documents\perso\ska\ska_draw\\graphic\texturedata.h
+	<string>
+	"Color.h"
+	"Rectangle.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\logging\logger.h
+	<string>
+	<iostream>
+	<ctime>
+	<typeinfo>
+	<iomanip>
+	"../Utils/NonCopyable.h"
+	"ColorStream.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\noncopyable.h
+
+1514984342 c:\documents\perso\ska\ska_core\\logging\colorstream.h
+	<ostream>
+
+1514984342 c:\documents\perso\ska\ska_particle\\particlefactory.h
+	<cstddef>
+
+1514984342 c:\documents\perso\ska\ska_particle\\particlebuilder.h
+	"Point.h"
+	"ParticleBuilder.h"
+

@@ -1,7 +1,10 @@
 #pragma once
+#include <string>
 
-#include <map>
-#include <SDL_ttf.h>
+extern "C" {
+    struct _TTF_Font;
+    typedef _TTF_Font TTF_Font;
+}
 
 namespace ska {
 	/**
@@ -10,7 +13,7 @@ namespace ska {
 	class SDLFont {
 	public:
 		SDLFont();
-		
+
 		SDLFont(SDLFont&) = delete;
 		SDLFont(SDLFont&&) = default;
 		SDLFont& operator=(const SDLFont&) = delete;
@@ -26,7 +29,6 @@ namespace ska {
 	private:
 		void open(const std::string& fontFile, unsigned int fontSize);
 		TTF_Font* m_fontC;
-
 
 	};
 }
