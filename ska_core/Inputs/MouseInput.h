@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL.h>
 #include "../Point.h"
 
 namespace ska {
@@ -8,7 +7,7 @@ namespace ska {
 		MouseInput();
 
 		void setMouseLastPos(const Point<int>& mouselastpos);
-		void setMousePos(SDL_Event event);
+		void setMousePos(const ska::Point<int>& mousePos, const ska::Point<int>& relativeMousePos);
 
 		void setMouseState(int touche, int x);
 		bool mouseClick(int touche);

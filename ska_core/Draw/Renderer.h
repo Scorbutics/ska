@@ -3,6 +3,11 @@
 #include "../Rectangle.h"
 #include "../Point.h"
 
+extern "C" {
+	struct SDL_Texture;
+	typedef struct SDL_Texture SDL_Texture;
+}
+
 namespace ska {
 	class AnimatedTexture;
 	class SDLTexture;

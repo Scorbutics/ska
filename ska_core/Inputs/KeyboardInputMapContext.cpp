@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "KeyboardInputMapContext.h"
 
-
+//TODO move to an SDL specific module
 ska::KeyboardInputMapContext::KeyboardInputMapContext(ska::RawInputListener& ril) : KeyboardInputContext(ril) {
 }
 

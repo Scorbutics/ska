@@ -33,9 +33,9 @@ int ska::MouseInput::toggle(int touche) const {
 }
 
 
-void ska::MouseInput::setMousePos(SDL_Event event) {
-	m_mouse = std::move(Point<int>(event.motion.x, event.motion.y));
-	m_mouseRel = std::move(Point<int>(event.motion.xrel, event.motion.yrel));
+void ska::MouseInput::setMousePos(const ska::Point<int>& mousePos, const ska::Point<int>& relativeMousePos) {
+	m_mouse = mousePos;
+	m_mouseRel = relativeMousePos;
 }
 
 const ska::Point<int>& ska::MouseInput::getMousePos() const {

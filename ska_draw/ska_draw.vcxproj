@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -120,7 +120,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +153,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -259,6 +261,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graphic\SDLWindow.cpp" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\external\SDL2_gif\src\CEV_gif.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\external\SDL2_gif\src\CEV_gifDeflate.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\external\SDL2_gif\src\CEV_gifToSurface.h" />
@@ -431,35 +434,36 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Texture.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\TextureData.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsRenderable.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\AnimatedTexture.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Font.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GifTexture.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GraphicComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\HasShadowComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLFont.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLRenderer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLSurface.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLTexture.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AbstractGraphicSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AnimationSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFixedSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFollowSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DebugCollisionDrawerSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\JumpAnimationStateMachine.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\ShadowSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\WalkAnimationStateMachine.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Texture.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\TextureData.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsRenderable.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\AnimatedTexture.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Font.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GifTexture.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GraphicComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\HasShadowComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLFont.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLRenderer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLSurface.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLTexture.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AbstractGraphicSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AnimationSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFixedSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraFollowSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DebugCollisionDrawerSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\JumpAnimationStateMachine.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\ShadowSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\WalkAnimationStateMachine.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Texture.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\TextureData.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.cpp" />
+    <ClInclude Include="Graphic\SDLWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_draw\ZERO_CHECK.vcxproj">

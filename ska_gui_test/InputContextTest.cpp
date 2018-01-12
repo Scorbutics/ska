@@ -1,4 +1,5 @@
 #include "InputContextTest.h"
+#include <SDL.h>
 
 
 void InputContextTest::queryActions(ska::InputActionContainer& actions) {

@@ -1,6 +1,6 @@
-#include <cmath>
 #include "PhysicUtils.h"
 
+constexpr static auto PI = M_PI;
 
 ska::PhysicUtils::PhysicUtils()
 {
@@ -13,7 +13,7 @@ const ska::Force ska::PhysicUtils::getMovement(const int direction, const float 
 	switch (direction)
 	{
 	case 0:
-		angle = (float)M_PI / 2;
+		angle = (float)PI / 2;
 		break;
 
 	case 1:
@@ -21,27 +21,27 @@ const ska::Force ska::PhysicUtils::getMovement(const int direction, const float 
 		break;
 
 	case 2:
-		angle = -(float)M_PI / 2;
+		angle = -(float)PI / 2;
 		break;
 
 	case 3:
-		angle = -(float)M_PI;
+		angle = -(float)PI;
 		break;
 
 	case 4:
-		angle = (float)M_PI / 4;
+		angle = (float)PI / 4;
 		break;
 
 	case 5:
-		angle = -(float)M_PI / 4;
+		angle = -(float)PI / 4;
 		break;
 
 	case 6:
-		angle = (float)(-3 * M_PI / 4);
+		angle = (float)(-3 * PI / 4);
 		break;
 
 	case 7:
-		angle = (float)(3 * M_PI / 4);
+		angle = (float)(3 * PI / 4);
 		break;
 
 	default:

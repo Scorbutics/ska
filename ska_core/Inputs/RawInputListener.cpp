@@ -68,7 +68,7 @@ void ska::RawInputListener::update() {
 				m_keyIn.setKeyState(event.key.keysym.scancode, false);
                 break;
             case SDL_MOUSEMOTION:
-				m_mouseIn.setMousePos(event);
+				m_mouseIn.setMousePos(ska::Point<int>(event.motion.x, event.motion.y), ska::Point<int>(event.motion.xrel, event.motion.yrel));
                 break;
             case SDL_MOUSEBUTTONDOWN:
 				m_mouseIn.setMouseState(event.button.button, 1);

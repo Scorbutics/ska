@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "KeyboardInputContext.h"
 
-
+//TODO move to an SDL specific module
 ska::KeyboardInputContext::KeyboardInputContext(RawInputListener& ril) : m_ril(ril) {
 }
 

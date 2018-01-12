@@ -1,5 +1,5 @@
 ﻿#ifndef __ANDROID__
-//#include <SDL.h>
+#include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
 
 #include "GameApp.h"
@@ -8,7 +8,10 @@ namespace ska {
 	class TerminateProcessException;
 }
 
-int main(int argc, char * argv[]) {
+#ifdef __cplusplus
+extern "C"
+#endif
+int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 

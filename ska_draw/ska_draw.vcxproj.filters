@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.cpp">
@@ -88,6 +88,7 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Graphic\SDLWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\external\SDL2_gif\src\CEV_gif.h">
@@ -606,6 +607,7 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Graphic\SDLWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_draw\CMakeLists.txt" />

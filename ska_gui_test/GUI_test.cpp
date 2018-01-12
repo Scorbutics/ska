@@ -101,7 +101,7 @@ void moveMouse(int x, int y) {
 	event.motion.xrel = x - GetICT()->mouseKeys.getMousePos().x;
 	event.motion.yrel = y - GetICT()->mouseKeys.getMousePos().y;
 
-	GetICT()->mouseKeys.setMousePos(event);
+	GetICT()->mouseKeys.setMousePos(ska::Point<int>(event.motion.x, event.motion.y), ska::Point<int>(event.motion.xrel, event.motion.yrel));
 }
 
 void clickMouseLeft(bool d) {

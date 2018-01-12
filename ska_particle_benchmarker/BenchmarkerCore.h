@@ -1,12 +1,12 @@
 #pragma once
-#include "../ska_core/GameApp.h"
-#include "../ska_particle/ParticleEffect.h"
-#include "../ska_core/Core/Window.h"
+#include "GameApp.h"
+#include "ParticleEffect.h"
 #include "Inputs/RawInputListener.h"
 #include "FpsCalculator.h"
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "ParticleSystem.h"
 #include "Graphic/SDLRenderer.h"
+#include "Graphic/SDLWindow.h"
 
 class BenchmarkerCore : 
 	public ska::GameApp {
@@ -25,7 +25,7 @@ private:
 	void buildFireworks();
 
 	ska::RawInputListener m_inputListener;
-	ska::Window m_window;
+	ska::SDLWindow m_window;
 	ska::ParticleEffect m_particles;
 	ska::ParticleSystem m_particleSystem;
 	ska::EulerAttractorParticleUpdater* m_attractor;

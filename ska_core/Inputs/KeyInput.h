@@ -1,11 +1,11 @@
 #pragma once
 
-#include <SDL.h>
 #include <bitset>
 
 namespace ska {
-	class KeyInput {
 
+	class KeyInput {
+		constexpr static auto keysNumber = 512;
 	public:
 		KeyInput() = default;
 
@@ -19,8 +19,8 @@ namespace ska {
 		~KeyInput() = default;
 
 	private:
-		std::bitset<SDL_NUM_SCANCODES> m_keys;
-		std::bitset<SDL_NUM_SCANCODES> m_toggle;
+		std::bitset<keysNumber> m_keys;
+		std::bitset<keysNumber> m_toggle;
 
 	};
 }

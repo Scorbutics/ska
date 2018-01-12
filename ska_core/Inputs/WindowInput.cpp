@@ -5,7 +5,7 @@ ska::WindowInput::WindowInput() :
 	m_height(0) {
 }
 
-void ska::WindowInput::setSize(Sint32 data1, Sint32 data2) {
+void ska::WindowInput::setSize(int32_t data1, int32_t data2) {
 	m_width = data1;
 	m_height = data2;
 }

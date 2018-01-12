@@ -9,6 +9,7 @@
 
 ska::GraphicModule::GraphicModule(const std::string& moduleName):
 	Module(moduleName) {
+	//SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));

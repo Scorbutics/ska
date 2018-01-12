@@ -1,7 +1,6 @@
 #pragma once
 
-#include <SDL.h>
-#include <bitset>
+#include <cstdint>
 
 namespace ska {
 	class WindowInput {
@@ -9,7 +8,7 @@ namespace ska {
 	public:
 		WindowInput();
 		~WindowInput() = default;
-		void setSize(Sint32 data1, Sint32 data2);
+		void setSize(int32_t data1, int32_t data2);
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 

@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "KeyboardInputGUIContext.h"
 
-
+//TODO move to an SDL specific module
 ska::KeyboardInputGUIContext::KeyboardInputGUIContext(ska::RawInputListener& ril) : ska::KeyboardInputContext(ril) {
 }
 

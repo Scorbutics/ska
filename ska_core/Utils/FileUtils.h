@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL.h>
 #include "SkaConstants.h"
 
 namespace ska {

@@ -399,7 +399,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.cpp"  />
