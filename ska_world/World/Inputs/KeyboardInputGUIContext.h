@@ -1,5 +1,5 @@
 #pragma once
-#include "KeyboardInputContext.h"
+#include "Inputs/KeyboardInputContext.h"
 
 namespace ska {
 	class KeyboardInputGUIContext : public KeyboardInputContext {

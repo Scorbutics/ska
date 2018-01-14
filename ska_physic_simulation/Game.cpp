@@ -1,6 +1,6 @@
 #include "Game.h"
-#include "Inputs/KeyboardInputMapContext.h"
-#include "Inputs/KeyboardInputGUIContext.h"
+#include "World/Inputs/KeyboardInputMapContext.h"
+#include "World/Inputs/KeyboardInputGUIContext.h"
 #include "Graphic/SDLFont.h"
 #include "StateSandbox.h"
 #include "Exceptions/FileException.h"

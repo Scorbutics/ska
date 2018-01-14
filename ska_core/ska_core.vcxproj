@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -120,7 +120,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +153,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -351,8 +353,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
@@ -397,58 +397,56 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\main.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_core\ZERO_CHECK.vcxproj">

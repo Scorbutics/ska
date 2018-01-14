@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -120,7 +120,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +153,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -259,6 +261,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="World\Inputs\KeyboardInputGUIContext.cpp" />
+    <ClCompile Include="World\Inputs\KeyboardInputMapContext.cpp" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
@@ -351,8 +355,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
@@ -446,15 +448,19 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Block.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetRenderable.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Layer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Block.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetRenderable.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Layer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.cpp" />
+    <ClInclude Include="World\Inputs\KeyboardInputGUIContext.h" />
+    <ClInclude Include="World\Inputs\KeyboardInputMapContext.h" />
+    <ClInclude Include="World\Input\KeyboardInputGUIContext.h" />
+    <ClInclude Include="World\Input\KeyboardInputMapContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_world\ZERO_CHECK.vcxproj">
