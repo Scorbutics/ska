@@ -464,6 +464,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\TextureData.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.cpp" />
     <ClInclude Include="Graphic\SDLWindow.h" />
+    <ClInclude Include="Graphic\SDL_RectConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_draw\ZERO_CHECK.vcxproj">

@@ -5,6 +5,7 @@
 #include "Task/WorkNode.h"
 #include "Task/TaskQueue.h"
 #include "Draw/Renderer.h"
+#include "SDL_RectConverter.h"
 
 ska::SDLTexture::SDLTexture(TextureData& data) :
 	m_texture(nullptr),
@@ -23,7 +24,7 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 		m_surface->load(data.getData().first, &color);
 		break;
 	case RECT:
-		m_surface->loadFromColoredRect(data.getData().second, data.rect);
+		m_surface->loadFromColoredRect(data.getData().second, ToSDL_Rect(data.rect));
 		break;
 	default:
 		break;

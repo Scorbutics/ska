@@ -3,6 +3,7 @@
 #include "Logging/Logger.h"
 #include "SDLWindow.h"
 #include "AnimatedTexture.h"
+#include "SDL_RectConverter.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
     m_renderer(nullptr) {
@@ -52,7 +53,8 @@ void ska::SDLRenderer::drawColorPoint(const Color& c, const Point<int>& pos) con
 
 void ska::SDLRenderer::drawColorRect(const Color& c, const Rectangle& r) const {
 	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
-	SDL_RenderFillRect(m_renderer, &r);
+	auto rNative = ToSDL_Rect(r);
+	SDL_RenderFillRect(m_renderer, &rNative);
 	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
@@ -77,14 +79,16 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 	if (instance != nullptr) {
 		instance->load(*this);
 
-		Rectangle destBuf = { posX, posY, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
+		SDL_Rect destBuf = { posX, posY, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
 
 		if (clip != nullptr) {
 			destBuf.w = clip->w;
 			destBuf.h = clip->h;
 		}
 
-		SDL_RenderCopy(m_renderer, instance->m_texture, clip, &destBuf);
+		SDL_Rect rClip;
+		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
+		SDL_RenderCopy(m_renderer, instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf);
 	}
 }
 
@@ -99,7 +103,10 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 		tmp.x = posX + at.m_relativePos.x;
 		tmp.y = posY + at.m_relativePos.y;
 
-		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip, &tmp);
+		auto rTmp = ToSDL_Rect(tmp);
+		SDL_Rect rClip;
+		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
+		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip != nullptr ? &rClip : nullptr, &rTmp);
 	} else {
 		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp);
 	}
