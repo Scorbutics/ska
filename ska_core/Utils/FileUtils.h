@@ -2,7 +2,7 @@
 #include "SkaConstants.h"
 
 namespace ska {
-	struct FileNameData {	
+	struct FileNameData {
 		explicit FileNameData(const std::string& fullFileName) :
 			FileNameData(build(fullFileName)) {
 		}
@@ -10,7 +10,7 @@ namespace ska {
 		const std::string extension;
 		const std::string path;
 		const std::string name;
-		
+
 	private:
 		FileNameData(const std::string& fpath, const std::string& fname, const std::string& ext) :
 			extension(ext),
@@ -45,7 +45,7 @@ namespace ska {
 		}
 
 		static std::string getExecutablePath() {
-			return SDL_GetBasePath();
+			return T::getExecutablePath();
 		}
 
 		static void createDirectory(const std::string& directoryName) {
@@ -58,7 +58,7 @@ namespace ska {
 
 	};
 
-	
+
 }
 
 #if defined(SKA_PLATFORM_LINUX)

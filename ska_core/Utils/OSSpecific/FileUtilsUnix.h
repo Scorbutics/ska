@@ -11,6 +11,7 @@ namespace ska {
 	public:
 		~FileUtilsUnix();
 		static std::string getCurrentDirectory();
+		static std::string getExecutablePath();
 		static void createDirectory(const std::string& directoryName);
 	};
 }

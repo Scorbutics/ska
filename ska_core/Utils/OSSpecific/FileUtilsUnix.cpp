@@ -32,6 +32,36 @@ void ska::FileUtilsUnix::createDirectory(const std::string& directoryName) {
 	}
 }
 
+std::string ska::FileUtilsWin::getExecutablePath() {
+  std::vector<char> buf(1024, 0);
+  size_t size = buf.size();
+  auto havePath = false;
+  auto shouldContinue = true;
+
+  do {
+    ssize_t result = readlink("/proc/self/exe", &buf[0], size);
+    if (result < 0) {
+      shouldContinue = false;
+    } else if (static_cast<size_t>(result) < size) {
+      havePath = true;
+      shouldContinue = false;
+      size = result;
+    } else {
+      size *= 2;
+      buf.resize(size);
+      std::fill(std::begin(buf), std::end(buf), 0);
+    }
+  } while (shouldContinue);
+
+  if (!havePath) {
+    return "";
+  }
+
+  buf[size] = '\0';
+  std::string path(&buf[0], size);
+  return path;
+}
+
 ska::FileUtilsUnix::~FileUtilsUnix() {
 }
 

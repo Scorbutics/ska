@@ -20,6 +20,34 @@ BOOL DirectoryExists(LPCTSTR szPath)
 ska::FileUtilsWin::FileUtilsWin() {
 }
 
+std::string ska::FileUtilsWin::getExecutablePath() {
+  std::vector<char> pathExecutable(1024, 0);
+  auto pathExecutableSize = pathExecutable.size();
+
+  auto continueLoop = true;
+
+  do {
+    auto result = GetModuleFileNameA(nullptr, &pathExecutable[0], pathExecutableSize);
+    auto lastError = GetLastError();
+
+    if (result == 0) {
+        //Failure
+        pathExecutable = "";
+        continueLoop = false;
+    } else if (result <= pathExecutableSize && lastError != ERROR_INSUFFICIENT_BUFFER) {
+        //Done
+        continueLoop = false;
+    } else if ( result == pathExecutableSize && (lastError == ERROR_INSUFFICIENT_BUFFER || lastError == ERROR_SUCCESS)) {
+        //Buffer too small
+        pathExecutableSize *= 2;
+        pathExecutable.resize(pathExecutableSize);
+    }
+  } while (continueLoop);
+
+  std::string ret = &pathExecutable[0];
+  return ret;
+}
+
 std::string ska::FileUtilsWin::getCurrentDirectory() {
 	CHAR NPath[MAX_PATH];
 	GetCurrentDirectoryA(MAX_PATH, NPath);
