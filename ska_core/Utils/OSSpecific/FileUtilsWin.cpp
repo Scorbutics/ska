@@ -2,6 +2,7 @@
 #if defined(SKA_PLATFORM_WIN)
 
 #include <Windows.h>
+#include <vector>
 #include "FileUtilsWin.h"
 #include "../../Exceptions/FileException.h"
 #include "../../Exceptions/InvalidPathException.h"

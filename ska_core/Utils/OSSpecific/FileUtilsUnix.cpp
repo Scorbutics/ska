@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <vector>
 #include "FileUtilsUnix.h"
 #include "../../Exceptions/FileException.h"
 #include "../../Exceptions/InvalidPathException.h"
