@@ -33,7 +33,7 @@ std::string ska::FileUtilsWin::getExecutablePath() {
 
     if (result == 0) {
         //Failure
-        pathExecutable = "";
+        pathExecutable[0] = '\0';
         continueLoop = false;
     } else if (result <= pathExecutableSize && lastError != ERROR_INSUFFICIENT_BUFFER) {
         //Done
