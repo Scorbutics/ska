@@ -26,6 +26,7 @@ void ska::StateBase::graphicUpdate(const unsigned int ellapsedTime, DrawableCont
 }
 
 void ska::StateBase::eventUpdate(const unsigned int ellapsedTime){
+	m_tasks.refresh();
 	onEventUpdate(ellapsedTime);
 
 	/* Logics */

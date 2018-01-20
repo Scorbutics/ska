@@ -148,7 +148,7 @@ void ska::GUI::refresh(unsigned int ellapsedTime) {
 
 	for(auto& wName : m_windowsToDelete) {
 		const auto* w = getWindow(wName);
-		const auto wasAParent = w->isAParent(*m_hovered);
+		const auto wasAParent = m_hovered != nullptr ? w->isAParent(*m_hovered) : false;
 		const auto* windowRemoved = removeWindow(wName);
 		if(m_hovered == windowRemoved || wasAParent) {
 			m_hovered = nullptr;
