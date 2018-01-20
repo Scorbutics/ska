@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\CompoundTask_test.cpp">
@@ -30,22 +30,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\ExposeImmutable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockGraphicSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockStateBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\MockSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core_test\StateListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExposeImmutable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MockGraphicSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MockSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

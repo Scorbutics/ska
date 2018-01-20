@@ -27,7 +27,14 @@ class MockGraphicSystem :
 	public ExposeImmutable<ImmutableGraphicSystemTracer> {
 
 public:
-	void update(unsigned ellapsedTime) override { update_ = true; }
+	void update(unsigned ellapsedTime) override { update_ = true; if(call_){call_(); } }
 	void linkCamera(ska::CameraSystem* cs) override { linkCamera_ = cs; linkCameraDone_ = true; }
 	void setDrawables(ska::DrawableContainer& container) override { drawables_ = &container; drawablesDone_ = true; }
+	void whenUpdate(std::function<void(void)> p) {
+		call_ = p;
+	}
+
+private:
+	std::function<void(void)> call_;
 };
+

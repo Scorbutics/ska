@@ -55,10 +55,24 @@ public:
 		return result;
 	}
 
+	MockGraphicSystem& addPriorizedMockGraphicSystem(unsigned int priority) {
+		auto ptr = std::make_unique<MockGraphicSystem>();
+		auto& result = *ptr.get();
+		addPriorizedGraphic(priority, std::move(ptr));
+		return result;
+	}
+
 	MockSystem& addMockSystem() {
 		auto ptr = std::make_unique<MockSystem>();
 		auto& result = *ptr.get();
 		addLogic(std::move(ptr));
+		return result;
+	}
+
+	MockSystem& addPriorizedMockSystem(unsigned int priority) {
+		auto ptr = std::make_unique<MockSystem>();
+		auto& result = *ptr.get();
+		addPriorizedLogic(priority, std::move(ptr));
 		return result;
 	}
 };

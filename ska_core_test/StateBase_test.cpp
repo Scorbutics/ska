@@ -257,4 +257,143 @@ TEST_CASE("[StateBase]") {
 			Verify(Method(mockState, eventUpdate));
 		}
 	}
+
+	SUBCASE("adding systems") {
+		MockStateBase sbt;
+		MockRenderer mr;
+		sbt.load(nullptr);
+
+		SUBCASE("logic priority") {
+			SUBCASE("asc") {
+				auto& m1 = sbt.addPriorizedMockSystem(14);
+				auto& m2 = sbt.addPriorizedMockSystem(21);
+
+				int order[2] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				sbt.eventUpdate(0);
+				CHECK(order[0] == 1);
+				CHECK(order[1] == 2);
+			}
+
+			SUBCASE("desc"){
+				auto& m1 = sbt.addPriorizedMockSystem(38);
+				auto& m2 = sbt.addPriorizedMockSystem(12);
+
+				int order[2] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				sbt.eventUpdate(0);
+				CHECK(order[0] == 2);
+				CHECK(order[1] == 1);
+			}
+
+			SUBCASE("mixed with default priorization") {
+				auto& m1 = sbt.addPriorizedMockSystem(38);
+				auto& m2 = sbt.addPriorizedMockSystem(12);
+				auto& m3 = sbt.addMockSystem();
+
+				int order[3] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				m3.whenUpdate([&order, &index]() {
+					order[index++] = 3;
+				});
+
+				sbt.eventUpdate(0);
+				CHECK(order[0] == 3);
+				CHECK(order[1] == 2);
+				CHECK(order[2] == 1);
+			}
+		}
+
+		SUBCASE("graphic priority") {
+			MockRenderer mr;
+			ska::VectorDrawableContainer vdc(mr);
+
+			SUBCASE("asc") {
+				auto& m1 = sbt.addPriorizedMockGraphicSystem(14);
+				auto& m2 = sbt.addPriorizedMockGraphicSystem(21);
+
+				int order[2] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				sbt.graphicUpdate(0, vdc);
+				CHECK(order[0] == 1);
+				CHECK(order[1] == 2);
+			}
+
+			SUBCASE("desc") {
+				auto& m1 = sbt.addPriorizedMockGraphicSystem(38);
+				auto& m2 = sbt.addPriorizedMockGraphicSystem(12);
+
+				int order[2] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				sbt.graphicUpdate(0, vdc);
+				CHECK(order[0] == 2);
+				CHECK(order[1] == 1);
+			}
+
+			SUBCASE("mixed with default priorization") {
+				auto& m1 = sbt.addPriorizedMockGraphicSystem(38);
+				auto& m2 = sbt.addPriorizedMockGraphicSystem(12);
+				auto& m3 = sbt.addMockGraphicSystem();
+
+				int order[3] = {};
+				auto index = 0;
+				m1.whenUpdate([&order, &index]() {
+					order[index++] = 1;
+				});
+
+				m2.whenUpdate([&order, &index]() {
+					order[index++] = 2;
+				});
+
+				m3.whenUpdate([&order, &index]() {
+					order[index++] = 3;
+				});
+
+				sbt.graphicUpdate(0, vdc);
+				CHECK(order[0] == 3);
+				CHECK(order[1] == 2);
+				CHECK(order[2] == 1);
+			}
+		}
+	}
 }
