@@ -16,10 +16,6 @@ void ska::StateBase::graphicUpdate(const unsigned int ellapsedTime, DrawableCont
 		s->graphicUpdate(ellapsedTime, drawables);
 	}
 
-	for (auto& s : m_linkedSubStates) {
-		s.get().graphicUpdate(ellapsedTime, drawables);
-	}
-
 	for (auto& s : m_graphics) {
 		s->setDrawables(drawables);
 		s->update(ellapsedTime);
@@ -33,10 +29,6 @@ void ska::StateBase::eventUpdate(const unsigned int ellapsedTime){
 	/* Logics */
 	for (auto& s : m_subStates) {
 		s->eventUpdate(ellapsedTime);
-	}
-
-	for (auto& s : m_linkedSubStates) {
-		s.get().eventUpdate(ellapsedTime);
 	}
 
 	for (auto& s : m_logics) {
@@ -99,18 +91,6 @@ bool ska::StateBase::unload() {
 	}
 
 	return m_state != -2;
-}
-
-void ska::StateBase::linkSubState(State& subState) {
-	m_linkedSubStates.insert(subState);
-}
-
-void ska::StateBase::unlinkSubState(State& subState){
-	m_linkedSubStates.erase(subState);
-}
-
-void ska::StateBase::transmitLinkedSubstates(StateBase& state){
-	m_linkedSubStates = state.m_linkedSubStates;
 }
 
 ska::State& ska::StateBase::addSubState(StatePtr s) {

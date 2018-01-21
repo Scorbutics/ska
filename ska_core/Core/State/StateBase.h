@@ -41,11 +41,6 @@ namespace ska {
 		void load(State* lastState) override final;
 		bool unload() override final;
 
-		void linkSubState(State& subState);
-		void unlinkSubState(State& subState);
-
-		void transmitLinkedSubstates(StateBase& state);
-
 		State& addSubState(StatePtr s);
 		ska::WorkNode<ska::StateBase>& scheduleRemoveSubState(State& subState);
 
@@ -107,7 +102,6 @@ namespace ska {
 		GraphicSystemContainer m_graphics;
 
 		std::vector<StatePtr> m_subStates;
-		std::unordered_set<std::reference_wrapper<State>, std::hash<State>> m_linkedSubStates;
         int m_state;
 		bool m_active;
 		WorkNode<ska::StateBase> m_callbackSubstateRemoved;

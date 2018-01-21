@@ -220,14 +220,6 @@ TEST_CASE("[StateBase]") {
 			Verify(Method(mockState, graphicUpdate));
 		}
 
-		SUBCASE("with linked substate") {
-			MockState state { mockState };
-			sbt.linkSubState(state);
-
-			sbt.graphicUpdate(0, vdc);
-
-			Verify(Method(mockState, graphicUpdate));
-		}
 	}
 
 	SUBCASE("eventUpdate") {
@@ -259,14 +251,6 @@ TEST_CASE("[StateBase]") {
 			Verify(Method(mockState, eventUpdate));
 		}
 
-		SUBCASE("with linked substate") {
-			MockState state{ mockState };
-			sbt.linkSubState(state);
-
-			sbt.eventUpdate(0);
-
-			Verify(Method(mockState, eventUpdate));
-		}
 	}
 
 	SUBCASE("adding systems") {
