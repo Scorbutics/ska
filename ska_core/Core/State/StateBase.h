@@ -6,6 +6,7 @@
 #include "../../Task/TaskQueue.h"
 #include "../../ECS/ISystem.h"
 #include "../../Draw/IGraphicSystem.h"
+#include "../../Task/WorkNode.h"
 
 namespace ska {
 
@@ -46,7 +47,7 @@ namespace ska {
 		void transmitLinkedSubstates(StateBase& state);
 
 		State& addSubState(StatePtr s);
-		bool removeSubState(State& subState);
+		ska::WorkNode<ska::StateBase>& scheduleRemoveSubState(State& subState);
 
 		virtual ~StateBase() = default;
 
@@ -86,6 +87,7 @@ namespace ska {
 
 
     private:
+		bool removeSubState(State& subState);
 
 		void addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const;
 		void addPriorizedGraphic(std::vector<IGraphicSystemPtr>& graphics, const int priority, IGraphicSystemPtr system) const;
@@ -108,6 +110,7 @@ namespace ska {
 		std::unordered_set<std::reference_wrapper<State>, std::hash<State>> m_linkedSubStates;
         int m_state;
 		bool m_active;
+		WorkNode<ska::StateBase> m_callbackSubstateRemoved;
 
 	};
 }

@@ -168,11 +168,11 @@ namespace ska {
 		}
 
 	protected:
-		EventDispatcher m_eventDispatcher;
+		EntityManager m_entityManager;
+    	EventDispatcher m_eventDispatcher;
 		WindowPtr m_mainWindow;
 
 	private:
-		EntityManager m_entityManager;
 		DrawableContainerPtr m_drawables;
         SoundManager m_soundManager;
 

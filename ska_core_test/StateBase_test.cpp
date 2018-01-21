@@ -46,22 +46,33 @@ TEST_CASE("[StateBase]") {
 		MockStateBase sbt;
 		auto sPtr = std::make_unique<MockState>(mockState);
 		auto& state = *sPtr.get();
-		sbt.addSubState(std::move(sPtr));
+		auto addedSubstate = &static_cast<MockState&>(sbt.addSubState(std::move(sPtr)));
 
 		SUBCASE("bad substate removed"){
 			Mock<ska::State> mSub2;
-			sbt.removeSubState(mSub2());
+			sbt.scheduleRemoveSubState(mSub2());
+			sbt.eventUpdate(0);
 			VerifyNoOtherInvocations(Method(mSub2, unload));
 		}
 
 		SUBCASE("parent not loaded : substate is not unloaded") {
-			sbt.removeSubState(state);
+			sbt.scheduleRemoveSubState(state);
+			sbt.eventUpdate(0);
 			VerifyNoOtherInvocations(Method(mockState, unload));
 		}
 
-		SUBCASE("loading parent then removing the substate") {
+		SUBCASE("loading parent then removing the substate without updating, then refreshing") {
 			sbt.load(nullptr);
-			sbt.removeSubState(state);
+			sbt.scheduleRemoveSubState(state);
+			VerifyNoOtherInvocations(Method(mockState, unload));
+			sbt.eventUpdate(0);
+			Verify(Method(mockState, unload));
+		}
+
+		SUBCASE("loading parent then removing the substate (after load one)") {
+			sbt.load(nullptr);
+			sbt.scheduleRemoveSubState(*addedSubstate);
+			sbt.eventUpdate(0);
 			Verify(Method(mockState, unload));
 		}
 	}

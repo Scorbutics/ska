@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "StateBase.h"
 #include "../../Draw/IGraphicSystem.h"
+#include "../../Task/WorkNode.h"
 
 ska::StateBase::StateBase():
 	m_state(0), 
@@ -124,8 +125,17 @@ ska::State& ska::StateBase::addSubState(StatePtr s) {
 	return *stateRaw;
 }
 
+ska::WorkNode<ska::StateBase>& ska::StateBase::scheduleRemoveSubState(State& subState) {
+	m_tasks.queueTask(ska::RunnableLambda([&]() {
+		removeSubState(subState);
+		m_callbackSubstateRemoved.executeAndPop(*this);
+		return true;
+	}));
+	return m_callbackSubstateRemoved;
+}
+
 bool ska::StateBase::removeSubState(State& subState) {
-	auto it = std::remove_if(m_subStates.begin(), m_subStates.end(), [&subState](const auto& c) {
+	auto it = std::find_if(m_subStates.begin(), m_subStates.end(), [&subState](const auto& c) {
 		return c.get() == &subState;
 	});
 
@@ -134,11 +144,10 @@ bool ska::StateBase::removeSubState(State& subState) {
 	}
 
 	auto removedState = std::move(*it);
-	m_subStates.erase(it, m_subStates.end());
-	auto removed = std::move(removedState);
-	if (m_active) {
-		removed->unload();
+	if (m_active && removedState != nullptr) {
+		removedState->unload();
 	}
+	m_subStates.erase(it);
 	return true;
 }
 

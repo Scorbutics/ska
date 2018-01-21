@@ -7,6 +7,7 @@
 #include "Utils/SkaConstants.h"
 #include "Chipset.h"
 #include "ChipsetHolder.h"
+#include "Exceptions/IllegalStateException.h"
 
 ska::ChipsetHolder::ChipsetHolder(const std::string&) {
 	SDLSurface fichierMCorr;
@@ -50,10 +51,10 @@ void ska::ChipsetHolder::update(BlockRenderable& block) {
 
 void ska::ChipsetHolder::generateBlock(Color& key, Block** outputBlock, BlockRenderable** outputRenderable) {
 	if (m_chipset == nullptr) {
-		/* TODO exception */
+		throw ska::IllegalStateException("chipset is null");
 	}
 
-	return m_chipset->generateBlock(key, outputBlock, outputRenderable);
+	m_chipset->generateBlock(key, outputBlock, outputRenderable);
 }
 
 void ska::ChipsetHolder::render(const ska::Renderer& renderer, ska::Point<int> pos, const BlockRenderable& block) const {
