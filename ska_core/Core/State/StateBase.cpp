@@ -109,7 +109,7 @@ ska::WorkNode<ska::StateBase>& ska::StateBase::scheduleRemoveSubState(State& sub
 	m_tasks.queueTask(ska::RunnableLambda([&]() {
 		removeSubState(subState);
 		m_callbackSubstateRemoved.executeAndPop(*this);
-		return true;
+		return false;
 	}));
 	return m_callbackSubstateRemoved;
 }
