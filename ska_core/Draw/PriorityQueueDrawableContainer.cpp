@@ -1,7 +1,6 @@
 #include "PriorityQueueDrawableContainer.h"
 
-
-ska::PriorityQueueDrawableContainer::PriorityQueueDrawableContainer(Renderer& renderer) : 
+ska::PriorityQueueDrawableContainer::PriorityQueueDrawableContainer(Renderer& renderer) :
 	m_renderer(renderer) {
 }
 
@@ -23,5 +22,3 @@ void ska::PriorityQueueDrawableContainer::draw() {
 	}
 }
 
-ska::PriorityQueueDrawableContainer::~PriorityQueueDrawableContainer() {
-}

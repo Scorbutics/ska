@@ -1,6 +1,6 @@
 #pragma once
-#include <limits>
 #include "DrawableFixedPriority.h"
+#include "DrawableContainer.h"
 
 namespace ska {
 	/**
@@ -11,9 +11,23 @@ namespace ska {
 	 */
 	class DrawableContainer {
 	public:
-		DrawableContainer() :
+        DrawableContainer() :
 			m_topPriority2D(std::numeric_limits<int>::min()),
 			m_topPriority(std::numeric_limits<int>::min()) {}
+
+
+		/**
+		 * \brief Draws the whole container, which generally implies drawing each element.
+		 */
+		virtual void draw() = 0;
+
+		/**
+		 * \brief Resets the container to make it empty.
+		 */
+		virtual void clear() = 0;
+
+		virtual ~DrawableContainer() = default;
+
 
 		/**
 		 * \brief Adds a Drawable element to the container
@@ -57,22 +71,9 @@ namespace ska {
 			}
 		}
 
-		/**
-		 * \brief Draws the whole container, which generally implies drawing each element.
-		 */
-		virtual void draw() = 0;
-
-		/**
-		 * \brief Resets the container to make it empty.
-		 */
-		virtual void clear() = 0;
-
-		virtual ~DrawableContainer() = default;
-
 	protected:
 		virtual void push(const Drawable& d) = 0;
-
-	private:
+    private:
 		int m_topPriority2D;
 		int m_topPriority;
 	};

@@ -6,6 +6,7 @@
 #include "Core/GameConfiguration.h"
 
 namespace ska {
+    class Module;
 
 	class GenericException;
 
@@ -17,7 +18,8 @@ namespace ska {
      */
 	class GameApp : public Ticked {
 
-	protected:
+    protected:
+        using ModulePtr = std::unique_ptr<Module>;
 		using GameAppPtr = std::unique_ptr<GameApp>;
 		explicit GameApp(ska::GameConfiguration&& gc);
 
@@ -26,6 +28,10 @@ namespace ska {
 		* \return The created game application.
 		*/
 		static std::unique_ptr<ska::GameApp> get();
+
+		std::vector<ModulePtr>& getModules() {
+		    return m_gameConfig.getModules();
+		}
 
 	public:
 		/**
@@ -60,7 +66,7 @@ namespace ska {
 		}
 
 		virtual ~GameApp();
-	
+
 	private:
 		GameConfiguration m_gameConfig;
 	};

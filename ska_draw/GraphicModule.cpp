@@ -6,9 +6,14 @@
 #include "GraphicModule.h"
 #include "Exceptions/IllegalStateException.h"
 #include "Logging/Logger.h"
+#include "Draw/Renderer.h"
+#include "Core/State/StateHolder.h"
+#include "Draw/DrawableContainer.h"
 
-ska::GraphicModule::GraphicModule(const std::string& moduleName):
-	Module(moduleName) {
+ska::GraphicModule::GraphicModule(const std::string& moduleName, DrawableContainerPtr dc, RendererPtr renderer):
+	Module(moduleName),
+	m_drawables(std::move(dc)),
+	m_renderer(std::move(renderer)) {
 	//SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -31,6 +36,14 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName):
 	if (TTF_Init() == -1) {
 		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
 	}
+}
+
+void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) {
+    sh.graphicUpdate(ellapsedTime, *m_drawables);
+    m_drawables->draw();
+
+    m_drawables->clear();
+    m_renderer->update();
 }
 
 ska::GraphicModule::~GraphicModule() {

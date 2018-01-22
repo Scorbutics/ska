@@ -67,6 +67,10 @@
 		<Unit filename="World/ChipsetHolder.h" />
 		<Unit filename="World/ChipsetRenderable.cpp" />
 		<Unit filename="World/ChipsetRenderable.h" />
+		<Unit filename="World/Inputs/KeyboardInputGUIContext.cpp" />
+		<Unit filename="World/Inputs/KeyboardInputGUIContext.h" />
+		<Unit filename="World/Inputs/KeyboardInputMapContext.cpp" />
+		<Unit filename="World/Inputs/KeyboardInputMapContext.h" />
 		<Unit filename="World/Layer.cpp" />
 		<Unit filename="World/Layer.h" />
 		<Unit filename="World/LayerEvent.cpp" />

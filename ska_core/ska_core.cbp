@@ -54,7 +54,6 @@
 		<Unit filename="Core/State/State.h" />
 		<Unit filename="Core/State/StateBase.cpp" />
 		<Unit filename="Core/State/StateBase.h" />
-		<Unit filename="Core/State/StateBuilder.h" />
 		<Unit filename="Core/State/StateData.h" />
 		<Unit filename="Core/State/StateHolder.cpp" />
 		<Unit filename="Core/State/StateHolder.h" />
@@ -78,6 +77,7 @@
 		<Unit filename="Draw/CameraAware.h" />
 		<Unit filename="Draw/Drawable.h" />
 		<Unit filename="Draw/DrawableContainer.h" />
+		<Unit filename="Draw/DrawableContainerBase.h" />
 		<Unit filename="Draw/DrawableFixedPriority.h" />
 		<Unit filename="Draw/IGraphicSystem.h" />
 		<Unit filename="Draw/PriorityQueueDrawableContainer.cpp" />
@@ -167,10 +167,6 @@
 		<Unit filename="Inputs/KeyInput.h" />
 		<Unit filename="Inputs/KeyboardInputContext.cpp" />
 		<Unit filename="Inputs/KeyboardInputContext.h" />
-		<Unit filename="Inputs/KeyboardInputGUIContext.cpp" />
-		<Unit filename="Inputs/KeyboardInputGUIContext.h" />
-		<Unit filename="Inputs/KeyboardInputMapContext.cpp" />
-		<Unit filename="Inputs/KeyboardInputMapContext.h" />
 		<Unit filename="Inputs/MouseInput.cpp" />
 		<Unit filename="Inputs/MouseInput.h" />
 		<Unit filename="Inputs/RawInputListener.cpp" />

@@ -15,9 +15,7 @@ namespace ska {
 }
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	ska::GameConfiguration gc;
-	gc.requireModule<CoreModule>("Core");
-	gc.requireModule<GraphicModule>("Graphics");
+
 
 	auto widthBlocks = 30;
 	auto heightBlocks = 20;
@@ -35,16 +33,21 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	static constexpr auto tailleblocFenetre = 32;
 	auto window = std::make_unique<SDLWindow>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
+    auto dc = std::make_unique<VectorDrawableContainer>(*renderer);
 
-	return std::make_unique<Game>(std::move(gc), std::move(renderer), std::move(window));
+	ska::GameConfiguration gc;
+	gc.requireModule<CoreModule>("Core");
+	gc.requireModule<GraphicModule>("Graphics", std::move(dc), std::move(renderer));
+
+	return std::make_unique<Game>(std::move(gc), std::move(window));
 }
 
 void LogsConfiguration() {
 	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
 }
 
-Game::Game(ska::GameConfiguration&& gc, RendererPtr&& renderer, WindowPtr&& window) :
-	GameCore(std::forward<ska::GameConfiguration>(gc), std::forward<RendererPtr>(renderer), std::forward<WindowPtr>(window)) {
+Game::Game(ska::GameConfiguration&& gc, WindowPtr&& window) :
+	GameCore(std::forward<ska::GameConfiguration>(gc), std::forward<WindowPtr>(window)) {
 
 	/* Configure inputs types */
 	addInputContext<ska::KeyboardInputMapContext>(ska::EnumContextManager::CONTEXT_MAP);
