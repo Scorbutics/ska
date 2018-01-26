@@ -1,8 +1,6 @@
 ﻿#ifndef __ANDROID__
-#ifdef _MSC_VER
 #include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
-#endif
 
 #include "GameApp.h"
 

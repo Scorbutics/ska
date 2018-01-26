@@ -15,14 +15,17 @@
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "Impl/SpreadingColorParticleEffectFactory.h"
 #include "Impl/SpreadingParticleEffectFactory.h"
+#include "Data/Events/ExtensibleGameEventDispatcher.h"
 #include "Impl/SpreadingTextureParticleEffectFactory.h"
 #include "Utils/FileUtils.h"
 #include "Impl/SideBalancingParticleUpdater.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
+#include "Data/Events/ExtensibleGameEventDispatcher.h"
+#include "ECS/EntityManager.h"
+#include "Draw/VectorDrawableContainer.h"
 
-BenchmarkerCore::BenchmarkerCore(ska::GameConfiguration&& gc) :
-	ska::GameApp(std::forward<ska::GameConfiguration>(gc)),
+BenchmarkerCore::BenchmarkerCore(GameConf&& gc) :
 	m_window("ska Particle Benchmark", 1500, 900),
 	m_particles(400, 70000),
 	m_renderer(m_window, 0, SDL_RENDERER_ACCELERATED) {
@@ -144,7 +147,7 @@ void BenchmarkerCore::run() {
 	auto accumulator = ti;
 
 	for (;;) {
-		unsigned long t = ska::TimeUtils::getTicks();
+		const unsigned long t = ska::TimeUtils::getTicks();
 
 		const auto ellapsedTime = t - t0;
 		t0 = t;
@@ -172,8 +175,12 @@ float BenchmarkerCore::ticksWanted() const{
 
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	ska::GameConfiguration gc;
-	gc.requireModule<CoreModule>("Core");
-	gc.requireModule<GraphicModule>("Graphics");
+	ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>> gc;
+	auto& core = gc.requireModule<CoreModule<ska::EntityManager>>("Core", gc.getEventDispatcher());
+	auto window = std::make_unique<ska::SDLWindow>("Particle benchmark", 1500, 900);
+	auto renderer = std::make_unique<ska::SDLRenderer>(*window, 0, SDL_RENDERER_ACCELERATED);
+	auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);
+
+	gc.requireModule<GraphicModule>("Graphics", gc.getEventDispatcher(), std::move(dc), std::move(renderer), std::move(window));
 	return std::make_unique<BenchmarkerCore>(std::move(gc));
 }

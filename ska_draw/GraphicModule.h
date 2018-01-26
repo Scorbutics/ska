@@ -6,7 +6,8 @@
 #include "Module.h"
 
 namespace ska {
-    class DrawableContainer;
+	class StateHolder;
+	class DrawableContainer;
     class Renderer;
 	class Window;
 

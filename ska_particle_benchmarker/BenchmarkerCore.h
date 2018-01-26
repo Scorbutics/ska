@@ -7,12 +7,13 @@
 #include "ParticleSystem.h"
 #include "Graphic/SDLRenderer.h"
 #include "Graphic/SDLWindow.h"
+#include "Data/Events/ExtensibleGameEventDispatcher.h"
 
 class BenchmarkerCore : 
 	public ska::GameApp {
-
+	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>>;
 public:
-	explicit BenchmarkerCore(ska::GameConfiguration&& gc);
+	explicit BenchmarkerCore(GameConf&& gc);
 	virtual ~BenchmarkerCore() = default;
 	int onTerminate(ska::TerminateProcessException&) override;
 	int onException(ska::GenericException&) override;

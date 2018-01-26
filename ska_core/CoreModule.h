@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include "Module.h"
+#include "Inputs/EnumContextManager.h"
+#include "Inputs/InputContextManager.h"
 
 namespace ska {
     template <class EntityManager>
