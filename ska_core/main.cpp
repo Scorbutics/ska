@@ -1,6 +1,8 @@
 ﻿#ifndef __ANDROID__
+#ifdef _MSC_VER
 #include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
+#endif
 
 #include "GameApp.h"
 
@@ -14,7 +16,6 @@ extern "C"
 int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
-
 
 	auto gameApp = ska::GameApp::instantiate();
 
