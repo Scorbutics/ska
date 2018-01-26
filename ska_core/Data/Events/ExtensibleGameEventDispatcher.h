@@ -15,6 +15,7 @@ namespace ska {
 	public:
 		ExtensibleGameEventDispatcher() = default;
 		ExtensibleGameEventDispatcher(const ExtensibleGameEventDispatcher&) = delete;
+		ExtensibleGameEventDispatcher(ExtensibleGameEventDispatcher&&) = default;
 		virtual ~ExtensibleGameEventDispatcher() = default;
 
 	private:

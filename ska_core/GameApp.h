@@ -21,17 +21,14 @@ namespace ska {
     protected:
         using ModulePtr = std::unique_ptr<Module>;
 		using GameAppPtr = std::unique_ptr<GameApp>;
-		explicit GameApp(ska::GameConfiguration&& gc);
+
+		GameApp() = default;
 
 		/**
 		* \brief User provided static method to inject game application dependency into the main function.
 		* \return The created game application.
 		*/
-		static std::unique_ptr<ska::GameApp> get();
-
-		std::vector<ModulePtr>& getModules() {
-		    return m_gameConfig.getModules();
-		}
+		static GameAppPtr get();
 
 	public:
 		/**
@@ -65,9 +62,6 @@ namespace ska {
 			return TICKS;
 		}
 
-		virtual ~GameApp();
-
-	private:
-		GameConfiguration m_gameConfig;
+		~GameApp() override = default;
 	};
 }

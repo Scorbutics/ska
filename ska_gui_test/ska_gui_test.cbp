@@ -66,6 +66,10 @@
 			<Add library="libska_core.a" />
 			<Add library="libska_draw.a" />
 			<Add library="libska_gui.a" />
+			<Add library="libSDL2.a" />
+			<Add library="libSDL2main.a" />
+			<Add library="libSDL2_image.a" />
+			<Add library="libSDL2_ttf.a" />
 			<Add directory="../.." />
 		</Linker>
 		<Unit filename="ClickEventListener_test.cpp" />

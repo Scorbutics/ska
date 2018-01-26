@@ -5,15 +5,17 @@
 #include "Audio/SoundRenderer.h"
 #include "Data/Events/ExtensibleGameEventDispatcher.h"
 
-using GameBase = ska::GameCore<ska::EntityManager, ska::ExtensibleGameEventDispatcher<>, ska::SoundRenderer>;
+using GameBase = ska::GameCore<ska::ExtensibleGameEventDispatcher<>>;
 class Game :
 	public GameBase {
 
 public:
-	Game(ska::GameConfiguration&& gc, WindowPtr&& window);
+	Game(ska::EntityManager& em, GameConf&& gc);
 	virtual ~Game() = default;
 
 private:
 	int onTerminate(ska::TerminateProcessException & tpe) override;
 	int onException(ska::GenericException & e) override;
+
+	ska::EntityManager& m_entityManager;
 };

@@ -6,9 +6,7 @@
 class AppTest : public ska::GameApp {
 public:
 
-	explicit AppTest(ska::GameConfiguration&& gc)
-		: ska::GameApp(std::forward<ska::GameConfiguration>(gc)) {
-	}
+	explicit AppTest(){}
 
 	virtual int onTerminate(ska::TerminateProcessException&) override{ std::cout << "Terminate process" << std::endl; return -1; };
 	virtual int onException(ska::GenericException&) override{ std::cout << "Terminate process" << std::endl; return -1; }
@@ -17,7 +15,7 @@ public:
 		doctest::Context context;
 		auto resultCode = 0;
 		try {
-			
+
 			// sort the test cases by their name
 			context.setOption("order-by", "name");
 			std::cout << "Running..." << std::endl;
@@ -35,8 +33,7 @@ public:
 };
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get(){
-	ska::GameConfiguration gc;
-	return std::make_unique<AppTest>(std::move(gc));
+	return std::make_unique<AppTest>();
 }
 
 

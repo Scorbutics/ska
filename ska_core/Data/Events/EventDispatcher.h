@@ -13,6 +13,7 @@ namespace ska {
 	public:
 		EventDispatcher() = default;
 		EventDispatcher(const EventDispatcher<ET...>&) = delete;
+		EventDispatcher(EventDispatcher&&) = default;
 
 		/**
 		 * \brief Adds several observers simultaneously

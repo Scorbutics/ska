@@ -9,11 +9,15 @@
 #include "Draw/Renderer.h"
 #include "Core/State/StateHolder.h"
 #include "Draw/DrawableContainer.h"
+#include "Core/Window.h"
 
-ska::GraphicModule::GraphicModule(const std::string& moduleName, DrawableContainerPtr dc, RendererPtr renderer):
+ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window):
 	Module(moduleName),
+	SubObserver<StateEvent>(std::bind(&GraphicModule::onStateEvent, this, std::placeholders::_1), ged),
+	m_eventDispatcher(ged),
 	m_drawables(std::move(dc)),
-	m_renderer(std::move(renderer)) {
+	m_renderer(std::move(renderer)),
+	m_mainWindow(std::move(window)) {
 	//SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -36,6 +40,19 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, DrawableContain
 	if (TTF_Init() == -1) {
 		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
 	}
+
+	m_mainWindow->show();
+}
+
+bool ska::GraphicModule::onStateEvent(StateEvent& se) {
+    if(se.type == FIRST_STATE_LOADED) {
+        GameEvent ge(GAME_WINDOW_READY);
+        ge.windowWidth = m_mainWindow->getWidth();
+        ge.windowHeight = m_mainWindow->getHeight();
+        m_eventDispatcher.Observable<GameEvent>::notifyObservers(ge);
+        return true;
+    }
+    return false;
 }
 
 void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) {

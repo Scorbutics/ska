@@ -1,13 +1,48 @@
 #pragma once
-#include "Module.h"
 #include <string>
+#include "Module.h"
 
 namespace ska {
+    template <class EntityManager>
 	class CoreModule :
-		public Module {
+		public Module  {
 	public:
-		explicit CoreModule(const std::string& moduleName);
-		void eventUpdate(unsigned int ellapsedTime) override;
-		~CoreModule();
+		CoreModule(const std::string& moduleName, GameEventDispatcher& ged):
+            Module(moduleName),
+            m_entityManager(ged),
+            m_playerICM(m_rawInputListener, ged) {
+		}
+
+		void eventUpdate(unsigned int ellapsedTime) override {
+            m_entityManager.refresh();
+
+            /* Raw input acquisition */
+            m_playerICM.refresh();
+		}
+
+        /**
+         * \brief Adds an input context to the game.
+         * \tparam I input context type
+         * \tparam Args additional parameters to the input context constructor
+         * \param em EnumContextManager
+         * \param args Args&&... additional parameters to the input context constructor
+         *
+         * Having multiple input contexts in a game allow to have specific ways to query inputs depending from where we are in the game.
+         */
+        template<class I, class ... Args>
+        void addInputContext(EnumContextManager em, Args&&... args) {
+            m_playerICM.addContext(em, std::make_unique<I>(m_rawInputListener, std::forward<Args>(args)...));
+        }
+
+		~CoreModule() override = default;
+
+		EntityManager& getEntityManager() {
+            return m_entityManager;
+		}
+
+    private:
+        RawInputListener m_rawInputListener;
+        EntityManager m_entityManager;
+        InputContextManager m_playerICM;
 	};
 }

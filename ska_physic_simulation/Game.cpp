@@ -15,8 +15,6 @@ namespace ska {
 }
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-
-
 	auto widthBlocks = 30;
 	auto heightBlocks = 20;
 
@@ -35,28 +33,30 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     auto dc = std::make_unique<VectorDrawableContainer>(*renderer);
 
-	ska::GameConfiguration gc;
-	gc.requireModule<CoreModule>("Core");
-	gc.requireModule<GraphicModule>("Graphics", std::move(dc), std::move(renderer));
+	ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>> gc;
+	auto& core = gc.requireModule<CoreModule<ska::EntityManager>>("Core", gc.getEventDispatcher());
 
-	return std::make_unique<Game>(std::move(gc), std::move(window));
+    /* Configure inputs types */
+	core.addInputContext<ska::KeyboardInputMapContext>(ska::EnumContextManager::CONTEXT_MAP);
+	core.addInputContext<ska::KeyboardInputGUIContext>(ska::EnumContextManager::CONTEXT_GUI);
+
+    gc.requireModule<GraphicModule>("Graphics", gc.getEventDispatcher(), std::move(dc), std::move(renderer), std::move(window));
+
+	return std::make_unique<Game>(core.getEntityManager(), std::move(gc));
 }
 
 void LogsConfiguration() {
 	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
 }
 
-Game::Game(ska::GameConfiguration&& gc, WindowPtr&& window) :
-	GameCore(std::forward<ska::GameConfiguration>(gc), std::forward<WindowPtr>(window)) {
-
-	/* Configure inputs types */
-	addInputContext<ska::KeyboardInputMapContext>(ska::EnumContextManager::CONTEXT_MAP);
-	addInputContext<ska::KeyboardInputGUIContext>(ska::EnumContextManager::CONTEXT_GUI);
+Game::Game(ska::EntityManager& em, GameConf&& gc) :
+	GameCore(std::forward<GameConf>(gc)),
+	m_entityManager(em) {
 
 	LogsConfiguration();
 
 	ska::SDLFont::DEFAULT_FONT_FILE = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Fonts" FILE_SEPARATOR "FiraSans-Medium.ttf";
-	navigateToState<StateSandbox>(m_eventDispatcher);
+	navigateToState<StateSandbox>(m_entityManager, m_eventDispatcher);
 }
 
 int Game::onTerminate(ska::TerminateProcessException& tpe) {

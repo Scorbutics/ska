@@ -1,13 +1,13 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest.h>
 #include "GameApp.h"
+#include "Data/Events/GameEventDispatcher.h"
 #include <iostream>
 
 class AppTest : public ska::GameApp {
 public:
 
-	explicit AppTest(ska::GameConfiguration&& gc)
-		: ska::GameApp(std::forward<ska::GameConfiguration>(gc)) {
+	explicit AppTest() {
 	}
 
 	virtual int onTerminate(ska::TerminateProcessException&) override { std::cout << "Terminate process" << std::endl; return -1; };
@@ -37,8 +37,7 @@ public:
 };
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	ska::GameConfiguration gc;
-	return std::make_unique<AppTest>(std::move(gc));
+	return std::make_unique<AppTest>();
 }
 
 

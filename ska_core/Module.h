@@ -5,7 +5,6 @@ namespace ska {
     class StateHolder;
 
 	class Module {
-		friend class GameConfiguration;
 
 	public:
 		Module(Module&&) = default;
