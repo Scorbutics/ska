@@ -18,8 +18,6 @@ namespace ska {
 		ExtensibleGameEventDispatcher(ExtensibleGameEventDispatcher&&) = default;
 		virtual ~ExtensibleGameEventDispatcher() = default;
 
-	private:
-
 	};
 
 }

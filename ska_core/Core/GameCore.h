@@ -3,21 +3,13 @@
 
 #include "State/StateHolder.h"
 #include "../Exceptions/StateDiedException.h"
-#include "../Data/Events/WorldEvent.h"
-#include "../Data/Events/SoundEvent.h"
-#include "../Inputs/RawInputListener.h"
-#include "../Inputs/InputContextManager.h"
 #include "../Utils/TimeUtils.h"
 #include "../GameApp.h"
-#include "State/StateData.h"
 
 namespace ska {
 	/**
      * \brief Main class of the engine that holds the game engine loop and instantiate every core systems.
-     * \tparam EntityManager The entity manager to use
      * \tparam EventDispatcher The event dispatcher to use
-     * \tparam DrawableContainer The drawable container to use
-     * \tparam SoundManager The sound manager to use
      *
      * This class holds an instance of each type template-specified and transmits its to every new game state.
      * It's often a good idea to subclass it if you need accesses to the game window / event dispatcher outside of any state.
@@ -28,16 +20,16 @@ namespace ska {
 
     protected:
         using GameConf = ska::GameConfiguration<EventDispatcher>;
-
+		using GameConfPtr = std::unique_ptr<GameConf>;
     public:
 
         /**
          * \brief Constructor that builds a basic context from a file.
          */
-	    explicit GameCore(GameConf&& gc) :
-    		m_eventDispatcher(gc.getEventDispatcher()),
+	    explicit GameCore(GameConfPtr&& gc) :
+    		m_eventDispatcher(gc->getEventDispatcher()),
     		m_stateHolder(m_eventDispatcher),
-    		m_gameConfig(std::forward<GameConf>(gc)){
+    		m_gameConfig(std::forward<GameConfPtr>(gc)){
         }
 
         ~GameCore() override = default;
@@ -96,7 +88,7 @@ namespace ska {
 
         void graphicUpdate(unsigned int ellapsedTime) {
             //TODO : éviter "getModules"
-            auto& modules = m_gameConfig.getModules();
+            auto& modules = m_gameConfig->getModules();
             for(auto& module : modules) {
                 //TODO : modules graphiques != modules logiques
                 module->graphicUpdate(ellapsedTime, m_stateHolder);
@@ -108,7 +100,7 @@ namespace ska {
             m_stateHolder.eventUpdate(ellapsedTime);
 
             //TODO : éviter "getModules"
-            auto& modules = m_gameConfig.getModules();
+            auto& modules = m_gameConfig->getModules();
             for(auto& module : modules) {
                 //TODO : modules graphiques != modules logiques
                 module->eventUpdate(ellapsedTime);
@@ -120,6 +112,6 @@ namespace ska {
 
 	private:
         StateHolder m_stateHolder;
-		GameConf m_gameConfig;
+		GameConfPtr m_gameConfig;
     };
 }

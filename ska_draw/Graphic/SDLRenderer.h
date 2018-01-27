@@ -35,8 +35,6 @@ namespace ska {
 
 		~SDLRenderer();
 
-		void load(SDL_Window * window, int index, Uint32 flags);
-
 		SDL_Renderer* unwrap() const;
 
 		/**
@@ -51,13 +49,19 @@ namespace ska {
 
 		void update() const override;
 
+		void load() override;
+
 	private:
+		void load(SDL_Window * window, int index, Uint32 flags);
 	    void free();
 		void renderPresent() const;
 		void renderClear() const;
 
 		SDL_Renderer* m_renderer;
 		Color m_currentRenderColor;
+		SDLWindow& m_window;
+		int m_index;
+		uint32_t m_flags;
 
 	};
 }

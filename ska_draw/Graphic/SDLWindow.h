@@ -17,6 +17,7 @@ namespace ska {
 		SDLWindow(const std::string& title, unsigned int w, unsigned int h);
 
 		void show() override;
+		void load() override;
 
 		SDLWindow& operator=(const SDLWindow&) = delete;
 		virtual ~SDLWindow();
@@ -60,6 +61,8 @@ namespace ska {
 		}
 
 	private:
+		void lazyInit();
+
 		unsigned int m_height;
 		unsigned int m_width;
 

@@ -20,6 +20,8 @@ namespace ska {
 		Renderer() = default;
 		virtual ~Renderer() = default;
 
+		virtual void load() {}
+
 		virtual void render(const Texture& t, int posX, int posY, Rectangle const * clip = nullptr) const = 0;
 		virtual void render(const AnimatedTexture& at, int x, int y, Rectangle const * clip = nullptr) const = 0;
 

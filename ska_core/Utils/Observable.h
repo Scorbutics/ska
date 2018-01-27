@@ -7,11 +7,9 @@
 namespace ska {
 
 	template <class T, class ...Args>
-	class Observable
-	{
+	class Observable {
 	public:
-		Observable() {
-		}
+		Observable() = default;
 
 		void addObserver(Observer<T, Args...>& obs) {
 			m_head.emplace(&obs);

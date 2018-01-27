@@ -50,6 +50,8 @@ namespace ska {
 		 * \param filename Path to the image to display as a program icon
 		 */
 		virtual void setWindowIcon(const std::string& filename) = 0;
+		
+		virtual void load() {}
 
 	};
 }

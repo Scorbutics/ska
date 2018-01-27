@@ -4,10 +4,13 @@
 #include "SDLWindow.h"
 #include "AnimatedTexture.h"
 #include "SDL_RectConverter.h"
+#include <cassert>
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
-    m_renderer(nullptr) {
-	load(window.getInstance() , index, flags);
+    m_renderer(nullptr),
+	m_window(window),
+	m_index(index),
+	m_flags(flags) {
 }
 
 void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
@@ -70,8 +73,13 @@ void ska::SDLRenderer::free() {
 }
 
 void ska::SDLRenderer::update() const {
+	assert(m_renderer != nullptr && "Renderer is not loaded");
 	renderPresent();
 	renderClear();
+}
+
+void ska::SDLRenderer::load() {
+	load(m_window.getInstance(), m_index, m_flags);
 }
 
 void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip) const {

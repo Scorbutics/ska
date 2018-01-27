@@ -18,7 +18,6 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	m_drawables(std::move(dc)),
 	m_renderer(std::move(renderer)),
 	m_mainWindow(std::move(window)) {
-	//SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
@@ -41,6 +40,9 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
 	}
 
+	m_mainWindow->load();
+	m_renderer->load();
+
 	m_mainWindow->show();
 }
 
@@ -49,7 +51,7 @@ bool ska::GraphicModule::onStateEvent(StateEvent& se) {
         GameEvent ge(GAME_WINDOW_READY);
         ge.windowWidth = m_mainWindow->getWidth();
         ge.windowHeight = m_mainWindow->getHeight();
-        m_eventDispatcher.Observable<GameEvent>::notifyObservers(ge);
+        m_eventDispatcher.ska::Observable<GameEvent>::notifyObservers(ge);
         return true;
     }
     return false;
