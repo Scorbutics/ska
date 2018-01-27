@@ -33,8 +33,8 @@ namespace ska {
 		}
 
 	private:
-
-		std::vector<ModulePtr> m_modules;
 		EventDispatcher m_eventDispatcher;
+		std::vector<ModulePtr> m_modules;
+		
 	};
 }

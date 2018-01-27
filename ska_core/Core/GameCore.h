@@ -27,12 +27,12 @@ namespace ska {
          * \brief Constructor that builds a basic context from a file.
          */
 	    explicit GameCore(GameConfPtr&& gc) :
-    		m_eventDispatcher(gc->getEventDispatcher()),
-    		m_stateHolder(m_eventDispatcher),
-    		m_gameConfig(std::forward<GameConfPtr>(gc)){
+			m_gameConfig(std::forward<GameConfPtr>(gc)),
+    		m_eventDispatcher(m_gameConfig->getEventDispatcher()),
+    		m_stateHolder(m_eventDispatcher){
         }
 
-        ~GameCore() override = default;
+		~GameCore() override = default;
 
         /**
          * \brief Loop on an internal refresh to know if we need to continue to run the application or not.
@@ -107,11 +107,13 @@ namespace ska {
             }
         }
 
+		GameConfPtr m_gameConfig;
+
     protected:
         EventDispatcher& m_eventDispatcher;
 
 	private:
         StateHolder m_stateHolder;
-		GameConfPtr m_gameConfig;
+		
     };
 }
