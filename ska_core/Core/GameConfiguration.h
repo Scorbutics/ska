@@ -31,7 +31,7 @@ namespace ska {
 
 		void eventUpdate(unsigned int ellapsedTime) {
 			ska::meta::for_each_in_tuple(m_modules, [&ellapsedTime](auto& m) {
-				using rawModuleType = meta::unsmart_ptr<decltype(m)>::type;
+				using rawModuleType = typename meta::unsmart_ptr<decltype(m)>::type;
 				if constexpr(has_eventUpdate<rawModuleType>::value) {
 					assert(m != nullptr && "This module type is not initialized");
 					m->eventUpdate(ellapsedTime);
@@ -41,7 +41,7 @@ namespace ska {
 
 		void graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) {
 			ska::meta::for_each_in_tuple(m_modules, [&ellapsedTime, &sh](auto& m) {
-				using rawModuleType = meta::unsmart_ptr<decltype(m)>::type;
+				using rawModuleType = typename meta::unsmart_ptr<decltype(m)>::type;
 				if constexpr(has_graphicUpdate<rawModuleType>::value) {
 					assert(m != nullptr && "This module type is not initialized");
 					m->graphicUpdate(ellapsedTime, sh);
