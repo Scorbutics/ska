@@ -1,6 +1,5 @@
 #pragma once
 #include "AnimationStateMachine.h"
-#include "DirectionnalAnimationStateMachine.h"
 
 namespace ska {
 	class EntityManager;

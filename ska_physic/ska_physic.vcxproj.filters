@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\CollisionSystem.cpp">
@@ -8,9 +8,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\ForceSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\GravitySystem.cpp">
@@ -451,9 +448,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\ForceSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\GravitySystem.h">

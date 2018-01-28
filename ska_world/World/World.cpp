@@ -123,12 +123,14 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point
 				//Vertical
 				const auto collisionContact = CollisionContact(hitbox, hitboxBlock);
 				if(collisionContact.normal().y != 0) {
+					SKA_LOG_INFO("Normal Y, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
 					outputY.push_back(hitboxBlock);
 					col = true;
 				}
 
 				//Horizontal
 				if (collisionContact.normal().x != 0) {
+					SKA_LOG_INFO("Normal X, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
 					outputX.push_back(hitboxBlock);
 					col = true;
 				}

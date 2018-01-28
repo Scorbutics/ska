@@ -405,7 +405,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\CollisionSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\DebugWorldCollisionResponse.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\ForceSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\GravitySystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.h" />
@@ -413,7 +412,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\CollisionSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\DebugWorldCollisionResponse.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.cpp" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\ForceSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\GravitySystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.cpp" />

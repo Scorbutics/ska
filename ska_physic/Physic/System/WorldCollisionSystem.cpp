@@ -51,7 +51,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			const auto& wcc = *wccPtr;
 			lastBlockColPosX = wcc.blockColPosX;
 			lastBlockColPosY = wcc.blockColPosY;
-			SKA_LOG_DEBUG("Suppression collision monde ", entityId);
+			//SKA_LOG_DEBUG("Suppression collision monde ", entityId);
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
 			/* Il faut rafraîchir l'ensemble des systèmes directement ici (au travers de l'EntityManager),
 			car il est possible de créer un autre WorldCollisionComponent dans le même tour de boucle.
@@ -69,7 +69,6 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		wcol.blockColPosY.clear();
 		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(nextPos, wcol.blockColPosX, wcol.blockColPosY);
 		if (intersect) {
-			collided = true;
 			wcol.xaxis = !wcol.blockColPosX.empty();
 			wcol.yaxis = !wcol.blockColPosY.empty();
 			wcol.lastBlockColPosX = lastBlockColPosX;
@@ -78,6 +77,9 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			const auto& overlapY = calculateOverlap(nextPos, wcol.blockColPosY);
 			wcol.contactX = CollisionContact{ overlapX, nextPos, overlapX };
 			wcol.contactY = CollisionContact{ overlapY, nextPos, overlapY };
+			if(wcol.contactY.hasCollision() || wcol.contactX.hasCollision()) {
+				collided = true;
+			}
 		}
 
 		if (collided) {

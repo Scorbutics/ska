@@ -64,9 +64,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -581,9 +578,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.h">

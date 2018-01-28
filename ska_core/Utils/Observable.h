@@ -1,22 +1,30 @@
 #pragma once
 
 #include <vector>
-#include <unordered_set>
 #include "Observer.h"
+#include "../Logging/Logger.h"
 
 namespace ska {
 
 	template <class T, class ...Args>
 	class Observable {
+		using ObserverType = Observer<T, Args...>;
 	public:
 		Observable() = default;
 
-		void addObserver(Observer<T, Args...>& obs) {
-			m_head.emplace(&obs);
+		void addObserver(ObserverType& obs) {
+			m_head.push_back(&obs);
 		}
 
-		void removeObserver(Observer<T, Args...>& obs) {
-			m_head.erase(&obs);
+		void removeObserver(ObserverType& obs) {
+			auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
+				return &(*o) == &obs;
+			});
+			if (foundObs != std::end(m_head)) {
+				m_head.erase(foundObs);
+			} else {
+				SKA_LOG_ERROR("Trying to delete an observer but not found !");
+			}
 		}
 
 		bool notifyObservers(T& t, Args... args) {
@@ -31,7 +39,7 @@ namespace ska {
 		virtual ~Observable() = default;
 
 	private:
-		std::unordered_set<Observer<T, Args...>*> m_head;
+		std::vector<ObserverType*> m_head;
 	};
 }
 

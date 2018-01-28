@@ -428,7 +428,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DebugCollisionDrawerSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\JumpAnimationStateMachine.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\ShadowSystem.h" />
@@ -457,7 +456,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\CameraSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DebugCollisionDrawerSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.cpp" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\JumpAnimationStateMachine.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\ShadowSystem.cpp" />

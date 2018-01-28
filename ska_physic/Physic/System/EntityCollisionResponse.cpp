@@ -1,12 +1,10 @@
 #include "EntityCollisionResponse.h"
 #include "ECS/Basics/Physic/ForceComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
-#include "ECS/Basics/Physic/HitboxComponent.h"
 #include "ECS/EntityManager.h"
 #include "CollisionSystem.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
 #include "Utils/RectangleUtils.h"
-#include "Core/CodeDebug/CodeDebug.h"
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
 	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1), ged),
@@ -18,12 +16,9 @@ ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(Collisi
     m_entityManager(em) {
 }
 
-void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, const CollisionContact& cc) {
-	auto penetration = cc.penetration();
+void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, const float invMassOrigin, const float invMassTarget, const CollisionContact& cc, const float slope, const float percent) {
+	const auto penetration = cc.penetration();
 	const auto& n = cc.normal();
-
-	const auto percent = 0.2F; // usually 20% to 80%
-	const auto slope = 0.01F; // usually 0.01 to 0.1
 
 	ska::Point<float> correction;
 	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
@@ -81,7 +76,7 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	);*/
 
 	//calcul vectoriel : impulse = j . normal
-	Point<double> impulse(j * col.contact.normal().x, j * col.contact.normal().y);
+	const auto impulse = Point<double>{ j * col.contact.normal().x, j * col.contact.normal().y };
 
 	mtarget.vx += impulse.x * invMassTarget;
 	mtarget.vy += impulse.y * invMassTarget;
@@ -89,7 +84,12 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	morigin.vx += -impulse.x * invMassOrigin;	
 	morigin.vy += -impulse.y * invMassOrigin;
 
-	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.contact);
+	//usually 20% to 80%
+	static const auto percent = 0.2F;
+
+	//usually 0.01 to 0.1
+	static const auto slope = 0.1F;
+	correctPosition(m_entityManager.getComponent<PositionComponent>(col.origin), m_entityManager.getComponent<PositionComponent>(col.target), invMassOrigin, invMassTarget, col.contact, slope, percent);
 
 	return true;
 }

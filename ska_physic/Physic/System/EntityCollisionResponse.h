@@ -21,8 +21,10 @@ namespace ska {
 
 		static bool handleInfiniteMasses(const CollisionComponent& col, float invMassOrigin, float invMassTarget, MovementComponent& mtarget, MovementComponent& morigin);
 		virtual bool onEntityCollision(CollisionEvent&);
+		
+		static void correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, const CollisionContact& cc, const float slope, const float percent);
+
 	private:
-		static void correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, float invMassOrigin, float invMassTarget, const CollisionContact& cc);
 		EntityManager& m_entityManager;
 	};
 }

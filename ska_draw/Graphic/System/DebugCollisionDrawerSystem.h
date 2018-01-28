@@ -8,7 +8,7 @@
 
 namespace ska {
 	class DebugCollisionDrawerSystem : 
-		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, HitboxComponent, DebugGraphicComponent>, PossibleComponent<WorldCollisionComponent>> {
+		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, HitboxComponent, DebugGraphicComponent>, PossibleComponent<>> {
 	public:
 		DebugCollisionDrawerSystem(EntityManager& em);
 		EntityId createDebugCollisionEntity(const Point<int>& p, int offset);

@@ -1,6 +1,5 @@
 #include "DebugCollisionDrawerSystem.h"
 #include "Utils/SpritePath.h"
-#include "Utils/SkaConstants.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "../GraphicComponent.h"
 #include "ECS/Basics/Graphic/DeleterComponent.h"
@@ -14,10 +13,7 @@ void ska::DebugCollisionDrawerSystem::refresh(unsigned int) {
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
 		auto& dcgc = m_componentAccessor.get<DebugGraphicComponent>(entityId);
-
-		auto* wcolPtr = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId);
-		if (((dcgc.typeMask & COLLISION) == COLLISION) && wcolPtr != nullptr) {
-			auto& wcol = *wcolPtr;
+		if (((dcgc.typeMask & COLLISION) == COLLISION)) {
 
 			if (dcgc.collidedBlocks.size() >= 10) {
 				scheduleDeferredRemove(dcgc.collidedBlocks.front());
@@ -25,18 +21,15 @@ void ska::DebugCollisionDrawerSystem::refresh(unsigned int) {
 				scheduleDeferredRemove(dcgc.collidedBlocks.front());
 				dcgc.collidedBlocks.pop();
 			}
+			
+			for (const auto& p : dcgc.blockColPosX) {
+				dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
+			}			
 
-			if (wcol.xaxis) {
-				for (const auto& p : wcol.blockColPosX) {
-					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
-				}
+			for (const auto& p : dcgc.blockColPosY) {
+				dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
 			}
 
-			if (wcol.yaxis) {
-				for (const auto& p : wcol.blockColPosY) {
-					dcgc.collidedBlocks.push(createDebugCollisionEntity(p, 1));
-				}
-			}
 		}
 		if ((dcgc.typeMask & WALK) == WALK) {
 			createDebugCollisionEntity(PositionComponent::getCenterPosition(m_componentAccessor.get<PositionComponent>(entityId), m_componentAccessor.get<HitboxComponent>(entityId)), 1);

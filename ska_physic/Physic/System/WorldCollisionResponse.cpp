@@ -7,7 +7,7 @@
 #include "ECS/Basics/Physic/ForceComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
-#include "../../../ska_ai/AI/IADefinedMovementComponent.h"
+#include "EntityCollisionResponse.h"
 
 ska::WorldCollisionResponse::WorldCollisionResponse(CollisionProfile& cp, GameEventDispatcher& ged, EntityManager& em) :
 	WorldCollisionObserver(std::bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1), ged),
@@ -28,12 +28,25 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 
 	auto wcol = *colE.wcollisionComponent;
 	auto colX = false;
+
+	//usually 20% to 80%
+	static const auto percent = 0.2F;
+
+	//usually 0.01 to 0.1
+	static const auto slope = 0.01F;
+
 	if (wcol.xaxis) {
 		for (const auto& p : wcol.blockColPosX) {
 			colX |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
 			if (colX) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
+				
+				auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
+				auto pcBlock = ska::PositionComponent{ p };
+				
+				EntityCollisionResponse::correctPosition(pc, pcBlock, forceComponent.weight == 0 ? std::numeric_limits<float>::max() : 1.F / forceComponent.weight, 0, wcol.contactX, slope, percent);
+
 				movementComponent.vx = 0;
 				movementComponent.ax = 0;
 				forceComponent.x = 0;
@@ -49,6 +62,12 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 			if (colY) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
+				
+				auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
+				auto pcBlock = ska::PositionComponent { p };
+
+				EntityCollisionResponse::correctPosition(pc, pcBlock, forceComponent.weight == 0 ? std::numeric_limits<float>::max() : 1.F / forceComponent.weight, 0, wcol.contactY, slope, percent);
+				
 				movementComponent.vy = 0;
 				movementComponent.ay = 0;
 				forceComponent.y = 0;
@@ -61,15 +80,11 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	
 	if(colX) {
 		SKA_LOG_INFO("Collision. Ghost : ", cc.ghost);
-		auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
-		pc.x += wcol.contactX.normal().x * wcol.contactX.overlap().w;
 		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
 	}
 
 	if(colY) {
 		SKA_LOG_INFO("Collision. Ghost : ", cc.ghost);
-		auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
-		pc.y += wcol.contactY.normal().y * wcol.contactY.overlap().h;
 		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
 	}
 

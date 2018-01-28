@@ -1,6 +1,7 @@
 #pragma once
-#include "DirectionnalAnimationStateMachine.h"
+#include <unordered_map>
 #include "JumpAnimationStateMachine.h"
+#include "ECS/Basics/Physic/PositionComponent.h"
 
 namespace ska {
     class EntityManager;
@@ -15,6 +16,7 @@ namespace ska {
 		virtual void onEnter(EntityId&) override;
     private:
 		ska::EntityManager& m_entityManager;
+		std::unordered_map<ska::EntityId, ska::PositionComponent> m_lastPos;
 	};
 }
 

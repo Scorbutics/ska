@@ -98,14 +98,16 @@ std::vector<std::string> ska::StringUtils::split(const std::string &s, const cha
 // trim from start
 std::string ska::StringUtils::ltrim(const std::string &s) {
 	std::string tmp(s.c_str());
-	tmp.erase(tmp.begin(), find_if(tmp.begin(), tmp.end(), not1(std::ptr_fun<int, int>(std::isspace))));
+	auto firstCharIt = find_if(tmp.begin(), tmp.end(), [](const auto& c) {return !std::isspace(c); });
+	tmp.erase(tmp.begin(), firstCharIt);
 	return tmp;
 }
 
 // trim from end
 std::string ska::StringUtils::rtrim(const std::string &s) {
 	std::string tmp(s.c_str());
-	tmp.erase(find_if(tmp.rbegin(), tmp.rend(), not1(std::ptr_fun<int, int>(std::isspace))).base(), tmp.end());
+	auto lastCharIt = std::find_if(tmp.rbegin(), tmp.rend(), [](const auto& c) {return !std::isspace(c); }).base();
+	tmp.erase(lastCharIt, tmp.end());
 	return tmp;
 }
 
