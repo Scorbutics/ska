@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -89,6 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -120,7 +121,9 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +155,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -484,34 +488,34 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\WindowIG.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessagePopup.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessageType.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Button.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonQuit.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonSprite.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\CheckBox.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\HorizontalSlider.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Image.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Input.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Label.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\LabeledHorizontalSlider.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\MouseCursor.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\RadioButton.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\RadioButtonGroup.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ScrollingMultiLineLabel.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Widget.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\ClickEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\ClickEventListener.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\FocusEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\FocusEventListener.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\HoverEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\HoverEventListener.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\KeyEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\KeyEventListener.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\TimeEvent.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\GUI.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Utils\WidgetMaskHelper.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\BalloonDialog.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\GUIScrollButtonWindowIG.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessagePopup.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Button.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonQuit.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ButtonSprite.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\CheckBox.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\HorizontalSlider.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Image.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Input.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\Label.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\LabeledHorizontalSlider.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\MouseCursor.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\RadioButton.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\RadioButtonGroup.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Concrete\ScrollingMultiLineLabel.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Components\Widget.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\ClickEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\ClickEventListener.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\FocusEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\FocusEventListener.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\HoverEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\HoverEventListener.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\KeyEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\KeyEventListener.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Events\TimeEvent.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\GUI.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Utils\WidgetMaskHelper.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\BalloonDialog.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\GUI\Windows\GUIScrollButtonWindowIG.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_gui\MessagePopup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_gui\ZERO_CHECK.vcxproj">

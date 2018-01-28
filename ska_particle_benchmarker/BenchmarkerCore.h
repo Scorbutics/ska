@@ -8,10 +8,13 @@
 #include "Graphic/SDLRenderer.h"
 #include "Graphic/SDLWindow.h"
 #include "Data/Events/ExtensibleGameEventDispatcher.h"
+#include "GraphicModule.h"
+#include "ECS/EntityManager.h"
+#include "CoreModule.h"
 
 class BenchmarkerCore : 
 	public ska::GameApp {
-	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>>;
+	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>, ska::CoreModule<ska::EntityManager>, ska::GraphicModule>;
 public:
 	explicit BenchmarkerCore(GameConf&& gc);
 	virtual ~BenchmarkerCore() = default;

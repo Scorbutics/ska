@@ -1,21 +1,19 @@
 #pragma once
 #include <string>
-#include "Module.h"
 #include "Inputs/EnumContextManager.h"
 #include "Inputs/InputContextManager.h"
 
 namespace ska {
     template <class EntityManager>
-	class CoreModule :
-		public Module  {
+	class CoreModule {
 	public:
 		CoreModule(const std::string& moduleName, GameEventDispatcher& ged):
-            Module(moduleName),
-            m_entityManager(ged),
+            m_name(moduleName),
+    		m_entityManager(ged),
             m_playerICM(m_rawInputListener, ged) {
 		}
 
-		void eventUpdate(unsigned int ellapsedTime) override {
+		void eventUpdate(unsigned int ellapsedTime) {
             m_entityManager.refresh();
 
             /* Raw input acquisition */
@@ -36,7 +34,7 @@ namespace ska {
             m_playerICM.addContext(em, std::make_unique<I>(m_rawInputListener, std::forward<Args>(args)...));
         }
 
-		~CoreModule() override = default;
+		~CoreModule() = default;
 
 		EntityManager& getEntityManager() {
             return m_entityManager;
@@ -46,5 +44,6 @@ namespace ska {
         RawInputListener m_rawInputListener;
         EntityManager m_entityManager;
         InputContextManager m_playerICM;
+		std::string m_name;
 	};
 }

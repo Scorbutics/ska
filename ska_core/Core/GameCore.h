@@ -14,12 +14,12 @@ namespace ska {
      * This class holds an instance of each type template-specified and transmits its to every new game state.
      * It's often a good idea to subclass it if you need accesses to the game window / event dispatcher outside of any state.
      */
-    template <class EventDispatcher>
+    template <class EventDispatcher, class ... Modules>
     class GameCore :
 		public GameApp {
 
     protected:
-        using GameConf = ska::GameConfiguration<EventDispatcher>;
+        using GameConf = ska::GameConfiguration<EventDispatcher, Modules...>;
 		using GameConfPtr = std::unique_ptr<GameConf>;
     public:
 
@@ -87,24 +87,14 @@ namespace ska {
         }
 
         void graphicUpdate(unsigned int ellapsedTime) {
-            //TODO : éviter "getModules"
-            auto& modules = m_gameConfig->getModules();
-            for(auto& module : modules) {
-                //TODO : modules graphiques != modules logiques
-                module->graphicUpdate(ellapsedTime, m_stateHolder);
-            }
+			m_gameConfig->graphicUpdate(ellapsedTime, m_stateHolder);
         }
 
         void eventUpdate(unsigned int ellapsedTime) {
 			m_stateHolder.update();
             m_stateHolder.eventUpdate(ellapsedTime);
 
-            //TODO : éviter "getModules"
-            auto& modules = m_gameConfig->getModules();
-            for(auto& module : modules) {
-                //TODO : modules graphiques != modules logiques
-                module->eventUpdate(ellapsedTime);
-            }
+			m_gameConfig->eventUpdate(ellapsedTime);
         }
 
 		GameConfPtr m_gameConfig;

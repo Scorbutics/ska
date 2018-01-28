@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -89,6 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -120,7 +121,9 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +155,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -456,29 +460,29 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleRenderer.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleUpdater.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicColorGenerator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicVelocityGenerator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxAttractorParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxParticleGenerator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColorParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColoredRectGraphicParticleRenderer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ConsoleParticleCountRenderer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\EulerAttractorParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\GenerationDelayProperty.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\PhysicParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\RandomColorGenerator.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SideBalancingParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SphereAttractorParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingColorParticleEffectFactory.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingParticleEffectFactory.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingTextureParticleEffectFactory.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpritePathProperty.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureAlphaParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureGraphicParticleRenderer.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TimeParticleUpdater.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleBuilder.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleEffect.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleFactory.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicColorGenerator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BasicVelocityGenerator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxAttractorParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\BoxParticleGenerator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColorParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ColoredRectGraphicParticleRenderer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\ConsoleParticleCountRenderer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\EulerAttractorParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\GenerationDelayProperty.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\PhysicParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\RandomColorGenerator.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SideBalancingParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SphereAttractorParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingColorParticleEffectFactory.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingParticleEffectFactory.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpreadingTextureParticleEffectFactory.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\SpritePathProperty.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureAlphaParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TextureGraphicParticleRenderer.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\Impl\TimeParticleUpdater.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleBuilder.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleEffect.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ParticleFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_particle\ZERO_CHECK.vcxproj">

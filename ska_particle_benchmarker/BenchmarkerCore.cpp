@@ -175,7 +175,8 @@ float BenchmarkerCore::ticksWanted() const{
 
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>> gc;
+	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>, CoreModule<ska::EntityManager>, GraphicModule>;
+	GameConf gc;
 	auto& core = gc.requireModule<CoreModule<ska::EntityManager>>("Core", gc.getEventDispatcher());
 	auto window = std::make_unique<ska::SDLWindow>("Particle benchmark", 1500, 900);
 	auto renderer = std::make_unique<ska::SDLRenderer>(*window, 0, SDL_RENDERER_ACCELERATED);

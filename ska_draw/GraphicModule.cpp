@@ -12,7 +12,6 @@
 #include "Core/Window.h"
 
 ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window):
-	Module(moduleName),
 	SubObserver<StateEvent>(std::bind(&GraphicModule::onStateEvent, this, std::placeholders::_1), ged),
 	m_eventDispatcher(ged),
 	m_drawables(std::move(dc)),

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -89,6 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -120,7 +121,9 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -152,7 +155,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -396,17 +400,17 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h" />
+    <ClInclude Include="..\ska_core\Utils\unsmartptr.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\IADefinedMovementComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\IARandomMovementComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Node.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Path.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IADefinedMovementSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IARandomMovementSystem.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Node.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Path.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IADefinedMovementSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IARandomMovementSystem.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Node.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\Path.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IADefinedMovementSystem.cpp" />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_ai\AI\System\IARandomMovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_ai\ZERO_CHECK.vcxproj">

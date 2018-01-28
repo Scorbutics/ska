@@ -1,13 +1,18 @@
 #pragma once
-#include <vector>
 #include <memory>
-#include "../Module.h"
+#include "../Utils/TupleUtils.h"
+#include "../Utils/ContainsTypeTuple.h"
+#include "../Utils/unsmartptr.h"
+#include <cassert>
 
 namespace ska {
+	class StateHolder;
 
-    template <class EventDispatcher>
+    template <class EventDispatcher, class ... Modules>
 	class GameConfiguration {
-		using ModulePtr = std::unique_ptr<Module>;
+		template <class T>
+		using ModulePtr = std::unique_ptr<T>;
+		using ModuleTuple = std::tuple<ModulePtr<Modules>...>;
 
 	public:
 		GameConfiguration() = default;
@@ -17,24 +22,82 @@ namespace ska {
 
 		template <class Module, class ... Args>
 		Module& requireModule(const std::string& moduleName, Args&& ... args) {
-			static_assert(std::is_base_of<ska::Module, Module>::value, "The module to load must inherit from Module");
-			auto mod = ModulePtr(new Module(moduleName, std::forward<Args>(args)...));
+			static_assert(meta::contains<Module, Modules...>::value, "The module to load must belong to the provided Module list");
+			auto mod = std::make_unique<Module>(moduleName, std::forward<Args>(args)...);
 			auto& moduleRef = static_cast<Module&>(*mod);
-			m_modules.push_back(std::move(mod));
+			std::get<ModulePtr<Module>>(m_modules) = std::move(mod);
 			return moduleRef;
 		}
 
-		std::vector<ModulePtr>& getModules() {
-		    return m_modules;
+		void eventUpdate(unsigned int ellapsedTime) {
+			ska::meta::for_each_in_tuple(m_modules, [&ellapsedTime](auto& m) {
+				using rawModuleType = meta::unsmart_ptr<decltype(m)>::type;
+				if constexpr(has_eventUpdate<rawModuleType>::value) {
+					assert(m != nullptr && "This module type is not initialized");
+					m->eventUpdate(ellapsedTime);
+				}
+			});
+		}
+
+		void graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) {
+			ska::meta::for_each_in_tuple(m_modules, [&ellapsedTime, &sh](auto& m) {
+				using rawModuleType = meta::unsmart_ptr<decltype(m)>::type;
+				if constexpr(has_graphicUpdate<rawModuleType>::value) {
+					assert(m != nullptr && "This module type is not initialized");
+					m->graphicUpdate(ellapsedTime, sh);
+				}
+			});
 		}
 
 		EventDispatcher& getEventDispatcher() {
             return m_eventDispatcher;
 		}
-
+		
 	private:
+
+    	template<typename C>
+		struct has_eventUpdate {
+		private:
+
+			template<typename T>
+			static constexpr auto check(T*)
+				-> typename
+				std::is_same<
+					decltype(std::declval<T>().eventUpdate(std::declval<unsigned int>())),
+					void
+				>::type;
+
+			template<typename>
+			static constexpr std::false_type check(...);
+
+			typedef decltype(check<C>(0)) type;
+
+		public:
+			static constexpr bool value = type::value;
+		};
+
+		template<typename C>
+		struct has_graphicUpdate {
+		private:
+			template<typename T>
+			static constexpr auto check(T*)
+				-> typename
+				std::is_same<
+					decltype(std::declval<T>().graphicUpdate(std::declval<unsigned int>(), std::declval<StateHolder&>())),
+					void
+				>::type;
+
+			template<typename>
+			static constexpr std::false_type check(...);
+
+			typedef decltype(check<C>(0)) type;
+
+		public:
+			static constexpr bool value = type::value;
+		};
+
 		EventDispatcher m_eventDispatcher;
-		std::vector<ModulePtr> m_modules;
+		ModuleTuple m_modules;
 		
 	};
 }

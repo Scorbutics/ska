@@ -34,7 +34,7 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 	auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);
 
-	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>>;
+	using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>, CoreModule<ska::EntityManager>, GraphicModule>;
 	auto gc = std::make_unique<GameConf>();
 	auto& core = gc->requireModule<CoreModule<ska::EntityManager>>("Core", gc->getEventDispatcher());
 

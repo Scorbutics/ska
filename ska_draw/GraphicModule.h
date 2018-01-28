@@ -11,9 +11,7 @@ namespace ska {
     class Renderer;
 	class Window;
 
-
 	class GraphicModule :
-		public Module,
 		public SubObserver<StateEvent> {
 
 		using RendererPtr = std::unique_ptr<Renderer>;
@@ -22,7 +20,7 @@ namespace ska {
 
 	public:
 		GraphicModule(const std::string& name, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window);
-		void graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) override;
+		void graphicUpdate(unsigned int ellapsedTime, StateHolder& sh);
 		virtual ~GraphicModule();
 
     private:
