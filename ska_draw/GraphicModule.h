@@ -3,7 +3,6 @@
 #include "Utils/SubObserver.h"
 #include "Data/Events/StateEvent.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include "Module.h"
 
 namespace ska {
 	class StateHolder;

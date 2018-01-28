@@ -1,24 +1,23 @@
 #pragma once
+#include <SDL_mixer.h>
 #include <string>
-#include "Module.h"
 #include "Data/Events/GameEventDispatcher.h"
 
 namespace ska {
 
     template <class SoundManager>
-	class SoundModule :
-        public ska::Module {
+	class SoundModule {
 
 	public:
-		explicit SoundModule(const std::string& moduleName, GameEventDispatcher& ged) :
-			Module(moduleName),
-            m_soundManager(ged) {
+		template <class SM>
+		explicit SoundModule(const std::string& moduleName, SM&& ged) :
+            m_soundManager(std::forward<SM>(ged)) {
             if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
                 SKA_LOG_ERROR("Impossible d'initialiser SDL_mixer : ", Mix_GetError());
             }
         }
 
-		~SoundModule() override {
+		virtual ~SoundModule() {
 			Mix_CloseAudio();
             Mix_Quit();
         }

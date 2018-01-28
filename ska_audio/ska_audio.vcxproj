@@ -365,7 +365,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Rectangle.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\CompoundTask.h" />

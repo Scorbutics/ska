@@ -112,9 +112,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -451,9 +448,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h">
