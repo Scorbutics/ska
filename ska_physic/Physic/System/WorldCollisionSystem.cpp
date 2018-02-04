@@ -75,6 +75,8 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			wcol.lastBlockColPosY = lastBlockColPosY;
 			const auto& overlapX = calculateOverlap(nextPos, wcol.blockColPosX);
 			const auto& overlapY = calculateOverlap(nextPos, wcol.blockColPosY);
+			//SKA_LOG_MESSAGE("Overlap x summed : \t", overlapX.x, ";", overlapX.y, ";", overlapX.w, ";", overlapX.h);
+			//SKA_LOG_MESSAGE("Overlap y summed : \t", overlapY.x, ";", overlapY.y, ";", overlapY.w, ";", overlapY.h);
 			wcol.contactX = CollisionContact{ overlapX, nextPos, overlapX };
 			wcol.contactY = CollisionContact{ overlapY, nextPos, overlapY };
 			if(wcol.contactY.hasCollision() || wcol.contactX.hasCollision()) {

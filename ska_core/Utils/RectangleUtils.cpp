@@ -33,7 +33,7 @@ ska::Rectangle ska::RectangleUtils::intersect(const Rectangle& r1, const Rectang
 	output.y = std::max(r1.y, r2.y);
 	const auto xmax = std::min(r1.x + r1.w, r2.x + r2.w);
 	const auto ymax = std::min(r1.y + r1.h, r2.y + r2.h);
-	if (xmax >= output.x && ymax >= output.y) {
+	if (xmax > output.x && ymax > output.y) {
 		output.w = xmax - output.x;
 		output.h = ymax - output.y;
 	} else {
