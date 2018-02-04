@@ -17,6 +17,9 @@ namespace ska {
             }
         }
 
+		void eventUpdate(unsigned int){
+		}
+
 		virtual ~SoundModule() {
 			Mix_CloseAudio();
             Mix_Quit();
