@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "Observer.h"
 #include "../Logging/Logger.h"
 

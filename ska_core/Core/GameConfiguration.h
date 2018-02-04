@@ -23,6 +23,7 @@ namespace ska {
 		template <class Module, class ... Args>
 		Module& requireModule(const std::string& moduleName, Args&& ... args) {
 			static_assert(meta::contains<Module, Modules...>::value, "The module to load must belong to the provided Module list");
+			static_assert(has_eventUpdate<Module>::value || has_graphicUpdate<Module>::value, "The module to load must have an eventUpdate or a graphicUpdate function");
 			auto mod = std::make_unique<Module>(moduleName, std::forward<Args>(args)...);
 			auto& moduleRef = static_cast<Module&>(*mod);
 			std::get<ModulePtr<Module>>(m_modules) = std::move(mod);
@@ -52,7 +53,7 @@ namespace ska {
 		EventDispatcher& getEventDispatcher() {
             return m_eventDispatcher;
 		}
-		
+
 	private:
 
     	template<typename C>
@@ -98,6 +99,6 @@ namespace ska {
 
 		EventDispatcher m_eventDispatcher;
 		ModuleTuple m_modules;
-		
+
 	};
 }
