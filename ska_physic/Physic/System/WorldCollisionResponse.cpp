@@ -43,13 +43,11 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
 				
 				auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
-				auto pcBlock = ska::PositionComponent{ p };
+				auto pcBlock = ska::PositionComponent{ ska::Point<int>(p) };
 				
 				EntityCollisionResponse::correctPosition(pc, pcBlock, forceComponent.weight == 0 ? std::numeric_limits<float>::max() : 1.F / forceComponent.weight, 0, wcol.contactX, slope, percent);
 
 				movementComponent.vx = 0;
-				movementComponent.ax = 0;
-				forceComponent.x = 0;
 				break;
 			}
 		}
@@ -64,13 +62,11 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
 				
 				auto& pc = m_entityManager.getComponent<PositionComponent>(colE.entity);
-				auto pcBlock = ska::PositionComponent { p };
+				auto pcBlock = ska::PositionComponent { ska::Point<int>(p) };
 
 				EntityCollisionResponse::correctPosition(pc, pcBlock, forceComponent.weight == 0 ? std::numeric_limits<float>::max() : 1.F / forceComponent.weight, 0, wcol.contactY, slope, percent);
-				
+
 				movementComponent.vy = 0;
-				movementComponent.ay = 0;
-				forceComponent.y = 0;
 				break;
 			}
 		}

@@ -10,6 +10,7 @@
 #include "Exceptions/FileException.h"
 #include "Utils/FileUtils.h"
 #include "ECS/Basics/Physic/CollisionContact.h"
+#include "Core/CodeDebug/CodeDebug.h"
 
 ska::World::World(const unsigned int tailleBloc) :
     m_windDirection(0),
@@ -107,13 +108,37 @@ void ska::World::update() {
 	m_lTop.getRenderable().update();
 }
 
-bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point<int>>& outputX, std::vector<Point<int>>& outputY) const {
+template <class T>
+void EraseAll(std::vector<T>& altered, std::vector<T>& toErase){
+	using std::begin;
+	using std::end;
+	using std::remove_if;
+	using std::find;
+
+	altered.erase(remove_if(begin(altered), end(altered),
+		[&](auto x) {return find(begin(toErase), end(toErase), x) != end(toErase); }), end(altered));
+}
+
+void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
+	std::vector<ska::Rectangle> doublons;
+	if(outputX.size() > outputY.size()) {
+		EraseAll(outputY, outputX);
+	} else {
+		EraseAll(outputX, outputY);
+	}
+
+}
+
+bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
 	Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
 	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
 	horizontalSegment /= m_blockSize;
 	verticalSegment /= m_blockSize;
 
 	auto col = false;
+
+	std::vector<ska::Rectangle> intermediateX;
+	std::vector<ska::Rectangle> intermediateY;
 
 	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
 		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
@@ -122,7 +147,7 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point
 
 				//Vertical
 				const auto collisionContact = CollisionContact(hitbox, hitboxBlock);
-				if(collisionContact.normal().y != 0) {
+				if (collisionContact.normal().y != 0) {
 					SKA_LOG_INFO("Normal Y, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
 					outputY.push_back(hitboxBlock);
 					col = true;
@@ -137,6 +162,23 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point
 			}
 		}
 	}
+	
+	FindAndEraseDoublons(outputX, outputY);
+
+	SKA_DBG_ONLY(
+		if (!outputX.empty()) {
+			SKA_LOG_INFO("X blocks : ", outputX.size());
+		}
+
+		if (!outputY.empty()) {
+			SKA_LOG_INFO("Y blocks : ", outputY.size());
+		}
+		
+		if(col) {
+			SKA_LOG_INFO("Hitbox : (", hitbox.x, " ; ", hitbox.y, " ; ", hitbox.w, " ; ", hitbox.h, ")");
+		}
+	);
+
 	return col;
 }
 

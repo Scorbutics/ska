@@ -12,7 +12,7 @@ ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, Co
 	m_ged(ged) {
 }
 
-ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, const std::vector<Point<int>>& points) {
+ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, const std::vector<Rectangle>& points) {
 	//TODO taille bloc dynamique
 	constexpr auto blockSize = 48;
 
@@ -44,8 +44,8 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			continue;
 		}
 
-		std::vector<Point<int>> lastBlockColPosX;
-		std::vector<Point<int>> lastBlockColPosY;
+		WorldCollisionComponent::BlockCollisionContainer lastBlockColPosX;
+		WorldCollisionComponent::BlockCollisionContainer lastBlockColPosY;
 		const auto& wccPtr = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId);
 		if (wccPtr != nullptr) {
 			const auto& wcc = *wccPtr;
@@ -59,26 +59,25 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			refreshEntity(entityId);
 		}
 
-		const auto entityHitbox = createHitBox(entityId, false, true);
+		const auto hitbox = createHitBox(entityId, false, true);
 
 		WorldCollisionComponent wcol;
 		auto collided = false;
-		const Rectangle nextPos = { entityHitbox.x, entityHitbox.y, entityHitbox.w, entityHitbox.h };
 
 		wcol.blockColPosX.clear();
 		wcol.blockColPosY.clear();
-		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(nextPos, wcol.blockColPosX, wcol.blockColPosY);
+		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(hitbox, wcol.blockColPosX, wcol.blockColPosY);
 		if (intersect) {
 			wcol.xaxis = !wcol.blockColPosX.empty();
 			wcol.yaxis = !wcol.blockColPosY.empty();
 			wcol.lastBlockColPosX = lastBlockColPosX;
 			wcol.lastBlockColPosY = lastBlockColPosY;
-			const auto& overlapX = calculateOverlap(nextPos, wcol.blockColPosX);
-			const auto& overlapY = calculateOverlap(nextPos, wcol.blockColPosY);
-			//SKA_LOG_MESSAGE("Overlap x summed : \t", overlapX.x, ";", overlapX.y, ";", overlapX.w, ";", overlapX.h);
-			//SKA_LOG_MESSAGE("Overlap y summed : \t", overlapY.x, ";", overlapY.y, ";", overlapY.w, ";", overlapY.h);
-			wcol.contactX = CollisionContact{ overlapX, nextPos, overlapX };
-			wcol.contactY = CollisionContact{ overlapY, nextPos, overlapY };
+			const auto& overlapX = calculateOverlap(hitbox, wcol.blockColPosX);
+			const auto& overlapY = calculateOverlap(hitbox, wcol.blockColPosY);
+			SKA_LOG_MESSAGE("Overlap x summed : \t", overlapX.x, ";", overlapX.y, ";", overlapX.w, ";", overlapX.h);
+			SKA_LOG_MESSAGE("Overlap y summed : \t", overlapY.x, ";", overlapY.y, ";", overlapY.w, ";", overlapY.h);
+			wcol.contactX = CollisionContact{ overlapX, hitbox, overlapX };
+			wcol.contactY = CollisionContact{ overlapY, hitbox, overlapY };
 			if(wcol.contactY.hasCollision() || wcol.contactX.hasCollision()) {
 				collided = true;
 			}
@@ -98,8 +97,8 @@ ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool ,
 	auto& movementComponent = m_componentAccessor.get<MovementComponent>(entityId);
 
 	Rectangle hitBox;
-	hitBox.x = ska::NumberUtils::round(positionComponent.x + movementComponent.vx + movementComponent.ax + hitboxComponent.xOffset);
-	hitBox.y = ska::NumberUtils::round(positionComponent.y + movementComponent.vy + movementComponent.ay + hitboxComponent.yOffset);
+	hitBox.x = ska::NumberUtils::round(positionComponent.x + hitboxComponent.xOffset);
+	hitBox.y = ska::NumberUtils::round(positionComponent.y + hitboxComponent.yOffset);
 	hitBox.w = hitboxComponent.width;
 	hitBox.h = hitboxComponent.height;
 	return hitBox;

@@ -55,18 +55,27 @@ namespace ska {
 
 			if (overlap.w != 0 && overlap.h != 0) {
 				collision = true;
-				if (overlap.w <= overlap.h) {
+				
+				if (overlap.w < overlap.h) {
 					const auto vectorAToBX = pcA.x - pcB.x;
 					normal.x = vectorAToBX < 0 ? -1.F : 1.F;
 					normal.y = 0;
 					penetration = static_cast<float>(overlap.w);
-					SKA_STATIC_LOG_INFO(CollisionContact)((vectorAToBX < 0 ? "<" : ">"));
-				} else {
+					SKA_STATIC_LOG_INFO(CollisionContact)(vectorAToBX < 0 ? "<" : ">");
+				} else if (overlap.w > overlap.h) {
 					const auto vectorAToBY = pcA.y - pcB.y;
 					normal.x = 0;
 					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 					penetration = static_cast<float>(overlap.h);
-					SKA_STATIC_LOG_INFO(CollisionContact)((vectorAToBY < 0 ? "^" : "v"));
+					SKA_STATIC_LOG_INFO(CollisionContact)(vectorAToBY < 0 ? "^" : "v");
+				} else {
+					const auto vectorAToBX = pcA.x - pcB.x;
+					const auto vectorAToBY = pcA.y - pcB.y;
+					normal.x = vectorAToBX < 0 ? -1.F : 1.F;
+					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
+					penetration = static_cast<float>(overlap.w);
+
+					SKA_STATIC_LOG_INFO(CollisionContact)(vectorAToBY < 0 ? "^" : "v", vectorAToBX < 0 ? "<" : ">");
 				}
 			}
 			return CollisionContact(overlap, penetration, normal, collision);

@@ -10,7 +10,7 @@ namespace ska {
         CollisionProfile() = default;
         virtual ~CollisionProfile() = default;
 
-        virtual bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<ska::Point<int>>& outputX, std::vector<ska::Point<int>>& outputY) const = 0;
+        virtual bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const = 0;
         virtual bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& blocksAuthorized) const = 0;
     };
 }

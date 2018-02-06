@@ -13,9 +13,12 @@ namespace ska {
 		CollisionContact contactY;
 		bool xaxis;
 		bool yaxis;
-		std::vector<Point<int>> blockColPosX;
-		std::vector<Point<int>> lastBlockColPosX;
-		std::vector<Point<int>> blockColPosY;
-		std::vector<Point<int>> lastBlockColPosY;
+
+		using BlockCollisionContainer = std::vector<Rectangle>;
+
+		BlockCollisionContainer blockColPosX;
+		BlockCollisionContainer lastBlockColPosX;
+		BlockCollisionContainer blockColPosY;
+		BlockCollisionContainer lastBlockColPosY;
 	};
 }

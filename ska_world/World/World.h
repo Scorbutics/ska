@@ -59,7 +59,7 @@ namespace ska {
 
 		void getData();
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
-		bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Point<int>>& outputX, std::vector<Point<int>>& outputY) const override;
+		bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const override;
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 
 		bool getCollision(const int i, const int j) const;
