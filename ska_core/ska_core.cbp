@@ -73,7 +73,7 @@
 		<Unit filename="Data/Events/SoundEvent.h" />
 		<Unit filename="Data/Events/StateEvent.h" />
 		<Unit filename="Data/Events/WorldEvent.h" />
-		<Unit filename="Data/Savegame.h" />
+		<Unit filename="Data/MemoryScript.h" />
 		<Unit filename="Draw/CameraAware.h" />
 		<Unit filename="Draw/Drawable.h" />
 		<Unit filename="Draw/DrawableContainer.h" />
@@ -183,8 +183,6 @@
 		<Unit filename="Logging/ColorStream.h" />
 		<Unit filename="Logging/Logger.cpp" />
 		<Unit filename="Logging/Logger.h" />
-		<Unit filename="Module.cpp" />
-		<Unit filename="Module.h" />
 		<Unit filename="Point.h" />
 		<Unit filename="Rectangle.h" />
 		<Unit filename="Task/CompoundTask.h" />
@@ -219,7 +217,6 @@
 		<Unit filename="Utils/RectangleUtils.cpp" />
 		<Unit filename="Utils/RectangleUtils.h" />
 		<Unit filename="Utils/Refreshable.h" />
-		<Unit filename="Utils/ResourceTemplate.h" />
 		<Unit filename="Utils/Singleton_template.h" />
 		<Unit filename="Utils/SkaConstants.h" />
 		<Unit filename="Utils/SpritePath.cpp" />
@@ -231,7 +228,6 @@
 		<Unit filename="Utils/TimeUtils.h" />
 		<Unit filename="Utils/TupleUtils.h" />
 		<Unit filename="Utils/VectorUtils.h" />
-		<Unit filename="Utils/ununique.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

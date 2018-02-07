@@ -8,7 +8,7 @@ ska::AbstractFunctionCommand::AbstractFunctionCommand(EntityManager& entityManag
 {
 }
 
-std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, std::stringstream&, std::vector<std::string>& args) {
+std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, MemoryScript& memory, std::stringstream&, std::vector<std::string>& args) {
 	int argNumber = argumentsNumber();
 	if (argNumber != -1 && static_cast<std::size_t>(argNumber) != args.size()) {
 		/* Syntax error */
@@ -19,7 +19,7 @@ std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, std::
 		throw ScriptSyntaxError(syntaxErrorMsg);
 	}
 
-	return execute(script, args);
+	return execute(script, memory, args);
 }
 
 char ska::AbstractFunctionCommand::getSeparator() {

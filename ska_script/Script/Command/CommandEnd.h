@@ -10,7 +10,7 @@ namespace ska {
 
 		static const std::string& getCmdName();
 
-		virtual std::string execute(ScriptComponent& script, std::vector<std::string>& args) override;
+		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) override;
 		virtual int argumentsNumber() override;
 	};
 }

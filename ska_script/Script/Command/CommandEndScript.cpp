@@ -12,6 +12,6 @@ int ska::CommandEndScript::argumentsNumber() {
 	return 1;
 }
 
-std::string ska::CommandEndScript::execute(ScriptComponent&, std::vector<std::string>& args) {
+std::string ska::CommandEndScript::execute(ScriptComponent&, MemoryScript&, std::vector<std::string>& args) {
 	throw ScriptDiedException(args[0]);
 }

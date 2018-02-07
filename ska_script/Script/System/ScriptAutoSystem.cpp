@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 #include "ScriptAutoSystem.h"
 #include "Exceptions/ScriptDiedException.h"
 #include "Exceptions/ScriptUnknownCommandException.h"
@@ -23,7 +24,7 @@
 #define MAX_CONSECUTIVE_COMMANDS_PLAYED 5
 
 
-ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, Savegame& saveGame) : System(entityManager),
+ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) : System(entityManager),
 m_saveGame(saveGame),
 m_world(w) {
 	sch.setupCommands(w, m_commands);
@@ -113,15 +114,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 		sc.fullPath = validPath;
 		sc.key = keyScript;
 		sc.origin = origin;
-
-		std::ifstream scriptFile(sc.fullPath);
-		if (scriptFile.fail()) {
-			throw InvalidPathException("Impossible d'ouvrir le fichier script " + sc.fullPath);
-		}
-
-		for (std::string line; getline(scriptFile, line);) {
-			sc.file.push_back(line);
-		}
+        sc.controller = std::make_unique<ScriptController>(sc.fullPath);
 
 		m_cache.insert(make_pair(sc.fullPath, sc));
 	} else {
@@ -158,11 +151,7 @@ ska::EntityId ska::ScriptAutoSystem::getEntityFromName(const std::string& nameEn
 	return m_namedScriptedEntities[nameEntity];
 }
 
-bool ska::ScriptAutoSystem::eof(ScriptComponent& script) {
-	return script.file.size() <= script.currentLine;
-}
-
-ska::Savegame& ska::ScriptAutoSystem::getSavegame() {
+ska::MemoryScript& ska::ScriptAutoSystem::getSavegame() {
 	return m_saveGame;
 }
 
@@ -183,22 +172,22 @@ void ska::ScriptAutoSystem::refresh(unsigned int) {
 				EntityId scriptEntity = StringUtils::strToInt(entityScriptId);
 				const auto& scriptCPtr = m_componentPossibleAccessor.get<ScriptComponent>(scriptEntity);
 				if (scriptCPtr == nullptr) {
-					SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->currentLine, ") ", sde.what(), " Script not found with id : ", entityScriptId);
+					SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", sde.what(), " Script not found with id : ", entityScriptId);
 				} else {
 					killAndSave(*scriptCPtr, m_saveGame);
 				}
 			} else {
-				SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->currentLine, ") ", sde.what(), " This is not an integer id : ", entityScriptId);
+				SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", sde.what(), " This is not an integer id : ", entityScriptId);
 			}
 		}
 
 	} catch (ScriptException e) {
-		SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->currentLine, ") ", e.what());
+		SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", e.what());
 	}
 
 }
 
-void ska::ScriptAutoSystem::killAndSave(ScriptComponent& script, const Savegame&) const {
+void ska::ScriptAutoSystem::killAndSave(ScriptComponent& script, const MemoryScript&) const {
 	//string& tmpScritFileName = ("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + savegame.getSaveName() + FILE_SEPARATOR "tmpscripts.data");
 	//std::ofstream scriptList;
 	/*scriptList.open(tmpScritFileName.c_str(), ios::app);
@@ -242,7 +231,7 @@ bool ska::ScriptAutoSystem::canBePlayed(ScriptComponent& script) {
 		|| script.active > 0
 		|| (TimeUtils::getTicks() - script.lastTimeDelayed) <= script.delay
 		|| !((script.triggeringType == EnumScriptTriggerType::AUTO && script.state == EnumScriptState::STOPPED) || (script.state != EnumScriptState::STOPPED))
-		|| eof(script);
+		|| script.controller->eof();
 
 	return !cannotBePlayed;
 }
@@ -260,7 +249,7 @@ bool ska::ScriptAutoSystem::transferActiveToDelay(ScriptComponent& script) {
 	return false;
 }
 
-bool ska::ScriptAutoSystem::play(ScriptComponent& script, Savegame& savegame) {
+bool ska::ScriptAutoSystem::play(ScriptComponent& script, MemoryScript& savegame) {
 
 	if (!canBePlayed(script)) {
 		return false;
@@ -276,8 +265,8 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, Savegame& savegame) {
 	script.parent = this;
 
 	/* Read commands */
-	while (!eof(script)) {
-		const auto cmd = nextLine(script);
+	while (!script.controller->eof()) {
+		const auto cmd = script.controller->nextLine();
 		if (cmd != "") {
 			script.lastResult = interpret(script, savegame, cmd);
 			/* We need to "manageCurrentState" to keep a valid state for the script at each command except the last one (when scriptStop is true) */
@@ -292,11 +281,11 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, Savegame& savegame) {
 	/*  If loop is exited it means that it's terminated or the script is stopped/paused.
 	That's why we rewind m_fscript.
 	(with a paused script here, it means that the script will resume next time we play it) */
-	if (eof(script)) {
+	if (script.controller->eof()) {
 		script.state = EnumScriptState::STOPPED;
 		/* If the script is terminated and triggering is not automatic, then we don't reload the script */
 		if (script.triggeringType == EnumScriptTriggerType::AUTO) {
-			script.currentLine = 0;
+			script.controller->rewind();
 			/*script.fscript.clear();
 			script.fscript.seekg(0, std::ios::beg);*/
 		}
@@ -306,7 +295,7 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, Savegame& savegame) {
 	return true;
 }
 
-std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, Savegame&, const std::string& cmd) {
+std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, MemoryScript&, const std::string& cmd) {
 	std::string cmdName;
 	std::stringstream streamCmd;
 
@@ -337,12 +326,6 @@ std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, Savegame&,
 
 void ska::ScriptAutoSystem::registerCommand(const std::string& cmdName, CommandPtr& cmd) {
 	m_commands[cmdName] = move(cmd);
-}
-
-std::string ska::ScriptAutoSystem::nextLine(ScriptComponent& script) {
-	std::string line = script.file[script.currentLine];
-	script.currentLine++;
-	return line;
 }
 
 float ska::ScriptAutoSystem::getPriority(ScriptComponent& script, const unsigned int currentTimeMillis) {

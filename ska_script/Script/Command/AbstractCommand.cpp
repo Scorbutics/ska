@@ -28,7 +28,7 @@ std::string ska::AbstractCommand::process(ScriptAutoSystem& system, ScriptCompon
 	}
 
 
-	return process(script, streamCmd, args);
+	return process(script, system.getSavegame(), streamCmd, args);
 }
 
 std::string ska::AbstractCommand::interpretSubCommands(ScriptAutoSystem& system, std::string& line, ScriptComponent& script) {

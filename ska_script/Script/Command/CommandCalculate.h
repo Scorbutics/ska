@@ -9,7 +9,7 @@ namespace ska {
 		void operator=(const CommandCalculate&) = delete;
 		virtual ~CommandCalculate();
 
-		virtual std::string execute(ScriptComponent& script, std::vector<std::string>& args) override;
+		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) override;
 		virtual int argumentsNumber() override;
 	};
 }

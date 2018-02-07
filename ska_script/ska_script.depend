@@ -1,1 +1,598 @@
 # depslib dependency file v1.0
+1518009139 source:c:\documents\perso\ska\ska_script\script\command\abstractcommand.cpp
+	<iostream>
+	"AbstractCommand.h"
+	"Utils/StringUtils.h"
+	"../ScriptUtils.h"
+	"../ScriptSymbolsConstants.h"
+	"../System/ScriptAutoSystem.h"
+	"../ScriptComponent.h"
+
+1518009596 c:\documents\perso\ska\ska_script\script\command\abstractcommand.h
+	<vector>
+	"Command.h"
+
+1518009576 c:\documents\perso\ska\ska_script\script\command\command.h
+	<memory>
+	<string>
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\stringutils.h
+	<string>
+	<vector>
+
+1518008844 c:\documents\perso\ska\ska_script\script\scriptutils.h
+	<string>
+	<unordered_map>
+	"../Script/ScriptComponent.h"
+
+1518008036 c:\documents\perso\ska\ska_script\script\scriptcomponent.h
+	<vector>
+	<limits>
+	<memory>
+	<unordered_map>
+	"ECS/SerializableComponent.h"
+	"ScriptState.h"
+	"ECS/Basics/Script/ScriptTriggerType.h"
+	"ECS/ECSDefines.h"
+	"ScriptController.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\serializablecomponent.h
+	<unordered_map>
+	"ComponentHandler.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\componenthandler.h
+	<vector>
+	<typeinfo>
+	"ECSDefines.h"
+	"ComponentSerializer.h"
+	"../Utils/Demangle.h"
+	"../Logging/Logger.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\ecsdefines.h
+	<vector>
+	<unordered_map>
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\componentserializer.h
+	<string>
+	"ECSDefines.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\demangle.h
+	<string>
+
+1514984342 c:\documents\perso\ska\ska_core\\logging\logger.h
+	<string>
+	<iostream>
+	<ctime>
+	<typeinfo>
+	<iomanip>
+	"../Utils/NonCopyable.h"
+	"ColorStream.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\noncopyable.h
+
+1514984342 c:\documents\perso\ska\ska_core\\logging\colorstream.h
+	<ostream>
+
+1514984343 c:\documents\perso\ska\ska_script\script\scriptstate.h
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\script\scripttriggertype.h
+
+1514984343 c:\documents\perso\ska\ska_script\script\scriptsymbolsconstants.h
+
+1518008938 c:\documents\perso\ska\ska_script\script\system\scriptautosystem.h
+	<unordered_set>
+	<string>
+	<unordered_map>
+	"../Command/Command.h"
+	"Data/MemoryScript.h"
+	"../ScriptComponent.h"
+	"ECS/System.h"
+	"ECS/Basics/Script/ScriptRegisterer.h"
+	"ECS/Basics/Script/ScriptSleepComponent.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\data\savegame.h
+	<string>
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\system.h
+	<unordered_set>
+	"SystemMaskGenerator.h"
+	"ComponentSafeAccessor.h"
+	"ISystem.h"
+	"../Utils/Observer.h"
+	"../Utils/Refreshable.h"
+	"ComponentUnsafeAccessor.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\systemmaskgenerator.h
+	"EntityManager.h"
+	"../Exceptions/IllegalStateException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\entitymanager.h
+	<bitset>
+	<unordered_set>
+	<array>
+	<unordered_map>
+	"ECSDefines.h"
+	"ComponentHandler.h"
+	"../Utils/Observable.h"
+	"ComponentSerializer.h"
+	"../Data/Events/ECSEvent.h"
+	"../Data/Events/GameEventDispatcher.h"
+
+1517328856 c:\documents\perso\ska\ska_core\\utils\observable.h
+	<vector>
+	<algorithm>
+	"Observer.h"
+	"../Logging/Logger.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\observer.h
+	<functional>
+	"../Exceptions/IllegalArgumentException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\illegalargumentexception.h
+	<string>
+	"GenericException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\genericexception.h
+	<exception>
+	<string>
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\ecsevent.h
+	<unordered_set>
+	"../../ECS/ECSDefines.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\gameeventdispatcher.h
+	"EventDispatcher.h"
+	"SoundEvent.h"
+	"CollisionEvent.h"
+	"WorldEvent.h"
+	"GameEvent.h"
+	"GUIEvent.h"
+	"StateEvent.h"
+	"InputKeyEvent.h"
+	"InputMouseEvent.h"
+	"ECSEvent.h"
+
+1516983869 c:\documents\perso\ska\ska_core\\data\events\eventdispatcher.h
+	"../../Utils/Observable.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\soundevent.h
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\collisionevent.h
+	"../../ECS/ECSDefines.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\worldevent.h
+
+1517212798 c:\documents\perso\ska\ska_core\\data\events\gameevent.h
+	<unordered_set>
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\guievent.h
+	"../../Point.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\point.h
+	"Utils/NumberUtils.h"
+	"Rectangle.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\numberutils.h
+	<functional>
+	<random>
+	"../Exceptions/IllegalArgumentException.h"
+
+1517999877 c:\documents\perso\ska\ska_core\\rectangle.h
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\stateevent.h
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\inputkeyevent.h
+
+1514984340 c:\documents\perso\ska\ska_core\\data\events\inputmouseevent.h
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\illegalstateexception.h
+	"GenericException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\componentsafeaccessor.h
+	"ECSDefines.h"
+	"EntityManager.h"
+	"../Utils/ContainsTypeTuple.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\containstypetuple.h
+	<type_traits>
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\isystem.h
+	"../Core/Priorized.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\core\priorized.h
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\refreshable.h
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\componentunsafeaccessor.h
+	"ECSDefines.h"
+	"EntityManager.h"
+	"../Utils/ContainsTypeTuple.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\script\scriptregisterer.h
+	"ECS/ECSDefines.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\script\scriptsleepcomponent.h
+	<vector>
+	"../../SerializableComponent.h"
+	"ScriptTriggerType.h"
+
+1518009179 source:c:\documents\perso\ska\ska_script\script\command\abstractfunctioncommand.cpp
+	"AbstractFunctionCommand.h"
+	"Utils/StringUtils.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"../ScriptSymbolsConstants.h"
+	"../ScriptComponent.h"
+
+1518009634 c:\documents\perso\ska\ska_script\script\command\abstractfunctioncommand.h
+	"AbstractCommand.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\scriptsyntaxerror.h
+	"ScriptException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\scriptexception.h
+	"GenericException.h"
+
+1518009434 source:c:\documents\perso\ska\ska_script\script\command\commandassign.cpp
+	<string>
+	"CommandAssign.h"
+	"../ScriptUtils.h"
+	"../ScriptSymbolsConstants.h"
+
+1518009277 c:\documents\perso\ska\ska_script\script\command\commandassign.h
+	"AbstractFunctionCommand.h"
+
+1518009451 source:c:\documents\perso\ska\ska_script\script\command\commandassignswitch.cpp
+	"CommandAssignSwitch.h"
+	"../ScriptUtils.h"
+	"../ScriptSymbolsConstants.h"
+
+1518009282 c:\documents\perso\ska\ska_script\script\command\commandassignswitch.h
+	"AbstractFunctionCommand.h"
+
+1518009488 source:c:\documents\perso\ska\ska_script\script\command\commandcalculate.cpp
+	"CommandCalculate.h"
+	"Utils/StringUtils.h"
+	"../ScriptUtils.h"
+	"Utils/FormalCalculation/FormalCalculator.h"
+
+1518009289 c:\documents\perso\ska\ska_script\script\command\commandcalculate.h
+	"AbstractFunctionCommand.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\formalcalculation\formalcalculator.h
+	<string>
+
+1518009667 source:c:\documents\perso\ska\ska_script\script\command\commandend.cpp
+	"CommandEnd.h"
+	"../ScriptUtils.h"
+	"Utils/StringUtils.h"
+	"Utils/SkaConstants.h"
+	"Exceptions/ScriptDiedException.h"
+
+1518009656 c:\documents\perso\ska\ska_script\script\command\commandend.h
+	"AbstractFunctionCommand.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\skaconstants.h
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\scriptdiedexception.h
+	"ScriptException.h"
+
+1518007922 source:c:\documents\perso\ska\ska_script\script\command\commandelse.cpp
+	<string>
+	"CommandElse.h"
+	"CommandIf.h"
+	"CommandElseEnd.h"
+	"Utils/StringUtils.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"../ScriptComponent.h"
+	"../System/ScriptAutoSystem.h"
+
+1514984343 c:\documents\perso\ska\ska_script\script\command\commandelse.h
+	"ControlStatement.h"
+
+1518009224 c:\documents\perso\ska\ska_script\script\command\controlstatement.h
+	"AbstractCommand.h"
+
+1514984343 c:\documents\perso\ska\ska_script\script\command\commandif.h
+	"ControlStatement.h"
+
+1514984343 c:\documents\perso\ska\ska_script\script\command\commandelseend.h
+	"ControlStatement.h"
+
+1518009694 source:c:\documents\perso\ska\ska_script\script\command\commandendscript.cpp
+	"CommandEndScript.h"
+	"Exceptions/ScriptDiedException.h"
+
+1518009687 c:\documents\perso\ska\ska_script\script\command\commandendscript.h
+	<vector>
+	"CommandEnd.h"
+
+1518007928 source:c:\documents\perso\ska\ska_script\script\command\commandif.cpp
+	"CommandIf.h"
+	<string>
+	<algorithm>
+	"Utils/StringUtils.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"../System/ScriptAutoSystem.h"
+
+1518009389 source:c:\documents\perso\ska\ska_script\script\command\commandlog.cpp
+	<iostream>
+	"CommandLog.h"
+	"Logging/Logger.h"
+
+1518009294 c:\documents\perso\ska\ska_script\script\command\commandlog.h
+	"AbstractFunctionCommand.h"
+
+1518009395 source:c:\documents\perso\ska\ska_script\script\command\commandrandom.cpp
+	"CommandRandom.h"
+	"../ScriptUtils.h"
+	"Utils/StringUtils.h"
+	"Utils/NumberUtils.h"
+
+1518009298 c:\documents\perso\ska\ska_script\script\command\commandrandom.h
+	"AbstractFunctionCommand.h"
+
+1518007635 c:\documents\perso\ska\ska_script\script\scriptcontroller.h
+	<string>
+	<vector>
+
+1518009367 source:c:\documents\perso\ska\ska_script\script\command\commandblockauthorize.cpp
+	"CommandBlockAuthorize.h"
+	"../ScriptUtils.h"
+	"Utils/StringUtils.h"
+	"ECS/Basics/Physic/CollidableComponent.h"
+	"Exceptions/ScriptException.h"
+	"ECS/EntityManager.h"
+
+1518009286 c:\documents\perso\ska\ska_script\script\command\commandblockauthorize.h
+	"AbstractFunctionCommand.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\ecs\basics\physic\collidablecomponent.h
+	<unordered_set>
+	"../../SerializableComponent.h"
+
+1518009399 source:c:\documents\perso\ska\ska_script\script\command\commandremovecomponent.cpp
+	"CommandRemoveComponent.h"
+	"../ScriptUtils.h"
+	"Utils/StringUtils.h"
+	"../System/ScriptAutoSystem.h"
+
+1518009301 c:\documents\perso\ska\ska_script\script\command\commandremovecomponent.h
+	"AbstractFunctionCommand.h"
+
+1518009402 source:c:\documents\perso\ska\ska_script\script\command\commandrestorecomponent.cpp
+	"CommandRestoreComponent.h"
+	"../ScriptUtils.h"
+	"Utils/StringUtils.h"
+	"../System/ScriptAutoSystem.h"
+
+1518009305 c:\documents\perso\ska\ska_script\script\command\commandrestorecomponent.h
+	"AbstractFunctionCommand.h"
+
+1518002337 source:c:\documents\perso\ska\ska_script\script\command\commandscript.cpp
+	<string>
+	"CommandScript.h"
+	"Utils/StringUtils.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"../System/ScriptAutoSystem.h"
+	"ECS/Basics/Script/ScriptSleepComponent.h"
+	"ECS/EntityManager.h"
+
+1518009315 c:\documents\perso\ska\ska_script\script\command\commandscript.h
+	"AbstractFunctionCommand.h"
+
+1518009426 source:c:\documents\perso\ska\ska_script\script\command\commandwait.cpp
+	"CommandWait.h"
+	"Utils/StringUtils.h"
+	"../../Script/ScriptComponent.h"
+
+1518009319 c:\documents\perso\ska\ska_script\script\command\commandwait.h
+	"AbstractFunctionCommand.h"
+
+1518009232 source:c:\documents\perso\ska\ska_script\script\command\controlstatement.cpp
+	<iostream>
+	"ControlStatement.h"
+
+1518008869 source:c:\documents\perso\ska\ska_script\script\scriptutils.cpp
+	<fstream>
+	<sstream>
+	"ScriptUtils.h"
+	"Utils/FormalCalculation/FormalCalculator.h"
+	"../Script/ScriptSymbolsConstants.h"
+	"Utils/StringUtils.h"
+	"Utils/SkaConstants.h"
+	"../Script/System/ScriptAutoSystem.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"Exceptions/NumberFormatException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\numberformatexception.h
+	"GenericException.h"
+
+1518009051 source:c:\documents\perso\ska\ska_script\script\system\scriptbasiccommandssystem.cpp
+	<utility>
+	"ScriptBasicCommandsSystem.h"
+	"../Command/CommandEnd.h"
+	"../Command/CommandCalculate.h"
+	"../Command/CommandAssignSwitch.h"
+	"../Command/CommandEndScript.h"
+	"../Command/CommandAssign.h"
+	"../Command/CommandRandom.h"
+	"../Command/CommandWait.h"
+	"../Command/CommandLog.h"
+	"../Command/CommandScript.h"
+	"../Command/CommandIf.h"
+	"../Command/CommandElse.h"
+	"../Command/CommandElseEnd.h"
+	"../Command/CommandRemoveComponent.h"
+	"../Command/CommandRestoreComponent.h"
+	"../Command/CommandBlockAuthorize.h"
+
+1518009042 c:\documents\perso\ska\ska_script\script\system\scriptbasiccommandssystem.h
+	"ScriptAutoSystem.h"
+
+1514984343 source:c:\documents\perso\ska\ska_script\script\system\scriptrefreshsystem.cpp
+	<limits>
+	"ScriptRefreshSystem.h"
+	"Utils/FileUtils.h"
+	"Core/CodeDebug/CodeDebug.h"
+	"ECS/EntityManager.h"
+	"ECS/Basics/Physic/WorldCollisionComponent.h"
+	"ECS/Basics/Script/ScriptTriggerType.h"
+	"ECS/Basics/Script/ScriptPositionedGetter.h"
+	"Data/BlockContainer.h"
+	"Data/Events/InputKeyEvent.h"
+	"Core/CodeDebug/CodeDebug.h"
+
+1514984343 c:\documents\perso\ska\ska_script\script\system\scriptrefreshsystem.h
+	<unordered_set>
+	"ECS/Basics/Script/ScriptAwareComponent.h"
+	"ECS/Basics/Physic/PositionComponent.h"
+	"ECS/Basics/Physic/MovementComponent.h"
+	"ECS/Basics/Script/ScriptSleepComponent.h"
+	"Inputs/InputContextManager.h"
+	"ECS/System.h"
+	"ScriptAutoSystem.h"
+	"ECS/Basics/Physic/WorldCollisionComponent.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\script\scriptawarecomponent.h
+	"../../SerializableComponent.h"
+	"../Physic/PositionComponent.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\physic\positioncomponent.h
+	"../../SerializableComponent.h"
+	"../../../Utils/StringUtils.h"
+	"../../../Utils/PhysicUtils.h"
+	"../../../Point.h"
+	"HitboxComponent.h"
+	"../Graphic/AnimationComponent.h"
+	"../../../Utils/NumberUtils.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\physicutils.h
+	"Force.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\force.h
+	"../Rectangle.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\physic\hitboxcomponent.h
+	"../../SerializableComponent.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\ecs\basics\graphic\animationcomponent.h
+	"../../SerializableComponent.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\physic\movementcomponent.h
+	"../../SerializableComponent.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\inputcontextmanager.h
+	<vector>
+	<bitset>
+	<unordered_map>
+	"InputContext.h"
+	"EnumContextManager.h"
+	"../Data/Events/GameEventDispatcher.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\inputcontext.h
+	<unordered_map>
+	<memory>
+	"InputAction.h"
+	"InputRange.h"
+	"InputToggle.h"
+	"RawInputListener.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\inputaction.h
+	<bitset>
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\inputrange.h
+	<vector>
+	"../Point.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\inputtoggle.h
+	<bitset>
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\rawinputlistener.h
+	"KeyInput.h"
+	"MouseInput.h"
+	"WindowInput.h"
+
+1516011109 c:\documents\perso\ska\ska_core\\inputs\keyinput.h
+	<bitset>
+
+1516011109 c:\documents\perso\ska\ska_core\\inputs\mouseinput.h
+	"../Point.h"
+
+1516011109 c:\documents\perso\ska\ska_core\\inputs\windowinput.h
+	<cstdint>
+
+1514984342 c:\documents\perso\ska\ska_core\\inputs\enumcontextmanager.h
+
+1517999877 c:\documents\perso\ska\ska_core\\ecs\basics\physic\worldcollisioncomponent.h
+	"../../SerializableComponent.h"
+	"../../../Point.h"
+	"CollisionContact.h"
+
+1518000267 c:\documents\perso\ska\ska_core\\ecs\basics\physic\collisioncontact.h
+	"../../../Utils/RectangleUtils.h"
+	"../../../Logging/Logger.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\rectangleutils.h
+	"../Rectangle.h"
+	"../Point.h"
+
+1516019781 c:\documents\perso\ska\ska_core\\utils\fileutils.h
+	"SkaConstants.h"
+	"./OSSpecific/FileUtilsUnix.h"
+	"./OSSpecific/FileUtilsWin.h"
+
+1516021019 c:\documents\perso\ska\ska_core\\utils\osspecific\fileutilsunix.h
+	"../SkaConstants.h"
+	<string>
+
+1516021016 c:\documents\perso\ska\ska_core\\utils\osspecific\fileutilswin.h
+	"../SkaConstants.h"
+	<string>
+
+1514984340 c:\documents\perso\ska\ska_core\\core\codedebug\codedebug.h
+
+1514984342 c:\documents\perso\ska\ska_core\\ecs\basics\script\scriptpositionedgetter.h
+	"ECS/Basics/Script/ScriptTriggerType.h"
+
+1514984340 c:\documents\perso\ska\ska_core\\data\blockcontainer.h
+
+1518007684 source:c:\documents\perso\ska\ska_script\script\scriptcontroller.cpp
+	<fstream>
+	"ScriptController.h"
+	"Exceptions/InvalidPathException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\invalidpathexception.h
+	"InputException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\inputexception.h
+	"GenericException.h"
+
+1518008975 source:c:\documents\perso\ska\ska_script\script\system\scriptautosystem.cpp
+	<iostream>
+	<algorithm>
+	<sstream>
+	<fstream>
+	"ScriptAutoSystem.h"
+	"Exceptions/ScriptDiedException.h"
+	"Exceptions/ScriptUnknownCommandException.h"
+	"Exceptions/IllegalArgumentException.h"
+	"../ScriptUtils.h"
+	"Exceptions/InvalidPathException.h"
+	"Exceptions/NumberFormatException.h"
+	"Exceptions/ScriptSyntaxError.h"
+	"Utils/StringUtils.h"
+	"Utils/FileUtils.h"
+	"Utils/TimeUtils.h"
+	"Utils/NumberUtils.h"
+	"Utils/SkaConstants.h"
+	"ECS/Basics/Script/ScriptTriggerType.h"
+	"ECS/Basics/Script/ScriptSleepComponent.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\exceptions\scriptunknowncommandexception.h
+	"ScriptException.h"
+
+1514984342 c:\documents\perso\ska\ska_core\\utils\timeutils.h
+
+1518008503 c:\documents\perso\ska\ska_core\\data\memoryscript.h
+	<string>
+

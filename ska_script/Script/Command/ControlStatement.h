@@ -2,6 +2,7 @@
 #include "AbstractCommand.h"
 
 namespace ska {
+    class MemoryScript;
 	class ControlStatement : public AbstractCommand {
 	public:
 		explicit ControlStatement(EntityManager& e);
@@ -13,7 +14,7 @@ namespace ska {
 		static const std::string& getCommandIf();
 
 	protected:
-		virtual std::string process(ScriptComponent& script, std::stringstream& streamCmd, std::vector<std::string>& args) override;
+		virtual std::string process(ScriptComponent& script, MemoryScript& memory, std::stringstream& streamCmd, std::vector<std::string>& args) override;
 		virtual char getSeparator() override;
 
 		virtual std::string analyzeLine(ScriptComponent& script, std::stringstream& streamCmd, std::vector<std::string>& args) = 0;

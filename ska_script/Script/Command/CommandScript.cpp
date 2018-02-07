@@ -19,7 +19,7 @@ int ska::CommandScript::argumentsNumber() {
 	return -1;
 }
 
-std::string ska::CommandScript::execute(ScriptComponent& script, std::vector<std::string>& args)
+std::string ska::CommandScript::execute(ScriptComponent& script, MemoryScript&, std::vector<std::string>& args)
 {
 	std::string scriptName;
 	std::vector<std::string> extraArgs;
@@ -47,6 +47,7 @@ std::string ska::CommandScript::execute(ScriptComponent& script, std::vector<std
 	ssc.triggeringType = EnumScriptTriggerType::AUTO;
 	ssc.name = scriptName;
 	m_entityManager.addComponent<ScriptSleepComponent>(newScript, std::move(ssc));
+	//TODO l'instanciation de nouveaux scripts devrait se faire depuis un controlleur intégré directement dans le script component (à allouer sur le tas pour éviter la lourdeur du composant)
 	script.parent->registerScript(&script, newScript, script.getOrigin());
 	return StringUtils::intToStr(newScript);
 

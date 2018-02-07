@@ -7,7 +7,6 @@
 #include "../ScriptComponent.h"
 #include "../System/ScriptAutoSystem.h"
 
-
 ska::CommandElse::CommandElse(EntityManager& entityManager) : ControlStatement(entityManager)
 {
 }
@@ -25,8 +24,9 @@ std::string ska::CommandElse::analyzeLine(ScriptComponent& script, std::stringst
 	int ifEnd = 1;
 	std::string lineBuf;
 
-	while (ifEnd > 0 && !script.parent->eof(script)) {
-		lineBuf = script.parent->nextLine(script);
+	//TODO le control flow devrait se faire depuis un controlleur intégré directement dans le script component (à allouer sur le tas pour éviter la lourdeur du composant)
+	while (ifEnd > 0 && !script.controller->eof()) {
+		lineBuf = script.controller->nextLine();
 		StringUtils::ltrim(lineBuf);
 		if (lineBuf.find(getCommandIf()) == 0)
 			ifEnd++;
@@ -34,7 +34,7 @@ std::string ska::CommandElse::analyzeLine(ScriptComponent& script, std::stringst
 			ifEnd--;
 	}
 
-	if (script.parent->eof(script)) {
+	if (script.controller->eof()) {
 		throw ScriptSyntaxError("Un endif est manquant");
 	}
 

@@ -99,7 +99,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		});
 
 		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100), "1", true);
-		auto blockB = createPhysicAABBEntity(ska::Point<int>(350, 150), "0", false);
+		createPhysicAABBEntity(ska::Point<int>(350, 150), "0", false);
 		auto blockC = createPhysicAABBEntity(ska::Point<int>(200, 300), "0", false);
 
 		auto& graphicComponentC = m_entityManager.getComponent<ska::GraphicComponent>(blockC);

@@ -11,7 +11,7 @@
 				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
 				<Option type="2" />
-				<Option compiler="gnu_gcc_compiler_x86_mode" />
+				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-Wall" />
@@ -20,6 +20,7 @@
 				</Compiler>
 				<Linker>
 					<Add library="user32" />
+					<Add library="libska_core.a" />
 					<Add directory="../../" />
 				</Linker>
 			</Target>
@@ -27,7 +28,7 @@
 				<Option output="ska_script" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="3" />
-				<Option compiler="gnu_gcc_compiler_x86_mode" />
+				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
@@ -45,6 +46,9 @@
 		<Compiler>
 			<Add directory="../ska_core/" />
 		</Compiler>
+		<Linker>
+			<Add library="libska_core.a" />
+		</Linker>
 		<Unit filename="Script/Command/AbstractCommand.cpp" />
 		<Unit filename="Script/Command/AbstractCommand.h" />
 		<Unit filename="Script/Command/AbstractFunctionCommand.cpp" />
@@ -82,6 +86,7 @@
 		<Unit filename="Script/Command/ControlStatement.cpp" />
 		<Unit filename="Script/Command/ControlStatement.h" />
 		<Unit filename="Script/ScriptComponent.h" />
+		<Unit filename="Script/ScriptController.cpp" />
 		<Unit filename="Script/ScriptState.h" />
 		<Unit filename="Script/ScriptSymbolsConstants.h" />
 		<Unit filename="Script/ScriptUtils.cpp" />

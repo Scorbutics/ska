@@ -16,10 +16,11 @@ int ska::CommandRestoreComponent::argumentsNumber() {
 	return 2;
 }
 
-std::string ska::CommandRestoreComponent::execute(ScriptComponent& script, std::vector<std::string>& args) {
+std::string ska::CommandRestoreComponent::execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) {
 	const auto& componentName = args[0];
 	const auto& entity = args[1];
 
+	//TODO event ?
 	script.parent->restoreComponent(componentName, entity);
 
 	return "";

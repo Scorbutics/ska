@@ -5,7 +5,7 @@ ska::ControlStatement::ControlStatement(EntityManager& e) : AbstractCommand(e)
 {
 }
 
-std::string ska::ControlStatement::process(ScriptComponent& script, std::stringstream& streamCmd, std::vector<std::string>& args) {
+std::string ska::ControlStatement::process(ScriptComponent& script, MemoryScript& memory, std::stringstream& streamCmd, std::vector<std::string>& args) {
 	return analyzeLine(script, streamCmd, args);
 }
 

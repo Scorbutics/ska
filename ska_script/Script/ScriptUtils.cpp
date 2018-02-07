@@ -1,3 +1,4 @@
+#include <fstream>
 #include <sstream>
 #include "ScriptUtils.h"
 #include "Utils/FormalCalculation/FormalCalculator.h"
@@ -23,8 +24,8 @@ std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
 }
 
 /* Récupère la valeur une variable LOCALE (dans varMap) */
-std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const Savegame& saveGame, const ScriptComponent& script, std::string varNumber) {
-	
+std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber) {
+
 	if (varNumber[0] == '{' && varNumber[varNumber.size() - 1] == '}') {
 		if (saveGame.getGameSwitch(varNumber.substr(1, varNumber.size() - 2))) {
 			return "1";
@@ -64,7 +65,7 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const Savegame& save
 	return varNumber;
 }
 
-std::string ska::ScriptUtils::replaceVariablesByNumerics(const Savegame& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol)
+std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol)
 {
 	auto it = line;
 	size_t posLeft, posRight;
@@ -91,7 +92,7 @@ std::string ska::ScriptUtils::replaceVariablesByNumerics(const Savegame& saveGam
 
 }
 
-std::string ska::ScriptUtils::replaceVariablesByNumerics(const Savegame& saveGame, const ScriptComponent& script, const std::string& line)
+std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line)
 {
 	std::string it = replaceVariablesByNumerics(saveGame, script, line, ScriptSymbolsConstants::VARIABLE_LEFT, ScriptSymbolsConstants::VARIABLE_RIGHT);
 	it = replaceVariablesByNumerics(saveGame, script, it, ScriptSymbolsConstants::ARG, ScriptSymbolsConstants::ARG);
@@ -168,7 +169,7 @@ std::string ska::ScriptUtils::getLocalVariableKey(const std::string& v)
 	return "";
 }
 
-void ska::ScriptUtils::setValueFromVarOrSwitchNumber(Savegame& saveGame, const std::string& scriptExtendedName, std::string varNumber, std::string value, std::unordered_map<std::string, std::string>& varMap) {
+void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, const std::string& scriptExtendedName, std::string varNumber, std::string value, std::unordered_map<std::string, std::string>& varMap) {
 	if (value.empty())
 		return;
 
@@ -194,7 +195,7 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(Savegame& saveGame, const s
 }
 
 /* Récupère la valeur d'une variable GLOBALE en utilisant potentiellement des sous-variables locales en paramètres */
-std::string ska::ScriptUtils::interpretVarName(const Savegame& saveGame, const ScriptComponent& script, const std::string& v)
+std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v)
 {
 	/*
 	$variable$   : variable globale à tout le jeu
@@ -223,7 +224,7 @@ std::string ska::ScriptUtils::interpretVarName(const Savegame& saveGame, const S
 	return getValueFromVarOrSwitchNumber(saveGame, script, v);
 }
 
-bool ska::ScriptUtils::isScriptActivated(const Savegame& saveGame, const std::string& scriptName)
+bool ska::ScriptUtils::isScriptActivated(const MemoryScript& saveGame, const std::string& scriptName)
 {
 	std::string s;
 	std::ifstream scriptList(("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + saveGame.getSaveName() + FILE_SEPARATOR "scripts.data").c_str(), std::ios::app);

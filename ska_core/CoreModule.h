@@ -8,9 +8,9 @@ namespace ska {
 	class CoreModule {
 	public:
 		CoreModule(const std::string& moduleName, GameEventDispatcher& ged):
-            m_name(moduleName),
     		m_entityManager(ged),
-            m_playerICM(m_rawInputListener, ged) {
+            m_playerICM(m_rawInputListener, ged),
+            m_name(moduleName) {
 		}
 
 		void eventUpdate(unsigned int ellapsedTime) {

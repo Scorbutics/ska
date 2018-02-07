@@ -16,7 +16,7 @@ int ska::CommandRandom::argumentsNumber() {
 	return 1;
 }
 
-std::string ska::CommandRandom::execute(ScriptComponent&, std::vector<std::string>& args) {
+std::string ska::CommandRandom::execute(ScriptComponent&, MemoryScript&, std::vector<std::string>& args) {
 	std::string s, value, commandCall;
 	int valueInt, resultInt;
 

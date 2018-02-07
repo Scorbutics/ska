@@ -2,15 +2,16 @@
 #include "ScriptAutoSystem.h"
 
 namespace ska {
+    class MemoryScript;
 	class World;
 	class ScriptBasicCommandsSystem : public ScriptAutoSystem {
 		friend class BasicScriptCommandHelper;
 	public :
-		ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, Savegame& saveGame);
+		ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, MemoryScript& saveGame);
 		virtual ~ScriptBasicCommandsSystem();
 
 	protected:
-		ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, Savegame& saveGame);
+		ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, MemoryScript& saveGame);
 		struct BasicScriptCommandHelper : public ScriptCommandHelper {
 		    BasicScriptCommandHelper() = default;
 		    virtual ~BasicScriptCommandHelper() = default;

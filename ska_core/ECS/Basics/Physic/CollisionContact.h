@@ -6,9 +6,9 @@ namespace ska {
 	class CollisionContact {
 	public:
 		CollisionContact() :
+			m_noCollision(true),
 			m_overlap({ 0, 0, 0, 0 }),
-			m_penetration(0.F),
-			m_noCollision(true) {
+			m_penetration(0.F) {
 		}
 
 		CollisionContact(Rectangle boxEntityA, Rectangle boxEntityB) :
@@ -36,16 +36,16 @@ namespace ska {
 		}
 
 	private:
+		Point<float> m_normal;
 		bool m_noCollision;
 		Rectangle m_overlap;
 		float m_penetration;
-		Point<float> m_normal;
 
 		CollisionContact(Rectangle overlap_, float penetration_, Point<float> normal_, bool collision) :
-			m_overlap(overlap_),
-			m_penetration(penetration_), 
 			m_normal(normal_),
-			m_noCollision(!collision) {
+			m_noCollision(!collision),
+			m_overlap(overlap_),
+			m_penetration(penetration_) {
 		}
 
 		static CollisionContact build(Rectangle overlap, Point<int> pcA, Point<int> pcB) {
@@ -55,7 +55,7 @@ namespace ska {
 
 			if (overlap.w != 0 && overlap.h != 0) {
 				collision = true;
-				
+
 				if (overlap.w < overlap.h) {
 					const auto vectorAToBX = pcA.x - pcB.x;
 					normal.x = vectorAToBX < 0 ? -1.F : 1.F;

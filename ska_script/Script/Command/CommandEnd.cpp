@@ -22,6 +22,6 @@ const std::string& ska::CommandEnd::getCmdName() {
 	return cmdName;
 }
 
-std::string ska::CommandEnd::execute(ScriptComponent&, std::vector<std::string>&) {
+std::string ska::CommandEnd::execute(ScriptComponent&, MemoryScript&, std::vector<std::string>&) {
 	throw ScriptDiedException("");
 }
