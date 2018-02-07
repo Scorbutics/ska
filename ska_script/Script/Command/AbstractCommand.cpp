@@ -1,4 +1,4 @@
-#include <iostream>
+#include <sstream>
 #include "AbstractCommand.h"
 #include "Utils/StringUtils.h"
 #include "../ScriptUtils.h"
@@ -12,7 +12,7 @@ ska::AbstractCommand::AbstractCommand(EntityManager& entityManager) : Command(en
 std::string ska::AbstractCommand::process(ScriptAutoSystem& system, ScriptComponent& script, std::stringstream& streamCmd) {
 
 	std::string line;
-	getline(streamCmd, line);
+	std::getline(streamCmd, line);
 
 	line = StringUtils::trim(line);
 

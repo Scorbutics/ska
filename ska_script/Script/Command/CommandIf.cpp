@@ -1,6 +1,6 @@
 #include "CommandIf.h"
 #include <string>
-#include <algorithm>
+#include <sstream>
 #include "Utils/StringUtils.h"
 #include "Exceptions/ScriptSyntaxError.h"
 #include "../System/ScriptAutoSystem.h"
