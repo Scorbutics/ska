@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../ska_physic;../ska_core;../ska_audio;../ska_draw;../ska_world;$(IncludePath)</IncludePath>
+    <IncludePath>../ska_chipmunk_physic;../ska_core;../ska_audio;../ska_draw;../ska_world;$(IncludePath)</IncludePath>
     <LibraryPath>../$(Configuration);../external/lib/MSVC/$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../ska_physic;../ska_core;../ska_audio;../ska_draw;../ska_world;$(IncludePath)</IncludePath>
+    <IncludePath>../ska_chipmunk_physic;../ska_core;../ska_audio;../ska_draw;../ska_world;$(IncludePath)</IncludePath>
     <LibraryPath>../$(Configuration);../external/lib/MSVC/$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -97,7 +97,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>ska_core.lib;ska_physic.lib;ska_audio.lib;ska_draw.lib;ska_world.lib;SDL2_gif.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ska_core.lib;ska_chipmunk_physic.lib;ska_audio.lib;ska_draw.lib;ska_world.lib;SDL2_gif.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,7 +127,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ska_core.lib;ska_physic.lib;ska_audio.lib;ska_draw.lib;ska_world.lib;SDL2_gif.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ska_core.lib;ska_chipmunk_physic.lib;ska_audio.lib;ska_draw.lib;ska_world.lib;SDL2_gif.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

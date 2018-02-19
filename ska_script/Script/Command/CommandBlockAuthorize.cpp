@@ -1,4 +1,5 @@
 #include "CommandBlockAuthorize.h"
+#include "Data/MemoryScript.h"
 #include "../ScriptUtils.h"
 #include "Utils/StringUtils.h"
 #include "ECS/Basics/Physic/CollidableComponent.h"

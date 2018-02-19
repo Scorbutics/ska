@@ -47,3 +47,11 @@
 /ska_gui/cmake_.bat
 /ska_draw/cmake_.bat
 /ska_core/cmake_.bat
+/ska_physic_homemade/.vs/ska_physic/v15
+/ska_physic_homemade/CMakeFiles
+/ska_physic_homemade/CMakeCache.txt
+/ska_physic_homemade/ALL_BUILD.vcxproj.filters
+/ska_physic_homemade/ALL_BUILD.vcxproj
+/ska_physic_homemade/ZERO_CHECK.vcxproj.filters
+/ska_physic_homemade/ZERO_CHECK.vcxproj
+/ska_physic_homemade/cmake_install.cmake

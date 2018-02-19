@@ -449,6 +449,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\main.cpp" />
+    <ClInclude Include="Utils\Movable.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_core\ZERO_CHECK.vcxproj">

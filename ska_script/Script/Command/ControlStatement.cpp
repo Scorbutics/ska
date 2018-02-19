@@ -1,4 +1,4 @@
-#include <iostream>
+#include "Data/MemoryScript.h"
 #include "ControlStatement.h"
 
 ska::ControlStatement::ControlStatement(EntityManager& e) : AbstractCommand(e)

@@ -2,6 +2,7 @@
 #include "AbstractFunctionCommand.h"
 
 namespace ska {
+
 	class CommandAssignSwitch :
 		public AbstractFunctionCommand {
 	public:
