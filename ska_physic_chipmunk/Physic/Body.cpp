@@ -5,6 +5,16 @@ ska::cp::Body::Body() :
 	m_body(nullptr) {
 }
 
+ska::cp::Body::Body(Body&& b) noexcept{
+	m_body = b.m_body;
+	b.m_body = nullptr;
+}
+
+ska::cp::Body& ska::cp::Body::operator=(Body&& b) noexcept{
+	std::swap(m_body, b.m_body);
+	return *this;
+}
+
 ska::cp::Body::~Body() {
 	free();
 }
@@ -13,13 +23,13 @@ cpBody* ska::cp::Body::body() const {
 	return m_body;
 }
 
-ska::cp::Body&& ska::cp::Body::fromMoment(double mass, double moment) {
+ska::cp::Body ska::cp::Body::fromMoment(double mass, double moment) {
 	Body body;
 	body.loadFromMoment(mass, moment);
 	return std::move(body);
 }
 
-ska::cp::Body&& ska::cp::Body::fromRadius(double mass, double radius) {
+ska::cp::Body ska::cp::Body::fromRadius(double mass, double radius) {
 	Body body;
 	body.loadFromRadius(mass, radius);
 	return std::move(body);

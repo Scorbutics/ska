@@ -13,6 +13,8 @@ namespace ska {
 			public NonCopyable {
 		public:
 			Space();
+			Space(Space&&);
+			Space& operator=(Space&&);
 			virtual ~Space();
 
 			cpBody* getStaticBody();

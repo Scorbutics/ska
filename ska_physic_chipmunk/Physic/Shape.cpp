@@ -5,13 +5,13 @@ ska::cp::Shape::Shape() :
 	m_shape(nullptr) {
 }
 
-ska::cp::Shape&& ska::cp::Shape::fromSegment(cpBody* body, const Vect& a, const Vect& b, float radius) {
+ska::cp::Shape ska::cp::Shape::fromSegment(cpBody* body, const Vect& a, const Vect& b, float radius) {
 	Shape sh;
 	sh.loadFromSegment(body, a, b, radius);
 	return std::move(sh);
 }
 
-ska::cp::Shape&& ska::cp::Shape::fromCircle(cpBody* body, float radius, const Vect& offset) {
+ska::cp::Shape ska::cp::Shape::fromCircle(cpBody* body, float radius, const Vect& offset) {
 	Shape sh;
 	sh.loadFromCircle(body, radius, offset);
 	return std::move(sh);
@@ -19,6 +19,16 @@ ska::cp::Shape&& ska::cp::Shape::fromCircle(cpBody* body, float radius, const Ve
 
 cpShape* ska::cp::Shape::shape() const {
 	return m_shape;
+}
+
+ska::cp::Shape::Shape(Shape&& sh) {
+	m_shape = sh.m_shape;
+	sh.m_shape = nullptr;
+}
+
+ska::cp::Shape& ska::cp::Shape::operator=(Shape&& sh) {
+	std::swap(m_shape, sh.m_shape);
+	return *this;
 }
 
 ska::cp::Shape::~Shape() {

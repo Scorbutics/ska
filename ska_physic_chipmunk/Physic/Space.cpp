@@ -12,6 +12,20 @@ ska::cp::Space::~Space() {
 	free();
 }
 
+ska::cp::Space::Space(Space&& sh) {
+	m_space = sh.m_space;
+	m_shapes = std::move(sh.m_shapes);
+	m_bodies = std::move(sh.m_bodies);
+	sh.m_space = nullptr;
+}
+
+ska::cp::Space& ska::cp::Space::operator=(Space&& sh) {
+	std::swap(m_space, sh.m_space);
+	std::swap(m_shapes, sh.m_shapes);
+	std::swap(m_bodies, sh.m_bodies);
+	return *this;
+}
+
 void ska::cp::Space::setGravity(const Vect& v) {
 	cpSpaceSetGravity(m_space, v.vect());
 }

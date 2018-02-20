@@ -10,12 +10,13 @@ namespace ska {
 		class Body :
 			public NonCopyable {
 		public:
-			Body(Body&&) = default;
+			Body(Body&&) noexcept;
+			Body& operator=(Body&&) noexcept;
 			virtual ~Body();
 			cpBody* body() const;
 
-			static Body&& fromMoment(double mass, double moment);
-			static Body&& fromRadius(double mass, double radius);
+			static Body fromMoment(double mass, double moment);
+			static Body fromRadius(double mass, double radius);
 
 			cpVect getPosition() const;
 			cpVect getVelocity() const;

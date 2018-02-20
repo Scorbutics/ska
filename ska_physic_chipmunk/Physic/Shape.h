@@ -10,12 +10,14 @@ namespace ska {
 		class Shape : 
 			public NonCopyable {
 		public:
-			Shape(Shape&&) = default;
+			Shape(Shape&&);
+			Shape& operator=(Shape&& sh);
+
 			virtual ~Shape();
 			cpShape* shape() const;
 
-			static Shape&& fromSegment(cpBody* body, const Vect& a, const Vect& b, float radius);
-			static Shape&& fromCircle(cpBody *body, float radius, const Vect& offset);
+			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, float radius);
+			static Shape fromCircle(cpBody *body, float radius, const Vect& offset);
 
 			void setFriction(float friction);
 
