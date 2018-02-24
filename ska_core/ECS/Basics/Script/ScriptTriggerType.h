@@ -1,6 +1,6 @@
 #pragma once
 namespace ska {
-	typedef char ScriptTriggerType;
+	using ScriptTriggerType = char;
 	namespace EnumScriptTriggerType
 	{
 		static const ScriptTriggerType AUTO = 0;

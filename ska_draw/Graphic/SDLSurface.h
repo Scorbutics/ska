@@ -28,6 +28,7 @@ namespace ska {
 
 		Color getPixel32Color(int x, int y) const;
 		Uint32 getPixel32(int x, int y) const;
+		Uint32 getPixel32(int pixIndex) const;
 		const SDL_PixelFormat * getFormat() const;
 
 		SDL_Surface* getInstance() const;

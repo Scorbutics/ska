@@ -6,6 +6,7 @@
 #include "Logging/Logger.h"
 #include "Utils/SkaConstants.h"
 #include "Core/CodeDebug/CodeDebug.h"
+#include <cassert>
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
 	m_surface = nullptr;
@@ -122,6 +123,9 @@ Uint32 ska::SDLSurface::getPixel32(int x, int y) const {
 	return static_cast<Uint32*>(m_surface->pixels)[y*(m_surface->pitch / 4) + x];
 }
 
+Uint32 ska::SDLSurface::getPixel32(int pixIndex) const {
+	return getPixel32(pixIndex % m_surface->w, pixIndex / m_surface->w);
+}
 
 void ska::SDLSurface::free() {
 	SDL_FreeSurface(m_surface);

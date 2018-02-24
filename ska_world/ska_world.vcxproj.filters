@@ -34,6 +34,15 @@
     <ClCompile Include="World\Inputs\KeyboardInputGUIContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="World\LayerLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World\ChipsetCorrespondanceMapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World\ChipsetEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h">
@@ -601,6 +610,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World\Inputs\KeyboardInputMapContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\LayerLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\ChipsetCorrespondanceMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\ChipsetEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
