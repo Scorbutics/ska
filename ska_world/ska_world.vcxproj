@@ -75,7 +75,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>\include;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_draw;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\include;..\ska_core;..\ska_draw;..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -109,7 +109,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>\include;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_draw;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\include;..\ska_core;..\ska_draw;..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -143,7 +143,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>\include;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_draw;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\include;..\ska_core;..\ska_draw;..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -176,7 +176,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>\include;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_core;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_draw;D:\Users\Brice\Source\Repos\ska\ska_world\..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\include;..\ska_core;..\ska_draw;..\ska_physic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -444,7 +444,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Block.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.h" />
@@ -453,7 +452,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Block.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.cpp" />

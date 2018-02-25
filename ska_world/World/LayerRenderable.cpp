@@ -13,9 +13,11 @@ ska::LayerRenderable::LayerRenderable(World& w) :
 void ska::LayerRenderable::update() {
 	const auto* cameraPos = m_world.getView();
 
-	if (cameraPos == nullptr) {
+	if (cameraPos == nullptr || m_world.getChipset() == nullptr) {
 		return;
 	}
+
+	auto& chipset = *m_world.getChipset();
 
 	/* TODO external view ? (avoid camera reference)*/
 	const auto absORelX = NumberUtils::absolute(cameraPos->x);
@@ -34,9 +36,9 @@ void ska::LayerRenderable::update() {
 			const auto currentYBlock = j * m_world.getBlockSize();
 
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
-				auto b = m_block[i][j];
+				const auto b = m_block[i][j];
 				if (b != nullptr) {
-					m_world.getChipset().update(*b);
+					chipset.getRenderable().update(*b);
 				}
 			}
 
@@ -55,9 +57,11 @@ void ska::LayerRenderable::clear() {
 void ska::LayerRenderable::render(const Renderer& renderer) const {
 	const auto* cameraPos = m_world.getView();
 
-	if (cameraPos == nullptr) {
+	if (cameraPos == nullptr || m_world.getChipset() == nullptr) {
 		return;
 	}
+
+	auto& chipset = *m_world.getChipset();
 
 	/* TODO external view ? (avoid camera reference)*/
 	const auto absORelX = NumberUtils::absolute(cameraPos->x);
@@ -79,7 +83,7 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 				if (b != nullptr) {
 					const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
 					/* TODO passer la propriété BLOCK_PROP_WIND_SENSITIVITY en script de chipset */
-					m_world.getChipset().render(renderer, absoluteCurrentPos, *b);
+					chipset.getRenderable().render(renderer, absoluteCurrentPos, *b);
 				}
 			}
 		}
@@ -94,7 +98,7 @@ ska::BlockRenderable* ska::LayerRenderable::getBlock(const unsigned int i, const
 	throw IndexOutOfBoundsException("block at coordinates (" + StringUtils::intToStr(i) + "; " + StringUtils::intToStr(j) + ") cannot be accessed");
 }
 
-void ska::LayerRenderable::reset(std::vector<std::vector<BlockRenderable*>>& block) {
-	m_block = move(block);
+void ska::LayerRenderable::reset(Vector2<BlockRenderable*>&& block) {
+	m_block = std::move(block);
 }
 

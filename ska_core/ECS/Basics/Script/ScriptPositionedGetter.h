@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS/Basics/Script/ScriptTriggerType.h"
+#include "ScriptSleepComponent.h"
 
 //TODO voué à disparaître au profit d'un Event
 namespace ska {

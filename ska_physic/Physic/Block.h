@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include "Point.h"
 
@@ -11,7 +10,7 @@ namespace ska {
 		Block(int corrFileWidth, Point<int> posChipset, unsigned int properties, int col);
 		~Block() = default;
 
-		unsigned int getProperties();
+		unsigned int getProperties() const;
 		int getCollision() const;
 		unsigned int getID() const;
 
@@ -22,5 +21,5 @@ namespace ska {
 
 	};
 
-	typedef std::unique_ptr<Block> BlockPtr;
+	using BlockPtr = std::unique_ptr<Block>;
 }

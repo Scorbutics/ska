@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Point.h"
-#include "Graphic/Color.h"
+#include "Draw/Color.h"
 #include "Graphic/SDLSurface.h"
 
 namespace ska {

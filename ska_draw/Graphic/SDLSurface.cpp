@@ -1,12 +1,15 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <cassert>
 #include "Font.h"
 #include "SDLSurface.h"
-#include "Exceptions/FileException.h"
 #include "Logging/Logger.h"
 #include "Utils/SkaConstants.h"
 #include "Core/CodeDebug/CodeDebug.h"
-#include <cassert>
+
+SDL_Color ColorToNative(const ska::Color& c){
+	return SDL_Color{ c.r, c.g, c.b, c.a };	
+}
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
 	m_surface = nullptr;
@@ -22,7 +25,7 @@ SDL_Surface* ska::SDLSurface::getInstance() const {
 
 void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Color c) {
 	free();
-	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), c.toNative());
+	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), ColorToNative(c));
 
 	if (!checkSurfaceValidity("(Text) : " + text)) {
 		return;
@@ -106,11 +109,10 @@ void ska::SDLSurface::load32(const std::string& file) {
 
 ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 	if (m_surface == nullptr) {
-		return Color( 0, 0, 0, 0 );
+		return Color{};
 	}
 
 	Color c;
-	c.a = 0;
 	const auto pix = getPixel32(x, y);
 	SDL_GetRGB(pix, getFormat(), &c.r, &c.g, &c.b);
 	return c;

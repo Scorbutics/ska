@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "Graphic/Color.h"
+#include "Draw/Color.h"
 #include "Graphic/SDLSurface.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "ChipsetRenderable.h"
@@ -17,8 +17,8 @@ namespace ska {
 	//Rename Tileset
 	class Chipset {
 	public:
-		Chipset(const int blockSize, const std::string& chipsetName);
-		std::pair<ska::Block*, ska::BlockRenderable*> generateBlock(const Color& key);
+		Chipset(const ChipsetCorrespondanceMapper& correspondanceMapper, const int blockSize, const std::string& chipsetName);
+		std::pair<ska::Block*, ska::BlockRenderable*> getBlock(const Color& key) const;
 		const std::string& getName() const;
 		ChipsetRenderable& getRenderable();
 		~Chipset() = default;
@@ -28,9 +28,9 @@ namespace ska {
 	private:
 		void load();
 
-		const ChipsetCorrespondanceMapper m_chipsetCorrespondanceMapper;
+		const ChipsetCorrespondanceMapper& m_chipsetCorrespondanceMapper;
 
-		std::vector<BlockPtr> m_blocks;
+		mutable std::vector<BlockPtr> m_blocks;
 
 		const int m_blockSize;
 		std::string m_chipsetName;

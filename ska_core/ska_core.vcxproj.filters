@@ -148,6 +148,7 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h">
@@ -556,6 +557,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Movable.h" />
+    <ClInclude Include="Utils\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_core\CMakeLists.txt" />

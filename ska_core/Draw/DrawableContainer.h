@@ -36,8 +36,8 @@ namespace ska {
 		 */
 		void add(const Drawable& d) {
 			if (d.isVisible()) {
-				auto currentPriority = d.getPriority();
-				auto currentPriority2D = d.getPriority2D();
+				const auto currentPriority = d.getPriority();
+				const auto currentPriority2D = d.getPriority2D();
 				if (currentPriority2D > m_topPriority2D) {
 					m_topPriority2D = currentPriority2D;
 				}

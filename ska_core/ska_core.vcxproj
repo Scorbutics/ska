@@ -265,6 +265,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Utils\Vector2.cpp" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
@@ -450,6 +451,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\main.cpp" />
     <ClInclude Include="Utils\Movable.h" />
+    <ClInclude Include="Utils\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_core\ZERO_CHECK.vcxproj">

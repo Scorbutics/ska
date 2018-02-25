@@ -1,6 +1,4 @@
-#include <iostream>
 #include <string>
-#include <fstream>
 
 #include "Layer.h"
 #include "World.h"
@@ -11,12 +9,14 @@
 #include "Utils/FileUtils.h"
 
 //Constructeur ouvrant un monde déjà créé
-ska::Layer::Layer(World& w, std::string pathFile, std::string chipsetName, Layer* parent) : m_world(w), m_renderable(w) {
+ska::Layer::Layer(World& w, const std::string& pathFile, Layer* parent) : 
+	m_world(w), 
+	m_renderable(w) {
 	m_block.reserve(20);
 	m_parent = parent;
 	m_fileWidth = 0;
 	m_fileHeight = 0;
-    reset(pathFile, chipsetName);
+    reset(pathFile);
 }
 
 ska::Layer::Layer(World& w, Layer*) : m_parent(nullptr), m_world(w), m_renderable(w), m_fileWidth(0), m_fileHeight(0){
@@ -24,6 +24,14 @@ ska::Layer::Layer(World& w, Layer*) : m_parent(nullptr), m_world(w), m_renderabl
 
 ska::Layer* ska::Layer::getParent() const {
 	return m_parent;
+}
+
+unsigned ska::Layer::getBlocksX() const {
+	return m_fileWidth;
+}
+
+unsigned ska::Layer::getBlocksY() const {
+	return m_fileHeight;
 }
 
 ska::LayerRenderable& ska::Layer::getRenderable() {
@@ -46,7 +54,7 @@ ska::Block* ska::Layer::getBlock(const unsigned int i, const unsigned int j) con
 
 int ska::Layer::getBlockCollision(const unsigned int i, const unsigned int j) const {
 	if (i < m_block.size() && j < m_block[i].size()) {
-		Block* b = m_block[i][j];
+		const auto* b = m_block[i][j];
 		if (b == nullptr) {
 			return BLOCK_COL_VOID;
 		}
@@ -56,9 +64,9 @@ int ska::Layer::getBlockCollision(const unsigned int i, const unsigned int j) co
 }
 
 
-void ska::Layer::reset(std::string pathFile, std::string) {
+void ska::Layer::reset(const std::string& pathFile) {
 
-	FileNameData fnd(pathFile);
+	const FileNameData fnd(pathFile);
 	m_nomFichier = fnd.name + "." + fnd.extension;
     m_name = fnd.name;
 
@@ -75,29 +83,26 @@ void ska::Layer::reset(std::string pathFile, std::string) {
 	/* Layer coherence check */
 	checkSize(m_fileWidth, m_fileHeight);
 
-	m_world.setNbrBlocX(m_fileWidth);
-	m_world.setNbrBlocY(m_fileHeight);
+	const auto chipset = m_world.getChipset();
+	if (chipset != nullptr) {
+		Vector2<BlockRenderable*> renderableBlocks;
+		m_block.reserve(m_fileWidth * m_fileHeight);
+		renderableBlocks.resize(m_fileWidth * m_fileHeight);
 
-	auto& chipset = m_world.getChipset();
-	//const auto blockSize = m_world.getBlockSize();
+		for (auto i = 0U; i < m_fileWidth; i++) {
+			renderableBlocks.reserve(m_fileHeight);
+			for (auto j = 0U; j < m_fileHeight; j++) {
+				auto c = fichierMPng.getPixel32Color(i, j);
+				BlockRenderable* brp = nullptr;
+				Block* bp = nullptr;
+				std::tie(bp, brp) = chipset->getBlock(c);
+				m_block.push_back(bp);
+				renderableBlocks.push_back(brp);
+			}
+		}
 
-	std::vector<std::vector<BlockRenderable*>> renderableBlocks;
-	m_block.resize(m_fileWidth);
-	renderableBlocks.resize(m_fileWidth);
-	for (auto i = 0U; i < m_fileWidth; i++) {
-		m_block.reserve(m_fileHeight);
-		renderableBlocks.reserve(m_fileHeight);
-		for (auto j = 0U; j < m_fileHeight; j++) {
-			auto c = fichierMPng.getPixel32Color(i, j);
-			BlockRenderable* brp = nullptr;
-			Block* bp = nullptr;
-			chipset.generateBlock(c, &bp, &brp);
-			m_block[i].push_back(bp);
-			renderableBlocks[i].push_back(brp);
-        }
-    }
-
-	m_renderable.reset(renderableBlocks);
+		m_renderable.reset(std::move(renderableBlocks));
+	}
 
 }
 

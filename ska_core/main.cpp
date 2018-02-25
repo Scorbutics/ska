@@ -1,4 +1,5 @@
 ﻿#ifndef __ANDROID__
+#define SDL_MAIN_HANDLED
 #include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
 

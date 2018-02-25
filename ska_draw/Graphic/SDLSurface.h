@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 #include <string>
-#include "Color.h"
+#include "Draw/Color.h"
 
 namespace ska {
 	class Font;

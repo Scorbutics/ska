@@ -409,7 +409,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsRenderable.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\AnimatedTexture.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Font.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GifTexture.h" />
@@ -439,7 +438,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsRenderable.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\AnimatedTexture.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.cpp" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Font.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\GifTexture.cpp" />

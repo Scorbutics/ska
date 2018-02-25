@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SDL.h>
 #include "Utils/NumberUtils.h"
 
 namespace ska {
@@ -13,7 +12,7 @@ namespace ska {
 		uint8_t b;
 		uint8_t a;
 
-		Color(Uint32 c) {
+		Color(uint32_t c) {
 			r = c >> 24;
 			g = c >> 16;
 			b = c >> 8;
@@ -41,10 +40,6 @@ namespace ska {
 
 		Color(Color&&) = default;
 
-		explicit Color(const SDL_Color& c) {
-			*this = c;
-		}
-
 		Color& operator= (Color&&) = default;
 
 		bool operator==(const Color& c) const {
@@ -55,13 +50,6 @@ namespace ska {
 		}
 
 		void operator=(const Color& c) {
-			r = c.r;
-			g = c.g;
-			b = c.b;
-			a = c.a;
-		}
-
-		void operator=(const SDL_Color& c) {
 			r = c.r;
 			g = c.g;
 			b = c.b;
@@ -93,11 +81,7 @@ namespace ska {
 						static_cast<uint8_t>(a + adder));
 		}
 
-		SDL_Color toNative() const {
-			return SDL_Color{ r, g, b, a };
-		}
-
-		void fill(Uint8& r_, Uint8& g_, Uint8& b_, Uint8* a_ = nullptr) const {
+		void fill(uint8_t& r_, uint8_t& g_, uint8_t& b_, uint8_t* a_ = nullptr) const {
 			r_ = r;
 			g_ = g;
 			b_ = b;

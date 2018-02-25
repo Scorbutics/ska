@@ -1,17 +1,12 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
 #include <memory>
 
 #include "BlockRenderable.h"
-
 #include "Draw/DrawableFixedPriority.h"
+#include "Utils/Vector2.h"
 
 class ParticleManager;
-
 
 namespace ska {
 	class World;
@@ -21,8 +16,7 @@ namespace ska {
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
-		void changeLevel(std::string fname, std::string chipsetname);
-		void reset(std::vector<std::vector<BlockRenderable*>>& block);
+		void reset(Vector2<BlockRenderable*>&& block);
 
 		void update();
 		void clear();
@@ -32,11 +26,9 @@ namespace ska {
 
 		BlockRenderable* getBlock(unsigned int i, unsigned int j);
 
-		void setRectAnim(Rectangle rectAnim);
-
 	private:
 		World& m_world;
-		std::vector<std::vector<BlockRenderable*>> m_block;
+		Vector2<BlockRenderable*> m_block;
 
 	};
 	typedef std::unique_ptr<LayerRenderable> LayerRenderablePtr;

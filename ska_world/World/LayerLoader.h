@@ -1,11 +1,11 @@
 #pragma once
-#include "Graphic/SDLSurface.h"
-#include "ChipsetCorrespondanceMapper.h"
-#include "Block.h"
+#include <memory>
+#include "Physic/Block.h"
 
 namespace ska {
 	class Chipset;
 	class ChipsetCorrespondanceMap;
+	template <class T> class Vector2;
 
 	class LayerLoader {
 		using BlockPtr = std::unique_ptr<Block>;
@@ -14,11 +14,7 @@ namespace ska {
 		LayerLoader() = default;
 		~LayerLoader() = default;
 
-		void load(std::vector<Block*>& layer, const std::string& layerFilename, Chipset& chipset);
-
-	private:
-		const ChipsetCorrespondanceMapper m_correspondanceMap;
-		SDLSurface m_file;
+		void load(Vector2<Block*>& layer, const std::string& layerFilename, Chipset& chipset);
 
 	};
 }

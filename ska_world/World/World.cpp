@@ -1,7 +1,6 @@
 #include <algorithm>
 #include "World.h"
 #include "Layer.h"
-#include "Block.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
 #include "LayerEvent.h"
@@ -11,8 +10,9 @@
 #include "Utils/FileUtils.h"
 #include "ECS/Basics/Physic/CollisionContact.h"
 #include "Core/CodeDebug/CodeDebug.h"
+#include "Draw/DrawableContainer.h"
 
-ska::World::World(const unsigned int tailleBloc) :
+ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
     m_windDirection(0),
     m_nbrBlockX(0),
     m_nbrBlockY(0),
@@ -23,7 +23,7 @@ ska::World::World(const unsigned int tailleBloc) :
 	m_lMid(*this, &m_lBot),
 	m_lTop(*this, &m_lMid),
 	m_layerE(*this),
-	m_chipset("." FILE_SEPARATOR "Chipsets" FILE_SEPARATOR "corr.png") {
+	m_correspondanceMapper(chipsetCorrespondanceFilename) {
 }
 
 void ska::World::linkCamera(CameraSystem* cs) {
@@ -76,8 +76,8 @@ bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unorde
 	return result;
 }
 
-ska::ChipsetHolder& ska::World::getChipset() {
-	return m_chipset;
+ska::Chipset* ska::World::getChipset() {
+	return m_chipset.get();
 }
 
 const std::string& ska::World::getFileName() const {
@@ -85,7 +85,7 @@ const std::string& ska::World::getFileName() const {
 }
 
 bool ska::World::isBlockDodgeable(const int i, const int j) const {
-	Block* b = m_lMid.getBlock(i, j);
+	const auto* b = m_lMid.getBlock(i, j);
 	return (b != nullptr && b->getProperties() == BLOCK_PROP_JUMPWALL);
 }
 
@@ -182,6 +182,12 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Recta
 	return col;
 }
 
+void ska::World::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
+	drawables.add(m_lBot.getRenderable());
+	drawables.add(m_lMid.getRenderable());
+	drawables.add(m_lTop.getRenderable());
+}
+
 const ska::Rectangle* ska::World::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
@@ -210,10 +216,15 @@ std::string ska::World::getGenericName() const {
 }
 
 void ska::World::load(const std::string& fileName, const std::string& chipsetName) {
-	const auto worldChanged = fileName != m_fileName;
 	m_autoScriptsPlayed = false;
-	const auto chipsetChanged = m_chipset.attach(m_blockSize, chipsetName);
+	
+	const auto chipsetChanged = m_chipset != nullptr ? m_chipset->getName() != chipsetName : true;
+	if (chipsetChanged) {
+		m_chipset = std::make_unique<Chipset>(m_correspondanceMapper, m_blockSize, chipsetName);
+		m_chipsetEvent = std::make_unique<ChipsetEvent>(chipsetName);
+	}
 
+	const auto worldChanged = fileName != m_fileName;
 	if (worldChanged) {
 		const ska::FileNameData fndata(fileName);
 		m_genericName = fndata.name;
@@ -234,9 +245,12 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 		m_lMid.clear();
 		m_lTop.clear();
 
-		m_lBot.reset(botLayerName, chipsetName);
-		m_lMid.reset(midLayerName, chipsetName);
-		m_lTop.reset(topLayerName, chipsetName);
+		m_lBot.reset(botLayerName);
+		m_lMid.reset(midLayerName);
+		m_lTop.reset(topLayerName);
+
+		m_nbrBlockX = m_lBot.getBlocksX();
+		m_nbrBlockY = m_lBot.getBlocksY();
 
 		m_layerE.changeLevel(eventLayerName);
 
@@ -249,6 +263,10 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 
 std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
 	std::vector<ScriptSleepComponent*> result;
+	if (m_chipsetEvent == nullptr) {
+		return result;
+	}
+
 	Layer* l;
 	switch (layerIndex) {
 	case 0:
@@ -263,7 +281,7 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 	}
 
 	if (reason == EnumScriptTriggerType::AUTO) {
-		auto tmp = m_chipset.getScript("", reason, m_autoScriptsPlayed);
+		auto tmp = m_chipsetEvent->getScript("", reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->context = getName();
@@ -278,7 +296,7 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 	auto b = l->getBlock(posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
 	if (b != nullptr) {
 		const auto id = b->getID();
-		auto tmp = m_chipset.getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
+		auto tmp = m_chipsetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->args.clear();
@@ -402,15 +420,6 @@ unsigned int ska::World::getPixelHeight() const {
 unsigned int ska::World::getBlockSize() const {
 	return m_blockSize;
 }
-
-void ska::World::setNbrBlocX(unsigned int nbrBlockX) {
-	m_nbrBlockX = nbrBlockX;
-}
-
-void ska::World::setNbrBlocY(unsigned int nbrBlockY) {
-	m_nbrBlockY = nbrBlockY;
-}
-
 
 
 void ska::World::getRainFromData(std::string ){

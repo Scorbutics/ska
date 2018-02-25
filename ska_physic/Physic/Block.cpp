@@ -6,7 +6,7 @@ ska::Block::Block(int corrFileWidth, Point<int> posChipset, unsigned int propert
 	m_id = posChipset.x + posChipset.y * corrFileWidth;
 }
 
-unsigned int ska::Block::getProperties() {
+unsigned int ska::Block::getProperties() const{
 	return m_properties;
 }
 

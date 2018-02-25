@@ -2,6 +2,7 @@
 
 #include "../Rectangle.h"
 #include "../Point.h"
+#include "Color.h"
 
 extern "C" {
 	struct SDL_Texture;
@@ -13,7 +14,6 @@ namespace ska {
 	class SDLTexture;
 	class SDLSurface;
 	class Texture;
-	struct Color;
 
 	class Renderer {
 	public:
@@ -31,6 +31,17 @@ namespace ska {
 		virtual void drawColorPoint(const Color& c, const Point<int>& pos) const = 0;
 		virtual void drawColorRect(const Color& c, const Rectangle& r) const = 0;
 		virtual void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const = 0;
+		
+		const Color& getDefaultColor() const {
+			return m_defaultColor;
+		}
+
+		void setDefaultColor(const Color& c) {
+			m_defaultColor = c;
+		}
+
+	private:
+		Color m_defaultColor;
 
 	};
 }

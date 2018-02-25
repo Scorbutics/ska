@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include "Graphic/Animation.h"
 #include "Point.h"

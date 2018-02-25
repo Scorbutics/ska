@@ -22,11 +22,11 @@ void ska::ChipsetRenderable::update(BlockRenderable& block) {
 	m_animBlocks.updateFrame();
 }
 
-ska::BlockRenderablePtr& ska::ChipsetRenderable::generateBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) {
+ska::BlockRenderable& ska::ChipsetRenderable::getBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) const {
 	if (m_blocks[id] == nullptr) {
 		m_blocks[id] = std::move(std::make_unique<BlockRenderable>(blockSize, posCorr, auto_anim));
 	}
-	return m_blocks[id];
+	return *m_blocks[id].get();
 }
 
 void ska::ChipsetRenderable::load(const std::string& chipsetName) {

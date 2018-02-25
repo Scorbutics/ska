@@ -1,7 +1,8 @@
 #pragma once
 #include "Draw/Renderer.h"
 #include "Point.h"
-#include "Color.h"
+#include "Draw/Color.h"
+#include <SDL.h>
 
 namespace ska {
 	class SDLWindow;

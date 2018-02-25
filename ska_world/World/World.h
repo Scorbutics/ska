@@ -11,6 +11,8 @@
 #include "ECS/Basics/Physic/CollisionProfile.h"
 #include "Data/BlockContainer.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
+#include "ChipsetEvent.h"
+#include "Chipset.h"
 
 namespace ska {
 	class CameraSystem;
@@ -27,7 +29,8 @@ namespace ska {
 	    public CollisionProfile,
 	    public ScriptPositionedGetter {
 	public:
-		explicit World(const unsigned int tailleBloc);
+		World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename);
+		
 		World(const World&) = delete;
 		World& operator=(const World&) = delete;
 
@@ -45,21 +48,20 @@ namespace ska {
 
 		unsigned int getNbrBlocX() const;
 		unsigned int getNbrBlocY() const;
-		void setNbrBlocX(unsigned int nbrBlockX);
-		void setNbrBlocY(unsigned int nbrBlockY);
 
 		LayerRenderable& getLayerRenderable(int level);
 		LayerEvent& getLayerEvent();
 		unsigned int getNumberLayers() const;
 
 		const Rectangle* getView() const;
-		ChipsetHolder& getChipset();
+		Chipset* getChipset();
 
 		Block* getHigherBlock(const unsigned int i, const unsigned int j) const;
 
 		void getData();
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
 		bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const override;
+		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 
 		bool getCollision(const int i, const int j) const;
@@ -73,7 +75,6 @@ namespace ska {
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
 
 		void linkCamera(CameraSystem* cs) override;
-		virtual void graphicUpdate(unsigned int ellapsedTime, DrawableContainer& drawables) = 0;
 
 		virtual ~World() = default;
 
@@ -97,6 +98,9 @@ namespace ska {
 		Layer m_lMid;
 		Layer m_lTop;
 		LayerEvent m_layerE;
-		ChipsetHolder m_chipset;
+		
+		const ChipsetCorrespondanceMapper m_correspondanceMapper;
+		std::unique_ptr<Chipset> m_chipset;
+		std::unique_ptr<ChipsetEvent> m_chipsetEvent;
 	};
 }
