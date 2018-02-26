@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Physic/Block.h"
+#include "BlockRenderable.h"
 
 namespace ska {
 	class Chipset;
@@ -14,7 +15,7 @@ namespace ska {
 		LayerLoader() = default;
 		~LayerLoader() = default;
 
-		void load(Vector2<Block*>& layer, const std::string& layerFilename, Chipset& chipset);
+		void load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, const std::string& layerFilename, Chipset& chipset);
 
 	};
 }

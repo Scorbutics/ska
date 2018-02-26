@@ -17,8 +17,8 @@ namespace ska {
 }
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {
-	auto widthBlocks = 30;
-	auto heightBlocks = 20;
+	auto widthBlocks = 40;
+	auto heightBlocks = 25;
 
 	std::string title = "Default title";
 	try {

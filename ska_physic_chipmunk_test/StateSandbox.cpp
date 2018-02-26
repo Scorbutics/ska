@@ -37,14 +37,14 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
 
 		const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
-		ska::Chipset chipset{ corr, 32, "Resources/Chipsets/chipset_platform" };
+		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
 
-		ska::Vector2<ska::Block*> layerBlocks;
-		loader.load(layerBlocks, "Resources/Levels/new_level/new_level.bmp", chipset);
+		ska::Vector2<ska::Block*> layerBlocks;		
+		loader.load(layerBlocks, m_layerHolder.layerRenderableBlocks, "Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
 
 		ska::MarchingSquare ms;
-		m_layerContour = Polygon<int>(ms.apply(layerBlocks), 32);
+		m_layerContour = Polygon<int>(ms.apply(layerBlocks), 48);
 
 		
 	}
@@ -88,7 +88,9 @@ void DoThings() {
 }
 
 void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {
-	drawables.addHead(m_layerContour);	
+	drawables.addHead(m_layerHolder);
+	drawables.addHead(m_layerContour);
+
 }
 
 void StateSandbox::onEventUpdate(unsigned int) {

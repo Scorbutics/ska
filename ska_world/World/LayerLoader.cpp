@@ -3,7 +3,7 @@
 #include "Exceptions/FileException.h"
 #include "Utils/Vector2.h"
 
-void ska::LayerLoader::load(Vector2<Block*>& layer, const std::string& layerFilename, Chipset& chipset) {
+void ska::LayerLoader::load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, const std::string& layerFilename, Chipset& chipset) {
 	SDLSurface file;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
@@ -15,16 +15,20 @@ void ska::LayerLoader::load(Vector2<Block*>& layer, const std::string& layerFile
 	const auto area = fileHeight * fileWidth;
 
 	layer.clear();
+	layerRenderable.clear();
 	layer.reserve(area);
+	layerRenderable.reserve(area);
 	layer.setLineSize(fileWidth);
+	layerRenderable.setLineSize(fileWidth);
 
-	for (auto x = 0; x < fileWidth; x++) {
-		for (auto y = 0; y < fileHeight; y++) {
+	for (auto y = 0; y < fileHeight; y++) {
+		for (auto x = 0; x < fileWidth; x++) {
 			const auto color = file.getPixel32Color(x, y);
 			Block* block;
 			BlockRenderable* br;
 			std::tie(block, br) = chipset.getBlock(color);
 			layer.push_back(block);
+			layerRenderable.push_back(br);
 		}
 	}
 }

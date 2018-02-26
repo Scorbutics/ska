@@ -53,7 +53,7 @@ ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& lay
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
 			const auto block = layer[x][y];
-			if (block->getCollision() == BLOCK_COL_YES) {
+			if (block != nullptr && block->getCollision() == BLOCK_COL_YES) {
 				return { x, y };
 			}
 		}
@@ -67,7 +67,8 @@ int GetCollisionBoundChecked(const ska::Vector2<ska::Block*>& layer, const ska::
 	const auto height = layer.size() / width;
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
-		return layer[point.x][point.y]->getCollision();
+		const auto b = layer[point.x][point.y];
+		return b != nullptr ? b->getCollision() : BLOCK_COL_NO;
 	}
 	return BLOCK_COL_NO;
 }

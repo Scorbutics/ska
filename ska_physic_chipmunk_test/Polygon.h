@@ -9,7 +9,8 @@ public:
 	Polygon() = default;
 
 	template<class Container>
-	Polygon(const Container& c, const unsigned int zoom = 1) {
+	Polygon(const Container& c, const unsigned int zoom = 1) : 
+		m_color(255, 0, 0, 255) {
 		m_points.reserve(c.size());
 		for(const auto& p : c) {
 			m_points.push_back(p * zoom);
@@ -23,7 +24,7 @@ public:
 		
 		auto pIt = m_points.cbegin();
 		for (++pIt; pIt != m_points.cend(); ++pIt) {
-			renderer.drawColorLine(renderer.getDefaultColor(), *lastPointIt, *pIt);
+			renderer.drawColorLine(m_color, *lastPointIt, *pIt);
 			lastPointIt = pIt;
 		}
 	}
@@ -35,5 +36,6 @@ public:
 private:
 	std::vector<ska::Point<T>> m_points;
 	bool m_visible = true;
+	ska::Color m_color;
 };
 
