@@ -15,7 +15,7 @@ namespace ska {
 		LayerLoader() = default;
 		~LayerLoader() = default;
 
-		void load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, const std::string& layerFilename, Chipset& chipset);
+		void load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, std::unordered_set<ska::Point<int>>* blockCollisionPositions, const std::string& layerFilename, Chipset& chipset);
 
 	};
 }

@@ -1,9 +1,10 @@
 #include "MarchingSquare.h"
 #include "Block.h"
 #include "Utils/SkaConstants.h"
+#include <unordered_set>
 
-std::list<ska::Point<int>> ska::MarchingSquare::apply(const Vector2<Block*>& layer) {
-	const auto startPoint = getStartingPoint(layer);
+std::list<ska::Point<int>> ska::MarchingSquare::apply(const Vector2<Block*>& layer, std::unordered_set<Point<int>>& remainingBlocks) {
+	const auto startPoint = getStartingPoint(layer, remainingBlocks);
 	std::list<Point<int>> path;
 
 	const auto width = layer.lineSize();
@@ -17,6 +18,7 @@ std::list<ska::Point<int>> ska::MarchingSquare::apply(const Vector2<Block*>& lay
 	auto lastDirection = StepDirection::None;
 	do {
 		if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
+			remainingBlocks.erase(point);
 			path.push_back(point);
 		}
 		
@@ -46,7 +48,7 @@ std::list<ska::Point<int>> ska::MarchingSquare::apply(const Vector2<Block*>& lay
 	return path;
 }
 
-ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& layer) const {
+ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& layer, const std::unordered_set<Point<int>>& in) const {
 	const auto width = layer.lineSize();
 	const auto height = layer.size() / width;
 
@@ -54,7 +56,9 @@ ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& lay
 		for (auto y = 0; y < height; y++) {
 			const auto block = layer[x][y];
 			if (block != nullptr && block->getCollision() == BLOCK_COL_YES) {
-				return { x, y };
+				if (in.count({ x, y }) > 0) {
+					return { x, y };
+				}
 			}
 		}
 	}

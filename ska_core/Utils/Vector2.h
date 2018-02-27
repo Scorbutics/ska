@@ -54,6 +54,7 @@ namespace ska {
 		using ViewV = View<Vector2<T>, T>;
 		using Parent = std::vector<T>;
 	public:
+		using Parent::erase;
 		using Parent::begin;
 		using Parent::end;
 		using Parent::cbegin;

@@ -23,9 +23,13 @@ public:
 		auto lastPointIt = m_points.cbegin();
 		
 		auto pIt = m_points.cbegin();
-		for (++pIt; pIt != m_points.cend(); ++pIt) {
-			renderer.drawColorLine(m_color, *lastPointIt, *pIt);
-			lastPointIt = pIt;
+		
+		if (pIt != m_points.cend()) {
+			++pIt;
+			for (; pIt != m_points.cend(); ++pIt) {
+				renderer.drawColorLine(m_color, *lastPointIt, *pIt);
+				lastPointIt = pIt;
+			}
 		}
 	}
 

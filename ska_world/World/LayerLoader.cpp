@@ -1,9 +1,10 @@
+#include <unordered_set>
 #include "LayerLoader.h"
 #include "Chipset.h"
 #include "Exceptions/FileException.h"
 #include "Utils/Vector2.h"
 
-void ska::LayerLoader::load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, const std::string& layerFilename, Chipset& chipset) {
+void ska::LayerLoader::load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& layerRenderable, std::unordered_set<ska::Point<int>>* blockCollisionPositions, const std::string& layerFilename, Chipset& chipset) {
 	SDLSurface file;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
@@ -29,6 +30,9 @@ void ska::LayerLoader::load(Vector2<Block*>& layer, Vector2<BlockRenderable*>& l
 			std::tie(block, br) = chipset.getBlock(color);
 			layer.push_back(block);
 			layerRenderable.push_back(br);
+			if(blockCollisionPositions != nullptr && block != nullptr && block->getCollision() == BLOCK_COL_YES) {
+				blockCollisionPositions->insert(ska::Point<int>{x, y});
+			}
 		}
 	}
 }

@@ -51,6 +51,6 @@ private:
 	
 	ska::ExtensibleGameEventDispatcher<>& m_eventDispatcher;
 	ska::EntityManager& m_entityManager;
-	Polygon<int> m_layerContour;
+	std::vector<Polygon<int>> m_layerContours;
 };
 
