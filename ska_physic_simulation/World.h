@@ -1,5 +1,4 @@
 #pragma once
-#include "ECS/Basics/Physic/CollisionProfile.h"
 #include "../ska_world/World/World.h"
 
 class World : 

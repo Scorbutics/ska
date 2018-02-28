@@ -40,6 +40,9 @@
     <ClCompile Include="World\ChipsetEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="World\CollisionProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h">
@@ -175,9 +178,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h">
@@ -613,6 +613,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World\ChipsetEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\LayerData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\CollisionProfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

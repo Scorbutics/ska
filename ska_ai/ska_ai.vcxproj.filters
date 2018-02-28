@@ -150,9 +150,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -445,6 +442,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ska_core\Utils\unsmartptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ska_core\ECS\Basics\Physic\BlockAllowance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

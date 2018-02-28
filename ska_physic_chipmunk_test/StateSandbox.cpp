@@ -41,9 +41,11 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ska::LayerLoader loader;
 
 		ska::Vector2<ska::Block*> layerBlocks;
-		std::unordered_set<ska::Point<int>> remainingBlocks;
-		loader.load(layerBlocks, m_layerHolder.layerRenderableBlocks, &remainingBlocks, "Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
+		loader.load(layerBlocks, m_layerHolder.layerRenderableBlocks, "Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
 	
+		std::unordered_set<ska::Point<int>> remainingBlocks;
+
+
 		ska::MarchingSquare ms;
 		do {
 			const auto pointList = ms.apply(layerBlocks, remainingBlocks);

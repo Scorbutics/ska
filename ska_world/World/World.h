@@ -6,13 +6,14 @@
 #include "Graphic/Texture.h"
 #include "Draw/CameraAware.h"
 #include "ChipsetHolder.h"
-#include "Layer.h"
 #include "LayerEvent.h"
-#include "ECS/Basics/Physic/CollisionProfile.h"
+#include "ECS/Basics/Physic/BlockAllowance.h"
 #include "Data/BlockContainer.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
 #include "ChipsetEvent.h"
 #include "Chipset.h"
+#include "CollisionProfile.h"
+#include "LayerRenderable.h"
 
 namespace ska {
 	class CameraSystem;
@@ -26,7 +27,7 @@ namespace ska {
 	class World :
 	    public CameraAware,
 	    public BlockContainer,
-	    public CollisionProfile,
+	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
 		World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename);
@@ -37,9 +38,6 @@ namespace ska {
 		virtual void load(const std::string& fileName, const std::string& chipsetName);
 
 		std::vector<IniReader>& getMobSettings();
-		std::string getGenericName() const;
-		std::string getName() const;
-		const std::string& getFileName() const;
 
 		unsigned int getPixelWidth() const;
 		unsigned int getPixelHeight() const;
@@ -49,14 +47,7 @@ namespace ska {
 		unsigned int getNbrBlocX() const;
 		unsigned int getNbrBlocY() const;
 
-		LayerRenderable& getLayerRenderable(int level);
-		LayerEvent& getLayerEvent();
-		unsigned int getNumberLayers() const;
-
 		const Rectangle* getView() const;
-		Chipset* getChipset();
-
-		Block* getHigherBlock(const unsigned int i, const unsigned int j) const;
 
 		void getData();
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
@@ -64,10 +55,9 @@ namespace ska {
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 
-		bool getCollision(const int i, const int j) const;
-		bool isBlockDodgeable(const int i, const int j) const;
+		bool getCollision(const unsigned int x, const unsigned int y) const;
 
-		unsigned int getBlockSize() const;
+		unsigned int getBlockSize() const override;
 
 		/* TODO classe à part ? */
 		std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& p, const ScriptTriggerType& reason, unsigned int layerIndex) override;
@@ -94,13 +84,13 @@ namespace ska {
 		CameraSystem* m_cameraSystem;
 
 	protected:
-		Layer m_lBot;
-		Layer m_lMid;
-		Layer m_lTop;
+		std::vector<LayerRenderablePtr> m_graphicLayers;
+		CollisionProfile m_collisionProfile;
 		LayerEvent m_layerE;
 		
 		const ChipsetCorrespondanceMapper m_correspondanceMapper;
 		std::unique_ptr<Chipset> m_chipset;
 		std::unique_ptr<ChipsetEvent> m_chipsetEvent;
+
 	};
 }

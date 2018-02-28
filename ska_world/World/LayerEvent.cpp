@@ -1,21 +1,14 @@
-#include <limits>
-#include <iostream>
-#include <string>
 #include <fstream>
 #include <sstream>
 
 #include "Utils/StringUtils.h"
-#include "Utils/SkaConstants.h"
 #include "LayerEvent.h"
-#include "Layer.h"
-#include "World.h"
 #include "Exceptions/CorruptedFileException.h"
 #include "Exceptions/NumberFormatException.h"
 #include "Logging/Logger.h"
 #include "Utils/FileUtils.h"
 
-//Constructeur ouvrant un monde déjà créé
-ska::LayerEvent::LayerEvent(World& world) : m_world(world) {
+ska::LayerEvent::LayerEvent() {
     m_nbrLignes = 0;
 }
 
@@ -98,7 +91,7 @@ void ska::LayerEvent::changeLevel(const std::string& fichier) {
 	/* Ignore first line */
 	getline(flux, line);
 
-	int i = 0;
+	auto i = 0;
 	try {
 		while (getline(flux, line)) {
 
@@ -106,7 +99,7 @@ void ska::LayerEvent::changeLevel(const std::string& fichier) {
 			std::size_t nextIndex = 0;
 			ss.clear();
 
-			const std::string x = StringUtils::extractTo(nextIndex, line, ':');
+			const auto x = StringUtils::extractTo(nextIndex, line, ':');
 			m_coordBX.push_back(StringUtils::strToInt(x));
 			nextIndex += x.size() + 1;
 
@@ -119,8 +112,7 @@ void ska::LayerEvent::changeLevel(const std::string& fichier) {
 			ss >> id;
 			if (id != "!") {
 				m_ID.push_back(StringUtils::strToInt(id));
-			}
-			else {
+			} else {
 				m_ID.push_back(std::numeric_limits<int>().min());
 			}
 
@@ -145,8 +137,7 @@ void ska::LayerEvent::changeLevel(const std::string& fichier) {
 			m_param.push_back(StringUtils::ltrim(param));
 
 		}
-	}
-	catch (NumberFormatException& nfe) {
+	} catch (NumberFormatException& nfe) {
 		throw CorruptedFileException("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::intToStr(i) + ")\n" + std::string(nfe.what()));
 	}
 	m_nbrLignes = i;

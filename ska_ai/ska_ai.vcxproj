@@ -308,7 +308,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h" />
+    <ClInclude Include="..\ska_core\ECS\Basics\Physic\BlockAllowance.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />

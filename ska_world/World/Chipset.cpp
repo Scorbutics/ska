@@ -50,7 +50,7 @@ std::pair<ska::Block*, ska::BlockRenderable*> ska::Chipset::getBlock(const Color
 			const auto prop = m_sProperties.getPixel32Color(posCorr.x, posCorr.y).r;
 			const auto col = m_sCol.getPixel32(posCorr.x, posCorr.y);
 
-			const auto collision = (col == m_whiteColor || col == m_lightColor) ? BLOCK_COL_NO : BLOCK_COL_YES;
+			const auto collision = (col == m_whiteColor || col == m_lightColor) ? BlockCollision::NO : BlockCollision::YES;
 			const auto autoAnim = (col == m_darkColor || col == m_lightColor);
 
 			const auto corrFileWidth = m_chipsetCorrespondanceMapper.getFileWidth();

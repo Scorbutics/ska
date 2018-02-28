@@ -8,10 +8,10 @@
 #include "Utils/Refreshable.h"
 
 namespace ska {
-	class World;
+	
 	class LayerEvent : public Refreshable {
 	public:
-		LayerEvent(World& world);
+		LayerEvent();
 		void operator=(const LayerEvent&) = delete;
 
 		virtual void refresh(unsigned int ellapsedTime) override;
@@ -30,9 +30,14 @@ namespace ska {
 	private:
 		std::string m_nomFichier, m_chipsetname;
 		int m_nbrLignes;
-		std::vector<int> m_coordBX, m_coordBY, m_ID, m_trigger, m_solide;
+
+		std::vector<int> m_coordBX;
+		std::vector<int> m_coordBY;
+		std::vector<int> m_ID;
+		std::vector<int> m_trigger;
+		std::vector<int> m_solide;
+		
 		std::vector<std::string> m_action, m_param, m_path;
-		World& m_world;
 	};
 	using LayerEPtr = std::unique_ptr<LayerEvent>;
 }

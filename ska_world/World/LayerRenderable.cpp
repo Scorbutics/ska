@@ -5,8 +5,9 @@
 #include "LayerRenderable.h"
 #include "Draw/Renderer.h"
 
-ska::LayerRenderable::LayerRenderable(World& w) : 
-	m_world(w) {
+ska::LayerRenderable::LayerRenderable(const unsigned int blockSize) : 
+	m_world(w),
+	m_blockSize(blockSize) {
 	m_block.reserve(20);
 }
 

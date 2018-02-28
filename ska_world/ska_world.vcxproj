@@ -265,6 +265,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="World\ChipsetCorrespondanceMapper.cpp" />
     <ClCompile Include="World\ChipsetEvent.cpp" />
+    <ClCompile Include="World\CollisionProfile.cpp" />
     <ClCompile Include="World\Inputs\KeyboardInputGUIContext.cpp" />
     <ClCompile Include="World\Inputs\KeyboardInputMapContext.cpp" />
     <ClCompile Include="World\LayerLoader.cpp" />
@@ -313,7 +314,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />
@@ -462,10 +462,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.cpp" />
     <ClInclude Include="World\ChipsetCorrespondanceMapper.h" />
     <ClInclude Include="World\ChipsetEvent.h" />
+    <ClInclude Include="World\CollisionProfile.h" />
     <ClInclude Include="World\Inputs\KeyboardInputGUIContext.h" />
     <ClInclude Include="World\Inputs\KeyboardInputMapContext.h" />
     <ClInclude Include="World\Input\KeyboardInputGUIContext.h" />
     <ClInclude Include="World\Input\KeyboardInputMapContext.h" />
+    <ClInclude Include="World\LayerData.h" />
     <ClInclude Include="World\LayerLoader.h" />
   </ItemGroup>
   <ItemGroup>

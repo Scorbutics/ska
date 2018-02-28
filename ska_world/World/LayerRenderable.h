@@ -12,7 +12,7 @@ namespace ska {
 	class World;
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
-		LayerRenderable(World& world);
+		LayerRenderable(const unsigned int blockSize);
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
@@ -27,6 +27,7 @@ namespace ska {
 		BlockRenderable* getBlock(unsigned int i, unsigned int j);
 
 	private:
+		const unsigned int m_blockSize;
 		World& m_world;
 		Vector2<BlockRenderable*> m_block;
 

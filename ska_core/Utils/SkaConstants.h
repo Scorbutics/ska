@@ -59,10 +59,6 @@
 #define BLOCK_PROP_JUMPWALL 2
 #define BLOCK_PROP_WIND_SENSITIVITY 3
 
-#define BLOCK_COL_NO 0
-#define BLOCK_COL_YES 1
-#define BLOCK_COL_VOID 2
-
 #define WIND_STOP 0
 #define WIND_LEFT 1
 #define WIND_RIGHT 2

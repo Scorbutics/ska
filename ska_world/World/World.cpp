@@ -11,6 +11,7 @@
 #include "ECS/Basics/Physic/CollisionContact.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Draw/DrawableContainer.h"
+#include "LayerLoader.h"
 
 ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
     m_windDirection(0),
@@ -19,10 +20,6 @@ ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorre
     m_blockSize(tailleBloc),
 	m_autoScriptsPlayed(false),
 	m_cameraSystem(nullptr),
-    m_lBot(*this),
-	m_lMid(*this, &m_lBot),
-	m_lTop(*this, &m_lMid),
-	m_layerE(*this),
 	m_correspondanceMapper(chipsetCorrespondanceFilename) {
 }
 
@@ -33,79 +30,37 @@ void ska::World::linkCamera(CameraSystem* cs) {
 	}
 }
 
-unsigned int ska::World::getNumberLayers() const {
-	return 3;
-}
-
 bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
 	const Layer* l;
-	switch (layerIndex) {
-	case 0:
-		l = &m_lBot;
-		break;
-	case 1:
-		l = &m_lMid;
-		break;
-	case 2:
-		l = &m_lTop;
-		break;
-	default :
-		l = nullptr;
-		break;
-	}
-
 	const auto p1Block = p1 / m_blockSize;
 	const auto p2Block = p2 / m_blockSize;
 	if (p1Block.x >= m_nbrBlockX || p2Block.x >= m_nbrBlockX || p1Block.y >= m_nbrBlockY || p2Block.y >= m_nbrBlockY) {
 		return true;
 	}
 
-	Block* b1 = l == nullptr ? getHigherBlock(p1Block.x, p1Block.y) : l->getBlock(p1Block.x, p1Block.y);
-	Block* b2 = l == nullptr ? getHigherBlock(p2Block.x, p2Block.y) : l->getBlock(p2Block.x, p2Block.y);
+	const auto& b1 = m_collisionProfile.getBlock(layerIndex, p1Block.x, p1Block.y);
+	const auto& b2 = m_collisionProfile.getBlock(layerIndex, p2Block.x, p2Block.y);
 	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->getID() == b2->getID()));
 }
 
 bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
-	auto l = &m_lBot;
 	const auto blockPos = pos / m_blockSize;
 	if (blockPos.x >= m_nbrBlockX || blockPos.y >= m_nbrBlockY ) {
 		return true;
 	}
-	auto b = l->getBlock(blockPos.x, blockPos.y);
+	const auto& b = m_collisionProfile.getBlock(0, blockPos.x, blockPos.y);
 	const auto result = b != nullptr ? (authorizedBlocks.find(b->getID()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
-ska::Chipset* ska::World::getChipset() {
-	return m_chipset.get();
-}
-
-const std::string& ska::World::getFileName() const {
-	return m_fileName;
-}
-
-bool ska::World::isBlockDodgeable(const int i, const int j) const {
-	const auto* b = m_lMid.getBlock(i, j);
-	return (b != nullptr && b->getProperties() == BLOCK_PROP_JUMPWALL);
-}
-
-bool ska::World::getCollision(const int i, const int j) const {
-	if (m_lBot.getBlockCollision(i, j) == BLOCK_COL_YES &&
-		(m_lMid.getBlockCollision(i, j) != BLOCK_COL_NO)) {
-		return true;
-	}
-
-	if (m_lMid.getBlockCollision(i, j) == BLOCK_COL_YES) {
-		return true;
-	}
-
-    return false;
+bool ska::World::getCollision(const unsigned int x, const unsigned int y) const {
+	return m_collisionProfile.collide(x, y);
 }
 
 void ska::World::update() {
-	m_lBot.getRenderable().update();
-	m_lMid.getRenderable().update();
-	m_lTop.getRenderable().update();
+	for (auto& graphicLayer : m_graphicLayers) {
+		graphicLayer->update();
+	}
 }
 
 template <class T>
@@ -129,6 +84,7 @@ void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska:
 
 }
 
+//TODO => partie physique
 bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
 	Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
 	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
@@ -183,36 +139,13 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Recta
 }
 
 void ska::World::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
-	drawables.add(m_lBot.getRenderable());
-	drawables.add(m_lMid.getRenderable());
-	drawables.add(m_lTop.getRenderable());
+	for (const auto& graphicLayer : m_graphicLayers) {
+		drawables.add(*graphicLayer);
+	}
 }
 
 const ska::Rectangle* ska::World::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
-}
-
-ska::LayerRenderable& ska::World::getLayerRenderable(int level) {
-	switch (level) {
-	case 0:
-		return m_lBot.getRenderable();
-	case 1:
-		return m_lMid.getRenderable();
-	default:
-		return m_lTop.getRenderable();
-	}
-}
-
-ska::LayerEvent& ska::World::getLayerEvent() {
-	return m_layerE;
-}
-
-std::string ska::World::getName() const {
-    return m_worldName;
-}
-
-std::string ska::World::getGenericName() const {
-    return m_genericName;
 }
 
 void ska::World::load(const std::string& fileName, const std::string& chipsetName) {
@@ -241,11 +174,23 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 		const auto& topLayerName = fileNamePrefix + "T.bmp";
 		const auto& eventLayerName = fileNamePrefix + "E.txt";
 
-		m_lBot.clear();
-		m_lMid.clear();
-		m_lTop.clear();
+		LayerLoader layerLoader;
+		auto layerData = layerLoader.load(botLayerName, *m_chipset);
+		
+		m_collisionProfile.clear();
+		m_graphicLayers.clear();
 
-		m_lBot.reset(botLayerName);
+		//TODO Init in constructors
+		auto lBot = std::make_unique<Layer>();
+		lBot->reset(std::move(layerData.physics));
+		m_collisionProfile.addLayer(std::move(lBot));
+
+		auto lBotGraphics = std::make_unique<LayerRenderable>(m_blockSize);
+		lBotGraphics->reset(std::move(layerData.graphics));
+		m_graphicLayers.push_back(std::move(lBotGraphics));
+
+
+		//TODO same for mid & top
 		m_lMid.reset(midLayerName);
 		m_lTop.reset(topLayerName);
 
@@ -267,24 +212,11 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 		return result;
 	}
 
-	Layer* l;
-	switch (layerIndex) {
-	case 0:
-		l = &m_lBot;
-		break;
-	case 1:
-		l = &m_lMid;
-		break;
-	default:
-		l = &m_lTop;
-		break;
-	}
-
 	if (reason == EnumScriptTriggerType::AUTO) {
 		auto tmp = m_chipsetEvent->getScript("", reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
-				ssc->context = getName();
+				ssc->context = m_worldName;
 				result.push_back(ssc);
 			}
 		}
@@ -293,7 +225,7 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 
 	const auto newBlock = newPos / m_blockSize;
 	const auto oldBlock = oldPos / m_blockSize;
-	auto b = l->getBlock(posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
+	const auto& b = m_collisionProfile.getBlock(layerIndex, posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
 	if (b != nullptr) {
 		const auto id = b->getID();
 		auto tmp = m_chipsetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
@@ -305,7 +237,7 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 				ssc->args.push_back(StringUtils::intToStr(newBlock.x));
 				ssc->args.push_back(StringUtils::intToStr(newBlock.y));
 				ssc->args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-				ssc->context = getName();
+				ssc->context = m_worldName;
 				result.push_back(ssc);
 			}
 		}
@@ -383,23 +315,6 @@ ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBo
 
 	return result;
 }
-
-ska::Block* ska::World::getHigherBlock(const unsigned int i, const unsigned int j) const {
-	Block* bBot = m_lBot.getBlock(i, j);
-	Block* bMid = m_lMid.getBlock(i, j);
-	Block* bTop = m_lTop.getBlock(i, j);
-
-	if (bTop != nullptr) {
-		return bTop;
-	}
-
-	if (bMid != nullptr) {
-		return bMid;
-	}
-
-	return bBot;
-}
-
 
 unsigned ska::World::getNbrBlocX() const{
     return m_nbrBlockX;
