@@ -14,10 +14,10 @@
 #include "LayerLoader.h"
 
 ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
-    m_windDirection(0),
-    m_nbrBlockX(0),
-    m_nbrBlockY(0),
-    m_blockSize(tailleBloc),
+	m_windDirection(0),
+	m_nbrBlockX(0),
+	m_nbrBlockY(0),
+	m_blockSize(tailleBloc),
 	m_autoScriptsPlayed(false),
 	m_cameraSystem(nullptr),
 	m_correspondanceMapper(chipsetCorrespondanceFilename) {
@@ -57,12 +57,13 @@ bool ska::World::getCollision(const unsigned int x, const unsigned int y) const 
 	return m_collisionProfile.collide(x, y);
 }
 
-void ska::World::update() {
+void ska::World::update(const ska::Rectangle& cameraPos) {
 	for (auto& graphicLayer : m_graphicLayers) {
-		graphicLayer->update();
+		graphicLayer->update(cameraPos);
 	}
 }
 
+/*
 template <class T>
 void EraseAll(std::vector<T>& altered, std::vector<T>& toErase){
 	using std::begin;
@@ -74,6 +75,7 @@ void EraseAll(std::vector<T>& altered, std::vector<T>& toErase){
 		[&](auto x) {return find(begin(toErase), end(toErase), x) != end(toErase); }), end(altered));
 }
 
+
 void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
 	std::vector<ska::Rectangle> doublons;
 	if(outputX.size() > outputY.size()) {
@@ -83,10 +85,11 @@ void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska:
 	}
 
 }
+*/
 
 //TODO => partie physique
 bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
-	Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
+	/*Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
 	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
 	horizontalSegment /= m_blockSize;
 	verticalSegment /= m_blockSize;
@@ -135,7 +138,8 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Recta
 		}
 	);
 
-	return col;
+	return col;*/
+	return false;
 }
 
 void ska::World::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
@@ -148,10 +152,25 @@ const ska::Rectangle* ska::World::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
 
+ska::Layer& ska::World::loadLayer(const std::string& layerFileName){
+	if(m_chipset == nullptr) {
+		throw IllegalStateException("Load a chipset before loading a layer");
+	}
+	ska::LayerLoader layerLoader;
+	auto layerData = layerLoader.load(layerFileName, *m_chipset);
+
+	auto lBot = std::make_unique<ska::Layer>(std::move(layerData.physics));
+	auto result = m_collisionProfile.addLayer(std::move(lBot));
+
+	auto lBotGraphics = std::make_unique<ska::LayerRenderable>(std::move(layerData.graphics), m_chipset->getRenderable(), m_blockSize);
+	m_graphicLayers.push_back(std::move(lBotGraphics));
+	return result;
+}
+
 void ska::World::load(const std::string& fileName, const std::string& chipsetName) {
 	m_autoScriptsPlayed = false;
 	
-	const auto chipsetChanged = m_chipset != nullptr ? m_chipset->getName() != chipsetName : true;
+	const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
 	if (chipsetChanged) {
 		m_chipset = std::make_unique<Chipset>(m_correspondanceMapper, m_blockSize, chipsetName);
 		m_chipsetEvent = std::make_unique<ChipsetEvent>(chipsetName);
@@ -174,28 +193,15 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 		const auto& topLayerName = fileNamePrefix + "T.bmp";
 		const auto& eventLayerName = fileNamePrefix + "E.txt";
 
-		LayerLoader layerLoader;
-		auto layerData = layerLoader.load(botLayerName, *m_chipset);
-		
 		m_collisionProfile.clear();
 		m_graphicLayers.clear();
 
-		//TODO Init in constructors
-		auto lBot = std::make_unique<Layer>();
-		lBot->reset(std::move(layerData.physics));
-		m_collisionProfile.addLayer(std::move(lBot));
+		auto botLayer = loadLayer(botLayerName);
+		loadLayer(midLayerName);
+		loadLayer(topLayerName);
 
-		auto lBotGraphics = std::make_unique<LayerRenderable>(m_blockSize);
-		lBotGraphics->reset(std::move(layerData.graphics));
-		m_graphicLayers.push_back(std::move(lBotGraphics));
-
-
-		//TODO same for mid & top
-		m_lMid.reset(midLayerName);
-		m_lTop.reset(topLayerName);
-
-		m_nbrBlockX = m_lBot.getBlocksX();
-		m_nbrBlockY = m_lBot.getBlocksY();
+		m_nbrBlockX = botLayer.getBlocksX();
+		m_nbrBlockY = botLayer.getBlocksY();
 
 		m_layerE.changeLevel(eventLayerName);
 
@@ -337,47 +343,5 @@ unsigned int ska::World::getBlockSize() const {
 }
 
 
-void ska::World::getRainFromData(std::string ){
-    /*int idsprite, acceleration, density;
-	IniReader reader(stringDataFile);
 
-    if(reader.exists("Rain id_sprite")) {
-		idsprite = reader.get<int>("Rain id_sprite");
-		acceleration = reader.get<int>("Rain acceleration");
-		density = reader.get<int>("Rain density");
-    } else {
-        std::clog << "La pluie est inexistante sur cette map" << std::endl;
-    }*/
-}
-
-void ska::World::getMobSettingsFromData() {
-	m_mobSettings.clear();
-
-	unsigned int i = 0;
-	try {
-        do  {
-            m_mobSettings.push_back(IniReader( "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "Monsters" FILE_SEPARATOR "" + StringUtils::intToStr(i) + ".ini"));
-            i++;
-        } while(m_mobSettings[i-1].isLoaded());
-    } catch (FileException&) {
-        SKA_LOG_INFO("Number of monsters found on map : ", i);
-    }
-
-	//le dernier �l�ment est invalide, on le supprime donc
-	if (!m_mobSettings.empty()) {
-		m_mobSettings.pop_back();
-	}
-
-}
-
-void ska::World::getData() {
-	const auto stringDataFile = "." FILE_SEPARATOR "Levels" FILE_SEPARATOR "" + m_genericName + "" FILE_SEPARATOR "" + m_genericName + ".ini";
-
-    getRainFromData(stringDataFile);
-	getMobSettingsFromData();
-}
-
-std::vector<ska::IniReader>& ska::World::getMobSettings() {
-	return m_mobSettings;
-}
 

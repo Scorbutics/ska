@@ -1,9 +1,10 @@
 #include "Layer.h"
 #include "World.h"
 
-ska::Layer::Layer() : 
+ska::Layer::Layer(ska::Vector2<ska::Block*>&& block) :
 	m_fileWidth(0),
 	m_fileHeight(0) {
+	reset(std::move(block));
 }
 
 unsigned ska::Layer::getBlocksX() const {

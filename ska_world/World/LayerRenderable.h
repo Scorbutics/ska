@@ -12,13 +12,11 @@ namespace ska {
 	class World;
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
-		LayerRenderable(const unsigned int blockSize);
+		LayerRenderable(Vector2<BlockRenderable*>&& block, ChipsetRenderable& chipset, const unsigned int blockSize);
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
-		void reset(Vector2<BlockRenderable*>&& block);
-
-		void update();
+		void update(const ska::Rectangle& cameraPos);
 		void clear();
 
 		void render(const Renderer& renderer) const override;
@@ -27,9 +25,13 @@ namespace ska {
 		BlockRenderable* getBlock(unsigned int i, unsigned int j);
 
 	private:
+
 		const unsigned int m_blockSize;
-		World& m_world;
 		Vector2<BlockRenderable*> m_block;
+		ChipsetRenderable& m_chipset;
+		ska::Rectangle m_lastCameraPos;
+		unsigned int m_width;
+		unsigned int m_height;
 
 	};
 	typedef std::unique_ptr<LayerRenderable> LayerRenderablePtr;

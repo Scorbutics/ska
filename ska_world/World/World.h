@@ -22,7 +22,7 @@ namespace ska {
 	class PrefabEntityManager;
 	class ScriptSleepComponent;
 	class DrawableContainer;
-	typedef char ScriptTriggerType;
+	using ScriptTriggerType = char;
 
 	class World :
 	    public CameraAware,
@@ -42,7 +42,7 @@ namespace ska {
 		unsigned int getPixelWidth() const;
 		unsigned int getPixelHeight() const;
 
-		void update();
+		void update(const ska::Rectangle& cameraPos);
 
 		unsigned int getNbrBlocX() const;
 		unsigned int getNbrBlocY() const;
@@ -70,6 +70,7 @@ namespace ska {
 
 	private:
 		static void getRainFromData(std::string stringDataFile);
+		ska::Layer& loadLayer(const std::string& layerFileName);
 		void getMobSettingsFromData();
 
 		int m_windDirection;

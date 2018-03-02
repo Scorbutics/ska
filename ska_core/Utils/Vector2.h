@@ -15,9 +15,9 @@ namespace ska {
 		}
 		
 		View(const ViewT&) = default;
-		View(ViewT&&) = default;
+		View(ViewT&&) noexcept = default;
 
-		ViewT& operator=(ViewT&&) = default;
+		ViewT& operator=(ViewT&&) noexcept = default;
 		ViewT& operator=(const ViewT&) = default;
 
 		~View() = default;
@@ -74,10 +74,19 @@ namespace ska {
 		Vector2() :
 			Vector2(0) { }
 
-		Vector2(Vector2<T>&&) = default;
+		explicit Vector2(Vector2<T>&& v) noexcept :
+			m_view(*this, v.m_lineSize)  {
+			*this = std::move(v);
+		};
 		Vector2(const Vector2<T>&) = default;
 		
-		Vector2<T>& operator=(Vector2<T>&&) noexcept = default;
+		Vector2<T>& operator=(Vector2<T>&& v) noexcept {
+			std::vector<T>::operator=(v);
+			std::swap(m_lineSize, v.m_lineSize);
+			m_view = ViewV(*this, m_lineSize);
+			return *this;
+		}
+
 		Vector2<T>& operator=(const Vector2<T>&) = default;
 		
 		~Vector2() = default;

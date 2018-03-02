@@ -15,9 +15,10 @@ void ska::CollisionProfile::calculate() const {
 	}
 }
 
-void ska::CollisionProfile::addLayer(LayerPtr l) {
+ska::Layer& ska::CollisionProfile::addLayer(LayerPtr l) {
 	m_layers.push_back(std::move(l));
 	m_mustUpdateCollisions = true;
+	return *m_layers.back().get();
 }
 
 bool ska::CollisionProfile::collide(const unsigned int x, const unsigned int y) const {

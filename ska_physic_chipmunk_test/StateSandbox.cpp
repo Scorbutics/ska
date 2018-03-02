@@ -40,9 +40,11 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
 
-		ska::Vector2<ska::Block*> layerBlocks;
-		loader.load(layerBlocks, m_layerHolder.layerRenderableBlocks, "Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
-	
+		auto layerData = loader.load("Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
+
+		auto layerBlocks = std::move(layerData.physics);
+		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);
+
 		std::unordered_set<ska::Point<int>> remainingBlocks;
 
 

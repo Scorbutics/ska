@@ -9,7 +9,7 @@ namespace ska {
 		CollisionProfile() = default;
 		~CollisionProfile() = default;
 
-		void addLayer(LayerPtr l);
+		ska::Layer& addLayer(LayerPtr l);
 		bool collide(const unsigned int x, const unsigned int y) const;
 		ska::Block const* getBlock(const unsigned int layer, const unsigned x, const unsigned y) const;
 		void clear();

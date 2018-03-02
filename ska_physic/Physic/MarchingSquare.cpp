@@ -55,7 +55,7 @@ ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& lay
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
 			const auto block = layer[x][y];
-			if (block != nullptr && block->getCollision() == BLOCK_COL_YES) {
+			if (block != nullptr && block->getCollision() == ska::BlockCollision::YES) {
 				if (in.count({ x, y }) > 0) {
 					return { x, y };
 				}
@@ -66,24 +66,24 @@ ska::Point<int> ska::MarchingSquare::getStartingPoint(const Vector2<Block*>& lay
 	return { static_cast<int>(width), static_cast<int>(height) };
 }
 
-int GetCollisionBoundChecked(const ska::Vector2<ska::Block*>& layer, const ska::Point<int>& point) {
+ska::BlockCollision GetCollisionBoundChecked(const ska::Vector2<ska::Block*>& layer, const ska::Point<int>& point) {
 	const auto width = layer.lineSize();
 	const auto height = layer.size() / width;
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
 		const auto b = layer[point.x][point.y];
-		return b != nullptr ? b->getCollision() : BLOCK_COL_NO;
+		return b != nullptr ? b->getCollision() : ska::BlockCollision::NO;
 	}
-	return BLOCK_COL_NO;
+	return ska::BlockCollision::NO;
 }
 
 ska::StepDirection ska::MarchingSquare::nextStep(const Vector2<Block*>& layer, const Point<int>& point, const StepDirection& previousStep) {
 	StepDirection result;
 
-	const auto upLeft = GetCollisionBoundChecked(layer, { point.x - 1, point.y - 1 });
-	const auto upRight = GetCollisionBoundChecked(layer, { point.x, point.y - 1 });
-	const auto downLeft = GetCollisionBoundChecked(layer, { point.x - 1, point.y });
-	const auto downRight = GetCollisionBoundChecked(layer, { point.x, point.y });
+	const auto upLeft = GetCollisionBoundChecked(layer, { point.x - 1, point.y - 1 }) != ska::BlockCollision::NO;
+	const auto upRight = GetCollisionBoundChecked(layer, { point.x, point.y - 1 }) != ska::BlockCollision::NO;
+	const auto downLeft = GetCollisionBoundChecked(layer, { point.x - 1, point.y }) != ska::BlockCollision::NO;
+	const auto downRight = GetCollisionBoundChecked(layer, { point.x, point.y }) != ska::BlockCollision::NO;
 
 	const auto state = upLeft + (upRight << 1) + (downLeft << 2) + (downRight << 3);
 
