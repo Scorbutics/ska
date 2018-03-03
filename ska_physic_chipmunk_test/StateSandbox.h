@@ -13,7 +13,7 @@ class LayerHolder : public ska::DrawableFixedPriority {
 public:
 	void render(const ska::Renderer& renderer) const override{
 		const auto width = layerRenderableBlocks.lineSize();
-		const auto height = layerRenderableBlocks.size() / width;
+		const auto height = width == 0 ? 0 : layerRenderableBlocks.size() / width;
 		for (auto x = 0; x < width; x++) {
 			for (auto y = 0; y < height; y++) {
 				const auto& b = layerRenderableBlocks[x][y];

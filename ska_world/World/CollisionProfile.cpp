@@ -2,6 +2,7 @@
 
 #include "Exceptions/IllegalStateException.h"
 #include "CollisionProfile.h"
+#include <cassert>
 
 void ska::CollisionProfile::calculate() const {
 	unsigned int width;
@@ -16,9 +17,15 @@ void ska::CollisionProfile::calculate() const {
 }
 
 ska::Layer& ska::CollisionProfile::addLayer(LayerPtr l) {
+	assert(l != nullptr);
+	auto& result = *l.get();
 	m_layers.push_back(std::move(l));
 	m_mustUpdateCollisions = true;
-	return *m_layers.back().get();
+	return result;
+}
+
+ska::Layer& ska::CollisionProfile::getLayer(const unsigned int index) {
+	return *m_layers[index].get();
 }
 
 bool ska::CollisionProfile::collide(const unsigned int x, const unsigned int y) const {
@@ -48,6 +55,7 @@ std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
 		if (!width.has_value() || !height.has_value()) {
 			width = l->getBlocksX();
 			height = l->getBlocksY();
+			m_collisions.resize(l->getBlocksX(), l->getBlocksY());
 		} else if(width != l->getBlocksX() || height != l->getBlocksY()) {
 			//TODO message
 			throw IllegalStateException("");

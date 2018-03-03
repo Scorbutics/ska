@@ -159,11 +159,11 @@ ska::Layer& ska::World::loadLayer(const std::string& layerFileName){
 	ska::LayerLoader layerLoader;
 	auto layerData = layerLoader.load(layerFileName, *m_chipset);
 
-	auto lBot = std::make_unique<ska::Layer>(std::move(layerData.physics));
-	auto result = m_collisionProfile.addLayer(std::move(lBot));
+	auto l = std::make_unique<ska::Layer>(std::move(layerData.physics));
+	auto& result = m_collisionProfile.addLayer(std::move(l));
 
-	auto lBotGraphics = std::make_unique<ska::LayerRenderable>(std::move(layerData.graphics), m_chipset->getRenderable(), m_blockSize);
-	m_graphicLayers.push_back(std::move(lBotGraphics));
+	auto lGraphics = std::make_unique<ska::LayerRenderable>(std::move(layerData.graphics), m_chipset->getRenderable(), m_blockSize);
+	m_graphicLayers.push_back(std::move(lGraphics));
 	return result;
 }
 
@@ -182,8 +182,6 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 		m_genericName = fndata.name;
 		m_worldName = fndata.path + "/" + fndata.name;
 		m_fileName = fileName;
-
-		getData();
 	}
 
 	if (worldChanged || chipsetChanged) {
@@ -196,12 +194,12 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 		m_collisionProfile.clear();
 		m_graphicLayers.clear();
 
-		auto botLayer = loadLayer(botLayerName);
+		loadLayer(botLayerName);
 		loadLayer(midLayerName);
-		loadLayer(topLayerName);
+		auto topLayer = loadLayer(topLayerName);
 
-		m_nbrBlockX = botLayer.getBlocksX();
-		m_nbrBlockY = botLayer.getBlocksY();
+		m_nbrBlockX = topLayer.getBlocksX();
+		m_nbrBlockY = topLayer.getBlocksY();
 
 		m_layerE.changeLevel(eventLayerName);
 

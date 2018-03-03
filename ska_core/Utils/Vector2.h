@@ -60,7 +60,6 @@ namespace ska {
 		using Parent::cbegin;
 		using Parent::cend;
 		using Parent::size;
-		using Parent::resize;
 		using Parent::reserve;
 		using Parent::push_back;
 		using Parent::emplace_back;
@@ -77,13 +76,13 @@ namespace ska {
 		explicit Vector2(Vector2<T>&& v) noexcept :
 			m_view(*this, v.m_lineSize)  {
 			*this = std::move(v);
-		};
+		}
 		Vector2(const Vector2<T>&) = default;
 		
 		Vector2<T>& operator=(Vector2<T>&& v) noexcept {
-			std::vector<T>::operator=(v);
 			std::swap(m_lineSize, v.m_lineSize);
 			m_view = ViewV(*this, m_lineSize);
+			std::vector<T>::operator=(std::move(v));
 			return *this;
 		}
 
@@ -107,6 +106,11 @@ namespace ska {
 
 		const T& operator() (const std::size_t x) const {
 			return Parent::operator[](x);
+		}
+
+		void resize(const std::size_t width, const std::size_t height) {
+			setLineSize(width);
+			Parent::resize(width * height);
 		}
 
 		void setLineSize(const std::size_t lineSize) {

@@ -37,8 +37,6 @@ namespace ska {
 
 		virtual void load(const std::string& fileName, const std::string& chipsetName);
 
-		std::vector<IniReader>& getMobSettings();
-
 		unsigned int getPixelWidth() const;
 		unsigned int getPixelHeight() const;
 
@@ -49,7 +47,6 @@ namespace ska {
 
 		const Rectangle* getView() const;
 
-		void getData();
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
 		bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
@@ -69,9 +66,7 @@ namespace ska {
 		virtual ~World() = default;
 
 	private:
-		static void getRainFromData(std::string stringDataFile);
 		ska::Layer& loadLayer(const std::string& layerFileName);
-		void getMobSettingsFromData();
 
 		int m_windDirection;
 		int m_nbrBlockX, m_nbrBlockY;

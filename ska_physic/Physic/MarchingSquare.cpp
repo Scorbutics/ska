@@ -1,7 +1,6 @@
+#include <unordered_set>
 #include "MarchingSquare.h"
 #include "Block.h"
-#include "Utils/SkaConstants.h"
-#include <unordered_set>
 
 std::list<ska::Point<int>> ska::MarchingSquare::apply(const Vector2<Block*>& layer, std::unordered_set<Point<int>>& remainingBlocks) {
 	const auto startPoint = getStartingPoint(layer, remainingBlocks);

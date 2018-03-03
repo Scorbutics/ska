@@ -13,6 +13,7 @@
 #include "World/Chipset.h"
 #include "Physic/Vect.h"
 #include "Physic/Space.h"
+#include "World/World.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
@@ -36,23 +37,71 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
 
-		const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
+		/*const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
 		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
 
 		auto layerData = loader.load("Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
 
-		auto layerBlocks = std::move(layerData.physics);
-		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);
+		const auto layerBlocks = std::move(layerData.physics);
+		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);*/
+
+		ska::World world{ 48, "Resources/Chipsets/corr.png" };
+		world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
+		
+		const auto width = world.getNbrBlocX();
+		const auto height = world.getNbrBlocY();
+		
+		//TODO algorithme à part
+		const int blockSize = world.getBlockSize();
+
+		std::vector<ska::Rectangle> physicCollisionMapX;
+		for(auto x = 0; x < width; x++) {
+			auto lastCol = false;
+			for (auto y = 0; y < height; y++) {
+				const auto col = world.getCollision(x, y);
+				if (col) {
+					if (!lastCol) {
+						physicCollisionMapX.push_back(ska::Rectangle{ x * blockSize, y * blockSize, blockSize, blockSize });
+					} else {
+						auto& last = physicCollisionMapX.back();
+						last.h += blockSize;
+					}
+				}
+				lastCol = col;
+			}
+		}
+		
+		std::vector<ska::Rectangle> physicCollisionMapY;
+		for (auto y = 0; y < height; y++) {
+			auto lastCol = false;
+			for (auto x = 0; x < width; x++) {
+				const auto col = world.getCollision(x, y);
+				if (col) {
+					if (!lastCol) {
+						physicCollisionMapY.push_back(ska::Rectangle{ x * blockSize, y * blockSize, blockSize, blockSize });
+					} else {
+						auto& last = physicCollisionMapY.back();
+						last.w += blockSize;
+					}
+				}
+				lastCol = col;
+			}
+		}
+		//fin algo
 
 		std::unordered_set<ska::Point<int>> remainingBlocks;
+		if (physicCollisionMapY.size() > physicCollisionMapX.size()) {
+			m_layerContours.push_back({ physicCollisionMapX });
+		} else {
+			m_layerContours.push_back({ physicCollisionMapY });
+		}
 
-
-		ska::MarchingSquare ms;
+		/*ska::MarchingSquare ms;
 		do {
 			const auto pointList = ms.apply(layerBlocks, remainingBlocks);
 			m_layerContours.push_back({ pointList, 48 });
-		} while (!remainingBlocks.empty());
+		} while (!remainingBlocks.empty());*/
 
 	}
 	return true;
@@ -99,7 +148,8 @@ void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableConta
 	for (auto& l : m_layerContours) {
 		drawables.addHead(l);
 	}
-
+	
+	
 }
 
 void StateSandbox::onEventUpdate(unsigned int) {
