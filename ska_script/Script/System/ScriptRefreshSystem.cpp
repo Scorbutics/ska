@@ -73,7 +73,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		}
 
 		//TODO D�clencher un �v�nement
-		/* World based events */
+		/* TileWorld based events */
 		
 		std::vector<ScriptTriggerType> reasons;
 		const auto blockSize = m_blockContainer.getBlockSize();

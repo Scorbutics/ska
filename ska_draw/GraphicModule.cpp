@@ -47,7 +47,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 
 bool ska::GraphicModule::onStateEvent(StateEvent& se) {
     if(se.type == FIRST_STATE_LOADED) {
-        GameEvent ge(GAME_WINDOW_READY);
+        GameEvent ge(GameEventType::GAME_WINDOW_READY);
         ge.windowWidth = m_mainWindow->getWidth();
         ge.windowHeight = m_mainWindow->getHeight();
         m_eventDispatcher.ska::Observable<GameEvent>::notifyObservers(ge);

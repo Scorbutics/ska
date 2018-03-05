@@ -1,5 +1,4 @@
 #include <algorithm>
-#include "World.h"
 #include "Layer.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
@@ -12,8 +11,9 @@
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Draw/DrawableContainer.h"
 #include "LayerLoader.h"
+#include "TileWorld.h"
 
-ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
+ska::TileWorld::TileWorld(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
 	m_windDirection(0),
 	m_nbrBlockX(0),
 	m_nbrBlockY(0),
@@ -23,14 +23,14 @@ ska::World::World(const unsigned int tailleBloc, const std::string& chipsetCorre
 	m_correspondanceMapper(chipsetCorrespondanceFilename) {
 }
 
-void ska::World::linkCamera(CameraSystem* cs) {
+void ska::TileWorld::linkCamera(CameraSystem* cs) {
 	m_cameraSystem = cs;
 	if (m_cameraSystem != nullptr) {
 		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
 	}
 }
 
-bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
+bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
 	const Layer* l;
 	const auto p1Block = p1 / m_blockSize;
 	const auto p2Block = p2 / m_blockSize;
@@ -43,7 +43,7 @@ bool ska::World::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int l
 	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->getID() == b2->getID()));
 }
 
-bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
+bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
 	const auto blockPos = pos / m_blockSize;
 	if (blockPos.x >= m_nbrBlockX || blockPos.y >= m_nbrBlockY ) {
 		return true;
@@ -53,11 +53,11 @@ bool ska::World::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unorde
 	return result;
 }
 
-bool ska::World::getCollision(const unsigned int x, const unsigned int y) const {
+bool ska::TileWorld::getCollision(const unsigned int x, const unsigned int y) const {
 	return m_collisionProfile.collide(x, y);
 }
 
-void ska::World::update(const ska::Rectangle& cameraPos) {
+void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
 	for (auto& graphicLayer : m_graphicLayers) {
 		graphicLayer->update(cameraPos);
 	}
@@ -88,7 +88,7 @@ void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska:
 */
 
 //TODO => partie physique
-bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
+bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
 	/*Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
 	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
 	horizontalSegment /= m_blockSize;
@@ -142,17 +142,17 @@ bool ska::World::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Recta
 	return false;
 }
 
-void ska::World::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
+void ska::TileWorld::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
 	for (const auto& graphicLayer : m_graphicLayers) {
 		drawables.add(*graphicLayer);
 	}
 }
 
-const ska::Rectangle* ska::World::getView() const {
+const ska::Rectangle* ska::TileWorld::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
 
-ska::Layer& ska::World::loadLayer(const std::string& layerFileName){
+ska::Layer& ska::TileWorld::loadLayer(const std::string& layerFileName){
 	if(m_chipset == nullptr) {
 		throw IllegalStateException("Load a chipset before loading a layer");
 	}
@@ -167,7 +167,7 @@ ska::Layer& ska::World::loadLayer(const std::string& layerFileName){
 	return result;
 }
 
-void ska::World::load(const std::string& fileName, const std::string& chipsetName) {
+void ska::TileWorld::load(const std::string& fileName, const std::string& chipsetName) {
 	m_autoScriptsPlayed = false;
 	
 	const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
@@ -210,7 +210,7 @@ void ska::World::load(const std::string& fileName, const std::string& chipsetNam
 
 }
 
-std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
+std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
 	std::vector<ScriptSleepComponent*> result;
 	if (m_chipsetEvent == nullptr) {
 		return result;
@@ -250,12 +250,12 @@ std::vector<ska::ScriptSleepComponent*> ska::World::chipsetScript(const Point<in
 
 }
 
-ska::Point<int> ska::World::alignOnBlock(const Rectangle& hitbox) const {
+ska::Point<int> ska::TileWorld::alignOnBlock(const Rectangle& hitbox) const {
 	const auto hitBoxBlock = (Point<int>(hitbox) / m_blockSize) * m_blockSize;
 	return Point<int>(hitbox) - hitBoxBlock;
 }
 
-ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const {
+ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const {
 	std::vector<Rectangle> blocksPos;
 	auto hitBoxBlock = (Point<int>(hitBox) + Point<int>(hitBox.w, hitBox.h) / 2) / m_blockSize;
 	auto result = hitBox;
@@ -320,23 +320,23 @@ ska::Rectangle ska::World::placeOnNearestPracticableBlock(const Rectangle& hitBo
 	return result;
 }
 
-unsigned ska::World::getNbrBlocX() const{
+unsigned ska::TileWorld::getNbrBlocX() const{
     return m_nbrBlockX;
 }
 
-unsigned int ska::World::getPixelWidth() const {
+unsigned int ska::TileWorld::getPixelWidth() const {
 	return m_nbrBlockX*m_blockSize;
 }
 
-unsigned ska::World::getNbrBlocY() const{
+unsigned ska::TileWorld::getNbrBlocY() const{
 	return m_nbrBlockY;
 }
 
-unsigned int ska::World::getPixelHeight() const {
+unsigned int ska::TileWorld::getPixelHeight() const {
 	return m_nbrBlockY*m_blockSize;
 }
 
-unsigned int ska::World::getBlockSize() const {
+unsigned int ska::TileWorld::getBlockSize() const {
 	return m_blockSize;
 }
 

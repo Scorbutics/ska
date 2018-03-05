@@ -22,9 +22,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="World\Inputs\KeyboardInputMapContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,6 +38,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World\CollisionProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World\TileAgglomerate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World\TileWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -591,9 +594,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="World\Input\KeyboardInputGUIContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -619,6 +619,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World\CollisionProfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\TileAgglomerate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\TileWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

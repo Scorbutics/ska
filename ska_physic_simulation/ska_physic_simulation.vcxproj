@@ -154,7 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="StateSandbox.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="TileWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

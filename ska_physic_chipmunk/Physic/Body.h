@@ -6,10 +6,17 @@
 namespace ska {
 	namespace cp {
 		class Vect;
+		
+		enum class BodyType {
+			DYNAMIC,
+			KINEMATIC,
+			STATIC
+		};
 
 		class Body :
 			public NonCopyable {
 		public:
+			Body();
 			Body(Body&&) noexcept;
 			Body& operator=(Body&&) noexcept;
 			virtual ~Body();
@@ -22,9 +29,9 @@ namespace ska {
 			cpVect getVelocity() const;
 
 			void setPosition(const Vect& p) const;
+			void setType(BodyType type);
 
 		private:
-			Body();
 			void loadFromMoment(double mass, double moment);
 			void loadFromRadius(double mass, double radius);
 

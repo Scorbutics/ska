@@ -12,14 +12,14 @@ ska::cp::Space::~Space() {
 	free();
 }
 
-ska::cp::Space::Space(Space&& sh) {
+ska::cp::Space::Space(Space&& sh) noexcept{
 	m_space = sh.m_space;
 	m_shapes = std::move(sh.m_shapes);
 	m_bodies = std::move(sh.m_bodies);
 	sh.m_space = nullptr;
 }
 
-ska::cp::Space& ska::cp::Space::operator=(Space&& sh) {
+ska::cp::Space& ska::cp::Space::operator=(Space&& sh) noexcept{
 	std::swap(m_space, sh.m_space);
 	std::swap(m_shapes, sh.m_shapes);
 	std::swap(m_bodies, sh.m_bodies);
@@ -30,18 +30,22 @@ void ska::cp::Space::setGravity(const Vect& v) {
 	cpSpaceSetGravity(m_space, v.vect());
 }
 
-ska::cp::Shape& ska::cp::Space::addShape(Shape&& shape) {
+ska::cp::Shape& ska::cp::Space::addShape(Shape shape) {
 	m_shapes.push_back(std::move(shape));
 	auto& ref = m_shapes.back();
 	cpSpaceAddShape(m_space, ref.shape());
 	return ref;
 }
 
-ska::cp::Body& ska::cp::Space::addBody(Body&& body) {
+ska::cp::Body& ska::cp::Space::addBody(Body body) {
 	m_bodies.emplace_back(std::move(body));
 	auto& ref = m_bodies.back();
 	cpSpaceAddBody(m_space, ref.body());
 	return ref;
+}
+
+std::vector<ska::cp::Body>& ska::cp::Space::getBodies() {
+	return m_bodies;
 }
 
 void ska::cp::Space::step(double timestep) {

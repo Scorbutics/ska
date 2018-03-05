@@ -24,16 +24,16 @@ namespace ska {
 	class DrawableContainer;
 	using ScriptTriggerType = char;
 
-	class World :
+	class TileWorld :
 	    public CameraAware,
 	    public BlockContainer,
 	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
-		World(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename);
+		TileWorld(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename);
 		
-		World(const World&) = delete;
-		World& operator=(const World&) = delete;
+		TileWorld(const TileWorld&) = delete;
+		TileWorld& operator=(const TileWorld&) = delete;
 
 		virtual void load(const std::string& fileName, const std::string& chipsetName);
 
@@ -63,7 +63,7 @@ namespace ska {
 
 		void linkCamera(CameraSystem* cs) override;
 
-		virtual ~World() = default;
+		virtual ~TileWorld() = default;
 
 	private:
 		ska::Layer& loadLayer(const std::string& layerFileName);

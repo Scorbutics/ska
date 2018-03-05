@@ -4,27 +4,34 @@
 #include "Utils/NonCopyable.h"
 
 namespace ska {
+	struct Rectangle;
+}
+
+namespace ska {
 	namespace cp {
+		class Body;
 		class Vect;
 
 		class Shape : 
 			public NonCopyable {
 		public:
-			Shape(Shape&&);
-			Shape& operator=(Shape&& sh);
+			Shape();
+			Shape(Shape&&) noexcept;
+			Shape& operator=(Shape&& sh) noexcept;
 
 			virtual ~Shape();
 			cpShape* shape() const;
 
-			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, float radius);
-			static Shape fromCircle(cpBody *body, float radius, const Vect& offset);
+			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, double radius);
+			static Shape fromCircle(cpBody* body, double radius, const Vect& offset);
+			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius);
 
 			void setFriction(float friction);
 
 		private:
-			Shape();
-			void loadFromSegment(cpBody *body, const Vect& a, const Vect& b, float radius);
-			void loadFromCircle(cpBody *body, float radius, const Vect& offset);
+			void loadFromSegment(cpBody *body, const Vect& a, const Vect& b, double radius);
+			void loadFromBox(cpBody* body, const ska::Rectangle& r, double radius);
+			void loadFromCircle(cpBody *body, double radius, const Vect& offset);
 
 			void free();
 			gsl::owner<cpShape*> m_shape;

@@ -8,6 +8,8 @@
 #include "World/BlockRenderable.h"
 #include "Utils/Vector2.h"
 #include "World/Chipset.h"
+#include "Physic/Space.h"
+#include "Graphic/PositionnedGraphicDrawable.h"
 
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
@@ -34,7 +36,8 @@ public:
 
 class StateSandbox :
 	public ska::StateBase,
-	public ska::SubObserver<ska::GameEvent> {
+	public ska::SubObserver<ska::GameEvent>,
+	public ska::SubObserver<ska::InputMouseEvent> {
 public:
 	StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>&);
 
@@ -44,6 +47,8 @@ public:
 	virtual void onEventUpdate(unsigned int) override;
 
 private:
+	void createBall(const ska::Point<float>& point);
+	bool onMouseEvent(ska::InputMouseEvent& ime);
 	bool onGameEvent(ska::GameEvent& ge);
 
 	LayerHolder m_layerHolder;
@@ -51,6 +56,12 @@ private:
 	
 	ska::ExtensibleGameEventDispatcher<>& m_eventDispatcher;
 	ska::EntityManager& m_entityManager;
-	std::vector<Polygon<int>> m_layerContours;
+	std::vector<ska::Polygon<int>> m_layerContours;
+	
+	ska::Texture m_ballTexture;
+	
+	ska::cp::Space m_space;
+	std::vector<ska::PositionnedGraphicDrawable> m_ballGraphics;
+
 };
 

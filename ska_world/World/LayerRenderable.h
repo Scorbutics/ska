@@ -9,7 +9,7 @@
 class ParticleManager;
 
 namespace ska {
-	class World;
+	class TileWorld;
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
 		LayerRenderable(Vector2<BlockRenderable*>&& block, ChipsetRenderable& chipset, const unsigned int blockSize);

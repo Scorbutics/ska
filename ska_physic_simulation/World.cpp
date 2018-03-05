@@ -1,5 +1,5 @@
 #include "World.h"
 
 World::World() :
-	ska::World(48, "Chipsets/corr.png") {
+	ska::TileWorld(48, "Chipsets/corr.png") {
 }

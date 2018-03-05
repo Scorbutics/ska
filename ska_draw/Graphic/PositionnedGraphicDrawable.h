@@ -30,6 +30,11 @@ namespace ska {
 			return m_priority2D;
 		}
 
+		void move(int x, int y) {
+			m_positionx = x;
+			m_positiony = y;
+		}
+
 		virtual bool isVisible() const override {
 			return true;
 		}

@@ -2,7 +2,7 @@
 #include <unordered_set>
 
 namespace ska {
-	enum GameEventType {
+	enum class GameEventType {
 		GAME_WINDOW_READY,
 		GAME_WINDOW_RESIZED
 	};

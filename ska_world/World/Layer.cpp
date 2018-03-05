@@ -1,5 +1,5 @@
 #include "Layer.h"
-#include "World.h"
+#include "TileWorld.h"
 
 ska::Layer::Layer(ska::Vector2<ska::Block*>&& block) :
 	m_fileWidth(0),

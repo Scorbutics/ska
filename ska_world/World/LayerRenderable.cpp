@@ -1,7 +1,7 @@
 #include "Exceptions/IndexOutOfBoundsException.h"
 #include "Utils/StringUtils.h"
 
-#include "World.h"
+#include "TileWorld.h"
 #include "LayerRenderable.h"
 #include "Draw/Renderer.h"
 

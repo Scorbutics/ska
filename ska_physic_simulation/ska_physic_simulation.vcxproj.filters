@@ -32,7 +32,7 @@
     <ClInclude Include="StateSandbox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
+    <ClInclude Include="TileWorld.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

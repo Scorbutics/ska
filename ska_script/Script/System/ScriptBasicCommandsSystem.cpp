@@ -18,17 +18,17 @@
 #include "../Command/CommandRestoreComponent.h"
 #include "../Command/CommandBlockAuthorize.h"
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, MemoryScript& saveGame) :
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, TileWorld& w, MemoryScript& saveGame) :
 	ScriptAutoSystem(entityManager, w, BasicScriptCommandHelper(w, entityManager), saveGame) {
 
 }
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, TileWorld& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
 	ScriptAutoSystem(entityManager, w, sch, saveGame) {
 
 }
 
-void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(World&, std::unordered_map<std::string, CommandPtr>& c) const {
+void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(TileWorld&, std::unordered_map<std::string, CommandPtr>& c) const {
 	c[CommandEnd::getCmdName()] = std::move(CommandPtr(new CommandEnd(m_entityManager)));
 	c[ControlStatement::getCommandIf()] = std::move(CommandPtr(new CommandIf(m_entityManager)));
 	c[ControlStatement::getCommandElse()] = std::move(CommandPtr(new CommandElse(m_entityManager)));

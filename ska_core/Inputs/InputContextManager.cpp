@@ -54,7 +54,7 @@ void ska::InputContextManager::refresh() {
 
 	if(wi->getWidth() != m_windowInput.getWidth() || wi->getHeight() != m_windowInput.getHeight()) {
 		m_windowInput = *wi;
-		ska::GameEvent ge(GAME_WINDOW_RESIZED);
+		ska::GameEvent ge(GameEventType::GAME_WINDOW_RESIZED);
 		ge.windowHeight = m_windowInput.getHeight();
 		ge.windowWidth = m_windowInput.getWidth();
 		m_eventDispatcher.ska::Observable<ska::GameEvent>::notifyObservers(ge);
