@@ -33,14 +33,14 @@ void ska::TileAgglomerate::apply(const ska::TileWorld& world, ska::Vector2<Merge
 	
 }
 
-std::vector<ska::Rectangle> ska::TileAgglomerate::apply(const ska::TileWorld& world) {
+std::vector<ska::Rectangle> ska::TileAgglomerate::apply(const ska::TileWorld& world, TileAgglomerationPriority priority) {
 	ska::Vector2<MergedTile> layer;
 	const auto width = world.getNbrBlocX();
 	const auto height = world.getNbrBlocY();
 	layer.resize(width, height);
 
-	apply(world, layer, true);
-	apply(world, layer, false);
+	apply(world, layer, priority == TileAgglomerationPriority::HORIZONTAL);
+	apply(world, layer, priority == TileAgglomerationPriority::VERTICAL);
 
 	std::unordered_set<ska::Rectangle> set;
 	for(const auto& b : layer) {

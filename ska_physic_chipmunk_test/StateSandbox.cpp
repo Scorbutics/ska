@@ -111,7 +111,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		
 	
 		for (const auto& r : agglomeratedTiles) {
-			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r, 1.));
+			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r, 0.));
 		}
 
 		m_layerContours.emplace_back(agglomeratedTiles);

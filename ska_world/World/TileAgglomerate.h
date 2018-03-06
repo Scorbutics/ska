@@ -7,6 +7,11 @@
 namespace ska {
 	class TileWorld;
 
+	enum class TileAgglomerationPriority {
+		HORIZONTAL,
+		VERTICAL
+	};
+
 	struct MergedTile {
 		std::optional<ska::Rectangle> area;
 		MergedTile* merged = nullptr;
@@ -19,7 +24,7 @@ namespace ska {
 		TileAgglomerate() = delete;
 		~TileAgglomerate() = default;
 
-		static std::vector<ska::Rectangle> apply(const ska::TileWorld& world);
+		static std::vector<ska::Rectangle> apply(const ska::TileWorld& world, TileAgglomerationPriority priority = TileAgglomerationPriority::HORIZONTAL);
 		
 	private:
 		static bool checkSize(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal);
