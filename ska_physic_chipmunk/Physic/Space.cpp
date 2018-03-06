@@ -48,6 +48,10 @@ std::vector<ska::cp::Body>& ska::cp::Space::getBodies() {
 	return m_bodies;
 }
 
+std::vector<ska::cp::Shape>& ska::cp::Space::getShapes() {
+	return m_shapes;
+}
+
 void ska::cp::Space::step(double timestep) {
 	cpSpaceStep(m_space, timestep);
 }

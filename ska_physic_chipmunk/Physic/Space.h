@@ -23,6 +23,7 @@ namespace ska {
 			Shape& addShape(Shape shape);
 			Body& addBody(Body body);
 			std::vector<ska::cp::Body>& getBodies();
+			std::vector<ska::cp::Shape>& getShapes();
 
 			void step(double timestep);
 

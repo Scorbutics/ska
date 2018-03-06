@@ -1,4 +1,4 @@
-#include <iostream>
+#include "Exceptions/IllegalArgumentException.h"
 #include "SDLRenderer.h"
 #include "Logging/Logger.h"
 #include "SDLWindow.h"

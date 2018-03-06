@@ -58,15 +58,14 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_entityManager(em){}
 
 std::vector<ska::Rectangle> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
-	auto physicCollisionMapX = ska::TileAgglomerate::apply(world, true);
+	/*auto physicCollisionMapX = ska::TileAgglomerate::apply(world, true);
 	auto physicCollisionMapY = ska::TileAgglomerate::apply(world, false);
 
-	std::unordered_set<ska::Point<int>> remainingBlocks;
 	if (physicCollisionMapY.size() > physicCollisionMapX.size()) {
 		return physicCollisionMapY;
-	}
+	}*/
 
-	return physicCollisionMapY;	
+	return ska::TileAgglomerate::apply(world);	
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -107,7 +106,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		
-		m_space.setGravity({ 0., 0.0001 });
+		m_space.setGravity({ 0., 0.01 });
 		m_ballTexture.loadFromColoredRect(10, 10, ska::Color{ 0, 125, 125, 255 });
 		
 	
@@ -135,11 +134,12 @@ void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableConta
 }
 
 void StateSandbox::onEventUpdate(unsigned int timeStep) {
-	
+	m_space.step(timeStep);
+
 	auto index = 0u;
 	for (const auto& ball : m_space.getBodies()) {
 		const auto pos = ball.getPosition();
-		m_space.step(timeStep);
+		
 		m_ballGraphics[index].move(pos.x, pos.y);
 		index++;
 	}
@@ -151,8 +151,8 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	const auto ballBody = &m_space.addBody(ska::cp::Body::fromRadius(1.F, 5.F));
 	ballBody->setPosition(ska::cp::Vect{ point.x, point.y });
 
-	auto& sh = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5.F, ska::cp::Vect{}));
-	sh.setFriction(1.F);
+	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5.F, ska::cp::Vect{}));
+	ballShape.setFriction(500.F);
 	
 	m_ballGraphics.emplace_back(m_ballTexture, 0, 0, 1000, 1000);
 }
