@@ -25,9 +25,9 @@ namespace ska {
 		void load(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
 		virtual ~Texture() = default;
 
-		void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
-		void setBlendMode(int blending) const;
-		void setAlpha(Uint8 alpha) const;
+		void setColor(Uint8 red, Uint8 green, Uint8 blue);
+		void setBlendMode(int blending);
+		void setAlpha(Uint8 alpha);
 		void resize(unsigned int width, unsigned int height);
 
 		unsigned int getWidth() const;
@@ -37,6 +37,6 @@ namespace ska {
 		SDLTexture* getInstance() const;
 
 	public:
-		void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const override;
+		void render(const Renderer& renderer, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
 	};
 }

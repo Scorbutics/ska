@@ -5,6 +5,7 @@
 #include "AnimatedTexture.h"
 #include "SDL_RectConverter.h"
 #include <cassert>
+#include "SDL_PointConverter.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
     m_renderer(nullptr),
@@ -82,7 +83,7 @@ void ska::SDLRenderer::load() {
 	load(m_window.getInstance(), m_index, m_flags);
 }
 
-void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip) const {
+void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
 	auto instance = t.getInstance();
 	if (instance != nullptr) {
 		instance->load(*this);
@@ -96,11 +97,13 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 
 		SDL_Rect rClip;
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
-		SDL_RenderCopy(m_renderer, instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf);
+		SDL_Point pRotationCenter;
+		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }
+		SDL_RenderCopyEx(m_renderer, instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE);
 	}
 }
 
-void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rectangle const* clip) const {
+void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
 	at.refresh();
 
 	auto tmp = at.m_anim.getCurrentFrame();
@@ -116,7 +119,7 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
 		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip != nullptr ? &rClip : nullptr, &rTmp);
 	} else {
-		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp);
+		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp, angle, rotationCenter);
 	}
 
 

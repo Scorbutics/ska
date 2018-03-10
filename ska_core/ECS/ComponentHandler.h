@@ -2,8 +2,8 @@
 #include <vector>
 #include <typeinfo>
 #include "ECSDefines.h"
+#include "SerializableComponent.h"
 #include "ComponentSerializer.h"
-#include "../Utils/Demangle.h"
 #include "../Logging/Logger.h"
 
 namespace ska {
@@ -43,7 +43,7 @@ namespace ska {
 		}
 
 		virtual std::string getComponentField(const EntityId id, const std::string& field) override {
-			return m_components[id].serialize(m_components[id], field, getClassName());
+			return ska::SerializeComponent<T>::serialize(m_components[id], field);
 		}
 
 		unsigned int getMask() const {

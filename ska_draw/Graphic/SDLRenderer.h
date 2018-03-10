@@ -41,12 +41,12 @@ namespace ska {
 		/**
 		* \brief Makes the renderer renders
 		*/
-		void render(const Texture& t, int posX, int posY, Rectangle const*) const override;
+		void render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
 
 		/**
 		* \brief Makes the renderer renders
 		*/
-		void render(const AnimatedTexture& t, int posX, int posY, Rectangle const*) const override;
+		void render(const AnimatedTexture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
 
 		void update() const override;
 

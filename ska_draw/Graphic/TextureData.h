@@ -5,7 +5,7 @@
 
 namespace ska {
     
-	enum EnumTextureType {
+	enum class EnumTextureType {
 		SPRITE,
 		TEXT,
 		RECT

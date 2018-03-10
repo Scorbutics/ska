@@ -1,7 +1,7 @@
 #pragma once
-#include "../../SerializableComponent.h"
+
 namespace ska {
-	class GravityAffectedComponent : public SerializableComponent {
+	class GravityAffectedComponent {
 	public:
 	    GravityAffectedComponent();
 	    ~GravityAffectedComponent() = default;

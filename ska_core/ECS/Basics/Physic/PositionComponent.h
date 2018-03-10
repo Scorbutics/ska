@@ -8,12 +8,12 @@
 #include "../../../Utils/NumberUtils.h"
 
 namespace ska {
-	class PositionComponent : public SerializableComponent {
+	class PositionComponent {
 	public:
 		PositionComponent();
 		PositionComponent(const Point<float>& p);
 		PositionComponent(const Point<int>& p);
-        void operator=(const Point<float>& p);
+        PositionComponent& operator=(const Point<float>& p);
 
 		static Point<float> getCenterPosition(const PositionComponent& pc, const HitboxComponent& hc) {
 			Point<float> result;
@@ -25,7 +25,7 @@ namespace ska {
 		//TODO move vers ska_physic
 		static Point<float> getFrontPosition(const PositionComponent& pc, const HitboxComponent& hc, const AnimationComponent& dac) {
 			Point<float> result;
-			Rectangle absoluteHitbox;
+			Rectangle absoluteHitbox{};
 			absoluteHitbox.x = static_cast<int>((pc.x + static_cast<float>(hc.xOffset)));
 			absoluteHitbox.y = static_cast<int>((pc.y + static_cast<float>(hc.yOffset)));
 			absoluteHitbox.w = static_cast<int>(hc.width);
@@ -33,28 +33,31 @@ namespace ska {
 			result.x = (absoluteHitbox.x + (absoluteHitbox.x + absoluteHitbox.w) + 1) / 2.F;
 			result.y = (absoluteHitbox.y + (absoluteHitbox.y + absoluteHitbox.h) + 1) / 2.F;
 
-			auto fDir = PhysicUtils::getMovement(dac.state, NumberUtils::maximum(static_cast<float>(absoluteHitbox.w), static_cast<float>(absoluteHitbox.h)));
-			auto pos = Point<float>::cartesian(fDir.power, fDir.angle);
+			const auto fDir = PhysicUtils::getMovement(dac.state, NumberUtils::maximum(static_cast<float>(absoluteHitbox.w), static_cast<float>(absoluteHitbox.h)));
+			const auto pos = Point<float>::cartesian(fDir.power, fDir.angle);
 			return result + pos;
 		}
 
-	protected:
-		static std::string serializeX(const SerializableComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).x));
+	private:
+		static std::string serializeX(const PositionComponent& component) {
+			return StringUtils::intToStr(static_cast<int>(component.x));
 		}
 
-		static std::string serializeY(const SerializableComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).y));
+		static std::string serializeY(const PositionComponent& component) {
+			return StringUtils::intToStr(static_cast<int>(component.y));
 		}
 
-		static std::string serializeZ(const SerializableComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(static_cast<const PositionComponent&>(component).z));
+		static std::string serializeZ(const PositionComponent& component) {
+			return StringUtils::intToStr(static_cast<int>(component.z));
 		}
 
 	public:
-		unsigned long x;
-		unsigned long y;
-		unsigned long z;
+		unsigned long x{};
+		unsigned long y{};
+		unsigned long z{};
+
+		float rotationX{};
+		float rotationY{};
 	};
 }
 

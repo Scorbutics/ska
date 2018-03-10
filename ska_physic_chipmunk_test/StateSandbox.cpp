@@ -15,42 +15,6 @@
 #include "World/TileAgglomerate.h"
 #include "Physic/MovementSystem.h"
 
-void DoThings() {
-	using ska::cp::Vect;
-	using ska::cp::Body;
-	using ska::cp::Shape;
-	using ska::cp::Space;
-
-	const auto gravity = Vect{ 0, 3 };
-
-	Space space;
-	space.setGravity(gravity);
-
-	auto& ground = space.addShape(Shape::fromSegment(space.getStaticBody(), Vect{ -20, 5 }, Vect{ 20, -5 }, 0));
-	ground.setFriction(1);
-
-	const auto radius = 5.F;
-	const auto mass = 1.F;
-
-	auto& ballBody = space.addBody(Body::fromRadius(mass, radius));
-	ballBody.setPosition(Vect{ 0, 15 });
-
-	auto& ballShape = space.addShape(Shape::fromCircle(ballBody.body(), radius, Vect{}));
-	ballShape.setFriction(0.7F);
-
-	const auto timeStep = 1.0 / 60.0;
-	for (auto time = 0.; time < 20.; time += timeStep) {
-		const auto pos = ballBody.getPosition();
-		const auto vel = ballBody.getVelocity();
-		printf(
-			"Time is %5.2f. ballBody is at (%5.2f, %5.2f). It's velocity is (%5.2f, %5.2f)\n",
-			time, pos.x, pos.y, vel.x, vel.y
-		);
-
-		space.step(timeStep);
-	}
-}
-
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
@@ -91,7 +55,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::DebugCollisionDrawerSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
-		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager));
+		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager, m_space));
 		/*const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
 		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
@@ -107,10 +71,10 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		
-		m_space.setGravity({ 0., 30 });
+		m_space.setGravity({ 0., 1 });
+
 		m_ballTexture.loadFromColoredRect(10, 10, ska::Color{ 0, 125, 125, 255 });
-		
-	
+
 		for (const auto& r : agglomeratedTiles) {
 			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r, 0.));
 		}
@@ -124,7 +88,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 
 
-void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {
+void StateSandbox::onGraphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
 	drawables.addHead(m_layerHolder);
 	for (auto& l : m_layerContours) {
 		drawables.addHead(l);
@@ -135,27 +99,16 @@ void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableConta
 }
 
 void StateSandbox::onEventUpdate(unsigned int timeStep) {
-	m_space.step(timeStep/100.);
-
-	auto index = 0u;
-	
-	for (const auto& ball : m_space.getBodies()) {
-		const auto pos = ball.getPosition();
-		
-		auto& posC = m_entityManager.getComponent<ska::PositionComponent>(m_balls[index]);
-		posC = pos;
-		index++;
-	}
-	
+	m_space.step(timeStep/1000.);
 }
 
 void StateSandbox::createBall(const ska::Point<float>& point) {
 
-	const auto ballBody = &m_space.addBody(ska::cp::Body::fromRadius(1.F, 5.F));
+	const auto ballBody = &m_space.addBody(ska::cp::Body::fromMoment(1., INFINITY));
 	const auto ballBodyIndex = m_space.getBodies().size() - 1;
 	ballBody->setPosition(ska::cp::Vect{ point.x, point.y });
 
-	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5.F, ska::cp::Vect{}));
+	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5., ska::cp::Vect{}));
 	ballShape.setFriction(500.F);
 	
 	auto ballEntity = m_entityManager.createEntity();
@@ -173,7 +126,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 	
-	ska::cp::BodyComponent bc{m_space};
+	ska::cp::BodyComponent bc{};
 	bc.bodyIndex = ballBodyIndex;
 
 	m_entityManager.addComponent(ballEntity, std::move(bc));

@@ -32,6 +32,7 @@ namespace ska {
 		const SDL_PixelFormat * getFormat() const;
 
 		SDL_Surface* getInstance() const;
+		
 
 	private:
 		bool checkSurfaceValidity(const std::string& fileName);

@@ -128,6 +128,6 @@ void ska::AnimatedTexture::nextFrame() {
 	
 }
 
-void ska::AnimatedTexture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
-	renderer.render(*this, posX, posY, clip);
+void ska::AnimatedTexture::render(const Renderer& renderer, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
+	renderer.render(*this, posX, posY, clip, angle, rotationCenter);
 }

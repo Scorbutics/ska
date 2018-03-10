@@ -22,8 +22,8 @@ namespace ska {
 
 		virtual void load() {}
 
-		virtual void render(const Texture& t, int posX, int posY, Rectangle const * clip = nullptr) const = 0;
-		virtual void render(const AnimatedTexture& at, int x, int y, Rectangle const * clip = nullptr) const = 0;
+		virtual void render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle = 0., Point<int> const* rotationCenter = nullptr) const = 0;
+		virtual void render(const AnimatedTexture& at, int x, int y, Rectangle const* clip, double angle = 0., Point<int> const* rotationCenter = nullptr) const = 0;
 
 		virtual SDL_Texture* createTextureFromSurface(const SDLSurface& surface) const = 0;
 		virtual void update() const = 0;

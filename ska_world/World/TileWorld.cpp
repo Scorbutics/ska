@@ -5,10 +5,7 @@
 #include "LayerEvent.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
-#include "Exceptions/FileException.h"
 #include "Utils/FileUtils.h"
-#include "ECS/Basics/Physic/CollisionContact.h"
-#include "Core/CodeDebug/CodeDebug.h"
 #include "Draw/DrawableContainer.h"
 #include "LayerLoader.h"
 #include "TileWorld.h"
@@ -31,7 +28,6 @@ void ska::TileWorld::linkCamera(CameraSystem* cs) {
 }
 
 bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
-	const Layer* l;
 	const auto p1Block = p1 / m_blockSize;
 	const auto p2Block = p2 / m_blockSize;
 	if (p1Block.x >= m_nbrBlockX || p2Block.x >= m_nbrBlockX || p1Block.y >= m_nbrBlockY || p2Block.y >= m_nbrBlockY) {

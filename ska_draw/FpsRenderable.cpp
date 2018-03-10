@@ -29,5 +29,5 @@ void ska::FpsRenderable::setVisible(bool v) {
 }
 
 void ska::FpsRenderable::render(const ska::Renderer& renderer) const {
-	renderer.render(m_fps, 0, 0);
+	renderer.render(m_fps, 0, 0, nullptr, 0.);
 }

@@ -47,7 +47,8 @@ namespace ska {
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
 
 	public:
-		void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const override;
+		void render(const Renderer& renderer, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
+
 	private:
 		Point<int> m_relativePos;
 		Animation m_anim;

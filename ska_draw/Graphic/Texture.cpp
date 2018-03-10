@@ -3,8 +3,7 @@
 #include "Draw/Renderer.h"
 #include "TextureData.h"
 
-ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) : 
-	ManagedResource() {
+ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) {
 	load(id, r, g, b, a);
 }
 
@@ -15,22 +14,22 @@ void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	finalColor.g = static_cast<Uint8>(g);
 	finalColor.r = static_cast<Uint8>(r);
 
-	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, SPRITE, 0));
+	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, EnumTextureType::SPRITE, 0));
 }
 
-void ska::Texture::setColor(Uint8 r, Uint8 g, Uint8 b) const {
+void ska::Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
 	if (m_value != nullptr) {
-		m_value->setColor(r, g, b);
+		m_value->setColor(red, green, blue);
 	}
 }
 
-void ska::Texture::setBlendMode(int blending) const {
+void ska::Texture::setBlendMode(int blending) {
 	if (m_value != nullptr) {
 		m_value->setBlendMode(blending);
 	}
 }
 
-void ska::Texture::setAlpha(Uint8 alpha) const{
+void ska::Texture::setAlpha(Uint8 alpha) {
 	if (m_value != nullptr) {
 		m_value->setBlendMode(alpha);
 	}
@@ -43,11 +42,11 @@ void ska::Texture::resize(unsigned int width, unsigned int height) {
 }
 
 void ska::Texture::loadFromText(unsigned int fontSize, std::string text, Color c) {
-	loadFromKey(TextureData(text, c, ska::Rectangle{}, TEXT, fontSize));
+	loadFromKey(TextureData(text, c, ska::Rectangle{}, EnumTextureType::TEXT, fontSize));
 }
 
 void ska::Texture::loadFromColoredRect(unsigned int width, unsigned int height, Color c) {
-	loadFromKey(TextureData("", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, RECT, 0));
+	loadFromKey(TextureData("", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, EnumTextureType::RECT, 0));
 	lifetimeSeparation();
 	resize(width, height);
 }
@@ -64,8 +63,8 @@ ska::SDLTexture* ska::Texture::getInstance() const {
 	return m_value.get();
 }
 
-void ska::Texture::render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const {
-	renderer.render(*this, posX, posY, clip);
+void ska::Texture::render(const Renderer& renderer, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
+	renderer.render(*this, posX, posY, clip, angle, rotationCenter);
 }
 
 

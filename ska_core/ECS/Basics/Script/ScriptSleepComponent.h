@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
-#include "../../SerializableComponent.h"
 #include "ScriptTriggerType.h"
 
 namespace ska {
-	class ScriptSleepComponent : public SerializableComponent {
+	class ScriptSleepComponent {
 	public:
 		std::string name;
 		std::string context;

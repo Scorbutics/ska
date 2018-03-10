@@ -4,8 +4,7 @@
 namespace ska {
 		
 	class IAnimationStateMachine;
-	class AnimationComponent : 
-		public SerializableComponent {
+	class AnimationComponent {
 	public:
 		AnimationComponent();
 		~AnimationComponent() = default;

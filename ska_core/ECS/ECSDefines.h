@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <unordered_map>
 
 #define SKA_ECS_MAX_ENTITIES 1000
 #define SKA_ECS_MAX_COMPONENTS 50
