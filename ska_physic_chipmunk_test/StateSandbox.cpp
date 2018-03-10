@@ -13,6 +13,7 @@
 #include "Physic/Space.h"
 #include "World/TileWorld.h"
 #include "World/TileAgglomerate.h"
+#include "Physic/MovementSystem.h"
 
 void DoThings() {
 	using ska::cp::Vect;
@@ -90,7 +91,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::DebugCollisionDrawerSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
-
+		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager));
 		/*const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
 		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
@@ -106,7 +107,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		
-		m_space.setGravity({ 0., 0.01 });
+		m_space.setGravity({ 0., 30 });
 		m_ballTexture.loadFromColoredRect(10, 10, ska::Color{ 0, 125, 125, 255 });
 		
 	
@@ -134,13 +135,15 @@ void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableConta
 }
 
 void StateSandbox::onEventUpdate(unsigned int timeStep) {
-	m_space.step(timeStep);
+	m_space.step(timeStep/100.);
 
 	auto index = 0u;
+	
 	for (const auto& ball : m_space.getBodies()) {
 		const auto pos = ball.getPosition();
 		
-		m_ballGraphics[index].move(pos.x, pos.y);
+		auto& posC = m_entityManager.getComponent<ska::PositionComponent>(m_balls[index]);
+		posC = pos;
 		index++;
 	}
 	
@@ -149,10 +152,31 @@ void StateSandbox::onEventUpdate(unsigned int timeStep) {
 void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	const auto ballBody = &m_space.addBody(ska::cp::Body::fromRadius(1.F, 5.F));
+	const auto ballBodyIndex = m_space.getBodies().size() - 1;
 	ballBody->setPosition(ska::cp::Vect{ point.x, point.y });
 
 	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5.F, ska::cp::Vect{}));
 	ballShape.setFriction(500.F);
 	
-	m_ballGraphics.emplace_back(m_ballTexture, 0, 0, 1000, 1000);
+	auto ballEntity = m_entityManager.createEntity();
+	m_entityManager.addComponent(ballEntity, ska::PositionComponent{});
+	
+	ska::GraphicComponent gc;
+	gc.sprites.push_back(m_ballTexture);
+	m_entityManager.addComponent(ballEntity, std::move(gc));
+
+	ska::ForceComponent fc;
+	m_entityManager.addComponent(ballEntity, std::move(fc));
+
+	ska::InputComponent ic;
+	ic.movePower = 1.;
+	
+	m_entityManager.addComponent(ballEntity, std::move(ic));
+	
+	ska::cp::BodyComponent bc{m_space};
+	bc.bodyIndex = ballBodyIndex;
+
+	m_entityManager.addComponent(ballEntity, std::move(bc));
+
+	m_balls.emplace_back(ballEntity);
 }

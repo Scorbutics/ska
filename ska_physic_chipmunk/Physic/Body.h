@@ -28,8 +28,9 @@ namespace ska {
 			cpVect getPosition() const;
 			cpVect getVelocity() const;
 
-			void setPosition(const Vect& p) const;
+			void setPosition(const Vect& p);
 			void setType(BodyType type);
+			void setVelocity(const Vect& v);
 
 		private:
 			void loadFromMoment(double mass, double moment);

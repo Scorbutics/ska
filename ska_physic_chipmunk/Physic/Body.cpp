@@ -43,8 +43,12 @@ cpVect ska::cp::Body::getVelocity() const {
 	return cpBodyGetVelocity(m_body);
 }
 
-void ska::cp::Body::setPosition(const Vect& p) const {
+void ska::cp::Body::setPosition(const Vect& p) {
 	cpBodySetPosition(m_body, p.vect());
+}
+
+void ska::cp::Body::setVelocity(const Vect& v) {
+	cpBodySetVelocity(m_body, v.vect());
 }
 
 void ska::cp::Body::setType(BodyType type) {

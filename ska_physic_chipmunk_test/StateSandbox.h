@@ -62,6 +62,7 @@ private:
 	
 	ska::cp::Space m_space;
 	std::vector<ska::PositionnedGraphicDrawable> m_ballGraphics;
+	std::vector<ska::EntityId> m_balls;
 
 };
 

@@ -52,9 +52,9 @@ namespace ska {
 		}
 
 	public:
-		float x;
-		float y;
-		float z;
+		unsigned long x;
+		unsigned long y;
+		unsigned long z;
 	};
 }
 

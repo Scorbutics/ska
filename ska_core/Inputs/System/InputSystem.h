@@ -5,21 +5,21 @@
 #include "../../ECS/Basics/Physic/ForceComponent.h"
 #include "../../ECS/Basics/Physic/PositionComponent.h"
 #include "../InputContextManager.h"
+#include "../../Utils/SubObserver.h"
 
 namespace ska {
 	struct InputKeyEvent;
 
 	class InputSystem : 
 		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, InputComponent, ForceComponent>, PossibleComponent<>>,
-		public Observer<InputKeyEvent> {
+		public SubObserver<InputKeyEvent> {
 	public:
 		InputSystem(EntityManager& entityManager, GameEventDispatcher& ged);
 		InputSystem& operator=(const InputSystem&) = delete;
-		virtual ~InputSystem();
+		~InputSystem() override = default;
 	
 	private:
 		bool onKeyInputEvent(InputKeyEvent & ike);
-		GameEventDispatcher& m_eventDispatcher;
 
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
