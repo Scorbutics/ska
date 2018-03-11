@@ -73,7 +73,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		
 		m_space.setGravity({ 0., 1 });
 
-		m_ballTexture.loadFromColoredRect(10, 10, ska::Color{ 0, 125, 125, 255 });
+		m_ballTexture.load("Resources/Sprites/2.png");
 
 		for (const auto& r : agglomeratedTiles) {
 			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r, 0.));
@@ -102,12 +102,13 @@ void StateSandbox::onEventUpdate(unsigned int timeStep) {
 
 void StateSandbox::createBall(const ska::Point<float>& point) {
 
-	const auto ballBody = &m_space.addBody(ska::cp::Body::fromMoment(1., INFINITY));
+	const auto ballBody = &m_space.addBody(ska::cp::Body::fromRadius(1., 16.));
 	const auto ballBodyIndex = m_space.getBodies().size() - 1;
-	ballBody->setPosition(ska::cp::Vect{ point.x, point.y });
+	ballBody->setPosition(point);
 
-	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 5., ska::cp::Vect{}));
-	ballShape.setFriction(500.F);
+	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody->body(), 16.));
+	const auto ballShapeIndex = m_space.getShapes().size() - 1;
+	ballShape.setFriction(100.F);
 	
 	auto ballEntity = m_entityManager.createEntity();
 	m_entityManager.addComponent(ballEntity, ska::PositionComponent{});
@@ -124,8 +125,9 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 	
-	ska::cp::BodyComponent bc{};
+	ska::cp::HitboxComponent bc{};
 	bc.bodyIndex = ballBodyIndex;
+	bc.shapeIndex = ballShapeIndex;
 
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <chipmunk.h>
+#include "Point.h"
 
 namespace ska {
 	namespace cp {
@@ -10,6 +11,11 @@ namespace ska {
 			template <class U1, class U2>
 			Vect(const U1& x, const U2& y) : 
 				m_vect(cpv(x, y)) {
+			}
+
+			template <class T>
+			Vect(const Point<T>& p) : 
+				m_vect(cpv(p.x, p.y)) {
 			}
 
 			Vect() : 

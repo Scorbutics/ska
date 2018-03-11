@@ -44,7 +44,7 @@
     <ClInclude Include="Physic\MovementSystem.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\BodyComponent.h">
+    <ClInclude Include="Physic\HitboxComponent.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

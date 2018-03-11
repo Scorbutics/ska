@@ -6,7 +6,7 @@ namespace ska {
 
 	class BalloonDialog;
 
-    enum GUIEventType {
+    enum class GUIEventType {
         REMOVE_WINDOW,
 		ADD_BALLOON,
 		REFRESH_BALLOON

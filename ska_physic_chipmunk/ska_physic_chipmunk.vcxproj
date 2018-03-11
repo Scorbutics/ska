@@ -26,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physic\Body.h" />
-    <ClInclude Include="Physic\BodyComponent.h" />
+    <ClInclude Include="Physic\HitboxComponent.h" />
     <ClInclude Include="Physic\MovementSystem.h" />
     <ClInclude Include="Physic\Shape.h" />
     <ClInclude Include="Physic\Space.h" />

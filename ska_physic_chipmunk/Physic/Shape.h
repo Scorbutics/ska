@@ -2,6 +2,7 @@
 #include <chipmunk.h>
 #include <gsl/pointers>
 #include "Utils/NonCopyable.h"
+#include "Vect.h"
 
 namespace ska {
 	struct Rectangle;
@@ -10,7 +11,6 @@ namespace ska {
 namespace ska {
 	namespace cp {
 		class Body;
-		class Vect;
 
 		class Shape : 
 			public NonCopyable {
@@ -21,9 +21,10 @@ namespace ska {
 
 			virtual ~Shape();
 			cpShape* shape() const;
+			ska::Rectangle getDimensions() const;
 
 			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, double radius);
-			static Shape fromCircle(cpBody* body, double radius, const Vect& offset);
+			static Shape fromCircle(cpBody* body, double radius, const Vect& offset = Vect{});
 			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius);
 
 			void setFriction(float friction);

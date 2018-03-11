@@ -56,9 +56,9 @@ namespace ska {
 
 
 	public:
-		unsigned long x{};
-		unsigned long y{};
-		unsigned long z{};
+		long x{};
+		long y{};
+		long z{};
 
 		float rotationX{};
 		float rotationY{};

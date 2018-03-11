@@ -29,6 +29,11 @@ cpShape* ska::cp::Shape::shape() const {
 	return m_shape;
 }
 
+ska::Rectangle ska::cp::Shape::getDimensions() const {
+	const auto& bb = cpShapeGetBB(m_shape);
+	return {static_cast<int>(bb.l), static_cast<int>(bb.t), static_cast<int>(bb.r - bb.l), static_cast<int>(bb.t - bb.b)};
+}
+
 ska::cp::Shape::Shape(Shape&& sh) noexcept{
 	m_shape = sh.m_shape;
 	sh.m_shape = nullptr;

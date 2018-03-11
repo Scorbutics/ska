@@ -21,6 +21,8 @@ namespace ska {
 			Body& operator=(Body&&) noexcept;
 			virtual ~Body();
 			cpBody* body() const;
+			cpVect getRotation() const;
+			void addForce(const Vect& force);
 
 			static Body fromMoment(double mass, double moment);
 			static Body fromRadius(double mass, double radius);

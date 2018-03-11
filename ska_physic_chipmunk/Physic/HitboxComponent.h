@@ -2,8 +2,9 @@
 
 namespace ska {
 	namespace cp {
-		struct BodyComponent {
+		struct HitboxComponent {
 			std::size_t bodyIndex{};
+			std::size_t shapeIndex{};
 		};
 	}
 }
