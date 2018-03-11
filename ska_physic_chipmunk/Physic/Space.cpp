@@ -2,6 +2,7 @@
 #include "Space.h"
 #include "Vect.h"
 #include "Shape.h"
+#include "../Constraint.h"
 
 ska::cp::Space::Space() : 
 	m_space(nullptr) {
@@ -28,6 +29,13 @@ ska::cp::Space& ska::cp::Space::operator=(Space&& sh) noexcept{
 
 void ska::cp::Space::setGravity(const Vect& v) {
 	cpSpaceSetGravity(m_space, v.vect());
+}
+
+ska::cp::Constraint& ska::cp::Space::addConstraint(Constraint c) {
+	m_constraints.emplace_back(std::move(c));
+	auto& ref = m_constraints.back();
+	cpSpaceAddConstraint(m_space, ref.constraint());
+	return ref;
 }
 
 ska::cp::Shape& ska::cp::Space::addShape(Shape shape) {

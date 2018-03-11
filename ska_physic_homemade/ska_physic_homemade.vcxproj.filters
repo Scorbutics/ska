@@ -22,6 +22,13 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physic\System\CollisionSystem.cpp" />
+    <ClCompile Include="Physic\System\DebugWorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\EntityCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\GravitySystem.cpp" />
+    <ClCompile Include="Physic\System\MovementSystem.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h">
@@ -462,6 +469,14 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Physic\System\CollisionSystem.h" />
+    <ClInclude Include="Physic\System\DebugWorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\EntityCollisionResponse.h" />
+    <ClInclude Include="Physic\System\GravitySystem.h" />
+    <ClInclude Include="Physic\System\MovementSystem.h" />
+    <ClInclude Include="Physic\System\WorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\WorldCollisionSystem.h" />
+    <ClInclude Include="Physic\PhysicDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_physic\CMakeLists.txt" />

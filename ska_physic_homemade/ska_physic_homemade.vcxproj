@@ -263,6 +263,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Physic\System\CollisionSystem.cpp" />
+    <ClCompile Include="Physic\System\DebugWorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\EntityCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\GravitySystem.cpp" />
+    <ClCompile Include="Physic\System\MovementSystem.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionResponse.cpp" />
+    <ClCompile Include="Physic\System\WorldCollisionSystem.cpp" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
@@ -416,6 +423,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.cpp" />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.cpp" />
+    <ClInclude Include="Physic\PhysicDefines.h" />
+    <ClInclude Include="Physic\System\CollisionSystem.h" />
+    <ClInclude Include="Physic\System\DebugWorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\EntityCollisionResponse.h" />
+    <ClInclude Include="Physic\System\GravitySystem.h" />
+    <ClInclude Include="Physic\System\MovementSystem.h" />
+    <ClInclude Include="Physic\System\WorldCollisionResponse.h" />
+    <ClInclude Include="Physic\System\WorldCollisionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_physic\ZERO_CHECK.vcxproj">

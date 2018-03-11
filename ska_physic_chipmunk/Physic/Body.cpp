@@ -27,8 +27,12 @@ cpVect ska::cp::Body::getRotation() const {
 	return cpBodyGetRotation(m_body);
 }
 
-void ska::cp::Body::addForce(const Vect& force) {
+void ska::cp::Body::applyForce(const Vect& force) {
 	cpBodyApplyForceAtLocalPoint(m_body, force.vect(), cpvzero);
+}
+
+void ska::cp::Body::applyImpulse(const Vect& impulse) {
+	cpBodyApplyImpulseAtLocalPoint(m_body, impulse.vect(), cpvzero);
 }
 
 ska::cp::Body ska::cp::Body::fromMoment(double mass, double moment) {

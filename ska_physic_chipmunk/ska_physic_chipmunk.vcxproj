@@ -23,8 +23,10 @@
     <ClCompile Include="Physic\MovementSystem.cpp" />
     <ClCompile Include="Physic\Shape.cpp" />
     <ClCompile Include="Physic\Space.cpp" />
+    <ClCompile Include="Constraint.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constraint.h" />
     <ClInclude Include="Physic\Body.h" />
     <ClInclude Include="Physic\HitboxComponent.h" />
     <ClInclude Include="Physic\MovementSystem.h" />

@@ -4,6 +4,7 @@
 #include "Utils/NonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
+#include "../Constraint.h"
 
 namespace ska {
 	namespace cp {
@@ -20,6 +21,7 @@ namespace ska {
 			cpBody* getStaticBody();
 			
 			void setGravity(const Vect& v);
+			Constraint&  addConstraint(Constraint c);
 			Shape& addShape(Shape shape);
 			Body& addBody(Body body);
 			std::vector<ska::cp::Body>& getBodies();
@@ -33,6 +35,7 @@ namespace ska {
 
 			std::vector<Shape> m_shapes;
 			std::vector<Body> m_bodies;
+			std::vector<Constraint> m_constraints;
 			gsl::owner<cpSpace*> m_space;
 		};
 	}
