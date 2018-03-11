@@ -6,7 +6,7 @@
 namespace ska {
 	
 	/**
-	 * \brief Indicates that the component inherited will be able to be serialized and deserialized from a character string.
+	 * \brief Indicates that the component will be able to be serialized and deserialized from a character string.
 	 * For example, it allows to do component instantiation from the scripting part of the engine.
 	 */
 	template <class Component>
@@ -25,7 +25,7 @@ namespace ska {
 
 	template <class Component>
 	std::string SerializeComponent<Component>::serialize(const Component& component, const std::string& field) {
-		const auto fullFieldName = ComponentHandler<Component>::getClassName() + "." + field;
+		const auto fullFieldName = /*Component::getClassName() + */"." + field;
 		if (m_fieldSerializer.find(fullFieldName) != m_fieldSerializer.end()) {
 			return (m_fieldSerializer[fullFieldName])(component);
 		}
@@ -34,7 +34,7 @@ namespace ska {
 
 	template<class Component>
 	void SerializeComponent<Component>::addFieldSerializer(FieldSerializer serializer, const std::string & fieldName) {
-		const auto fullFieldName = ComponentHandler<Component>::getClassName() + "." + fieldName;
+		const auto fullFieldName = /*Component::getClassName() + */"." + fieldName;
 		m_fieldSerializer.emplace(fullFieldName, serializer);
 	}
 

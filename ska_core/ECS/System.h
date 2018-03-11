@@ -80,22 +80,22 @@ namespace ska {
         bool onComponentModified(const EntityEventType& e, const EntityComponentsMask& mask, EntityId entityId) {
 
             /* An entity belongs to the system ONLY IF it has ALL the requiered components of the system */
-            auto resultMask = mask & m_systemComponentMask;
+	        const auto resultMask = mask & m_systemComponentMask;
 
             switch (e) {
-            case COMPONENT_ADD:
+            case EntityEventType::COMPONENT_ADD:
                 if (resultMask == m_systemComponentMask && m_processed.count(entityId) == 0) {
                     m_processed.insert(entityId);
                 }
                 break;
 
-            case COMPONENT_REMOVE:
+            case EntityEventType::COMPONENT_REMOVE:
                 if (resultMask != m_systemComponentMask && m_processed.count(entityId) > 0) {
                     m_processed.erase(entityId);
                 }
                 break;
 
-            case COMPONENT_ALTER:
+            case EntityEventType::COMPONENT_ALTER:
                 if(resultMask == m_systemComponentMask) {
                     m_processed.insert(entityId);
                 } else {
@@ -127,11 +127,11 @@ namespace ska {
 			return m_entityManager.createEntityNoThrow();
 		}
 
-		void removeEntity(EntityId entity) const {
+		void removeEntity(const EntityId& entity) const {
 			m_entityManager.removeEntity(entity);
         }
 
-		void refreshEntity(EntityId entity) const {
+		void refreshEntity(const EntityId& entity) const {
 			m_entityManager.refreshEntity(entity);
         }
     };

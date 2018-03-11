@@ -1,11 +1,10 @@
 #pragma once
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/SerializableComponent.h"
 #include "Point.h"
 #include "Utils/TimeUtils.h"
 
 namespace ska {
-	class IADefinedMovementComponent : public SerializableComponent {
+	class IADefinedMovementComponent {
 	public:
 		IADefinedMovementComponent(): 
 			speed(5.F) {

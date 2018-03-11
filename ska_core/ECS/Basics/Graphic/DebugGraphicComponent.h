@@ -1,6 +1,5 @@
 #pragma once
 #include <queue>
-#include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
 

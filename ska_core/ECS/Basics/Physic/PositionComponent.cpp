@@ -1,4 +1,5 @@
 #include "PositionComponent.h"
+#include "../../SerializeComponent.h"
 
 ska::PositionComponent::PositionComponent() {
     static auto initialized = false;

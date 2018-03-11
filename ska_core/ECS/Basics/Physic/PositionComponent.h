@@ -1,5 +1,4 @@
 #pragma once
-#include "../../SerializableComponent.h"
 #include "../../../Utils/StringUtils.h"
 #include "../../../Utils/PhysicUtils.h"
 #include "../../../Point.h"
@@ -38,6 +37,10 @@ namespace ska {
 			return result + pos;
 		}
 
+		static std::string getClassName() {
+			return "PositionComponent";
+		}
+
 	private:
 		static std::string serializeX(const PositionComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(component.x));
@@ -50,6 +53,7 @@ namespace ska {
 		static std::string serializeZ(const PositionComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(component.z));
 		}
+
 
 	public:
 		unsigned long x{};

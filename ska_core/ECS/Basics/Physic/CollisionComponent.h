@@ -1,5 +1,4 @@
 #pragma once
-#include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
 #include "CollisionContact.h"
 

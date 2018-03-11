@@ -86,8 +86,6 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	return true;
 }
 
-
-
 void StateSandbox::onGraphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
 	drawables.addHead(m_layerHolder);
 	for (auto& l : m_layerContours) {
@@ -122,7 +120,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	m_entityManager.addComponent(ballEntity, std::move(fc));
 
 	ska::InputComponent ic;
-	ic.movePower = 1.;
+	ic.movePower = 10.;
 	
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 	

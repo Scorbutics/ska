@@ -70,9 +70,6 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -343,9 +340,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -558,6 +552,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Movable.h" />
     <ClInclude Include="Utils\Vector2.h" />
+    <ClInclude Include="ECS\SerializeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_core\CMakeLists.txt" />

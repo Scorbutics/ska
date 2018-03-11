@@ -15,7 +15,7 @@ namespace ska {
 	typedef std::bitset<SKA_ECS_MAX_COMPONENTS> EntityComponentsMask;
 	typedef std::pair<EntityComponentsMask*, EntityId> EntityData;
 
-	enum EntityEventType {
+	enum class EntityEventType {
 		COMPONENT_ADD,
 		COMPONENT_REMOVE,
 		COMPONENT_ALTER
@@ -29,21 +29,20 @@ namespace ska {
 	public:
 		explicit EntityManager(GameEventDispatcher& ged) : 
 			m_ged(ged), 
-			m_componentMask(), 
 			m_componentMaskCounter(0) { }
 
 		bool checkEntitiesNumber() const;
 		EntityId createEntity();
 		EntityId createEntityNoThrow();
-		void removeEntity(EntityId entity);
+		void removeEntity(const EntityId& entity);
 		void removeEntities(const std::unordered_set<EntityId>& exceptions);
-		void refreshEntity(EntityId entity);
+		void refreshEntity(const EntityId& entity);
 		void refreshEntities();
         void refresh();
 
-		const std::string serializeComponent(const EntityId entityId, const std::string& component, const std::string& field) const;
-		void removeComponent(const EntityId entity, const std::string& component);
-		void addComponent(const EntityId entity, const std::string& component);
+		std::string serializeComponent(const EntityId& entityId, const std::string& component, const std::string& field) const;
+		void removeComponent(const EntityId& entity, const std::string& component);
+		void addComponent(const EntityId& entity, const std::string& component);
 
 		template <class T>
 		void addComponent(EntityId entity, T&& component) {
@@ -76,12 +75,6 @@ namespace ska {
 			return components.getMask();
 		}
 
-        template <class T>
-		std::string getComponentName() {
-			ComponentHandler<T>& components = this->template getComponents<T>();
-			return components.getClassName();
-		}
-
 		virtual ~EntityManager() = default;
 
 	private:
@@ -94,7 +87,7 @@ namespace ska {
 
 		std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
 
-		void innerRemoveEntity(EntityId entity, ECSEvent& ecsEvent);
+		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
@@ -102,8 +95,8 @@ namespace ska {
 			return components;
 		}
 
-		void commonRemoveComponent(EntityId entity, ComponentSerializer& components);
-		void commonAddComponent(EntityId entity, const unsigned int componentMask);
+		void commonRemoveComponent(const EntityId& entity, ComponentSerializer& components);
+		void commonAddComponent(const EntityId& entity, const unsigned int componentMask);
 
 	};
 

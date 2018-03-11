@@ -1,13 +1,14 @@
 #pragma once
-#include "../../SerializableComponent.h"
+
+#include "../../ECSDefines.h"
 
 namespace ska {
-		
+
 	class IAnimationStateMachine;
 	class AnimationComponent {
 	public:
 		AnimationComponent();
-		~AnimationComponent() = default;
+		~AnimationComponent();
 
 		void setASM(IAnimationStateMachine& afsm, EntityId& entity);
 		IAnimationStateMachine* getASM() const;
