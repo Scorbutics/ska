@@ -1,5 +1,4 @@
 #include "StateSandbox.h"
-#include "Constraint.h"
 #include "Graphic/System/GraphicSystem.h"
 #include "Graphic/System/CameraFixedSystem.h"
 #include "Graphic/System/AnimationSystem.h"
@@ -15,6 +14,7 @@
 #include "World/TileWorld.h"
 #include "World/TileAgglomerate.h"
 #include "Physic/MovementSystem.h"
+#include "Physic/BuildHitbox.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -102,16 +102,8 @@ void StateSandbox::onEventUpdate(unsigned int timeStep) {
 }
 
 void StateSandbox::createBall(const ska::Point<float>& point) {
-
-	auto& ballBody = m_space.addBody(ska::cp::Body::fromRadius(1., 16.));
-	const auto ballBodyIndex = m_space.getBodies().size() - 1;
-	ballBody.setPosition(point);
-
-	auto& ballShape = m_space.addShape(ska::cp::Shape::fromCircle(ballBody.body(), 16.));
-	const auto ballShapeIndex = m_space.getShapes().size() - 1;
-	ballShape.setFriction(0.7F);
-	
 	auto ballEntity = m_entityManager.createEntity();
+
 	m_entityManager.addComponent(ballEntity, ska::PositionComponent{});
 	
 	ska::GraphicComponent gc;
@@ -126,18 +118,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 	
-	ska::cp::HitboxComponent bc{};
-	bc.bodyIndex = ballBodyIndex;
-	bc.shapeIndex = ballShapeIndex;
-
-	auto& pj = m_space.addConstraint(ska::cp::Constraint::buildPivotJoint(*m_space.getStaticBody(), *ballBody.body(), ska::cp::Vect{}, ska::cp::Vect{}));
-    pj.setMaxForce(100.0);   
-	pj.setMaxBias(0); 
-    
-	auto& gj = m_space.addConstraint(ska::cp::Constraint::buildGearJoint(*m_space.getStaticBody(), *ballBody.body(), 0., 1.));
-    gj.setMaxForce(500.0);
-    gj.setMaxBias(0);
-
+	auto bc = ska::cp::BuildHitbox(m_space, point, 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

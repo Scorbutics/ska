@@ -62,7 +62,7 @@ bool ska::TileAgglomerate::checkSize(unsigned int blockSize, const std::optional
 	return horizontal ? value->h == blockSize : value->w == blockSize;
 }
 
-ska::MergedTile& ska::TileAgglomerate::mergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
+ska::TileAgglomerate::MergedTile& ska::TileAgglomerate::mergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
 	const auto canBeMerged = withLastTile != nullptr && (checkSize(blockSize, withLastTile->area, horizontal));	
 	if (!canBeMerged) {
 		currentTileToMerge.area = currentArea;

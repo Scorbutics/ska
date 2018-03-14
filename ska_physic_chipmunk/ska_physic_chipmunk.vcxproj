@@ -20,14 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Physic\Body.cpp" />
+    <ClCompile Include="Physic\BuildHitbox.cpp" />
+    <ClCompile Include="Physic\Constraint.cpp" />
     <ClCompile Include="Physic\MovementSystem.cpp" />
     <ClCompile Include="Physic\Shape.cpp" />
     <ClCompile Include="Physic\Space.cpp" />
-    <ClCompile Include="Constraint.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constraint.h" />
+    <ClInclude Include="BuildHitbox.h" />
     <ClInclude Include="Physic\Body.h" />
+    <ClInclude Include="Physic\Constraint.h" />
     <ClInclude Include="Physic\HitboxComponent.h" />
     <ClInclude Include="Physic\MovementSystem.h" />
     <ClInclude Include="Physic\Shape.h" />
