@@ -1,89 +1,704 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="6" />
+	<FileVersion major="1" minor="6"/>
 	<Project>
-		<Option title="ska_world" />
-		<Option pch_mode="2" />
-		<Option compiler="gcc" />
-		<MakeCommands>
-			<Build command="" />
-			<CompileFile command="" />
-			<Clean command="" />
-			<DistClean command="" />
-			<AskRebuildNeeded command="" />
-			<SilentBuild command=" &gt; $(CMD_NULL)" />
-		</MakeCommands>
+		<Option title="ska_world"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
 		<Build>
-			<Target title="Debug">
-				<Option output="../Debug/ska_world" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="" />
-				<Option object_output="obj/Debug/" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Option createDefFile="1" />
-				<Option projectCompilerOptionsRelation="-1" />
-				<Option projectLinkerOptionsRelation="-1" />
-				<Option projectLibDirsRelation="-1" />
+			<Target title="all">
+				<Option working_dir="C:/Documents/Perso/ska/ska_world"/>
+				<Option type="4"/>
 				<MakeCommands>
-					<Build command="" />
-					<CompileFile command="" />
-					<Clean command="" />
-					<DistClean command="" />
-					<AskRebuildNeeded command="" />
-					<SilentBuild command=" &gt; $(CMD_NULL)" />
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="Release">
-				<Option output="ska_world" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option createDefFile="1" />
-				<Option createStaticLib="1" />
+			<Target title="ska_world">
+				<Option output="C:/Documents/Perso/ska/Debug/libska_world.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Documents/Perso/ska/ska_world"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
 				<Compiler>
-					<Add option="-O2" />
-					<Add option="-Wall" />
-					<Add option="-DBUILD_DLL" />
+					<Add directory="/include"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_core"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_draw"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_physic"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/backward"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include-fixed"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/../../../../i686-w64-mingw32/include"/>
 				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add library="user32" />
-					<Add directory="." />
-				</Linker>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 ska_world"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ska_world/fast">
+				<Option output="C:/Documents/Perso/ska/Debug/libska_world.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Documents/Perso/ska/ska_world"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/include"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_core"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_draw"/>
+					<Add directory="C:/Documents/Perso/ska/ska_world/../ska_physic"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/backward"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include-fixed"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/../../../../i686-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 ska_world/fast"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Documents/Perso/ska/ska_world"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Documents/Perso/ska/ska_world"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_world/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add directory="../ska_core" />
-			<Add directory="../ska_draw" />
-			<Add directory="../ska_physic" />
-		</Compiler>
-		<Unit filename="World/Block.cpp" />
-		<Unit filename="World/Block.h" />
-		<Unit filename="World/BlockRenderable.cpp" />
-		<Unit filename="World/BlockRenderable.h" />
-		<Unit filename="World/Chipset.cpp" />
-		<Unit filename="World/Chipset.h" />
-		<Unit filename="World/ChipsetHolder.cpp" />
-		<Unit filename="World/ChipsetHolder.h" />
-		<Unit filename="World/ChipsetRenderable.cpp" />
-		<Unit filename="World/ChipsetRenderable.h" />
-		<Unit filename="World/Inputs/KeyboardInputGUIContext.cpp" />
-		<Unit filename="World/Inputs/KeyboardInputGUIContext.h" />
-		<Unit filename="World/Inputs/KeyboardInputMapContext.cpp" />
-		<Unit filename="World/Inputs/KeyboardInputMapContext.h" />
-		<Unit filename="World/Layer.cpp" />
-		<Unit filename="World/Layer.h" />
-		<Unit filename="World/LayerEvent.cpp" />
-		<Unit filename="World/LayerEvent.h" />
-		<Unit filename="World/LayerRenderable.cpp" />
-		<Unit filename="World/LayerRenderable.h" />
-		<Unit filename="World/World.cpp" />
-		<Unit filename="World/World.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-			<lib_finder disable_auto="1" />
-		</Extensions>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/CodeDebug/CodeDebug.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/GameConfiguration.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/GameCore.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/Priorized.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/State/State.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/State/StateBase.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/State/StateData.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/State/StateHolder.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Core/Window.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/CoreModule.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/BlockContainer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/CollisionEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/ECSEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/EventDispatcher.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/ExtensibleGameEventDispatcher.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/GUIEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/GameEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/GameEventDispatcher.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/GameLibrariesInitializedEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/InputKeyEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/InputMouseEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/SoundEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/StateEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/Events/WorldEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Data/MemoryScript.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/CameraAware.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/Color.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/Drawable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/DrawableContainer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/DrawableContainerBase.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/DrawableFixedPriority.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/IGraphicSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/PriorityQueueDrawableContainer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/Renderable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/Renderer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Draw/VectorDrawableContainer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/AnimationComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/CameraFocusedComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/DebugGraphicComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/DeleterComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/DialogComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Graphic/IAnimationStateMachine.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Input/InputComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/BlockAllowance.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/CollidableComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/CollisionComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/CollisionContact.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/ForceComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/GravityAffectedComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/HitboxComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/MovementComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/PositionComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Physic/WorldCollisionComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Script/ScriptAwareComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Script/ScriptPositionedGetter.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Script/ScriptRegisterer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Script/ScriptSleepComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/Basics/Script/ScriptTriggerType.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ComponentHandler.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ComponentSafeAccessor.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ComponentSerializer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ComponentUnsafeAccessor.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ECSDefines.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/EntityManager.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/ISystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/SerializeComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/System.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/ECS/SystemMaskGenerator.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/CorruptedFileException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/FileException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/GenericException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/IllegalArgumentException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/IllegalStateException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/IndexOutOfBoundsException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/InputException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/InvalidPathException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/NumberFormatException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/ScriptDiedException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/ScriptException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/ScriptNotActivatedException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/ScriptSyntaxError.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/ScriptUnknownCommandException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/StateDiedException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Exceptions/TerminateProcessException.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/GameApp.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/EnumContextManager.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/InputAction.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/InputContext.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/InputContextManager.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/InputRange.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/InputToggle.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/KeyInput.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/KeyboardInputContext.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/MouseInput.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/RawInputListener.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/Readers/IniReader.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/Readers/Readinifile.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/System/InputSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Inputs/WindowInput.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Logging/ColorStream.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Logging/Logger.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Point.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Rectangle.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Task/CompoundTask.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Task/Runnable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Task/Task.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Task/TaskQueue.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Task/WorkNode.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Ticked.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/ContainsTypeTuple.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Demangle.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/FileUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Force.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/FormalCalculation/CalculOperators.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/FormalCalculation/FormalCalculator.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Identity.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/ManagedResource.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Movable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/NonCopyable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/NumberUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/OSSpecific/FileUtilsUnix.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/OSSpecific/FileUtilsWin.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Observable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Observer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/OutputUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/PhysicUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/RectangleUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Refreshable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Singleton_template.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/SkaConstants.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/SpritePath.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/StringUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/SubObserver.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/TimeUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/TupleUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/Vector2.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/VectorUtils.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_core/Utils/unsmartptr.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/FpsCalculator.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/FpsRenderable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/AnimatedTexture.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/Animation.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/DebugEntityCollisionResponse.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/Font.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/GifTexture.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/GraphicComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/HasShadowComponent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/PositionnedGraphicDrawable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDLFont.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDLRenderer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDLSurface.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDLTexture.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDLWindow.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDL_PointConverter.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/SDL_RectConverter.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/AbstractGraphicSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/AnimationStateMachine.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/AnimationSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/CameraFixedSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/CameraFollowSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/CameraSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/DebugCollisionDrawerSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/DeleterSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/GraphicSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/JumpAnimationStateMachine.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/ShadowSystem.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/System/WalkAnimationStateMachine.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/Texture.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/Graphic/TextureData.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_draw/GraphicModule.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic/Physic/Block.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic/Physic/MarchingSquare.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/BlockRenderable.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/BlockRenderable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Chipset.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Chipset.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetCorrespondanceMapper.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetCorrespondanceMapper.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetEvent.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetHolder.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetHolder.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetRenderable.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/ChipsetRenderable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/CollisionProfile.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/CollisionProfile.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Inputs/KeyboardInputGUIContext.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Inputs/KeyboardInputGUIContext.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Inputs/KeyboardInputMapContext.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Inputs/KeyboardInputMapContext.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Layer.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/Layer.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerData.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerEvent.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerEvent.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerLoader.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerLoader.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerRenderable.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/LayerRenderable.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/TileAgglomerate.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/TileAgglomerate.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/TileWorld.cpp">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/World/TileWorld.h">
+			<Option target="ska_world"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_world/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
 	</Project>
 </CodeBlocks_project_file>

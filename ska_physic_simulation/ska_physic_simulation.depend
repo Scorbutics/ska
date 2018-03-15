@@ -72,7 +72,7 @@
 	"../Utils/NonCopyable.h"
 	"ColorStream.h"
 
-1514984342 c:\documents\perso\ska\ska_core\utils\noncopyable.h
+1519720452 c:\documents\perso\ska\ska_core\utils\noncopyable.h
 
 1514984342 c:\documents\perso\ska\ska_core\logging\colorstream.h
 	<ostream>
@@ -82,28 +82,27 @@
 1514984340 c:\documents\perso\ska\ska_core\data\events\collisionevent.h
 	"../../ECS/ECSDefines.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\ecsdefines.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\ecsdefines.h
 	<vector>
-	<unordered_map>
 
 1514984340 c:\documents\perso\ska\ska_core\data\events\worldevent.h
 
-1517212798 c:\documents\perso\ska\ska_core\data\events\gameevent.h
+1521115663 c:\documents\perso\ska\ska_core\data\events\gameevent.h
 	<unordered_set>
 
-1514984340 c:\documents\perso\ska\ska_core\data\events\guievent.h
+1521115663 c:\documents\perso\ska\ska_core\data\events\guievent.h
 	"../../Point.h"
 
-1514984342 c:\documents\perso\ska\ska_core\point.h
+1521115663 c:\documents\perso\ska\ska_core\point.h
 	"Utils/NumberUtils.h"
 	"Rectangle.h"
 
-1514984342 c:\documents\perso\ska\ska_core\utils\numberutils.h
+1521115663 c:\documents\perso\ska\ska_core\utils\numberutils.h
 	<functional>
 	<random>
-	"../Exceptions/IllegalArgumentException.h"
 
-1517999877 c:\documents\perso\ska\ska_core\rectangle.h
+1521115663 c:\documents\perso\ska\ska_core\rectangle.h
+	"Utils/NumberUtils.h"
 
 1514984340 c:\documents\perso\ska\ska_core\data\events\stateevent.h
 
@@ -115,7 +114,7 @@
 	<unordered_set>
 	"../../ECS/ECSDefines.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\entitymanager.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\entitymanager.h
 	<bitset>
 	<unordered_set>
 	<array>
@@ -127,15 +126,17 @@
 	"../Data/Events/ECSEvent.h"
 	"../Data/Events/GameEventDispatcher.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\componenthandler.h
+1521116846 c:\documents\perso\ska\ska_core\ecs\componenthandler.h
 	<vector>
 	<typeinfo>
+	<optional>
+	<cassert>
 	"ECSDefines.h"
+	"SerializeComponent.h"
 	"ComponentSerializer.h"
-	"../Utils/Demangle.h"
 	"../Logging/Logger.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\componentserializer.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\componentserializer.h
 	<string>
 	"ECSDefines.h"
 
@@ -224,7 +225,7 @@
 1514984342 c:\documents\perso\ska\ska_core\exceptions\inputexception.h
 	"GenericException.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\texture.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\texture.h
 	"Utils/ManagedResource.h"
 	"Utils/SkaConstants.h"
 	"Rectangle.h"
@@ -236,9 +237,9 @@
 	<memory>
 	<unordered_map>
 
-1514984342 c:\documents\perso\ska\ska_core\utils\skaconstants.h
+1521115663 c:\documents\perso\ska\ska_core\utils\skaconstants.h
 
-1514984340 c:\documents\perso\ska\ska_core\draw\renderable.h
+1521115663 c:\documents\perso\ska\ska_core\draw\renderable.h
 	"../Rectangle.h"
 
 1514984342 c:\documents\perso\ska\ska_draw\graphic\sdltexture.h
@@ -246,18 +247,18 @@
 	"SDLSurface.h"
 	"Task/TaskQueue.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\sdlsurface.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\sdlsurface.h
 	<SDL.h>
 	<string>
-	"Color.h"
+	"Draw/Color.h"
 
 1514984342 c:\documents\perso\ska\ska_draw\graphic\color.h
 	<SDL.h>
 	"Utils/NumberUtils.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\texturedata.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\texturedata.h
 	<string>
-	"Color.h"
+	"Draw/Color.h"
 	"Rectangle.h"
 
 1514984343 c:\documents\perso\ska\ska_world\world\chipsetholder.h
@@ -351,8 +352,7 @@
 	"ECS/Basics/Physic/MovementComponent.h"
 	"Utils/SubObserver.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\basics\physic\positioncomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\positioncomponent.h
 	"../../../Utils/StringUtils.h"
 	"../../../Utils/PhysicUtils.h"
 	"../../../Point.h"
@@ -366,14 +366,12 @@
 1514984342 c:\documents\perso\ska\ska_core\utils\force.h
 	"../Rectangle.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\basics\physic\hitboxcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\hitboxcomponent.h
 
-1514984340 c:\documents\perso\ska\ska_core\ecs\basics\graphic\animationcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\graphic\animationcomponent.h
+	"../../ECSDefines.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\basics\physic\movementcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\movementcomponent.h
 
 1517212798 c:\documents\perso\ska\ska_draw\graphic\system\walkanimationstatemachine.h
 	<unordered_map>
@@ -418,12 +416,11 @@
 	<Data/Events/GameEventDispatcher.h>
 	"ECS/Basics/Graphic/DialogComponent.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\graphiccomponent.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\graphiccomponent.h
 	<vector>
 	"AnimatedTexture.h"
-	"ECS/SerializableComponent.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\animatedtexture.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\animatedtexture.h
 	"Animation.h"
 	"Texture.h"
 	"Rectangle.h"
@@ -436,7 +433,7 @@
 	<string>
 	"Rectangle.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\system.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\system.h
 	<unordered_set>
 	"SystemMaskGenerator.h"
 	"ComponentSafeAccessor.h"
@@ -445,7 +442,7 @@
 	"../Utils/Refreshable.h"
 	"ComponentUnsafeAccessor.h"
 
-1514984342 c:\documents\perso\ska\ska_core\ecs\systemmaskgenerator.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\systemmaskgenerator.h
 	"EntityManager.h"
 	"../Exceptions/IllegalStateException.h"
 
@@ -469,16 +466,17 @@
 	"Draw/IGraphicSystem.h"
 	"../PositionnedGraphicDrawable.h"
 
-1514984342 c:\documents\perso\ska\ska_draw\graphic\positionnedgraphicdrawable.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\positionnedgraphicdrawable.h
+	<optional>
 	"Draw/Drawable.h"
 	"Draw/Renderer.h"
 
-1517212798 c:\documents\perso\ska\ska_core\draw\renderer.h
+1521115663 c:\documents\perso\ska\ska_core\draw\renderer.h
 	"../Rectangle.h"
 	"../Point.h"
+	"Color.h"
 
-1514984340 c:\documents\perso\ska\ska_core\ecs\basics\graphic\dialogcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\graphic\dialogcomponent.h
 	"../../../Data/Events/GUIEvent.h"
 
 1514984342 c:\documents\perso\ska\ska_draw\graphic\system\camerafixedsystem.h
@@ -494,9 +492,7 @@
 	"../GraphicComponent.h"
 	"Utils/SubObserver.h"
 
-1514984340 c:\documents\perso\ska\ska_core\ecs\basics\graphic\camerafocusedcomponent.h
-	"../../SerializableComponent.h"
-	"../../../Point.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\graphic\camerafocusedcomponent.h
 
 1514984343 c:\documents\perso\ska\ska_physic\physic\system\movementsystem.h
 	<unordered_set>
@@ -506,8 +502,7 @@
 	"ECS/Basics/Physic/ForceComponent.h"
 	"Ticked.h"
 
-1514984341 c:\documents\perso\ska\ska_core\ecs\basics\physic\forcecomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\forcecomponent.h
 
 1514984342 c:\documents\perso\ska\ska_core\ticked.h
 
@@ -535,16 +530,16 @@
 	"ECS/System.h"
 	"AnimationStateMachine.h"
 
-1514984342 c:\documents\perso\ska\ska_core\inputs\system\inputsystem.h
+1521115663 c:\documents\perso\ska\ska_core\inputs\system\inputsystem.h
 	<unordered_set>
 	"../../ECS/System.h"
 	"../../ECS/Basics/Input/InputComponent.h"
 	"../../ECS/Basics/Physic/ForceComponent.h"
 	"../../ECS/Basics/Physic/PositionComponent.h"
 	"../InputContextManager.h"
+	"../../Utils/SubObserver.h"
 
-1514984340 c:\documents\perso\ska\ska_core\ecs\basics\input\inputcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\input\inputcomponent.h
 
 1514984342 c:\documents\perso\ska\ska_core\inputs\inputcontextmanager.h
 	<vector>
@@ -588,8 +583,7 @@
 
 1514984342 c:\documents\perso\ska\ska_core\inputs\enumcontextmanager.h
 
-1514984341 c:\documents\perso\ska\ska_core\ecs\basics\physic\gravityaffectedcomponent.h
-	"../../SerializableComponent.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\gravityaffectedcomponent.h
 
 1514984343 c:\documents\perso\ska\ska_physic\physic\system\gravitysystem.h
 	<unordered_set>
@@ -603,9 +597,7 @@
 	"ECS/System.h"
 	"ECS/Basics/Graphic/DeleterComponent.h"
 
-1514984340 c:\documents\perso\ska\ska_core\ecs\basics\graphic\deletercomponent.h
-	"../../SerializableComponent.h"
-	"../../../Utils/TimeUtils.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\graphic\deletercomponent.h
 
 1514984342 c:\documents\perso\ska\ska_core\utils\timeutils.h
 
@@ -628,9 +620,7 @@
 	"ECS/Basics/Physic/PositionComponent.h"
 	"ECS/Basics/Physic/HitboxComponent.h"
 
-1517999877 c:\documents\perso\ska\ska_core\ecs\basics\physic\worldcollisioncomponent.h
-	"../../SerializableComponent.h"
-	"../../../Point.h"
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\physic\worldcollisioncomponent.h
 	"CollisionContact.h"
 
 1518000267 c:\documents\perso\ska\ska_core\ecs\basics\physic\collisioncontact.h
@@ -641,9 +631,8 @@
 	"../Rectangle.h"
 	"../Point.h"
 
-1517999877 c:\documents\perso\ska\ska_core\ecs\basics\graphic\debuggraphiccomponent.h
+1521115663 c:\documents\perso\ska\ska_core\ecs\basics\graphic\debuggraphiccomponent.h
 	<queue>
-	"../../SerializableComponent.h"
 	"../../ECSDefines.h"
 	"../Physic/WorldCollisionComponent.h"
 
@@ -651,7 +640,7 @@
 	"World.h"
 	"Draw/DrawableContainer.h"
 
-1516711060 c:\documents\perso\ska\ska_core\draw\drawablecontainer.h
+1519720452 c:\documents\perso\ska\ska_core\draw\drawablecontainer.h
 	<limits>
 	"DrawableFixedPriority.h"
 	"DrawableContainer.h"
@@ -746,10 +735,11 @@
 1514984342 c:\documents\perso\ska\ska_core\exceptions\fileexception.h
 	"InputException.h"
 
-1517212798 c:\documents\perso\ska\ska_draw\graphic\sdlrenderer.h
+1521115663 c:\documents\perso\ska\ska_draw\graphic\sdlrenderer.h
 	"Draw/Renderer.h"
 	"Point.h"
-	"Color.h"
+	"Draw/Color.h"
+	<SDL.h>
 
 1517212798 c:\documents\perso\ska\ska_draw\graphic\sdlwindow.h
 	<SDL.h>
@@ -759,4 +749,11 @@
 1517212798 c:\documents\perso\ska\ska_core\core\window.h
 	<string>
 	<cstdint>
+
+1521116930 c:\documents\perso\ska\ska_core\ecs\serializecomponent.h
+	<functional>
+	<unordered_map>
+
+1521116238 c:\documents\perso\ska\ska_core\draw\color.h
+	"../Utils/NumberUtils.h"
 

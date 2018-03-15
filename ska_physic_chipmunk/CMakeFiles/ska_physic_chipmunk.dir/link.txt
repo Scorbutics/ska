@@ -1,0 +1,2 @@
+C:\mingw\bin\ar.exe qc C:\Documents\Perso\ska\Debug\libska_physic_chipmunk.a  CMakeFiles/ska_physic_chipmunk.dir/Physic/Body.cpp.obj CMakeFiles/ska_physic_chipmunk.dir/Physic/BuildHitbox.cpp.obj CMakeFiles/ska_physic_chipmunk.dir/Physic/Constraint.cpp.obj CMakeFiles/ska_physic_chipmunk.dir/Physic/MovementSystem.cpp.obj CMakeFiles/ska_physic_chipmunk.dir/Physic/Shape.cpp.obj CMakeFiles/ska_physic_chipmunk.dir/Physic/Space.cpp.obj
+C:\mingw\bin\ranlib.exe C:\Documents\Perso\ska\Debug\libska_physic_chipmunk.a

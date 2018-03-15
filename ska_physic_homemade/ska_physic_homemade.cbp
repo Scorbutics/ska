@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ska_physic_homemade"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Documents/Perso/ska/ska_physic_homemade"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ska_physic_homemade">
+				<Option output="C:/Documents/Perso/ska/Debug/libska_physic_homemade.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Documents/Perso/ska/ska_physic_homemade"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/include"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_core"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_physic"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_world"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/backward"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include-fixed"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/../../../../i686-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 ska_physic_homemade"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ska_physic_homemade/fast">
+				<Option output="C:/Documents/Perso/ska/Debug/libska_physic_homemade.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Documents/Perso/ska/ska_physic_homemade"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/include"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_core"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_physic"/>
+					<Add directory="C:/Documents/Perso/ska/ska_physic_homemade/../ska_world"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include/c++/backward"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/include-fixed"/>
+					<Add directory="C:/mingw/bin/../lib/gcc/i686-w64-mingw32/7.2.0/../../../../i686-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 ska_physic_homemade/fast"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Documents/Perso/ska/ska_physic_homemade"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Documents/Perso/ska/ska_physic_homemade"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw/bin/mingw32-make.exe -f &quot;C:/Documents/Perso/ska/ska_physic_homemade/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/PhysicDefines.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/CollisionSystem.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/CollisionSystem.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/DebugWorldCollisionResponse.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/DebugWorldCollisionResponse.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/EntityCollisionResponse.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/EntityCollisionResponse.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/GravitySystem.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/GravitySystem.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/MovementSystem.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/MovementSystem.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/WorldCollisionResponse.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/WorldCollisionResponse.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/WorldCollisionSystem.cpp">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/Physic/System/WorldCollisionSystem.h">
+			<Option target="ska_physic_homemade"/>
+		</Unit>
+		<Unit filename="C:/Documents/Perso/ska/ska_physic_homemade/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
