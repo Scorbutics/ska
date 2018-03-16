@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core_test)
 
-set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
+find_path(SDL2_INCLUDE_DIR NAME SDL.h)
+if(NOT SDL2_INCLUDE_DIR)
+	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
+endif()
+
 set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
 
 message("lib folder is " ${LIBRARY_DIR})
