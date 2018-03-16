@@ -10,6 +10,10 @@ cd ../ska_gui
 call cmake_.bat %target%
 cd ../ska_gui_test
 call cmake_.bat %target%
+cd ../ska_ai
+call cmake_.bat %target%
+cd ../ska_particle
+call cmake_.bat %target%
 cd ../ska_physic
 call cmake_.bat %target%
 cd ../ska_physic_chipmunk
