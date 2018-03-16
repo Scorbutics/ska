@@ -30,6 +30,6 @@ ska::MouseCursor::~MouseCursor(){}
 
 void ska::MouseCursor::render(const Renderer& renderer) const{
 	if (m_currentCursor != nullptr) {
-		renderer.render(*m_currentCursor, m_mousePos.x, m_mousePos.y);
+		renderer.render(*m_currentCursor, m_mousePos.x, m_mousePos.y, nullptr);
 	}
 }

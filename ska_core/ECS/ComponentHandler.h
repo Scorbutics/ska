@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 #include <typeinfo>
+#include <optional>
+#include <cassert>
 #include "ECSDefines.h"
 #include "SerializeComponent.h"
 #include "ComponentSerializer.h"
 #include "../Logging/Logger.h"
-#include <optional>
-#include <cassert>
 
 namespace ska {
 	/**
@@ -18,7 +18,7 @@ namespace ska {
         public ComponentSerializer {
 
 	public:
-		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames): 
+		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames):
 			m_mask(mask) {
 			SKA_LOG_DEBUG("Initializing component type ", "", " with mask ", m_mask);
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
@@ -30,10 +30,10 @@ namespace ska {
 			return m_mask;
 		}
 
-		unsigned int add(EntityId& entityId, T&& comp) {			
+		unsigned int add(EntityId& entityId, T&& comp) {
 			const auto componentIdForEntity = m_components.size();
 			if(componentIdForEntity < m_components.size()) {
-				m_components[componentIdForEntity] = std::forward<T>(comp);				
+				m_components[componentIdForEntity] = std::forward<T>(comp);
 			} else {
 				m_components.push_back(std::forward<T>(comp));
 			}

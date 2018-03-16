@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest.h>
+#include <iostream>
 #include "GameApp.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include <iostream>
 
 class AppTest : public ska::GameApp {
 public:

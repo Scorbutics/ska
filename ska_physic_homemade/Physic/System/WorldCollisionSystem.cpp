@@ -1,12 +1,12 @@
 #include "WorldCollisionSystem.h"
-#include "ECS/Basics/Physic/CollisionProfile.h"
+#include "ECS/Basics/Physic/BlockAllowance.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Physic/CollisionContact.h"
 
 #include "Utils/RectangleUtils.h"
 
-ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, CollisionProfile& cp, GameEventDispatcher& ged) :
+ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, BlockAllowance& cp, GameEventDispatcher& ged) :
 	System(entityManager),
 	m_collisionProfile(cp),
 	m_ged(ged) {

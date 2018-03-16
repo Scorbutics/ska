@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "ScriptTriggerType.h"
 
 namespace ska {

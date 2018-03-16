@@ -30,8 +30,8 @@ ska::GUI::GUI(GameEventDispatcher& ged) :
 }
 
 bool ska::GUI::onGameEvent(GameEvent& ge) {
-	if (ge.getEventType() == GAME_WINDOW_READY ||
-		ge.getEventType() == GAME_WINDOW_RESIZED) {
+	if (ge.getEventType() == GameEventType::GAME_WINDOW_READY ||
+		ge.getEventType() == GameEventType::GAME_WINDOW_RESIZED) {
 		m_wMaster.setWidth(ge.windowWidth);
 		m_wMaster.setHeight(ge.windowWidth);
 		return onScreenResized(ge.windowWidth, ge.windowHeight);
@@ -200,11 +200,11 @@ void ska::GUI::windowSorter(Widget* tthis, ClickEvent& e) {
 }
 
 bool ska::GUI::onGUIEvent(GUIEvent& ge) {
-    if(ge.type == REMOVE_WINDOW) {
+    if(ge.type == GUIEventType::REMOVE_WINDOW) {
         m_windowsToDelete.push_back(ge.windowName);
     }
 
-	if(ge.type == ADD_BALLOON) {
+	if(ge.type == GUIEventType::ADD_BALLOON) {
  		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, TAILLEBLOCFENETRE * 2, TAILLEBLOCFENETRE * 10, TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
 		bd.addHandler<TimeEventListener>([&](Widget* tthis, TimeEvent&) {
 			auto& balloon = static_cast<BalloonDialog&>(*tthis);
@@ -215,13 +215,13 @@ bool ska::GUI::onGUIEvent(GUIEvent& ge) {
 		ge.balloonHandle = &bd;
 	}
 
-	if(ge.type == REFRESH_BALLOON) {
+	if(ge.type == GUIEventType::REFRESH_BALLOON) {
 		auto bd = static_cast<BalloonDialog*>(getWindow(ge.windowName));
 		if (bd != nullptr) {
 			bd->move(Point<int>(ge.balloonPosition.x, ge.balloonPosition.y - ge.balloonHandle->getBox().h));
 			if (!bd->isVisible()) {
 				ge.balloonHandle = nullptr;
-				GUIEvent geI(REMOVE_WINDOW);
+				GUIEvent geI(GUIEventType::REMOVE_WINDOW);
 				geI.windowName = ge.windowName;
 				onGUIEvent(geI);
 			}

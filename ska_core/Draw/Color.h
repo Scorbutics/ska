@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/NumberUtils.h"
+#include "../Utils/NumberUtils.h"
 
 namespace ska {
 	/**
@@ -67,17 +67,17 @@ namespace ska {
 
 		template<class T>
 		Color operator*(const T& factor) {
-			return Color(static_cast<uint8_t>(r * factor), 
-						static_cast<uint8_t>(g * factor), 
-						static_cast<uint8_t>(b * factor), 
+			return Color(static_cast<uint8_t>(r * factor),
+						static_cast<uint8_t>(g * factor),
+						static_cast<uint8_t>(b * factor),
 						static_cast<uint8_t>(a * factor));
 		}
 
 		template<class T>
 		Color operator+(const T& adder) {
-			return Color(static_cast<uint8_t>(r + adder), 
-						static_cast<uint8_t>(g + adder), 
-						static_cast<uint8_t>(b + adder), 
+			return Color(static_cast<uint8_t>(r + adder),
+						static_cast<uint8_t>(g + adder),
+						static_cast<uint8_t>(b + adder),
 						static_cast<uint8_t>(a + adder));
 		}
 

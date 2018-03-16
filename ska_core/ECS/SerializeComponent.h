@@ -1,10 +1,9 @@
 #pragma once
 #include <functional>
 #include <unordered_map>
-#include "ComponentHandler.h"
 
 namespace ska {
-	
+
 	/**
 	 * \brief Indicates that the component will be able to be serialized and deserialized from a character string.
 	 * For example, it allows to do component instantiation from the scripting part of the engine.

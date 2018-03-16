@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <limits>
 
 #include "Utils/StringUtils.h"
 #include "LayerEvent.h"

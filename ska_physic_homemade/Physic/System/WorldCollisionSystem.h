@@ -11,11 +11,11 @@
 
 namespace ska {
 	class WorldCollisionComponent;
-    class CollisionProfile;
+    class BlockAllowance;
 
 	class WorldCollisionSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
-		WorldCollisionSystem(EntityManager& entityManager, CollisionProfile& w, GameEventDispatcher& ged);
+		WorldCollisionSystem(EntityManager& entityManager, BlockAllowance& w, GameEventDispatcher& ged);
 		WorldCollisionSystem& operator=(const WorldCollisionSystem&) = delete;
 		virtual ~WorldCollisionSystem();
 	protected:
@@ -23,7 +23,7 @@ namespace ska {
 		virtual void refresh(unsigned int ellapsedTime) override;
 	private:
 		inline Rectangle createHitBox(EntityId entityId, bool xaxis, bool noMove) const;
-		CollisionProfile& m_collisionProfile;
+		BlockAllowance& m_collisionProfile;
 		GameEventDispatcher& m_ged;
 	};
 }

@@ -73,64 +73,53 @@ build_script:
 
   # Build
   - |-
-    cmake --version
     cd ska_core
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_core_test
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_draw
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_gui
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_gui_test
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make VERBOSE=1
 
     cd ../ska_ai
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_particle
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_physic
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_script
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 
     cd ../ska_world
-    del CMakeCache.txt
-    cmake -DCMAKE_PREFIX_PATH="%PREFIX%" -DCMAKE_C_COMPILER=%ARCH%-gcc.exe -DCMAKE_CXX_COMPILER=%ARCH%-g++.exe -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_CXX_STANDARD=17 -G "MinGW Makefiles"
+    cmake_
 
     mingw32-make
 

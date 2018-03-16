@@ -69,7 +69,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	using GameAnimationSystem = ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>;
-	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
+	if (ge.getEventType() == ska::GameEventType::GAME_WINDOW_READY) {
 		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
 		m_cameraSystem = cameraSystemPtr.get();
 		addLogic(std::move(cameraSystemPtr));

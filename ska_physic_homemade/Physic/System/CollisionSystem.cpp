@@ -1,5 +1,5 @@
 #include "CollisionSystem.h"
-#include "ECS/Basics/Physic/CollisionProfile.h"
+#include "World/CollisionProfile.h"
 #include "Utils/RectangleUtils.h"
 #include "ECS/Basics/Physic/CollisionComponent.h"
 
@@ -14,7 +14,7 @@ void ska::CollisionSystem::refresh(unsigned int) {
 		auto entityId = *entityIdIt;
 		const auto entityHitbox = createHitBox(entityId);
 
-	
+
 		for (auto itEntityIt = entityIdIt; itEntityIt != processed.end(); ++itEntityIt) {
 			auto itEntity = *itEntityIt;
 			if (itEntity != entityId) {
@@ -31,7 +31,7 @@ void ska::CollisionSystem::refresh(unsigned int) {
 						col.contact = CollisionContact(intersection, entityHitbox, otherEntityBox);
 
 						// When collision between entities is detected, we can do things as decreasing health,
-						//pushing entities, or any statistic interaction 
+						//pushing entities, or any statistic interaction
 						CollisionEvent ce(entityId, nullptr, &col, cc);
 						m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
 					}

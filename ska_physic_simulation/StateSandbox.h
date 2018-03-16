@@ -3,7 +3,7 @@
 #include "ECS/EntityManager.h"
 #include "Core/State/StateBase.h"
 #include "Utils/SubObserver.h"
-#include "World.h"
+#include "TileWorld.h"
 #include "Physic/System/EntityCollisionResponse.h"
 #include "Graphic/System/WalkAnimationStateMachine.h"
 #include "Graphic/DebugEntityCollisionResponse.h"
