@@ -12,6 +12,6 @@ goto end
 call "../cmake_visual_studio.bat" %1 %2 %3 %4 %5
 goto end
 :nativemakefiles
-call "../cmake_makefiles.bat" %1 %2 %3 %4 %5
+call "../cmake_makefile.bat" %1 %2 %3 %4 %5
 goto end
 :end

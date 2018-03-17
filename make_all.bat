@@ -1,5 +1,5 @@
 cd ska_core
-call cmake_.bat %*
+call "../cmake_.bat" %*
 mingw32-make
 if errorlevel gtr 0 exit 
 cd ../ska_core_test
