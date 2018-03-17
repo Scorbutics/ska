@@ -14,8 +14,11 @@ before_build:
   - git submodule update --init --recursive
 
   # depends are only fetched where there's no cache
+  - if exist %PREFIX% set DEPENDS=rem
 
   - |-
+    %DEPENDS% mkdir %PREFIX%\include
+    %DEPENDS% mkdir %PREFIX%\lib
     %DEPENDS% cd %TEMP%
 
   # SDL2
@@ -54,9 +57,45 @@ before_build:
     %DEPENDS% copy SDL2_mixer-2.0.2\%ARCH%\lib\*.a %PREFIX%\lib > nul
     %DEPENDS% copy SDL2_mixer-2.0.2\%ARCH%\bin\*.dll %PREFIX%\lib > nul
 
+  # Newer mingw is required, as older mingw32 does not support std::thread
+  - |-
+    %DEPENDS% appveyor DownloadFile "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win32/Personal Builds/mingw-builds/7.2.0/threads-posix/dwarf/i686-7.2.0-release-posix-dwarf-rt_v5-rev1.7z/download"
+    %DEPENDS%  7z x download -o%MINGW32% > nul
+
   - |-
     dir %PREFIX%\lib
     dir %PREFIX%\include
 build_script:
   - |-
-    echo test
+    set Path=%MINGW32%\mingw32\bin;%Path%
+    cd %APPVEYOR_BUILD_FOLDER%
+    del "C:\Program Files\Git\usr\bin\sh.exe"
+
+  # Build
+  - |-
+    call make_all.bat makefiles "-DCMAKE_PREFIX_PATH=%PREFIX%"
+
+    dir C:\projects\ska\Release
+    dir C:\projects\ska\Debug
+
+  # Add needed libs
+  - |-
+    copy %MINGW32%\mingw32\bin\libgcc_s_dw2-1.dll %PROJECT_PATH%
+    copy %MINGW32%\mingw32\bin\libwinpthread-1.dll %PROJECT_PATH%
+    copy %MINGW32%\mingw32\bin\libstdc*.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2_image.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\SDL2_ttf.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\libfreetype-6.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\zlib1.dll %PROJECT_PATH%
+    copy %PREFIX%\lib\libpng16-16.dll %PROJECT_PATH%
+  
+  # Unit Tests
+  - |-
+    copy %PROJECT_PATH%\Debug\ska_core_test.exe %PROJECT_PATH%
+    cd %PROJECT_PATH%
+    ska_core_test.exe
+
+    copy %PROJECT_PATH%\Debug\ska_gui_test.exe %PROJECT_PATH%
+    cd %PROJECT_PATH%
+    ska_gui_test.exe
