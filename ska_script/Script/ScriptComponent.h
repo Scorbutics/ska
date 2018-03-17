@@ -28,7 +28,7 @@ namespace ska {
 			commandsPlayed = 0;
 			lastTimeDelayed = 0;
 			delay = 0;
-			entityId = std::numeric_limits<unsigned int>().max();
+			entityId = std::numeric_limits<unsigned int>::max();
 			active = 0;
 			parent = nullptr;
 		}

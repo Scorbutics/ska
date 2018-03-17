@@ -10,7 +10,6 @@ include_directories(${SDL2_INCLUDE_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	${SDL2_INCLUDE_DIR}/*.h
     *.h
     *.cpp
 )

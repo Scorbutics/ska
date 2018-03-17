@@ -267,144 +267,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\CodeDebug\CodeDebug.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameConfiguration.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\GameCore.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Priorized.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\State.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateBase.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateData.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\CoreModule.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\BlockContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\CollisionEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ECSEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\EventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\ExtensibleGameEventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GUIEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameEventDispatcher.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\GameLibrariesInitializedEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputKeyEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\InputMouseEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\SoundEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\StateEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\MemoryScript.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Color.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainerBase.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\IGraphicSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\PriorityQueueDrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Renderer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\VectorDrawableContainer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\AnimationComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\CameraFocusedComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DebugGraphicComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DeleterComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\DialogComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Graphic\IAnimationStateMachine.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\BlockAllowance.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\GravityAffectedComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\HitboxComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\MovementComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\PositionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\WorldCollisionComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptAwareComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptPositionedGetter.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptRegisterer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptSleepComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Script\ScriptTriggerType.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentHandler.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSafeAccessor.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentSerializer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ComponentUnsafeAccessor.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ECSDefines.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\EntityManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializeComponent.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SystemMaskGenerator.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\CorruptedFileException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\FileException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\GenericException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalArgumentException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IllegalStateException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\IndexOutOfBoundsException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InputException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\InvalidPathException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\NumberFormatException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptDiedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptNotActivatedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptSyntaxError.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\ScriptUnknownCommandException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\StateDiedException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Exceptions\TerminateProcessException.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\GameApp.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\EnumContextManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputAction.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputContextManager.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputRange.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\InputToggle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\RawInputListener.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\IniReader.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\Readers\Readinifile.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\System\InputSystem.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\WindowInput.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\ColorStream.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Rectangle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\CompoundTask.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Runnable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\Task.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\TaskQueue.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Task\WorkNode.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Ticked.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ContainsTypeTuple.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Demangle.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FileUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Force.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\CalculOperators.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\FormalCalculation\FormalCalculator.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Identity.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Movable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NumberUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsUnix.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OSSpecific\FileUtilsWin.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Observer.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\OutputUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\PhysicUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\RectangleUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Refreshable.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Singleton_template.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SkaConstants.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SpritePath.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\StringUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\SubObserver.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TimeUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Vector2.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h" />
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\unsmartptr.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractCommand.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractFunctionCommand.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\Command.h" />
@@ -432,118 +294,28 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptAutoSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptBasicCommandsSystem.h" />
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptRefreshSystem.h" />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractCommand.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/AbstractCommand.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractFunctionCommand.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/AbstractFunctionCommand.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandAssign.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandAssign.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandAssignSwitch.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandAssignSwitch.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandBlockAuthorize.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandBlockAuthorize.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandCalculate.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandCalculate.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandElse.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandElse.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandEnd.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandEnd.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandEndScript.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandEndScript.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandIf.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandIf.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandLog.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandLog.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRandom.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandRandom.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRemoveComponent.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandRemoveComponent.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRestoreComponent.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandRestoreComponent.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandScript.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandScript.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandWait.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/CommandWait.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\ControlStatement.cpp" >
-      <ObjectFileName>$(IntDir)/Script/Command/ControlStatement.cpp.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractCommand.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractFunctionCommand.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandAssign.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandAssignSwitch.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandBlockAuthorize.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandCalculate.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandElse.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandEnd.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandEndScript.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandIf.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandLog.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRandom.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRemoveComponent.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandRestoreComponent.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandScript.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\CommandWait.cpp"  />
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\ControlStatement.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptController.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptUtils.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptAutoSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptBasicCommandsSystem.cpp" >
-      <ObjectFileName>$(IntDir)/Script/System/ScriptBasicCommandsSystem.cpp.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptBasicCommandsSystem.cpp"  />
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptRefreshSystem.cpp"  />
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\AbstractCommand.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/AbstractCommand.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\AbstractFunctionCommand.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/AbstractFunctionCommand.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandAssign.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandAssign.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandAssignSwitch.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandAssignSwitch.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandBlockAuthorize.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandBlockAuthorize.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandCalculate.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandCalculate.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandElse.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandElse.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandEnd.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandEnd.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandEndScript.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandEndScript.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandIf.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandIf.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandLog.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandLog.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRandom.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandRandom.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRemoveComponent.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandRemoveComponent.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRestoreComponent.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandRestoreComponent.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandScript.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandScript.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandWait.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/CommandWait.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\ControlStatement.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/Command/ControlStatement.cpp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\System\ScriptBasicCommandsSystem.cpp" >
-      <ObjectFileName>$(IntDir)/obj/Debug/Script/System/ScriptBasicCommandsSystem.cpp.obj</ObjectFileName>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Users\Brice\Source\Repos\ska\ska_script\ZERO_CHECK.vcxproj">
