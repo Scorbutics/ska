@@ -39,4 +39,4 @@ set_target_properties(ska_core_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-target_link_libraries(ska_core_test SDL2main ska_core SDL2)
+target_link_libraries(ska_core_test ska_core SDL2)

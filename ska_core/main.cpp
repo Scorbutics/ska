@@ -1,4 +1,6 @@
+#define SDL_MAIN_HANDLED
 #include "GameApp.h"
+#include <SDL_main.h>
 
 namespace ska {
 	class TerminateProcessException;
