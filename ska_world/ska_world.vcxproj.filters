@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.cpp">
@@ -7,10 +7,25 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetCorrespondanceMapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetRenderable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\CollisionProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Inputs\KeyboardInputGUIContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Inputs\KeyboardInputMapContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Layer.cpp">
@@ -19,31 +34,16 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World\Inputs\KeyboardInputMapContext.cpp">
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\TileAgglomerate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World\Inputs\KeyboardInputGUIContext.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\LayerLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\ChipsetCorrespondanceMapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\ChipsetEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\CollisionProfile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\TileAgglomerate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World\TileWorld.cpp">
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\TileWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -70,9 +70,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h">
@@ -123,16 +120,22 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\MemoryScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainerBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h">
@@ -172,6 +175,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\BlockAllowance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h">
@@ -237,7 +243,7 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h">
@@ -345,9 +351,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -394,6 +397,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Movable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h">
@@ -447,10 +453,13 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\unsmartptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.h">
@@ -463,9 +472,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.h">
@@ -498,6 +504,15 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDL_PointConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDL_RectConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AbstractGraphicSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -522,9 +537,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -546,31 +558,10 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\GraphicModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\PhysicDefines.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\Block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\CollisionSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\DebugWorldCollisionResponse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\EntityCollisionResponse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\ForceSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\GravitySystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\MovementSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionResponse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\System\WorldCollisionSystem.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic\Physic\MarchingSquare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\BlockRenderable.h">
@@ -579,52 +570,46 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Chipset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetCorrespondanceMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\ChipsetRenderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\CollisionProfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Inputs\KeyboardInputGUIContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Inputs\KeyboardInputMapContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\LayerRenderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World\Input\KeyboardInputGUIContext.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\TileAgglomerate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World\Input\KeyboardInputMapContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\Inputs\KeyboardInputGUIContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\Inputs\KeyboardInputMapContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\LayerLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\ChipsetCorrespondanceMapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\ChipsetEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\LayerData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\CollisionProfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\TileAgglomerate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World\TileWorld.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_world\World\TileWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

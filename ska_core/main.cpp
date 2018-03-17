@@ -1,4 +1,6 @@
-#ifndef __ANDROID__
+#ifdef _MSC_VER
+#define SDL_MAIN_HANDLED
+#endif
 #include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
 
@@ -8,9 +10,6 @@ namespace ska {
 	class TerminateProcessException;
 }
 
-#ifdef __cplusplus
-extern "C"
-#endif
 int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
@@ -27,4 +26,3 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
-#endif

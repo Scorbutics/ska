@@ -52,6 +52,9 @@
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\ControlStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,6 +65,60 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\System\ScriptRefreshSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\AbstractCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\AbstractFunctionCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandAssign.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandAssignSwitch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandBlockAuthorize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandCalculate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandElse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandEnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandEndScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandIf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRandom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRemoveComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandRestoreComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\CommandWait.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\Command\ControlStatement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_script\obj\Debug\Script\System\ScriptBasicCommandsSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,9 +145,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h">
@@ -141,16 +195,22 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\MemoryScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainerBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h">
@@ -192,6 +252,9 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\BlockAllowance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -199,9 +262,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h">
@@ -258,7 +318,7 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h">
@@ -342,12 +402,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -370,9 +424,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h">
@@ -421,6 +472,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Movable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h">
@@ -474,10 +528,13 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\unsmartptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\Command\AbstractCommand.h">
@@ -538,6 +595,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_script\Script\ScriptState.h">

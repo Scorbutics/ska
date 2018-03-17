@@ -2,7 +2,6 @@
 #include "Space.h"
 #include "Vect.h"
 #include "Shape.h"
-#include "../Constraint.h"
 
 ska::cp::Space::Space() : 
 	m_space(nullptr) {

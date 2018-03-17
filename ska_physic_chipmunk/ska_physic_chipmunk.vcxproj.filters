@@ -1,63 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Physic\Body.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Body.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physic\Shape.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\BuildHitbox.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physic\Space.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Constraint.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physic\MovementSystem.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\MovementSystem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physic\Constraint.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Shape.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physic\BuildHitbox.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Space.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Physic\Body.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Body.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\Shape.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\BuildHitbox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\Space.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Constraint.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\Vect.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\HitboxComponent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\MovementSystem.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\MovementSystem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\HitboxComponent.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Shape.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BuildHitbox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Space.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physic\Constraint.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\Physic\Vect.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{6CA0F1A2-1CAF-3347-9B28-85D7A9E7E83B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A56300AD-991B-3D42-9F18-2423ACDBE087}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

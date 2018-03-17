@@ -96,9 +96,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\StateHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\State\SystemBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Core\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,16 +144,22 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Events\WorldEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\Savegame.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Data\MemoryScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\CameraAware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\Drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableContainerBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Draw\DrawableFixedPriority.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Input\InputComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\BlockAllowance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollidableComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -205,9 +211,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionContact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\CollisionProfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\Basics\Physic\ForceComponent.h">
@@ -264,7 +267,7 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\ISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializableComponent.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\SerializeComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\ECS\System.h">
@@ -348,12 +351,6 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputGUIContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\KeyboardInputMapContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Inputs\MouseInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -376,9 +373,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Logging\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Point.h">
@@ -427,6 +421,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ManagedResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Movable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\NonCopyable.h">
@@ -480,10 +477,13 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\TupleUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\VectorUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\ununique.h">
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_core\Utils\unsmartptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\FpsCalculator.h">
@@ -496,9 +496,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\DebugEntityCollisionResponse.h">
@@ -531,6 +528,15 @@
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDLWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDL_PointConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\SDL_RectConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\AbstractGraphicSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -553,9 +559,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DeleterSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\DirectionnalAnimationStateMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Users\Brice\Source\Repos\ska\ska_draw\Graphic\System\GraphicSystem.h">

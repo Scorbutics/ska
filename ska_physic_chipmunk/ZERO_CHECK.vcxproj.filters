@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Users\Brice\Source\Repos\ska\ska_physic_chipmunk\CMakeFiles\4385dd295d3eb83d84c7aa790efff79a\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5C2640A6-90FC-380A-8FD0-6A174CE97E1A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

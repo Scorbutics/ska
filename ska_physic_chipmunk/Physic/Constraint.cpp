@@ -1,5 +1,5 @@
 #include "Constraint.h"
-#include "Physic/Vect.h"
+#include "Vect.h"
 
 ska::cp::Constraint::Constraint() :
 	m_joint(nullptr) {

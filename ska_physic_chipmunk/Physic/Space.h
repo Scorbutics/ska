@@ -4,7 +4,7 @@
 #include "Utils/NonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
-#include "../Constraint.h"
+#include "Constraint.h"
 
 namespace ska {
 	namespace cp {
