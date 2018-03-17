@@ -14,8 +14,11 @@ before_build:
   - git submodule update --init --recursive
 
   # depends are only fetched where there's no cache
+  - if exist %PREFIX% set DEPENDS=rem
 
   - |-
+    %DEPENDS% mkdir %PREFIX%\include
+    %DEPENDS% mkdir %PREFIX%\lib
     %DEPENDS% cd %TEMP%
 
   # SDL2
