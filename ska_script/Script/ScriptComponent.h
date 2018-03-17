@@ -3,7 +3,6 @@
 #include <limits>
 #include <memory>
 #include <unordered_map>
-#include "ECS/SerializableComponent.h"
 #include "ScriptState.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/ECSDefines.h"
@@ -11,7 +10,7 @@
 
 namespace ska {
     class ScriptAutoSystem;
-	class ScriptComponent : public SerializableComponent {
+	class ScriptComponent {
 		friend class ScriptAutoSystem;
 		friend class ScriptController;
 
