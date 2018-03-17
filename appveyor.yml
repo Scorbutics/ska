@@ -73,7 +73,7 @@ build_script:
 
   # Build
   - |-
-    call make_all.bat makefiles -DCMAKE_PREFIX_PATH=%PREFIX%
+    call make_all.bat makefiles "-DCMAKE_PREFIX_PATH=%PREFIX%"
 
     dir C:\projects\ska\Release
     dir C:\projects\ska\Debug
