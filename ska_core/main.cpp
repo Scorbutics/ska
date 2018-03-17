@@ -1,6 +1,4 @@
-#ifdef _MSC_VER
 #define SDL_MAIN_HANDLED
-#endif
 #include <SDL_main.h>
 //We need this include to define "main" as "SDL_main"
 

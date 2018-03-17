@@ -21,6 +21,7 @@
 /*/.vs
 /Debug
 /*/*.cbp
+/*/*.depend
 /*/*.sln*
 /*/*.vcxproj*
 /*/cmake_install.cmake

@@ -15,8 +15,6 @@ include_directories(${SKA_DRAW_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	${SKA_CORE_DIR}/*.h
-	${SKA_DRAW_DIR}/*.h
     *.h
     *.cpp
 )

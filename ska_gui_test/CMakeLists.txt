@@ -51,5 +51,5 @@ set_target_properties(ska_gui_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-set(YOUR_APP_ALL_DEPS ska_gui ska_draw SDL2main ska_core SDL2_ttf SDL2_image SDL2)
+set(YOUR_APP_ALL_DEPS ska_gui ska_draw ska_core SDL2_ttf SDL2_image SDL2)
 target_link_libraries(ska_gui_test ${YOUR_APP_ALL_DEPS})
