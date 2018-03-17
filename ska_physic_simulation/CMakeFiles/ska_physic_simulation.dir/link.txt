@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E remove -f CMakeFiles\ska_physic_simulation.dir/objects.a
-C:\mingw\bin\ar.exe cr CMakeFiles\ska_physic_simulation.dir/objects.a @CMakeFiles\ska_physic_simulation.dir\objects1.rsp
-C:\mingw\bin\g++.exe  -lmingw32  -static-libgcc -static-libstdc++ -Wl,--whole-archive CMakeFiles\ska_physic_simulation.dir/objects.a -Wl,--no-whole-archive  -o C:\Documents\Perso\ska\Debug\ska_physic_simulation.exe -Wl,--out-implib,libska_physic_simulation.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ska_physic_simulation.dir\linklibs.rsp
