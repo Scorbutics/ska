@@ -1,5 +1,4 @@
 #pragma once
-#include "ECS/SerializableComponent.h"
 #include "Point.h"
 #include "../../ska_draw/Graphic/DebugEntityCollisionResponse.h"
 
@@ -11,8 +10,7 @@ namespace ska {
 		};
 	}
 
-	class IARandomMovementComponent : 
-		public SerializableComponent {
+	class IARandomMovementComponent {
 	public:
 		IARandomMovementComponent() {
 			lastTimeStarted = 0;
@@ -23,7 +21,7 @@ namespace ska {
 
 		char direction;
 		char type;
-		EntityId emitter;
+		ska::EntityId emitter;
 		unsigned int delay;
 		unsigned int lastTimeStarted;
 	};

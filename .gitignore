@@ -14,12 +14,13 @@
 *.iobj
 *.ipdb
 /*/obj
+/CMakeFiles
 /*/CMakeFiles
 /*/CMakeCache.txt
 /*/Makefile
 /*/.vs
 /Debug
-/*/ALL_BUILD.vcxproj*
-/*/ZERO_CHECK.vcxproj*
+/*/*.cbp
+/*/*.sln*
+/*/*.vcxproj*
 /*/cmake_install.cmake
-

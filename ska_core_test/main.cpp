@@ -4,16 +4,16 @@
 #include "GameApp.h"
 #include "Data/Events/GameEventDispatcher.h"
 
-class AppTest : public ska::GameApp {
+class AppTest : 
+	public ska::GameApp {
+
 public:
+	explicit AppTest() = default;
 
-	explicit AppTest() {
-	}
+	int onTerminate(ska::TerminateProcessException&) override { std::cout << "Terminate process" << std::endl; return -1; };
+	int onException(ska::GenericException&) override { std::cout << "Terminate process" << std::endl; return -1; }
 
-	virtual int onTerminate(ska::TerminateProcessException&) override { std::cout << "Terminate process" << std::endl; return -1; };
-	virtual int onException(ska::GenericException&) override { std::cout << "Terminate process" << std::endl; return -1; }
-
-	virtual void run() override {
+	void run() override {
 		doctest::Context context;
 		auto resultCode = 0;
 		try {
@@ -33,7 +33,7 @@ public:
 		}
 	}
 
-	virtual ~AppTest() override {}
+	~AppTest() override = default;
 };
 
 std::unique_ptr<ska::GameApp> ska::GameApp::get() {

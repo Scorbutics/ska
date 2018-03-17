@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Point.h"
-#include "Graphic/Color.h"
+#include "Draw/Color.h"
 #include "Graphic/Texture.h"
 #include "Logging/Logger.h"
 
