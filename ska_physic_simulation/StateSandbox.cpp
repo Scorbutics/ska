@@ -115,7 +115,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
-		m_world.load("Resources\\Levels\\new_level", "Resources\\Chipsets\\chipset_platform.png");
+		m_world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
 		m_world.linkCamera(m_cameraSystem);
 	}
 	return true;

@@ -16,17 +16,17 @@ ska::Chipset::Chipset(const ChipsetCorrespondanceMapper& correspondanceMapper, c
 void ska::Chipset::load() {
 	m_sChipset.load32(m_chipsetName + ".png");
 	if (m_sChipset.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + "\", fichier du chipset. " + std::string(SDL_GetError()));
+		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png\", fichier du chipset. " + std::string(SDL_GetError()));
 	}
 
 	m_sCol.load32(m_chipsetName + ".png.col");
 	if (m_sCol.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".col\", fichier de collsions du chipset. " + std::string(SDL_GetError()));
+		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png.col\", fichier de collsions du chipset. " + std::string(SDL_GetError()));
 	}
 
 	m_sProperties.load32(m_chipsetName + ".png.prop");
 	if (m_sProperties.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".prop\", fichier de propriétés du chipset. " + std::string(SDL_GetError()));
+		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png.prop\", fichier de propriétés du chipset. " + std::string(SDL_GetError()));
 	}
 }
 
