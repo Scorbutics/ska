@@ -1,6 +1,7 @@
 #pragma once
 #include <gsl/pointers>
 #include <vector>
+#include <functional>
 #include "Utils/NonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
@@ -8,10 +9,13 @@
 
 namespace ska {
 	namespace cp {
+		struct CollisionHandlerData;
+		enum class CollisionHandlerType;
 		class Vect;
 
 		class Space :
 			public NonCopyable {
+			
 		public:
 			Space();
 			Space(Space&&) noexcept;
@@ -21,6 +25,10 @@ namespace ska {
 			cpBody* getStaticBody();
 			
 			void setGravity(const Vect& v);
+
+			void addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData);
+			void addDefaultCollisionHandler(CollisionHandlerData collisionHandlerData);
+
 			Constraint&  addConstraint(Constraint c);
 			Shape& addShape(Shape shape);
 			Body& addBody(Body body);
@@ -30,6 +38,7 @@ namespace ska {
 			void step(double timestep);
 
 		private:
+			void setCollisionCallbackForHandler(cpCollisionHandler* col, CollisionHandlerData& collisionHandlerData);
 			void load();
 			void free();
 

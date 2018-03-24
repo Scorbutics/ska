@@ -79,6 +79,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic", "ska_physic\ska_physic.vcxproj", "{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_simulation_chipmunk", "ska_physic_simulation_chipmunk\ska_physic_simulation_chipmunk.vcxproj", "{2DDCA757-1909-364A-852A-7FCC0E7A0B68}"
+	ProjectSection(ProjectDependencies) = postProject
+		{27DAB442-9E78-3AD1-893A-605BD278395C} = {27DAB442-9E78-3AD1-893A-605BD278395C}
+		{C5798D43-DA6C-3BD1-9681-C18AE4B4A6FE} = {C5798D43-DA6C-3BD1-9681-C18AE4B4A6FE}
+		{674D1781-02C7-3598-BF05-ACF0BF98FE84} = {674D1781-02C7-3598-BF05-ACF0BF98FE84}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_test", "ska_physic_test\ska_physic_test.vcxproj", "{A2A529DE-5750-3664-9186-3DF51F949879}"
 EndProject

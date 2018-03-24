@@ -15,6 +15,7 @@
 #include "World/TileAgglomerate.h"
 #include "Physic/MovementSystem.h"
 #include "Physic/BuildHitbox.h"
+#include "CollisionHandlerType.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -42,6 +43,11 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 		
 		createBall(mousePos);
 	}
+	return true;
+}
+
+cpBool CollisionCallback(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collision" << std::endl;
 	return true;
 }
 
@@ -81,7 +87,10 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		}
 
 		m_layerContours.emplace_back(agglomeratedTiles);
-		//DoThings();
+		
+		ska::cp::CollisionHandlerData chd;
+		chd.setHandler<ska::cp::CollisionHandlerType::BEGIN>(CollisionCallback);
+		m_space.addDefaultCollisionHandler(std::move(chd));
 
 	}
 	return true;
