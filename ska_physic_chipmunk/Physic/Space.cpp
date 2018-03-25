@@ -33,31 +33,12 @@ void ska::cp::Space::setGravity(const Vect& v) {
 
 void ska::cp::Space::addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData) {
 	const auto col = cpSpaceAddCollisionHandler(m_space, collisionTypeA, collisionTypeB);
-	setCollisionCallbackForHandler(col, collisionHandlerData);
+	collisionHandlerData.setupCollisionHandler(*col);
 }
 
-void ska::cp::Space::setCollisionCallbackForHandler(cpCollisionHandler* collisionHanlder, CollisionHandlerData& collisionHandlerData){
-	switch(collisionHandlerData.getType()) {
-	case CollisionHandlerType::BEGIN:
-		collisionHanlder->beginFunc = collisionHandlerData.getHandler<CollisionHandlerType::BEGIN>();
-		break;
-	case CollisionHandlerType::PRE:
-		collisionHanlder->preSolveFunc = collisionHandlerData.getHandler<CollisionHandlerType::PRE>();
-		break;
-	case CollisionHandlerType::POST:
-		collisionHanlder->postSolveFunc = collisionHandlerData.getHandler<CollisionHandlerType::POST>();
-		break;
-	case CollisionHandlerType::SEPARATE:
-		collisionHanlder->separateFunc = collisionHandlerData.getHandler<CollisionHandlerType::SEPARATE>();
-		break;
-	default:
-		break;
-	}
-}
-
-void ska::cp::Space::addDefaultCollisionHandler(CollisionHandlerData collisionCallback) {
+void ska::cp::Space::addDefaultCollisionHandler(CollisionHandlerData collisionHandlerData) {
 	const auto col = cpSpaceAddDefaultCollisionHandler(m_space);
-	setCollisionCallbackForHandler(col, collisionCallback);
+	collisionHandlerData.setupCollisionHandler(*col);
 }
 
 ska::cp::Constraint& ska::cp::Space::addConstraint(Constraint c) {

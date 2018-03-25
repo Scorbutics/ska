@@ -46,9 +46,22 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 	return true;
 }
 
-cpBool CollisionCallback(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collision" << std::endl;
+cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collisionBegin" << std::endl;
 	return true;
+}
+
+void CollisionCallbackPost(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collisionPost" << std::endl;
+}
+
+cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collisionPre" << std::endl;
+	return true;
+}
+
+void CollisionCallbackSeparate(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collisionSeparate" << std::endl;
 }
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
@@ -88,9 +101,22 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(agglomeratedTiles);
 		
-		ska::cp::CollisionHandlerData chd;
-		chd.setHandler<ska::cp::CollisionHandlerType::BEGIN>(CollisionCallback);
+		auto chd = ska::cp::CollisionHandlerData{
+			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::BEGIN>{CollisionCallbackBegin}};
+		
+		auto chd2 = ska::cp::CollisionHandlerData {
+			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::POST>{CollisionCallbackPost}};
+		
+		auto chd3 = ska::cp::CollisionHandlerData {
+			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::PRE>{CollisionCallbackPre}};
+
+		auto chd4 = ska::cp::CollisionHandlerData {
+			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::SEPARATE>{CollisionCallbackSeparate}};
+
 		m_space.addDefaultCollisionHandler(std::move(chd));
+		m_space.addDefaultCollisionHandler(std::move(chd2));
+		m_space.addDefaultCollisionHandler(std::move(chd3));
+		m_space.addDefaultCollisionHandler(std::move(chd4));
 
 	}
 	return true;

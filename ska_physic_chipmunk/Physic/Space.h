@@ -38,7 +38,6 @@ namespace ska {
 			void step(double timestep);
 
 		private:
-			void setCollisionCallbackForHandler(cpCollisionHandler* col, CollisionHandlerData& collisionHandlerData);
 			void load();
 			void free();
 

@@ -26,3 +26,5 @@
 /*/*.sln*
 /*/*.vcxproj*
 /*/cmake_install.cmake
+/*/Debug
+/*/Release
