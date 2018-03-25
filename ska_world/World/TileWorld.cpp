@@ -148,6 +148,17 @@ const ska::Rectangle* ska::TileWorld::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
 
+const ska::Block* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const {
+	const auto layers = 3;
+	for(int i = layers - 1; i >= 0; i--) {
+		const auto b = m_collisionProfile.getBlock(i, x, y);
+		if(b != nullptr && b->getCollision() != ska::BlockCollision::VOID) {
+			return b;
+		}
+	}
+	return nullptr;
+}
+
 ska::Layer& ska::TileWorld::loadLayer(const std::string& layerFileName){
 	if(m_chipset == nullptr) {
 		throw IllegalStateException("Load a chipset before loading a layer");

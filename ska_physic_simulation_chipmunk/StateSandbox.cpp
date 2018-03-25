@@ -7,15 +7,14 @@
 #include "Graphic/System/DeleterSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
 #include "Draw/DrawableContainer.h"
-#include "Physic/MarchingSquare.h"
 #include "World/LayerLoader.h"
 #include "Physic/Vect.h"
 #include "Physic/Space.h"
 #include "World/TileWorld.h"
-#include "World/TileAgglomerate.h"
 #include "Physic/MovementSystem.h"
 #include "Physic/BuildHitbox.h"
 #include "CollisionHandlerType.h"
+#include "World/MarchingSquare.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -24,7 +23,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_eventDispatcher(ed),
 	m_entityManager(em){}
 
-std::vector<ska::Rectangle> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
+std::list<ska::Point<int>> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
 	/*auto physicCollisionMapX = ska::TileAgglomerate::apply(world, true);
 	auto physicCollisionMapY = ska::TileAgglomerate::apply(world, false);
 
@@ -32,7 +31,21 @@ std::vector<ska::Rectangle> GenerateAgglomeratedTileMap(const ska::TileWorld& wo
 		return physicCollisionMapY;
 	}*/
 
-	return ska::TileAgglomerate::apply(world);	
+	std::list<ska::Point<int>> result;
+	std::unordered_set<ska::Point<int>> remainingBlocks;
+	std::list<ska::Point<int>> pointList;
+	bool done = false;
+	do {
+		std::tie(done, pointList) = ska::MarchingSquare(world, remainingBlocks, [](const ska::Block* b) {
+			return b != nullptr ? b->getCollision() : ska::BlockCollision::NO;
+		});
+		for(const auto& p : pointList) {
+			result.push_back(p);
+		}
+	} while (!done);
+
+	
+	return result;
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -46,22 +59,36 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 	return true;
 }
 
-cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionBegin" << std::endl;
-	return true;
-}
-
-void CollisionCallbackPost(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionPost" << std::endl;
-}
-
 cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionPre" << std::endl;
+	std::cout << "collisionBegin" << std::endl;
+	const auto firstPointA = cpArbiterGetPointA(arb, 0);
+	std::cout << "Point x : "<< firstPointA.x << "; y : " << firstPointA.y << std::endl;
 	return true;
 }
 
-void CollisionCallbackSeparate(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionSeparate" << std::endl;
+ska::Vector2<ska::Rectangle> GenerateContourTileMap(const std::list<ska::Point<int>>& list) {
+	ska::Vector2<ska::Rectangle> contours;
+	
+	auto lastPointIt = list.cbegin();
+	auto pIt = list.cbegin();
+
+	if (pIt != list.cend()) {
+		++pIt;
+		for (; pIt != list.cend(); ++pIt) {
+			auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt) * 48, (*pIt)  * 48);
+			if(rect.w == 0) {
+				rect.w = 1;
+				rect.x--;
+			}
+			if(rect.h == 0) {
+				rect.h = 1;
+				rect.y--;
+			}
+			contours.push_back(std::move(rect));
+			lastPointIt = pIt;
+		}
+	}	
+	return contours;
 }
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
@@ -90,33 +117,22 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
 		
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
-		
-		m_space.setGravity({ 0., 1 });
+		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
+
+		//m_space.setGravity({ 0., 300 });
 
 		m_ballTexture.load("Resources/Sprites/2.png");
 
-		for (const auto& r : agglomeratedTiles) {
-			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r, 0.));
+		for (const auto& r : contourRectangleTile) {
+			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r));
 		}
 
 		m_layerContours.emplace_back(agglomeratedTiles);
 		
 		auto chd = ska::cp::CollisionHandlerData{
-			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::BEGIN>{CollisionCallbackBegin}};
-		
-		auto chd2 = ska::cp::CollisionHandlerData {
-			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::POST>{CollisionCallbackPost}};
-		
-		auto chd3 = ska::cp::CollisionHandlerData {
 			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::PRE>{CollisionCallbackPre}};
-
-		auto chd4 = ska::cp::CollisionHandlerData {
-			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::SEPARATE>{CollisionCallbackSeparate}};
-
+		
 		m_space.addDefaultCollisionHandler(std::move(chd));
-		m_space.addDefaultCollisionHandler(std::move(chd2));
-		m_space.addDefaultCollisionHandler(std::move(chd3));
-		m_space.addDefaultCollisionHandler(std::move(chd4));
 
 	}
 	return true;
@@ -153,7 +169,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 	
-	auto bc = ska::cp::BuildHitbox(m_space, point, 200.f, 500.f);
+	auto bc = ska::cp::BuildCircleHitbox(m_space, point, 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

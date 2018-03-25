@@ -4,7 +4,7 @@
 namespace ska {
 	struct Rectangle {
 		int x, y;
-		int w, h;
+		int w, h;		
 
 		bool operator==(const Rectangle& r) const {
 			return !operator!=(r);

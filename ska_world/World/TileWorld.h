@@ -64,6 +64,7 @@ namespace ska {
 		void linkCamera(CameraSystem* cs) override;
 
 		virtual ~TileWorld() = default;
+		const ska::Block* getHighestBlock(unsigned i, unsigned y) const;
 
 	private:
 		ska::Layer& loadLayer(const std::string& layerFileName);

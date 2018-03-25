@@ -25,7 +25,7 @@ namespace ska {
 
 			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, double radius);
 			static Shape fromCircle(cpBody* body, double radius, const Vect& offset = Vect{});
-			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius);
+			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius = 0.);
 
 			void setFriction(float friction);
 

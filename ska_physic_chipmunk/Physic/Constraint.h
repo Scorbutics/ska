@@ -2,10 +2,10 @@
 #include <chipmunk.h>
 #include <gsl/pointers>
 #include "Utils/NonCopyable.h"
+#include "Vect.h"
 
 namespace ska {
 	namespace cp {
-		class Vect;
 
 		class Constraint :
 			public NonCopyable {
@@ -17,7 +17,7 @@ namespace ska {
 			cpConstraint* constraint();
 			
 			static Constraint buildGearJoint(cpBody& body1, cpBody& body2, double phase, double ratio);
-			static Constraint buildPivotJoint(cpBody& body1, cpBody& body2, const Vect& anchor1, const Vect& anchor2);
+			static Constraint buildPivotJoint(cpBody& body1, cpBody& body2, const Vect& anchor1 = Vect{}, const Vect& anchor2 = Vect{});
 
 			void setMaxForce(double maxForce);
 			void setMaxBias(double maxBias);

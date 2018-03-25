@@ -54,7 +54,7 @@ namespace ska {
 				case CollisionHandlerType::BEGIN: collisionHandler.beginFunc = std::get<static_cast<int>(CollisionHandlerType::BEGIN)>(m_handle).func; break;
 				case CollisionHandlerType::POST: collisionHandler.postSolveFunc = std::get<static_cast<int>(CollisionHandlerType::POST)>(m_handle).func; break;
 				case CollisionHandlerType::SEPARATE: collisionHandler.separateFunc = std::get<static_cast<int>(CollisionHandlerType::SEPARATE)>(m_handle).func; break;
-				default: assert(false, "Bad initialization");
+				default: assert(false && "Bad initialization");
 				}
 			}
 
