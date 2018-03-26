@@ -15,6 +15,11 @@
 #include "Physic/BuildHitbox.h"
 #include "CollisionHandlerType.h"
 #include "World/MarchingSquare.h"
+#include "World/TileAgglomerate.h"
+
+struct PointArea {
+	std::list<ska::Point<int>> pointList;
+};
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -23,29 +28,24 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_eventDispatcher(ed),
 	m_entityManager(em){}
 
-std::list<ska::Point<int>> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
-	/*auto physicCollisionMapX = ska::TileAgglomerate::apply(world, true);
-	auto physicCollisionMapY = ska::TileAgglomerate::apply(world, false);
-
-	if (physicCollisionMapY.size() > physicCollisionMapX.size()) {
-		return physicCollisionMapY;
-	}*/
-
-	std::list<ska::Point<int>> result;
+std::vector<PointArea> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
+	std::vector<PointArea> result;
 	std::unordered_set<ska::Point<int>> remainingBlocks;
-	std::list<ska::Point<int>> pointList;
+	
 	bool done = false;
 	do {
-		std::tie(done, pointList) = ska::MarchingSquare(world, remainingBlocks, [](const ska::Block* b) {
+		PointArea pointList;
+		std::tie(done, pointList.pointList) = ska::MarchingSquare(world, remainingBlocks, [](const ska::Block* b) {
 			return b != nullptr ? b->getCollision() : ska::BlockCollision::NO;
 		});
-		for(const auto& p : pointList) {
-			result.push_back(p);
-		}
+		result.push_back(pointList);
 	} while (!done);
-
 	
 	return result;
+}
+
+std::vector<ska::Rectangle> GenerateAgglomeratedTileMapBasic(const ska::TileWorld& world) {
+	return ska::TileAgglomerate(world);	
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -60,34 +60,57 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 }
 
 cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
+	std::cout << "collisionPre" << std::endl;
+	const auto firstPointA = cpArbiterGetPointA(arb, 0);
+	std::cout << "Point x : "<< firstPointA.x << "; y : " << firstPointA.y << std::endl;
+	return true;
+}
+
+cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
 	std::cout << "collisionBegin" << std::endl;
 	const auto firstPointA = cpArbiterGetPointA(arb, 0);
 	std::cout << "Point x : "<< firstPointA.x << "; y : " << firstPointA.y << std::endl;
 	return true;
 }
 
-ska::Vector2<ska::Rectangle> GenerateContourTileMap(const std::list<ska::Point<int>>& list) {
-	ska::Vector2<ska::Rectangle> contours;
+std::vector<ska::Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas) {
+	std::vector<ska::Rectangle> contours;
+	constexpr auto depth = 24;
 	
-	auto lastPointIt = list.cbegin();
-	auto pIt = list.cbegin();
+	//TODO simplify by skipping useless points to avoid false rectangles
+	for(const auto& pa : areas) {
+		auto lastPointIt = pa.pointList.cbegin();
+		auto pIt = pa.pointList.cbegin();
 
-	if (pIt != list.cend()) {
-		++pIt;
-		for (; pIt != list.cend(); ++pIt) {
-			auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt) * 48, (*pIt)  * 48);
+		if (pIt != pa.pointList.cend()) {
+			++pIt;
+			for (; pIt != pa.pointList.cend(); ++pIt) {
+				auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt), (*pIt));
+				if(rect.w == 0) {
+					rect.w = depth;
+					rect.x-= depth;
+				}
+				if(rect.h == 0) {
+					rect.h = depth;
+					rect.y-= depth;
+				}
+				contours.push_back(std::move(rect));
+				lastPointIt = pIt;
+			}
+
+			auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt), (*pa.pointList.cbegin()));
 			if(rect.w == 0) {
-				rect.w = 1;
-				rect.x--;
+				rect.w = depth;
+				rect.x-= depth;
 			}
 			if(rect.h == 0) {
-				rect.h = 1;
-				rect.y--;
+				rect.h = depth;
+				rect.y-= depth;
 			}
-			contours.push_back(std::move(rect));
-			lastPointIt = pIt;
+			contours.push_back(rect);
 		}
-	}	
+		
+	}
 	return contours;
 }
 
@@ -119,6 +142,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
 
+		//const auto contourRectangleTile = GenerateAgglomeratedTileMapBasic(world);
+
 		//m_space.setGravity({ 0., 300 });
 
 		m_ballTexture.load("Resources/Sprites/2.png");
@@ -127,10 +152,10 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r));
 		}
 
-		m_layerContours.emplace_back(agglomeratedTiles);
+		m_layerContours.emplace_back(contourRectangleTile);
 		
 		auto chd = ska::cp::CollisionHandlerData{
-			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::PRE>{CollisionCallbackPre}};
+			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::BEGIN>{CollisionCallbackBegin}};
 		
 		m_space.addDefaultCollisionHandler(std::move(chd));
 

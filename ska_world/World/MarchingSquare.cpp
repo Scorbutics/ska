@@ -21,7 +21,7 @@ std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::TileW
 	do {
 		if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
 			doneBlocks.insert(point);
-			path.push_back(point);
+			path.push_back(point * world.getBlockSize());
 		}
 		
 		const auto direction = MarchingSquareNextStep(world, point, pred, lastDirection);

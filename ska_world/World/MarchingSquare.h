@@ -17,5 +17,5 @@ namespace ska {
 
 	using MarchingSquarePredicate = std::function<ska::BlockCollision(const Block*)>;	
 
-	std::pair<bool, std::list<ska::Point<int>>> MarchingSquare(const ska::TileWorld& world, std::unordered_set<Point<int>>& remainingBlocks, const ska::MarchingSquarePredicate& pred);
+	std::pair<bool, std::list<ska::Point<int>>> MarchingSquare(const ska::TileWorld& world, std::unordered_set<Point<int>>& doneBlocks, const ska::MarchingSquarePredicate& pred);
 }

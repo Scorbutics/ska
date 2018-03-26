@@ -13,7 +13,7 @@ namespace ska {
 
 			auto& ballShape = space.addShape(ska::cp::Shape::fromCircle(ballBody.body(), 16.));
 			const auto ballShapeIndex = space.getShapes().size() - 1;
-			ballShape.setFriction(0.7F);
+			//ballShape.setFriction(0.7F);
 
 			ska::cp::HitboxComponent bc{};
 			bc.bodyIndex = ballBodyIndex;
@@ -37,7 +37,7 @@ namespace ska {
 
 			auto& ballShape = space.addShape(ska::cp::Shape::fromBox(ballBody.body(), {0, 0, box.w, box.h}));
 			const auto ballShapeIndex = space.getShapes().size() - 1;
-			ballShape.setFriction(0.7F);
+			//ballShape.setFriction(0.7F);
 
 			ska::cp::HitboxComponent bc{};
 			bc.bodyIndex = ballBodyIndex;

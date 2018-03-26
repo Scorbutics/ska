@@ -19,9 +19,9 @@ ska::cp::Shape ska::cp::Shape::fromCircle(cpBody* body, double radius, const Vec
 	return sh;
 }
 
-ska::cp::Shape ska::cp::Shape::fromBox(cpBody* body, const ska::Rectangle& r, double radius) {
+ska::cp::Shape ska::cp::Shape::fromBox(cpBody* body, const ska::Rectangle& relative, double radius) {
 	Shape sh;
-	sh.loadFromBox(body, r, radius);
+	sh.loadFromBox(body, relative, radius);
 	return sh;
 }
 
@@ -57,9 +57,9 @@ void ska::cp::Shape::loadFromSegment(cpBody *body, const Vect& a, const Vect& b,
 	m_shape = cpSegmentShapeNew(body, a.vect(), b.vect(), radius);
 }
 
-void ska::cp::Shape::loadFromBox(cpBody *body, const ska::Rectangle& r, double radius) {
+void ska::cp::Shape::loadFromBox(cpBody *body, const ska::Rectangle& relative, double radius) {
 	free();
-	const cpBB dBox{ r.x, r.y, r.x + r.w, r.y + r.h };
+	const cpBB dBox{ relative.x, relative.y, relative.x + relative.w, relative.y + relative.h };
 	m_shape = cpBoxShapeNew2(body, dBox, radius);
 }
 

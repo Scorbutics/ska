@@ -47,7 +47,7 @@ void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& laye
 	
 }
 
-std::vector<ska::Rectangle> TileAgglomerate(const ska::TileWorld& world, ska::TileAgglomerationPriority priority) {
+std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::TileWorld& world, ska::TileAgglomerationPriority priority) {
 	ska::Vector2<MergedTile> layer;
 	const auto width = world.getNbrBlocX();
 	const auto height = world.getNbrBlocY();
