@@ -103,7 +103,7 @@ Align GetPointAlignment(const ska::Point<int>& currentPoint, const ska::Point<in
 	return sameDirectionX ? Align::Horizontal : (sameDirectionY ? Align::Vertical : Align::None);
 }
 
-std::vector<PointArea> FilterAlignedPoints(const std::vector<PointArea>& areas){
+std::vector<PointArea> FilterAlignedSuccessivePoints(const std::vector<PointArea>& areas){
 	std::vector<PointArea> filteredPointAreas;
 	filteredPointAreas.reserve(areas.size());
 
@@ -143,7 +143,7 @@ std::vector<PointArea> FilterAlignedPoints(const std::vector<PointArea>& areas){
 }
 
 std::vector<ska::Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas) {
-	const auto filteredPointAreas = FilterAlignedPoints(areas);
+	const auto filteredPointAreas = FilterAlignedSuccessivePoints(areas);
 	
 	std::vector<ska::Rectangle> contours;
 	for(const auto& pa : filteredPointAreas) {
@@ -182,7 +182,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		//TODO sortir completement le load de la classe world
 		world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
 		
-		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
+		auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
 
 		//const auto contourRectangleTile = GenerateAgglomeratedTileMapBasic(world);

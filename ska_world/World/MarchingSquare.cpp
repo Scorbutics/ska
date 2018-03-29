@@ -4,6 +4,7 @@
 
 ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred);
 ska::StepDirection MarchingSquareNextStep(const ska::TileWorld& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep);
+void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path);
 
 std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::TileWorld& world, std::unordered_set<ska::Point<int>>& doneBlocks, const ska::MarchingSquarePredicate& pred) {
 	const auto startPoint = MarchingSquareGetStartingPoint(world, doneBlocks, pred);
@@ -47,7 +48,23 @@ std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::TileW
 		}
 		lastDirection = direction;
 	} while (point != startPoint);
+	
+	ReorganizeFirstPointToBeAlwaysTopLeft(path);
 	return {false, path};
+}
+
+void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
+	if(!path.empty()) {
+		auto& lastPoint = path.back();
+		auto& firstPoint = path.front();
+		if((lastPoint.y == firstPoint.y && lastPoint.x < firstPoint.x)
+			|| (lastPoint.x == firstPoint.x && lastPoint.y < firstPoint.y)) {
+			auto it = path.cend();
+			--it;
+			path.push_front(*it);
+			path.erase(it);
+		}
+	}
 }
 
 ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred) {
