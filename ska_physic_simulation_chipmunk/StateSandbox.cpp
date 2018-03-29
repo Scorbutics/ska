@@ -73,44 +73,87 @@ cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer user
 	return true;
 }
 
-std::vector<ska::Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas) {
-	std::vector<ska::Rectangle> contours;
-	constexpr auto depth = 24;
-	
-	//TODO simplify by skipping useless points to avoid false rectangles
+ska::Rectangle GenerateRect(const ska::Point<int>& start, const ska::Point<int>& end){
+	static constexpr auto depth = 3;
+	auto rect = ska::RectangleUtils::createRectangleFromPoints(start, end);
+	if(rect.w == 0) {
+		rect.w = depth;
+		rect.x -= depth/2;
+		rect.y += depth/2;
+		rect.h -= depth/2;
+	}
+	if(rect.h == 0) {
+		rect.h = depth;
+		rect.y -= depth/2;
+		rect.x += depth/2;
+		rect.w -= depth/2;
+	}
+	return rect;
+}
+
+enum class Align {
+	Horizontal,
+	Vertical,
+	None
+};
+
+Align GetPointAlignment(const ska::Point<int>& currentPoint, const ska::Point<int>& lastPoint){
+	const auto sameDirectionY = currentPoint.x == lastPoint.x && currentPoint.y != lastPoint.y;
+	const auto sameDirectionX = currentPoint.y == lastPoint.y && currentPoint.x != lastPoint.x;
+	return sameDirectionX ? Align::Horizontal : (sameDirectionY ? Align::Vertical : Align::None);
+}
+
+std::vector<PointArea> FilterAlignedPoints(const std::vector<PointArea>& areas){
+	std::vector<PointArea> filteredPointAreas;
+	filteredPointAreas.reserve(areas.size());
+
 	for(const auto& pa : areas) {
-		auto lastPointIt = pa.pointList.cbegin();
-		auto pIt = pa.pointList.cbegin();
-
-		if (pIt != pa.pointList.cend()) {
-			++pIt;
-			for (; pIt != pa.pointList.cend(); ++pIt) {
-				auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt), (*pIt));
-				if(rect.w == 0) {
-					rect.w = depth;
-					rect.x-= depth;
-				}
-				if(rect.h == 0) {
-					rect.h = depth;
-					rect.y-= depth;
-				}
-				contours.push_back(std::move(rect));
-				lastPointIt = pIt;
-			}
-
-			auto rect = ska::RectangleUtils::createRectangleFromPoints((*lastPointIt), (*pa.pointList.cbegin()));
-			if(rect.w == 0) {
-				rect.w = depth;
-				rect.x-= depth;
-			}
-			if(rect.h == 0) {
-				rect.h = depth;
-				rect.y-= depth;
-			}
-			contours.push_back(rect);
+		if(pa.pointList.size() < 2) {
+			continue;
 		}
+
+		auto pointArea = PointArea{};
+
+		const auto startPointIt = pa.pointList.cbegin();
+		auto nextToStartPoint = startPointIt;
+		++nextToStartPoint;
+		auto lastPointIt = startPointIt;
+		auto lastAlign = Align::None;
+
+		for (auto pIt = nextToStartPoint; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
+			const auto pointAlign = GetPointAlignment(*lastPointIt, *pIt);
+			if(pointAlign != lastAlign && pointAlign != Align::None) {
+				pointArea.pointList.emplace_back(*lastPointIt);
+				
+				lastAlign = pointAlign;
+			}
+		}
+
+		const auto pointAlign = GetPointAlignment(*lastPointIt, *startPointIt);
+		if(pointAlign != lastAlign && pointAlign != Align::None) {
+			pointArea.pointList.emplace_back(*lastPointIt);
+		}
+
+		pointArea.pointList.emplace_back(*startPointIt);
+
+		filteredPointAreas.push_back(std::move(pointArea));
 		
 	}
+	return filteredPointAreas;
+}
+
+std::vector<ska::Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas) {
+	const auto filteredPointAreas = FilterAlignedPoints(areas);
+	
+	std::vector<ska::Rectangle> contours;
+	for(const auto& pa : filteredPointAreas) {
+		auto lastPointIt = pa.pointList.cbegin();
+		for (auto pIt = lastPointIt; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
+			auto rect = GenerateRect(*lastPointIt, *pIt);
+			contours.push_back(std::move(rect));
+		}
+	}
+
 	return contours;
 }
 

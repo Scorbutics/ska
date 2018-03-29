@@ -24,8 +24,8 @@ namespace ska {
 		
 		template <class T>
 		static ska::Rectangle createRectangleFromPoints(const Point<T>& p1, const Point<T>& p2) {
-			int width = ska::NumberUtils::absolute(p1.x - p2.x);
-			int height = ska::NumberUtils::absolute(p1.y - p2.y);
+			const int width = ska::NumberUtils::absolute(p1.x - p2.x);
+			const int height = ska::NumberUtils::absolute(p1.y - p2.y);
 			auto x = ska::NumberUtils::minimum(p1.x, p2.x);
 			auto y = ska::NumberUtils::minimum(p1.y, p2.y);
 			return ska::Rectangle {x, y, width, height};
