@@ -179,8 +179,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ska::TileWorld world{ 48, "Resources/Chipsets/corr.png" };
 		//TODO sortir completement le load de la classe world
 		world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
-		
-		auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
+
+		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
 
 		//const auto contourRectangleTile = GenerateAgglomeratedTileMapBasic(world);

@@ -10,7 +10,7 @@ namespace ska {
 			}
 		};
 
-		Node(int column, int line);
+		Node(int column, int line, bool walkable);
 	
 		void calculateGlobalCost(const Node& parent, const Node& nodeGoal);
 
@@ -26,17 +26,16 @@ namespace ska {
 			return m_parent->m_costSoFar + 1 < m_costSoFar;
 		}
 
-		const int column{};
-		const int line{};
-
-		bool walkable = true;
+		const int column;
+		const int line;
+		const bool walkable;
 
 	private:
 		gsl::not_null<const Node*> m_parent = this;
 
 		bool m_notInPath = true;
 		int m_costSoFar = 0;
-		int m_heuristic;
+		int m_heuristic = 0;
 		int m_priority = 0;
 	};
 

@@ -22,6 +22,10 @@ cd ../ska_ai
 call "../cmake_.bat" %*
 mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
+cd ../ska_ai_test
+call "../cmake_.bat" %*
+mingw32-make
+if %errorlevel% neq 0 exit /b %errorlevel%
 cd ../ska_audio
 call "../cmake_.bat" %*
 mingw32-make

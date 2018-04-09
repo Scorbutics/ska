@@ -1,15 +1,12 @@
 #pragma once
 #include <string>
-#include <unordered_set>
-#include "Rectangle.h"
+#include <queue>
 #include "Utils/MovableNonCopyable.h"
 #include "Point.h"
 #include "Node.h"
 #include "Utils/Vector2.h"
-#include <queue>
 
 namespace ska {
-	class PathGraphe;
 
 	enum class PathType {
 		Random,
@@ -37,7 +34,6 @@ namespace ska {
 		PathDirection getPathDirection(std::size_t number) const;
 		void reverse();
 		static ska::PathString fromOpenList(const Node& start, const NodePriorityRefContainer& openList);
-		PathDirection buildNextPathDirection();
 
 	private:
 		std::vector<PathDirection> m_path;
@@ -48,21 +44,9 @@ namespace ska {
 	public:
 		Path(PathString path, PathType type);
 
-		const PathString m_path;		
-		const PathType m_type;
+		const PathString path;		
+		const PathType type;
 	};
 
-	class PathFinder {
-	public:
-		PathFinder(const Vector2<bool>& collisions);
-		
-		Path&& findPath(const Point<int>& from, const ska::Point<int>& to);
-
-	private:
-		std::pair<gsl::not_null<ska::Node*>, NodePriorityRefContainer> buildOpenList(const Point<int>& from, const ska::Point<int>& to);
-		NodeRefContainer neighbours(const Node& node) const;
-
-		NodeOwnerContainer m_container;
-	};
 }
 

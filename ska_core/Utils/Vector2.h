@@ -60,7 +60,6 @@ namespace ska {
 		using Parent::cbegin;
 		using Parent::cend;
 		using Parent::size;
-		using Parent::reserve;
 		using Parent::push_back;
 		using Parent::emplace_back;
 		using Parent::clear;
@@ -111,6 +110,11 @@ namespace ska {
 		void resize(const std::size_t width, const std::size_t height) {
 			setLineSize(width);
 			Parent::resize(width * height);
+		}
+
+		void reserve(const std::size_t width, const std::size_t height){
+			setLineSize(width);
+			Parent::reserve(width * height);
 		}
 
 		void setLineSize(const std::size_t lineSize) {

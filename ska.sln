@@ -96,6 +96,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_world_test", "ska_world
 		{674D1781-02C7-3598-BF05-ACF0BF98FE84} = {674D1781-02C7-3598-BF05-ACF0BF98FE84}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_ai_test", "ska_ai_test\ska_ai_test.vcxproj", "{518D07B8-A01F-367C-8A44-52574C456E25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -344,6 +346,18 @@ Global
 		{C70C9486-BCC1-3203-8C26-2FBC6005A569}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{C70C9486-BCC1-3203-8C26-2FBC6005A569}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{C70C9486-BCC1-3203-8C26-2FBC6005A569}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Debug|x64.ActiveCfg = Debug|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Debug|x86.ActiveCfg = Debug|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Debug|x86.Build.0 = Debug|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.MinSizeRel|x64.ActiveCfg = MinSizeRel|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.MinSizeRel|x86.ActiveCfg = MinSizeRel|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.MinSizeRel|x86.Build.0 = MinSizeRel|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Release|x64.ActiveCfg = Release|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Release|x86.ActiveCfg = Release|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.Release|x86.Build.0 = Release|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{518D07B8-A01F-367C-8A44-52574C456E25}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

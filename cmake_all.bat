@@ -10,6 +10,8 @@ cd ../ska_gui_test
 call ../cmake_.bat %*
 cd ../ska_ai
 call ../cmake_.bat %*
+cd ../ska_ai_test
+call ../cmake_.bat %*
 cd ../ska_audio
 call ../cmake_.bat %*
 cd ../ska_particle
