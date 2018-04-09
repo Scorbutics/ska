@@ -2,7 +2,7 @@
 #include <gsl/pointers>
 #include <vector>
 #include <functional>
-#include "Utils/NonCopyable.h"
+#include "Utils/MovableNonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
 #include "Constraint.h"
@@ -14,7 +14,7 @@ namespace ska {
 		class Vect;
 
 		class Space :
-			public NonCopyable {
+			public MovableNonCopyable {
 			
 		public:
 			Space();

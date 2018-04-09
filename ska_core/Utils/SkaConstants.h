@@ -37,15 +37,17 @@
 #define SPRITEBANK_PATH_ICONS SPRITEBANK_PATH_DIR "Icones"
 #define SPRITEBANK_PATH_INVENTORY SPRITEBANK_PATH_DIR "Inventory"
 
-#define P_DEFINED 2 //Path défini
+/*#define P_DEFINED 2 //Path défini
 #define P_RANDOM 3//ou aléatoire
 #define P_FIXED 1 //ou encore fixe
 
 //Transparence non alpha (couleur sous forme RVB)
 #define DEFAULT_T_RED 190
 #define DEFAULT_T_GREEN 151
-#define DEFAULT_T_BLUE 255
+#define DEFAULT_T_BLUE 255*/
 
+
+/*
 #define EARTH_GRAVITY 9.81F
 
 #define BLOCK_ID_AIR INT16_MAX
@@ -68,9 +70,10 @@
 #define EVENT_KEYBOARD 1
 
 #define SPRITE_ID_SHADOW 13
+*/
 
 //Taille d'un bloc dans le chipset fenetre (morceau d'une fenetre)
-#define TAILLEBLOCFENETRE 32
+/*#define TAILLEBLOCFENETRE 32
 #define TAILLEECRANMINX TAILLEBLOCFENETRE*15
-#define TAILLEECRANMINY TAILLEBLOCFENETRE*13
+#define TAILLEECRANMINY TAILLEBLOCFENETRE*13*/
 

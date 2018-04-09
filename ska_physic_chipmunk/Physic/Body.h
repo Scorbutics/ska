@@ -1,7 +1,7 @@
 #pragma once
 #include <chipmunk.h>
 #include <gsl/pointers>
-#include "Utils/NonCopyable.h"
+#include "Utils/MovableNonCopyable.h"
 
 namespace ska {
 	namespace cp {
@@ -14,7 +14,7 @@ namespace ska {
 		};
 
 		class Body :
-			public NonCopyable {
+			public MovableNonCopyable {
 		public:
 			Body();
 			Body(Body&&) noexcept;

@@ -1,14 +1,14 @@
 #pragma once
 #include <chipmunk.h>
 #include <gsl/pointers>
-#include "Utils/NonCopyable.h"
+#include "Utils/MovableNonCopyable.h"
 #include "Vect.h"
 
 namespace ska {
 	namespace cp {
 
 		class Constraint :
-			public NonCopyable {
+			public MovableNonCopyable {
 		public:
 			Constraint();
 			Constraint(Constraint&&) noexcept;

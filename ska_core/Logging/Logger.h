@@ -4,7 +4,7 @@
 #include <ctime>
 #include <typeinfo>
 #include <iomanip>
-#include "../Utils/NonCopyable.h"
+#include "../Utils/MovableNonCopyable.h"
 #include "ColorStream.h"
 
 namespace ska {
@@ -73,7 +73,7 @@ namespace ska {
 
 	}
 
-	class Logger : public LoggerLogLevel, public NonCopyable {
+	class Logger : public LoggerLogLevel, public MovableNonCopyable {
 		friend class LoggerFactory;
 	private:
 		static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){

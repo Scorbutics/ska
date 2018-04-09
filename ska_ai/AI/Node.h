@@ -1,32 +1,51 @@
 #pragma once
+#include "../../external/gsl/gsl/pointers"
 
-#include <string>
-#include <vector>
+namespace ska {
+	struct Node {
+		class CompareDist {
+		public:
+			bool operator()(Node& n1, Node& n2) const {
+				return n1.m_priority > n2.m_priority;
+			}
+		};
 
-class Node
-{
-    public:
-    Node();
-    void setParent(Node *n);
-	void setWalkable(bool x);
-	void setG(int g);
-	void setH(int h);
-	void setF(int f);
-    void setCol(int col);
-    void setLine(int line);
+		Node(int column, int line);
+	
+		void calculateGlobalCost(const Node& parent, const Node& nodeGoal);
 
-	Node* getParent(std::vector<std::vector<Node>> &graphe);
-	bool getWalkable();
-	int getG();
-	int getH();
-	int getF();
-    int getCol();
-    int getLine();
+		const Node& parent() const {
+			return *m_parent;
+		}
 
-    private:
-    int m_g, m_h, m_f, m_col, m_line, m_parentCol, m_parentLine;
-    bool m_walkable;
-    Node* m_parent;
+		bool isNotAlreadyInPath() const{
+			return m_notInPath;
+		}
 
-};
+		bool willHaveLessCost() const {
+			return m_parent->m_costSoFar + 1 < m_costSoFar;
+		}
 
+		const int column{};
+		const int line{};
+
+		bool walkable = true;
+
+	private:
+		gsl::not_null<const Node*> m_parent = this;
+
+		bool m_notInPath = true;
+		int m_costSoFar = 0;
+		int m_heuristic;
+		int m_priority = 0;
+	};
+
+	inline bool operator==(const Node& n1, const Node& n2) {
+		return n1.column == n2.column && n1.line == n2.line;
+	}
+
+	inline bool operator!=(const Node& n1, const Node& n2) {
+		return !operator==(n1, n2);
+	}
+
+}
