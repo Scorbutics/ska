@@ -11,7 +11,7 @@ ska::LayerRenderable::LayerRenderable(Vector2<BlockRenderable*>&& block, Chipset
 	m_block(std::move(block)),
 	m_width(m_block.lineSize()),
 	m_height(m_width == 0 ? 0 : m_block.size() / m_width) {
-	m_block.reserve(20);
+	m_block.reserve(m_width, m_height);
 }
 
 void ska::LayerRenderable::update(const ska::Rectangle& cameraPos) {

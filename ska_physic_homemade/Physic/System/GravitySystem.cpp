@@ -1,5 +1,6 @@
 #include "GravitySystem.h"
-#include "Utils/SkaConstants.h"
+
+static constexpr auto EARTH_GRAVITY = 9.81F;
 
 ska::GravitySystem::GravitySystem(EntityManager& entityManager) : System(entityManager) {
 }

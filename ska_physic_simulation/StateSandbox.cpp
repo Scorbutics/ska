@@ -1,6 +1,6 @@
 #include "StateSandbox.h"
-#include "../ska_draw/Graphic/System/GraphicSystem.h"
-#include "../ska_draw/Graphic/System/CameraFixedSystem.h"
+#include "Graphic/System/GraphicSystem.h"
+#include "Graphic/System/CameraFixedSystem.h"
 #include "Physic/System/MovementSystem.h"
 #include "Physic/System/CollisionSystem.h"
 #include "Graphic/System/AnimationSystem.h"
@@ -12,7 +12,7 @@
 #include "Physic/System/WorldCollisionSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
 
-constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
+constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
@@ -29,7 +29,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 }
 
 ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const {
-	auto entity = m_entityManager.createEntity();
+	const auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
 	gc.animatedSprites.resize(1);
 	auto& at = gc.animatedSprites[0];

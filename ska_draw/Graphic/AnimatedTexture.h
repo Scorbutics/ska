@@ -4,7 +4,6 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "GifTexture.h"
-#include "Utils/SkaConstants.h"
 #include "Draw/Renderable.h"
 
 namespace ska {
@@ -17,7 +16,7 @@ namespace ska {
 		~AnimatedTexture() = default;
 
 		void loadFromText(unsigned fontSize, const std::string& text, Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical = false);
-		void load(const std::string& spritePath, unsigned int horizontalFrames = 1, unsigned int verticalFrames = 1, unsigned int animatedFrames = 1, bool isVertical = false, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
+		void load(const std::string& spritePath, unsigned int horizontalFrames = 1, unsigned int verticalFrames = 1, unsigned int animatedFrames = 1, bool isVertical = false, int r = Texture::DEFAULT_T_RED, int g = Texture::DEFAULT_T_GREEN, int b = Texture::DEFAULT_T_BLUE, int a = -1);
 
 		void stop(bool x);
 		void reset();

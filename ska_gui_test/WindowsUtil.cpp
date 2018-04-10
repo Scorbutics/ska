@@ -35,7 +35,7 @@ ska::InputContextManager& GetICM() {
 		initialized = true;
 		auto ict = std::make_unique<InputContextTest>();
 		SetICT(ict.get());
-		playerICM.addContext(ska::CONTEXT_GUI, std::move(ict));
+		playerICM.addContext(ska::EnumContextManager::CONTEXT_GUI, std::move(ict));
 	}
 	return playerICM;
 }

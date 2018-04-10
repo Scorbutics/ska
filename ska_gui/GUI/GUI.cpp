@@ -8,6 +8,9 @@
 #include "Utils/SkaConstants.h"
 
 #define SCROLL_BUTTON_SPEED 3
+static constexpr auto TAILLEECRANMINX = ska::WindowIG<>::TAILLEBLOCFENETRE*15;
+static constexpr auto TAILLEECRANMINY = ska::WindowIG<>::TAILLEBLOCFENETRE*13;
+
 std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "." FILE_SEPARATOR "Menu" FILE_SEPARATOR "default_theme" FILE_SEPARATOR;
 
 ska::GUI::GUI(GameEventDispatcher& ged) :
@@ -113,7 +116,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 			FocusEvent fe(m_clicked, MOUSE_FOCUS);
 			m_clicked->directNotify(fe);
 			if(fe.getTarget() != nullptr) {
-				playerIcm.disableContext(CONTEXT_MAP, true);
+				playerIcm.disableContext(EnumContextManager::CONTEXT_MAP, true);
 			}
 
 			m_lastFocused = m_clicked;
@@ -125,7 +128,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 		}
 
 		if (fbe.getTarget() != nullptr) {
-			playerIcm.disableContext(CONTEXT_MAP, false);
+			playerIcm.disableContext(EnumContextManager::CONTEXT_MAP, false);
 		}
 	}
 
@@ -205,7 +208,7 @@ bool ska::GUI::onGUIEvent(GUIEvent& ge) {
     }
 
 	if(ge.type == GUIEventType::ADD_BALLOON) {
- 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, TAILLEBLOCFENETRE * 2, TAILLEBLOCFENETRE * 10, TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
+ 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, ska::WindowIG<>::TAILLEBLOCFENETRE * 2, ska::WindowIG<>::TAILLEBLOCFENETRE * 10, ska::WindowIG<>::TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
 		bd.addHandler<TimeEventListener>([&](Widget* tthis, TimeEvent&) {
 			auto& balloon = static_cast<BalloonDialog&>(*tthis);
 			if(balloon.isExpired()) {

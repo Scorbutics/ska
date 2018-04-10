@@ -13,11 +13,10 @@ ska::LayerData ska::LayerLoader::load(const std::string& layerFilename, Chipset&
 
 	const auto fileHeight = static_cast<unsigned int>(file.getInstance()->h);
 	const auto fileWidth = static_cast<unsigned int>(file.getInstance()->w);
-	const auto area = fileHeight * fileWidth;
 	
 	LayerData layerData;
-	layerData.physics.reserve(area);
-	layerData.graphics.reserve(area);
+	layerData.physics.reserve(fileWidth, fileHeight);
+	layerData.graphics.reserve(fileWidth, fileHeight);
 	layerData.physics.setLineSize(fileWidth);
 	layerData.graphics.setLineSize(fileWidth);
 
