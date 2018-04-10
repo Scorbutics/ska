@@ -97,6 +97,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_world_test", "ska_world
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_ai_test", "ska_ai_test\ska_ai_test.vcxproj", "{518D07B8-A01F-367C-8A44-52574C456E25}"
+	ProjectSection(ProjectDependencies) = postProject
+		{020EC70E-E392-3EAE-AF5E-6B7581DC7AA4} = {020EC70E-E392-3EAE-AF5E-6B7581DC7AA4}
+		{27DAB442-9E78-3AD1-893A-605BD278395C} = {27DAB442-9E78-3AD1-893A-605BD278395C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

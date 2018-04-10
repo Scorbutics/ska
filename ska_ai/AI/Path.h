@@ -27,25 +27,19 @@ namespace ska {
 	using NodeRefContainer = std::vector<NodeRef>;
 	using NodeOwnerContainer = Vector2<Node>;
 
-	class PathString : public MovableNonCopyable {
-	public:
-		PathString(const std::string& path);
-	
-		PathDirection getPathDirection(std::size_t number) const;
-		void reverse();
-		static ska::PathString fromOpenList(const Node& start, const NodePriorityRefContainer& openList);
+	class Path : public MovableNonCopyable {
+	public:		
+		static Path fromOpenList(const Node& start, const NodePriorityRefContainer& openList);
+
+		Path(Path&&) = default;
+		~Path() = default;
+
+		const std::vector<PathDirection> path;
+		const PathType type;
 
 	private:
-		std::vector<PathDirection> m_path;
-		std::size_t m_cursor;
-	};
-
-	class Path : public MovableNonCopyable {
-	public:
-		Path(PathString path, PathType type);
-
-		const PathString path;		
-		const PathType type;
+		static std::vector<PathDirection> buildPath(const std::string& path);
+		Path(std::vector<PathDirection> path, PathType type);
 	};
 
 }

@@ -5,73 +5,62 @@
 #include "Node.h"
 #include "Task/Task.h"
 
-ska::PathString::PathString(const std::string& path) {
-	m_path.reserve(path.size());
-	for(const auto& p : path) {
+std::vector<ska::PathDirection> ska::Path::buildPath(const std::string& path) {
+	auto result = std::vector<ska::PathDirection> {};
+	result.reserve(path.size());
+	for(auto it = path.crbegin(); it != path.crend(); ++it) {
+		const auto& p = *it;
 		switch(p) {
 		case 'h':
-			m_path.push_back(PathDirection::Up);
+			result.push_back(ska::PathDirection::Up);
 			break;
 
 		case 'b':
-			m_path.push_back(PathDirection::Down);
+			result.push_back(ska::PathDirection::Down);
 			break;
 
 		case 'g':
-			m_path.push_back(PathDirection::Left);
+			result.push_back(ska::PathDirection::Left);
 			break;
 
 		case 'd':
-			m_path.push_back(PathDirection::Right);
+			result.push_back(ska::PathDirection::Right);
 			break;
 
 		default:
 			break;
 		}
 	}
+	return result;
 }
 
-ska::PathDirection ska::PathString::getPathDirection(std::size_t number) const {
-    if(m_cursor >= m_path.size()) {
-        return PathDirection::Unknown;
-	}
-
-    return m_path[number];
-}
-
-void ska::PathString::reverse() {
-	std::reverse(m_path.begin(), m_path.end());
-}
-
-ska::PathString ska::PathString::fromOpenList(const Node& start, const NodePriorityRefContainer& openList) {
+ska::Path ska::Path::fromOpenList(const Node& start, const NodePriorityRefContainer& openList) {
 	std::string path;
+	if(!openList.empty()) {
+		const auto *itNode = &openList.top().get();
+		while(itNode != &start) {
+			const auto directionX = itNode->column - itNode->parent().column + 1;
+			const auto directionY = itNode->line - itNode->parent().line + 1;
 		
-	const auto *itNode = &openList.top().get();
-    while(itNode != &start) {
-		const auto directionX = itNode->column - itNode->parent().column + 1;
-		const auto directionY = itNode->line - itNode->parent().line + 1;
+			if(directionX == 1) {
+				path += "d";
+			} else if(directionX == -1) {
+				path += "g";
+			}
 		
-		if(directionX == 1) {
-			path += "d";
-		} else if(directionX == -1) {
-			path += "g";
-		}
-		
-		if(directionY == 1) {
-			path += "b";
-		} else if (directionY == -1) {
-			path += "h";
-		}
+			if(directionY == 1) {
+				path += "b";
+			} else if (directionY == -1) {
+				path += "h";
+			}
 
-        itNode = &itNode->parent();
-    }
-
-	auto pathString = ska::PathString { path };
-	pathString.reverse();
-	return pathString;
+			itNode = &itNode->parent();
+		}
+	}
+	return { buildPath(path), PathType::Defined };
 }
 
-ska::Path::Path(PathString path, PathType type) :
+ska::Path::Path(std::vector<ska::PathDirection> path, PathType type) :
 	path(std::move(path)),
 	type(type) {
 }

@@ -9,5 +9,7 @@ namespace ska {
 
 		MovableNonCopyable(MovableNonCopyable&&) = default;
 		MovableNonCopyable& operator=(MovableNonCopyable&&) = default;
+		
+		~MovableNonCopyable() = default;
 	};
 }

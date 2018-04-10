@@ -11,7 +11,25 @@ namespace ska {
 		};
 
 		Node(int column, int line, bool walkable);
-	
+
+		Node(Node&& n) noexcept : 
+			column(n.column), 
+			line(n.line), 
+			walkable(n.walkable),
+			m_notInPath(n.m_notInPath), 
+			m_costSoFar(n.m_costSoFar),
+			m_heuristic(n.m_heuristic),
+			m_priority(n.m_priority) {
+			if(n.m_parent != &n) {
+				m_parent = n.m_parent;
+			}
+		}
+
+		Node(const Node& n) = delete;
+
+		Node& operator=(const Node& n) = delete;
+		Node& operator=(Node&& n) = delete;
+
 		void calculateGlobalCost(const Node& parent, const Node& nodeGoal);
 
 		const Node& parent() const {

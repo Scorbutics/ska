@@ -72,6 +72,11 @@ namespace ska {
 		Vector2() :
 			Vector2(0) { }
 
+		Vector2(const std::size_t lineSize, std::initializer_list<T> list) :
+			Parent(std::move(list)),
+			m_view(*this, lineSize),
+			m_lineSize(lineSize){ }
+
 		explicit Vector2(Vector2<T>&& v) noexcept :
 			m_view(*this, v.m_lineSize)  {
 			*this = std::move(v);
