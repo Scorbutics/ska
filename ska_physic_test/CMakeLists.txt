@@ -8,6 +8,9 @@ endif()
 
 set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
 
+set(SKA_DEBUG_DIR "Debug")
+set(SKA_RELEASE_DIR "Release")
+
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SDL2_GIF_INCLUDE_DIR ${CMAKE_BINARY_DIR}/../external/SDL2_gif/src)
@@ -21,8 +24,8 @@ include_directories(${DOCTEST_DIR})
 include_directories(${FAKEIT_DIR})
 include_directories(${SKA_PHYSIC_DIR})
 
-link_directories(${LIBRARY_DIR})
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+link_directories(${LIBRARY_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}

@@ -8,8 +8,6 @@ endif()
 
 set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
 
-message("lib folder is " ${LIBRARY_DIR})
-
 set(SKA_DEBUG_DIR "Debug")
 set(SKA_RELEASE_DIR "Release")
 
