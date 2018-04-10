@@ -18,12 +18,14 @@ ska::NodeRefContainer ska::PathFinder::neighbours(const Node& node) {
 
 
 
-std::pair<gsl::not_null<ska::Node*>, ska::NodePriorityRefContainer> ska::PathFinder::buildOpenList(const Point<int>& from, const ska::Point<int>& to) {
+ska::NodeRefContainer ska::PathFinder::buildPathList(const Point<int>& from, const ska::Point<int>& to) {
 	auto& nodeStart = m_container[from.x][from.y];
 	const auto& nodeGoal = m_container[to.x][to.y];
 
+	NodeRefContainer pathList;
 	NodePriorityRefContainer openList;
 	openList.push(nodeStart);
+	pathList.push_back(nodeStart);
 
     while(!openList.empty()) {
 		const auto& minPriorityNode = openList.top().get();
@@ -36,15 +38,16 @@ std::pair<gsl::not_null<ska::Node*>, ska::NodePriorityRefContainer> ska::PathFin
         for (auto& neighbourRef : neighbourList) {
 			auto& neighbour = neighbourRef.get();
 
-			if(neighbour.isNotAlreadyInPath() && neighbour.willHaveLessCost()) {
+			if(neighbour.isNotAlreadyInPath() || neighbour.willHaveLessCost()) {
 				neighbour.calculateGlobalCost(minPriorityNode, nodeGoal);
 				openList.push(neighbour);
+				pathList.push_back(neighbour);
 			}
 		}
 		
     }
 
-	return std::make_pair(&nodeStart, std::move(openList));
+	return pathList;
 }
 
 //pour l'explication détaillée de l'A*
@@ -56,8 +59,8 @@ ska::PathFinder::PathFinder(const Vector2<char>& collisions) {
 	const int height = collisions.empty() ? 0 : collisions.size() / collisions.lineSize();
 	m_container.reserve(width, height);
 
-	for(auto x = 0; x < width; x++) {
-		for(auto y = 0; y < height; y++) {
+	for(auto y = 0; y < height; y++) {
+		for(auto x = 0; x < width; x++) {
 			const auto& col = collisions[x][y] != 0;
 			m_container.push_back(ska::Node {x, y, !col});
 		}
@@ -65,6 +68,6 @@ ska::PathFinder::PathFinder(const Vector2<char>& collisions) {
 }
 
 ska::Path ska::PathFinder::findPath(const Point<int>& from, const Point<int>& to) {
-	const auto [nodeStart, openList] = buildOpenList(from, to);
-	return Path::fromOpenList(*nodeStart, openList);
+	const auto list = buildPathList(from, to);
+	return Path::fromPathList(list);
 }

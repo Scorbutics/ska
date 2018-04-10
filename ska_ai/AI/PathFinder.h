@@ -11,7 +11,7 @@ namespace ska {
 		Path findPath(const Point<int>& from, const ska::Point<int>& to);
 
 	private:
-		std::pair<gsl::not_null<ska::Node*>, NodePriorityRefContainer> buildOpenList(const Point<int>& from, const ska::Point<int>& to);
+		NodeRefContainer buildPathList(const Point<int>& from, const ska::Point<int>& to);
 		NodeRefContainer neighbours(const Node& node);
 
 		template<class Point>

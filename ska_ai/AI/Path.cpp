@@ -34,13 +34,13 @@ std::vector<ska::PathDirection> ska::Path::buildPath(const std::string& path) {
 	return result;
 }
 
-ska::Path ska::Path::fromOpenList(const Node& start, const NodePriorityRefContainer& openList) {
+ska::Path ska::Path::fromPathList(const NodeRefContainer& pathList) {
 	std::string path;
-	if(!openList.empty()) {
-		const auto *itNode = &openList.top().get();
-		while(itNode != &start) {
-			const auto directionX = itNode->column - itNode->parent().column + 1;
-			const auto directionY = itNode->line - itNode->parent().line + 1;
+	if(!pathList.empty()) {
+		for(const auto * itNode = &pathList.crbegin()->get(); itNode != &itNode->parent() && *itNode != pathList[0]; itNode = &itNode->parent()) {
+			auto& node = *itNode;
+			const auto directionX = node.column - node.parent().column;
+			const auto directionY = node.line - node.parent().line;
 		
 			if(directionX == 1) {
 				path += "d";
@@ -53,8 +53,6 @@ ska::Path ska::Path::fromOpenList(const Node& start, const NodePriorityRefContai
 			} else if (directionY == -1) {
 				path += "h";
 			}
-
-			itNode = &itNode->parent();
 		}
 	}
 	return { buildPath(path), PathType::Defined };

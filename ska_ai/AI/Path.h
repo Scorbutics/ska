@@ -29,7 +29,7 @@ namespace ska {
 
 	class Path : public MovableNonCopyable {
 	public:		
-		static Path fromOpenList(const Node& start, const NodePriorityRefContainer& openList);
+		static Path fromPathList(const NodeRefContainer& pathList);
 
 		Path(Path&&) = default;
 		~Path() = default;

@@ -21,16 +21,16 @@ TEST_CASE("[PathFinder]") {
 		constexpr auto width = 10u;
 
 		auto collisions = ska::Vector2<char> { width, 
-		   {0, 0,  0,   0,  0, '#', 0, 0, 0, 0,
-			0, 0,  0,   0,  0, '#', 0, 0, 0, 0,
-			0, 0, '#', '#', 0, '#', 0, 0, 0, 0,
-			0, 0, '#', '#', 0, '#', 0, 0, 0, 0,
-			0, 0, '#',  0,  0, '#', 0, 0, 0, 0,
-			0, 0, '#', '#', 0, '#', 0, 0, 0, 0,
-			0, 0, '#', '#', 0,  0,  0, 0, 0, 0,
-			0, 0, '#', '#', 0,  0,  0, 0, 0, 0,
-			0, 0, '#', '#', 0,  0,  0, 0, 0, 0,
-			0, 0,  0,  '#', 0,  0,  0, 0, 0, 0 }};
+		   {0, 0,  0,   0,  0, '#', '#', 0, 0, 0,
+			0, 0,  0,   0,  0,  0,  '#', 0, 0, 0,
+			0, 0, '#', '#', 0, '#', '#', 0, 0, 0,
+			0, 0, '#', '#', 0, '#',  0,  0, 0, 0,
+			0, 0, '#',  0,  0, '#',  0,  0, 0, 0,
+			0, 0, '#', '#', 0, '#',  0,  0, 0, 0,
+			0, 0, '#', '#', 0,  0,   0,  0, 0, 0,
+			0, 0, '#', '#', 0,  0,   0,  0, 0, 0,
+			0, 0, '#', '#', 0,  0,   0,  0, 0, 0,
+			0, 0,  0,  '#', 0,  0,   0,  0, 0, 0 }};
 
 		auto pathFinder = ska::PathFinder { collisions };
 
@@ -50,7 +50,7 @@ TEST_CASE("[PathFinder]") {
 				case ska::PathDirection::Unknown: break;
 				default: ;
 				}
-				if(currentPosition.y >= 0 && currentPosition.x >=0) {
+				if(currentPosition.y >= 0 && currentPosition.x >=0 && currentPosition.x < 10 && currentPosition.y < 10) {
 					collisions[currentPosition.x][currentPosition.y] = '.';
 				}
 			}
