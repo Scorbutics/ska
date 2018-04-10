@@ -6,6 +6,11 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
+set(LIBRARY_DIR ${SDL2_INCLUDE_DIR}/../lib)
+
+set(SKA_DEBUG_DIR "Debug")
+set(SKA_RELEASE_DIR "Release")
+
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/doctest)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
