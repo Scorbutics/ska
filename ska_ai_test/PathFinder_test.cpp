@@ -54,8 +54,8 @@ TEST_CASE("[PathFinder]") {
 					collisions[currentPosition.x][currentPosition.y] = '.';
 				}
 			}
-			DisplayCollisions(collisions);
-			//CHECK();
+			//DisplayCollisions(collisions);
+			CHECK(!p.path.empty());
 		}
 	}
 
