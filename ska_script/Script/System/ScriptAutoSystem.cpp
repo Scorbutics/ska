@@ -91,7 +91,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 	extendedName = keyScript + "_" + scriptData.context;
 
 	const std::string& currentDir = FileUtils::getCurrentDirectory();
-	validPath = (currentDir + FILE_SEPARATOR "" + scriptData.name);
+	validPath = (currentDir + "/" + scriptData.name);
 
 	ScriptComponent sc;
 	if (m_cache.find(validPath) == m_cache.end()) {

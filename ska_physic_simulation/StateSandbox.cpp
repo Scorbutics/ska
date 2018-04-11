@@ -11,6 +11,7 @@
 #include "Graphic/System/DeleterSystem.h"
 #include "Physic/System/WorldCollisionSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
+#include "World/TileMapLoaderImage.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
@@ -115,7 +116,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
-		m_world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
+		ska::TileMapLoaderImage loader {"Resources/Levels/new_level", "Resources/Chipsets/chipset_platform", "Chipsets/corr.png"};
+		m_world.load(loader);
 		m_world.linkCamera(m_cameraSystem);
 	}
 	return true;

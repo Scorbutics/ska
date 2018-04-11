@@ -22,7 +22,7 @@ ska::SpritePath::SpritePath()
 
 std::string ska::SpritePath::getPath(unsigned int spriteType, int id)
 {
-	return m_paths[spriteType] + FILE_SEPARATOR + (id >= 0 ? "" : "pnj") + StringUtils::intToStr(NumberUtils::absolute(id)) + ".png";
+	return m_paths[spriteType] + "/" + (id >= 0 ? "" : "pnj") + StringUtils::intToStr(NumberUtils::absolute(id)) + ".png";
 }
 
 ska::SpritePath::~SpritePath(){}

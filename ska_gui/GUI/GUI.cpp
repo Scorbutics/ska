@@ -11,7 +11,7 @@
 static constexpr auto TAILLEECRANMINX = ska::WindowIG<>::TAILLEBLOCFENETRE*15;
 static constexpr auto TAILLEECRANMINY = ska::WindowIG<>::TAILLEBLOCFENETRE*13;
 
-std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "." FILE_SEPARATOR "Menu" FILE_SEPARATOR "default_theme" FILE_SEPARATOR;
+std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "./Menu/default_theme/";
 
 ska::GUI::GUI(GameEventDispatcher& ged) :
 	ska::Observer<GUIEvent>(std::bind(&GUI::onGUIEvent, this, std::placeholders::_1)),

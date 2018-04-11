@@ -5,7 +5,6 @@
 #include "LayerEvent.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
-#include "Utils/FileUtils.h"
 #include "Draw/DrawableContainer.h"
 #include "LayerLoader.h"
 #include "TileWorld.h"
@@ -162,12 +161,13 @@ const ska::Block* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const 
 void ska::TileWorld::load(TileMapLoader& loader) {
 	m_autoScriptsPlayed = false;
 	
+	//TODO éviter de reload chipset si identique (à faire avec le TODO de séparation de lifetime entre tileset et world)
+
+
+
 	m_collisionProfile.clear();
 	m_graphicLayers.clear();
-
-
-	//TODO éviter de reload chipset si identique
-
+	
 	/*const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
 	if (chipsetChanged) {
 		m_chipset = std::make_unique<Tileset>(m_correspondanceMapper, m_blockSize, chipsetName);

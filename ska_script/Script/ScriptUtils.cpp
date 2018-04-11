@@ -227,8 +227,8 @@ std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, con
 bool ska::ScriptUtils::isScriptActivated(const MemoryScript& saveGame, const std::string& scriptName)
 {
 	std::string s;
-	std::ifstream scriptList(("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + saveGame.getSaveName() + FILE_SEPARATOR "scripts.data").c_str(), std::ios::app);
-	std::ifstream tmpScriptList(("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + saveGame.getSaveName() + FILE_SEPARATOR "tmpscripts.data").c_str(), std::ios::app);
+	std::ifstream scriptList(("./Data/Saves/" + saveGame.getSaveName() + "/scripts.data").c_str(), std::ios::app);
+	std::ifstream tmpScriptList(("./Data/Saves/" + saveGame.getSaveName() + "/tmpscripts.data").c_str(), std::ios::app);
 
 	if (scriptList.fail())
 		return true;

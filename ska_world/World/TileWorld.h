@@ -12,8 +12,10 @@
 #include "CollisionProfile.h"
 #include "LayerRenderable.h"
 #include "TilesetEvent.h"
+#include "Tileset.h"
 
 namespace ska {
+	class TileMapLoader;
 	class CameraSystem;
 	class PhysicObject;
 	class Block;
@@ -33,7 +35,7 @@ namespace ska {
 		TileWorld(const TileWorld&) = delete;
 		TileWorld& operator=(const TileWorld&) = delete;
 
-		virtual void load(const std::string& fileName, const std::string& chipsetName);
+		void load(TileMapLoader& loader);
 
 		unsigned int getPixelWidth() const;
 		unsigned int getPixelHeight() const;
@@ -50,7 +52,7 @@ namespace ska {
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 
-		bool getCollision(const unsigned int x, const unsigned int y) const;
+		bool getCollision(unsigned int x, unsigned int y) const;
 
 		unsigned int getBlockSize() const override;
 
@@ -83,6 +85,7 @@ namespace ska {
 		CollisionProfile m_collisionProfile;
 		LayerEvent m_layerE;
 		
+		//TODO Tileset avec lifetime à part
 		std::unique_ptr<TilesetEvent> m_tilesetEvent;
 		std::unique_ptr<Tileset> m_tileset;
 

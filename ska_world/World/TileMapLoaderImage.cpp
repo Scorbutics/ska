@@ -17,7 +17,7 @@ std::pair<std::unique_ptr<ska::Layer>, std::unique_ptr<ska::LayerRenderable>> sk
 	auto l = std::make_unique<Layer>(std::move(layerData.physics));
 	auto lGraphics = std::make_unique<LayerRenderable>(std::move(layerData.graphics), tileset.getRenderable(), blockSize);
 
-	return std::make_pair(l, lGraphics);
+	return std::make_pair(std::move(l), std::move(lGraphics));
 }
 
 std::unique_ptr<ska::Tileset> ska::TileMapLoaderImage::load(const int blockSize, CollisionProfile& profile, std::vector<LayerRenderablePtr>& renderables) {
