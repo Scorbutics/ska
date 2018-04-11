@@ -5,16 +5,16 @@
 
 namespace ska {
 
-	class ChipsetRenderable {
+	class TilesetRenderable {
 	public:
-		ChipsetRenderable(const unsigned int corrFileSize, const int blockSize, const std::string& chipsetName);
+		TilesetRenderable(const unsigned int corrFileSize, const int blockSize, const std::string& chipsetName);
 		void render(const Renderer& renderer, Point<int> pos, const BlockRenderable& block) const;
 		void update(BlockRenderable& block);
 		
 		BlockRenderable& getBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) const;
 
 		const Texture& getTexture() const;
-		~ChipsetRenderable() = default;
+		~TilesetRenderable() = default;
 
 	private:
 		mutable std::vector<BlockRenderablePtr> m_blocks;

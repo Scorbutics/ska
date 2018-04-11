@@ -26,7 +26,7 @@ ska::Rectangle ska::BlockRenderable::determineFrame(ska::Point<int>, const Recta
 	auto buf = m_spritePosInChipset;
 
 	if (m_auto_animation) {
-		Rectangle bufRectAnim;
+		Rectangle bufRectAnim{};
 
 		if (rectAnim != nullptr) {
 			bufRectAnim = *rectAnim;

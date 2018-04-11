@@ -5,9 +5,9 @@
 #include "LayerRenderable.h"
 #include "Draw/Renderer.h"
 
-ska::LayerRenderable::LayerRenderable(Vector2<BlockRenderable*>&& block, ChipsetRenderable& chipset, const unsigned int blockSize) :
+ska::LayerRenderable::LayerRenderable(Vector2<BlockRenderable*>&& block, TilesetRenderable& chipset, const unsigned int blockSize) :
 	m_blockSize(blockSize),
-	m_chipset(chipset),
+	m_tileset(chipset),
 	m_block(std::move(block)),
 	m_width(m_block.lineSize()),
 	m_height(m_width == 0 ? 0 : m_block.size() / m_width) {
@@ -17,7 +17,6 @@ ska::LayerRenderable::LayerRenderable(Vector2<BlockRenderable*>&& block, Chipset
 void ska::LayerRenderable::update(const ska::Rectangle& cameraPos) {
 	m_lastCameraPos = cameraPos;
 
-	/* TODO external view ? (avoid camera reference)*/
 	const auto absORelX = NumberUtils::absolute(cameraPos.x);
 	const auto absORelY = NumberUtils::absolute(cameraPos.y);
 	const auto cameraPositionStartBlockX = absORelX / m_blockSize;
@@ -36,7 +35,7 @@ void ska::LayerRenderable::update(const ska::Rectangle& cameraPos) {
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
 				const auto b = m_block[i][j];
 				if (b != nullptr) {
-					m_chipset.update(*b);
+					m_tileset.update(*b);
 				}
 			}
 
@@ -72,8 +71,7 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 				const auto b = m_block[i][j];
 				if (b != nullptr) {
 					const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
-					/* TODO passer la propriété BLOCK_PROP_WIND_SENSITIVITY en script de chipset */
-					m_chipset.render(renderer, absoluteCurrentPos, *b);
+					m_tileset.render(renderer, absoluteCurrentPos, *b);
 				}
 			}
 		}

@@ -2,9 +2,8 @@
 #include <memory>
 #include "Draw/Color.h"
 #include "Graphic/SDLSurface.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ChipsetRenderable.h"
-#include "ChipsetCorrespondanceMapper.h"
+#include "TilesetRenderable.h"
+#include "TilesetCorrespondanceMapper.h"
 
 namespace ska {
 	class Animation;
@@ -14,21 +13,20 @@ namespace ska {
 	typedef std::unique_ptr<BlockRenderable> BlockRenderablePtr;
 	typedef char ScriptTriggerType;
 
-	//Rename Tileset
-	class Chipset {
+	class Tileset {
 	public:
-		Chipset(const ChipsetCorrespondanceMapper& correspondanceMapper, const int blockSize, const std::string& chipsetName);
+		Tileset(TilesetCorrespondanceMapper correspondanceMapper, const int blockSize, const std::string& chipsetName);
 		std::pair<ska::Block*, ska::BlockRenderable*> getBlock(const Color& key) const;
 		const std::string& getName() const;
-		ChipsetRenderable& getRenderable();
-		~Chipset() = default;
+		TilesetRenderable& getRenderable();
+		~Tileset() = default;
 
-		void operator=(const Chipset&) = delete;
+		void operator=(const Tileset&) = delete;
 
 	private:
 		void load();
 
-		const ChipsetCorrespondanceMapper& m_chipsetCorrespondanceMapper;
+		const TilesetCorrespondanceMapper m_chipsetCorrespondanceMapper;
 
 		mutable std::vector<BlockPtr> m_blocks;
 
@@ -38,10 +36,10 @@ namespace ska {
 		SDLSurface m_sChipset;
 		SDLSurface m_sProperties;
 
-		ChipsetRenderable m_renderable;
+		TilesetRenderable m_renderable;
 
-		Uint32 m_darkColor;
-		Uint32 m_whiteColor;
-		Uint32 m_lightColor;
+		Uint32 m_darkColor{};
+		Uint32 m_whiteColor{};
+		Uint32 m_lightColor{};
 	};
 }

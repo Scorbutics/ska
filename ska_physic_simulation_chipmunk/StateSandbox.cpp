@@ -14,6 +14,7 @@
 #include "CollisionHandlerType.h"
 #include "World/MarchingSquare.h"
 #include "World/TileAgglomerate.h"
+#include "World/TileMapLoaderImage.h"
 
 struct PointArea {
 	std::list<ska::Point<int>> pointList;
@@ -167,8 +168,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
 		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager, m_space));
-		/*const ska::ChipsetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
-		m_layerHolder.chipset = std::make_unique<ska::Chipset>( corr, 48, "Resources/Chipsets/chipset_platform" );
+		/*const ska::TilesetCorrespondanceMapper corr{ "Resources/Chipsets/corr.png" };
+		m_layerHolder.chipset = std::make_unique<ska::Tileset>( corr, 48, "Resources/Chipsets/chipset_platform" );
 		ska::LayerLoader loader;
 
 		auto layerData = loader.load("Resources/Levels/new_level/new_level.bmp", *m_layerHolder.chipset);
@@ -176,9 +177,11 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto layerBlocks = std::move(layerData.physics);
 		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);*/
 
-		ska::TileWorld world{ 48, "Resources/Chipsets/corr.png" };
-		//TODO sortir completement le load de la classe world
-		world.load("Resources/Levels/new_level", "Resources/Chipsets/chipset_platform");
+		ska::TileWorld world{ 48 };
+
+		ska::TileMapLoaderImage loader { "Resources/Levels/new_level", "Resources/Chipsets/chipset_platform", "Resources/Chipsets/corr.png" };
+
+		world.load(loader);
 
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);

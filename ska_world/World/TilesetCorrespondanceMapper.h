@@ -3,12 +3,14 @@
 #include "Point.h"
 #include "Draw/Color.h"
 #include "Graphic/SDLSurface.h"
+#include "Utils/MovableNonCopyable.h"
 
 namespace ska {
-	class ChipsetCorrespondanceMapper {
+	class TilesetCorrespondanceMapper : public MovableNonCopyable {
 	public:
-		explicit ChipsetCorrespondanceMapper(const std::string& filenameCorr);
-		~ChipsetCorrespondanceMapper() = default;
+		explicit TilesetCorrespondanceMapper(const std::string& filenameCorr);
+		TilesetCorrespondanceMapper(TilesetCorrespondanceMapper&&) = default;
+		~TilesetCorrespondanceMapper() = default;
 
 		const std::unordered_map<Color, Point<int>>& access() const;
 		unsigned int getFileWidth() const;

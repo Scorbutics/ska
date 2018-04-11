@@ -3,17 +3,15 @@
 #include <unordered_set>
 #include <vector>
 #include "Inputs/Readers/IniReader.h"
-#include "Graphic/Texture.h"
 #include "Draw/CameraAware.h"
 #include "ChipsetHolder.h"
 #include "LayerEvent.h"
 #include "ECS/Basics/Physic/BlockAllowance.h"
 #include "Data/BlockContainer.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
-#include "ChipsetEvent.h"
-#include "Chipset.h"
 #include "CollisionProfile.h"
 #include "LayerRenderable.h"
+#include "TilesetEvent.h"
 
 namespace ska {
 	class CameraSystem;
@@ -30,7 +28,7 @@ namespace ska {
 	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
-		TileWorld(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename);
+		TileWorld(const unsigned int tailleBloc);
 		
 		TileWorld(const TileWorld&) = delete;
 		TileWorld& operator=(const TileWorld&) = delete;
@@ -85,9 +83,8 @@ namespace ska {
 		CollisionProfile m_collisionProfile;
 		LayerEvent m_layerE;
 		
-		const ChipsetCorrespondanceMapper m_correspondanceMapper;
-		std::unique_ptr<Chipset> m_chipset;
-		std::unique_ptr<ChipsetEvent> m_chipsetEvent;
+		std::unique_ptr<TilesetEvent> m_tilesetEvent;
+		std::unique_ptr<Tileset> m_tileset;
 
 	};
 }

@@ -9,15 +9,15 @@
 #include "Draw/DrawableContainer.h"
 #include "LayerLoader.h"
 #include "TileWorld.h"
+#include "TileMapLoader.h"
 
-ska::TileWorld::TileWorld(const unsigned int tailleBloc, const std::string& chipsetCorrespondanceFilename) :
+ska::TileWorld::TileWorld(const unsigned int tailleBloc) :
 	m_windDirection(0),
 	m_nbrBlockX(0),
 	m_nbrBlockY(0),
 	m_blockSize(tailleBloc),
 	m_autoScriptsPlayed(false),
-	m_cameraSystem(nullptr),
-	m_correspondanceMapper(chipsetCorrespondanceFilename) {
+	m_cameraSystem(nullptr) {
 }
 
 void ska::TileWorld::linkCamera(CameraSystem* cs) {
@@ -159,28 +159,19 @@ const ska::Block* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const 
 	return nullptr;
 }
 
-ska::Layer& ska::TileWorld::loadLayer(const std::string& layerFileName){
-	if(m_chipset == nullptr) {
-		throw IllegalStateException("Load a chipset before loading a layer");
-	}
-	ska::LayerLoader layerLoader;
-	auto layerData = layerLoader.load(layerFileName, *m_chipset);
-
-	auto l = std::make_unique<ska::Layer>(std::move(layerData.physics));
-	auto& result = m_collisionProfile.addLayer(std::move(l));
-
-	auto lGraphics = std::make_unique<ska::LayerRenderable>(std::move(layerData.graphics), m_chipset->getRenderable(), m_blockSize);
-	m_graphicLayers.push_back(std::move(lGraphics));
-	return result;
-}
-
-void ska::TileWorld::load(const std::string& fileName, const std::string& chipsetName) {
+void ska::TileWorld::load(TileMapLoader& loader) {
 	m_autoScriptsPlayed = false;
 	
-	const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
+	m_collisionProfile.clear();
+	m_graphicLayers.clear();
+
+
+	//TODO éviter de reload chipset si identique
+
+	/*const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
 	if (chipsetChanged) {
-		m_chipset = std::make_unique<Chipset>(m_correspondanceMapper, m_blockSize, chipsetName);
-		m_chipsetEvent = std::make_unique<ChipsetEvent>(chipsetName);
+		m_chipset = std::make_unique<Tileset>(m_correspondanceMapper, m_blockSize, chipsetName);
+		m_tilesetEvent = std::make_unique<TilesetEvent>(chipsetName);
 	}
 
 	const auto worldChanged = fileName != m_fileName;
@@ -192,39 +183,42 @@ void ska::TileWorld::load(const std::string& fileName, const std::string& chipse
 	}
 
 	if (worldChanged || chipsetChanged) {
-		const auto fileNamePrefix = m_worldName + std::string(FILE_SEPARATOR) + m_genericName;
+		const auto fileNamePrefix = m_worldName + "/" + m_genericName;
 		const auto& botLayerName = fileNamePrefix + ".bmp";
 		const auto& midLayerName = fileNamePrefix + "M.bmp";
 		const auto& topLayerName = fileNamePrefix + "T.bmp";
 		const auto& eventLayerName = fileNamePrefix + "E.txt";
 
-		m_collisionProfile.clear();
-		m_graphicLayers.clear();
+
 
 		loadLayer(botLayerName);
 		loadLayer(midLayerName);
 		auto topLayer = loadLayer(topLayerName);
 
-		m_nbrBlockX = topLayer.getBlocksX();
-		m_nbrBlockY = topLayer.getBlocksY();
 
 		m_layerE.changeLevel(eventLayerName);
+		*/
+		
+	m_tileset = loader.load(m_blockSize, m_collisionProfile, m_graphicLayers);
 
+		m_nbrBlockX = m_collisionProfile.getLayer(0).getBlocksX();
+		m_nbrBlockY = m_collisionProfile.getLayer(0).getBlocksY();
+		
 		if (m_cameraSystem != nullptr) {
 			m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
 		}
-	}
+	//}
 
 }
 
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
 	std::vector<ScriptSleepComponent*> result;
-	if (m_chipsetEvent == nullptr) {
+	if (m_tilesetEvent == nullptr) {
 		return result;
 	}
 
 	if (reason == EnumScriptTriggerType::AUTO) {
-		auto tmp = m_chipsetEvent->getScript("", reason, m_autoScriptsPlayed);
+		auto tmp = m_tilesetEvent->getScript("", reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->context = m_worldName;
@@ -239,7 +233,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 	const auto& b = m_collisionProfile.getBlock(layerIndex, posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
 	if (b != nullptr) {
 		const auto id = b->getID();
-		auto tmp = m_chipsetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
+		auto tmp = m_tilesetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
 				ssc->args.clear();

@@ -9,15 +9,15 @@ namespace ska {
 		CollisionProfile() = default;
 		~CollisionProfile() = default;
 
-		ska::Layer& addLayer(LayerPtr l);
-		ska::Layer& getLayer(const unsigned int index);
-		bool collide(const unsigned int x, const unsigned int y) const;
-		ska::Block const* getBlock(const unsigned int layer, const unsigned x, const unsigned y) const;
+		Layer& addLayer(LayerPtr l);
+		Layer& getLayer(unsigned int index);
+		bool collide(unsigned int x, unsigned int y) const;
+		Block const* getBlock(unsigned int layer, unsigned x, unsigned y) const;
 		void clear();
 
 	private:
 		std::pair<unsigned, unsigned> safeGetSizes() const;
-		BlockCollision getHigherCollision(const unsigned int x, const unsigned int y) const;
+		BlockCollision getHigherCollision(unsigned int x, unsigned int y) const;
 		void calculate() const;
 
 		mutable ska::Vector2<BlockCollision> m_collisions;

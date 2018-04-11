@@ -1,11 +1,12 @@
 #include "Exceptions/CorruptedFileException.h"
 #include "Exceptions/FileException.h"
 #include "../World/BlockRenderable.h"
-#include "Chipset.h"
 #include "Physic/Block.h"
+#include "Tileset.h"
+#include "TilesetCorrespondanceMapper.h"
 
-ska::Chipset::Chipset(const ChipsetCorrespondanceMapper& correspondanceMapper, const int blockSize, const std::string& chipsetName) :
-	m_chipsetCorrespondanceMapper(correspondanceMapper),
+ska::Tileset::Tileset(TilesetCorrespondanceMapper correspondanceMapper, const int blockSize, const std::string& chipsetName) :
+	m_chipsetCorrespondanceMapper(std::move(correspondanceMapper)),
 	m_blockSize(blockSize),
 	m_chipsetName(chipsetName),
 	m_renderable(static_cast<const unsigned int>(m_chipsetCorrespondanceMapper.access().size()), blockSize, chipsetName + ".png") {
@@ -13,7 +14,7 @@ ska::Chipset::Chipset(const ChipsetCorrespondanceMapper& correspondanceMapper, c
 	m_blocks.resize(m_chipsetCorrespondanceMapper.access().size());
 }
 
-void ska::Chipset::load() {
+void ska::Tileset::load() {
 	m_sChipset.load32(m_chipsetName + ".png");
 	if (m_sChipset.getInstance() == nullptr) {
 		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png\", fichier du chipset. " + std::string(SDL_GetError()));
@@ -30,15 +31,15 @@ void ska::Chipset::load() {
 	}
 }
 
-const std::string& ska::Chipset::getName() const {
+const std::string& ska::Tileset::getName() const {
 	return m_chipsetName;
 }
 
-ska::ChipsetRenderable& ska::Chipset::getRenderable() {
+ska::TilesetRenderable& ska::Tileset::getRenderable() {
 	return m_renderable;
 }
 
-std::pair<ska::Block*, ska::BlockRenderable*> ska::Chipset::getBlock(const Color& key) const {
+std::pair<ska::Block*, ska::BlockRenderable*> ska::Tileset::getBlock(const Color& key) const {
 	Block* outputBlock = nullptr; 
 	BlockRenderable* outputRenderable = nullptr;
 

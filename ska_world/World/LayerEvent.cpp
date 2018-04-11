@@ -15,7 +15,7 @@ ska::LayerEvent::LayerEvent() {
 
 
 void ska::LayerEvent::refresh(unsigned int) {
-	/* TODO Chipset relative scripts */
+	/* TODO Tileset relative scripts */
 }
 
 int ska::LayerEvent::getBlocX(int ligne) const {

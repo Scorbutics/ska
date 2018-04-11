@@ -1,10 +1,10 @@
-#include "ChipsetCorrespondanceMapper.h"
 #include "Graphic/SDLSurface.h"
 #include "Point.h"
 #include "Exceptions/CorruptedFileException.h"
 #include "Utils/StringUtils.h"
+#include "TilesetCorrespondanceMapper.h"
 
-ska::ChipsetCorrespondanceMapper::ChipsetCorrespondanceMapper(const std::string& filenameCorr) {
+ska::TilesetCorrespondanceMapper::TilesetCorrespondanceMapper(const std::string& filenameCorr) {
 	SDLSurface surf;
 	surf.load32(filenameCorr);
 	if(surf.getInstance() == nullptr) {
@@ -15,15 +15,15 @@ ska::ChipsetCorrespondanceMapper::ChipsetCorrespondanceMapper(const std::string&
 	buildCorrMap(surf);
 }
 
-const std::unordered_map<ska::Color, ska::Point<int>>& ska::ChipsetCorrespondanceMapper::access() const{
+const std::unordered_map<ska::Color, ska::Point<int>>& ska::TilesetCorrespondanceMapper::access() const{
 	return m_corr;
 }
 
-unsigned ska::ChipsetCorrespondanceMapper::getFileWidth() const{
+unsigned ska::TilesetCorrespondanceMapper::getFileWidth() const{
 	return m_fileWidth;
 }
 
-void ska::ChipsetCorrespondanceMapper::buildCorrMap(const SDLSurface& fichierMCorr) {
+void ska::TilesetCorrespondanceMapper::buildCorrMap(const SDLSurface& fichierMCorr) {
 	for (auto x = 0; x < fichierMCorr.getInstance()->w; x++) {
 		for (auto y = 0; y < fichierMCorr.getInstance()->h; y++) {
 			auto c = fichierMCorr.getPixel32Color(x, y);

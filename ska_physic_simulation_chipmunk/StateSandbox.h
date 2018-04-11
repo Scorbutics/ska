@@ -7,9 +7,9 @@
 #include "Polygon.h"
 #include "World/BlockRenderable.h"
 #include "Utils/Vector2.h"
-#include "World/Chipset.h"
 #include "Physic/Space.h"
 #include "Graphic/PositionnedGraphicDrawable.h"
+#include "World/Tileset.h"
 
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
@@ -31,7 +31,7 @@ public:
 	}
 
 	ska::Vector2<ska::BlockRenderable*> layerRenderableBlocks;
-	std::unique_ptr<ska::Chipset> chipset;
+	std::unique_ptr<ska::Tileset> chipset;
 };
 
 class StateSandbox :

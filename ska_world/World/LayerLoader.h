@@ -4,7 +4,7 @@
 #include "LayerData.h"
 
 namespace ska {
-	class Chipset;
+	class Tileset;
 	class ChipsetCorrespondanceMap;
 
 	class LayerLoader {
@@ -14,7 +14,7 @@ namespace ska {
 		LayerLoader() = default;
 		~LayerLoader() = default;
 
-		ska::LayerData load(const std::string& layerFilename, Chipset& chipset);
+		ska::LayerData load(const std::string& layerFilename, Tileset& chipset);
 
 	};
 }

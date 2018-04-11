@@ -5,14 +5,14 @@
 namespace ska {
 	using ScriptTriggerType = char;
 
-	class ChipsetEvent {
+	class TilesetEvent {
 	public:
-		explicit ChipsetEvent(std::string chipsetName);
+		explicit TilesetEvent(std::string chipsetName);
 		std::vector<ScriptSleepComponent*> getScript(const std::string& id, const ScriptTriggerType& type, bool& autoBlackList);
-		~ChipsetEvent() = default;
+		~TilesetEvent() = default;
 
-		ChipsetEvent(ChipsetEvent&) = delete;
-		void operator=(const ChipsetEvent&) = delete;
+		TilesetEvent(TilesetEvent&) = delete;
+		void operator=(const TilesetEvent&) = delete;
 
 	private:
 		void load();
@@ -22,9 +22,5 @@ namespace ska {
 		std::unordered_map<int, ScriptSleepComponent> m_autoScripts;
 
 		const std::string m_chipsetName;
-
-		uint32_t m_darkColor;
-		uint32_t m_whiteColor;
-		uint32_t m_lightColor;
 	};
 }

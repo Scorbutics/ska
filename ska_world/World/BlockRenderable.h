@@ -16,7 +16,7 @@ namespace ska {
 		void setSpriteFrame(unsigned int x);
 
 	private:
-		Rectangle m_spritePosInChipset;
+		Rectangle m_spritePosInChipset{};
 		bool m_auto_animation;
 		Animation m_anim;
 

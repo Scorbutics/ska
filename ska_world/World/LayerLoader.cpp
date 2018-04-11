@@ -1,10 +1,11 @@
 #include "LayerLoader.h"
-#include "Chipset.h"
 #include "Exceptions/FileException.h"
 #include "Utils/Vector2.h"
 #include "LayerData.h"
+#include "Graphic/SDLSurface.h"
+#include "Tileset.h"
 
-ska::LayerData ska::LayerLoader::load(const std::string& layerFilename, Chipset& chipset) {
+ska::LayerData ska::LayerLoader::load(const std::string& layerFilename, Tileset& chipset) {
 	SDLSurface file;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
