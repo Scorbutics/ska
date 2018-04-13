@@ -8,7 +8,7 @@ namespace ska {
 	class TilesetEvent {
 	public:
 		explicit TilesetEvent(std::string chipsetName);
-		std::vector<ScriptSleepComponent*> getScript(const std::string& id, const ScriptTriggerType& type, bool& autoBlackList);
+		std::vector<ScriptSleepComponent*> getScript(const std::string& id, const ScriptTriggerType& reason, bool& autoBlackList);
 		~TilesetEvent() = default;
 
 		TilesetEvent(TilesetEvent&) = delete;
@@ -21,6 +21,6 @@ namespace ska {
 		std::unordered_map<std::string, ScriptSleepComponent> m_triggeredScripts;
 		std::unordered_map<int, ScriptSleepComponent> m_autoScripts;
 
-		const std::string m_chipsetName;
+		const std::string m_tilesetName;
 	};
 }

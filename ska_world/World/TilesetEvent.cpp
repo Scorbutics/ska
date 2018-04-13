@@ -4,26 +4,26 @@
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "TilesetEvent.h"
 
-ska::TilesetEvent::TilesetEvent(std::string chipsetName) : 
-	m_chipsetName(std::move(chipsetName)) {
+ska::TilesetEvent::TilesetEvent(std::string tilesetName) : 
+	m_tilesetName(std::move(tilesetName)) {
 	load();
 }
 
 void ska::TilesetEvent::load() {
-    const auto& chipsetFolder = m_chipsetName.substr(0, m_chipsetName.find_last_of('.'));
-	std::ifstream scriptList((chipsetFolder + "/scripts.txt").c_str(), std::ifstream::in);
+    const auto& tilesetFolder = m_tilesetName.substr(0, m_tilesetName.find_last_of('.'));
+	std::ifstream scriptList((tilesetFolder + "/scripts.txt").c_str(), std::ifstream::in);
 	std::string ss;
 
 	if (scriptList.fail()) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + chipsetFolder + "/scripts.txt" + "\", fichier de scripts du chipset. ");
+		throw FileException("Erreur lors de l'ouverture du fichier \"" + tilesetFolder + "/scripts.txt" + "\", fichier de scripts du tileset. ");
 	}
 
 	while (getline(scriptList, ss)) {
-		fillScript(chipsetFolder, ss, EnumScriptTriggerType::TOUCH);
-		fillScript(chipsetFolder, ss, EnumScriptTriggerType::MOVE_OUT);
-		fillScript(chipsetFolder, ss, EnumScriptTriggerType::MOVE_IN);
-		fillScript(chipsetFolder, ss, EnumScriptTriggerType::ACTION);
-		fillScript(chipsetFolder, ss, EnumScriptTriggerType::AUTO);
+		fillScript(tilesetFolder, ss, EnumScriptTriggerType::TOUCH);
+		fillScript(tilesetFolder, ss, EnumScriptTriggerType::MOVE_OUT);
+		fillScript(tilesetFolder, ss, EnumScriptTriggerType::MOVE_IN);
+		fillScript(tilesetFolder, ss, EnumScriptTriggerType::ACTION);
+		fillScript(tilesetFolder, ss, EnumScriptTriggerType::AUTO);
 	}
 
 }
@@ -59,7 +59,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TilesetEvent::getScript(const std::
 		autoBlackList = true;
 	} else if(!id.empty()) {
 		const auto fullId = id + "_" + static_cast<char>(reason + '0');
-		const auto fullName = m_chipsetName.substr(0, m_chipsetName.find_last_of('.')) + "/Scripts/" + fullId + ".txt";
+		const auto fullName = m_tilesetName.substr(0, m_tilesetName.find_last_of('.')) + "/Scripts/" + fullId + ".txt";
 		if (m_triggeredScripts.find(fullName) != m_triggeredScripts.end()) {
 			result.push_back(&m_triggeredScripts.at(fullName));
 		}

@@ -1,7 +1,6 @@
 #pragma once
 #include <gsl/pointers>
 #include <vector>
-#include <functional>
 #include "Utils/MovableNonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
@@ -9,7 +8,7 @@
 
 namespace ska {
 	namespace cp {
-		struct CollisionHandlerData;
+		class CollisionHandlerData;
 		enum class CollisionHandlerType;
 		class Vect;
 

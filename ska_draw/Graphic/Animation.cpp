@@ -98,7 +98,7 @@ void ska::Animation::nextFrame() {
 }
 
 ska::Rectangle ska::Animation::updateFrame() {
-	if (m_active == false) {
+	if (!m_active) {
 		return m_offset;
 	}
 

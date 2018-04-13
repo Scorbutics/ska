@@ -21,6 +21,7 @@ set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/fakeit)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
 set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_draw)
 set(SKA_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_gui)
+set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${DOCTEST_DIR})
@@ -28,6 +29,7 @@ include_directories(${FAKEIT_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_DRAW_DIR})
 include_directories(${SKA_GUI_DIR})
+include_directories(${GSL_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}

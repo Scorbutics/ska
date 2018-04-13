@@ -10,10 +10,38 @@ struct MergedTile {
 	MergedTile& operator=(const MergedTile& mergedTile) = default;
 };
 
-bool TileAgglomerateCheckSize(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal);
-MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal);
-void TileAgglomerateApply(const ska::TileWorld& world, ska::Vector2<MergedTile>& layer, bool horizontal);
+bool TileAgglomerateCheckSizeNotMerged(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal) {
+	if (!value.has_value()) {
+		return false;
+	}
+	return horizontal ? value->h == blockSize : value->w == blockSize;
+}
 
+MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
+	const auto canBeMerged = withLastTile != nullptr && (TileAgglomerateCheckSizeNotMerged(blockSize, withLastTile->area, horizontal));
+	if (!canBeMerged) {
+		currentTileToMerge.area = currentArea;
+	}
+	else {
+		auto& originTile = withLastTile->merged;
+
+		if (originTile == nullptr) {
+			originTile = withLastTile;
+		}
+
+		if (horizontal) {
+			originTile->area->w += blockSize;
+		}
+		else {
+			originTile->area->h += blockSize;
+		}
+
+		currentTileToMerge.merged = originTile;
+		currentTileToMerge.area = std::optional<ska::Rectangle>();
+		return *originTile;
+	}
+	return currentTileToMerge;
+}
 
 //TODO rendre le code plus lisible et explicite
 void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
@@ -69,33 +97,3 @@ std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::TileWorld& world, sk
 	return result;
 }
 
-bool TileAgglomerateCheckSizeNotMerged(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal) {
-	if(!value.has_value()) {
-		return false;
-	}
-	return horizontal ? value->h == blockSize : value->w == blockSize;
-}
-
-MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
-	const auto canBeMerged = withLastTile != nullptr && (TileAgglomerateCheckSizeNotMerged(blockSize, withLastTile->area, horizontal));	
-	if (!canBeMerged) {
-		currentTileToMerge.area = currentArea;
-	} else {
-		auto& originTile = withLastTile->merged;
-
-		if(originTile == nullptr) {
-			originTile = withLastTile;
-		}
-		
-		if (horizontal)  {
-			originTile->area->w += blockSize;										
-		} else {
-			originTile->area->h += blockSize;
-		}
-
-		currentTileToMerge.merged = originTile;
-		currentTileToMerge.area = std::optional<ska::Rectangle>();
-		return *originTile;
-	}
-	return currentTileToMerge;
-}

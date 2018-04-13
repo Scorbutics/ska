@@ -1,26 +1,28 @@
 #pragma once
 #include "Graphic/Texture.h"
-#include "Graphic/Animation.h"
-#include "../World/BlockRenderable.h"
+#include "../World/TileRenderable.h"
+#include "Utils/Vector2.h"
 
 namespace ska {
+	class TilesetLoader;
 
-	class TilesetRenderable {
+	class TilesetRenderable : public MovableNonCopyable {
 	public:
-		TilesetRenderable(const unsigned int corrFileSize, const int blockSize, const std::string& chipsetName);
-		void render(const Renderer& renderer, Point<int> pos, const BlockRenderable& block) const;
-		void update(BlockRenderable& block);
-		
-		BlockRenderable& getBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) const;
+		explicit TilesetRenderable(unsigned int tileSize, const TilesetLoader& loader);
+		TilesetRenderable(TilesetRenderable&&) = default;
 
+		void render(const Renderer& renderer, Point<int> pos, const TileRenderable& block) const;
+		const TileRenderable& getTile(Point<int> posCorr) const;
 		const Texture& getTexture() const;
-		~TilesetRenderable() = default;
+
+		~TilesetRenderable() override = default;
 
 	private:
-		mutable std::vector<BlockRenderablePtr> m_blocks;
-		void load(const std::string& chipsetName);
+		void load(const TilesetLoader& loader);
 
-		Texture m_chipset;
-		Animation m_animBlocks;
+		Vector2<TileRenderable> m_blocks{};
+		Texture m_tileset;
+		const std::string m_tilesetName;
+		const unsigned int m_tileSize;
 	};
 }

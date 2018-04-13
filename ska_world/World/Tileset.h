@@ -1,45 +1,36 @@
 #pragma once
 #include <memory>
-#include "Draw/Color.h"
-#include "Graphic/SDLSurface.h"
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
+#include "TilesetLoader.h"
 
 namespace ska {
-	class Animation;
-	class Block;
-	typedef std::unique_ptr<Block> BlockPtr;
-	class BlockRenderable;
-	typedef std::unique_ptr<BlockRenderable> BlockRenderablePtr;
-	typedef char ScriptTriggerType;
+	struct Tile;
+	using BlockPtr = std::unique_ptr<Tile>;
 
-	class Tileset {
+	class Tileset : public MovableNonCopyable {
 	public:
-		Tileset(TilesetCorrespondanceMapper correspondanceMapper, const int blockSize, const std::string& chipsetName);
-		std::pair<ska::Block*, ska::BlockRenderable*> getBlock(const Color& key) const;
-		const std::string& getName() const;
-		TilesetRenderable& getRenderable();
-		~Tileset() = default;
+		Tileset(unsigned int tileSize, const TilesetLoader& loader);
+		Tileset(Tileset&&) = default;
 
-		void operator=(const Tileset&) = delete;
+		std::pair<Tile*, const TileRenderable*> getTile(const Point<int>& coordinates);
+		const std::string& getName() const;
+		const TilesetRenderable& getRenderable() const;
+		
+		unsigned int getWidth() const;
+		unsigned int getHeight() const;
+
+		~Tileset() override = default;
+		unsigned int getTileSize() const;
 
 	private:
-		void load();
+		void load(const TilesetLoader& loader);
 
-		const TilesetCorrespondanceMapper m_chipsetCorrespondanceMapper;
-
-		mutable std::vector<BlockPtr> m_blocks;
-
-		const int m_blockSize;
-		std::string m_chipsetName;
-		SDLSurface m_sCol;
-		SDLSurface m_sChipset;
-		SDLSurface m_sProperties;
+		std::string m_tilesetName;
 
 		TilesetRenderable m_renderable;
-
-		Uint32 m_darkColor{};
-		Uint32 m_whiteColor{};
-		Uint32 m_lightColor{};
+		Vector2<Tile> m_blocks{};
+		
+		const unsigned int m_tileSize;
 	};
 }

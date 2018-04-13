@@ -15,27 +15,27 @@
 #include "Tileset.h"
 
 namespace ska {
-	class TileMapLoader;
+	class TileWorldLoader;
 	class CameraSystem;
 	class PhysicObject;
-	class Block;
+	struct Tile;
 	class PrefabEntityManager;
 	class ScriptSleepComponent;
 	class DrawableContainer;
 	using ScriptTriggerType = char;
 
 	class TileWorld :
+		public MovableNonCopyable,
 	    public CameraAware,
 	    public BlockContainer,
 	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
-		TileWorld(const unsigned int tailleBloc);
-		
-		TileWorld(const TileWorld&) = delete;
-		TileWorld& operator=(const TileWorld&) = delete;
+		TileWorld(Tileset& tileset);
+		TileWorld(Tileset& tileset, const TileWorldLoader& loader);
+		TileWorld(TileWorld&&) = default;
 
-		void load(TileMapLoader& loader);
+		void load(const TileWorldLoader& loader, Tileset* tilesetToChange = nullptr);
 
 		unsigned int getPixelWidth() const;
 		unsigned int getPixelHeight() const;
@@ -63,13 +63,10 @@ namespace ska {
 
 		void linkCamera(CameraSystem* cs) override;
 
-		virtual ~TileWorld() = default;
-		const ska::Block* getHighestBlock(unsigned i, unsigned y) const;
+		const Tile* getHighestBlock(unsigned i, unsigned y) const;
 
 	private:
-		ska::Layer& loadLayer(const std::string& layerFileName);
 
-		int m_windDirection;
 		int m_nbrBlockX, m_nbrBlockY;
 		unsigned int m_blockSize;
 
@@ -77,17 +74,16 @@ namespace ska {
 		std::string m_fileName, m_genericName, m_worldName;
 
 		bool m_autoScriptsPlayed;
-		std::vector<IniReader> m_mobSettings;
+		std::vector<IniReader> m_mobSettings{};
 		CameraSystem* m_cameraSystem;
 
 	protected:
-		std::vector<LayerRenderablePtr> m_graphicLayers;
+		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		CollisionProfile m_collisionProfile;
 		LayerEvent m_layerE;
 		
 		//TODO Tileset avec lifetime à part
-		std::unique_ptr<TilesetEvent> m_tilesetEvent;
-		std::unique_ptr<Tileset> m_tileset;
-
+		gsl::not_null<Tileset*> m_tileset;
+		std::unique_ptr<TilesetEvent> m_tilesetEvent{};		
 	};
 }

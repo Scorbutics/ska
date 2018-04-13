@@ -6,46 +6,20 @@
 #include "Graphic/System/DeleterSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
 #include "Draw/DrawableContainer.h"
-#include "World/LayerLoader.h"
 #include "Physic/Space.h"
 #include "World/TileWorld.h"
 #include "Physic/MovementSystem.h"
 #include "Physic/BuildHitbox.h"
 #include "CollisionHandlerType.h"
-#include "World/MarchingSquare.h"
-#include "World/TileAgglomerate.h"
-#include "World/TileMapLoaderImage.h"
-
-struct PointArea {
-	std::list<ska::Point<int>> pointList;
-};
+#include "World/TileWorldLoaderImage.h"
+#include "World/TilesetLoaderImage.h"
+#include "World/TileWorldPhysics.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
-	m_cameraSystem(nullptr),
 	m_eventDispatcher(ed),
 	m_entityManager(em){}
-
-std::vector<PointArea> GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
-	std::vector<PointArea> result;
-	std::unordered_set<ska::Point<int>> remainingBlocks;
-	
-	bool done = false;
-	do {
-		PointArea pointList;
-		std::tie(done, pointList.pointList) = ska::MarchingSquare(world, remainingBlocks, [](const ska::Block* b) {
-			return b != nullptr ? b->getCollision() : ska::BlockCollision::NO;
-		});
-		result.push_back(pointList);
-	} while (!done);
-	
-	return result;
-}
-
-std::vector<ska::Rectangle> GenerateAgglomeratedTileMapBasic(const ska::TileWorld& world) {
-	return ska::TileAgglomerate(world);	
-}
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 	const auto& actions = ime.icm.getActions();
@@ -72,89 +46,7 @@ cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer user
 	return true;
 }
 
-ska::Rectangle GenerateRect(const ska::Point<int>& start, const ska::Point<int>& end){
-	static constexpr auto depth = 3;
-	auto rect = ska::RectangleUtils::createRectangleFromPoints(start, end);
-	if(rect.w == 0) {
-		rect.w = depth;
-		rect.x -= depth/2;
-		rect.y += depth/2;
-		rect.h -= depth/2;
-	}
-	if(rect.h == 0) {
-		rect.h = depth;
-		rect.y -= depth/2;
-		rect.x += depth/2;
-		rect.w -= depth/2;
-	}
-	return rect;
-}
 
-enum class Align {
-	Horizontal,
-	Vertical,
-	None
-};
-
-Align GetPointAlignment(const ska::Point<int>& currentPoint, const ska::Point<int>& lastPoint){
-	const auto sameDirectionY = currentPoint.x == lastPoint.x && currentPoint.y != lastPoint.y;
-	const auto sameDirectionX = currentPoint.y == lastPoint.y && currentPoint.x != lastPoint.x;
-	return sameDirectionX ? Align::Horizontal : (sameDirectionY ? Align::Vertical : Align::None);
-}
-
-std::vector<PointArea> FilterAlignedSuccessivePoints(const std::vector<PointArea>& areas){
-	std::vector<PointArea> filteredPointAreas;
-	filteredPointAreas.reserve(areas.size());
-
-	for(const auto& pa : areas) {
-		if(pa.pointList.size() < 2) {
-			continue;
-		}
-
-		auto pointArea = PointArea{};
-
-		const auto startPointIt = pa.pointList.cbegin();
-		auto nextToStartPoint = startPointIt;
-		++nextToStartPoint;
-		auto lastPointIt = startPointIt;
-		auto lastAlign = Align::None;
-
-		for (auto pIt = nextToStartPoint; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
-			const auto pointAlign = GetPointAlignment(*lastPointIt, *pIt);
-			if(pointAlign != lastAlign && pointAlign != Align::None) {
-				pointArea.pointList.emplace_back(*lastPointIt);
-				
-				lastAlign = pointAlign;
-			}
-		}
-
-		const auto pointAlign = GetPointAlignment(*lastPointIt, *startPointIt);
-		if(pointAlign != lastAlign && pointAlign != Align::None) {
-			pointArea.pointList.emplace_back(*lastPointIt);
-		}
-
-		pointArea.pointList.emplace_back(*startPointIt);
-
-		filteredPointAreas.push_back(std::move(pointArea));
-		
-	}
-	return filteredPointAreas;
-}
-
-std::vector<ska::Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas) {
-	const auto filteredPointAreas = FilterAlignedSuccessivePoints(areas);
-	
-	std::vector<ska::Rectangle> contours;
-	for(const auto& pa : filteredPointAreas) {
-		auto lastPointIt = pa.pointList.cbegin();
-		for (auto pIt = lastPointIt; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
-			auto rect = GenerateRect(*lastPointIt, *pIt);
-			contours.push_back(std::move(rect));
-		}
-	}
-
-	return contours;
-}
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	
@@ -177,11 +69,11 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto layerBlocks = std::move(layerData.physics);
 		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);*/
 
-		ska::TileWorld world{ 48 };
+		const ska::TilesetLoaderImage tilesetLoader { "Resources/Chipsets/chipset_platform"};
+		auto tileset = ska::Tileset{ 48, tilesetLoader };
 
-		ska::TileMapLoaderImage loader { "Resources/Levels/new_level", "Resources/Chipsets/chipset_platform", "Resources/Chipsets/corr.png" };
-
-		world.load(loader);
+		const ska::TileWorldLoaderImage levelLoader { "Resources/Chipsets/corr.png", "Resources/Levels/new_level" };
+		const auto world = ska::TileWorld { tileset, levelLoader };
 
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);

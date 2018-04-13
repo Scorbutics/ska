@@ -21,7 +21,7 @@ namespace ska {
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		void kill(const std::string& keyScript);
-		virtual const std::string map(const std::string& key, const std::string& id) const;
+		virtual std::string map(const std::string& key, const std::string& id) const;
 		void registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity);
 		void clearNamedScriptedEntities();
 		void removeComponent(const std::string& componentName, const std::string& id) const;

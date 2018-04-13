@@ -8,15 +8,21 @@
 #include "Draw/DrawableContainer.h"
 #include "LayerLoader.h"
 #include "TileWorld.h"
-#include "TileMapLoader.h"
+#include "TileWorldLoader.h"
 
-ska::TileWorld::TileWorld(const unsigned int tailleBloc) :
-	m_windDirection(0),
+ska::TileWorld::TileWorld(Tileset& tileset) :
 	m_nbrBlockX(0),
 	m_nbrBlockY(0),
-	m_blockSize(tailleBloc),
+	m_blockSize(tileset.getTileSize()),
 	m_autoScriptsPlayed(false),
-	m_cameraSystem(nullptr) {
+	m_cameraSystem(nullptr),
+	m_tileset(&tileset),
+	m_tilesetEvent(std::make_unique<TilesetEvent>(m_tileset->getName())) {
+}
+
+ska::TileWorld::TileWorld(Tileset& tileset, const TileWorldLoader& loader) :
+	TileWorld(tileset) {
+	load(loader);
 }
 
 void ska::TileWorld::linkCamera(CameraSystem* cs) {
@@ -35,7 +41,7 @@ bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, i
 
 	const auto& b1 = m_collisionProfile.getBlock(layerIndex, p1Block.x, p1Block.y);
 	const auto& b2 = m_collisionProfile.getBlock(layerIndex, p2Block.x, p2Block.y);
-	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->getID() == b2->getID()));
+	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id));
 }
 
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
@@ -44,7 +50,7 @@ bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::un
 		return true;
 	}
 	const auto& b = m_collisionProfile.getBlock(0, blockPos.x, blockPos.y);
-	const auto result = b != nullptr ? (authorizedBlocks.find(b->getID()) != authorizedBlocks.end()) : false;
+	const auto result = b != nullptr ? (authorizedBlocks.find(b->id.x + b->id.y * m_tileset->getWidth()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
@@ -147,33 +153,27 @@ const ska::Rectangle* ska::TileWorld::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
 
-const ska::Block* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const {
+const ska::Tile* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const {
 	const auto layers = 3;
-	for(int i = layers - 1; i >= 0; i--) {
+	for(auto i = layers - 1; i >= 0; i--) {
 		const auto b = m_collisionProfile.getBlock(i, x, y);
-		if(b != nullptr && b->getCollision() != ska::BlockCollision::VOID) {
+		if(b != nullptr && b->collision != ska::TileCollision::Void) {
 			return b;
 		}
 	}
 	return nullptr;
 }
 
-void ska::TileWorld::load(TileMapLoader& loader) {
+void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChange) {
 	m_autoScriptsPlayed = false;
-	
-	//TODO éviter de reload chipset si identique (à faire avec le TODO de séparation de lifetime entre tileset et world)
 
-
-
-	m_collisionProfile.clear();
-	m_graphicLayers.clear();
-	
-	/*const auto chipsetChanged = m_chipset == nullptr ? true : m_chipset->getName() != chipsetName;
-	if (chipsetChanged) {
-		m_chipset = std::make_unique<Tileset>(m_correspondanceMapper, m_blockSize, chipsetName);
-		m_tilesetEvent = std::make_unique<TilesetEvent>(chipsetName);
+	if(tilesetToChange != nullptr) {
+		m_tileset = tilesetToChange;
+		//TODO
+		m_tilesetEvent = std::make_unique<TilesetEvent>(m_tileset->getName());
 	}
 
+	/*
 	const auto worldChanged = fileName != m_fileName;
 	if (worldChanged) {
 		const ska::FileNameData fndata(fileName);
@@ -182,33 +182,28 @@ void ska::TileWorld::load(TileMapLoader& loader) {
 		m_fileName = fileName;
 	}
 
-	if (worldChanged || chipsetChanged) {
-		const auto fileNamePrefix = m_worldName + "/" + m_genericName;
-		const auto& botLayerName = fileNamePrefix + ".bmp";
-		const auto& midLayerName = fileNamePrefix + "M.bmp";
-		const auto& topLayerName = fileNamePrefix + "T.bmp";
-		const auto& eventLayerName = fileNamePrefix + "E.txt";
+	*/
+	 
+	m_collisionProfile = loader.loadPhysics(*m_tileset);
+	m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
+
+	if(m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
+		throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
+	}
+
+	m_nbrBlockX = m_collisionProfile.getLayer(0).getBlocksX();
+	m_nbrBlockY = m_collisionProfile.getLayer(0).getBlocksY();
+	
+	if (m_cameraSystem != nullptr) {
+		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
+	}
 
 
-
-		loadLayer(botLayerName);
-		loadLayer(midLayerName);
-		auto topLayer = loadLayer(topLayerName);
-
-
-		m_layerE.changeLevel(eventLayerName);
-		*/
-		
-	m_tileset = loader.load(m_blockSize, m_collisionProfile, m_graphicLayers);
-
-		m_nbrBlockX = m_collisionProfile.getLayer(0).getBlocksX();
-		m_nbrBlockY = m_collisionProfile.getLayer(0).getBlocksY();
-		
-		if (m_cameraSystem != nullptr) {
-			m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
-		}
-	//}
-
+	//TODO layer event loader
+	const auto fileNamePrefix = m_worldName + "/" + m_genericName;
+	const auto& eventLayerName = fileNamePrefix + "E.txt";
+	m_layerE.changeLevel(eventLayerName);
+	
 }
 
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
@@ -232,7 +227,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 	const auto oldBlock = oldPos / m_blockSize;
 	const auto& b = m_collisionProfile.getBlock(layerIndex, posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
 	if (b != nullptr) {
-		const auto id = b->getID();
+		const auto id = b->id.x + b->id.y * m_tileset->getWidth();
 		auto tmp = m_tilesetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
@@ -268,7 +263,7 @@ ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& h
 	const auto maxWidth = getNbrBlocX();
 	const auto maxHeight = getNbrBlocY();
 
-	Rectangle blockArea;
+	Rectangle blockArea{};
 	blockArea.x = hitBoxBlock.x - radius;
 	blockArea.y = hitBoxBlock.y - radius;
 	blockArea.w = (radius << 1) + 1;

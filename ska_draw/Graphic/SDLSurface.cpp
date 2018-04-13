@@ -118,14 +118,14 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 	return c;
 }
 
-Uint32 ska::SDLSurface::getPixel32(int x, int y) const {
+uint32_t ska::SDLSurface::getPixel32(int x, int y) const {
 	if (m_surface == nullptr || x < 0 || x > m_surface->w - 1 || y < 0 || y > m_surface->h - 1) {
 		return 0;
 	}
 	return static_cast<Uint32*>(m_surface->pixels)[y*(m_surface->pitch / 4) + x];
 }
 
-Uint32 ska::SDLSurface::getPixel32(int pixIndex) const {
+uint32_t ska::SDLSurface::getPixel32(int pixIndex) const {
 	return getPixel32(pixIndex % m_surface->w, pixIndex / m_surface->w);
 }
 

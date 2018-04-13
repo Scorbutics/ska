@@ -14,7 +14,6 @@
 #include "Utils/FileUtils.h"
 #include "Utils/TimeUtils.h"
 #include "Utils/NumberUtils.h"
-#include "Utils/SkaConstants.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 
@@ -30,7 +29,7 @@ m_world(w) {
 	sch.setupCommands(w, m_commands);
 }
 
-const std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
+std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
 	std::vector<std::string> keys = StringUtils::split(key, '.');
 	if (keys.size() != 2) {
 		throw ScriptSyntaxError("Error during recuperation of the global variable " + key);

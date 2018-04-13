@@ -21,6 +21,7 @@ set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_draw)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_world)
 set(SKA_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_gui)
 set(SDL2_GIF_INCLUDE_DIR ${CMAKE_BINARY_DIR}/../external/SDL2_gif/src)
+set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2_GIF_INCLUDE_DIR})
@@ -30,6 +31,7 @@ include_directories(${SKA_PHYSIC_DIR})
 include_directories(${SKA_PHYSIC_HOME_DIR})
 include_directories(${SKA_WORLD_DIR})
 include_directories(${SKA_GUI_DIR})
+include_directories(${GSL_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}

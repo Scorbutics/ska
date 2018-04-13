@@ -1,39 +1,28 @@
-#include <utility>
-#include "../World/BlockRenderable.h"
-#include "Utils/StringUtils.h"
+#include "../World/TileRenderable.h"
 #include "Draw/Renderer.h"
 #include "TilesetRenderable.h"
+#include "TilesetLoader.h"
 
-
-ska::TilesetRenderable::TilesetRenderable(const unsigned int corrFileSize, const int blockSize, const std::string& chipsetName) :
-m_animBlocks(375, 4, true, 0, 0, blockSize, blockSize) {
-	load(chipsetName);
-	m_blocks.resize(corrFileSize);
+ska::TilesetRenderable::TilesetRenderable(const unsigned int tileSize, const TilesetLoader& loader) :
+	m_tilesetName(loader.getName()),
+	m_tileSize(tileSize) {
+	load(loader);
 }
 
-void ska::TilesetRenderable::render(const Renderer& renderer, Point<int> pos, const BlockRenderable& block) const{
-	auto clip = m_animBlocks.getCurrentFrame();
-	auto chipsetPartRender = block.determineFrame(pos, &clip);
-	renderer.render(m_chipset, pos.x, pos.y, &chipsetPartRender);
-}
-
-void ska::TilesetRenderable::update(BlockRenderable& block) {
+void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int> pos, const TileRenderable& block) const {
 	block.refresh();
-	m_animBlocks.updateFrame();
+	auto chipsetPartRender = block.determineFrame(nullptr);
+	renderer.render(m_tileset, pos.x, pos.y, &chipsetPartRender);
 }
 
-ska::BlockRenderable& ska::TilesetRenderable::getBlock(const int id, const int blockSize, Point<int> posCorr, bool auto_anim) const {
-	if (m_blocks[id] == nullptr) {
-		m_blocks[id] = std::move(std::make_unique<BlockRenderable>(blockSize, posCorr, auto_anim));
-	}
-	return *m_blocks[id].get();
+const ska::TileRenderable& ska::TilesetRenderable::getTile(const Point<int> posCorr) const {
+	return m_blocks[posCorr.x][posCorr.y];
 }
-
-void ska::TilesetRenderable::load(const std::string& chipsetName) {
-	m_chipset.load(chipsetName);
-}
-
 
 const ska::Texture& ska::TilesetRenderable::getTexture() const{
-	return m_chipset;
+	return m_tileset;
+}
+
+void ska::TilesetRenderable::load(const TilesetLoader& loader) {
+	std::tie(m_tileset, m_blocks) = loader.loadGraphics(m_tileSize);
 }

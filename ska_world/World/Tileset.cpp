@@ -1,71 +1,49 @@
-#include "Exceptions/CorruptedFileException.h"
-#include "Exceptions/FileException.h"
-#include "../World/BlockRenderable.h"
-#include "Physic/Block.h"
+#include "../World/TileRenderable.h"
+#include "Physic/Tile.h"
 #include "Tileset.h"
 #include "TilesetCorrespondanceMapper.h"
+#include "Exceptions/CorruptedFileException.h"
 
-ska::Tileset::Tileset(TilesetCorrespondanceMapper correspondanceMapper, const int blockSize, const std::string& chipsetName) :
-	m_chipsetCorrespondanceMapper(std::move(correspondanceMapper)),
-	m_blockSize(blockSize),
-	m_chipsetName(chipsetName),
-	m_renderable(static_cast<const unsigned int>(m_chipsetCorrespondanceMapper.access().size()), blockSize, chipsetName + ".png") {
-	load();
-	m_blocks.resize(m_chipsetCorrespondanceMapper.access().size());
-}
-
-void ska::Tileset::load() {
-	m_sChipset.load32(m_chipsetName + ".png");
-	if (m_sChipset.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png\", fichier du chipset. " + std::string(SDL_GetError()));
-	}
-
-	m_sCol.load32(m_chipsetName + ".png.col");
-	if (m_sCol.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png.col\", fichier de collsions du chipset. " + std::string(SDL_GetError()));
-	}
-
-	m_sProperties.load32(m_chipsetName + ".png.prop");
-	if (m_sProperties.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + m_chipsetName + ".png.prop\", fichier de propriétés du chipset. " + std::string(SDL_GetError()));
-	}
+ska::Tileset::Tileset(const unsigned int tileSize, const TilesetLoader& loader) :
+	m_tilesetName(loader.getName()),
+	m_renderable(tileSize, loader),
+	m_tileSize(tileSize) {
+	load(loader);
 }
 
 const std::string& ska::Tileset::getName() const {
-	return m_chipsetName;
+	return m_tilesetName;
 }
 
-ska::TilesetRenderable& ska::Tileset::getRenderable() {
+const ska::TilesetRenderable& ska::Tileset::getRenderable() const {
 	return m_renderable;
 }
 
-std::pair<ska::Block*, ska::BlockRenderable*> ska::Tileset::getBlock(const Color& key) const {
-	Block* outputBlock = nullptr; 
-	BlockRenderable* outputRenderable = nullptr;
+unsigned int ska::Tileset::getWidth() const {
+	return m_renderable.getTexture().getWidth();
+}
 
-	if (key.r != 255 || key.g != 255 || key.b != 255) {
-		const auto& map = m_chipsetCorrespondanceMapper.access();
-		if (map.find(key) != map.end()) {
-			const auto& posCorr = map.at(key);
+unsigned int ska::Tileset::getHeight() const {
+	return m_renderable.getTexture().getHeight();
+}
 
-			const auto prop = m_sProperties.getPixel32Color(posCorr.x, posCorr.y).r;
-			const auto col = m_sCol.getPixel32(posCorr.x, posCorr.y);
+unsigned ska::Tileset::getTileSize() const {
+	return m_tileSize;
+}
 
-			const auto collision = (col == m_whiteColor || col == m_lightColor) ? BlockCollision::NO : BlockCollision::YES;
-			const auto autoAnim = (col == m_darkColor || col == m_lightColor);
+void ska::Tileset::load(const TilesetLoader& loader) {
+	m_blocks = loader.loadPhysics();
+}
 
-			const auto corrFileWidth = m_chipsetCorrespondanceMapper.getFileWidth();
-			const int id = posCorr.x + posCorr.y * corrFileWidth;
-			if (m_blocks[id] == nullptr) {
-				m_blocks[id] = std::move(std::make_unique<Block>(corrFileWidth, posCorr, prop, collision));
-			}
+std::pair<ska::Tile*, const ska::TileRenderable*> ska::Tileset::getTile(const Point<int>& coordinates) {
 
-			outputBlock = m_blocks[id].get();
-			outputRenderable = &m_renderable.getBlock(id, m_blockSize, posCorr, autoAnim);
-		} else {
-			throw CorruptedFileException("Impossible de trouver la correspondance en pixel (fichier niveau corrompu)");
-		}
+	if(!m_blocks.has(coordinates.x, coordinates.y)) {
+		return std::make_pair(nullptr, nullptr);
 	}
 
-	return std::make_pair(outputBlock, outputRenderable);
+	auto& outputBlock = m_blocks[coordinates.x][coordinates.y];
+	const auto& outputRenderable = m_renderable.getTile(coordinates);
+	
+	return std::make_pair(&outputBlock, &outputRenderable);
+
 }

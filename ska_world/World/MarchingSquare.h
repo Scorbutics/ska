@@ -2,7 +2,7 @@
 #include <list>
 #include <unordered_set>
 #include "Point.h"
-#include "Physic/Block.h"
+#include "Physic/Tile.h"
 
 namespace ska {
 	class TileWorld;
@@ -15,7 +15,7 @@ namespace ska {
 		None
 	};
 
-	using MarchingSquarePredicate = std::function<ska::BlockCollision(const Block*)>;	
+	using MarchingSquarePredicate = std::function<TileCollision(const Tile*)>;	
 
-	std::pair<bool, std::list<ska::Point<int>>> MarchingSquare(const ska::TileWorld& world, std::unordered_set<Point<int>>& doneBlocks, const ska::MarchingSquarePredicate& pred);
+	std::pair<bool, std::list<Point<int>>> MarchingSquare(const TileWorld& world, std::unordered_set<Point<int>>& doneBlocks, const MarchingSquarePredicate& pred);
 }

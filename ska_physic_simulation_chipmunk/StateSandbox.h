@@ -5,7 +5,6 @@
 #include "Core/State/StateBase.h"
 #include "Utils/SubObserver.h"
 #include "Polygon.h"
-#include "World/BlockRenderable.h"
 #include "Utils/Vector2.h"
 #include "Physic/Space.h"
 #include "Graphic/PositionnedGraphicDrawable.h"
@@ -30,7 +29,7 @@ public:
 		return true;
 	}
 
-	ska::Vector2<ska::BlockRenderable*> layerRenderableBlocks;
+	ska::Vector2<ska::TileRenderable*> layerRenderableBlocks;
 	std::unique_ptr<ska::Tileset> chipset;
 };
 
@@ -52,17 +51,17 @@ private:
 	bool onGameEvent(ska::GameEvent& ge);
 
 	LayerHolder m_layerHolder;
-	ska::CameraSystem* m_cameraSystem;
+	ska::CameraSystem* m_cameraSystem{};
 	
 	ska::ExtensibleGameEventDispatcher<>& m_eventDispatcher;
 	ska::EntityManager& m_entityManager;
-	std::vector<ska::Polygon<int>> m_layerContours;
+	std::vector<ska::Polygon<int>> m_layerContours{};
 	
 	ska::Texture m_ballTexture;
 	
 	ska::cp::Space m_space;
-	std::vector<ska::PositionnedGraphicDrawable> m_ballGraphics;
-	std::vector<ska::EntityId> m_balls;
+	std::vector<ska::PositionnedGraphicDrawable> m_ballGraphics{};
+	std::vector<ska::EntityId> m_balls{};
 
 };
 

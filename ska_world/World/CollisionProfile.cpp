@@ -1,12 +1,13 @@
 #include <optional>
+#include <cassert>
 
 #include "Exceptions/IllegalStateException.h"
 #include "CollisionProfile.h"
-#include <cassert>
+#include "Utils/StringUtils.h"
 
 void ska::CollisionProfile::calculate() const {
-	unsigned int width;
-	unsigned int height;
+	int width;
+	int height;
 	std::tie(width, height) = safeGetSizes();
 
 	for(auto x = 0; x < width; x++) {
@@ -25,7 +26,7 @@ ska::Layer& ska::CollisionProfile::addLayer(LayerPtr l) {
 }
 
 ska::Layer& ska::CollisionProfile::getLayer(const unsigned int index) {
-	return *m_layers[index].get();
+	return *m_layers[index];
 }
 
 bool ska::CollisionProfile::collide(const unsigned int x, const unsigned int y) const {
@@ -33,12 +34,20 @@ bool ska::CollisionProfile::collide(const unsigned int x, const unsigned int y) 
 		calculate();
 		m_mustUpdateCollisions = false;
 	}
-	return m_collisions[x][y] == BlockCollision::YES;
+	return m_collisions[x][y] == TileCollision::Yes;
 }
 
-ska::Block const* ska::CollisionProfile::getBlock(const unsigned int layer, const unsigned x, const unsigned y) const {
+const ska::Tile* ska::CollisionProfile::getBlock(const unsigned int layer, const unsigned x, const unsigned y) const {
 	const auto& l = m_layers[layer];
 	return l->getBlock(x, y);
+}
+
+bool ska::CollisionProfile::empty() const {
+	return m_layers.empty();
+}
+
+std::size_t ska::CollisionProfile::layers() const {
+	return m_layers.size();
 }
 
 void ska::CollisionProfile::clear() {
@@ -57,26 +66,25 @@ std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
 			height = l->getBlocksY();
 			m_collisions.resize(l->getBlocksX(), l->getBlocksY());
 		} else if(width != l->getBlocksX() || height != l->getBlocksY()) {
-			//TODO message
-			throw IllegalStateException("");
+			throw IllegalStateException("Not every layer has same dimensions meaning that this map is invalid (expected " + StringUtils::uintToStr(width.value()) + " width and " + StringUtils::uintToStr(height.value()) + " height for every layer).");
 		}
 	}
 
 	return std::make_pair(width.value_or(0), height.value_or(0));
 }
 
-ska::BlockCollision ska::CollisionProfile::getHigherCollision(const unsigned int x, const unsigned int y) const {
-	auto nonVoidCollision = BlockCollision::VOID;
+ska::TileCollision ska::CollisionProfile::getHigherCollision(const unsigned int x, const unsigned int y) const {
+	auto nonVoidCollision = TileCollision::Void;
 
 	for (auto it = m_layers.crbegin(); it != m_layers.crend(); ++it) {
 		auto& l = *it;
 		
 		const auto& collision = l->getCollision(x, y);
-		if (collision == BlockCollision::NO) {
+		if (collision == TileCollision::No) {
 			return collision;
 		}
 		
-		if(collision != BlockCollision::VOID) {
+		if(collision != TileCollision::Void) {
 			nonVoidCollision = collision;
 		}
 	}

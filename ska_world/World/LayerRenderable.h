@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "BlockRenderable.h"
+#include "TileRenderable.h"
 #include "Draw/DrawableFixedPriority.h"
 #include "Utils/Vector2.h"
 #include "TilesetRenderable.h"
@@ -11,7 +11,7 @@ namespace ska {
 	class TileWorld;
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
-		LayerRenderable(Vector2<BlockRenderable*>&& block, TilesetRenderable& chipset, unsigned int blockSize);
+		LayerRenderable(Vector2<const TileRenderable*> block, const TilesetRenderable& chipset, unsigned int blockSize);
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
@@ -21,16 +21,16 @@ namespace ska {
 		void render(const Renderer& renderer) const override;
 		bool isVisible() const override;
 
-		BlockRenderable* getBlock(unsigned int i, unsigned int j);
+		const TileRenderable* getBlock(unsigned int i, unsigned int j);
 
 	private:
 
 		const unsigned int m_blockSize;
-		Vector2<BlockRenderable*> m_block;
-		TilesetRenderable& m_tileset;
+		Vector2<const TileRenderable*> m_block;
+		const TilesetRenderable& m_tileset;
 		ska::Rectangle m_lastCameraPos;
-		unsigned int m_width;
-		unsigned int m_height;
+		unsigned int m_width{};
+		unsigned int m_height{};
 
 	};
 	typedef std::unique_ptr<LayerRenderable> LayerRenderablePtr;

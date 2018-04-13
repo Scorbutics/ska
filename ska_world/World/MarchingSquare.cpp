@@ -74,7 +74,7 @@ ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, cons
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
 			const auto block = world.getHighestBlock(x, y);
-			if(pred(block) == ska::BlockCollision::YES) {
+			if(pred(block) == ska::TileCollision::Yes) {
 				if (in.count({ x, y }) == 0) {
 					return { x, y };
 				}
@@ -85,24 +85,24 @@ ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, cons
 	return { static_cast<int>(width), static_cast<int>(height) };
 }
 
-ska::BlockCollision GetCollisionBoundChecked(const ska::TileWorld& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred) {
-	const auto width = world.getNbrBlocX();
-	const auto height = world.getNbrBlocY();
+ska::TileCollision GetCollisionBoundChecked(const ska::TileWorld& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred) {
+	const int width = world.getNbrBlocX();
+	const int height = world.getNbrBlocY();
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
 		const auto b = world.getHighestBlock(point.x, point.y);
 		return pred(b);
 	}
-	return ska::BlockCollision::NO;
+	return ska::TileCollision::No;
 }
 
 ska::StepDirection MarchingSquareNextStep(const ska::TileWorld& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep) {
 	ska::StepDirection result;
 
-	const auto upLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y - 1 }, pred) != ska::BlockCollision::NO;
-	const auto upRight = GetCollisionBoundChecked(world, { point.x, point.y - 1 }, pred) != ska::BlockCollision::NO;
-	const auto downLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y }, pred) != ska::BlockCollision::NO;
-	const auto downRight = GetCollisionBoundChecked(world, { point.x, point.y }, pred) != ska::BlockCollision::NO;
+	const auto upLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y - 1 }, pred) != ska::TileCollision::No;
+	const auto upRight = GetCollisionBoundChecked(world, { point.x, point.y - 1 }, pred) != ska::TileCollision::No;
+	const auto downLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y }, pred) != ska::TileCollision::No;
+	const auto downRight = GetCollisionBoundChecked(world, { point.x, point.y }, pred) != ska::TileCollision::No;
 
 	const auto state = upLeft + (upRight << 1) + (downLeft << 2) + (downRight << 3);
 
