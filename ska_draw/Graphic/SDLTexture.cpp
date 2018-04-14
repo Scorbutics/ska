@@ -71,7 +71,7 @@ ska::SDLTexture::~SDLTexture() {
 }
 
 void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
-	auto action = [&]() {
+	const auto action = [&]() {
 		SDL_SetTextureColorMod(m_texture, r, g, b);
 		return false;
 	};

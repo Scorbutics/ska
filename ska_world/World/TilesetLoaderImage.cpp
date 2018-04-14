@@ -33,8 +33,8 @@ ska::SDLSurface LoadTilesetImageProperties(const std::string& tilesetName) {
 
 
 void ska::TilesetLoaderImage::checkSizes() const {
-	if(!AllEquals(m_sChipset.getInstance()->w, m_sChipset.getInstance()->w, m_sProperties.getInstance()->w) ||
-	   !AllEquals(m_sChipset.getInstance()->h, m_sChipset.getInstance()->h, m_sProperties.getInstance()->h)) {
+	if(!AllEquals(m_sCol.getInstance()->w, m_sProperties.getInstance()->w) ||
+	   !AllEquals(m_sCol.getInstance()->h, m_sProperties.getInstance()->h)) {
 		throw FileException("Unable to load the tileset " + m_tilesetName + " from image loader : image files don't have the same dimensions");
 	}
 }
@@ -48,8 +48,8 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 }
 
 ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
-	const auto width = m_sChipset.getInstance()->w;
-	const auto height = m_sChipset.getInstance()->h;
+	const auto width = m_sCol.getInstance()->w;
+	const auto height = m_sCol.getInstance()->h;
 
 	auto tiles = Vector2<Tile>{};
 	tiles.resize(width, height);
@@ -70,8 +70,8 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 }
 
 std::pair<ska::Texture, ska::Vector2<ska::TileRenderable>> ska::TilesetLoaderImage::loadGraphics(unsigned int blockSize) const {
-	const auto width = m_sChipset.getInstance()->w;
-	const auto height = m_sChipset.getInstance()->h;
+	const auto width = m_sCol.getInstance()->w;
+	const auto height = m_sCol.getInstance()->h;
 
 	auto tiles = ska::Vector2<TileRenderable>{};
 	tiles.resize(width, height);

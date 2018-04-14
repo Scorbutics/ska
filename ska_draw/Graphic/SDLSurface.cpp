@@ -139,3 +139,17 @@ void ska::SDLSurface::free() {
 ska::SDLSurface::~SDLSurface() {
 	free();
 }
+
+ska::SDLSurface::SDLSurface(SDLSurface&& surf) noexcept {
+	*this = std::move(surf);
+}
+
+ska::SDLSurface& ska::SDLSurface::operator=(SDLSurface&& surf) noexcept {
+	std::swap(m_g, surf.m_g);
+	std::swap(m_b, surf.m_b);
+	std::swap(m_a, surf.m_a);
+
+	m_surface = surf.m_surface;
+	surf.m_surface = nullptr;
+	return *this;
+}

@@ -6,7 +6,10 @@ if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
 endif()
 
+set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
+
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${GSL_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}

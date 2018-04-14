@@ -19,7 +19,8 @@ namespace ska {
 		SDLSurface();
 		~SDLSurface() override;
 
-		SDLSurface(SDLSurface&&) = default;
+		SDLSurface(SDLSurface&& surf) noexcept;
+		SDLSurface& operator=(SDLSurface&& surf) noexcept;
 
 		void load(const std::string& file, Color const* colorKey);
 		void load32(const std::string& file);
