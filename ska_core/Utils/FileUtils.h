@@ -21,13 +21,13 @@ namespace ska {
 		static FileNameData build(const std::string& fullFileName) {
 			auto lastSlash = fullFileName.find_last_of('/');
 			auto lastBackSlash = fullFileName.find_last_of('\\');
-			auto lastFileSeparator = (lastSlash != std::string::npos) ? (lastBackSlash != std::string::npos ? (lastBackSlash > lastSlash ? lastBackSlash : lastSlash) : lastSlash) : lastBackSlash;
+			const auto lastFileSeparator = (lastSlash != std::string::npos) ? (lastBackSlash != std::string::npos ? (lastBackSlash > lastSlash ? lastBackSlash : lastSlash) : lastSlash) : lastBackSlash;
 
 			auto fileNameWithExt = lastFileSeparator == std::string::npos ? fullFileName : fullFileName.substr(lastFileSeparator + 1);
-			auto extDotPos = fileNameWithExt.find_last_of('.');
-			auto fpath = fullFileName.substr(0, lastFileSeparator);
-			auto ext = (extDotPos != std::string::npos) ? fileNameWithExt.substr(extDotPos + 1) : "";
-			auto fname = (extDotPos != std::string::npos) ? fileNameWithExt.substr(0, extDotPos) : fileNameWithExt;
+			const auto extDotPos = fileNameWithExt.find_last_of('.');
+			const auto fpath = fullFileName.substr(0, lastFileSeparator);
+			const auto ext = (extDotPos != std::string::npos) ? fileNameWithExt.substr(extDotPos + 1) : "";
+			const auto fname = (extDotPos != std::string::npos) ? fileNameWithExt.substr(0, extDotPos) : fileNameWithExt;
 			return FileNameData(fpath, fname, ext);
 		}
 	};

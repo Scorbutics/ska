@@ -3,6 +3,7 @@
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "TilesetLoader.h"
+#include "TilesetEvent.h"
 
 namespace ska {
 	struct Tile;
@@ -10,7 +11,7 @@ namespace ska {
 
 	class Tileset : public MovableNonCopyable {
 	public:
-		Tileset(unsigned int tileSize, const TilesetLoader& loader);
+		Tileset(unsigned int tileSize, const TilesetLoader& loader, const TilesetEventLoader& loaderEvent);
 		Tileset(Tileset&&) = default;
 
 		std::pair<Tile*, const TileRenderable*> getTile(const Point<int>& coordinates);
@@ -24,13 +25,11 @@ namespace ska {
 		unsigned int getTileSize() const;
 
 	private:
-		void load(const TilesetLoader& loader);
-
 		std::string m_tilesetName;
+		const unsigned int m_tileSize;
 
 		TilesetRenderable m_renderable;
-		Vector2<Tile> m_blocks{};
-		
-		const unsigned int m_tileSize;
+		TilesetEvent m_event;
+		Vector2<Tile> m_blocks{};		
 	};
 }

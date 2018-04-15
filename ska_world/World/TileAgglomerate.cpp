@@ -46,8 +46,8 @@ MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectan
 //TODO rendre le code plus lisible et explicite
 void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
 	const int blockSize = world.getBlockSize();
-	const auto width = world.getNbrBlocX();
-	const auto height = world.getNbrBlocY();
+	const auto width = world.getBlocksX();
+	const auto height = world.getBlocksY();
 	const int area = width * height;
 
 	const auto dimension = horizontal ? width : height;
@@ -77,8 +77,8 @@ void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& laye
 
 std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::TileWorld& world, ska::TileAgglomerationPriority priority) {
 	ska::Vector2<MergedTile> layer;
-	const auto width = world.getNbrBlocX();
-	const auto height = world.getNbrBlocY();
+	const auto width = world.getBlocksX();
+	const auto height = world.getBlocksY();
 	layer.resize(width, height);
 
 	TileAgglomerate(world, layer, priority == ska::TileAgglomerationPriority::HORIZONTAL);

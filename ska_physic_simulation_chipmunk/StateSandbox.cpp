@@ -14,6 +14,8 @@
 #include "World/TileWorldLoaderImage.h"
 #include "World/TilesetLoaderImage.h"
 #include "World/TileWorldPhysics.h"
+#include "World/TilesetEventLoaderText.h"
+#include "World/TilesetCompleteLoader.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -69,8 +71,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto layerBlocks = std::move(layerData.physics);
 		m_layerHolder.layerRenderableBlocks = std::move(layerData.graphics);*/
 
-		const ska::TilesetLoaderImage tilesetLoader { "Resources/Chipsets/chipset_platform"};
-		auto tileset = ska::Tileset{ 48, tilesetLoader };
+		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
+		auto tileset = ska::Tileset{ 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
 
 		const ska::TileWorldLoaderImage levelLoader { "Resources/Chipsets/corr.png", "Resources/Levels/new_level" };
 		const auto world = ska::TileWorld { tileset, levelLoader };

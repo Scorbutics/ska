@@ -12,7 +12,7 @@ namespace ska {
 		TilesetRenderable(TilesetRenderable&&) = default;
 
 		void render(const Renderer& renderer, Point<int> pos, const TileRenderable& block) const;
-		const TileRenderable& getTile(Point<int> posCorr) const;
+		const TileRenderable* getTile(Point<int> posCorr) const;
 		const Texture& getTexture() const;
 
 		~TilesetRenderable() override = default;

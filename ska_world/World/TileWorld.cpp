@@ -9,15 +9,15 @@
 #include "LayerLoader.h"
 #include "TileWorld.h"
 #include "TileWorldLoader.h"
+#include "Utils/FileUtils.h"
 
 ska::TileWorld::TileWorld(Tileset& tileset) :
-	m_nbrBlockX(0),
-	m_nbrBlockY(0),
+	m_blocksX(0),
+	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
 	m_autoScriptsPlayed(false),
 	m_cameraSystem(nullptr),
-	m_tileset(&tileset),
-	m_tilesetEvent(std::make_unique<TilesetEvent>(m_tileset->getName())) {
+	m_tileset(&tileset) {
 }
 
 ska::TileWorld::TileWorld(Tileset& tileset, const TileWorldLoader& loader) :
@@ -35,7 +35,10 @@ void ska::TileWorld::linkCamera(CameraSystem* cs) {
 bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
 	const auto p1Block = p1 / m_blockSize;
 	const auto p2Block = p2 / m_blockSize;
-	if (p1Block.x >= m_nbrBlockX || p2Block.x >= m_nbrBlockX || p1Block.y >= m_nbrBlockY || p2Block.y >= m_nbrBlockY) {
+	if (p1Block.x >= static_cast<int>(m_blocksX) || 
+		p2Block.x >= static_cast<int>(m_blocksX) || 
+		p1Block.y >= static_cast<int>(m_blocksY) || 
+		p2Block.y >= static_cast<int>(m_blocksY)) {
 		return true;
 	}
 
@@ -46,7 +49,7 @@ bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, i
 
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
 	const auto blockPos = pos / m_blockSize;
-	if (blockPos.x >= m_nbrBlockX || blockPos.y >= m_nbrBlockY ) {
+	if (blockPos.x >= m_blocksX || blockPos.y >= m_blocksY) {
 		return true;
 	}
 	const auto& b = m_collisionProfile.getBlock(0, blockPos.x, blockPos.y);
@@ -143,7 +146,7 @@ bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<R
 	return false;
 }
 
-void ska::TileWorld::graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {	
+void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawables) {	
 	for (const auto& graphicLayer : m_graphicLayers) {
 		drawables.add(*graphicLayer);
 	}
@@ -153,7 +156,7 @@ const ska::Rectangle* ska::TileWorld::getView() const {
 	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
 }
 
-const ska::Tile* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const {
+const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
 	const auto layers = 3;
 	for(auto i = layers - 1; i >= 0; i--) {
 		const auto b = m_collisionProfile.getBlock(i, x, y);
@@ -167,42 +170,38 @@ const ska::Tile* ska::TileWorld::getHighestBlock(unsigned x, unsigned y) const {
 void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChange) {
 	m_autoScriptsPlayed = false;
 
-	if(tilesetToChange != nullptr) {
+	const auto tilesetChanged = tilesetToChange != nullptr && m_tileset->getName() != tilesetToChange->getName();
+	if(tilesetChanged) {
 		m_tileset = tilesetToChange;
-		//TODO
-		m_tilesetEvent = std::make_unique<TilesetEvent>(m_tileset->getName());
 	}
 
-	/*
-	const auto worldChanged = fileName != m_fileName;
-	if (worldChanged) {
-		const ska::FileNameData fndata(fileName);
-		m_genericName = fndata.name;
-		m_worldName = fndata.path + "/" + fndata.name;
-		m_fileName = fileName;
+	const auto worldChanged = loader.getName() != m_fullName;
+	if (worldChanged || tilesetChanged) {
+		m_fullName = loader.getName();
+
+		m_collisionProfile = loader.loadPhysics(*m_tileset);
+		m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
+
+		if (m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
+			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
+		}
+
+		m_blocksX = m_collisionProfile.getLayer(0).getBlocksX();
+		m_blocksY = m_collisionProfile.getLayer(0).getBlocksY();
 	}
 
-	*/
-	 
-	m_collisionProfile = loader.loadPhysics(*m_tileset);
-	m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
-
-	if(m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
-		throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
-	}
-
-	m_nbrBlockX = m_collisionProfile.getLayer(0).getBlocksX();
-	m_nbrBlockY = m_collisionProfile.getLayer(0).getBlocksY();
-	
+	//TODO event
 	if (m_cameraSystem != nullptr) {
 		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
 	}
 
+	const ska::FileNameData fndata(m_fullName);
+	m_name = fndata.name;
 
 	//TODO layer event loader
-	const auto fileNamePrefix = m_worldName + "/" + m_genericName;
+	const auto fileNamePrefix = m_fullName + "/" + m_name;
 	const auto& eventLayerName = fileNamePrefix + "E.txt";
-	m_layerE.changeLevel(eventLayerName);
+	m_layerEvent.changeLevel(eventLayerName);
 	
 }
 
@@ -216,7 +215,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 		auto tmp = m_tilesetEvent->getScript("", reason, m_autoScriptsPlayed);
 		for (auto& ssc : tmp) {
 			if (ssc != nullptr) {
-				ssc->context = m_worldName;
+				ssc->context = m_fullName;
 				result.push_back(ssc);
 			}
 		}
@@ -237,7 +236,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 				ssc->args.push_back(StringUtils::intToStr(newBlock.x));
 				ssc->args.push_back(StringUtils::intToStr(newBlock.y));
 				ssc->args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-				ssc->context = m_worldName;
+				ssc->context = m_fullName;
 				result.push_back(ssc);
 			}
 		}
@@ -260,8 +259,8 @@ ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& h
 		return result;
 	}
 
-	const auto maxWidth = getNbrBlocX();
-	const auto maxHeight = getNbrBlocY();
+	const auto maxWidth = getBlocksX();
+	const auto maxHeight = getBlocksY();
 
 	Rectangle blockArea{};
 	blockArea.x = hitBoxBlock.x - radius;
@@ -316,23 +315,23 @@ ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& h
 	return result;
 }
 
-unsigned ska::TileWorld::getNbrBlocX() const{
-    return m_nbrBlockX;
+std::size_t ska::TileWorld::getBlocksX() const{
+    return m_blocksX;
 }
 
-unsigned int ska::TileWorld::getPixelWidth() const {
-	return m_nbrBlockX*m_blockSize;
+std::size_t ska::TileWorld::getPixelWidth() const {
+	return m_blocksX * m_blockSize;
 }
 
-unsigned ska::TileWorld::getNbrBlocY() const{
-	return m_nbrBlockY;
+std::size_t ska::TileWorld::getBlocksY() const{
+	return m_blocksY;
 }
 
-unsigned int ska::TileWorld::getPixelHeight() const {
-	return m_nbrBlockY*m_blockSize;
+std::size_t ska::TileWorld::getPixelHeight() const {
+	return m_blocksY * m_blockSize;
 }
 
-unsigned int ska::TileWorld::getBlockSize() const {
+std::size_t ska::TileWorld::getBlockSize() const {
 	return m_blockSize;
 }
 

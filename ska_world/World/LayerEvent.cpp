@@ -46,7 +46,9 @@ std::string ska::LayerEvent::getAction(int ligne) const
 {
 	if (ligne < m_nbrLignes && ligne >= 0) {
 		return m_action[ligne];
-	} else if (ligne != 0) {
+	} 
+	
+	if (ligne != 0) {
 		SKA_LOG_ERROR("Erreur (classe LayerEvent) : Buffer Overflow lors de la tentative d'accès à la ligne ", ligne, " dans le fichier évènement ", m_nomFichier);
     }
     return "";
@@ -57,7 +59,9 @@ std::string ska::LayerEvent::getPath(int ligne) const
 {
 	if (ligne < m_nbrLignes && ligne >= 0) {
 		return m_path[ligne];
-	} else if (ligne != 0) {
+	} 
+	
+	if (ligne != 0) {
 		SKA_LOG_ERROR("Erreur (classe LayerEvent) : Buffer Overflow lors de la tentative d'accès à la ligne ", ligne, " dans le fichier évènement ", m_nomFichier);
     }
     return "";
@@ -114,7 +118,7 @@ void ska::LayerEvent::changeLevel(const std::string& fichier) {
 			if (id != "!") {
 				m_ID.push_back(StringUtils::strToInt(id));
 			} else {
-				m_ID.push_back(std::numeric_limits<int>().min());
+				m_ID.push_back(std::numeric_limits<int>::min());
 			}
 
 			std::string solide;

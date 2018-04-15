@@ -37,13 +37,13 @@ namespace ska {
 
 		void load(const TileWorldLoader& loader, Tileset* tilesetToChange = nullptr);
 
-		unsigned int getPixelWidth() const;
-		unsigned int getPixelHeight() const;
+		std::size_t getPixelWidth() const;
+		std::size_t getPixelHeight() const;
 
 		void update(const ska::Rectangle& cameraPos);
 
-		unsigned int getNbrBlocX() const;
-		unsigned int getNbrBlocY() const;
+		std::size_t getBlocksX() const;
+		std::size_t getBlocksY() const;
 
 		const Rectangle* getView() const;
 
@@ -63,24 +63,23 @@ namespace ska {
 
 		void linkCamera(CameraSystem* cs) override;
 
-		const Tile* getHighestBlock(unsigned i, unsigned y) const;
+		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
 
 	private:
-
-		int m_nbrBlockX, m_nbrBlockY;
+		unsigned int m_blocksX;
+		unsigned int m_blocksY;
 		unsigned int m_blockSize;
-
-
-		std::string m_fileName, m_genericName, m_worldName;
 
 		bool m_autoScriptsPlayed;
 		std::vector<IniReader> m_mobSettings{};
 		CameraSystem* m_cameraSystem;
+		std::string m_fullName;
+		std::string m_name;
 
 	protected:
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		CollisionProfile m_collisionProfile;
-		LayerEvent m_layerE;
+		LayerEvent m_layerEvent;
 		
 		//TODO Tileset avec lifetime à part
 		gsl::not_null<Tileset*> m_tileset;

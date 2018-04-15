@@ -10,8 +10,8 @@ std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::TileW
 	const auto startPoint = MarchingSquareGetStartingPoint(world, doneBlocks, pred);
 	std::list<ska::Point<int>> path;
 
-	const auto width = world.getNbrBlocX();
-	const auto height = world.getNbrBlocY();
+	const auto width = world.getBlocksX();
+	const auto height = world.getBlocksY();
 
 	if(startPoint.x == width && startPoint.y == height) {
 		return {true, path};
@@ -68,8 +68,8 @@ void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
 }
 
 ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred) {
-	const int width = world.getNbrBlocX();
-	const int height = world.getNbrBlocY();
+	const int width = world.getBlocksX();
+	const int height = world.getBlocksY();
 
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
@@ -86,8 +86,8 @@ ska::Point<int> MarchingSquareGetStartingPoint(const ska::TileWorld& world, cons
 }
 
 ska::TileCollision GetCollisionBoundChecked(const ska::TileWorld& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred) {
-	const int width = world.getNbrBlocX();
-	const int height = world.getNbrBlocY();
+	const int width = world.getBlocksX();
+	const int height = world.getBlocksY();
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
 		const auto b = world.getHighestBlock(point.x, point.y);
