@@ -28,6 +28,8 @@ cd ../ska_physic_homemade
 call ../cmake_.bat %*
 cd ../ska_physic_simulation
 call ../cmake_.bat %*
+cd ../ska_physic_simulation_chipmunk
+call ../cmake_.bat %*
 cd ../ska_script
 call ../cmake_.bat %*
 cd ../ska_world

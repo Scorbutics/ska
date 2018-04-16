@@ -1,7 +1,11 @@
 #pragma once
+#include "Utils/MovableNonCopyable.h"
+#include "Utils/Vector2.h"
 
 namespace ska {
 	class Tileset;
+    class Tile;
+    class TileRenderable;
 
 	class LayerLoader : public MovableNonCopyable {
 	public :

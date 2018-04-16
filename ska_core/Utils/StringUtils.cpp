@@ -128,17 +128,6 @@ void ska::StringUtils::replaceAll(std::string& str, const char from, const char 
 	replaceAll(str, std::string(1, from), std::string(1, to));
 }
 
-std::string ska::StringUtils::extractTo(const size_t start, const std::string& s, const char to) {
-	const std::string subString = s.substr(start);
-	size_t pos = subString.find_first_of(to);
-	std::string result = "";
-	if (pos != std::string::npos) {
-		result = subString.substr(0, pos - start);
-	}
-
-	return result;
-}
-
 std::wstring ska::StringUtils::toUTF8(const std::string& s) {
 	if (s.empty()) {
 		return L"";

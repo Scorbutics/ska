@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "LayerLoader.h"
+#include "LayerLoaderImage.h"
 #include "Exceptions/FileException.h"
 #include "Utils/Vector2.h"
 #include "Graphic/SDLSurface.h"
@@ -38,7 +38,7 @@ ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) co
 	for (auto y = 0; y < m_fileHeight; y++) {
 		for (auto x = 0; x < m_fileWidth; x++) {
 			const auto& color = m_file.getPixel32Color(x, y);
-			
+
 			if (color.r == 255 && color.g == 255 && color.b == 255) {
 				physics.push_back(nullptr);
 			} else {

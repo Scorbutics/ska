@@ -6,13 +6,19 @@
 #include <memory>
 
 #include "Utils/Refreshable.h"
+#include "Utils/MovableNonCopyable.h"
+#include "BlockEvent.h"
 
 namespace ska {
 	class LayerEventLoader;
+    class LayerEventLoaderText;
 
-	class LayerEvent : public Refreshable {
+	class LayerEvent :
+        public MovableNonCopyable,
+        public Refreshable {
 	public:
-		LayerEvent();
+		LayerEvent(const LayerEventLoaderText& loader);
+		LayerEvent(LayerEvent&&) = default;
 		void operator=(const LayerEvent&) = delete;
 
 		virtual void refresh(unsigned int ellapsedTime) override;
@@ -25,26 +31,16 @@ namespace ska {
 		std::string getAction(int ligne) const;
 		int getSolide(int ligne) const;
 		int getNbrLignes() const;
-		
+
 		std::string getPath(int ligne) const;
 
 	private:
-		void load(LayerEventLoader& loader);
+		void load(const LayerEventLoader& loader);
 
-		std::string m_nomFichier;
+		std::string m_fileName;
 		std::string m_chipsetname;
-		int m_nbrLignes;
 
-		std::vector<int> m_coordBX;
-		std::vector<int> m_coordBY;
-		std::vector<int> m_ID;
-		std::vector<int> m_trigger;
-		std::vector<int> m_solide;
-		
-		std::vector<std::string> m_action;
-		std::vector<std::string> m_param;
-		std::vector<std::string> m_path;
+        std::vector<BlockEvent> m_events;
 	};
-	using LayerEPtr = std::unique_ptr<LayerEvent>;
 }
 

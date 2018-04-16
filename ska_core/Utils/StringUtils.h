@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <sstream>
 #include <vector>
 
 namespace ska {
@@ -17,13 +18,34 @@ namespace ska {
 		static std::string floatToStr(const float f);
 		static std::string charToStr(char letter);
 
+		template <class T>
+		static T fromString(const std::string& str) {
+            std::istringstream iss(str);
+            T result;
+            iss >> result;
+            return result;
+		}
+
+		template <class T>
+		static std::string toString(const T& value) {
+            std::ostringstream oss;
+            oss << value;
+            return oss.str();
+		}
+
 		static std::vector<std::string>& split(const std::string &s, const char delim, std::vector<std::string> &elems);
 		static std::vector<std::string> split(const std::string &s, const char delim);
 		static std::string ltrim(const std::string &s);
 		static std::string rtrim(const std::string &s);
 		static std::string trim(const std::string &s);
 
-		static std::string extractTo(const size_t start, const std::string& s, const char to);
+		template <class T>
+		static T extractTo(const size_t start, const std::string& s, const char to) {
+            const auto subString = s.substr(start);
+            const auto positionCharSearched = subString.find_first_of(to);
+            return positionCharSearched != std::string::npos ?
+                subString.substr(0, positionCharSearched - start) : "";
+        };
 
 		static std::wstring toUTF8(const std::string& s);
 		static std::string toANSI(const std::wstring& ws);
@@ -33,7 +55,7 @@ namespace ska {
 		static bool isInt(const std::string& s, const int base);
 		static bool isDecimal(const std::string& s);
 		~StringUtils();
-		
+
 
 	};
 }

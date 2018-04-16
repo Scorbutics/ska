@@ -8,5 +8,8 @@ namespace ska {
 		virtual ~LayerEventLoader() = default;
 
 		virtual std::vector<BlockEvent> load() const = 0;
+		virtual const std::string& getName() const {
+		    return "";
+		}
 	};
 }
