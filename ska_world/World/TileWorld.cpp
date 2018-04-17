@@ -35,9 +35,9 @@ void ska::TileWorld::linkCamera(CameraSystem* cs) {
 bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
 	const auto p1Block = p1 / m_blockSize;
 	const auto p2Block = p2 / m_blockSize;
-	if (p1Block.x >= static_cast<int>(m_blocksX) || 
-		p2Block.x >= static_cast<int>(m_blocksX) || 
-		p1Block.y >= static_cast<int>(m_blocksY) || 
+	if (p1Block.x >= static_cast<int>(m_blocksX) ||
+		p2Block.x >= static_cast<int>(m_blocksX) ||
+		p1Block.y >= static_cast<int>(m_blocksY) ||
 		p2Block.y >= static_cast<int>(m_blocksY)) {
 		return true;
 	}
@@ -125,7 +125,7 @@ bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<R
 			}
 		}
 	}
-	
+
 	FindAndEraseDoublons(outputX, outputY);
 
 	SKA_DBG_ONLY(
@@ -136,7 +136,7 @@ bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<R
 		if (!outputY.empty()) {
 			SKA_LOG_INFO("Y blocks : ", outputY.size());
 		}
-		
+
 		if(col) {
 			SKA_LOG_INFO("Hitbox : (", hitbox.x, " ; ", hitbox.y, " ; ", hitbox.w, " ; ", hitbox.h, ")");
 		}
@@ -146,7 +146,7 @@ bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<R
 	return false;
 }
 
-void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawables) {	
+void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
 	for (const auto& graphicLayer : m_graphicLayers) {
 		drawables.add(*graphicLayer);
 	}
@@ -201,8 +201,8 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	//TODO layer event loader
 	const auto fileNamePrefix = m_fullName + "/" + m_name;
 	const auto& eventLayerName = fileNamePrefix + "E.txt";
-	m_layerEvent.changeLevel(eventLayerName);
-	
+	m_events.clear();
+	m_events.push_back(loader.loadEvents());
 }
 
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {

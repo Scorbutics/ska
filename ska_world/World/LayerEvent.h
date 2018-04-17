@@ -17,9 +17,12 @@ namespace ska {
         public MovableNonCopyable,
         public Refreshable {
 	public:
+	    LayerEvent() = default;
 		LayerEvent(const LayerEventLoaderText& loader);
 		LayerEvent(LayerEvent&&) = default;
-		void operator=(const LayerEvent&) = delete;
+        ~LayerEvent() override = default;
+
+        void load(const LayerEventLoader& loader);
 
 		virtual void refresh(unsigned int ellapsedTime) override;
 
@@ -29,18 +32,18 @@ namespace ska {
 		std::string getParam(int ligne) const;
 		int getTrigger(int ligne) const;
 		std::string getAction(int ligne) const;
-		int getSolide(int ligne) const;
-		int getNbrLignes() const;
+		int getSolid(int ligne) const;
+		int getLines() const;
 
 		std::string getPath(int ligne) const;
 
 	private:
-		void load(const LayerEventLoader& loader);
-
 		std::string m_fileName;
 		std::string m_chipsetname;
 
         std::vector<BlockEvent> m_events;
 	};
+
+	using LayerEventPtr = std::unique_ptr<LayerEvent>;
 }
 

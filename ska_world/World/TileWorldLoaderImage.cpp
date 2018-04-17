@@ -4,12 +4,9 @@
 #include "LayerRenderable.h"
 #include "TileWorld.h"
 
-ska::TileWorldLoaderImage::TileWorldLoaderImage(const std::string& corrFileName, std::string levelPath) :
-	m_correspondanceMapper(corrFileName),
-	m_levelPath(std::move(levelPath)) {
-	m_loaders.emplace_back(std::make_unique<LayerLoaderImage>(m_correspondanceMapper, m_levelPath + ".bmp"));
-	m_loaders.emplace_back(std::make_unique<LayerLoaderImage>(m_correspondanceMapper, m_levelPath + "M.bmp"));
-	m_loaders.emplace_back(std::make_unique<LayerLoaderImage>(m_correspondanceMapper, m_levelPath + "T.bmp"));
+ska::TileWorldLoaderImage::TileWorldLoaderImage(std::string levelPath, std::vector<std::unique_ptr<LayerLoader>> loaders, std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders) :
+    m_loaders(std::move(loaders)),
+    m_eventLoaders(std::move(eventLoaders)) {
 }
 
 ska::CollisionProfile ska::TileWorldLoaderImage::loadPhysics(Tileset& tileset) const {
@@ -26,6 +23,13 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderImage::loadGraphics(Til
 		renderables.push_back(std::make_unique<LayerRenderable>(l->loadGraphics(tileset), tileset.getRenderable(), blockSize));
 	}
 	return renderables;
+}
+
+std::vector<ska::LayerEvent> ska::TileWorldLoaderImage::loadEvents() const {
+    auto events = std::vector<LayerEvent>{};
+    for(const auto& l : m_eventLoaders) {
+        events.push_back();
+    }
 }
 
 const std::string& ska::TileWorldLoaderImage::getName() const {

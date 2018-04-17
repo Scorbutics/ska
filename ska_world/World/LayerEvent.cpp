@@ -39,7 +39,7 @@ int ska::LayerEvent::getTrigger(int ligne) const {
 	return (ligne < m_events.size() && ligne >= 0) ? m_events[ligne].trigger : -1;
 }
 
-int ska::LayerEvent::getSolide(int ligne) const {
+int ska::LayerEvent::getSolid(int ligne) const {
 	return (ligne < m_events.size() && ligne >= 0) ? m_events[ligne].solid : -1;
 }
 
@@ -67,7 +67,7 @@ std::string ska::LayerEvent::getPath(int ligne) const {
 
 }
 
-int ska::LayerEvent::getNbrLignes() const {
+int ska::LayerEvent::getLines() const {
     return m_events.size();
 }
 

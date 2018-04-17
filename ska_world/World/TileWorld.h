@@ -78,11 +78,11 @@ namespace ska {
 
 	protected:
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
+		std::vector<LayerEventPtr> m_events;
 		CollisionProfile m_collisionProfile;
-		LayerEvent m_layerEvent;
-		
+
 		//TODO Tileset avec lifetime à part
 		gsl::not_null<Tileset*> m_tileset;
-		std::unique_ptr<TilesetEvent> m_tilesetEvent{};		
+		std::unique_ptr<TilesetEvent> m_tilesetEvent{};
 	};
 }

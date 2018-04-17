@@ -16,6 +16,7 @@
 #include "World/TileWorldPhysics.h"
 #include "World/TilesetEventLoaderText.h"
 #include "World/TilesetCompleteLoader.h"
+#include "World/LayerEventLoaderText.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -28,7 +29,7 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 	if(actions[ska::LClic]) {
 		const auto& ranges = ime.icm.getRanges();
 		const auto mousePos = ranges[ska::MousePos];
-		
+
 		createBall(mousePos);
 	}
 	return true;
@@ -51,7 +52,7 @@ cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer user
 
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
-	
+
 	if (ge.getEventType() == ska::GameEventType::GAME_WINDOW_READY) {
 		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
 		m_cameraSystem = cameraSystemPtr.get();
@@ -74,7 +75,18 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
 		auto tileset = ska::Tileset{ 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
 
-		const ska::TileWorldLoaderImage levelLoader { "Resources/Chipsets/corr.png", "Resources/Levels/new_level" };
+		const auto mapper = TilesetCorrespondanceMapper {"Resources/Chipsets/corr.png"};
+
+		auto loaders = std::vector<std::unique_ptr<LayerLoader>> {};
+		auto eventLoaders = std::vector<std::unique_ptr<LayerEventLoader>> {};
+
+        loaders.push_back(std::make_unique<LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_level.bmp"));
+        loaders.push_back(std::make_unique<LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_levelM.bmp"));
+        loaders.push_back(std::make_unique<LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_levelT.bmp"));
+
+        eventLoaders.push_back(std::make_unique<LayerEventLoaderText>("Resources/Levels/new_level"));
+
+		const ska::TileWorldLoaderImage levelLoader { "Resources/Levels/new_level", std::move(loaders), std::move(eventLoaders) };
 		const auto world = ska::TileWorld { tileset, levelLoader };
 
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
@@ -89,10 +101,10 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		}
 
 		m_layerContours.emplace_back(contourRectangleTile);
-		
+
 		auto chd = ska::cp::CollisionHandlerData{
 			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::BEGIN>{CollisionCallbackBegin}};
-		
+
 		m_space.addDefaultCollisionHandler(std::move(chd));
 
 	}
@@ -117,7 +129,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	auto ballEntity = m_entityManager.createEntity();
 
 	m_entityManager.addComponent(ballEntity, ska::PositionComponent{});
-	
+
 	ska::GraphicComponent gc;
 	gc.sprites.push_back(m_ballTexture);
 	m_entityManager.addComponent(ballEntity, std::move(gc));
@@ -127,9 +139,9 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	ska::InputComponent ic;
 	ic.movePower = 10.;
-	
+
 	m_entityManager.addComponent(ballEntity, std::move(ic));
-	
+
 	auto bc = ska::cp::BuildCircleHitbox(m_space, point, 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
