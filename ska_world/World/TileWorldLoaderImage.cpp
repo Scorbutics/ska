@@ -3,8 +3,13 @@
 #include "LayerLoader.h"
 #include "LayerRenderable.h"
 #include "TileWorld.h"
+#include "LayerEventLoaderText.h"
 
-ska::TileWorldLoaderImage::TileWorldLoaderImage(std::string levelPath, std::vector<std::unique_ptr<LayerLoader>> loaders, std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders) :
+ska::TileWorldLoaderImage::TileWorldLoaderImage(
+                                                std::string levelPath,
+                                                std::vector<std::unique_ptr<LayerLoader>> loaders,
+                                                std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders) :
+    m_levelPath(std::move(levelPath)),
     m_loaders(std::move(loaders)),
     m_eventLoaders(std::move(eventLoaders)) {
 }
@@ -25,11 +30,12 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderImage::loadGraphics(Til
 	return renderables;
 }
 
-std::vector<ska::LayerEvent> ska::TileWorldLoaderImage::loadEvents() const {
-    auto events = std::vector<LayerEvent>{};
+std::vector<ska::LayerEventPtr> ska::TileWorldLoaderImage::loadEvents() const {
+    auto events = std::vector<LayerEventPtr>{};
     for(const auto& l : m_eventLoaders) {
-        events.push_back();
+        events.push_back(std::make_unique<LayerEvent>(m_levelPath, l->load()));
     }
+    return events;
 }
 
 const std::string& ska::TileWorldLoaderImage::getName() const {

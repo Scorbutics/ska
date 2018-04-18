@@ -18,11 +18,10 @@ namespace ska {
         public Refreshable {
 	public:
 	    LayerEvent() = default;
+	    LayerEvent(std::string levelPath, std::vector<BlockEvent> blocks);
 		LayerEvent(const LayerEventLoaderText& loader);
 		LayerEvent(LayerEvent&&) = default;
         ~LayerEvent() override = default;
-
-        void load(const LayerEventLoader& loader);
 
 		virtual void refresh(unsigned int ellapsedTime) override;
 
@@ -38,6 +37,8 @@ namespace ska {
 		std::string getPath(int ligne) const;
 
 	private:
+	    void load(const LayerEventLoader& loader);
+
 		std::string m_fileName;
 		std::string m_chipsetname;
 

@@ -10,11 +10,14 @@ namespace ska {
 
 	class TileWorldLoaderImage : public TileWorldLoader {
 	public:
-		TileWorldLoaderImage (std::string levelPath, std::vector<std::unique_ptr<LayerLoader>> loaders, std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders);
+		TileWorldLoaderImage (
+                        std::string levelPath,
+                        std::vector<std::unique_ptr<LayerLoader>> loaders,
+                        std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders);
 
 		CollisionProfile loadPhysics(Tileset& tileset) const override;
 		std::vector<LayerRenderablePtr> loadGraphics(Tileset& tileset, unsigned int blockSize) const override;
-		std::vector<LayerEvent> loadEvents() const override;
+		std::vector<LayerEventPtr> loadEvents() const override;
 		const std::string& getName() const override;
 
 	private:

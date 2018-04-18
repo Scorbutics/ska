@@ -201,8 +201,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	//TODO layer event loader
 	const auto fileNamePrefix = m_fullName + "/" + m_name;
 	const auto& eventLayerName = fileNamePrefix + "E.txt";
-	m_events.clear();
-	m_events.push_back(loader.loadEvents());
+	m_events = loader.loadEvents();
 }
 
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {

@@ -15,6 +15,11 @@ ska::LayerEvent::LayerEvent(const LayerEventLoaderText& loader) :
     m_fileName(loader.getName()) {
 }
 
+ska::LayerEvent::LayerEvent(std::string name, std::vector<BlockEvent> events) :
+    m_events(std::move(events)),
+    m_fileName(std::move(name)) {
+}
+
 void ska::LayerEvent::refresh(unsigned int) {
 	/* TODO Tileset relative scripts ?? */
 }
