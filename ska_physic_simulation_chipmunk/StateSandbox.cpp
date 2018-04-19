@@ -11,13 +11,14 @@
 #include "Physic/MovementSystem.h"
 #include "Physic/BuildHitbox.h"
 #include "CollisionHandlerType.h"
-#include "World/TileWorldLoaderImage.h"
+#include "World/TileWorldLoaderAggregate.h"
 #include "World/TilesetLoaderImage.h"
 #include "World/TileWorldPhysics.h"
 #include "World/TilesetEventLoaderText.h"
 #include "World/TilesetCompleteLoader.h"
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
+#include "Utils/FileUtils.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -51,7 +52,19 @@ cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer user
 	return true;
 }
 
+ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::TilesetCorrespondanceMapper& mapper, const std::string& levelName) {
+    const auto levelFileName = ska::FileNameData {levelName};
 
+    auto loaders = std::vector<std::unique_ptr<ska::LayerLoader>> {};
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + ".bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "M.bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "T.bmp"));
+
+    auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
+    eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName));
+
+    return { levelName, std::move(loaders), std::move(eventLoaders) };
+}
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
@@ -69,18 +82,9 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
 		auto tileset = ska::Tileset{ 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
-
 		const auto mapper = ska::TilesetCorrespondanceMapper {"Resources/Chipsets/corr.png"};
+		const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
 
-		auto loaders = std::vector<std::unique_ptr<ska::LayerLoader>> {};
-        loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_level.bmp"));
-        loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_levelM.bmp"));
-        loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, "Resources/Levels/new_level/new_levelT.bmp"));
-
-        auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
-        eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>("Resources/Levels/new_level"));
-
-		const ska::TileWorldLoaderImage levelLoader { "Resources/Levels/new_level", std::move(loaders), std::move(eventLoaders) };
 		const auto world = ska::TileWorld { tileset, levelLoader };
 
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);

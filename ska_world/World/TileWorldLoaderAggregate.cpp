@@ -1,11 +1,11 @@
-#include "TileWorldLoaderImage.h"
+#include "TileWorldLoaderAggregate.h"
 #include "Layer.h"
 #include "LayerLoader.h"
 #include "LayerRenderable.h"
 #include "TileWorld.h"
 #include "LayerEventLoaderText.h"
 
-ska::TileWorldLoaderImage::TileWorldLoaderImage(
+ska::TileWorldLoaderAggregate::TileWorldLoaderAggregate(
                                                 std::string levelPath,
                                                 std::vector<std::unique_ptr<LayerLoader>> loaders,
                                                 std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders) :
@@ -14,7 +14,7 @@ ska::TileWorldLoaderImage::TileWorldLoaderImage(
     m_eventLoaders(std::move(eventLoaders)) {
 }
 
-ska::CollisionProfile ska::TileWorldLoaderImage::loadPhysics(Tileset& tileset) const {
+ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tileset) const {
 	CollisionProfile profile;
 	for (const auto& l : m_loaders) {
 		profile.addLayer(std::make_unique<Layer>(l->loadPhysics(tileset)));
@@ -22,7 +22,7 @@ ska::CollisionProfile ska::TileWorldLoaderImage::loadPhysics(Tileset& tileset) c
 	return profile;
 }
 
-std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderImage::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
+std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
 	std::vector<LayerRenderablePtr> renderables;
 	for (const auto& l : m_loaders) {
 		renderables.push_back(std::make_unique<LayerRenderable>(l->loadGraphics(tileset), tileset.getRenderable(), blockSize));
@@ -30,7 +30,7 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderImage::loadGraphics(Til
 	return renderables;
 }
 
-std::vector<ska::LayerEventPtr> ska::TileWorldLoaderImage::loadEvents() const {
+std::vector<ska::LayerEventPtr> ska::TileWorldLoaderAggregate::loadEvents() const {
     auto events = std::vector<LayerEventPtr>{};
     for(const auto& l : m_eventLoaders) {
         events.push_back(std::make_unique<LayerEvent>(m_levelPath, l->load()));
@@ -38,6 +38,6 @@ std::vector<ska::LayerEventPtr> ska::TileWorldLoaderImage::loadEvents() const {
     return events;
 }
 
-const std::string& ska::TileWorldLoaderImage::getName() const {
+const std::string& ska::TileWorldLoaderAggregate::getName() const {
 	return m_levelPath;
 }

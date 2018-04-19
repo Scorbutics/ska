@@ -8,9 +8,9 @@
 namespace ska {
 	class CollisionProfile;
 
-	class TileWorldLoaderImage : public TileWorldLoader {
+	class TileWorldLoaderAggregate : public TileWorldLoader {
 	public:
-		TileWorldLoaderImage (
+		TileWorldLoaderAggregate (
                         std::string levelPath,
                         std::vector<std::unique_ptr<LayerLoader>> loaders,
                         std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders);
