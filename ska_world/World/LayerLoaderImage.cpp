@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SDL.h>
 #include "LayerLoaderImage.h"
 #include "Exceptions/FileException.h"
@@ -21,10 +22,10 @@ ska::Vector2<const ska::TileRenderable*> ska::LayerLoaderImage::loadGraphics(Til
 				graphics.push_back(nullptr);
 			} else {
 				if (map.find(color) == map.end()) {
-                    const auto ss = ska::StringUtils::toString(color.r) + "; " + ska::StringUtils::toString(color.g) + "; " + ska::StringUtils::toString(color.b);
+                    const std::string ss = ska::StringUtils::intToStr(color.r) + "; " + ska::StringUtils::intToStr(color.g) + "; " + ska::StringUtils::intToStr(color.b);
 					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
-				const auto&[block, br] = chipset.getTile(map.at(color));
+				const auto& [block, br] = chipset.getTile(map.at(color));
 				graphics.push_back(br);
 			}
 		}
@@ -46,7 +47,7 @@ ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) co
 				physics.push_back(nullptr);
 			} else {
 				if (map.find(color) == map.end()) {
-                    const auto ss =  ska::StringUtils::toString(color.r) + "; " + ska::StringUtils::toString(color.g) + "; " + ska::StringUtils::toString(color.b);
+                    const std::string ss = ska::StringUtils::intToStr(color.r) + "; " + ska::StringUtils::intToStr(color.g) + "; " + ska::StringUtils::intToStr(color.b);
 					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
 				const auto& [block, br] = chipset.getTile(map.at(color));
@@ -59,6 +60,7 @@ ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) co
 
 ska::SDLSurface ska::LayerLoaderImage::loadFrom32(const std::string& layerFilename) {
 	SDLSurface file;
+	std::cout << layerFilename << std::endl;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
 		throw FileException("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDL_GetError()));

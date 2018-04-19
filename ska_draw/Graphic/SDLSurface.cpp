@@ -8,7 +8,7 @@
 #include "Core/CodeDebug/CodeDebug.h"
 
 SDL_Color ColorToNative(const ska::Color& c){
-	return SDL_Color{ c.r, c.g, c.b, c.a };	
+	return SDL_Color{ c.r, c.g, c.b, c.a };
 }
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
@@ -92,6 +92,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 	if (imageRam != nullptr) {
 		m_surface = SDL_CreateRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
 		if (m_surface == nullptr) {
+            SKA_LOG_ERROR("Erreur du chargement de l'image " + file + ": " + std::string(SDL_GetError()));
 			goto loadImage32Free;
 		}
 
@@ -145,6 +146,7 @@ ska::SDLSurface::SDLSurface(SDLSurface&& surf) noexcept {
 }
 
 ska::SDLSurface& ska::SDLSurface::operator=(SDLSurface&& surf) noexcept {
+	std::swap(m_r, surf.m_r);
 	std::swap(m_g, surf.m_g);
 	std::swap(m_b, surf.m_b);
 	std::swap(m_a, surf.m_a);
