@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SDL.h>
 #include "LayerLoaderImage.h"
 #include "Exceptions/FileException.h"
@@ -60,7 +59,6 @@ ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) co
 
 ska::SDLSurface ska::LayerLoaderImage::loadFrom32(const std::string& layerFilename) {
 	SDLSurface file;
-	std::cout << layerFilename << std::endl;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
 		throw FileException("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDL_GetError()));
@@ -71,6 +69,6 @@ ska::SDLSurface ska::LayerLoaderImage::loadFrom32(const std::string& layerFilena
 ska::LayerLoaderImage::LayerLoaderImage(const TilesetCorrespondanceMapper& correspondanceMapper, const std::string & layerFilename) :
 	m_colorMapper(correspondanceMapper),
 	m_file(loadFrom32(layerFilename)),
-	m_fileWidth(m_file.getInstance()->h),
-	m_fileHeight(m_file.getInstance()->w) {
+	m_fileWidth(m_file.getInstance()->w),
+	m_fileHeight(m_file.getInstance()->h) {
 }

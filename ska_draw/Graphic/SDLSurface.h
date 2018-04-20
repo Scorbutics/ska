@@ -32,18 +32,18 @@ namespace ska {
 		uint32_t getPixel32(int pixIndex) const;
 		const SDL_PixelFormat * getFormat() const;
 
-		SDL_Surface* getInstance() const;		
+		SDL_Surface* getInstance() const;
 
 	private:
-		bool checkSurfaceValidity(const std::string& fileName);
+		bool checkSurfaceValidity(const std::string& fileName, bool is32 = false);
 		void free();
-		
+
 		uint8_t m_r;
 		uint8_t m_g;
 		uint8_t m_b;
 		uint8_t m_a;
 
 		gsl::owner<SDL_Surface*> m_surface;
-		
+
 	};
 }

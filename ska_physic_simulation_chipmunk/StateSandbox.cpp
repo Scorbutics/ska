@@ -61,7 +61,7 @@ ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::Tilese
     loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "T.bmp"));
 
     auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
-    eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName));
+    eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName + "/" + levelFileName.name + "E.txt"));
 
     return { levelName, std::move(loaders), std::move(eventLoaders) };
 }

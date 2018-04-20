@@ -65,7 +65,7 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 	}
 }
 
-bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
+bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bool is32) {
 	if(fileName == std::string(NOSUCHFILE)) {
 		return true;
 	}
@@ -75,7 +75,11 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
 	});
 
 	if (m_surface == nullptr) {
-		load(NOSUCHFILE, nullptr);
+        if(!is32) {
+            load(NOSUCHFILE, nullptr);
+        } else {
+            return false;
+        }
 	}
 
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
@@ -92,7 +96,6 @@ void ska::SDLSurface::load32(const std::string& file) {
 	if (imageRam != nullptr) {
 		m_surface = SDL_CreateRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
 		if (m_surface == nullptr) {
-            SKA_LOG_ERROR("Erreur du chargement de l'image " + file + ": " + std::string(SDL_GetError()));
 			goto loadImage32Free;
 		}
 
@@ -121,9 +124,10 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 
 uint32_t ska::SDLSurface::getPixel32(int x, int y) const {
 	if (m_surface == nullptr || x < 0 || x > m_surface->w - 1 || y < 0 || y > m_surface->h - 1) {
+        SKA_LOG_ERROR("Tentative d'acces a une zone hors limites sur l'image de dimensions ", m_surface->w, " par ", m_surface->h, " au coordonnees : (", x, "; ", y, ")");
 		return 0;
 	}
-	return static_cast<Uint32*>(m_surface->pixels)[y*(m_surface->pitch / 4) + x];
+	return static_cast<uint32_t*>(m_surface->pixels)[y * (m_surface->pitch / 4) + x];
 }
 
 uint32_t ska::SDLSurface::getPixel32(int pixIndex) const {
