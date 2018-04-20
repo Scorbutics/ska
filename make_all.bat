@@ -50,10 +50,6 @@ cd ../ska_physic_chipmunk_test
 call "../cmake_.bat" %*
 mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
-cd ../ska_physic_simulation_chipmunk
-call "../cmake_.bat" %*
-mingw32-make
-if %errorlevel% neq 0 exit /b %errorlevel%
 cd ../ska_physic_homemade
 call "../cmake_.bat" %*
 mingw32-make
@@ -63,6 +59,10 @@ call "../cmake_.bat" %*
 mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd ../ska_world
+call "../cmake_.bat" %*
+mingw32-make
+if %errorlevel% neq 0 exit /b %errorlevel%
+cd ../ska_physic_simulation_chipmunk
 call "../cmake_.bat" %*
 mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
