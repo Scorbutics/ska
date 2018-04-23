@@ -55,5 +55,6 @@
 			<Depends filename="ska_physic_homemade/ska_physic_homemade.cbp" />
 			<Depends filename="ska_physic_chipmunk/ska_physic_chipmunk.cbp" />
 		</Project>
+		<Project filename="ska_world_test/ska_world_test.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
