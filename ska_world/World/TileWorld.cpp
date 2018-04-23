@@ -10,8 +10,10 @@
 #include "TileWorld.h"
 #include "TileWorldLoader.h"
 #include "Utils/FileUtils.h"
+#include "Data/Events/WorldEvent.h"
 
-ska::TileWorld::TileWorld(Tileset& tileset) :
+ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
+	m_eventDispatcher(ged),
 	m_blocksX(0),
 	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
@@ -20,8 +22,8 @@ ska::TileWorld::TileWorld(Tileset& tileset) :
 	m_tileset(&tileset) {
 }
 
-ska::TileWorld::TileWorld(Tileset& tileset, const TileWorldLoader& loader) :
-	TileWorld(tileset) {
+ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const TileWorldLoader& loader) :
+	TileWorld(ged, tileset) {
 	load(loader);
 }
 
@@ -67,85 +69,6 @@ void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
 	}
 }
 
-/*
-template <class T>
-void EraseAll(std::vector<T>& altered, std::vector<T>& toErase){
-	using std::begin;
-	using std::end;
-	using std::remove_if;
-	using std::find;
-
-	altered.erase(remove_if(begin(altered), end(altered),
-		[&](auto x) {return find(begin(toErase), end(toErase), x) != end(toErase); }), end(altered));
-}
-
-
-void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
-	std::vector<ska::Rectangle> doublons;
-	if(outputX.size() > outputY.size()) {
-		EraseAll(outputY, outputX);
-	} else {
-		EraseAll(outputX, outputY);
-	}
-
-}
-*/
-
-//TODO => partie physique
-bool ska::TileWorld::intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const {
-	/*Point<int> horizontalSegment { hitbox.x, hitbox.x + hitbox.w };
-	Point<int> verticalSegment { hitbox.y, hitbox.y + hitbox.h };
-	horizontalSegment /= m_blockSize;
-	verticalSegment /= m_blockSize;
-
-	auto col = false;
-
-	std::vector<ska::Rectangle> intermediateX;
-	std::vector<ska::Rectangle> intermediateY;
-
-	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
-		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
-			if (getCollision(x, y)) {
-				const Rectangle hitboxBlock{ static_cast<int>(x * m_blockSize), static_cast<int>(y * m_blockSize), static_cast<int>(m_blockSize), static_cast<int>(m_blockSize) };
-
-				//Vertical
-				const auto collisionContact = CollisionContact(hitbox, hitboxBlock);
-				if (collisionContact.normal().y != 0) {
-					SKA_LOG_INFO("Normal Y, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
-					outputY.push_back(hitboxBlock);
-					col = true;
-				}
-
-				//Horizontal
-				if (collisionContact.normal().x != 0) {
-					SKA_LOG_INFO("Normal X, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
-					outputX.push_back(hitboxBlock);
-					col = true;
-				}
-			}
-		}
-	}
-
-	FindAndEraseDoublons(outputX, outputY);
-
-	SKA_DBG_ONLY(
-		if (!outputX.empty()) {
-			SKA_LOG_INFO("X blocks : ", outputX.size());
-		}
-
-		if (!outputY.empty()) {
-			SKA_LOG_INFO("Y blocks : ", outputY.size());
-		}
-
-		if(col) {
-			SKA_LOG_INFO("Hitbox : (", hitbox.x, " ; ", hitbox.y, " ; ", hitbox.w, " ; ", hitbox.h, ")");
-		}
-	);
-
-	return col;*/
-	return false;
-}
-
 void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
 	for (const auto& graphicLayer : m_graphicLayers) {
 		drawables.add(*graphicLayer);
@@ -188,22 +111,26 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 
 		m_blocksX = m_collisionProfile.getLayer(0).getBlocksX();
 		m_blocksY = m_collisionProfile.getLayer(0).getBlocksY();
+
+		m_events = loader.loadEvents();
+
+        const ska::FileNameData fndata(m_fullName);
+        m_name = fndata.name;
+
+        auto we = WorldEvent { WorldEventType::WORLD_CHANGE };
+        we.blocksWidth = m_blocksX;
+        we.blocksHeight = m_blocksX;
+        we.fullName = m_fullName;
+        m_eventDispatcher.Observable<WorldEvent>::notifyObservers(we);
+
+        //TODO event
+        /*if (m_cameraSystem != nullptr) {
+            m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
+        }*/
 	}
-
-	//TODO event
-	if (m_cameraSystem != nullptr) {
-		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
-	}
-
-	const ska::FileNameData fndata(m_fullName);
-	m_name = fndata.name;
-
-	//TODO layer event loader
-	const auto fileNamePrefix = m_fullName + "/" + m_name;
-	const auto& eventLayerName = fileNamePrefix + "E.txt";
-	m_events = loader.loadEvents();
 }
 
+//TODO : déplacer ?
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
 	std::vector<ScriptSleepComponent*> result;
 	if (m_tilesetEvent == nullptr) {

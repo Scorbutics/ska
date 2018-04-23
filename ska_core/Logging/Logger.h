@@ -9,7 +9,7 @@
 
 namespace ska {
 
-	enum EnumLogLevel {
+	enum class EnumLogLevel {
 		SKA_DEBUG = 0,
 		SKA_INFO = 1,
 		SKA_MESSAGE = 2,

@@ -3,7 +3,8 @@
 namespace ska {
 
 	class Music;
-	enum WorldEventType {
+
+	enum class WorldEventType {
 		WORLD_CREATE,
 		WORLD_CHANGE,
 		WORLD_QUIT
@@ -14,28 +15,21 @@ namespace ska {
 	*/
 	class WorldEvent {
 	public:
-		explicit WorldEvent(WorldEventType wet) : 
-			m_type(wet), 
-			m_bgm(nullptr){
+		explicit WorldEvent(WorldEventType wet) :
+			type(wet),
+			bgm(nullptr){
 		}
 
-		void setBgm(Music& m) {
-			m_bgm = &m;
+		explicit WorldEvent(WorldEventType wet, Music& currentBgm) :
+			type(wet),
+			bgm(&currentBgm){
 		}
 
-		Music* getBgm() const {
-			return m_bgm;
-		}
-
-		const WorldEventType& getEventType() const {
-			return m_type;
-		}
-
-		virtual ~WorldEvent() = default;
-
-	private:
-		WorldEventType m_type;
-		Music* m_bgm;
+		const WorldEventType type;
+		Music* const bgm;
+        unsigned int blocksWidth {};
+        unsigned int blocksHeight {};
+        std::string fullName;
 	};
 
 }

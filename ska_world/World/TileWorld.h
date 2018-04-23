@@ -7,8 +7,8 @@
 #include "ChipsetHolder.h"
 #include "LayerEvent.h"
 #include "ECS/Basics/Physic/BlockAllowance.h"
-#include "Data/BlockContainer.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
+#include "Data/Events/GameEventDispatcher.h"
 #include "CollisionProfile.h"
 #include "LayerRenderable.h"
 #include "TilesetEvent.h"
@@ -27,12 +27,11 @@ namespace ska {
 	class TileWorld :
 		public MovableNonCopyable,
 	    public CameraAware,
-	    public BlockContainer,
 	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
-		TileWorld(Tileset& tileset);
-		TileWorld(Tileset& tileset, const TileWorldLoader& loader);
+		TileWorld(GameEventDispatcher& ged, Tileset& tileset);
+		TileWorld(GameEventDispatcher& ged, Tileset& tileset, const TileWorldLoader& loader);
 		TileWorld(TileWorld&&) = default;
 
 		void load(const TileWorldLoader& loader, Tileset* tilesetToChange = nullptr);
@@ -48,11 +47,10 @@ namespace ska {
 		const Rectangle* getView() const;
 
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
-		bool intersectBlocksAtPos(const Rectangle& hitbox, std::vector<Rectangle>& outputX, std::vector<Rectangle>& outputY) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 
-		bool getCollision(unsigned int x, unsigned int y) const;
+		bool getCollision(std::size_t x, std::size_t y) const override;
 
 		unsigned int getBlockSize() const override;
 
@@ -66,6 +64,8 @@ namespace ska {
 		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
 
 	private:
+	    GameEventDispatcher& m_eventDispatcher;
+
 		unsigned int m_blocksX;
 		unsigned int m_blocksY;
 		unsigned int m_blockSize;
@@ -76,7 +76,6 @@ namespace ska {
 		std::string m_fullName;
 		std::string m_name;
 
-	protected:
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		std::vector<LayerEventPtr> m_events;
 		CollisionProfile m_collisionProfile;

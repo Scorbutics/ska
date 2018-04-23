@@ -3,7 +3,7 @@
 #include "ECS/Basics/Physic/CollisionComponent.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Physic/CollisionContact.h"
-
+#include "Core/CodeDebug/CodeDebug.h"
 #include "Utils/RectangleUtils.h"
 
 ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, BlockAllowance& cp, GameEventDispatcher& ged) :
@@ -13,8 +13,7 @@ ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, Bl
 }
 
 ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, const std::vector<Rectangle>& points) {
-	//TODO taille bloc dynamique
-	constexpr auto blockSize = 48;
+	const auto blockSize = m_collisionProfile.getBlockSize();
 
 	if(points.empty()) {
 		return Rectangle{0, 0, 0, 0};
@@ -23,7 +22,7 @@ ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, co
 	Rectangle summedBlocksToOverlap;
 	auto first = true;
 	for (auto& p : points) {
-		const auto currentRect = Rectangle{ p.x, p.y, blockSize, blockSize };
+		const auto currentRect = Rectangle{ p.x, p.y, static_cast<int>(blockSize), static_cast<int>(blockSize) };
 		if (first) {
 			summedBlocksToOverlap = currentRect;
 			first = false;
@@ -33,6 +32,82 @@ ska::Rectangle ska::WorldCollisionSystem::calculateOverlap(Rectangle nextPos, co
 	}
 
 	return RectangleUtils::intersect(nextPos, summedBlocksToOverlap);
+}
+
+template <class T>
+void EraseAll(std::vector<T>& altered, const std::vector<T>& toErase){
+	using std::begin;
+	using std::end;
+	using std::remove_if;
+	using std::find;
+
+	altered.erase(remove_if(begin(altered), end(altered),
+		[&](auto x) {return find(begin(toErase), end(toErase), x) != end(toErase); }), end(altered));
+}
+
+
+void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
+	std::vector<ska::Rectangle> doublons;
+	if(outputX.size() > outputY.size()) {
+		EraseAll(outputY, outputX);
+	} else {
+		EraseAll(outputX, outputY);
+	}
+
+}
+
+bool IntersectBlocksAtPos(const ska::BlockAllowance& world, const ska::Rectangle& hitbox, std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
+	auto horizontalSegment = ska::Point<int> { hitbox.x, hitbox.x + hitbox.w };
+	auto verticalSegment = ska::Point<int> { hitbox.y, hitbox.y + hitbox.h };
+	const auto m_blockSize = world.getBlockSize();
+	horizontalSegment /= m_blockSize;
+	verticalSegment /= m_blockSize;
+
+	auto col = false;
+
+	auto intermediateX = std::vector<ska::Rectangle> {};
+	auto intermediateY = std::vector<ska::Rectangle> {};
+
+	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
+		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
+			if (world.getCollision(x, y)) {
+				const ska::Rectangle hitboxBlock{ static_cast<int>(x * m_blockSize), static_cast<int>(y * m_blockSize), static_cast<int>(m_blockSize), static_cast<int>(m_blockSize) };
+
+				//Vertical
+				const auto collisionContact = ska::CollisionContact {hitbox, hitboxBlock};
+				if (collisionContact.normal().y != 0) {
+					SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Normal Y, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
+					outputY.push_back(hitboxBlock);
+					col = true;
+				}
+
+				//Horizontal
+				if (collisionContact.normal().x != 0) {
+					SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Normal X, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
+					outputX.push_back(hitboxBlock);
+					col = true;
+				}
+			}
+		}
+	}
+
+	FindAndEraseDoublons(outputX, outputY);
+
+	SKA_DBG_ONLY(
+		if (!outputX.empty()) {
+			SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("X blocks : ", outputX.size());
+		}
+
+		if (!outputY.empty()) {
+			SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Y blocks : ", outputY.size());
+		}
+
+		if(col) {
+			SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Hitbox : (", hitbox.x, " ; ", hitbox.y, " ; ", hitbox.w, " ; ", hitbox.h, ")");
+		}
+	);
+
+	return col;
 }
 
 
@@ -66,7 +141,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 
 		wcol.blockColPosX.clear();
 		wcol.blockColPosY.clear();
-		const auto& intersect = m_collisionProfile.intersectBlocksAtPos(hitbox, wcol.blockColPosX, wcol.blockColPosY);
+		const auto& intersect = IntersectBlocksAtPos(m_collisionProfile, hitbox, wcol.blockColPosX, wcol.blockColPosY);
 		if (intersect) {
 			wcol.xaxis = !wcol.blockColPosX.empty();
 			wcol.yaxis = !wcol.blockColPosY.empty();

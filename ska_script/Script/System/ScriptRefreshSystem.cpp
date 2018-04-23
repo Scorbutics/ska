@@ -6,22 +6,21 @@
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
-#include "Data/BlockContainer.h"
+#include "ECS/Basics/Physic/BlockAllowance.h"
 #include "Data/Events/InputKeyEvent.h"
 #include "Core/CodeDebug/CodeDebug.h"
 
-ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockContainer& bc) :
+ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockAllowance& world) :
 	ScriptRefreshSystemBase(entityManager),
 	ScriptPositionSystemAccess(entityManager),
 	ska::Observer<InputKeyEvent>(std::bind(&ScriptRefreshSystem::onKeyEvent, this, std::placeholders::_1)),
 	m_eventDispatcher(ged),
-	m_scriptPositionedGetter(spg), 
-	m_blockContainer(bc), 
+	m_scriptPositionedGetter(spg),
+	m_world(world),
 	m_scriptAutoSystem(scriptAutoSystem),
 	m_action(false) {
 	m_eventDispatcher.ska::Observable<InputKeyEvent>::addObserver(*this);
 }
-
 
 bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 	m_action = ike.icm.getActions()[DoAction];
@@ -40,7 +39,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		const auto& pc = components.get<PositionComponent>(entityId);
 		const auto& hc = components.get<HitboxComponent>(entityId);
 		const auto& dac = components.get<AnimationComponent>(entityId);
-		
+
 		const Point<int>& frontPos = PositionComponent::getFrontPosition(pc, hc, dac);
 		const Point<int>& centerPos = PositionComponent::getCenterPosition(pc, hc);
 
@@ -74,9 +73,9 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 
 		//TODO D�clencher un �v�nement
 		/* TileWorld based events */
-		
+
 		std::vector<ScriptTriggerType> reasons;
-		const auto blockSize = m_blockContainer.getBlockSize();
+		const auto blockSize = m_world.getBlockSize();
 		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
 		auto worldScripts = m_scriptPositionedGetter.chipsetScript(oldCenterPos, centerPos, centerPos, EnumScriptTriggerType::AUTO, static_cast<const unsigned int>(-1));
@@ -96,7 +95,7 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 			//std::clog << "Block collision" << std::endl;
 			if ((wcc.blockColPosX != wcc.lastBlockColPosX && wcc.blockColPosX != wcc.lastBlockColPosY) ||
 				(wcc.blockColPosY != wcc.lastBlockColPosY && wcc.blockColPosY != wcc.lastBlockColPosX)) {
-				
+
 				auto tmp = m_scriptPositionedGetter.chipsetScript(oldCenterPos, frontPos, frontPos, EnumScriptTriggerType::TOUCH, 0);
 				SKA_DBG_ONLY(
 					if (!tmp.empty()) {
@@ -116,8 +115,8 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		}
 
 		/* If we are moving to another block, triggers a MOVE_OUT event on previous block and MOVE_IN on the next one */
-		const auto sameBlockBot = m_blockContainer.isSameBlockId(centerPos, oldCenterPos, 0);
-		const auto sameBlockMid = m_blockContainer.isSameBlockId(centerPos, oldCenterPos, 1);
+		const auto sameBlockBot = m_world.isSameBlockId(centerPos, oldCenterPos, 0);
+		const auto sameBlockMid = m_world.isSameBlockId(centerPos, oldCenterPos, 1);
 		if (!sameBlockBot || !sameBlockMid) {
 #ifdef SKA_DEBUG_GRAPHIC
 			auto& dgc = entityManager.getComponent<DebugGraphicComponent>(entityId);
@@ -189,9 +188,9 @@ void ska::ScriptRefreshSystem::startScript(const EntityId scriptEntity, const En
 }
 
 ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script) const {
-	const unsigned int blockSizeSquared = m_blockContainer.getBlockSize() * m_blockContainer.getBlockSize();
+	const unsigned int blockSizeSquared = m_world.getBlockSize() * m_world.getBlockSize();
 	auto& componentsSP = ScriptPositionSystemAccess::m_componentAccessor;
-	
+
 	PositionComponent& scriptPos = componentsSP.get<PositionComponent>(script);
 
 	int varX = (scriptPos.x - entityPos.x);

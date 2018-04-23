@@ -12,7 +12,7 @@
 namespace ska {
 	struct InputKeyEvent;
 	class ScriptPositionedGetter;
-    class BlockContainer;
+    class BlockAllowance;
 
 	using ScriptPositionSystemAccess = System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, ScriptSleepComponent>, PossibleComponent<>>;
 	using ScriptRefreshSystemBase = System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent>>;
@@ -23,7 +23,7 @@ namespace ska {
 		public Observer<InputKeyEvent> {
 
 	public:
-		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockContainer& bc);
+		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockAllowance& world);
 		void registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity);
 		void clearNamedScriptedEntities();
 		virtual ~ScriptRefreshSystem();
@@ -37,7 +37,7 @@ namespace ska {
 
 		GameEventDispatcher& m_eventDispatcher;
 		ScriptPositionedGetter& m_scriptPositionedGetter;
-		BlockContainer& m_blockContainer;
+		BlockAllowance& m_world;
 		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;
 

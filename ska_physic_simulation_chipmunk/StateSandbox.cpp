@@ -85,7 +85,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto mapper = ska::TilesetCorrespondanceMapper {"Resources/Chipsets/corr.png"};
 		const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
 
-		const auto world = ska::TileWorld { tileset, levelLoader };
+		const auto world = ska::TileWorld { m_eventDispatcher, tileset, levelLoader };
 
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world);
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);

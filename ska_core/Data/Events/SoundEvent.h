@@ -2,7 +2,7 @@
 
 namespace ska {
 	class Music;
-	enum SoundEventType {
+	enum class SoundEventType {
 		PLAY_MUSIC,
 		PLAY_SOUND,
 		STOP_MUSIC,
