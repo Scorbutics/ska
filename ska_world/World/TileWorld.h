@@ -26,7 +26,6 @@ namespace ska {
 
 	class TileWorld :
 		public MovableNonCopyable,
-	    public CameraAware,
 	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
@@ -44,8 +43,6 @@ namespace ska {
 		std::size_t getBlocksX() const;
 		std::size_t getBlocksY() const;
 
-		const Rectangle* getView() const;
-
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
@@ -59,8 +56,6 @@ namespace ska {
 		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const;
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
 
-		void linkCamera(CameraSystem* cs) override;
-
 		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
 
 	private:
@@ -72,7 +67,6 @@ namespace ska {
 
 		bool m_autoScriptsPlayed;
 		std::vector<IniReader> m_mobSettings{};
-		CameraSystem* m_cameraSystem;
 		std::string m_fullName;
 		std::string m_name;
 

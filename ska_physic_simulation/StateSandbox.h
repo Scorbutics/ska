@@ -26,9 +26,15 @@ private:
 	ska::EntityId createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const;
 
 	ska::CameraSystem* m_cameraSystem;
-	World m_world;
+
+	ska::TilesetCorrespondanceMapper m_mapper;
+	ska::Tileset m_tileset;
+
 	ska::ExtensibleGameEventDispatcher<>& m_eventDispatcher;
 	ska::EntityManager& m_entityManager;
+
+	ska::TileWorld m_world;
+
 	ska::DebugEntityCollisionResponse m_debugEntityCollision;
 	ska::EntityCollisionResponse m_entityCollision;
 	ska::DebugWorldCollisionResponse m_debugWorldCollision;

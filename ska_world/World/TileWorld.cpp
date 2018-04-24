@@ -18,20 +18,12 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
 	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
 	m_autoScriptsPlayed(false),
-	m_cameraSystem(nullptr),
 	m_tileset(&tileset) {
 }
 
 ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const TileWorldLoader& loader) :
 	TileWorld(ged, tileset) {
 	load(loader);
-}
-
-void ska::TileWorld::linkCamera(CameraSystem* cs) {
-	m_cameraSystem = cs;
-	if (m_cameraSystem != nullptr) {
-		m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
-	}
 }
 
 bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
@@ -75,10 +67,6 @@ void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 	}
 }
 
-const ska::Rectangle* ska::TileWorld::getView() const {
-	return m_cameraSystem == nullptr ? nullptr : m_cameraSystem->getDisplay();
-}
-
 const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
 	const auto layers = 3;
 	for(auto i = layers - 1; i >= 0; i--) {
@@ -120,13 +108,9 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
         auto we = WorldEvent { WorldEventType::WORLD_CHANGE };
         we.blocksWidth = m_blocksX;
         we.blocksHeight = m_blocksX;
+        we.blockSize = m_blockSize;
         we.fullName = m_fullName;
         m_eventDispatcher.Observable<WorldEvent>::notifyObservers(we);
-
-        //TODO event
-        /*if (m_cameraSystem != nullptr) {
-            m_cameraSystem->worldResized(getPixelWidth(), getPixelHeight());
-        }*/
 	}
 }
 

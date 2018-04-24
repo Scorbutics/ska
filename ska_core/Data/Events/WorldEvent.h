@@ -29,6 +29,7 @@ namespace ska {
 		Music* const bgm;
         unsigned int blocksWidth {};
         unsigned int blocksHeight {};
+        unsigned int blockSize {};
         std::string fullName;
 	};
 

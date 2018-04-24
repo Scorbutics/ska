@@ -39,9 +39,9 @@ bool ska::SoundRenderer::handleSoundEvent(SoundEvent& se) {
 }
 
 bool ska::SoundRenderer::handleWorldEvent(WorldEvent& we) {
-	auto music = we.getBgm();
-	if (we.getEventType() == WorldEventType::WORLD_CREATE ||
-		we.getEventType() == WorldEventType::WORLD_CHANGE) {
+	auto music = we.bgm;
+	if (we.type == WorldEventType::WORLD_CREATE ||
+		we.type == WorldEventType::WORLD_CHANGE) {
 		music->play(*this);
 	}
 	return false;

@@ -11,10 +11,40 @@
 #include "Graphic/System/DeleterSystem.h"
 #include "Physic/System/WorldCollisionSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
-#include "World/TileMapLoaderImage.h"
+#include "World/TileWorldLoaderAggregate.h"
+#include "World/TilesetLoaderImage.h"
+#include "World/TilesetEventLoaderText.h"
+#include "World/TilesetCompleteLoader.h"
+#include "World/LayerEventLoaderText.h"
+#include "World/LayerLoaderImage.h"
+#include "Utils/FileUtils.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
+
+ska::Tileset BuildTileset() {
+    const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
+    return { 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
+}
+
+ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::TilesetCorrespondanceMapper& mapper, const std::string& levelName) {
+    const auto levelFileName = ska::FileNameData {levelName};
+
+    auto loaders = std::vector<std::unique_ptr<ska::LayerLoader>> {};
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + ".bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "M.bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "T.bmp"));
+
+    auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
+    eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName + "/" + levelFileName.name + "E.txt"));
+
+    return { levelName, std::move(loaders), std::move(eventLoaders) };
+}
+
+ska::TileWorld BuildTileWorld(const ska::TilesetCorrespondanceMapper& mapper, ska::ExtensibleGameEventDispatcher<>& ed, ska::Tileset& tileset) {
+    const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
+    return { ed, tileset, levelLoader };
+}
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -24,6 +54,9 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_debugEntityCollision(ed, em),
 	m_entityCollision(ed, em),
 	m_debugWorldCollision(ed, em),
+	m_mapper {"Resources/Chipsets/corr.png"},
+	m_tileset {BuildTileset()},
+	m_world (std::move(BuildTileWorld(m_mapper, ed, m_tileset))),
 	m_worldCollisionResponse(m_world, ed, em),
 	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
@@ -116,9 +149,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
-		ska::TileMapLoaderImage loader {"Resources/Levels/new_level", "Resources/Chipsets/chipset_platform", "Chipsets/corr.png"};
-		m_world.load(loader);
-		m_world.linkCamera(m_cameraSystem);
+		//m_world.linkCamera(m_cameraSystem);
 	}
 	return true;
 }

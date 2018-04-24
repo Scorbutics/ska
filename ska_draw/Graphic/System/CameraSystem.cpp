@@ -5,6 +5,7 @@
 ska::CameraSystem::CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW, const unsigned int screenH) :
 	System(entityManager),
 	SubObserver<GameEvent>(std::bind(&CameraSystem::onGameEvent, this, std::placeholders::_1), ged),
+	SubObserver<WorldEvent>(std::bind(&CameraSystem::onWorldEvent, this, std::placeholders::_1), ged),
     m_pos(nullptr) {
 
 	worldResized(screenW, screenH);
@@ -24,6 +25,11 @@ ska::Point<int> ska::CameraSystem::getScreenSize() const {
 bool ska::CameraSystem::onGameEvent(ska::GameEvent& ge) {
 	m_cameraRect.w = ge.windowWidth;
 	m_cameraRect.h = ge.windowHeight;
+	return true;
+}
+
+bool ska::CameraSystem::onWorldEvent(ska::WorldEvent& we) {
+	worldResized(we.blocksWidth * we.blockSize, we.blocksHeight * we.blockSize);
 	return true;
 }
 
