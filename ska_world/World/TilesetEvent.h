@@ -1,10 +1,12 @@
 #pragma once
 #include <unordered_map>
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "TilesetEventLoader.h"
+#include "Point.h"
+#include <gsl/pointers>
 
 namespace ska {
-	using ScriptTriggerType = char;
 
 	class TilesetEvent : 
 		public MovableNonCopyable {
@@ -12,7 +14,8 @@ namespace ska {
 		explicit TilesetEvent(std::string tilesetName, const TilesetEventLoader& loader);
 		TilesetEvent(TilesetEvent&&) = default;
 
-		std::vector<ScriptSleepComponent*> getScript(const std::string& id, const ScriptTriggerType& reason, bool& autoBlackList);
+		std::vector<gsl::not_null<ScriptSleepComponent*>> getScript(ScriptTriggerType type, const Point<int>& id = Point<int>{});
+
 		~TilesetEvent() override = default;
 
 	private:

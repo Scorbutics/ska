@@ -21,7 +21,7 @@ namespace ska {
 		ScriptComponent():
 			deleteEntityWhenFinished(false),
 			scriptPeriod(0),
-			triggeringType(0),
+			triggeringType(ScriptTriggerType::NONE),
 			origin(0) {
 			state = EnumScriptState::STOPPED;
 			lastTimeStarted = 0;

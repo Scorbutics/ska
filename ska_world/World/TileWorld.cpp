@@ -17,7 +17,6 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
 	m_blocksX(0),
 	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
-	m_autoScriptsPlayed(false),
 	m_tileset(&tileset) {
 }
 
@@ -68,7 +67,7 @@ void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 }
 
 const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
-	const auto layers = 3;
+	const int layers = m_collisionProfile.layers();
 	for(auto i = layers - 1; i >= 0; i--) {
 		const auto b = m_collisionProfile.getBlock(i, x, y);
 		if(b != nullptr && b->collision != ska::TileCollision::Void) {
@@ -79,7 +78,7 @@ const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std:
 }
 
 void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChange) {
-	m_autoScriptsPlayed = false;
+	m_autoScripts = true;
 
 	const auto tilesetChanged = tilesetToChange != nullptr && m_tileset->getName() != tilesetToChange->getName();
 	if(tilesetChanged) {
@@ -114,43 +113,53 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	}
 }
 
-//TODO : déplacer ?
-std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& posToLookAt, const ScriptTriggerType& reason, const unsigned int layerIndex) {
+ska::ScriptSleepComponent* ska::TileWorld::chipsetScriptAuto() {
+	if (m_autoScripts) {
+		auto tmp = m_tilesetEvent->getScript(ScriptTriggerType::AUTO);
+		for (auto& ssc : tmp) {
+			if (ssc != nullptr) {
+				ssc->context = m_fullName;
+				m_autoScripts = false;
+				return ssc;
+			}
+		}
+	}
+	return nullptr;	
+}
+
+std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& frontPos, ScriptTriggerType type) {
 	std::vector<ScriptSleepComponent*> result;
-	if (m_tilesetEvent == nullptr) {
+	if (m_tilesetEvent == nullptr || type == ScriptTriggerType::AUTO) {
 		return result;
 	}
 
-	if (reason == EnumScriptTriggerType::AUTO) {
-		auto tmp = m_tilesetEvent->getScript("", reason, m_autoScriptsPlayed);
-		for (auto& ssc : tmp) {
-			if (ssc != nullptr) {
-				ssc->context = m_fullName;
-				result.push_back(ssc);
-			}
-		}
-		return result;
-	}
+	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldPos / m_blockSize : frontPos / m_blockSize;
+	
+	const int layers = m_collisionProfile.layers();
+	for (auto i = layers; i >= 0; i--) {
+		const auto& b = m_collisionProfile.getBlock(i, effectiveBlockPosition.x, effectiveBlockPosition.y);
+		if (b != nullptr && b->collision != TileCollision::Void) {
 
-	const auto newBlock = newPos / m_blockSize;
-	const auto oldBlock = oldPos / m_blockSize;
-	const auto& b = m_collisionProfile.getBlock(layerIndex, posToLookAt.x / m_blockSize, posToLookAt.y / m_blockSize);
-	if (b != nullptr) {
-		const auto id = b->id.x + b->id.y * m_tileset->getWidth();
-		auto tmp = m_tilesetEvent->getScript(StringUtils::intToStr(id), reason, m_autoScriptsPlayed);
-		for (auto& ssc : tmp) {
-			if (ssc != nullptr) {
-				ssc->args.clear();
-				ssc->args.push_back(StringUtils::intToStr(oldBlock.x));
-				ssc->args.push_back(StringUtils::intToStr(oldBlock.y));
-				ssc->args.push_back(StringUtils::intToStr(newBlock.x));
-				ssc->args.push_back(StringUtils::intToStr(newBlock.y));
-				ssc->args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-				ssc->context = m_fullName;
-				result.push_back(ssc);
+			auto tmp = m_tilesetEvent->getScript(type, b->id);
+
+			const auto newBlock = frontPos / m_blockSize;
+			const auto oldBlock = oldPos / m_blockSize;
+
+			for (auto& ssc : tmp) {
+				if (ssc != nullptr) {
+					ssc->args.clear();
+					ssc->args.push_back(StringUtils::intToStr(oldBlock.x));
+					ssc->args.push_back(StringUtils::intToStr(oldBlock.y));
+					ssc->args.push_back(StringUtils::intToStr(newBlock.x));
+					ssc->args.push_back(StringUtils::intToStr(newBlock.y));
+					ssc->args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+					ssc->context = m_fullName;
+					result.push_back(ssc);
+				}
 			}
 		}
 	}
+	
 	return result;
 
 }

@@ -22,7 +22,6 @@ namespace ska {
 	class PrefabEntityManager;
 	class ScriptSleepComponent;
 	class DrawableContainer;
-	using ScriptTriggerType = char;
 
 	class TileWorld :
 		public MovableNonCopyable,
@@ -52,20 +51,22 @@ namespace ska {
 		unsigned int getBlockSize() const override;
 
 		/* TODO classe à part ? */
-		std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldPos, const Point<int>& newPos, const Point<int>& p, const ScriptTriggerType& reason, unsigned int layerIndex) override;
+		std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldCenterPos, const Point<int>& newCenterPos, ScriptTriggerType type) override;
+		ScriptSleepComponent* chipsetScriptAuto() override;
+
 		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const;
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
 
 		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
 
 	private:
+		bool m_autoScripts {};
 	    GameEventDispatcher& m_eventDispatcher;
 
 		unsigned int m_blocksX;
 		unsigned int m_blocksY;
 		unsigned int m_blockSize;
 
-		bool m_autoScriptsPlayed;
 		std::vector<IniReader> m_mobSettings{};
 		std::string m_fullName;
 		std::string m_name;

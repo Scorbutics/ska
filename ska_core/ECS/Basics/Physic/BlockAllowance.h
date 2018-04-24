@@ -1,7 +1,5 @@
 #pragma once
-#include <vector>
 #include <unordered_set>
-#include "Rectangle.h"
 #include "Point.h"
 
 namespace ska {

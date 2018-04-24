@@ -124,7 +124,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 	sc.scriptPeriod = scriptData.period == 0 ? 1 : scriptData.period;
 	sc.extraArgs = scriptData.args;
 	sc.context = scriptData.context;
-	sc.triggeringType = EnumScriptTriggerType::AUTO;
+	sc.triggeringType = ScriptTriggerType::AUTO;
 	sc.entityId = scriptSleepEntity;
 	sc.deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
 
@@ -229,7 +229,7 @@ bool ska::ScriptAutoSystem::canBePlayed(ScriptComponent& script) {
 		|| EnumScriptState::DEAD == script.state
 		|| script.active > 0
 		|| (TimeUtils::getTicks() - script.lastTimeDelayed) <= script.delay
-		|| !((script.triggeringType == EnumScriptTriggerType::AUTO && script.state == EnumScriptState::STOPPED) || (script.state != EnumScriptState::STOPPED))
+		|| !((script.triggeringType == ScriptTriggerType::AUTO && script.state == EnumScriptState::STOPPED) || (script.state != EnumScriptState::STOPPED))
 		|| script.controller->eof();
 
 	return !cannotBePlayed;
@@ -283,7 +283,7 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, MemoryScript& savegame
 	if (script.controller->eof()) {
 		script.state = EnumScriptState::STOPPED;
 		/* If the script is terminated and triggering is not automatic, then we don't reload the script */
-		if (script.triggeringType == EnumScriptTriggerType::AUTO) {
+		if (script.triggeringType == ScriptTriggerType::AUTO) {
 			script.controller->rewind();
 			/*script.fscript.clear();
 			script.fscript.seekg(0, std::ios::beg);*/
@@ -371,7 +371,7 @@ ska::ScriptState ska::ScriptAutoSystem::manageCurrentState(ScriptComponent& scri
 void ska::ScriptAutoSystem::stop(ScriptComponent& script) {
 	/* kind of delete the script */
 	script.state = EnumScriptState::STOPPED;
-	script.triggeringType = EnumScriptTriggerType::NONE;
+	script.triggeringType = ScriptTriggerType::NONE;
 }
 
 ska::ScriptAutoSystem::~ScriptAutoSystem()

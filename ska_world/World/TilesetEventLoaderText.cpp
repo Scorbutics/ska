@@ -20,10 +20,10 @@ std::vector<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::load() const
 	auto scripts = std::vector<ScriptSleepComponent>{};
 
 	while (getline(scriptList, ss)) {
-		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, EnumScriptTriggerType::MOVE_OUT));
-		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, EnumScriptTriggerType::MOVE_IN));
-		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, EnumScriptTriggerType::ACTION));
-		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, EnumScriptTriggerType::AUTO));
+		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::MOVE_OUT));
+		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::MOVE_IN));
+		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::ACTION));
+		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::AUTO));
 	}
 
 	return scripts;
@@ -38,7 +38,7 @@ void ska::TilesetEventLoaderText::addScriptIfExists(std::vector<ska::ScriptSleep
 
 std::optional<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::fillScript(const std::string& chipsetFolder, const std::string& id, const ScriptTriggerType& type) {
 	std::ifstream currentScript;
-	const auto fullName = chipsetFolder + "/Scripts/" + id + "_" + static_cast<char>(type + '0') + ".txt";
+	const auto fullName = chipsetFolder + "/Scripts/" + id + "_" + static_cast<char>(static_cast<char>(type) + '0') + ".txt";
 	currentScript.open(fullName, std::ios_base::in);
 	if (currentScript.fail()) {
 		return std::optional<ScriptSleepComponent>();
