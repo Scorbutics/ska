@@ -16,6 +16,8 @@ cd ../ska_audio
 call ../cmake_.bat %*
 cd ../ska_particle
 call ../cmake_.bat %*
+cd ../ska_particle_benchmarker
+call ../cmake_.bat %*
 cd ../ska_physic
 call ../cmake_.bat %*
 cd ../ska_physic_test
