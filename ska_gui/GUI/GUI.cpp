@@ -8,7 +8,10 @@
 #include "Utils/SkaConstants.h"
 
 #define SCROLL_BUTTON_SPEED 3
-std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "." FILE_SEPARATOR "Menu" FILE_SEPARATOR "default_theme" FILE_SEPARATOR;
+static constexpr auto TAILLEECRANMINX = ska::WindowIG<>::TAILLEBLOCFENETRE*15;
+static constexpr auto TAILLEECRANMINY = ska::WindowIG<>::TAILLEBLOCFENETRE*13;
+
+std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "./Menu/default_theme/";
 
 ska::GUI::GUI(GameEventDispatcher& ged) :
 	ska::Observer<GUIEvent>(std::bind(&GUI::onGUIEvent, this, std::placeholders::_1)),
@@ -30,8 +33,8 @@ ska::GUI::GUI(GameEventDispatcher& ged) :
 }
 
 bool ska::GUI::onGameEvent(GameEvent& ge) {
-	if (ge.getEventType() == GAME_WINDOW_READY ||
-		ge.getEventType() == GAME_WINDOW_RESIZED) {
+	if (ge.getEventType() == GameEventType::GAME_WINDOW_READY ||
+		ge.getEventType() == GameEventType::GAME_WINDOW_RESIZED) {
 		m_wMaster.setWidth(ge.windowWidth);
 		m_wMaster.setHeight(ge.windowWidth);
 		return onScreenResized(ge.windowWidth, ge.windowHeight);
@@ -113,7 +116,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 			FocusEvent fe(m_clicked, MOUSE_FOCUS);
 			m_clicked->directNotify(fe);
 			if(fe.getTarget() != nullptr) {
-				playerIcm.disableContext(CONTEXT_MAP, true);
+				playerIcm.disableContext(EnumContextManager::CONTEXT_MAP, true);
 			}
 
 			m_lastFocused = m_clicked;
@@ -125,7 +128,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 		}
 
 		if (fbe.getTarget() != nullptr) {
-			playerIcm.disableContext(CONTEXT_MAP, false);
+			playerIcm.disableContext(EnumContextManager::CONTEXT_MAP, false);
 		}
 	}
 
@@ -200,12 +203,12 @@ void ska::GUI::windowSorter(Widget* tthis, ClickEvent& e) {
 }
 
 bool ska::GUI::onGUIEvent(GUIEvent& ge) {
-    if(ge.type == REMOVE_WINDOW) {
+    if(ge.type == GUIEventType::REMOVE_WINDOW) {
         m_windowsToDelete.push_back(ge.windowName);
     }
 
-	if(ge.type == ADD_BALLOON) {
- 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, TAILLEBLOCFENETRE * 2, TAILLEBLOCFENETRE * 10, TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
+	if(ge.type == GUIEventType::ADD_BALLOON) {
+ 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, ska::WindowIG<>::TAILLEBLOCFENETRE * 2, ska::WindowIG<>::TAILLEBLOCFENETRE * 10, ska::WindowIG<>::TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
 		bd.addHandler<TimeEventListener>([&](Widget* tthis, TimeEvent&) {
 			auto& balloon = static_cast<BalloonDialog&>(*tthis);
 			if(balloon.isExpired()) {
@@ -215,13 +218,13 @@ bool ska::GUI::onGUIEvent(GUIEvent& ge) {
 		ge.balloonHandle = &bd;
 	}
 
-	if(ge.type == REFRESH_BALLOON) {
+	if(ge.type == GUIEventType::REFRESH_BALLOON) {
 		auto bd = static_cast<BalloonDialog*>(getWindow(ge.windowName));
 		if (bd != nullptr) {
 			bd->move(Point<int>(ge.balloonPosition.x, ge.balloonPosition.y - ge.balloonHandle->getBox().h));
 			if (!bd->isVisible()) {
 				ge.balloonHandle = nullptr;
-				GUIEvent geI(REMOVE_WINDOW);
+				GUIEvent geI(GUIEventType::REMOVE_WINDOW);
 				geI.windowName = ge.windowName;
 				onGUIEvent(geI);
 			}

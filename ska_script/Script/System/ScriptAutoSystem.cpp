@@ -14,7 +14,6 @@
 #include "Utils/FileUtils.h"
 #include "Utils/TimeUtils.h"
 #include "Utils/NumberUtils.h"
-#include "Utils/SkaConstants.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 
@@ -24,13 +23,13 @@
 #define MAX_CONSECUTIVE_COMMANDS_PLAYED 5
 
 
-ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) : System(entityManager),
+ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, TileWorld& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) : System(entityManager),
 m_saveGame(saveGame),
 m_world(w) {
 	sch.setupCommands(w, m_commands);
 }
 
-const std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
+std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
 	std::vector<std::string> keys = StringUtils::split(key, '.');
 	if (keys.size() != 2) {
 		throw ScriptSyntaxError("Error during recuperation of the global variable " + key);
@@ -91,7 +90,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 	extendedName = keyScript + "_" + scriptData.context;
 
 	const std::string& currentDir = FileUtils::getCurrentDirectory();
-	validPath = (currentDir + FILE_SEPARATOR "" + scriptData.name);
+	validPath = (currentDir + "/" + scriptData.name);
 
 	ScriptComponent sc;
 	if (m_cache.find(validPath) == m_cache.end()) {
@@ -125,7 +124,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 	sc.scriptPeriod = scriptData.period == 0 ? 1 : scriptData.period;
 	sc.extraArgs = scriptData.args;
 	sc.context = scriptData.context;
-	sc.triggeringType = EnumScriptTriggerType::AUTO;
+	sc.triggeringType = ScriptTriggerType::AUTO;
 	sc.entityId = scriptSleepEntity;
 	sc.deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
 
@@ -230,7 +229,7 @@ bool ska::ScriptAutoSystem::canBePlayed(ScriptComponent& script) {
 		|| EnumScriptState::DEAD == script.state
 		|| script.active > 0
 		|| (TimeUtils::getTicks() - script.lastTimeDelayed) <= script.delay
-		|| !((script.triggeringType == EnumScriptTriggerType::AUTO && script.state == EnumScriptState::STOPPED) || (script.state != EnumScriptState::STOPPED))
+		|| !((script.triggeringType == ScriptTriggerType::AUTO && script.state == EnumScriptState::STOPPED) || (script.state != EnumScriptState::STOPPED))
 		|| script.controller->eof();
 
 	return !cannotBePlayed;
@@ -284,7 +283,7 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, MemoryScript& savegame
 	if (script.controller->eof()) {
 		script.state = EnumScriptState::STOPPED;
 		/* If the script is terminated and triggering is not automatic, then we don't reload the script */
-		if (script.triggeringType == EnumScriptTriggerType::AUTO) {
+		if (script.triggeringType == ScriptTriggerType::AUTO) {
 			script.controller->rewind();
 			/*script.fscript.clear();
 			script.fscript.seekg(0, std::ios::beg);*/
@@ -372,7 +371,7 @@ ska::ScriptState ska::ScriptAutoSystem::manageCurrentState(ScriptComponent& scri
 void ska::ScriptAutoSystem::stop(ScriptComponent& script) {
 	/* kind of delete the script */
 	script.state = EnumScriptState::STOPPED;
-	script.triggeringType = EnumScriptTriggerType::NONE;
+	script.triggeringType = ScriptTriggerType::NONE;
 }
 
 ska::ScriptAutoSystem::~ScriptAutoSystem()

@@ -1,32 +1,46 @@
 #pragma once
 #include <string>
-#include "Rectangle.h"
+#include <queue>
+#include "Utils/MovableNonCopyable.h"
+#include "Point.h"
 #include "Node.h"
-
-class World;
+#include "Utils/Vector2.h"
 
 namespace ska {
-	class Path
-	{
-	public:
-		Path();
 
-		bool isPredefined();
-		bool isMotionless();
-		bool isRandom();
-		void findPath(Rectangle from, Rectangle to, const unsigned int blockSize);
+	enum class PathType {
+		Random,
+		Defined, 
+		Fixed
+	};
 
-		void createGraphe(std::vector<std::vector<Node>> *graphe);
+	enum class PathDirection {
+		Down,
+		Right,
+		Up,
+		Left,
+		Unknown
+	};
 
-		int getPathDirection(unsigned int number);
-		std::string getPathString();
-		int getNextPathDirection();
+	using NodeRef = std::reference_wrapper<Node>;
+	using NodePriorityRefContainer = std::priority_queue<NodeRef, std::vector<NodeRef>, Node::CompareDist>;
+	using NodeRefContainer = std::vector<NodeRef>;
+	using NodeOwnerContainer = Vector2<Node>;
 
-		void setPathString(std::string path);
+	class Path : public MovableNonCopyable {
+	public:		
+		static Path fromPathList(const NodeRefContainer& pathList);
+
+		Path(Path&&) = default;
+		~Path() = default;
+
+		const std::vector<PathDirection> path;
+		const PathType type;
 
 	private:
-		std::string m_pathDirections;
-		unsigned int m_pos, m_type;
+		static std::vector<PathDirection> buildPath(const std::string& path);
+		Path(std::vector<PathDirection> path, PathType type);
 	};
+
 }
 

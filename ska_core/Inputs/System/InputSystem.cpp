@@ -3,9 +3,7 @@
 
 ska::InputSystem::InputSystem(EntityManager& entityManager, GameEventDispatcher& ged) :
 	System(entityManager),
-	ska::Observer<InputKeyEvent>(std::bind(&ska::InputSystem::onKeyInputEvent, this, std::placeholders::_1)),
-	m_eventDispatcher(ged) {
-	m_eventDispatcher.ska::Observable<InputKeyEvent>::addObserver(*this);
+	ska::SubObserver<InputKeyEvent>(std::bind(&ska::InputSystem::onKeyInputEvent, this, std::placeholders::_1), ged) {
 }
 
 void ska::InputSystem::refresh(unsigned int) {
@@ -60,8 +58,4 @@ bool ska::InputSystem::onKeyInputEvent(InputKeyEvent& ike) {
 		forceComponent.y += movePower.y;
 	}
 	return true;
-}
-
-ska::InputSystem::~InputSystem() {
-	m_eventDispatcher.ska::Observable<InputKeyEvent>::removeObserver(*this);
 }

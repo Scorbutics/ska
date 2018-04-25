@@ -17,13 +17,13 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 	const auto& color = data.getData().second;
 
 	switch (data.type) {
-	case TEXT:
+	case EnumTextureType::TEXT:
 		m_surface->loadFromText(Font(data.fontSize), data.getData().first, data.getData().second);
 		break;
-	case SPRITE:
+	case EnumTextureType::SPRITE:
 		m_surface->load(data.getData().first, &color);
 		break;
-	case RECT:
+	case EnumTextureType::RECT:
 		m_surface->loadFromColoredRect(data.getData().second, ToSDL_Rect(data.rect));
 		break;
 	default:
@@ -71,7 +71,7 @@ ska::SDLTexture::~SDLTexture() {
 }
 
 void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
-	auto action = [&]() {
+	const auto action = [&]() {
 		SDL_SetTextureColorMod(m_texture, r, g, b);
 		return false;
 	};

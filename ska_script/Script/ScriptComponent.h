@@ -3,7 +3,6 @@
 #include <limits>
 #include <memory>
 #include <unordered_map>
-#include "ECS/SerializableComponent.h"
 #include "ScriptState.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/ECSDefines.h"
@@ -11,7 +10,7 @@
 
 namespace ska {
     class ScriptAutoSystem;
-	class ScriptComponent : public SerializableComponent {
+	class ScriptComponent {
 		friend class ScriptAutoSystem;
 		friend class ScriptController;
 
@@ -22,14 +21,14 @@ namespace ska {
 		ScriptComponent():
 			deleteEntityWhenFinished(false),
 			scriptPeriod(0),
-			triggeringType(0),
+			triggeringType(ScriptTriggerType::NONE),
 			origin(0) {
 			state = EnumScriptState::STOPPED;
 			lastTimeStarted = 0;
 			commandsPlayed = 0;
 			lastTimeDelayed = 0;
 			delay = 0;
-			entityId = std::numeric_limits<unsigned int>().max();
+			entityId = std::numeric_limits<unsigned int>::max();
 			active = 0;
 			parent = nullptr;
 		}

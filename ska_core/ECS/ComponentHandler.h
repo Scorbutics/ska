@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
 #include <typeinfo>
+#include <optional>
+#include <cassert>
 #include "ECSDefines.h"
+#include "SerializeComponent.h"
 #include "ComponentSerializer.h"
-#include "../Utils/Demangle.h"
 #include "../Logging/Logger.h"
 
 namespace ska {
@@ -16,34 +18,48 @@ namespace ska {
         public ComponentSerializer {
 
 	public:
-		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames): 
+		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames):
 			m_mask(mask) {
-			m_components.resize(SKA_ECS_MAX_ENTITIES);
-			SKA_LOG_DEBUG("Initializing component type ", getClassName(), " with mask ", m_mask);
-			mapComponentNames.emplace(getClassName(), this);
+			SKA_LOG_DEBUG("Initializing component type ", "", " with mask ", m_mask);
+			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
+			mapComponentNames.emplace("", this);
 		}
 
-		unsigned int addEmpty(EntityId) override {
+		unsigned int addEmpty(const EntityId&) override {
 			/* We can add operations here depending of the ComponentHandler implementation */
 			return m_mask;
 		}
 
-		unsigned int add(EntityId entityId, T&& comp) {
-			m_components[entityId] = std::forward<T>(comp);
+		unsigned int add(EntityId& entityId, T&& comp) {
+			const auto componentIdForEntity = m_components.size();
+			if(componentIdForEntity < m_components.size()) {
+				m_components[componentIdForEntity] = std::forward<T>(comp);
+			} else {
+				m_components.push_back(std::forward<T>(comp));
+			}
+			m_entitiesWithComponent[entityId] = componentIdForEntity;
 			return m_mask;
 		}
 
-		unsigned int remove(EntityId) override {
-			/* We can add operations here depending of the ComponentHandler implementation */
+		unsigned int remove(const EntityId& entityId) override {
+			if(m_entitiesWithComponent[entityId].has_value()) {
+				const auto componentIdForEntity = m_entitiesWithComponent[entityId].value();
+				m_components[componentIdForEntity] = std::optional<T>();
+				m_entitiesWithComponent[entityId] = std::optional<ComponentId>();
+			}
 			return m_mask;
 		}
 
-		T& getComponent(const EntityId id) {
-			return m_components[id];
+		std::string getComponentField(const EntityId& id, const std::string& field) override {
+			return ska::SerializeComponent<T>::serialize(getComponent(id), field);
 		}
 
-		virtual std::string getComponentField(const EntityId id, const std::string& field) override {
-			return m_components[id].serialize(m_components[id], field, getClassName());
+
+		T& getComponent(const EntityId& id) {
+			assert(id < m_entitiesWithComponent.size() && m_entitiesWithComponent[id].has_value());
+			auto& componentIdForEntity = m_entitiesWithComponent[id].value();
+			assert(componentIdForEntity < m_components.size());
+			return m_components[componentIdForEntity].value();
 		}
 
 		unsigned int getMask() const {
@@ -52,15 +68,9 @@ namespace ska {
 
 		virtual ~ComponentHandler() = default;
 
-		static const std::string& getClassName() {
-			static const auto fullClassName = std::string(/*ska::demangle(typeid(T).name())*/ "");
-			static const auto startPos = fullClassName.find_last_of(':');
-			static const auto& name = fullClassName.substr((startPos == std::string::npos ? -1 : startPos) + 1);
-			return name;
-		}
-
 	private:
-		std::vector<T> m_components;
+		std::vector<std::optional<T>> m_components;
+		std::vector<std::optional<ComponentId>> m_entitiesWithComponent;
 		const unsigned int m_mask;
 	};
 

@@ -188,3 +188,23 @@ namespace ska {
 	}
 }
 
+namespace std {
+	template <class T>
+	struct hash<ska::Point<T>> {
+		size_t operator()(const ska::Point<T>& k) const {
+			using std::size_t;
+			using std::hash;
+
+			auto hashSeed = hash<T>()(k.x);
+			ska::NumberUtils::hashCombine<T>(hashSeed, k.y);
+			return hashSeed;
+		}
+	};
+
+	template <class T>
+	struct equal_to<ska::Point<T>> {
+		bool operator()(const ska::Point<T>& p1, const ska::Point<T>& p2) const {
+			return p1 == p2;
+		}
+	};
+}

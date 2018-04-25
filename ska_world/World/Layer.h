@@ -1,48 +1,30 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
-
-#include "Block.h"
-#include "LayerRenderable.h"
-
-class ParticleManager;
-
+#include "Physic/Tile.h"
+#include "Utils/Vector2.h"
+#include "Utils/MovableNonCopyable.h"
 
 namespace ska {
-	class World;
-	class Layer {
+	class Layer :
+        public MovableNonCopyable {
 	public:
-		Layer(World& world, std::string nomFichier, std::string chipsetName, Layer* parent = nullptr);
-		Layer(World& w, Layer* parent = nullptr);
-		void operator=(const Layer&) = delete;
-		~Layer() = default;
+		Layer(Vector2<Tile*>&& block);
+		Layer(Layer&&) = default;
+		~Layer() override = default;
 
-		LayerRenderable& getRenderable();
+		TileCollision getCollision(std::size_t x, std::size_t y) const;
 
-		void reset(std::string file, std::string chipsetName);
-
-		void clear();
-
-		Block* getBlock(unsigned int i, unsigned int j) const;
-		int getBlockCollision(const unsigned int i, const unsigned int j) const;
-		Layer* getParent() const;
-
+		unsigned int getBlocksX() const;
+		unsigned int getBlocksY() const;
+		Tile const* getBlock(std::size_t x, std::size_t y) const;
 
 	private:
-		void checkSize(unsigned int nbrBlocX, unsigned int nbrBlocY) const;
-
-		Layer* m_parent;
-		World& m_world;
-		std::string m_name, m_nomFichier;
-		std::vector<std::vector<Block*>> m_block;
-		LayerRenderable m_renderable;
-		unsigned int m_fileWidth, m_fileHeight;
+		void reset(Vector2<Tile*>&& block);
+		Vector2<Tile*> m_block;
+		unsigned int m_fileWidth;
+		unsigned int m_fileHeight;
 
 	};
-
-	using LayerPtr = std::unique_ptr<Layer>;
 
 }
 

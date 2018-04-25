@@ -1,11 +1,15 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <cassert>
 #include "Font.h"
 #include "SDLSurface.h"
-#include "Exceptions/FileException.h"
 #include "Logging/Logger.h"
 #include "Utils/SkaConstants.h"
 #include "Core/CodeDebug/CodeDebug.h"
+
+SDL_Color ColorToNative(const ska::Color& c){
+	return SDL_Color{ c.r, c.g, c.b, c.a };
+}
 
 ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
 	m_surface = nullptr;
@@ -21,7 +25,7 @@ SDL_Surface* ska::SDLSurface::getInstance() const {
 
 void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Color c) {
 	free();
-	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), c.toNative());
+	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), ColorToNative(c));
 
 	if (!checkSurfaceValidity("(Text) : " + text)) {
 		return;
@@ -61,7 +65,7 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 	}
 }
 
-bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
+bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bool is32) {
 	if(fileName == std::string(NOSUCHFILE)) {
 		return true;
 	}
@@ -71,7 +75,11 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName) {
 	});
 
 	if (m_surface == nullptr) {
-		load(NOSUCHFILE, nullptr);
+        if(!is32) {
+            load(NOSUCHFILE, nullptr);
+        } else {
+            return false;
+        }
 	}
 
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
@@ -105,23 +113,26 @@ void ska::SDLSurface::load32(const std::string& file) {
 
 ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 	if (m_surface == nullptr) {
-		return Color( 0, 0, 0, 0 );
+		return Color{};
 	}
 
 	Color c;
-	c.a = 0;
 	const auto pix = getPixel32(x, y);
 	SDL_GetRGB(pix, getFormat(), &c.r, &c.g, &c.b);
 	return c;
 }
 
-Uint32 ska::SDLSurface::getPixel32(int x, int y) const {
+uint32_t ska::SDLSurface::getPixel32(int x, int y) const {
 	if (m_surface == nullptr || x < 0 || x > m_surface->w - 1 || y < 0 || y > m_surface->h - 1) {
+        SKA_LOG_ERROR("Tentative d'acces a une zone hors limites sur l'image de dimensions ", m_surface->w, " par ", m_surface->h, " au coordonnees : (", x, "; ", y, ")");
 		return 0;
 	}
-	return static_cast<Uint32*>(m_surface->pixels)[y*(m_surface->pitch / 4) + x];
+	return static_cast<uint32_t*>(m_surface->pixels)[y * (m_surface->pitch / 4) + x];
 }
 
+uint32_t ska::SDLSurface::getPixel32(int pixIndex) const {
+	return getPixel32(pixIndex % m_surface->w, pixIndex / m_surface->w);
+}
 
 void ska::SDLSurface::free() {
 	SDL_FreeSurface(m_surface);
@@ -132,4 +143,19 @@ void ska::SDLSurface::free() {
 
 ska::SDLSurface::~SDLSurface() {
 	free();
+}
+
+ska::SDLSurface::SDLSurface(SDLSurface&& surf) noexcept {
+	*this = std::move(surf);
+}
+
+ska::SDLSurface& ska::SDLSurface::operator=(SDLSurface&& surf) noexcept {
+	std::swap(m_r, surf.m_r);
+	std::swap(m_g, surf.m_g);
+	std::swap(m_b, surf.m_b);
+	std::swap(m_a, surf.m_a);
+
+	m_surface = surf.m_surface;
+	surf.m_surface = nullptr;
+	return *this;
 }

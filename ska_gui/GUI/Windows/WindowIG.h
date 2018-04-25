@@ -1,9 +1,7 @@
 #pragma once
 #include "../Components/WidgetPanel.h"
 #include "Graphic/Texture.h"
-#include "Utils/SkaConstants.h"
 #include "Draw/Renderer.h"
-
 
 namespace ska{
 	class Texture;
@@ -11,7 +9,10 @@ namespace ska{
 	template <class ...HL>
 	class WindowIG :
 		public WidgetPanel<HL...> {
+
 	public:
+		static constexpr auto TAILLEBLOCFENETRE = 32;
+
 		WindowIG(Widget& parent, const Rectangle& box, const std::string& styleName) :
 			WidgetPanel<HL...>(parent),
 			m_drawStyle(!styleName.empty()) {

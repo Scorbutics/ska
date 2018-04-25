@@ -6,13 +6,22 @@
 #include <memory>
 
 #include "Utils/Refreshable.h"
+#include "Utils/MovableNonCopyable.h"
+#include "BlockEvent.h"
 
 namespace ska {
-	class World;
-	class LayerEvent : public Refreshable {
+	class LayerEventLoader;
+    class LayerEventLoaderText;
+
+	class LayerEvent :
+        public MovableNonCopyable,
+        public Refreshable {
 	public:
-		LayerEvent(World& world);
-		void operator=(const LayerEvent&) = delete;
+	    LayerEvent() = default;
+	    LayerEvent(std::string levelPath, std::vector<BlockEvent> blocks);
+		LayerEvent(const LayerEventLoaderText& loader);
+		LayerEvent(LayerEvent&&) = default;
+        ~LayerEvent() override = default;
 
 		virtual void refresh(unsigned int ellapsedTime) override;
 
@@ -22,18 +31,20 @@ namespace ska {
 		std::string getParam(int ligne) const;
 		int getTrigger(int ligne) const;
 		std::string getAction(int ligne) const;
-		int getSolide(int ligne) const;
-		int getNbrLignes() const;
-		void changeLevel(const std::string& nomFichier);
+		int getSolid(int ligne) const;
+		int getLines() const;
+
 		std::string getPath(int ligne) const;
 
 	private:
-		std::string m_nomFichier, m_chipsetname;
-		int m_nbrLignes;
-		std::vector<int> m_coordBX, m_coordBY, m_ID, m_trigger, m_solide;
-		std::vector<std::string> m_action, m_param, m_path;
-		World& m_world;
+	    void load(const LayerEventLoader& loader);
+
+		std::string m_fileName;
+		std::string m_chipsetname;
+
+        std::vector<BlockEvent> m_events;
 	};
-	using LayerEPtr = std::unique_ptr<LayerEvent>;
+
+	using LayerEventPtr = std::unique_ptr<LayerEvent>;
 }
 

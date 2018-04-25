@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
-#include "Color.h"
+#include "Draw/Color.h"
 #include "Rectangle.h"
 
 namespace ska {
     
-	enum EnumTextureType {
+	enum class EnumTextureType {
 		SPRITE,
 		TEXT,
 		RECT

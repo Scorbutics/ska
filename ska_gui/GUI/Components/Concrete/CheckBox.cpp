@@ -7,7 +7,7 @@ ska::CheckBox::CheckBox(Widget& parent, Point<int> relativePos, const std::strin
 	Button(parent, relativePos, placeHolderStyleName, clip, [&](Widget*, ClickEvent& e) {
 		if (e.getState() == MOUSE_RELEASE) {
 			m_value = !m_value;
-			
+
 			ValueChangedEvent<bool> vce(!m_value, m_value);
 			directNotify(vce);
 		}
@@ -28,7 +28,7 @@ void ska::CheckBox::render(const Renderer& renderer) const {
 	Button::render(renderer);
 	if (m_value) {
 		const auto& absPos = getAbsolutePosition();
-		renderer.render(m_check, absPos.x + (getBox().w - m_check.getWidth()) / 2, absPos.y + (getBox().h - m_check.getHeight()) / 2);
+		renderer.render(m_check, absPos.x + (getBox().w - m_check.getWidth()) / 2, absPos.y + (getBox().h - m_check.getHeight()) / 2, nullptr);
 	}
 }
 

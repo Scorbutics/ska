@@ -1,6 +1,6 @@
 #include "StateSandbox.h"
-#include "../ska_draw/Graphic/System/GraphicSystem.h"
-#include "../ska_draw/Graphic/System/CameraFixedSystem.h"
+#include "Graphic/System/GraphicSystem.h"
+#include "Graphic/System/CameraFixedSystem.h"
 #include "Physic/System/MovementSystem.h"
 #include "Physic/System/CollisionSystem.h"
 #include "Graphic/System/AnimationSystem.h"
@@ -11,9 +11,40 @@
 #include "Graphic/System/DeleterSystem.h"
 #include "Physic/System/WorldCollisionSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
+#include "World/TileWorldLoaderAggregate.h"
+#include "World/TilesetLoaderImage.h"
+#include "World/TilesetEventLoaderText.h"
+#include "World/TilesetCompleteLoader.h"
+#include "World/LayerEventLoaderText.h"
+#include "World/LayerLoaderImage.h"
+#include "Utils/FileUtils.h"
 
-constexpr const char* RESOURCES_FOLDER_RAW = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Sprites" FILE_SEPARATOR;
+constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
+
+ska::Tileset BuildTileset() {
+    const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
+    return { 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
+}
+
+ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::TilesetCorrespondanceMapper& mapper, const std::string& levelName) {
+    const auto levelFileName = ska::FileNameData {levelName};
+
+    auto loaders = std::vector<std::unique_ptr<ska::LayerLoader>> {};
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + ".bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "M.bmp"));
+    loaders.push_back(std::make_unique<ska::LayerLoaderImage>(mapper, levelName + "/" + levelFileName.name + "T.bmp"));
+
+    auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
+    eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName + "/" + levelFileName.name + "E.txt"));
+
+    return { levelName, std::move(loaders), std::move(eventLoaders) };
+}
+
+ska::TileWorld BuildTileWorld(const ska::TilesetCorrespondanceMapper& mapper, ska::ExtensibleGameEventDispatcher<>& ed, ska::Tileset& tileset) {
+    const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
+    return { ed, tileset, levelLoader };
+}
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -23,13 +54,16 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_debugEntityCollision(ed, em),
 	m_entityCollision(ed, em),
 	m_debugWorldCollision(ed, em),
+	m_mapper {"Resources/Chipsets/corr.png"},
+	m_tileset {BuildTileset()},
+	m_world (std::move(BuildTileWorld(m_mapper, ed, m_tileset))),
 	m_worldCollisionResponse(m_world, ed, em),
 	m_walkASM(nullptr) {
 	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
 }
 
 ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const {
-	auto entity = m_entityManager.createEntity();
+	const auto entity = m_entityManager.createEntity();
 	ska::GraphicComponent gc;
 	gc.animatedSprites.resize(1);
 	auto& at = gc.animatedSprites[0];
@@ -69,7 +103,7 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	using GameAnimationSystem = ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>;
-	if (ge.getEventType() == ska::GAME_WINDOW_READY) {
+	if (ge.getEventType() == ska::GameEventType::GAME_WINDOW_READY) {
 		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
 		m_cameraSystem = cameraSystemPtr.get();
 		addLogic(std::move(cameraSystemPtr));
@@ -115,8 +149,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		ic.movePower = 0.2F;
 		m_entityManager.addComponent<ska::InputComponent>(blockC, std::move(ic));
 
-		m_world.load("Resources\\Levels\\new_level", "Resources\\Chipsets\\chipset_platform.png");
-		m_world.linkCamera(m_cameraSystem);
+		//m_world.linkCamera(m_cameraSystem);
 	}
 	return true;
 }

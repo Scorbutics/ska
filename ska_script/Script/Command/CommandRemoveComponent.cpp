@@ -1,5 +1,4 @@
 #include "CommandRemoveComponent.h"
-#include "../ScriptUtils.h"
 #include "Utils/StringUtils.h"
 #include "../System/ScriptAutoSystem.h"
 

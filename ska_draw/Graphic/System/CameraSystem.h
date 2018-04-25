@@ -2,6 +2,7 @@
 #include <unordered_set>
 #include "Rectangle.h"
 #include "ECS/System.h"
+#include "Data/Events/WorldEvent.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/Basics/Graphic/CameraFocusedComponent.h"
 #include "../GraphicComponent.h"
@@ -11,16 +12,16 @@ namespace ska {
 	template <class T>
 	struct Point;
 
-	class CameraSystem : 
+	class CameraSystem :
 		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, CameraFocusedComponent>, PossibleComponent<HitboxComponent>>,
-		public SubObserver<GameEvent> {
+		public SubObserver<GameEvent>,
+		public SubObserver<WorldEvent> {
+
 	public:
 		CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW = 0, const unsigned int screenH = 0);
 		CameraSystem& operator=(const CameraSystem&) = delete;
-		void worldResized(const unsigned int worldW, const unsigned int worldH);
 
 		Point<int> getScreenSize() const;
-		
 
 		virtual const Rectangle* getDisplay() const;
 		virtual ~CameraSystem();
@@ -33,6 +34,9 @@ namespace ska {
 		Rectangle m_cameraRect;
 
 	private:
+	    void worldResized(const unsigned int worldW, const unsigned int worldH);
+
+	    bool onWorldEvent(ska::WorldEvent& we);
 		bool onGameEvent(ska::GameEvent& ge);
 	};
 }

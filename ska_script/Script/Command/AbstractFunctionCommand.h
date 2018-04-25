@@ -1,7 +1,9 @@
 #pragma once
 #include "AbstractCommand.h"
+
 namespace ska {
     class MemoryScript;
+
 	class AbstractFunctionCommand :
 		public AbstractCommand {
 	public:

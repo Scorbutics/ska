@@ -18,6 +18,8 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	m_renderer(std::move(renderer)),
 	m_mainWindow(std::move(window)) {
 
+	SDL_SetMainReady();
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
 	}
@@ -47,7 +49,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 
 bool ska::GraphicModule::onStateEvent(StateEvent& se) {
     if(se.type == FIRST_STATE_LOADED) {
-        GameEvent ge(GAME_WINDOW_READY);
+        GameEvent ge(GameEventType::GAME_WINDOW_READY);
         ge.windowWidth = m_mainWindow->getWidth();
         ge.windowHeight = m_mainWindow->getHeight();
         m_eventDispatcher.ska::Observable<GameEvent>::notifyObservers(ge);

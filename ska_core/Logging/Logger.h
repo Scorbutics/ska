@@ -4,12 +4,12 @@
 #include <ctime>
 #include <typeinfo>
 #include <iomanip>
-#include "../Utils/NonCopyable.h"
+#include "../Utils/MovableNonCopyable.h"
 #include "ColorStream.h"
 
 namespace ska {
 
-	enum EnumLogLevel {
+	enum class EnumLogLevel {
 		SKA_DEBUG = 0,
 		SKA_INFO = 1,
 		SKA_MESSAGE = 2,
@@ -73,7 +73,7 @@ namespace ska {
 
 	}
 
-	class Logger : public LoggerLogLevel, public NonCopyable {
+	class Logger : public LoggerLogLevel, public MovableNonCopyable {
 		friend class LoggerFactory;
 	private:
 		static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){

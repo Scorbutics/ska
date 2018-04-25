@@ -4,7 +4,6 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "GifTexture.h"
-#include "Utils/SkaConstants.h"
 #include "Draw/Renderable.h"
 
 namespace ska {
@@ -17,7 +16,7 @@ namespace ska {
 		~AnimatedTexture() = default;
 
 		void loadFromText(unsigned fontSize, const std::string& text, Color c, unsigned horizontalFrames, unsigned verticalFrames, unsigned animatedFrames, bool isVertical = false);
-		void load(const std::string& spritePath, unsigned int horizontalFrames = 1, unsigned int verticalFrames = 1, unsigned int animatedFrames = 1, bool isVertical = false, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
+		void load(const std::string& spritePath, unsigned int horizontalFrames = 1, unsigned int verticalFrames = 1, unsigned int animatedFrames = 1, bool isVertical = false, int r = Texture::DEFAULT_T_RED, int g = Texture::DEFAULT_T_GREEN, int b = Texture::DEFAULT_T_BLUE, int a = -1);
 
 		void stop(bool x);
 		void reset();
@@ -47,7 +46,8 @@ namespace ska {
 		void recalculateFrames(unsigned int horizontalFrames, unsigned int verticalFrames, unsigned int animatedFrames, bool isVertical);
 
 	public:
-		void render(const Renderer& renderer, int posX, int posY, const Rectangle* clip) const override;
+		void render(const Renderer& renderer, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
+
 	private:
 		Point<int> m_relativePos;
 		Animation m_anim;

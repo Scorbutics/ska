@@ -23,6 +23,15 @@ namespace ska {
 		static int getDirectionFromPos(const Point<float>& center, const Point<float>& destination);
 		
 		template <class T>
+		static ska::Rectangle createRectangleFromPoints(const Point<T>& p1, const Point<T>& p2) {
+			const int width = ska::NumberUtils::absolute(p1.x - p2.x);
+			const int height = ska::NumberUtils::absolute(p1.y - p2.y);
+			auto x = ska::NumberUtils::minimum(p1.x, p2.x);
+			auto y = ska::NumberUtils::minimum(p1.y, p2.y);
+			return ska::Rectangle {x, y, width, height};
+		}
+
+		template <class T>
 		static T projection(const Point<T>& vector, const Point<T>& axis) {
 			return vector.x * axis.x + vector.y * axis.y;
 		}

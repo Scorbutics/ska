@@ -25,22 +25,41 @@
 			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_gui/ska_gui.cbp" />
 		</Project>
-		<Project filename="ska_particle_test/ska_particle_test.cbp">
-			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_draw/ska_draw.cbp" />
-			<Depends filename="ska_particle/ska_particle.cbp" />
-		</Project>
-		<Project filename="ska_gui/ska_gui.cbp" >
+		<Project filename="ska_gui/ska_gui.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
 			<Depends filename="ska_draw/ska_draw.cbp" />
 		</Project>
-		<Project filename="ska_script/ska_script.cbp" >
+		<Project filename="ska_script/ska_script.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
 		</Project>
 		<Project filename="ska_world/ska_world.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
 			<Depends filename="ska_physic/ska_physic.cbp" />
 			<Depends filename="ska_draw/ska_draw.cbp" />
+		</Project>
+		<Project filename="ska_physic_homemade/ska_physic_homemade.cbp" />
+		<Project filename="ska_physic_chipmunk/ska_physic_chipmunk.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_physic/ska_physic.cbp" />
+		</Project>
+		<Project filename="ska_physic_test/ska_physic_test.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_physic/ska_physic.cbp" />
+		</Project>
+		<Project filename="ska_physic_simulation_chipmunk/ska_physic_simulation_chipmunk.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_physic/ska_physic.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
+			<Depends filename="ska_gui/ska_gui.cbp" />
+			<Depends filename="ska_world/ska_world.cbp" />
+			<Depends filename="ska_physic_homemade/ska_physic_homemade.cbp" />
+			<Depends filename="ska_physic_chipmunk/ska_physic_chipmunk.cbp" />
+		</Project>
+		<Project filename="ska_world_test/ska_world_test.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_physic/ska_physic.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
+			<Depends filename="ska_world/ska_world.cbp" />
 		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>

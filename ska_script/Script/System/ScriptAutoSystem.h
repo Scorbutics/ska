@@ -10,7 +10,7 @@
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
-	class World;
+	class TileWorld;
 
 	class ScriptAutoSystem : public ScriptRegisterer,
 		public System<std::unordered_set<EntityId>, RequiredComponent<ScriptComponent>, PossibleComponent<ScriptSleepComponent, ScriptComponent>> {
@@ -21,7 +21,7 @@ namespace ska {
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		void kill(const std::string& keyScript);
-		virtual const std::string map(const std::string& key, const std::string& id) const;
+		virtual std::string map(const std::string& key, const std::string& id) const;
 		void registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity);
 		void clearNamedScriptedEntities();
 		void removeComponent(const std::string& componentName, const std::string& id) const;
@@ -45,7 +45,7 @@ namespace ska {
 	private:
 		MemoryScript& m_saveGame;
 		ScriptComponent* getHighestPriorityScript();
-		World& m_world;
+		TileWorld& m_world;
 
 		std::unordered_map<std::string, ScriptComponent> m_cache;
 		std::unordered_map<std::string, CommandPtr> m_commands;
@@ -54,14 +54,14 @@ namespace ska {
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
 		struct ScriptCommandHelper {
-			ScriptCommandHelper(World&, EntityManager& parent) : m_entityManager(parent) {}
+			ScriptCommandHelper(TileWorld&, EntityManager& parent) : m_entityManager(parent) {}
 			virtual ~ScriptCommandHelper() = default;
 			void operator=(const ScriptCommandHelper&) = delete;
-			virtual void setupCommands(World& w, std::unordered_map<std::string, CommandPtr>& commands) const = 0;
+			virtual void setupCommands(TileWorld& w, std::unordered_map<std::string, CommandPtr>& commands) const = 0;
 			EntityManager& m_entityManager;
 		};
 
-		ScriptAutoSystem(EntityManager& entityManager, World& w, const ScriptCommandHelper& sch, MemoryScript& saveGame);
+		ScriptAutoSystem(EntityManager& entityManager, TileWorld& w, const ScriptCommandHelper& sch, MemoryScript& saveGame);
 	};
 
 }

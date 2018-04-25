@@ -1,42 +1,36 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
 #include <memory>
 
-#include "BlockRenderable.h"
-
+#include "TileRenderable.h"
 #include "Draw/DrawableFixedPriority.h"
-
-class ParticleManager;
-
+#include "Utils/Vector2.h"
+#include "TilesetRenderable.h"
 
 namespace ska {
-	class World;
+	class TileWorld;
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
-		LayerRenderable(World& world);
+		LayerRenderable(Vector2<const TileRenderable*> block, const TilesetRenderable& chipset, unsigned int blockSize);
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
-		void changeLevel(std::string fname, std::string chipsetname);
-		void reset(std::vector<std::vector<BlockRenderable*>>& block);
-
-		void update();
+		void update(const ska::Rectangle& cameraPos);
 		void clear();
 
 		void render(const Renderer& renderer) const override;
 		bool isVisible() const override;
 
-		BlockRenderable* getBlock(unsigned int i, unsigned int j);
-
-		void setRectAnim(Rectangle rectAnim);
+		const TileRenderable* getBlock(unsigned int i, unsigned int j);
 
 	private:
-		World& m_world;
-		std::vector<std::vector<BlockRenderable*>> m_block;
+
+		const unsigned int m_blockSize;
+		Vector2<const TileRenderable*> m_block;
+		const TilesetRenderable& m_tileset;
+		ska::Rectangle m_lastCameraPos;
+		unsigned int m_width{};
+		unsigned int m_height{};
 
 	};
 	typedef std::unique_ptr<LayerRenderable> LayerRenderablePtr;

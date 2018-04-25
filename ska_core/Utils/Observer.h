@@ -14,7 +14,8 @@ namespace ska {
         template <typename T1, typename ...Args1>
 		friend class Observable;
 
-		explicit Observer(std::function<bool(T&, Args...)> const& handler) : m_handler(handler) {
+		explicit Observer(std::function<bool(T&, Args...)> handler) : 
+			m_handler(std::move(handler)) {
 			if(m_handler == nullptr) {
 				throw IllegalArgumentException("Function cannot be null", "Error");
 			}

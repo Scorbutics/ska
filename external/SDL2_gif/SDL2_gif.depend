@@ -1,1 +1,41 @@
 # depslib dependency file v1.0
+1514984340 source:c:\documents\perso\ska\external\sdl2_gif\src\cev_gifdeflate.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<SDL.h>
+	"CEV_gif.h"
+	"CEV_gifDeflate.h"
+	"CEV_gifToSurface.h"
+
+1514984340 c:\documents\perso\ska\external\sdl2_gif\src\cev_gif.h
+	<SDL.h>
+
+1514984340 c:\documents\perso\ska\external\sdl2_gif\src\cev_gifdeflate.h
+	<SDL.h>
+
+1514984340 c:\documents\perso\ska\external\sdl2_gif\src\cev_giftosurface.h
+	<SDL.h>
+	"CEV_gif.h"
+	"CEV_gifDeflate.h"
+
+1514984340 source:c:\documents\perso\ska\external\sdl2_gif\src\cev_giftosurface.c
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	<string.h>
+	<SDL.h>
+	"CEV_gifToSurface.h"
+	"CEV_gif.h"
+
+1514984340 source:c:\documents\perso\ska\external\sdl2_gif\src\cev_gifuser.c
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	<string.h>
+	<SDL.h>
+	"CEV_gifDeflate.h"
+	"CEV_gifToSurface.h"
+	"CEV_gif.h"
+

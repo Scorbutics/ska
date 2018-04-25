@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL.h>
 #include "RawInputListener.h"
 #include "../Exceptions/TerminateProcessException.h"
 #include "../Utils/StringUtils.h"

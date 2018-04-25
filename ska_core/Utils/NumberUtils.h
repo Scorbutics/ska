@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
 #include <random>
-#include "../Exceptions/IllegalArgumentException.h"
 
 namespace ska{
 	class NumberUtils {

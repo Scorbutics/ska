@@ -1,6 +1,5 @@
 #pragma once
 #include <queue>
-#include "../../SerializableComponent.h"
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
 
@@ -9,7 +8,7 @@ namespace ska {
 		COLLISION = (1u << 0),
 		WALK = (1u << 1)
 	};
-	class DebugGraphicComponent : public SerializableComponent {
+	class DebugGraphicComponent {
 	public:
 		DebugGraphicComponent();
 		virtual ~DebugGraphicComponent() = default;

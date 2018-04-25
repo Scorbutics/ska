@@ -1,6 +1,6 @@
 #pragma once
 #include "../ParticleGenerator.h"
-#include "Graphic/Color.h"
+#include "Draw/Color.h"
 
 namespace ska {
 	class ParticleBuilder;

@@ -1,4 +1,5 @@
 #include "CommandCalculate.h"
+#include "Data/MemoryScript.h"
 #include "Utils/StringUtils.h"
 #include "../ScriptUtils.h"
 #include "Utils/FormalCalculation/FormalCalculator.h"

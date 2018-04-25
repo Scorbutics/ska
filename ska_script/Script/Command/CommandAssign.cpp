@@ -1,4 +1,5 @@
 #include <string>
+#include "Data/MemoryScript.h"
 #include "CommandAssign.h"
 #include "../ScriptUtils.h"
 #include "../ScriptSymbolsConstants.h"

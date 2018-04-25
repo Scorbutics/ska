@@ -4,7 +4,6 @@
 #include "../Components/Concrete/ButtonQuit.h"
 #include "../Events/HoverEvent.h"
 #include "../GUI.h"
-#include "Utils/SkaConstants.h"
 
 namespace ska {
 
@@ -25,7 +24,7 @@ namespace ska {
 
 	private:
 		void initHandlers() {
-			const auto& clip = Rectangle{ 0, 0, this->getBox().w, TAILLEBLOCFENETRE / 2 };
+			const auto& clip = Rectangle{ 0, 0, this->getBox().w, ska::WindowIG<>::TAILLEBLOCFENETRE / 2 };
 			auto& button = this->template addWidget<Button>(Point<int>(), GUI::MENU_DEFAULT_THEME_PATH + "button", &clip, [&](Widget* tthis, ClickEvent& e) {
 				if (e.getState() == MOUSE_CLICK) {
 					m_moving = true;
@@ -34,9 +33,9 @@ namespace ska {
 					m_moving = false;
 				}
 			});
-			auto wButtonWidth = this->getBox().w - TAILLEBLOCFENETRE / 2;
+			auto wButtonWidth = this->getBox().w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2;
 			button.setWidth((wButtonWidth > 0) ? wButtonWidth : this->getBox().w);
-			button.setHeight(TAILLEBLOCFENETRE / 2);
+			button.setHeight(ska::WindowIG<>::TAILLEBLOCFENETRE / 2);
 			button.template addHandler<HoverEventListener> ([&](Widget*, HoverEvent& e) {
 				if (m_moving && e.getState() != MOUSE_ENTER) {
 					const auto& clickAbsPos = e.getMousePosition();
@@ -45,7 +44,7 @@ namespace ska {
 				}
 			});
 
-			auto& buttonQuit = this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - TAILLEBLOCFENETRE / 2, 0), GUI::MENU_DEFAULT_THEME_PATH + "close_button");
+			auto& buttonQuit = this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2, 0), GUI::MENU_DEFAULT_THEME_PATH + "close_button");
 			buttonQuit.setPriority(std::numeric_limits<int>::max() - 1);
 
 			button.setPriority(std::numeric_limits<int>::max());

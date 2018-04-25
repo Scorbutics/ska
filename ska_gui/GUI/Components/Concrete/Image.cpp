@@ -4,7 +4,7 @@
 
 ska::Image::Image(Widget& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip) :
 	Widget(parent, relativePos),
-	m_img(imagePath, DEFAULT_T_RED, DEFAULT_T_GREEN, DEFAULT_T_BLUE, alpha ? 128 : -1) {
+	m_img(imagePath, Texture::DEFAULT_T_RED, Texture::DEFAULT_T_GREEN, Texture::DEFAULT_T_BLUE, alpha ? 128 : -1) {
 	if(clip == nullptr) {
 		m_clip.x = 0;
 		m_clip.y = 0;

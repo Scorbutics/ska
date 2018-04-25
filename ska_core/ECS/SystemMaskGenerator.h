@@ -31,7 +31,7 @@ namespace ska {
 			if (mask >= systemComponentMask.size()) {
 				throw IllegalStateException("Too many components are used in the game. Unable to continue.");
 			}
-			SKA_LOG_DEBUG("\t - ", m_entityManager.template getComponentName<T>(), " with mask ", mask);
+			SKA_LOG_DEBUG("\t - mask ", mask);
 
 			systemComponentMask[mask] = true;
 		}

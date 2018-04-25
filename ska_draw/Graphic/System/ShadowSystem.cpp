@@ -8,7 +8,7 @@
 ska::ShadowSystem::ShadowSystem(ska::EntityManager& entityManager, ska::CameraSystem* camera) :
     AbstractGraphicSystem(camera),
     System(entityManager) {
-	m_shadow.load(ska::SpritePath::getInstance().getPath(SPRITEBANK_ANIMATION, 13), 2, 1, 1, false, DEFAULT_T_RED, DEFAULT_T_GREEN, DEFAULT_T_BLUE, 127);
+	m_shadow.load(ska::SpritePath::getInstance().getPath(SPRITEBANK_ANIMATION, 13), 2, 1, 1, false, Texture::DEFAULT_T_RED, Texture::DEFAULT_T_GREEN, Texture::DEFAULT_T_BLUE, 127);
 }
 
 void ska::ShadowSystem::refresh(unsigned int) {

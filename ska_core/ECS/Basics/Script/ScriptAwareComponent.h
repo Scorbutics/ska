@@ -1,9 +1,8 @@
 #pragma once
-#include "../../SerializableComponent.h"
 #include "../Physic/PositionComponent.h"
 
 namespace ska {
-	class ScriptAwareComponent : public SerializableComponent {
+	class ScriptAwareComponent {
 	public:
 	    ScriptAwareComponent();
 	    ~ScriptAwareComponent() = default;

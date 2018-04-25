@@ -1,14 +1,16 @@
 #pragma once
-#include "ECS/Basics/Script/ScriptTriggerType.h"
+#include "ScriptSleepComponent.h"
+#include "../../../Point.h"
 
-//TODO voué à disparaître au profit d'un Event
 namespace ska {
+
     class ScriptPositionedGetter {
     public:
         ScriptPositionedGetter() = default;
         virtual ~ScriptPositionedGetter() = default;
-        virtual std::vector<ScriptSleepComponent*> chipsetScript(const ska::Point<int>& oldCenterPos, const ska::Point<int>& p, const ska::Point<int>& centerPos, const ScriptTriggerType& stt, unsigned int i) = 0;
 
+        virtual std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldCenterPos, const ska::Point<int>& frontPos, ScriptTriggerType type) = 0;
+		virtual ScriptSleepComponent* chipsetScriptAuto() = 0;
     };
 }
 

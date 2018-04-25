@@ -1,4 +1,5 @@
 #include "CommandAssignSwitch.h"
+#include "Data/MemoryScript.h"
 #include "../ScriptUtils.h"
 #include "../ScriptSymbolsConstants.h"
 

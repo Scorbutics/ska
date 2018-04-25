@@ -14,7 +14,7 @@ m_drawStyle(!placeHolderStyleName.empty()) {
 
 	m_textureSelector = &m_placeHolder;
 	m_lastTextureSelector = nullptr;
-	
+
 	const auto width = m_placeHolder.getWidth();
 	const auto height = m_placeHolder.getHeight();
 	if (width != 0 && height != 0) {
@@ -131,7 +131,7 @@ void ska::Button::render(const Renderer& renderer) const {
 
 	const auto& pos = getAbsolutePosition();
 	if (m_clip.w == std::numeric_limits<int>().max()) {
-		renderer.render(*m_textureSelector, pos.x, pos.y);
+		renderer.render(*m_textureSelector, pos.x, pos.y, nullptr);
 	} else {
 		renderer.render(*m_textureSelector, pos.x, pos.y, &m_clip);
 	}

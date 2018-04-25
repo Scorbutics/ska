@@ -1,8 +1,7 @@
 #pragma once
-#include "../../SerializableComponent.h"
 
 namespace ska {
-	struct HitboxComponent : public SerializableComponent {
+	struct HitboxComponent {
 	public:
 	    HitboxComponent();
 	    ~HitboxComponent() = default;

@@ -9,7 +9,6 @@ namespace ska {
     public:
         AbstractGraphicSystem(CameraSystem* camera);
         virtual ~AbstractGraphicSystem();
-        void linkCamera(CameraSystem* camera) override;
         void setDrawables(DrawableContainer& container) override;
 
     protected:

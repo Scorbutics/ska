@@ -10,6 +10,7 @@
 #include "Exceptions/IllegalStateException.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
+#include "Utils/SkaConstants.h"
 
 namespace ska {
 	class FileException;
@@ -57,7 +58,7 @@ Game::Game(ska::EntityManager& em, GameConfPtr&& gc) :
 
 	LogsConfiguration();
 
-	ska::SDLFont::DEFAULT_FONT_FILE = "." FILE_SEPARATOR "Resources" FILE_SEPARATOR "Fonts" FILE_SEPARATOR "FiraSans-Medium.ttf";
+	ska::SDLFont::DEFAULT_FONT_FILE = "./Resources/Fonts/FiraSans-Medium.ttf";
 	navigateToState<StateSandbox>(m_entityManager, m_eventDispatcher);
 }
 
