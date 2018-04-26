@@ -15,8 +15,8 @@ void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int> p
 	renderer.render(m_tileset, pos.x, pos.y, &chipsetPartRender);
 }
 
-const ska::TileRenderable* ska::TilesetRenderable::getTile(const Point<int> posCorr) const {
-	return m_blocks.has(posCorr.x, posCorr.y) ? nullptr : &m_blocks[posCorr.x][posCorr.y];
+const ska::TileRenderable& ska::TilesetRenderable::getTile(const Point<int> posCorr) const {
+	return m_blocks[posCorr.x][posCorr.y];
 }
 
 const ska::Texture& ska::TilesetRenderable::getTexture() const{

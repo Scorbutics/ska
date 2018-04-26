@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <optional>
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "TilesetLoader.h"
@@ -7,17 +8,17 @@
 
 namespace ska {
 	struct Tile;
-	using BlockPtr = std::unique_ptr<Tile>;
-
 	class Tileset : public MovableNonCopyable {
 	public:
 		Tileset(unsigned int tileSize, const TilesetLoader& loader, const TilesetEventLoader& loaderEvent);
 		Tileset(Tileset&&) = default;
 
-		std::pair<Tile*, const TileRenderable*> getTile(const Point<int>& coordinates);
+		Tile& getTile(const Point<int>& coordinates);
+		const TileRenderable& getTileRenderable(const Point<int>& coordinates);
+
 		const std::string& getName() const;
 		const TilesetRenderable& getRenderable() const;
-		
+
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 
@@ -30,6 +31,6 @@ namespace ska {
 
 		TilesetRenderable m_renderable;
 		TilesetEvent m_event;
-		Vector2<Tile> m_blocks{};		
+		Vector2<Tile> m_blocks{};
 	};
 }

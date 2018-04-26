@@ -15,10 +15,10 @@ namespace ska {
 
 		LayerLoaderImage(LayerLoaderImage&&) = default;
 		explicit LayerLoaderImage(const TilesetCorrespondanceMapper& correspondanceMapper, const std::string& layerFilename);
-		
-		Vector2<Tile*> loadPhysics(Tileset& chipset) const override;
-		Vector2<const TileRenderable*> loadGraphics(Tileset& chipset) const override;
-	
+
+		Vector2<std::optional<ska::Tile>> loadPhysics(Tileset& chipset) const override;
+		Vector2<std::optional<const ska::TileRenderable>> loadGraphics(Tileset& chipset) const override;
+
 	private:
 		const TilesetCorrespondanceMapper& m_colorMapper;
 

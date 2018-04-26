@@ -5,9 +5,9 @@
 #include "LayerRenderable.h"
 #include "Draw/Renderer.h"
 
-ska::LayerRenderable::LayerRenderable(Vector2<const TileRenderable*> block, const TilesetRenderable& chipset, const unsigned int blockSize) :
+ska::LayerRenderable::LayerRenderable(Vector2<std::optional<const TileRenderable>> block, const TilesetRenderable& chipset, const unsigned int blockSize) :
 	m_blockSize(blockSize),
-	m_tileset(chipset), 
+	m_tileset(chipset),
 	m_lastCameraPos(),
 	m_block(std::move(block)),
 	m_width(m_block.lineSize()),
@@ -43,10 +43,10 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 			const auto currentXBlock = i * m_blockSize;
 			const auto currentYBlock = j * m_blockSize;
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
-				const auto b = m_block[i][j];
-				if (b != nullptr) {
+				const auto& b = m_block[i][j];
+				if (b.has_value()) {
 					const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
-					m_tileset.render(renderer, absoluteCurrentPos, *b);
+					m_tileset.render(renderer, absoluteCurrentPos, b.value());
 				}
 			}
 		}
@@ -55,9 +55,9 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 
 const ska::TileRenderable* ska::LayerRenderable::getBlock(const unsigned int i, const unsigned int j) {
 	if (m_block.has(i, j)) {
-		return m_block[i][j];
+		return m_block[i][j].has_value() ? &m_block[i][j].value() : nullptr;
 	}
-	
+
 	throw IndexOutOfBoundsException("block at coordinates (" + StringUtils::intToStr(i) + "; " + StringUtils::intToStr(j) + ") cannot be accessed");
 }
 

@@ -6,6 +6,7 @@
 
 namespace ska {
 
+    //TODO a supprimer et à la place render directement le layer renderable
 	class TileRenderable {
 	public:
 		TileRenderable() = default;
@@ -21,8 +22,5 @@ namespace ska {
 
 		bool m_autoAnimation = false;
 		Rectangle m_spritePosInChipset{};
-
 	};
-
-	typedef std::unique_ptr<TileRenderable> BlockRenderablePtr;
 }

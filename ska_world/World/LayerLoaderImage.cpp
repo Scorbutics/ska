@@ -7,8 +7,8 @@
 #include "Tileset.h"
 #include "Exceptions/CorruptedFileException.h"
 
-ska::Vector2<const ska::TileRenderable*> ska::LayerLoaderImage::loadGraphics(Tileset& chipset) const {
-	auto graphics = ska::Vector2<const  TileRenderable*> {};
+ska::Vector2<std::optional<const ska::TileRenderable>> ska::LayerLoaderImage::loadGraphics(Tileset& chipset) const {
+	auto graphics = ska::Vector2<std::optional<const ska::TileRenderable>> {};
 	graphics.reserve(m_fileWidth, m_fileHeight);
 
 	const auto& map = m_colorMapper.access();
@@ -18,22 +18,21 @@ ska::Vector2<const ska::TileRenderable*> ska::LayerLoaderImage::loadGraphics(Til
 			const auto& color = m_file.getPixel32Color(x, y);
 
 			if(color.r == 255 && color.g == 255 && color.b == 255) {
-				graphics.push_back(nullptr);
+				graphics.push_back(std::optional<ska::TileRenderable>{});
 			} else {
 				if (map.find(color) == map.end()) {
                     const std::string ss = ska::StringUtils::intToStr(color.r) + "; " + ska::StringUtils::intToStr(color.g) + "; " + ska::StringUtils::intToStr(color.b);
 					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
-				const auto& [block, br] = chipset.getTile(map.at(color));
-				graphics.push_back(br);
+				graphics.push_back(chipset.getTileRenderable(map.at(color)));
 			}
 		}
 	}
 	return graphics;
 }
 
-ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) const {
-	auto physics = ska::Vector2<Tile*> {};
+ska::Vector2<std::optional<ska::Tile>> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) const {
+	auto physics = ska::Vector2<std::optional<ska::Tile>> {};
 	physics.reserve(m_fileWidth, m_fileHeight);
 
 	const auto& map = m_colorMapper.access();
@@ -43,14 +42,13 @@ ska::Vector2<ska::Tile*> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) co
 			const auto& color = m_file.getPixel32Color(x, y);
 
 			if (color.r == 255 && color.g == 255 && color.b == 255) {
-				physics.push_back(nullptr);
+				physics.push_back(std::optional<ska::Tile>{});
 			} else {
 				if (map.find(color) == map.end()) {
                     const std::string ss = ska::StringUtils::intToStr(color.r) + "; " + ska::StringUtils::intToStr(color.g) + "; " + ska::StringUtils::intToStr(color.b);
 					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
-				const auto& [block, br] = chipset.getTile(map.at(color));
-				physics.push_back(block);
+				physics.push_back(chipset.getTile(map.at(color)));
 			}
 		}
 	}

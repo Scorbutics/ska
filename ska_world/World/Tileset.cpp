@@ -30,10 +30,10 @@ unsigned ska::Tileset::getTileSize() const {
 	return m_tileSize;
 }
 
-std::pair<ska::Tile*, const ska::TileRenderable*> ska::Tileset::getTile(const Point<int>& coordinates) {
-	if(!m_blocks.has(coordinates.x, coordinates.y)) {
-		return std::make_pair(nullptr, nullptr);
-	}
+ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) {
+	return m_blocks[coordinates.x][coordinates.y];
+}
 
-	return std::make_pair(&m_blocks[coordinates.x][coordinates.y], m_renderable.getTile(coordinates));
+const ska::TileRenderable& ska::Tileset::getTileRenderable(const Point<int>& coordinates) {
+    return m_renderable.getTile(coordinates);
 }
