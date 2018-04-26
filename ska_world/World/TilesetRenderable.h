@@ -1,7 +1,8 @@
 #pragma once
 #include "Graphic/Texture.h"
-#include "../World/TileRenderable.h"
 #include "Utils/Vector2.h"
+#include "Graphic/Animation.h"
+#include <optional>
 
 namespace ska {
 	class TilesetLoader;
@@ -11,8 +12,9 @@ namespace ska {
 		explicit TilesetRenderable(unsigned int tileSize, const TilesetLoader& loader);
 		TilesetRenderable(TilesetRenderable&&) = default;
 
-		void render(const Renderer& renderer, Point<int> pos, const Point<int>& tileId) const;
+		void render(const Renderer& renderer, const Point<int>& pos, const Point<int>& tileId) const;
 		const Texture& getTexture() const;
+		std::optional<Animation>& getAnimation(const Point<int>& pos);
 
 		~TilesetRenderable() override = default;
 
@@ -21,7 +23,7 @@ namespace ska {
 
 		Rectangle m_spritePosInChipset{};
 
-		Vector2<std::optional<Animation>> m_animations;
+		mutable Vector2<std::optional<Animation>> m_animations;
 		Texture m_tileset;
 
 		const std::string m_tilesetName;

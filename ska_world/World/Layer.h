@@ -8,7 +8,7 @@ namespace ska {
 	class Layer :
         public MovableNonCopyable {
 	public:
-		Layer(Vector2<std::optional<Tile>> block);
+		explicit Layer(Vector2<std::optional<Tile>> block);
 		Layer(Layer&&) = default;
 		~Layer() override = default;
 

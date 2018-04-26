@@ -59,11 +59,11 @@ void ska::Animation::setOffsetAndFrameSize(Rectangle s) {
 	}
 }
 
-ska::Rectangle ska::Animation::getOffsetBase() const {
+const ska::Rectangle& ska::Animation::getOffsetBase() const {
 	return m_offsetBase;
 }
 
-ska::Rectangle ska::Animation::getCurrentFrame() const {
+const ska::Rectangle& ska::Animation::getCurrentFrame() const {
     return m_offset;
 }
 
@@ -97,7 +97,7 @@ void ska::Animation::nextFrame() {
 	switchToFrame(m_position);
 }
 
-ska::Rectangle ska::Animation::updateFrame() {
+const ska::Rectangle& ska::Animation::updateFrame() {
 	if (!m_active) {
 		return m_offset;
 	}

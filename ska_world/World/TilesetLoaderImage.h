@@ -1,6 +1,8 @@
 #pragma once
 #include "TilesetLoader.h"
 #include "Graphic/SDLSurface.h"
+#include "Graphic/Texture.h"
+#include "Graphic/Animation.h"
 
 namespace ska {
 	class TilesetLoaderImage : public TilesetLoader {
@@ -9,8 +11,8 @@ namespace ska {
 		TilesetLoaderImage(TilesetLoaderImage&&) = default;
 
 		Vector2<Tile> loadPhysics() const override;
-        virtual Texture loadTexture() const override;
-		virtual Vector2<Animation> loadAnimations(unsigned int blockSize) const override;
+		Texture loadGraphics() const override;
+		Vector2<std::optional<Animation>> loadAnimations(unsigned int blockSize) const override;
 
 		std::string getName() const override;
 

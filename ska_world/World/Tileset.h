@@ -1,10 +1,10 @@
 #pragma once
-#include <memory>
 #include <optional>
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "TilesetLoader.h"
 #include "TilesetEvent.h"
+#include "Graphic/Animation.h"
 
 namespace ska {
 	struct Tile;
@@ -14,7 +14,7 @@ namespace ska {
 		Tileset(Tileset&&) = default;
 
 		Tile& getTile(const Point<int>& coordinates);
-		const TileRenderable& getTileRenderable(const Point<int>& coordinates);
+		std::optional<ska::Animation>& getAnimation(const Point<int>& coordinates);
 
 		const std::string& getName() const;
 		const TilesetRenderable& getRenderable() const;

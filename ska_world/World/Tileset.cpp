@@ -1,6 +1,6 @@
-#include "../World/TileRenderable.h"
 #include "Physic/Tile.h"
 #include "Tileset.h"
+#include "Graphic/Animation.h"
 
 ska::Tileset::Tileset(const unsigned int tileSize, const TilesetLoader& loader, const TilesetEventLoader& loaderEvent) :
 	m_tilesetName(loader.getName()),
@@ -34,6 +34,6 @@ ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) {
 	return m_blocks[coordinates.x][coordinates.y];
 }
 
-const ska::TileRenderable& ska::Tileset::getTileRenderable(const Point<int>& coordinates) {
-    return m_renderable.getTile(coordinates);
+std::optional<ska::Animation>& ska::Tileset::getAnimation(const Point<int>& coordinates) {
+	return m_renderable.getAnimation(coordinates);
 }

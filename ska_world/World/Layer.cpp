@@ -1,7 +1,7 @@
 #include "Layer.h"
 #include "TileWorld.h"
 
-ska::Layer::Layer(ska::Vector2<std::optional<ska::Tile>> block) :
+ska::Layer::Layer(Vector2<std::optional<Tile>> block) :
 	m_fileWidth(0),
 	m_fileHeight(0) {
 	reset(std::move(block));
@@ -27,10 +27,10 @@ ska::TileCollision ska::Layer::getCollision(const std::size_t x, const std::size
 		}
 		return b.value().collision;
 	}
-	return ska::TileCollision::Yes;
+	return TileCollision::Yes;
 }
 
-void ska::Layer::reset(Vector2<std::optional<ska::Tile>> block) {
+void ska::Layer::reset(Vector2<std::optional<Tile>> block) {
 	m_block = std::move(block);
 	m_fileWidth = m_block.lineSize();
 	m_fileHeight = m_fileWidth == 0 ? 0 : m_block.size() / m_fileWidth;

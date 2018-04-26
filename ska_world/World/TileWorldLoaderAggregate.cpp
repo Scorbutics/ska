@@ -25,7 +25,7 @@ ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tilese
 std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
 	std::vector<LayerRenderablePtr> renderables;
 	for (const auto& l : m_loaders) {
-		renderables.push_back(std::make_unique<LayerRenderable>(l->loadGraphics(tileset), tileset.getRenderable(), blockSize));
+		renderables.push_back(std::make_unique<LayerRenderable>(l->loadAnimations(tileset), tileset.getRenderable().getTexture(), blockSize));
 	}
 	return renderables;
 }

@@ -10,11 +10,11 @@ namespace ska {
 		void stop(bool x);
 		void nextFrame();
 
-		Rectangle getCurrentFrame() const;
-		Rectangle updateFrame();
+		const Rectangle& getCurrentFrame() const;
+		const Rectangle& updateFrame();
 
 		void switchToFrame(unsigned int number);
-		Rectangle getOffsetBase() const;
+		const Rectangle& getOffsetBase() const;
 
 	private:
 		void setVertical(const bool b);

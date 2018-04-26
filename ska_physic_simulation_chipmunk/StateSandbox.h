@@ -5,31 +5,31 @@
 #include "Core/State/StateBase.h"
 #include "Utils/SubObserver.h"
 #include "Polygon.h"
-#include "Utils/Vector2.h"
 #include "Physic/Space.h"
 #include "Graphic/PositionnedGraphicDrawable.h"
 #include "World/Tileset.h"
+#include "Graphic/System/CameraSystem.h"
 
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
 	void render(const ska::Renderer& renderer) const override{
-		const auto width = layerRenderableBlocks.lineSize();
+		/*const auto width = layerRenderableBlocks.lineSize();
 		const auto height = width == 0 ? 0 : layerRenderableBlocks.size() / width;
 		for (auto x = 0; x < width; x++) {
 			for (auto y = 0; y < height; y++) {
 				const auto& b = layerRenderableBlocks[x][y];
 				if (b != nullptr) {
-					chipset->getRenderable().render(renderer, { x * 48, y * 48 }, *b);
+					//chipset->getRenderable().render(renderer, { x * 48, y * 48 }, *b);
 				}
 			}
-		}
+		}*/
 	}
 	
 	bool isVisible() const override {
 		return true;
 	}
 
-	ska::Vector2<ska::TileRenderable*> layerRenderableBlocks;
+	//ska::Vector2<ska::TileRenderable*> layerRenderableBlocks;
 	std::unique_ptr<ska::Tileset> chipset;
 };
 
@@ -42,8 +42,8 @@ public:
 
 	virtual ~StateSandbox() = default;
 
-	virtual void onGraphicUpdate(unsigned int, ska::DrawableContainer&) override;
-	virtual void onEventUpdate(unsigned int) override;
+	void onGraphicUpdate(unsigned int, ska::DrawableContainer&) override;
+	void onEventUpdate(unsigned int) override;
 
 private:
 	void createBall(const ska::Point<float>& point);

@@ -6,7 +6,6 @@
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/System/CameraSystem.h"
 #include "Draw/DrawableContainer.h"
-#include "LayerLoader.h"
 #include "TileWorld.h"
 #include "TileWorldLoader.h"
 #include "Utils/FileUtils.h"
@@ -37,7 +36,7 @@ bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, i
 
 	const auto& b1 = m_collisionProfile.getBlock(layerIndex, p1Block.x, p1Block.y);
 	const auto& b2 = m_collisionProfile.getBlock(layerIndex, p2Block.x, p2Block.y);
-	return (b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id));
+	return b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id);
 }
 
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
