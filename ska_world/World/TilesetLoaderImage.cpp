@@ -44,7 +44,7 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 	m_sChipset(LoadTilesetImage(m_tilesetName)),
 	m_sCol(LoadTilesetImageCollisions(m_tilesetName)),
 	m_sProperties(LoadTilesetImageProperties(m_tilesetName)) {
-	checkSizes();	
+	checkSizes();
 }
 
 ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
@@ -69,21 +69,25 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 	return tiles;
 }
 
-std::pair<ska::Texture, ska::Vector2<ska::TileRenderable>> ska::TilesetLoaderImage::loadGraphics(unsigned int blockSize) const {
+ska::Texture ska::TilesetLoaderImage::loadTexture(unsigned int blockSize) const {
+	return { m_tilesetName + ".png"};
+}
+
+ska::Vector2<std::optional<ska::Animation>> ska::TilesetLoaderImage::loadAnimations(unsigned int blockSize) const {
 	const auto width = m_sCol.getInstance()->w;
 	const auto height = m_sCol.getInstance()->h;
 
-	auto tiles = ska::Vector2<TileRenderable>{};
+	auto tiles = ska::Vector2<std::optional<ska::Animation>>{};
 	tiles.resize(width, height);
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
-			const auto colPixel = m_sCol.getPixel32(x, y);
+            const auto colPixel = m_sCol.getPixel32(x, y);
 			const auto autoAnim = (colPixel == m_darkColor || colPixel == m_lightColor);
-			tiles[x][y] = TileRenderable{ blockSize, { x, y }, autoAnim };
+			tiles[x][y] = autoAnim ? Animation {375, 4, true, 0, 0, m_blockSize, m_blockSize} : std::optional<ska::Animation>();
 		}
 	}
 
-	return std::make_pair(Texture{ m_tilesetName + ".png"}, std::move(tiles));
+	return tiles;
 }
 
 std::string ska::TilesetLoaderImage::getName() const {

@@ -21,11 +21,9 @@ namespace ska {
 		void render(const Renderer& renderer) const override;
 		bool isVisible() const override;
 
-		const TileRenderable* getBlock(unsigned int i, unsigned int j);
-
 	private:
-
 		const unsigned int m_blockSize;
+
 		Vector2<std::optional<const TileRenderable>> m_block;
 		const TilesetRenderable& m_tileset;
 		ska::Rectangle m_lastCameraPos;

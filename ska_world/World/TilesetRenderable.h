@@ -11,8 +11,7 @@ namespace ska {
 		explicit TilesetRenderable(unsigned int tileSize, const TilesetLoader& loader);
 		TilesetRenderable(TilesetRenderable&&) = default;
 
-		void render(const Renderer& renderer, Point<int> pos, const TileRenderable& block) const;
-		const TileRenderable& getTile(Point<int> posCorr) const;
+		void render(const Renderer& renderer, Point<int> pos, const Point<int>& tileId) const;
 		const Texture& getTexture() const;
 
 		~TilesetRenderable() override = default;
@@ -20,8 +19,11 @@ namespace ska {
 	private:
 		void load(const TilesetLoader& loader);
 
-		Vector2<TileRenderable> m_blocks{};
+		Rectangle m_spritePosInChipset{};
+
+		Vector2<std::optional<Animation>> m_animations;
 		Texture m_tileset;
+
 		const std::string m_tilesetName;
 		const unsigned int m_tileSize;
 	};

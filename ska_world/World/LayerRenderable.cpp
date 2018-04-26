@@ -43,21 +43,11 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 			const auto currentXBlock = i * m_blockSize;
 			const auto currentYBlock = j * m_blockSize;
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
-				const auto& b = m_block[i][j];
-				if (b.has_value()) {
-					const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
-					m_tileset.render(renderer, absoluteCurrentPos, b.value());
-				}
+				const auto& b = ska::Point<int>{i, j};
+                const ska::Point<int> absoluteCurrentPos(currentXBlock - absORelX, currentYBlock - absORelY);
+                m_tileset.render(renderer, absoluteCurrentPos, b);
+
 			}
 		}
 	}
 }
-
-const ska::TileRenderable* ska::LayerRenderable::getBlock(const unsigned int i, const unsigned int j) {
-	if (m_block.has(i, j)) {
-		return m_block[i][j].has_value() ? &m_block[i][j].value() : nullptr;
-	}
-
-	throw IndexOutOfBoundsException("block at coordinates (" + StringUtils::intToStr(i) + "; " + StringUtils::intToStr(j) + ") cannot be accessed");
-}
-

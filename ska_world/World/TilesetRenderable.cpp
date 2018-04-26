@@ -9,14 +9,12 @@ ska::TilesetRenderable::TilesetRenderable(const unsigned int tileSize, const Til
 	load(loader);
 }
 
-void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int> pos, const TileRenderable& block) const {
-	block.refresh();
-	auto chipsetPartRender = block.determineFrame(nullptr);
-	renderer.render(m_tileset, pos.x, pos.y, &chipsetPartRender);
-}
-
-const ska::TileRenderable& ska::TilesetRenderable::getTile(const Point<int> posCorr) const {
-	return m_blocks[posCorr.x][posCorr.y];
+void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int> pos, const Point<int>& blockId) const {
+	if(m_animations.has(blockId.x, blockId.y)) {
+        const auto& anim = m_animations[blockId.x][blockId.y];
+        auto* chipsetPartRender = anim.has_value() ? &anim.value() : nullptr;
+        renderer.render(m_tileset, pos.x, pos.y, chipsetPartRender);
+	}
 }
 
 const ska::Texture& ska::TilesetRenderable::getTexture() const{
@@ -24,5 +22,6 @@ const ska::Texture& ska::TilesetRenderable::getTexture() const{
 }
 
 void ska::TilesetRenderable::load(const TilesetLoader& loader) {
-	std::tie(m_tileset, m_blocks) = loader.loadGraphics(m_tileSize);
+    m_tileset = loader.loadTexture();
+	m_animations = loader.loadAnimations();
 }

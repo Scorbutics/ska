@@ -9,7 +9,8 @@ namespace ska {
 		TilesetLoaderImage(TilesetLoaderImage&&) = default;
 
 		Vector2<Tile> loadPhysics() const override;
-		std::pair<Texture, Vector2<TileRenderable>> loadGraphics(unsigned blockSize) const override;
+        virtual Texture loadTexture() const override;
+		virtual Vector2<Animation> loadAnimations(unsigned int blockSize) const override;
 
 		std::string getName() const override;
 
