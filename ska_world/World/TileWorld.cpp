@@ -10,6 +10,7 @@
 #include "TileWorldLoader.h"
 #include "Utils/FileUtils.h"
 #include "Data/Events/WorldEvent.h"
+#include "LayerEventLoaderTilesetEvent.h"
 
 ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
 	m_eventDispatcher(ged),
@@ -34,8 +35,8 @@ bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, i
 		return true;
 	}
 
-	const auto& b1 = m_physics.getBlock(layerIndex, p1Block.x, p1Block.y);
-	const auto& b2 = m_physics.getBlock(layerIndex, p2Block.x, p2Block.y);
+	const auto& b1 = m_physicLayers.getBlock(layerIndex, p1Block.x, p1Block.y);
+	const auto& b2 = m_physicLayers.getBlock(layerIndex, p2Block.x, p2Block.y);
 	return b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id);
 }
 
@@ -44,13 +45,13 @@ bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::un
 	if (blockPos.x >= m_blocksX || blockPos.y >= m_blocksY) {
 		return true;
 	}
-	const auto& b = m_physics.getBlock(0, blockPos.x, blockPos.y);
+	const auto& b = m_physicLayers.getBlock(0, blockPos.x, blockPos.y);
 	const auto result = b != nullptr ? (authorizedBlocks.find(b->id.x + b->id.y * m_tileset->getWidth()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
 bool ska::TileWorld::getCollision(const unsigned int x, const unsigned int y) const {
-	return m_physics.collide(x, y);
+	return m_physicLayers.collide(x, y);
 }
 
 void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
@@ -66,9 +67,9 @@ void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 }
 
 const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
-	const auto layers = m_physics.layers();
+	const int layers = m_physicLayers.layers();
 	for(auto i = layers - 1; i >= 0; i--) {
-		const auto& b = m_physics.getBlock(i, x, y);
+		const auto& b = m_physicLayers.getBlock(i, x, y);
 		if(b != nullptr && b->collision != ska::TileCollision::Void) {
 			return b;
 		}
@@ -88,17 +89,24 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	if (worldChanged || tilesetChanged) {
 		m_fullName = loader.getName();
 
-		m_physics = loader.loadPhysics(*m_tileset);
+		m_physicLayers = loader.loadPhysics(*m_tileset);
 		m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
 
-		if (m_physics.empty() || m_graphicLayers.empty() || m_physics.layers() != m_graphicLayers.size()) {
+		if (m_physicLayers.empty() || m_graphicLayers.empty() || m_physicLayers.layers() != m_graphicLayers.size()) {
 			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
 		}
 
-		m_blocksX = m_physics.getLayer(0).getBlocksX();
-		m_blocksY = m_physics.getLayer(0).getBlocksY();
+		m_blocksX = m_physicLayers.getLayer(0).getBlocksX();
+		m_blocksY = m_physicLayers.getLayer(0).getBlocksY();
 
+		//Layer Events
 		m_events = loader.loadEvents(m_blocksX, m_blocksY);
+
+		//Tileset based layer events
+		const auto layers = m_physicLayers.layers();
+		for (auto i = 0u; i < layers; i++) {
+			m_events.push_back(std::make_unique<LayerEvent>(LayerEventLoaderTilesetEvent{ m_physicLayers.getLayer(i), m_tileset->getTilesetEvent() }, m_blocksX, m_blocksY));
+		}
 
         const ska::FileNameData fndata(m_fullName);
         m_name = fndata.name;
@@ -112,53 +120,46 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	}
 }
 
-//TODO déplacer dans les layers event
-ska::ScriptSleepComponent* ska::TileWorld::chipsetScriptAuto() {
+std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScriptsAuto() {
+	std::vector<std::reference_wrapper<ScriptSleepComponent>> result;
 	if (m_autoScripts) {
-		auto tmp = m_tilesetEvent->getScript(ScriptTriggerType::AUTO);
-		for (auto& ssc : tmp) {
-			if (ssc != nullptr) {
-				ssc->context = m_fullName;
+		for (auto& layerScriptsPtr : m_events) {
+			auto& autosScript = layerScriptsPtr->getAutoScript();
+			for (auto& ssc : autosScript) {
+				ssc.context = m_fullName;
 				m_autoScripts = false;
-				return ssc;
+				result.emplace_back(ssc);
 			}
 		}
 	}
-	return nullptr;
+	return {};
 }
 
-//TODO déplacer dans les layers event
-std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& frontPos, ScriptTriggerType type) {
-	std::vector<ScriptSleepComponent*> result;
-	if (m_tilesetEvent == nullptr || type == ScriptTriggerType::AUTO) {
+std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type) {
+	std::vector<std::reference_wrapper<ScriptSleepComponent>> result;
+	if (type == ScriptTriggerType::AUTO) {
 		return result;
 	}
 
-	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldPos / m_blockSize : frontPos / m_blockSize;
+	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldCenterPos / m_blockSize : frontPos / m_blockSize;
 
-	const int layers = m_physics.layers();
-	for (auto i = layers; i >= 0; i--) {
-		const auto& b = m_physics.getBlock(i, effectiveBlockPosition.x, effectiveBlockPosition.y);
-		if (b != nullptr && b->collision != TileCollision::Void) {
+	for (auto& layerScriptsPtr : m_events) {
+		auto& blockScript = layerScriptsPtr->getScript(effectiveBlockPosition);
 
-			auto tmp = m_tilesetEvent->getScript(type, b->id);
+		const auto newBlock = frontPos / m_blockSize;
+		const auto oldBlock = oldCenterPos / m_blockSize;
 
-			const auto newBlock = frontPos / m_blockSize;
-			const auto oldBlock = oldPos / m_blockSize;
-
-			for (auto& ssc : tmp) {
-				if (ssc != nullptr) {
-					ssc->args.clear();
-					ssc->args.push_back(StringUtils::intToStr(oldBlock.x));
-					ssc->args.push_back(StringUtils::intToStr(oldBlock.y));
-					ssc->args.push_back(StringUtils::intToStr(newBlock.x));
-					ssc->args.push_back(StringUtils::intToStr(newBlock.y));
-					ssc->args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-					ssc->context = m_fullName;
-					result.push_back(ssc);
-				}
-			}
+		for (auto& ssc : blockScript) {
+			ssc.args.clear();
+			ssc.args.push_back(StringUtils::intToStr(oldBlock.x));
+			ssc.args.push_back(StringUtils::intToStr(oldBlock.y));
+			ssc.args.push_back(StringUtils::intToStr(newBlock.x));
+			ssc.args.push_back(StringUtils::intToStr(newBlock.y));
+			ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+			ssc.context = m_fullName;
+			result.emplace_back(ssc);
 		}
+		
 	}
 
 	return result;
@@ -182,11 +183,12 @@ ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& h
 	const auto maxWidth = getBlocksX();
 	const auto maxHeight = getBlocksY();
 
-	Rectangle blockArea{};
-	blockArea.x = hitBoxBlock.x - radius;
-	blockArea.y = hitBoxBlock.y - radius;
-	blockArea.w = (radius << 1) + 1;
-	blockArea.h = (radius << 1) + 1;
+	auto blockArea = Rectangle { 
+		static_cast<int>(hitBoxBlock.x - radius) , 
+		static_cast<int>(hitBoxBlock.y - radius), 
+		static_cast<int>((radius << 1) + 1), 
+		static_cast<int>((radius << 1) + 1) 
+	};
 
 	if (blockArea.x < 0) {
 		blockArea.x = 0;

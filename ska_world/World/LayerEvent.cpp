@@ -1,30 +1,23 @@
-#include <fstream>
-#include <sstream>
-#include <limits>
-
-#include "Utils/StringUtils.h"
 #include "LayerEvent.h"
-#include "Exceptions/CorruptedFileException.h"
-#include "Exceptions/NumberFormatException.h"
-#include "Logging/Logger.h"
 #include "LayerEventLoaderText.h"
-#include "Utils/FileUtils.h"
+#include "ECS/Basics/Script/ScriptSleepComponent.h"
 
-ska::LayerEvent::LayerEvent(const LayerEventLoaderText& loader, unsigned int width, unsigned int height) :
-    m_events(loader.load(width, height)),
-    m_fileName(loader.getName()) {
-}
-
-ska::LayerEvent::LayerEvent(std::string name, ska::Vector2<std::optional<BlockEvent>> events) :
-    m_events(std::move(events)),
-    m_fileName(std::move(name)) {
-}
-
-void ska::LayerEvent::refresh(unsigned int) {
-	/* TODO Tileset relative scripts ?? */
+ska::LayerEvent::LayerEvent(const LayerEventLoader& loader, unsigned int width, unsigned int height) :
+    m_fileName(loader.getName()),
+    m_events(loader.loadPositioned(width, height)),
+	m_autoEvents(loader.loadGlobal()){
 }
 
 void ska::LayerEvent::load(const LayerEventLoader& loader, unsigned int width, unsigned int height) {
-    m_events = loader.load(width, height);
+    m_events = loader.loadPositioned(width, height);
+	m_autoEvents = loader.loadGlobal();
     m_fileName = loader.getName();
+}
+
+ska::ScriptPack& ska::LayerEvent::getScript(const ska::Point<int>& coordinates) {
+	return m_events[coordinates.x][coordinates.y];
+}
+
+ska::ScriptPack& ska::LayerEvent::getAutoScript() {
+	return m_autoEvents;
 }

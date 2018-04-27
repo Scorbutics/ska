@@ -9,8 +9,8 @@ namespace ska {
         ScriptPositionedGetter() = default;
         virtual ~ScriptPositionedGetter() = default;
 
-        virtual std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldCenterPos, const ska::Point<int>& frontPos, ScriptTriggerType type) = 0;
-		virtual ScriptSleepComponent* chipsetScriptAuto() = 0;
+        virtual std::vector<std::reference_wrapper<ScriptSleepComponent>> getScripts(const Point<int>& oldCenterPos, const ska::Point<int>& frontPos, ScriptTriggerType type) = 0;
+		virtual std::vector<std::reference_wrapper<ScriptSleepComponent>> getScriptsAuto() = 0;
     };
 }
 

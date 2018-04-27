@@ -17,19 +17,19 @@ namespace ska {
 	public:
 
 		MemoryScript& getSavegame();
-		void registerScript(ScriptComponent* parent, const EntityId scriptSleepEntity, const EntityId origin) override;
+		void registerScript(ScriptComponent* parent, EntityId scriptSleepEntity, EntityId origin) override;
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
-		void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
-		void kill(const std::string& keyScript);
+		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
+		//void kill(const std::string& keyScript);
 		virtual std::string map(const std::string& key, const std::string& id) const;
-		void registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity);
+		void registerNamedScriptedEntity(const std::string& nameEntity, EntityId entity);
 		void clearNamedScriptedEntities();
 		void removeComponent(const std::string& componentName, const std::string& id) const;
 		void restoreComponent(const std::string& componentName, const std::string& id) const;
 		EntityId getEntityFromName(const std::string& nameEntity);
 
 		/* ScriptComponent methods */
-		float getPriority(ScriptComponent& script, const unsigned int currentTimeMillis);
+		float getPriority(ScriptComponent& script, unsigned int currentTimeMillis);
 		bool canBePlayed(ScriptComponent& script);
 		bool transferActiveToDelay(ScriptComponent& script);
 		bool play(ScriptComponent& script, MemoryScript& savegame);
@@ -45,7 +45,6 @@ namespace ska {
 	private:
 		MemoryScript& m_saveGame;
 		ScriptComponent* getHighestPriorityScript();
-		TileWorld& m_world;
 
 		std::unordered_map<std::string, ScriptComponent> m_cache;
 		std::unordered_map<std::string, CommandPtr> m_commands;
@@ -54,14 +53,14 @@ namespace ska {
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
 		struct ScriptCommandHelper {
-			ScriptCommandHelper(TileWorld&, EntityManager& parent) : m_entityManager(parent) {}
+			ScriptCommandHelper(EntityManager& parent) : m_entityManager(parent) {}
 			virtual ~ScriptCommandHelper() = default;
 			void operator=(const ScriptCommandHelper&) = delete;
-			virtual void setupCommands(TileWorld& w, std::unordered_map<std::string, CommandPtr>& commands) const = 0;
+			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& commands) const = 0;
 			EntityManager& m_entityManager;
 		};
 
-		ScriptAutoSystem(EntityManager& entityManager, TileWorld& w, const ScriptCommandHelper& sch, MemoryScript& saveGame);
+		ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame);
 	};
 
 }

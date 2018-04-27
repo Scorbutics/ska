@@ -5,11 +5,8 @@ namespace ska {
 	struct BlockEvent {
 		Point<int> position;
 
-		int id;
-		int trigger;
-		int solid;
+		int trigger{};
 
-		std::string action;
 		std::string param;
 		std::string path;
 	};

@@ -1,29 +1,27 @@
 #pragma once
 
-#include <iostream>
+#include <optional>
 #include <string>
 #include <memory>
 
 #include "Utils/Vector2.h"
-#include "Utils/Refreshable.h"
 #include "Utils/MovableNonCopyable.h"
-#include "BlockEvent.h"
+#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Graphic/AnimatedTexture.h"
 
 namespace ska {
-	class LayerEventLoader;
-    class LayerEventLoaderText;
+    class LayerEventLoader;
 
 	class LayerEvent :
-        public MovableNonCopyable,
-        public Refreshable {
+        public MovableNonCopyable {
 	public:
 	    LayerEvent() = default;
-	    LayerEvent(std::string levelPath, ska::Vector2<std::optional<BlockEvent>> blocks);
-		LayerEvent(const LayerEventLoaderText& loader, unsigned int width, unsigned int height);
+		LayerEvent(const LayerEventLoader& loader, unsigned int width, unsigned int height);
 		LayerEvent(LayerEvent&&) = default;
         ~LayerEvent() override = default;
 
-		virtual void refresh(unsigned int ellapsedTime) override;
+		ScriptPack& getScript(const ska::Point<int>& coordinates);
+		ScriptPack& getAutoScript();
 
 	private:
 	    void load(const LayerEventLoader& loader, unsigned int width, unsigned int height);
@@ -31,7 +29,8 @@ namespace ska {
 		std::string m_fileName;
 		std::string m_chipsetname;
 
-        ska::Vector2<std::optional<BlockEvent>> m_events;
+        Vector2<ScriptPack> m_events;
+		ScriptPack m_autoEvents;
 	};
 
 	using LayerEventPtr = std::unique_ptr<LayerEvent>;

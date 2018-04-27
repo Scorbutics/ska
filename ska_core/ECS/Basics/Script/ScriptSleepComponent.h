@@ -18,4 +18,6 @@ namespace ska {
 		~ScriptSleepComponent() = default;
 
 	};
+
+	using ScriptPack = std::vector<ScriptSleepComponent>;
 }

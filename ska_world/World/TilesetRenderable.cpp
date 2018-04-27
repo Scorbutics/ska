@@ -8,9 +8,9 @@ ska::TilesetRenderable::TilesetRenderable(const unsigned int tileSize, const Til
 	load(loader);
 }
 
-void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int>& pos, const Point<int>& blockId) const {
-	if(m_animations.has(blockId.x, blockId.y)) {
-        auto& anim = m_animations[blockId.x][blockId.y];
+void ska::TilesetRenderable::render(const Renderer& renderer, const Point<int>& pos, const Point<int>& tileId) const {
+	if(m_animations.has(tileId.x, tileId.y)) {
+        auto& anim = m_animations[tileId.x][tileId.y];
         auto* chipsetPartRender = anim.has_value() ? &anim.value().updateFrame() : nullptr;
         renderer.render(m_tileset, pos.x, pos.y, chipsetPartRender);
 	}

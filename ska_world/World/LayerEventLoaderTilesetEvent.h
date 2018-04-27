@@ -1,20 +1,22 @@
 #pragma once
 #include "LayerEventLoader.h"
+#include "TilesetEvent.h"
 
 namespace ska {
-	class LayerEventLoaderText :
+	class Layer;
+
+	class LayerEventLoaderTilesetEvent :
 		public LayerEventLoader {
 
 	public:
-		explicit LayerEventLoaderText(std::string layerFileName);
-		
+		explicit LayerEventLoaderTilesetEvent(const Layer& layer, const TilesetEvent& tilesetEvent);
 		Vector2<ScriptPack> loadPositioned(unsigned int width, unsigned int height) const override;
 		ScriptPack loadGlobal() const override;
         const std::string& getName() const override;
 
 	private:
-		std::pair<BlockEvent, ScriptSleepComponent> buildFromLine(const std::string& line, unsigned int lineIndex) const;
+		const Layer& m_layer;
+		const TilesetEvent& m_tilesetEvent;
 		std::string m_fileName;
-		std::vector<std::string> m_fileContent;
 	};
 }

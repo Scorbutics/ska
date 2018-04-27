@@ -14,7 +14,7 @@ namespace ska {
 		explicit TilesetEvent(std::string tilesetName, const TilesetEventLoader& loader);
 		TilesetEvent(TilesetEvent&&) = default;
 
-		std::vector<gsl::not_null<ScriptSleepComponent*>> getScript(ScriptTriggerType type, const Point<int>& id = Point<int>{});
+		std::vector<std::reference_wrapper<const ska::ScriptSleepComponent>> getScript(ScriptTriggerType type, const Point<int>& id = Point<int>{}) const;
 
 		~TilesetEvent() override = default;
 

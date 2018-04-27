@@ -14,7 +14,7 @@ namespace ska {
 		Tileset(Tileset&&) = default;
 
 		Tile& getTile(const Point<int>& coordinates);
-		std::optional<ska::Animation>& getAnimation(const Point<int>& coordinates);
+		std::optional<Animation>& getAnimation(const Point<int>& coordinates);
 
 		const std::string& getName() const;
 		const TilesetRenderable& getRenderable() const;
@@ -24,6 +24,7 @@ namespace ska {
 
 		~Tileset() override = default;
 		unsigned int getTileSize() const;
+		const TilesetEvent& getTilesetEvent() const;
 
 	private:
 		std::string m_tilesetName;

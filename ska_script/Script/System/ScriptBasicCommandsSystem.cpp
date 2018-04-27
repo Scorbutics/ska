@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "ScriptBasicCommandsSystem.h"
 
 #include "../Command/CommandEnd.h"
@@ -18,34 +16,30 @@
 #include "../Command/CommandRestoreComponent.h"
 #include "../Command/CommandBlockAuthorize.h"
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, TileWorld& w, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, w, BasicScriptCommandHelper(w, entityManager), saveGame) {
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(entityManager), saveGame) {
 
 }
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, TileWorld& w, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, w, sch, saveGame) {
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, sch, saveGame) {
 
 }
 
-void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(TileWorld&, std::unordered_map<std::string, CommandPtr>& c) const {
-	c[CommandEnd::getCmdName()] = std::move(CommandPtr(new CommandEnd(m_entityManager)));
-	c[ControlStatement::getCommandIf()] = std::move(CommandPtr(new CommandIf(m_entityManager)));
-	c[ControlStatement::getCommandElse()] = std::move(CommandPtr(new CommandElse(m_entityManager)));
-	c[ControlStatement::getCommandEndIf()] = std::move(CommandPtr(new CommandElseEnd(m_entityManager)));
-	c["end_script"] = std::move(CommandPtr(new CommandEndScript(m_entityManager)));
-	c["calculate"] = std::move(CommandPtr(new CommandCalculate(m_entityManager)));
-	c["assign"] = std::move(CommandPtr(new CommandAssign(m_entityManager)));
-	c["assign_switch"] = std::move(CommandPtr(new CommandAssignSwitch(m_entityManager)));
-	c["random"] = std::move(CommandPtr(new CommandRandom(m_entityManager)));
-	c["log"] = std::move(CommandPtr(new CommandLog(m_entityManager)));
-	c["script"] = std::move(CommandPtr(new CommandScript(m_entityManager)));
-	c["wait"] = std::move(CommandPtr(new CommandWait(m_entityManager)));
-	c["remove_component"] = std::move(CommandPtr(new CommandRemoveComponent(m_entityManager)));
-	c["restore_component"] = std::move(CommandPtr(new CommandRestoreComponent(m_entityManager)));
-	c["block_authorize"] = std::move(CommandPtr(new CommandBlockAuthorize(m_entityManager)));
-}
-
-
-ska::ScriptBasicCommandsSystem::~ScriptBasicCommandsSystem() {
+void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c) const {
+	c[CommandEnd::getCmdName()] = std::unique_ptr<Command>(std::make_unique<CommandEnd>(m_entityManager));
+	c[ControlStatement::getCommandIf()] = std::unique_ptr<Command>(std::make_unique<CommandIf>(m_entityManager));
+	c[ControlStatement::getCommandElse()] = std::unique_ptr<Command>(std::make_unique<CommandElse>(m_entityManager));
+	c[ControlStatement::getCommandEndIf()] = std::unique_ptr<Command>(std::make_unique<CommandElseEnd>(m_entityManager));
+	c["end_script"] = std::unique_ptr<Command>(std::make_unique<CommandEndScript>(m_entityManager));
+	c["calculate"] = std::unique_ptr<Command>(std::make_unique<CommandCalculate>(m_entityManager));
+	c["assign"] = std::unique_ptr<Command>(std::make_unique<CommandAssign>(m_entityManager));
+	c["assign_switch"] = std::unique_ptr<Command>(std::make_unique<CommandAssignSwitch>(m_entityManager));
+	c["random"] = std::unique_ptr<Command>(std::make_unique<CommandRandom>(m_entityManager));
+	c["log"] = std::unique_ptr<Command>(std::make_unique<CommandLog>(m_entityManager));
+	c["script"] = std::unique_ptr<Command>(std::make_unique<CommandScript>(m_entityManager));
+	c["wait"] = std::unique_ptr<Command>(std::make_unique<CommandWait>(m_entityManager));
+	c["remove_component"] = std::unique_ptr<Command>(std::make_unique<CommandRemoveComponent>(m_entityManager));
+	c["restore_component"] = std::unique_ptr<Command>(std::make_unique<CommandRestoreComponent>(m_entityManager));
+	c["block_authorize"] = std::unique_ptr<Command>(std::make_unique<CommandBlockAuthorize>(m_entityManager));
 }

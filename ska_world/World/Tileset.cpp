@@ -30,6 +30,10 @@ unsigned ska::Tileset::getTileSize() const {
 	return m_tileSize;
 }
 
+const ska::TilesetEvent& ska::Tileset::getTilesetEvent() const {
+	return m_event;
+}
+
 ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) {
 	return m_blocks[coordinates.x][coordinates.y];
 }

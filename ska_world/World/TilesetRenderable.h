@@ -1,13 +1,14 @@
 #pragma once
+#include <optional>
 #include "Graphic/Texture.h"
 #include "Utils/Vector2.h"
 #include "Graphic/Animation.h"
-#include <optional>
 
 namespace ska {
 	class TilesetLoader;
 
-	class TilesetRenderable : public MovableNonCopyable {
+	class TilesetRenderable : 
+		public MovableNonCopyable {
 	public:
 		explicit TilesetRenderable(unsigned int tileSize, const TilesetLoader& loader);
 		TilesetRenderable(TilesetRenderable&&) = default;
@@ -20,8 +21,6 @@ namespace ska {
 
 	private:
 		void load(const TilesetLoader& loader);
-
-		Rectangle m_spritePosInChipset{};
 
 		mutable Vector2<std::optional<Animation>> m_animations;
 		Texture m_tileset;

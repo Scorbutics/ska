@@ -9,7 +9,6 @@
 #include "ECS/Basics/Physic/BlockAllowance.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include "Layer.h"
 #include "LayerRenderable.h"
 #include "TilesetEvent.h"
 #include "Tileset.h"
@@ -46,14 +45,12 @@ namespace ska {
 		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
-
-		bool getCollision(std::size_t x, std::size_t y) const override;
+		bool getCollision(unsigned int x, unsigned int y) const override;
 
 		unsigned int getBlockSize() const override;
 
-		/* TODO classe à part ? */
-		std::vector<ScriptSleepComponent*> chipsetScript(const Point<int>& oldCenterPos, const Point<int>& newCenterPos, ScriptTriggerType type) override;
-		ScriptSleepComponent* chipsetScriptAuto() override;
+		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type) override;
+		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScriptsAuto() override;
 
 		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const;
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
@@ -74,9 +71,8 @@ namespace ska {
 
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		std::vector<LayerEventPtr> m_events;
-		CollisionProfile m_physics;
+		CollisionProfile m_physicLayers;
 
 		gsl::not_null<Tileset*> m_tileset;
-		std::unique_ptr<TilesetEvent> m_tilesetEvent{};
 	};
 }

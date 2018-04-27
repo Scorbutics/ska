@@ -9,12 +9,12 @@ ska::TilesetEvent::TilesetEvent(std::string tilesetName, const TilesetEventLoade
 	load(loader);
 }
 
-std::vector<gsl::not_null<ska::ScriptSleepComponent*>> ska::TilesetEvent::getScript(ScriptTriggerType type, const Point<int>& id) {
-	std::vector<gsl::not_null<ScriptSleepComponent*>> result;
+std::vector<std::reference_wrapper<const ska::ScriptSleepComponent>> ska::TilesetEvent::getScript(ScriptTriggerType type, const Point<int>& id) const {
+	std::vector<std::reference_wrapper<const ska::ScriptSleepComponent>> result;
 
 	if (type == ScriptTriggerType::AUTO) {
 		for (auto& s : m_autoScripts) {
-			result.emplace_back(&s.second);
+			result.emplace_back(s.second);
 		}
 	} else {
 		std::stringstream ss;
@@ -22,7 +22,7 @@ std::vector<gsl::not_null<ska::ScriptSleepComponent*>> ska::TilesetEvent::getScr
 		const auto fullId = ss.str();
 		const auto fullName = m_tilesetName.substr(0, m_tilesetName.find_last_of('.')) + "/Scripts/" + fullId + ".txt";
 		if (m_triggeredScripts.find(fullName) != m_triggeredScripts.end()) {
-			result.emplace_back(&m_triggeredScripts.at(fullName));
+			result.emplace_back(m_triggeredScripts.at(fullName));
 		}
 	}
 
