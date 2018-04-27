@@ -76,7 +76,6 @@ namespace ska {
 		std::vector<LayerEventPtr> m_events;
 		CollisionProfile m_physics;
 
-		//TODO Tileset avec lifetime à part
 		gsl::not_null<Tileset*> m_tileset;
 		std::unique_ptr<TilesetEvent> m_tilesetEvent{};
 	};

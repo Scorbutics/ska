@@ -7,7 +7,7 @@ namespace ska {
 
 	public:
 		explicit LayerEventLoaderText(std::string layerFileName);
-		std::vector<BlockEvent> load() const override;
+		ska::Vector2<std::optional<BlockEvent>> load(unsigned int width, unsigned int height) const override;
         const std::string& getName() const override;
 
 	private:

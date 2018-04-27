@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include <optional>
+#include "Utils/Vector2.h"
 #include "BlockEvent.h"
 
 namespace ska {
@@ -7,7 +8,7 @@ namespace ska {
 	public:
 		virtual ~LayerEventLoader() = default;
 
-		virtual std::vector<BlockEvent> load() const = 0;
+		virtual ska::Vector2<std::optional<BlockEvent>> load(unsigned int width, unsigned int height) const = 0;
 		virtual const std::string& getName() const = 0;
 	};
 }

@@ -10,10 +10,11 @@ ska::LayerEventLoaderText::LayerEventLoaderText(std::string layerFileName) :
 	m_fileName(std::move(layerFileName)) {
 }
 
-std::vector<ska::BlockEvent> ska::LayerEventLoaderText::load() const {
+ska::Vector2<std::optional<ska::BlockEvent>> ska::LayerEventLoaderText::load(unsigned int width, unsigned int height) const {
 	FileNameData fndata(m_fileName);
 
-	auto events = std::vector<BlockEvent>{};
+	auto events = ska::Vector2<std::optional<BlockEvent>>{};
+    events.resize(width, height);
 
 	const auto nomFichier = fndata.name.substr(0, fndata.name.find_last_of('E'));
 	std::ifstream flux(m_fileName.c_str());
@@ -57,7 +58,7 @@ std::vector<ska::BlockEvent> ska::LayerEventLoaderText::load() const {
 			getline(ss, event.param);
             event.param = StringUtils::ltrim(event.param);
 
-			events.push_back(std::move(event));
+			events[event.position.x][event.position.y] = std::move(event);
 		}
 	} catch (NumberFormatException& nfe) {
 		throw CorruptedFileException("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));

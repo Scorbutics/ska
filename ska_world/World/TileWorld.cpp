@@ -98,7 +98,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 		m_blocksX = m_physics.getLayer(0).getBlocksX();
 		m_blocksY = m_physics.getLayer(0).getBlocksY();
 
-		m_events = loader.loadEvents();
+		m_events = loader.loadEvents(m_blocksX, m_blocksY);
 
         const ska::FileNameData fndata(m_fullName);
         m_name = fndata.name;
@@ -112,6 +112,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	}
 }
 
+//TODO déplacer dans les layers event
 ska::ScriptSleepComponent* ska::TileWorld::chipsetScriptAuto() {
 	if (m_autoScripts) {
 		auto tmp = m_tilesetEvent->getScript(ScriptTriggerType::AUTO);
@@ -126,6 +127,7 @@ ska::ScriptSleepComponent* ska::TileWorld::chipsetScriptAuto() {
 	return nullptr;
 }
 
+//TODO déplacer dans les layers event
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& frontPos, ScriptTriggerType type) {
 	std::vector<ScriptSleepComponent*> result;
 	if (m_tilesetEvent == nullptr || type == ScriptTriggerType::AUTO) {

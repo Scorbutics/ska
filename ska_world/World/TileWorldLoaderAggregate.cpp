@@ -30,10 +30,10 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics
 	return renderables;
 }
 
-std::vector<ska::LayerEventPtr> ska::TileWorldLoaderAggregate::loadEvents() const {
+std::vector<ska::LayerEventPtr> ska::TileWorldLoaderAggregate::loadEvents(unsigned int widthLayer, unsigned int heightLayer) const {
     auto events = std::vector<LayerEventPtr>{};
     for(const auto& l : m_eventLoaders) {
-        events.push_back(std::make_unique<LayerEvent>(m_levelPath, l->load()));
+        events.push_back(std::make_unique<LayerEvent>(m_levelPath, l->load(widthLayer, heightLayer)));
     }
     return events;
 }
