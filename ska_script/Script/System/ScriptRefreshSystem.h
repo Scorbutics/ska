@@ -28,9 +28,12 @@ namespace ska {
 		void clearNamedScriptedEntities();
 		~ScriptRefreshSystem() override = default;
 		virtual void update(unsigned int ellapsedTime) override;
-	protected:
+
+		protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
+	
 	private:
+		void createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent);
 		std::vector<ScriptSleepComponent*> refreshScripts(const ska::EntityId& entityId);
 		bool onKeyEvent(InputKeyEvent & ike);
 		EntityId findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script) const;
