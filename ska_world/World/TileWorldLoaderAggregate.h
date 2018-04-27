@@ -3,6 +3,7 @@
 #include "TileWorldLoader.h"
 #include "Tileset.h"
 #include "LayerRenderable.h"
+#include "CollisionProfile.h"
 #include "LayerLoader.h"
 
 namespace ska {

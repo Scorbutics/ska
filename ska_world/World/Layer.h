@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <optional>
 #include "Physic/Tile.h"
 #include "Utils/Vector2.h"
@@ -16,15 +17,15 @@ namespace ska {
 
 		unsigned int getBlocksX() const;
 		unsigned int getBlocksY() const;
-		Tile const* getBlock(std::size_t x, std::size_t y) const;
+		const Tile* getBlock(std::size_t x, std::size_t y) const;
 
 	private:
 		void reset(Vector2<std::optional<Tile>> block);
 		Vector2<std::optional<Tile>> m_block;
 		unsigned int m_fileWidth;
 		unsigned int m_fileHeight;
-
 	};
 
+	using LayerPtr = std::unique_ptr<Layer>;
 }
 

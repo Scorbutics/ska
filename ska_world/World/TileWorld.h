@@ -9,10 +9,11 @@
 #include "ECS/Basics/Physic/BlockAllowance.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include "CollisionProfile.h"
+#include "Layer.h"
 #include "LayerRenderable.h"
 #include "TilesetEvent.h"
 #include "Tileset.h"
+#include "CollisionProfile.h"
 
 namespace ska {
 	class TileWorldLoader;
@@ -73,7 +74,7 @@ namespace ska {
 
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		std::vector<LayerEventPtr> m_events;
-		CollisionProfile m_collisionProfile;
+		CollisionProfile m_physics;
 
 		//TODO Tileset avec lifetime à part
 		gsl::not_null<Tileset*> m_tileset;

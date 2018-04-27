@@ -1,10 +1,10 @@
 #pragma once
 #include "LayerRenderable.h"
 #include "LayerEvent.h"
+#include "CollisionProfile.h"
 
 namespace ska {
 	class Tileset;
-	class CollisionProfile;
 	class TileWorld;
 
 	class TileWorldLoader : public MovableNonCopyable {

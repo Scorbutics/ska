@@ -34,8 +34,8 @@ bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, i
 		return true;
 	}
 
-	const auto& b1 = m_collisionProfile.getBlock(layerIndex, p1Block.x, p1Block.y);
-	const auto& b2 = m_collisionProfile.getBlock(layerIndex, p2Block.x, p2Block.y);
+	const auto& b1 = m_physics.getBlock(layerIndex, p1Block.x, p1Block.y);
+	const auto& b2 = m_physics.getBlock(layerIndex, p2Block.x, p2Block.y);
 	return b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id);
 }
 
@@ -44,13 +44,13 @@ bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::un
 	if (blockPos.x >= m_blocksX || blockPos.y >= m_blocksY) {
 		return true;
 	}
-	const auto& b = m_collisionProfile.getBlock(0, blockPos.x, blockPos.y);
+	const auto& b = m_physics.getBlock(0, blockPos.x, blockPos.y);
 	const auto result = b != nullptr ? (authorizedBlocks.find(b->id.x + b->id.y * m_tileset->getWidth()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
 bool ska::TileWorld::getCollision(const unsigned int x, const unsigned int y) const {
-	return m_collisionProfile.collide(x, y);
+	return m_physics.collide(x, y);
 }
 
 void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
@@ -66,9 +66,9 @@ void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 }
 
 const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
-	const int layers = m_collisionProfile.layers();
+	const auto layers = m_physics.layers();
 	for(auto i = layers - 1; i >= 0; i--) {
-		const auto b = m_collisionProfile.getBlock(i, x, y);
+		const auto& b = m_physics.getBlock(i, x, y);
 		if(b != nullptr && b->collision != ska::TileCollision::Void) {
 			return b;
 		}
@@ -88,15 +88,15 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	if (worldChanged || tilesetChanged) {
 		m_fullName = loader.getName();
 
-		m_collisionProfile = loader.loadPhysics(*m_tileset);
+		m_physics = loader.loadPhysics(*m_tileset);
 		m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
 
-		if (m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
+		if (m_physics.empty() || m_graphicLayers.empty() || m_physics.layers() != m_graphicLayers.size()) {
 			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
 		}
 
-		m_blocksX = m_collisionProfile.getLayer(0).getBlocksX();
-		m_blocksY = m_collisionProfile.getLayer(0).getBlocksY();
+		m_blocksX = m_physics.getLayer(0).getBlocksX();
+		m_blocksY = m_physics.getLayer(0).getBlocksY();
 
 		m_events = loader.loadEvents();
 
@@ -123,7 +123,7 @@ ska::ScriptSleepComponent* ska::TileWorld::chipsetScriptAuto() {
 			}
 		}
 	}
-	return nullptr;	
+	return nullptr;
 }
 
 std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Point<int>& oldPos, const Point<int>& frontPos, ScriptTriggerType type) {
@@ -133,10 +133,10 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 	}
 
 	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldPos / m_blockSize : frontPos / m_blockSize;
-	
-	const int layers = m_collisionProfile.layers();
+
+	const int layers = m_physics.layers();
 	for (auto i = layers; i >= 0; i--) {
-		const auto& b = m_collisionProfile.getBlock(i, effectiveBlockPosition.x, effectiveBlockPosition.y);
+		const auto& b = m_physics.getBlock(i, effectiveBlockPosition.x, effectiveBlockPosition.y);
 		if (b != nullptr && b->collision != TileCollision::Void) {
 
 			auto tmp = m_tilesetEvent->getScript(type, b->id);
@@ -158,7 +158,7 @@ std::vector<ska::ScriptSleepComponent*> ska::TileWorld::chipsetScript(const Poin
 			}
 		}
 	}
-	
+
 	return result;
 
 }

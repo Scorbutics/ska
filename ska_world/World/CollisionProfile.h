@@ -23,10 +23,9 @@ namespace ska {
 	private:
 		std::pair<unsigned, unsigned> safeGetSizes() const;
 		TileCollision getHigherCollision(unsigned int x, unsigned int y) const;
-		void calculate() const;
+		void calculate();
 
-		mutable ska::Vector2<TileCollision> m_collisions;
-		mutable bool m_mustUpdateCollisions = false;
+		ska::Vector2<TileCollision> m_collisions;
 
 		std::vector<LayerPtr> m_layers;
 	};
