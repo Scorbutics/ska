@@ -24,7 +24,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
 	m_eventDispatcher(ed),
-	m_entityManager(em){
+	m_entityManager(em) {
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -35,20 +35,6 @@ bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
 
 		createBall(mousePos);
 	}
-	return true;
-}
-
-cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionPre" << std::endl;
-	const auto firstPointA = cpArbiterGetPointA(arb, 0);
-	std::cout << "Point x : "<< firstPointA.x << "; y : " << firstPointA.y << std::endl;
-	return true;
-}
-
-cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userData) {
-	std::cout << "collisionBegin" << std::endl;
-	const auto firstPointA = cpArbiterGetPointA(arb, 0);
-	std::cout << "Point x : "<< firstPointA.x << "; y : " << firstPointA.y << std::endl;
 	return true;
 }
 
@@ -100,11 +86,14 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(contourRectangleTile);
 
-		auto chd = ska::cp::CollisionHandlerData{
-			ska::cp::CollisionHandlerTypeFunc<ska::cp::CollisionHandlerType::BEGIN>{CollisionCallbackBegin}};
-
-		m_space.addDefaultCollisionHandler(std::move(chd));
-
+		auto chd = [] (cpArbiter& arb, ska::cp::Space& space) {
+			std::cout << "collisionBegin" << std::endl;
+			const auto firstPointA = cpArbiterGetPointA(&arb, 0);
+			std::cout << "Point x : " << firstPointA.x << "; y : " << firstPointA.y << std::endl;
+			return true;
+		};
+		
+		m_space.addDefaultCollisionCallback<ska::cp::CollisionHandlerType::BEGIN>(chd);
 	}
 	return true;
 }

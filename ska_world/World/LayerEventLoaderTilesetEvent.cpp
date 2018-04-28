@@ -3,7 +3,8 @@
 
 ska::LayerEventLoaderTilesetEvent::LayerEventLoaderTilesetEvent(const Layer& layer, const TilesetEvent& tilesetEvent) :
 	m_layer(layer),
-	m_tilesetEvent(tilesetEvent) {
+	m_tilesetEvent(tilesetEvent),
+	m_name("tilesetEvent") {
 }
 
 ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderTilesetEvent::loadPositioned(unsigned int width, unsigned int height) const {
@@ -41,5 +42,5 @@ ska::ScriptPack ska::LayerEventLoaderTilesetEvent::loadGlobal() const {
 }
 
 const std::string& ska::LayerEventLoaderTilesetEvent::getName() const {
-    return "tilesetEvent";
+    return m_name;
 }

@@ -18,5 +18,6 @@ namespace ska {
 		const Layer& m_layer;
 		const TilesetEvent& m_tilesetEvent;
 		std::string m_fileName;
+		const std::string m_name;
 	};
 }

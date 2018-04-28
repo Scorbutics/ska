@@ -18,24 +18,28 @@ namespace ska {
 		struct CollisionHandlerTypeFunc<CollisionHandlerType::PRE> {
 			using type = cpCollisionPreSolveFunc;
 			type func;
+			using returnType = bool;
 		};
 
 		template <>
 		struct CollisionHandlerTypeFunc<CollisionHandlerType::POST> {
 			using type = cpCollisionPostSolveFunc;
 			type func;
+			using returnType = void;
 		};
 
 		template <>
 		struct CollisionHandlerTypeFunc<CollisionHandlerType::BEGIN> {
 			using type = cpCollisionBeginFunc;
 			type func;
+			using returnType = bool;
 		};
 
 		template <>
 		struct CollisionHandlerTypeFunc<CollisionHandlerType::SEPARATE> {
 			using type = cpCollisionSeparateFunc;
 			type func;
+			using returnType = void;
 		};
 
 		
