@@ -9,10 +9,11 @@
 #include "InputKeyEvent.h"
 #include "InputMouseEvent.h"
 #include "ECSEvent.h"
+#include "ScriptEvent.h"
 
 namespace ska {
 	/**
 	* \brief Defines a basic list of common events in a game.
 	*/
-	using GameEventDispatcher = EventDispatcher<SoundEvent, WorldEvent, CollisionEvent, GUIEvent, GameEvent, StateEvent, InputKeyEvent, InputMouseEvent, ECSEvent>;
+	using GameEventDispatcher = EventDispatcher<SoundEvent, WorldEvent, CollisionEvent, GUIEvent, GameEvent, StateEvent, InputKeyEvent, InputMouseEvent, ECSEvent, ScriptEvent>;
 }

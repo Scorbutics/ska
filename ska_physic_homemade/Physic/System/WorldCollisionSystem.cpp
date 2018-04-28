@@ -145,8 +145,8 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		if (intersect) {
 			wcol.xaxis = !wcol.blockColPosX.empty();
 			wcol.yaxis = !wcol.blockColPosY.empty();
-			wcol.lastBlockColPosX = lastBlockColPosX;
-			wcol.lastBlockColPosY = lastBlockColPosY;
+			/*wcol.lastBlockColPosX = lastBlockColPosX;
+			wcol.lastBlockColPosY = lastBlockColPosY;*/
 			const auto& overlapX = calculateOverlap(hitbox, wcol.blockColPosX);
 			const auto& overlapY = calculateOverlap(hitbox, wcol.blockColPosY);
 			SKA_LOG_MESSAGE("Overlap x summed : \t", overlapX.x, ";", overlapX.y, ";", overlapX.w, ";", overlapX.h);

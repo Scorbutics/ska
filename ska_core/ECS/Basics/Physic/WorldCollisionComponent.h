@@ -15,8 +15,9 @@ namespace ska {
 		using BlockCollisionContainer = std::vector<Rectangle>;
 
 		BlockCollisionContainer blockColPosX;
-		BlockCollisionContainer lastBlockColPosX;
 		BlockCollisionContainer blockColPosY;
-		BlockCollisionContainer lastBlockColPosY;
+		
+		/*BlockCollisionContainer lastBlockColPosX;
+		BlockCollisionContainer lastBlockColPosY;*/
 	};
 }

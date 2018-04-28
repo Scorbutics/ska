@@ -25,19 +25,15 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const Tile
 	load(loader);
 }
 
-bool ska::TileWorld::isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const {
-	const auto p1Block = p1 / m_blockSize;
-	const auto p2Block = p2 / m_blockSize;
+ska::Point<int> ska::TileWorld::getBlockId(const Point<int>& pos, int layerIndex) const {
+	const auto p1Block = pos / m_blockSize;
 	if (p1Block.x >= static_cast<int>(m_blocksX) ||
-		p2Block.x >= static_cast<int>(m_blocksX) ||
-		p1Block.y >= static_cast<int>(m_blocksY) ||
-		p2Block.y >= static_cast<int>(m_blocksY)) {
-		return true;
+		p1Block.y >= static_cast<int>(m_blocksY)) {
+		return {-1, -1};
 	}
 
-	const auto& b1 = m_physicLayers.getBlock(layerIndex, p1Block.x, p1Block.y);
-	const auto& b2 = m_physicLayers.getBlock(layerIndex, p2Block.x, p2Block.y);
-	return b1 == b2 || (b1 != nullptr && b2 != nullptr && b1->id == b2->id);
+	const auto& b = m_physicLayers.getBlock(layerIndex, p1Block.x, p1Block.y);
+	return b != nullptr ? b->id : Point<int> {-1, -1};
 }
 
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {

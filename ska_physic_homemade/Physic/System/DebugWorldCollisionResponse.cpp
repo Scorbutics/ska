@@ -19,13 +19,13 @@ bool ska::DebugWorldCollisionResponse::onWorldCollision(CollisionEvent& e) const
 	dgc.typeMask = COLLISION;
 	auto& wcol = *e.wcollisionComponent;
 
-	if (wcol.xaxis) {
+	/*if (wcol.xaxis) {
 		dgc.blockColPosX = wcol.blockColPosX;
 	}
 
 	if (wcol.yaxis) {
 		dgc.blockColPosY = wcol.blockColPosY;
-	}
+	}*/
 
 	m_entityManager.addComponent<DebugGraphicComponent>(e.entity, std::move(dgc));
 	return true;

@@ -42,7 +42,7 @@ namespace ska {
 		std::size_t getBlocksX() const;
 		std::size_t getBlocksY() const;
 
-		bool isSameBlockId(const Point<int>& p1, const Point<int>& p2, int layerIndex) const override;
+		Point<int> getBlockId(const Point<int>& pos, int layerIndex) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
 		bool getCollision(unsigned int x, unsigned int y) const override;

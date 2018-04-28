@@ -20,22 +20,26 @@ namespace ska {
 		public ScriptRefreshSystemBase,
 		/* Allows easy access to each entity that contains ScriptSleepComponent and PositionComponent */
 		public ScriptPositionSystemAccess,
-		public SubObserver<InputKeyEvent> {
+		public SubObserver<InputKeyEvent>,
+		public SubObserver<CollisionEvent>,
+		public SubObserver<ScriptEvent> {
 
 	public:
 		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockAllowance& world);
 		void registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity);
 		void clearNamedScriptedEntities();
 		~ScriptRefreshSystem() override = default;
-		virtual void update(unsigned int ellapsedTime) override;
+		void update(unsigned int ellapsedTime) override;
 
-		protected:
-		virtual void refresh(unsigned int ellapsedTime) override;
+	protected:
+		void refresh(unsigned int ellapsedTime) override;
 	
 	private:
 		void createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent);
 		std::vector<ScriptSleepComponent*> refreshScripts(const ska::EntityId& entityId);
 		bool onKeyEvent(InputKeyEvent & ike);
+		bool onCollisionEvent(CollisionEvent& ce);
+		bool onScriptEvent(ScriptEvent& se);
 		EntityId findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script) const;
 		void startScript(const EntityId scriptEntity, const EntityId origin);
 
@@ -43,7 +47,7 @@ namespace ska {
 		BlockAllowance& m_world;
 		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;
-
+		GameEventDispatcher& m_eventDispatcher;
 	};
 
 }
