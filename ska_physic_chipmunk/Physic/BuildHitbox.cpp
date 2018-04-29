@@ -6,12 +6,13 @@
 
 namespace ska {
 	namespace cp {
-		ska::cp::HitboxComponent BuildCircleHitbox(ska::cp::Space& space, const ska::Point<float>& point, float friction, float rotateFriction) {
+		ska::cp::HitboxComponent BuildCircleHitbox(ska::cp::Space& space, const ska::Point<float>& point, float friction, float rotateFriction, EntityId entityId) {
 			auto& ballBody = space.addBody(ska::cp::Body::fromRadius(1., 16.));
 			const auto ballBodyIndex = space.getBodies().size() - 1;
 			ballBody.setPosition(point);
+			ballBody.setEntity(entityId);
 
-			auto& ballShape = space.addShape(ska::cp::Shape::fromCircle(ballBody.body(), 16.));
+			space.addShape(ska::cp::Shape::fromCircle(ballBody.body(), 16.));
 			const auto ballShapeIndex = space.getShapes().size() - 1;
 			//ballShape.setFriction(0.7F);
 

@@ -19,6 +19,7 @@
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
 #include "Utils/FileUtils.h"
+#include "ECS/Basics/Physic/CollidableComponent.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -86,14 +87,22 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(contourRectangleTile);
 
-		auto chd = [] (cpArbiter& arb, ska::cp::Space& space) {
+		m_space.addDefaultCollisionCallback<ska::cp::CollisionHandlerType::BEGIN>([&](cpArbiter& arb, ska::cp::Space& space, ska::EntityId& entityId) {
 			std::cout << "collisionBegin" << std::endl;
 			const auto firstPointA = cpArbiterGetPointA(&arb, 0);
 			std::cout << "Point x : " << firstPointA.x << "; y : " << firstPointA.y << std::endl;
+
+			auto wcc = ska::WorldCollisionComponent{};
+			wcc.xaxis = true;
+			wcc.contactX = ska::CollisionContact{ };
+			auto colliComp = ska::CollidableComponent{};
+			auto ce = ska::CollisionEvent{ entityId, &wcc, nullptr, colliComp };
+			//ce.wcollisionComponent->xaxis ? ce.wcollisionComponent->contactX.overlap() : ce.wcollisionComponent->contactY.overlap();
+
+			m_eventDispatcher.ska::Observable<ska::CollisionEvent>::notifyObservers(ce);
+
 			return true;
-		};
-		
-		m_space.addDefaultCollisionCallback<ska::cp::CollisionHandlerType::BEGIN>(chd);
+		});
 	}
 	return true;
 }
@@ -129,7 +138,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
-	auto bc = ska::cp::BuildCircleHitbox(m_space, point, 200.f, 500.f);
+	auto bc = ska::cp::BuildCircleHitbox(m_space, point, 200.f, 500.f, ballEntity);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

@@ -17,7 +17,7 @@ namespace ska {
 
 		struct SpaceUserData {
 			template <class ReturnType>
-			using SpaceCollisionCallback = std::function<ReturnType(cpArbiter&, Space&)>;
+			using SpaceCollisionCallback = std::function<ReturnType(cpArbiter&, Space&, EntityId&)>;
 
 			Space& space;
 			SpaceUserData(Space& space) : space(space) {};
@@ -55,9 +55,9 @@ namespace ska {
 
 			void step(double timestep);
 
-			template <CollisionHandlerType type, class F>
-			void addDefaultCollisionCallback(F&& callback) {
-				std::get<static_cast<int>(type)>(m_userData.callbacks).push_back(std::forward<F>(callback));
+			template <CollisionHandlerType type>
+			void addDefaultCollisionCallback(SpaceUserData::SpaceCollisionCallback<typename CollisionHandlerTypeFunc<type>::returnType> callback) {
+				std::get<static_cast<int>(type)>(m_userData.callbacks).push_back(std::forward<SpaceUserData::SpaceCollisionCallback<typename CollisionHandlerTypeFunc<type>::returnType>>(callback));
 			}
 
 		private:

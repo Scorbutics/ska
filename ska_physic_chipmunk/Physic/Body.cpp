@@ -35,6 +35,11 @@ void ska::cp::Body::applyImpulse(const Vect& impulse) {
 	cpBodyApplyImpulseAtLocalPoint(m_body, impulse.vect(), cpvzero);
 }
 
+void ska::cp::Body::setEntity(EntityId entity) {
+	m_entity = entity;
+	cpBodySetUserData(m_body, &m_entity);
+}
+
 ska::cp::Body ska::cp::Body::fromMoment(double mass, double moment) {
 	Body body;
 	body.loadFromMoment(mass, moment);

@@ -5,40 +5,47 @@
 #include "Shape.h"
 #include "../CollisionHandlerType.h"
 
-cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
+template <ska::cp::CollisionHandlerType type>
+bool Call(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
 	auto result = true;
-	auto& callbacks = std::get<static_cast<int>(ska::cp::CollisionHandlerType::PRE)>(userData.callbacks);
-	for (auto& callback : callbacks) {
-		result &= callback(*arb, userData.space);
+
+	cpBody* a;
+	cpBody* b;
+	cpArbiterGetBodies(arb, &a, &b);
+
+	const auto entityBody = cpSpaceGetStaticBody(space) == a ? b : a;
+	auto& bodyEntityId = *static_cast<ska::EntityId*>(cpBodyGetUserData(entityBody));
+
+	if constexpr (type == ska::cp::CollisionHandlerType::PRE || type == ska::cp::CollisionHandlerType::BEGIN) {
+		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
+		for (auto& callback : callbacks) {
+			result &= callback(*arb, userData.space, bodyEntityId);
+		}
+		return result;
+	} else {
+		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
+		for (auto& callback : callbacks) {
+			callback(*arb, userData.space, bodyEntityId);
+		}
 	}
-	return result;
+	return true;
+}
+
+cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
+	return Call<ska::cp::CollisionHandlerType::PRE>(arb, space, userDataPtr);
 }
 
 cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
-	auto result = true;
-	auto& callbacks = std::get<static_cast<int>(ska::cp::CollisionHandlerType::BEGIN)>(userData.callbacks);
-	for (auto& callback : callbacks) {
-		result &= callback(*arb, userData.space);
-	}
-	return result;
+	return Call<ska::cp::CollisionHandlerType::BEGIN>(arb, space, userDataPtr);
 }
 
 void CollisionCallbackPost(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
-	auto& callbacks = std::get<static_cast<int>(ska::cp::CollisionHandlerType::POST)>(userData.callbacks);
-	for (auto& callback : callbacks) {
-		callback(*arb, userData.space);
-	}
+	Call<ska::cp::CollisionHandlerType::POST>(arb, space, userDataPtr);
 }
 
 void CollisionCallbackSeparate(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
-	auto& callbacks = std::get<static_cast<int>(ska::cp::CollisionHandlerType::SEPARATE)>(userData.callbacks);
-	for (auto& callback : callbacks) {
-		callback(*arb, userData.space);
-	}
+	Call<ska::cp::CollisionHandlerType::SEPARATE>(arb, space, userDataPtr);
 }
 
 void ska::cp::Space::initCollisionHandlers() {

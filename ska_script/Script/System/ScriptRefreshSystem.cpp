@@ -57,15 +57,13 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 	//Filter only world collision
 	if (ce.wcollisionComponent != nullptr) {
 		const auto entityId = ce.entity;
+
 		auto& components = ScriptRefreshSystemBase::m_componentAccessor;
-
-		const auto& pc = components.get<PositionComponent>(entityId);
+		
 		auto& sac = components.get<ScriptAwareComponent>(entityId);
-		const auto& hc = components.get<HitboxComponent>(entityId);
-		const auto& dac = components.get<AnimationComponent>(entityId);
-
-		const Point<int>& frontPos = PositionComponent::getFrontPosition(pc, hc, dac);
+		const Point<int>& frontPos = ce.wcollisionComponent->xaxis ? ce.wcollisionComponent->contactX.overlap() : ce.wcollisionComponent->contactY.overlap();
 		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
+
 		auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH);
 		SKA_DBG_ONLY(
 			if (!tmp.empty()) {

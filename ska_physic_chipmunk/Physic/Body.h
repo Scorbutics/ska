@@ -2,6 +2,7 @@
 #include <chipmunk.h>
 #include <gsl/pointers>
 #include "Utils/MovableNonCopyable.h"
+#include "ECS/ECSDefines.h"
 
 namespace ska {
 	namespace cp {
@@ -24,6 +25,8 @@ namespace ska {
 			cpVect getRotation() const;
 			void applyForce(const Vect& force);
 			void applyImpulse(const Vect& impulse);
+			
+			void setEntity(EntityId entity);
 
 			static Body fromMoment(double mass, double moment);
 			static Body fromRadius(double mass, double radius);
@@ -41,6 +44,8 @@ namespace ska {
 
 			void free();
 			gsl::owner<cpBody*> m_body;
+
+			EntityId m_entity;
 		};
 	}
 }
