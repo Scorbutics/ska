@@ -9,6 +9,7 @@
 #include "Graphic/PositionnedGraphicDrawable.h"
 #include "World/Tileset.h"
 #include "Graphic/System/CameraSystem.h"
+#include "Physic/SpaceCollisionEventSender.h"
 
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
@@ -62,6 +63,8 @@ private:
 	ska::cp::Space m_space;
 	std::vector<ska::PositionnedGraphicDrawable> m_ballGraphics{};
 	std::vector<ska::EntityId> m_balls{};
+
+	ska::cp::SpaceCollisionEventSender m_spaceCollisionEventSender;
 
 };
 

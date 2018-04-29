@@ -15,7 +15,7 @@ namespace ska {
 		
 		unsigned int typeMask;
 		std::queue<EntityId> collidedBlocks;
-		WorldCollisionComponent::BlockCollisionContainer blockColPosX;
-		WorldCollisionComponent::BlockCollisionContainer blockColPosY;
+		std::vector<Rectangle> blockColPosX;
+		std::vector<Rectangle> blockColPosY;
 	};
 }

@@ -1,7 +1,6 @@
 #include "StateSandbox.h"
 #include "Graphic/System/GraphicSystem.h"
 #include "Graphic/System/CameraFixedSystem.h"
-#include "Graphic/System/AnimationSystem.h"
 #include "Inputs/System/InputSystem.h"
 #include "Graphic/System/DeleterSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
@@ -19,13 +18,13 @@
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
 #include "Utils/FileUtils.h"
-#include "ECS/Basics/Physic/CollidableComponent.h"
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
 	m_eventDispatcher(ed),
-	m_entityManager(em) {
+	m_entityManager(em),
+	m_spaceCollisionEventSender{ m_space, m_eventDispatcher, 48 } {
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -87,22 +86,8 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(contourRectangleTile);
 
-		m_space.addDefaultCollisionCallback<ska::cp::CollisionHandlerType::BEGIN>([&](cpArbiter& arb, ska::cp::Space& space, ska::EntityId& entityId) {
-			std::cout << "collisionBegin" << std::endl;
-			const auto firstPointA = cpArbiterGetPointA(&arb, 0);
-			std::cout << "Point x : " << firstPointA.x << "; y : " << firstPointA.y << std::endl;
-
-			auto wcc = ska::WorldCollisionComponent{};
-			wcc.xaxis = true;
-			wcc.contactX = ska::CollisionContact{ };
-			auto colliComp = ska::CollidableComponent{};
-			auto ce = ska::CollisionEvent{ entityId, &wcc, nullptr, colliComp };
-			//ce.wcollisionComponent->xaxis ? ce.wcollisionComponent->contactX.overlap() : ce.wcollisionComponent->contactY.overlap();
-
-			m_eventDispatcher.ska::Observable<ska::CollisionEvent>::notifyObservers(ce);
-
-			return true;
-		});
+		auto blockSize = world.getBlockSize();
+		
 	}
 	return true;
 }
@@ -138,7 +123,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
-	auto bc = ska::cp::BuildCircleHitbox(m_space, point, 200.f, 500.f, ballEntity);
+	auto bc = ska::cp::BuildRectangleHitbox(m_space, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 200.f, 500.f, ballEntity);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

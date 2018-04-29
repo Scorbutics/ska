@@ -35,11 +35,6 @@ namespace ska {
 			return !m_noCollision;
 		}
 
-	private:
-		Point<float> m_normal;
-		bool m_noCollision;
-		Rectangle m_overlap;
-		float m_penetration;
 
 		CollisionContact(Rectangle overlap_, float penetration_, Point<float> normal_, bool collision) :
 			m_normal(normal_),
@@ -47,6 +42,12 @@ namespace ska {
 			m_overlap(overlap_),
 			m_penetration(penetration_) {
 		}
+
+	private:
+		Point<float> m_normal;
+		bool m_noCollision;
+		Rectangle m_overlap;
+		float m_penetration;
 
 		static CollisionContact build(Rectangle overlap, Point<int> pcA, Point<int> pcB) {
 			auto penetration = 0.F;

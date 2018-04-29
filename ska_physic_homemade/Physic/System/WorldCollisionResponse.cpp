@@ -34,7 +34,9 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 
 	//usually 0.01 to 0.1
 	static const auto slope = 0.01F;
-
+	/*
+	 TODO sans utiliser d'ECS pour simplifier les dialogues par évènements avec le moteur de jeu
+	 
 	if (wcol.xaxis) {
 		for (const auto& p : wcol.blockColPosX) {
 			colX |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
@@ -82,7 +84,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	if(colY) {
 		SKA_LOG_INFO("Collision. Ghost : ", cc.ghost);
 		m_entityManager.addComponent<WorldCollisionComponent>(colE.entity, std::move(wcol));
-	}
+	}*/
 
 	return true;
 }

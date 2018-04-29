@@ -61,18 +61,21 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 		auto& components = ScriptRefreshSystemBase::m_componentAccessor;
 		
 		auto& sac = components.get<ScriptAwareComponent>(entityId);
-		const Point<int>& frontPos = ce.wcollisionComponent->xaxis ? ce.wcollisionComponent->contactX.overlap() : ce.wcollisionComponent->contactY.overlap();
+
 		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
-		auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH);
-		SKA_DBG_ONLY(
-			if (!tmp.empty()) {
-				SKA_LOG_DEBUG("Chipset script TOUCH");
-			}
-		);
 		auto worldScripts = std::vector<ScriptSleepComponent*>{};
-		for (auto& script : tmp) {
-			worldScripts.push_back(&script.get());
+
+		for (const auto& frontPos : ce.wcollisionComponent->blockContacts) {
+			auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH);
+			SKA_DBG_ONLY(
+				if (!tmp.empty()) {
+					SKA_LOG_DEBUG("Chipset script TOUCH");
+				}
+			);
+			for (auto& script : tmp) {
+				worldScripts.push_back(&script.get());
+			}
 		}
 		createScriptFromSleeping(worldScripts, entityId);
 	}

@@ -14,19 +14,21 @@ bool Call(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	cpBody* b;
 	cpArbiterGetBodies(arb, &a, &b);
 
+	auto arbiter = ska::cp::Arbiter{ *arb };
+
 	const auto entityBody = cpSpaceGetStaticBody(space) == a ? b : a;
 	auto& bodyEntityId = *static_cast<ska::EntityId*>(cpBodyGetUserData(entityBody));
 
 	if constexpr (type == ska::cp::CollisionHandlerType::PRE || type == ska::cp::CollisionHandlerType::BEGIN) {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
 		for (auto& callback : callbacks) {
-			result &= callback(*arb, userData.space, bodyEntityId);
+			result &= callback.second(arbiter, userData.space, &bodyEntityId);
 		}
 		return result;
 	} else {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
 		for (auto& callback : callbacks) {
-			callback(*arb, userData.space, bodyEntityId);
+			callback.second(arbiter, userData.space, &bodyEntityId);
 		}
 	}
 	return true;

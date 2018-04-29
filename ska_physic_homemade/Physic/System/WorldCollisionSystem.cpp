@@ -119,7 +119,10 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			continue;
 		}
 
-		WorldCollisionComponent::BlockCollisionContainer lastBlockColPosX;
+		/*
+		 TODO ne pas utiliser l'ECS ici pour simplifier les dialogues par évènement avec le moteur
+
+		 WorldCollisionComponent::BlockCollisionContainer lastBlockColPosX;
 		WorldCollisionComponent::BlockCollisionContainer lastBlockColPosY;
 		const auto& wccPtr = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId);
 		if (wccPtr != nullptr) {
@@ -128,9 +131,10 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			lastBlockColPosY = wcc.blockColPosY;
 			//SKA_LOG_DEBUG("Suppression collision monde ", entityId);
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
-			/* Il faut rafraîchir l'ensemble des systèmes directement ici (au travers de l'EntityManager),
-			car il est possible de créer un autre WorldCollisionComponent dans le même tour de boucle.
-			Si le refresh n'est pas fait, il sera supprimé par le prochain rafraîchissement de l'EntityManager */
+			
+			//Il faut rafraîchir l'ensemble des systèmes directement ici (au travers de l'EntityManager),
+			//car il est possible de créer un autre WorldCollisionComponent dans le même tour de boucle.
+			//Si le refresh n'est pas fait, il sera supprimé par le prochain rafraîchissement de l'EntityManager
 			refreshEntity(entityId);
 		}
 
@@ -145,8 +149,6 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		if (intersect) {
 			wcol.xaxis = !wcol.blockColPosX.empty();
 			wcol.yaxis = !wcol.blockColPosY.empty();
-			/*wcol.lastBlockColPosX = lastBlockColPosX;
-			wcol.lastBlockColPosY = lastBlockColPosY;*/
 			const auto& overlapX = calculateOverlap(hitbox, wcol.blockColPosX);
 			const auto& overlapY = calculateOverlap(hitbox, wcol.blockColPosY);
 			SKA_LOG_MESSAGE("Overlap x summed : \t", overlapX.x, ";", overlapX.y, ";", overlapX.w, ";", overlapX.h);
@@ -161,7 +163,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		if (collided) {
 			CollisionEvent ce(entityId, &wcol, nullptr, m_componentAccessor.get<CollidableComponent>(entityId));
 			m_ged.ska::Observable<CollisionEvent>::notifyObservers(ce);
-		}
+		}*/
 
 	}
 }

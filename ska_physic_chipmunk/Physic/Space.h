@@ -7,6 +7,7 @@
 #include "Body.h"
 #include "Constraint.h"
 #include "../CollisionHandlerType.h"
+#include "Arbiter.h"
 
 namespace ska {
 	namespace cp {
@@ -17,25 +18,31 @@ namespace ska {
 
 		struct SpaceUserData {
 			template <class ReturnType>
-			using SpaceCollisionCallback = std::function<ReturnType(cpArbiter&, Space&, EntityId&)>;
+			using SpaceCollisionCallback = std::function<ReturnType(Arbiter&, Space&, EntityId*)>;
+
+			template <class ReturnType>
+			using SpaceCollisionCallbackContainer = std::unordered_map<std::size_t, SpaceCollisionCallback<ReturnType>>;
 
 			Space& space;
 			SpaceUserData(Space& space) : space(space) {};
 
 			std::tuple<
 				//BEGIN
-				std::vector<SpaceCollisionCallback<bool>>,
+				SpaceCollisionCallbackContainer<bool>,
 				//PRE
-				std::vector<SpaceCollisionCallback<bool>>,
+				SpaceCollisionCallbackContainer<bool>,
 				//POST
-				std::vector<SpaceCollisionCallback<void>>,
+				SpaceCollisionCallbackContainer<void>,
 				//SEPARATE
-				std::vector<SpaceCollisionCallback<void>>> callbacks;
+				SpaceCollisionCallbackContainer<void>> callbacks;
 			
 		};
 
 		class Space :
 			public MovableNonCopyable {
+
+			template <CollisionHandlerType type>
+			using CollisionHandlerCallbackFromType = SpaceUserData::SpaceCollisionCallback<typename CollisionHandlerTypeFunc<type>::returnType>;
 
 		public:
 			void initCollisionHandlers();
@@ -56,8 +63,17 @@ namespace ska {
 			void step(double timestep);
 
 			template <CollisionHandlerType type>
-			void addDefaultCollisionCallback(SpaceUserData::SpaceCollisionCallback<typename CollisionHandlerTypeFunc<type>::returnType> callback) {
-				std::get<static_cast<int>(type)>(m_userData.callbacks).push_back(std::forward<SpaceUserData::SpaceCollisionCallback<typename CollisionHandlerTypeFunc<type>::returnType>>(callback));
+			std::size_t addDefaultCollisionCallback(CollisionHandlerCallbackFromType<type> callback) {
+				auto& container = std::get<static_cast<int>(type)>(m_userData.callbacks);
+				auto id = container.size();
+				container.emplace(id, std::forward<CollisionHandlerCallbackFromType<type>>(callback));
+				return id;
+			}
+
+			template <CollisionHandlerType type>
+			bool removeDefaultCollisionCallback(std::size_t index) {
+				auto& container = std::get<static_cast<int>(type)>(m_userData.callbacks);
+				return container.erase(index) > 0;
 			}
 
 		private:

@@ -1,23 +1,13 @@
 #pragma once
-#include "CollisionContact.h"
+#include "../../../Point.h"
 
 namespace ska {
 	class WorldCollisionComponent {
 	public:
-        WorldCollisionComponent();
+        WorldCollisionComponent() = default;
 		~WorldCollisionComponent() = default;
 
-		CollisionContact contactX;
-		CollisionContact contactY;
-		bool xaxis;
-		bool yaxis;
-
-		using BlockCollisionContainer = std::vector<Rectangle>;
-
-		BlockCollisionContainer blockColPosX;
-		BlockCollisionContainer blockColPosY;
-		
-		/*BlockCollisionContainer lastBlockColPosX;
-		BlockCollisionContainer lastBlockColPosY;*/
+		std::vector<Point<int>> blockContacts;
+		Point<float> normal;
 	};
 }

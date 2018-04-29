@@ -2,10 +2,13 @@
 
 #include "../Rectangle.h"
 #include "../Point.h"
+#include <optional>
 
 namespace ska {
 	class RectangleUtils {
 	public:
+		~RectangleUtils() = default;
+
 		template <class T>
 		static T distanceSquared(const Point<T>& pos1, const Point<T>& pos2) {
 			return (((pos1.x - pos2.x) * (pos1.x - pos2.x)) + ((pos1.y - pos2.y) * (pos1.y - pos2.y)));	
@@ -36,7 +39,7 @@ namespace ska {
 			return vector.x * axis.x + vector.y * axis.y;
 		}
 
-		~RectangleUtils();
+		static std::vector<Point<int>> createIntermediatePoints(const Point<int>& pointA, const Point<int>& pointB, bool step = 1);
 
 	private:
 		RectangleUtils();

@@ -31,10 +31,11 @@ namespace ska {
 			return bc;
 		}
 
-		ska::cp::HitboxComponent BuildRectangleHitbox(ska::cp::Space& space, const ska::Rectangle& box, float friction, float rotateFriction) {
+		ska::cp::HitboxComponent BuildRectangleHitbox(ska::cp::Space& space, const ska::Rectangle& box, float friction, float rotateFriction, EntityId entityId) {
 			auto& ballBody = space.addBody(ska::cp::Body::fromMoment(1., INFINITY));
 			const auto ballBodyIndex = space.getBodies().size() - 1;
 			ballBody.setPosition({static_cast<float>(box.x), static_cast<float>(box.y)});
+			ballBody.setEntity(entityId);
 
 			auto& ballShape = space.addShape(ska::cp::Shape::fromBox(ballBody.body(), {0, 0, box.w, box.h}));
 			const auto ballShapeIndex = space.getShapes().size() - 1;
