@@ -6,7 +6,7 @@
 #include "ECS/Basics/Graphic/DialogComponent.h"
 #include "Utils/NumberUtils.h"
 
-ska::GraphicSystem::GraphicSystem(ska::EntityManager& entityManager, ska::GameEventDispatcher& ged, ska::CameraSystem* camera) :
+ska::GraphicSystem::GraphicSystem(ska::EntityManager& entityManager, ska::GameEventDispatcher& ged, ska::CameraSystem& camera) :
 	AbstractGraphicSystem(camera),
 	System(entityManager),
 	m_ged(ged),
@@ -15,13 +15,9 @@ ska::GraphicSystem::GraphicSystem(ska::EntityManager& entityManager, ska::GameEv
 }
 
 void ska::GraphicSystem::refresh(unsigned int) {
-	const auto camera = m_camera == nullptr ? nullptr : m_camera->getDisplay();
-	const unsigned int cameraX = (camera == nullptr || camera->x < 0 ? 0 : camera->x);
-	const unsigned int cameraY = (camera == nullptr || camera->y < 0 ? 0 : camera->y);
+	assert(m_drawables != nullptr && "Bad state");
 
-	if (m_drawables == nullptr) {
-		return;
-	}
+	const auto camera = m_camera.getDisplay();
 
 	m_topLayerPriority = std::numeric_limits<int>::min();
 	m_pgd.clear();
@@ -30,13 +26,13 @@ void ska::GraphicSystem::refresh(unsigned int) {
 	for (const auto& entityId : processed) {
 		auto& gc = m_componentAccessor.get<ska::GraphicComponent>(entityId);
 		auto& pos = m_componentAccessor.get<ska::PositionComponent>(entityId);
-		const auto& relPosX = static_cast<int>(pos.x - cameraX);
-		const auto& relPosY = static_cast<int>(pos.y - cameraY - pos.z);
+		const auto& relPosX = static_cast<int>(pos.x - camera.x);
+		const auto& relPosY = static_cast<int>(pos.y - camera.y - pos.z);
 
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(pos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + (camera == nullptr ? 0 : camera->h * pos.z));
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + camera.h * pos.z);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
@@ -47,7 +43,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			sprite.update();
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(pos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min();
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + (camera == nullptr ? 0 : camera->h * pos.z));
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(pos.y + camera.h * pos.z);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
@@ -61,7 +57,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			GUIEvent ge(GUIEventType::REFRESH_BALLOON);
 			ge.balloonHandle = dc.handle;
 			ge.windowName = dc.name;
-			ge.balloonPosition = { static_cast<int>(pos.x - cameraX), static_cast<int>(pos.y - cameraY) };
+			ge.balloonPosition = { static_cast<int>(pos.x - camera.x), static_cast<int>(pos.y - camera.y) };
 			m_ged.ska::Observable<GUIEvent>::notifyObservers(ge);
 
 			if(ge.balloonHandle == nullptr) {

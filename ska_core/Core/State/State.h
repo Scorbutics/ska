@@ -33,7 +33,8 @@ namespace ska {
 
 		virtual void graphicUpdate(unsigned ellapsedTime, DrawableContainer& drawables) = 0;
 		virtual void eventUpdate(unsigned int) = 0;
-		virtual void load(State* lastState) = 0;
+		virtual void loadBefore(State* lastState) = 0;
+		virtual void loadAfter(State* lastState) = 0;
 		virtual bool unload() = 0;
 
 		virtual ~State() = default;

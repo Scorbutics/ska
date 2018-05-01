@@ -31,17 +31,19 @@ void ska::StateHolder::update() {
 			auto lastScene = move(firstState ? std::unique_ptr<ska::State>(nullptr) : move(m_currentState));
 			m_currentState = move(m_nextState);
 			m_nextState = nullptr;
-			m_currentState->load(firstState ? nullptr : lastScene.get());
+			m_currentState->loadBefore(firstState ? nullptr : lastScene.get());
 
 			/* We have to invalidate the current iterating (old) scene. */
 			if (!firstState) {
-				StateEvent se(STATE_CHANGED);
+				StateEvent se(StateEventType::STATE_CHANGE);
 				m_eventDispatcher.ska::Observable<ska::StateEvent>::notifyObservers(se);
-				throw ska::StateDiedException("");
-			}
+				m_currentState->loadAfter(lastScene.get());
+				throw StateDiedException("");
+			} 
 
-			StateEvent se(FIRST_STATE_LOADED);
+			StateEvent se(StateEventType::FIRST_STATE_LOAD);
 			m_eventDispatcher.ska::Observable<ska::StateEvent>::notifyObservers(se);
+			m_currentState->loadAfter(nullptr);
 		}
 	}
 

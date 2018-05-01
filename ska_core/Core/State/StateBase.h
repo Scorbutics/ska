@@ -38,7 +38,8 @@ namespace ska {
 		virtual void graphicUpdate(const unsigned int ellapsedTime, DrawableContainer& drawables) override final;
 		virtual void eventUpdate(const unsigned int ellapsedTime) override final;
 
-		void load(State* lastState) override final;
+		void loadBefore(State* lastState) override final;
+		void loadAfter(State* lastState) override final;
 		bool unload() override final;
 
 		State& addSubState(StatePtr s);

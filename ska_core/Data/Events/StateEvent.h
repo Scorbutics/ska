@@ -2,9 +2,9 @@
 
 namespace ska {
 
-    enum StateEventType {
-        FIRST_STATE_LOADED,
-		STATE_CHANGED
+    enum class StateEventType {
+        FIRST_STATE_LOAD,
+		STATE_CHANGE
     };
 
 	/**

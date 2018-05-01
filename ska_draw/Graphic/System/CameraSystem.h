@@ -7,6 +7,7 @@
 #include "ECS/Basics/Graphic/CameraFocusedComponent.h"
 #include "../GraphicComponent.h"
 #include "Utils/SubObserver.h"
+#include "CameraStrategy.h"
 
 namespace ska {
 	template <class T>
@@ -18,22 +19,25 @@ namespace ska {
 		public SubObserver<WorldEvent> {
 
 	public:
-		CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW = 0, const unsigned int screenH = 0);
+		CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, CameraStrategyPtr strategy, const unsigned int screenW = 0, const unsigned int screenH = 0);
 		CameraSystem& operator=(const CameraSystem&) = delete;
 
+		void refresh(unsigned int ellapsedTime) override;
+
 		Point<int> getScreenSize() const;
+		void changeStrategy(CameraStrategyPtr strategy);
+		const Rectangle& getDisplay() const;
 
-		virtual const Rectangle* getDisplay() const;
-		virtual ~CameraSystem();
+		~CameraSystem() override = default;
 
-	protected:
+	private:
 		void focusOn(Rectangle& pos, EntityId* optionalEntityId);
 
 		unsigned int m_worldW, m_worldH;
-		Rectangle* m_pos;
-		Rectangle m_cameraRect;
+		Rectangle m_cameraRect{};
 
-	private:
+		CameraStrategyPtr m_strategy;
+
 	    void worldResized(const unsigned int worldW, const unsigned int worldH);
 
 	    bool onWorldEvent(ska::WorldEvent& we);

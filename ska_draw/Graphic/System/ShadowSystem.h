@@ -12,9 +12,9 @@ namespace ska {
         public AbstractGraphicSystem,
         public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, HitboxComponent, HasShadowComponent>, PossibleComponent<>> {
     public:
-		ShadowSystem(EntityManager& entityManager, CameraSystem* camera);
+		ShadowSystem(EntityManager& entityManager, CameraSystem& camera);
         ShadowSystem& operator=(const ShadowSystem&) = delete;
-        virtual ~ShadowSystem();
+        ~ShadowSystem() override = default;
         virtual void update(unsigned int ellapsedTime) override;
     protected:
         virtual void refresh(unsigned int ellapsedTime) override;

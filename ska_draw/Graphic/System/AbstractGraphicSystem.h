@@ -7,12 +7,12 @@ namespace ska {
 
     class AbstractGraphicSystem : public IGraphicSystem {
     public:
-        AbstractGraphicSystem(CameraSystem* camera);
+        AbstractGraphicSystem(CameraSystem& camera);
         virtual ~AbstractGraphicSystem();
         void setDrawables(DrawableContainer& container) override;
 
     protected:
-        CameraSystem* m_camera;
+        CameraSystem& m_camera;
         DrawableContainer* m_drawables;
         std::vector<PositionnedGraphicDrawable> m_pgd;
     };

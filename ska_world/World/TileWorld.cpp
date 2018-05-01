@@ -1,4 +1,4 @@
-#include <algorithm>
+
 #include "Layer.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
@@ -95,6 +95,12 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 		m_blocksX = m_physicLayers.getLayer(0).getBlocksX();
 		m_blocksY = m_physicLayers.getLayer(0).getBlocksY();
 
+		auto priority = 0;
+		for (const auto& graphicLayer : m_graphicLayers) {
+			graphicLayer->setPriority(priority);
+			priority++;
+		}
+
 		//Layer Events
 		m_events = loader.loadEvents(m_blocksX, m_blocksY);
 
@@ -107,7 +113,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
         const ska::FileNameData fndata(m_fullName);
         m_name = fndata.name;
 
-        auto we = WorldEvent { WorldEventType::WORLD_CHANGE };
+        auto we = ska::WorldEvent { WorldEventType::WORLD_CHANGE };
         we.blocksWidth = m_blocksX;
         we.blocksHeight = m_blocksX;
         we.blockSize = m_blockSize;

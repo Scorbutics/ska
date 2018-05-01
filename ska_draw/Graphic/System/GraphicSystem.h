@@ -12,7 +12,7 @@ namespace ska {
     class GraphicSystem : public AbstractGraphicSystem, 
 		public System<std::unordered_set<EntityId>, RequiredComponent<GraphicComponent, PositionComponent>, PossibleComponent<DialogComponent>> {
     public:
-		GraphicSystem(EntityManager& entityManager, ska::GameEventDispatcher& ged, CameraSystem* camera);
+		GraphicSystem(EntityManager& entityManager, ska::GameEventDispatcher& ged, CameraSystem& camera);
         GraphicSystem& operator=(const GraphicSystem&) = delete;
         int getTopLayerPriority() const;
         virtual void update(unsigned int ellapsedTime) override;

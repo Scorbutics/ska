@@ -36,13 +36,19 @@ void ska::StateBase::eventUpdate(const unsigned int ellapsedTime){
 	}
 }
 
-void ska::StateBase::load(State* lastState) {
+void ska::StateBase::loadBefore(State* lastState) {
 	m_active = true;
 	beforeLoad(lastState);
 	m_state = 1;
 
 	for (auto& s : m_subStates) {
-		s->load(lastState);
+		s->loadBefore(lastState);
+	}
+}
+
+void ska::StateBase::loadAfter(State* lastState) {
+	for (auto& s : m_subStates) {
+		s->loadBefore(lastState);
 	}
 
 	m_state = 2;
@@ -99,7 +105,8 @@ ska::State& ska::StateBase::addSubState(StatePtr s) {
 
 	//manages the case that this current state isn't loaded yet : then substate should be loaded after the state is loaded
 	if (m_active) {
-		stateRaw->load(nullptr);
+		stateRaw->loadBefore(nullptr);
+		stateRaw->loadAfter(nullptr);
 	}
 
 	return *stateRaw;

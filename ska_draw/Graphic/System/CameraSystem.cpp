@@ -2,12 +2,14 @@
 #include "Rectangle.h"
 #include "../GraphicComponent.h"
 
-ska::CameraSystem::CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, const unsigned int screenW, const unsigned int screenH) :
+ska::CameraSystem::CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, CameraStrategyPtr strategy, const unsigned int screenW, const unsigned int screenH) :
 	System(entityManager),
 	SubObserver<GameEvent>(std::bind(&CameraSystem::onGameEvent, this, std::placeholders::_1), ged),
 	SubObserver<WorldEvent>(std::bind(&CameraSystem::onWorldEvent, this, std::placeholders::_1), ged),
-    m_pos(nullptr) {
+	m_strategy(std::move(strategy)) {
 
+	assert(m_strategy != nullptr && "Cannot use a null camera strategy : pick one");
+	
 	worldResized(screenW, screenH);
 	m_cameraRect.w = screenW;
 	m_cameraRect.h = screenH;
@@ -31,6 +33,11 @@ bool ska::CameraSystem::onGameEvent(ska::GameEvent& ge) {
 bool ska::CameraSystem::onWorldEvent(ska::WorldEvent& we) {
 	worldResized(we.blocksWidth * we.blockSize, we.blocksHeight * we.blockSize);
 	return true;
+}
+
+void ska::CameraSystem::changeStrategy(ska::CameraStrategyPtr strategy) {
+	m_strategy = std::move(strategy);
+	assert(m_strategy != nullptr && "Cannot use a null camera strategy : pick one");
 }
 
 void ska::CameraSystem::focusOn(Rectangle& pos, EntityId* entityId) {
@@ -58,14 +65,11 @@ void ska::CameraSystem::focusOn(Rectangle& pos, EntityId* entityId) {
 }
 
 
-const ska::Rectangle* ska::CameraSystem::getDisplay() const {
-	if (m_pos == nullptr) {
-		return nullptr;
-	}
-
-	return &m_cameraRect;
+const ska::Rectangle& ska::CameraSystem::getDisplay() const {
+	return m_cameraRect;
 }
 
-ska::CameraSystem::~CameraSystem()
-{
+void ska::CameraSystem::refresh(unsigned int ellapsedTime) {
+	auto[pos, entityId] = m_strategy->focus(getEntities());
+	focusOn(pos, entityId);
 }
