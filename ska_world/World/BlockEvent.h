@@ -9,5 +9,6 @@ namespace ska {
 
 		std::string param;
 		std::string path;
+		std::string script;
 	};
 }

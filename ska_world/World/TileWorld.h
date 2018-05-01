@@ -57,6 +57,8 @@ namespace ska {
 
 		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
 
+		ska::DrawableFixedPriority& getLayerRenderable(std::size_t index);
+
 	private:
 		bool m_autoScripts {};
 	    GameEventDispatcher& m_eventDispatcher;
@@ -65,7 +67,6 @@ namespace ska {
 		unsigned int m_blocksY;
 		unsigned int m_blockSize;
 
-		std::vector<IniReader> m_mobSettings{};
 		std::string m_fullName;
 		std::string m_name;
 

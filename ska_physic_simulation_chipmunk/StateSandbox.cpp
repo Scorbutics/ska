@@ -19,12 +19,14 @@
 #include "World/LayerLoaderImage.h"
 #include "Utils/FileUtils.h"
 
+constexpr auto BLOCKSIZE = 48;
+
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
 	m_eventDispatcher(ed),
 	m_entityManager(em),
-	m_spaceCollisionEventSender{ m_space, m_eventDispatcher, 48 } {
+	m_spaceCollisionEventSender{ m_space, m_eventDispatcher, BLOCKSIZE } {
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){
@@ -67,7 +69,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager, m_space));
 
 		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
-		auto tileset = ska::Tileset{ 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
+		auto tileset = ska::Tileset{ BLOCKSIZE, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
 		const auto mapper = ska::TilesetCorrespondanceMapper {"Resources/Chipsets/corr.png"};
 		const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
 
@@ -86,7 +88,6 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(contourRectangleTile);
 
-		auto blockSize = world.getBlockSize();
 		
 	}
 	return true;

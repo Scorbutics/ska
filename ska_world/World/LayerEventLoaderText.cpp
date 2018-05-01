@@ -29,31 +29,40 @@ ska::LayerEventLoaderText::LayerEventLoaderText(std::string layerFileName) :
 
 std::pair<ska::BlockEvent, ska::ScriptSleepComponent> ska::LayerEventLoaderText::buildFromLine(const std::string& line, const unsigned int lineIndex) const {
 	std::stringstream ss;
+	ss << line;
 
 	ska::BlockEvent event;
 	{
-		const auto x = ska::StringUtils::extractTo<std::string>(0, line, ':');
-		const auto nextIndex = x.size() + 1;
+		int x;
+		ss >> x;
 
-		ss << line.substr(nextIndex);
 		int y;
 		ss >> y;
 
-		event.position = {ska::StringUtils::strToInt(x), y };
+		event.position = { x, y };
 	}
 
 	ss >> event.trigger;
 
-	getline(ss, event.param);
-	event.param = ska::StringUtils::ltrim(event.param);
+	std::string lineRemaining;
+	getline(ss, lineRemaining);
+	lineRemaining = lineRemaining.substr(1);
+
+	if (lineRemaining.find_first_of(',') == std::string::npos) {
+		event.script = lineRemaining;
+		event.param = "" ;
+	} else {
+		event.script = StringUtils::extractTo<std::string>(0, lineRemaining, ',');
+		event.param = StringUtils::trim(lineRemaining.substr(event.script.size() + 1));
+	}
 
 	auto ssc = ska::ScriptSleepComponent{};
 	std::ifstream currentScript;
-	const auto fullName = event.param;
+	const auto fullName = lineRemaining;
 
-	currentScript.open(fullName, std::ios_base::in);
+	currentScript.open(event.script, std::ios_base::in);
 	if (currentScript.fail()) {
-		throw ska::FileException("Script not found : " + fullName + " at line " + ska::StringUtils::intToStr(lineIndex) + " of the level " + m_fileName);
+		throw ska::FileException("Script not found : " + event.script + " at line " + ska::StringUtils::intToStr(lineIndex) + " of the level " + m_fileName);
 	}
 
 	ssc.id = -1;

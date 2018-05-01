@@ -154,6 +154,11 @@ std::string ska::StringUtils::charToStr(char letter) {
 	return oss.str();
 }
 
+template <>
+std::string ska::StringUtils::fromString<std::string>(const std::string& str) {
+	return str;
+}
+
 std::string ska::StringUtils::toANSI(const std::wstring& ws) {
 	if (ws.empty()) {
 		return "";

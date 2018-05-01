@@ -13,7 +13,7 @@ namespace ska {
 	public:
 		DrawableFixedPriority() = default;
 
-		virtual int getPriority() const override {
+		int getPriority() const override {
             return Priorized::getPriority();
 		}
 

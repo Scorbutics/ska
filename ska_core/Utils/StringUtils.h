@@ -43,8 +43,8 @@ namespace ska {
 		static T extractTo(const size_t start, const std::string& s, const char to) {
             const auto subString = s.substr(start);
             const auto positionCharSearched = subString.find_first_of(to);
-            return positionCharSearched != std::string::npos ?
-                subString.substr(0, positionCharSearched - start) : "";
+            return fromString<T>(positionCharSearched != std::string::npos ?
+                subString.substr(0, positionCharSearched - start) : "");
         };
 
 		static std::wstring toUTF8(const std::string& s);
@@ -58,4 +58,7 @@ namespace ska {
 
 
 	};
+
+	template <>
+	std::string StringUtils::fromString<std::string>(const std::string& str);
 }

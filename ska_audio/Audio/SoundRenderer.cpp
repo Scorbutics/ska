@@ -32,7 +32,7 @@ void ska::SoundRenderer::setMusicVolume(float volPcts) const{
 
 bool ska::SoundRenderer::handleSoundEvent(SoundEvent& se) {
 	auto music = se.getMusic();
-	if (se.getEventType() == SoundEventType::PLAY_MUSIC) {
+	if (music != nullptr && se.getEventType() == SoundEventType::PLAY_MUSIC) {
 		music->play(*this);
 	}
 	return false;
@@ -40,8 +40,8 @@ bool ska::SoundRenderer::handleSoundEvent(SoundEvent& se) {
 
 bool ska::SoundRenderer::handleWorldEvent(WorldEvent& we) {
 	auto music = we.bgm;
-	if (we.type == WorldEventType::WORLD_CREATE ||
-		we.type == WorldEventType::WORLD_CHANGE) {
+	if (music != nullptr && (we.type == WorldEventType::WORLD_CREATE ||
+		we.type == WorldEventType::WORLD_CHANGE)) {
 		music->play(*this);
 	}
 	return false;
