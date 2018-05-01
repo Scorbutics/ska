@@ -6,7 +6,8 @@ MockState::MockState(fakeit::Mock<ska::State>& instance) :
 
 	fakeit::Fake(Method(m_instance, graphicUpdate));
 	fakeit::Fake(Method(m_instance, eventUpdate));
-	fakeit::Fake(Method(m_instance, load));
+	fakeit::Fake(Method(m_instance, loadBefore));
+	fakeit::Fake(Method(m_instance, loadAfter));
 	Method(m_instance, unload) = false;
 }
 
@@ -18,8 +19,12 @@ void MockState::eventUpdate(unsigned ellapsedTime) {
 	return m_instance().eventUpdate(ellapsedTime);
 }
 
-void MockState::load(ska::State* lastState) {
-	return m_instance().load(lastState);
+void MockState::loadBefore(ska::State* lastState) {
+	m_instance().loadBefore(lastState);
+}
+
+void MockState::loadAfter(ska::State* lastState) {
+	m_instance().loadAfter(lastState);
 }
 
 bool MockState::unload() {

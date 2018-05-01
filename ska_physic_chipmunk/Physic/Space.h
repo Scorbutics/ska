@@ -57,8 +57,12 @@ namespace ska {
 			Constraint&  addConstraint(Constraint c);
 			Shape& addShape(Shape shape);
 			Body& addBody(Body body);
+			void clear();
 			std::vector<Body>& getBodies();
 			std::vector<Shape>& getShapes();
+
+			void eraseShapes(std::size_t firstIndex, std::size_t lastIndex = 0);
+			void eraseBodies(std::size_t firstIndex, std::size_t lastIndex = 0);
 
 			void step(double timestep);
 

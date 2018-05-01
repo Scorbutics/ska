@@ -120,6 +120,30 @@ ska::cp::Body& ska::cp::Space::addBody(Body body) {
 	return ref;
 }
 
+void ska::cp::Space::eraseShapes(std::size_t firstIndex, std::size_t lastIndex) {
+	auto startShapesIt = m_shapes.begin() + firstIndex;
+	auto endShapesIt = lastIndex == 0 ? m_shapes.end() : m_shapes.begin() + lastIndex;
+	for (auto it = startShapesIt; it != endShapesIt; it++) {
+		cpSpaceRemoveShape(m_space, it->shape());
+	}
+	m_shapes.erase(startShapesIt, endShapesIt);
+}
+
+void ska::cp::Space::eraseBodies(std::size_t firstIndex, std::size_t lastIndex) {
+	auto startBodiesIt = m_bodies.begin() + firstIndex;
+	auto endBodiesIt = lastIndex == 0 ? m_bodies.end() : m_bodies.begin() + lastIndex;
+	for (auto it = startBodiesIt; it != endBodiesIt; it++) {
+		cpSpaceRemoveBody(m_space, it->body());
+	}
+
+	m_bodies.erase(startBodiesIt, endBodiesIt);
+}
+
+void ska::cp::Space::clear() {
+	eraseShapes(0);
+	eraseBodies(0);
+}
+
 std::vector<ska::cp::Body>& ska::cp::Space::getBodies() {
 	return m_bodies;
 }

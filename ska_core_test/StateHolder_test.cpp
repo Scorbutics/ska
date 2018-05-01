@@ -23,9 +23,10 @@ TEST_CASE("[StateHolder]"){
 
 		auto lastEvent = stateListener.getLastStateEventTriggered();
 		CHECK(lastEvent != nullptr);
-		CHECK(lastEvent->type == ska::FIRST_STATE_LOADED);
+		CHECK(lastEvent->type == ska::StateEventType::FIRST_STATE_LOAD);
 
-		Verify(Method(mockState, load));
+		Verify(Method(mockState, loadBefore));
+		Verify(Method(mockState, loadAfter));
 	}
 
 	SUBCASE("State change") {
@@ -37,7 +38,8 @@ TEST_CASE("[StateHolder]"){
 		stateHolder.nextState(std::make_unique<MockState>(mockState));
 		stateHolder.update();
 
-		Verify(Method(mockState, load));
+		Verify(Method(mockState, loadBefore));
+		Verify(Method(mockState, loadAfter));
 
 		Mock<ska::State> mockState2;
 		//Next state
@@ -48,10 +50,11 @@ TEST_CASE("[StateHolder]"){
 			CHECK(false);
 		} catch (ska::StateDiedException& sde) {
 			Verify(Method(mockState, unload));
-			Verify(Method(mockState2, load));
+			Verify(Method(mockState2, loadBefore));
+			Verify(Method(mockState2, loadAfter));
 
 			auto lastEvent = stateListener.getLastStateEventTriggered();
-			CHECK(lastEvent->type == ska::STATE_CHANGED);
+			CHECK(lastEvent->type == ska::StateEventType::STATE_CHANGE);
 		}
 	}
 }

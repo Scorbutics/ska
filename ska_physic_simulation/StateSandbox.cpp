@@ -1,6 +1,7 @@
 #include "StateSandbox.h"
 #include "Graphic/System/GraphicSystem.h"
-#include "Graphic/System/CameraFixedSystem.h"
+#include "Graphic/System/CameraSystem.h"
+#include "Graphic/System/CameraFixedStrategy.h"
 #include "Physic/System/MovementSystem.h"
 #include "Physic/System/CollisionSystem.h"
 #include "Graphic/System/AnimationSystem.h"
@@ -104,10 +105,10 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 	using GameAnimationSystem = ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>;
 	if (ge.getEventType() == ska::GameEventType::GAME_WINDOW_READY) {
-		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		auto cameraSystemPtr = std::make_unique<ska::CameraSystem>(m_entityManager, m_eventDispatcher, std::make_unique<ska::CameraFixedStrategy>(ska::Point<int>()), ge.windowWidth, ge.windowHeight);
 		m_cameraSystem = cameraSystemPtr.get();
 		addLogic(std::move(cameraSystemPtr));
-		addGraphic(std::make_unique<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem));
+		addGraphic(std::make_unique<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, *m_cameraSystem));
 
 		addLogic(std::make_unique<ska::MovementSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::CollisionSystem>(m_entityManager, m_eventDispatcher));

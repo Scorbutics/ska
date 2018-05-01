@@ -146,6 +146,10 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldCenterPos / m_blockSize : frontPos / m_blockSize;
 
 	for (auto& layerScriptsPtr : m_events) {
+		if (effectiveBlockPosition.x >= m_blocksX ||
+			effectiveBlockPosition.y >= m_blocksX) {
+			continue;
+		}
 		auto& blockScript = layerScriptsPtr->getScript(effectiveBlockPosition);
 
 		const auto newBlock = frontPos / m_blockSize;

@@ -81,7 +81,15 @@ std::pair<ska::BlockEvent, ska::ScriptSleepComponent> ska::LayerEventLoaderText:
 		break;
 	}
 
-	ssc.name = fullName;
+	auto args = StringUtils::split(fullName, ',');
+	
+	ssc.name = args[0];
+	
+	auto it = args.cbegin();
+	for (it++; it != args.cend(); it++) {
+		ssc.args.push_back(ska::StringUtils::trim(*it));
+	}
+
 	ssc.period = 1000;
 
 	return std::make_pair(event, ssc);

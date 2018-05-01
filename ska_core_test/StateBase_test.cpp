@@ -18,14 +18,17 @@ TEST_CASE("[StateBase]") {
 		sbt.addSubState(std::make_unique<MockState>(mockState));
 		
 		SUBCASE("parent not loaded : substate is not loaded") {
-			VerifyNoOtherInvocations(Method(mockState, load));
+			VerifyNoOtherInvocations(Method(mockState, loadBefore));
+			VerifyNoOtherInvocations(Method(mockState, loadAfter));
 		}
 
 		SUBCASE("loading parent state after adding the substate") {
-			sbt.load(nullptr);
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
 
 			SUBCASE("substate is loaded") {
-				Verify(Method(mockState, load));
+				Verify(Method(mockState, loadBefore));
+				Verify(Method(mockState, loadAfter));
 			}
 		}
 	}
@@ -34,11 +37,13 @@ TEST_CASE("[StateBase]") {
 		MockStateBase sbt;
 		
 		//sets the state active
-		sbt.load(nullptr);
+		sbt.loadBefore(nullptr);
+		sbt.loadAfter(nullptr);
 
 		sbt.addSubState(std::make_unique<MockState>(mockState));
 
-		Verify(Method(mockState, load));
+		Verify(Method(mockState, loadBefore));
+		Verify(Method(mockState, loadAfter));
 	}
 
 
@@ -62,7 +67,8 @@ TEST_CASE("[StateBase]") {
 		}
 
 		SUBCASE("loading parent then removing the substate without updating, then refreshing") {
-			sbt.load(nullptr);
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
 			sbt.scheduleRemoveSubState(state);
 			VerifyNoOtherInvocations(Method(mockState, unload));
 			sbt.eventUpdate(0);
@@ -70,7 +76,8 @@ TEST_CASE("[StateBase]") {
 		}
 
 		SUBCASE("loading parent then removing the substate (after load one)") {
-			sbt.load(nullptr);
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
 			sbt.scheduleRemoveSubState(*addedSubstate);
 			sbt.eventUpdate(0);
 			Verify(Method(mockState, unload));
@@ -81,7 +88,8 @@ TEST_CASE("[StateBase]") {
 		MockStateBase sbt;
 
 		SUBCASE("basic (direct loading)") {
-			sbt.load(nullptr);
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
 			CHECK(sbt.read.beforeLoadStateDone_);
 			CHECK(sbt.read.afterLoadStateDone_);
 		}
@@ -89,14 +97,17 @@ TEST_CASE("[StateBase]") {
 		SUBCASE("loading with a substate") {
 			sbt.addSubState(std::make_unique<MockState>(mockState));
 
-			sbt.load(nullptr);
-			Verify(Method(mockState, load));
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
+			Verify(Method(mockState, loadBefore));
+			Verify(Method(mockState, loadAfter));
 		}
 	}
 
 	SUBCASE("unloading") {
 		MockStateBase sbt;
-		sbt.load(nullptr);
+		sbt.loadBefore(nullptr);
+		sbt.loadAfter(nullptr);
 
 		SUBCASE("basic (direct unloading)") {
 			sbt.unload();
@@ -192,7 +203,8 @@ TEST_CASE("[StateBase]") {
 		MockStateBase sbt;
 		MockRenderer mr;
 		ska::VectorDrawableContainer vdc(mr);
-		sbt.load(nullptr);
+		sbt.loadBefore(nullptr);
+		sbt.loadAfter(nullptr);
 		
 		SUBCASE("no substate") {
 			SUBCASE("basic") {
@@ -225,7 +237,8 @@ TEST_CASE("[StateBase]") {
 	SUBCASE("eventUpdate") {
 		MockStateBase sbt;
 		MockRenderer mr;
-		sbt.load(nullptr);
+		sbt.loadBefore(nullptr);
+		sbt.loadAfter(nullptr);
 
 		SUBCASE("no substate") {
 			SUBCASE("basic") {
@@ -256,7 +269,8 @@ TEST_CASE("[StateBase]") {
 	SUBCASE("adding systems") {
 		MockStateBase sbt;
 		MockRenderer mr;
-		sbt.load(nullptr);
+		sbt.loadBefore(nullptr);
+		sbt.loadAfter(nullptr);
 
 		SUBCASE("logic priority") {
 			SUBCASE("asc") {

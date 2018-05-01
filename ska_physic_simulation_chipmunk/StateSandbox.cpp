@@ -1,6 +1,6 @@
 #include "StateSandbox.h"
 #include "Graphic/System/GraphicSystem.h"
-#include "Graphic/System/CameraFixedSystem.h"
+#include "Graphic/System/CameraSystem.h"
 #include "Inputs/System/InputSystem.h"
 #include "Graphic/System/DeleterSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
@@ -18,8 +18,8 @@
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
 #include "Utils/FileUtils.h"
-
-constexpr auto BLOCKSIZE = 48;
+#include "Graphic/System/CameraFixedStrategy.h"
+constexpr auto BLOCKSIZE = 48u;
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
 	SubObserver<ska::GameEvent>(std::bind(&StateSandbox::onGameEvent, this, std::placeholders::_1), ed),
@@ -57,11 +57,11 @@ ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::Tilese
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 	if (ge.getEventType() == ska::GameEventType::GAME_WINDOW_READY) {
-		auto cameraSystemPtr = std::make_unique<ska::CameraFixedSystem>(m_entityManager, m_eventDispatcher, ge.windowWidth, ge.windowHeight, ska::Point<int>());
+		auto cameraSystemPtr = std::make_unique<ska::CameraSystem>(m_entityManager, m_eventDispatcher, std::make_unique<ska::CameraFixedStrategy>(ska::Point<int>{}), ge.windowWidth, ge.windowHeight);
 		m_cameraSystem = cameraSystemPtr.get();
 
 		addLogic(std::move(cameraSystemPtr));
-		addGraphic(std::make_unique<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, m_cameraSystem));
+		addGraphic(std::make_unique<ska::GraphicSystem>(m_entityManager, m_eventDispatcher, *m_cameraSystem));
 
 		addLogic(std::make_unique<ska::DebugCollisionDrawerSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));

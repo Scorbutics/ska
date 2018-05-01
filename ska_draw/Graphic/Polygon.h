@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Graphic/SDLRenderer.h"
+#include "SDLRenderer.h"
 #include "Draw/DrawableFixedPriority.h"
 
 namespace ska {
@@ -44,6 +44,10 @@ namespace ska {
 
 		~Polygon() override = default;
 
+		void setOffset(ska::Point<int> offset) {
+			m_offset = offset;
+		}
+
 		void render(const ska::Renderer& renderer) const override {
 			auto lastPointIt = m_points.cbegin();
 
@@ -53,7 +57,7 @@ namespace ska {
 				++pIt;
 				for (; pIt != m_points.cend(); ++pIt) {
 					if ((*lastPointIt).linked) {
-						renderer.drawColorLine(m_color, (*lastPointIt).value, (*pIt).value);
+						renderer.drawColorLine(m_color, m_offset + (*lastPointIt).value, m_offset + (*pIt).value);
 					}
 					lastPointIt = pIt;
 				}
@@ -71,6 +75,7 @@ namespace ska {
 		std::vector<LinkedPoint> m_points;
 		bool m_visible = true;
 		ska::Color m_color;
+		ska::Point<int> m_offset;
 	};
 
 }

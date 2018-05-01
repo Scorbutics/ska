@@ -10,7 +10,8 @@ public:
 	void graphicUpdate(unsigned ellapsedTime, ska::DrawableContainer& drawables) override;
 	void eventUpdate(unsigned) override;
 
-	void load(ska::State* lastState) override;
+	void loadBefore(ska::State* lastState) override;
+	void loadAfter(ska::State* lastState) override;
 	bool unload() override;
 
 private:
