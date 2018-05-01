@@ -44,7 +44,10 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 	m_tilesetName(std::move(tilesetName)),
 	m_sChipset(LoadTilesetImage(m_tilesetName)),
 	m_sCol(LoadTilesetImageCollisions(m_tilesetName)),
-	m_sProperties(LoadTilesetImageProperties(m_tilesetName)) {
+	m_sProperties(LoadTilesetImageProperties(m_tilesetName)),
+	m_lightColor(0xAAAAAA),
+	m_darkColor(0x464646),
+	m_whiteColor(0xFFFFFF) {
 	checkSizes();
 }
 
@@ -74,17 +77,27 @@ ska::Texture ska::TilesetLoaderImage::loadGraphics() const {
 	return Texture { m_tilesetName + ".png"};
 }
 
-ska::Vector2<std::optional<ska::Animation>> ska::TilesetLoaderImage::loadAnimations(unsigned int blockSize) const {
+ska::Vector2<ska::TileAnimation> ska::TilesetLoaderImage::loadAnimations(unsigned int blockSize) const {
 	const auto width = m_sCol.getInstance()->w;
 	const auto height = m_sCol.getInstance()->h;
 
-	auto tiles = ska::Vector2<std::optional<Animation>>{};
+	auto tiles = ska::Vector2<TileAnimation>{};
 	tiles.resize(width, height);
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
             const auto colPixel = m_sCol.getPixel32(x, y);
 			const auto autoAnim = colPixel == m_darkColor || colPixel == m_lightColor;
-			tiles[x][y] = autoAnim ? Animation {375, 4, true, x, y, blockSize, blockSize } : std::optional<Animation>();
+			tiles[x][y].animated = autoAnim;
+			
+			const auto r = ska::Rectangle{
+				static_cast<int>(x * blockSize),
+				static_cast<int>(y * blockSize),
+				static_cast<int>(blockSize),
+				static_cast<int>(blockSize)
+			};
+
+			tiles[x][y].animation = autoAnim ? Animation{ 375, 4, true, r.x, r.y, static_cast<unsigned int>(r.w), static_cast<unsigned int>(r.h) } : 
+				Animation{ std::numeric_limits<unsigned int>::max(), 1, true, r.x, r.y, static_cast<unsigned int>(r.w), static_cast<unsigned int>(r.h) };
 		}
 	}
 

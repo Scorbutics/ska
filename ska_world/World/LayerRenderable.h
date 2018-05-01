@@ -4,14 +4,15 @@
 #include "Draw/DrawableFixedPriority.h"
 #include "Utils/Vector2.h"
 #include "Graphic/Texture.h"
-#include "Graphic/Animation.h"
 
 namespace ska {
 	class Texture;
 	class TileWorld;
+	struct TileAnimation;
+
 	class LayerRenderable : public DrawableFixedPriority {
 	public:
-		LayerRenderable(Vector2<Animation*> block, const Texture& tileset, unsigned int blockSize);
+		LayerRenderable(Vector2<TileAnimation*> block, const Texture& tileset, unsigned int blockSize);
 		void operator=(const LayerRenderable&) = delete;
 		~LayerRenderable() = default;
 
@@ -24,7 +25,7 @@ namespace ska {
 	private:
 		const unsigned int m_tileSize;
 
-		Vector2<Animation*> m_animations;
+		Vector2<TileAnimation*> m_animations;
 		Texture m_tileset;
 
 		Rectangle m_lastCameraPos {};

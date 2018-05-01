@@ -2,12 +2,12 @@
 #include "LayerRenderable.h"
 #include "Draw/Renderer.h"
 
-ska::LayerRenderable::LayerRenderable(Vector2<Animation*> block, const Texture& tileset, const unsigned int blockSize) :
+ska::LayerRenderable::LayerRenderable(Vector2<TileAnimation*> block, const Texture& tileset, const unsigned int blockSize) :
 	m_tileSize(blockSize),
 	m_animations(std::move(block)),
 	m_tileset(tileset),
-	m_width(m_animations.lineSize()),
-	m_height(m_width == 0 ? 0 : m_animations.size() / m_width) {
+	m_width(m_animations.lineSize() * m_tileSize),
+	m_height(m_width == 0 ? 0 : (m_animations.size() / m_animations.lineSize()) * m_tileSize ) {
 }
 
 void ska::LayerRenderable::update(const ska::Rectangle& cameraPos) {
@@ -39,8 +39,10 @@ void ska::LayerRenderable::render(const Renderer& renderer) const {
 			const auto currentYBlock = j * m_tileSize;
 			if (currentXBlock < layerPixelsX && currentYBlock < layerPixelsY) {
 				const auto& a = m_animations[i][j];
-				auto* currentClip = a != nullptr ? &a->getCurrentFrame() : nullptr;
-				renderer.render(m_tileset, currentXBlock - absORelX, currentYBlock - absORelY, currentClip, 0, nullptr);
+				if (a != nullptr) {
+					auto* currentClip = a->animated ? &a->animation.getCurrentFrame() : &a->animation.getOffsetBase();
+					renderer.render(m_tileset, currentXBlock - absORelX, currentYBlock - absORelY, currentClip, 0, nullptr);
+				}
 			}
 		}
 	}

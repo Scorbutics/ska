@@ -95,7 +95,7 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 			destBuf.h = clip->h;
 		}
 
-		SDL_Rect rClip;
+		SDL_Rect rClip{};
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
 		SDL_Point pRotationCenter;
 		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }

@@ -7,8 +7,8 @@
 #include "Tileset.h"
 #include "Exceptions/CorruptedFileException.h"
 
-ska::Vector2<ska::Animation*> ska::LayerLoaderImage::loadAnimations(Tileset& chipset) const {
-	auto graphics = ska::Vector2<Animation*>{};
+ska::Vector2<ska::TileAnimation*> ska::LayerLoaderImage::loadAnimations(Tileset& chipset) const {
+	auto graphics = ska::Vector2<TileAnimation*>{};
 	graphics.reserve(m_fileWidth, m_fileHeight);
 
 	const auto& map = m_colorMapper.access();
@@ -24,8 +24,10 @@ ska::Vector2<ska::Animation*> ska::LayerLoaderImage::loadAnimations(Tileset& chi
                     const auto& ss = StringUtils::intToStr(color.r) + "; " + StringUtils::intToStr(color.g) + "; " + StringUtils::intToStr(color.b);
 					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
-				auto& anim = chipset.getAnimation(map.at(color));
-				graphics.push_back(anim.has_value() ? &anim.value() : nullptr);
+				const auto& tilePosition = map.at(color);
+				auto& anim = chipset.getAnimation(tilePosition);
+				const auto& tile = chipset.getTile(tilePosition);
+				graphics.push_back(tile.collision != TileCollision::Void ? &anim : nullptr);
 			}
 		}
 	}

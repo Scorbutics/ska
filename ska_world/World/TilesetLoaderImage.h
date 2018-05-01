@@ -12,7 +12,7 @@ namespace ska {
 
 		Vector2<Tile> loadPhysics() const override;
 		Texture loadGraphics() const override;
-		Vector2<std::optional<Animation>> loadAnimations(unsigned int blockSize) const override;
+		Vector2<TileAnimation> loadAnimations(unsigned int blockSize) const override;
 
 		std::string getName() const override;
 

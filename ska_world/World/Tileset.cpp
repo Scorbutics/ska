@@ -10,12 +10,12 @@ ska::Tileset::Tileset(const unsigned int tileSize, const TilesetLoader& loader, 
 	m_blocks(loader.loadPhysics()){
 }
 
-const std::string& ska::Tileset::getName() const {
-	return m_tilesetName;
+const ska::Texture& ska::Tileset::getTexture() const {
+	return m_renderable.getTexture();
 }
 
-const ska::TilesetRenderable& ska::Tileset::getRenderable() const {
-	return m_renderable;
+const std::string& ska::Tileset::getName() const {
+	return m_tilesetName;
 }
 
 unsigned int ska::Tileset::getWidth() const {
@@ -38,6 +38,10 @@ ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) {
 	return m_blocks[coordinates.x][coordinates.y];
 }
 
-std::optional<ska::Animation>& ska::Tileset::getAnimation(const Point<int>& coordinates) {
+void ska::Tileset::update() {
+	m_renderable.update();
+}
+
+ska::TileAnimation& ska::Tileset::getAnimation(const Point<int>& coordinates) {
 	return m_renderable.getAnimation(coordinates);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <memory>
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "TilesetLoader.h"
@@ -14,13 +15,14 @@ namespace ska {
 		Tileset(Tileset&&) = default;
 
 		Tile& getTile(const Point<int>& coordinates);
-		std::optional<Animation>& getAnimation(const Point<int>& coordinates);
+		TileAnimation& getAnimation(const Point<int>& coordinates);
 
+		const Texture& getTexture() const;
 		const std::string& getName() const;
-		const TilesetRenderable& getRenderable() const;
-
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
+
+		void update();
 
 		~Tileset() override = default;
 		unsigned int getTileSize() const;
@@ -34,4 +36,5 @@ namespace ska {
 		TilesetEvent m_event;
 		Vector2<Tile> m_blocks{};
 	};
+	using TilesetPtr = std::unique_ptr<Tileset>;
 }
