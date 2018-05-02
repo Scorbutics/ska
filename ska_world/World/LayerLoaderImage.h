@@ -1,5 +1,5 @@
 #pragma once
-#include "Physic/Tile.h"
+#include "Tile.h"
 #include "Graphic/SDLSurface.h"
 #include "Utils/Vector2.h"
 #include "TilesetCorrespondanceMapper.h"
@@ -7,7 +7,7 @@
 
 namespace ska {
 	class Tileset;
-	
+
 	class LayerLoaderImage : public LayerLoader {
 	public:
 		static SDLSurface loadFrom32(const std::string& layerFilename);

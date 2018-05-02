@@ -7,13 +7,11 @@ if(NOT SDL2_INCLUDE_DIR)
 endif()
 
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
-set(SKA_PHYSIC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_physic)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_world)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
-include_directories(${SKA_PHYSIC_DIR})
 include_directories(${SKA_WORLD_DIR})
 include_directories(${GSL_DIR})
 

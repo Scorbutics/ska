@@ -38,14 +38,6 @@ cd ../ska_particle_benchmarker
 call "../cmake_.bat" %*
 mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
-cd ../ska_physic
-call "../cmake_.bat" %*
-mingw32-make
-if %errorlevel% neq 0 exit /b %errorlevel%
-cd ../ska_physic_test
-call "../cmake_.bat" %*
-mingw32-make
-if %errorlevel% neq 0 exit /b %errorlevel%
 cd ../ska_physic_chipmunk
 call "../cmake_.bat" %*
 mingw32-make

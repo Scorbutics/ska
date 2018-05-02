@@ -4,14 +4,13 @@
 		<Project filename="ska_physic_simulation/ska_physic_simulation.cbp">
 			<Depends filename="ska_audio/ska_audio.cbp" />
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
 			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="external/SDL2_gif/SDL2_gif.cbp" />
+			<Depends filename="ska_physic_homemade/ska_physic_homemade.cbp" />
 			<Depends filename="ska_world/ska_world.cbp" />
 		</Project>
 		<Project filename="ska_audio/ska_audio.cbp" />
 		<Project filename="ska_core/ska_core.cbp" />
-		<Project filename="ska_physic/ska_physic.cbp" />
 		<Project filename="ska_draw/ska_draw.cbp">
 			<Depends filename="external/SDL2_gif/SDL2_gif.cbp" />
 		</Project>
@@ -22,8 +21,8 @@
 		</Project>
 		<Project filename="ska_gui_test/ska_gui_test.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_gui/ska_gui.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
 		</Project>
 		<Project filename="ska_gui/ska_gui.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
@@ -35,31 +34,30 @@
 		<Project filename="ska_physic_homemade/ska_physic_homemade.cbp" />
 		<Project filename="ska_world/ska_world.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
 			<Depends filename="ska_draw/ska_draw.cbp" />
 		</Project>
 		<Project filename="ska_physic_chipmunk/ska_physic_chipmunk.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
-		</Project>
-		<Project filename="ska_physic_test/ska_physic_test.cbp">
-			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
 		</Project>
 		<Project filename="ska_world_test/ska_world_test.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
-			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_world/ska_world.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
 		</Project>
 		<Project filename="ska_physic_simulation_chipmunk/ska_physic_simulation_chipmunk.cbp">
 			<Depends filename="ska_core/ska_core.cbp" />
-			<Depends filename="ska_physic/ska_physic.cbp" />
-			<Depends filename="ska_draw/ska_draw.cbp" />
 			<Depends filename="ska_gui/ska_gui.cbp" />
 			<Depends filename="ska_physic_homemade/ska_physic_homemade.cbp" />
 			<Depends filename="ska_physic_chipmunk/ska_physic_chipmunk.cbp" />
 			<Depends filename="ska_world/ska_world.cbp" />
+			<Depends filename="ska_draw/ska_draw.cbp" />
+		</Project>
+		<Project filename="ska_ai/ska_ai.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+		</Project>
+		<Project filename="ska_ai_test/ska_ai_test.cbp">
+			<Depends filename="ska_core/ska_core.cbp" />
+			<Depends filename="ska_ai/ska_ai.cbp" />
 		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>

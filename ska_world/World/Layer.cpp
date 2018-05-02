@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "Layer.h"
 #include "TileWorld.h"
 
@@ -31,7 +32,9 @@ ska::TileCollision ska::Layer::getCollision(const std::size_t x, const std::size
 }
 
 void ska::Layer::reset(Vector2<std::optional<Tile>> block) {
+	printf("coucou\n");
 	m_block = std::move(block);
+	printf("cava\n");
 	m_fileWidth = m_block.lineSize();
 	m_fileHeight = m_fileWidth == 0 ? 0 : m_block.size() / m_fileWidth;
 }

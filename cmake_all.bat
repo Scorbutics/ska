@@ -18,10 +18,6 @@ cd ../ska_particle
 call ../cmake_.bat %*
 cd ../ska_particle_benchmarker
 call ../cmake_.bat %*
-cd ../ska_physic
-call ../cmake_.bat %*
-cd ../ska_physic_test
-call ../cmake_.bat %*
 cd ../ska_physic_chipmunk
 call ../cmake_.bat %*
 cd ../ska_physic_chipmunk_test
