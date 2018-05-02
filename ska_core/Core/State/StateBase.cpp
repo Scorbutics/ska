@@ -48,7 +48,7 @@ void ska::StateBase::loadBefore(State* lastState) {
 
 void ska::StateBase::loadAfter(State* lastState) {
 	for (auto& s : m_subStates) {
-		s->loadBefore(lastState);
+		s->loadAfter(lastState);
 	}
 
 	m_state = 2;
