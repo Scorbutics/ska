@@ -57,7 +57,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_world", "ska_world\ska_
 	ProjectSection(ProjectDependencies) = postProject
 		{27DAB442-9E78-3AD1-893A-605BD278395C} = {27DAB442-9E78-3AD1-893A-605BD278395C}
 		{674D1781-02C7-3598-BF05-ACF0BF98FE84} = {674D1781-02C7-3598-BF05-ACF0BF98FE84}
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF} = {B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_simulation", "ska_physic_simulation\ska_physic_simulation.vcxproj", "{F1F618CA-9057-32ED-8D6F-747B4170C3E2}"
@@ -75,8 +74,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_chipmunk", "ska_
 	ProjectSection(ProjectDependencies) = postProject
 		{27DAB442-9E78-3AD1-893A-605BD278395C} = {27DAB442-9E78-3AD1-893A-605BD278395C}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic", "ska_physic\ska_physic.vcxproj", "{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ska_physic_simulation_chipmunk", "ska_physic_simulation_chipmunk\ska_physic_simulation_chipmunk.vcxproj", "{2DDCA757-1909-364A-852A-7FCC0E7A0B68}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -298,18 +295,6 @@ Global
 		{C5798D43-DA6C-3BD1-9681-C18AE4B4A6FE}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{C5798D43-DA6C-3BD1-9681-C18AE4B4A6FE}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{C5798D43-DA6C-3BD1-9681-C18AE4B4A6FE}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Debug|x64.ActiveCfg = Debug|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Debug|x86.ActiveCfg = Debug|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Debug|x86.Build.0 = Debug|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.MinSizeRel|x64.ActiveCfg = MinSizeRel|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.MinSizeRel|x86.ActiveCfg = MinSizeRel|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.MinSizeRel|x86.Build.0 = MinSizeRel|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Release|x64.ActiveCfg = Release|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Release|x86.ActiveCfg = Release|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.Release|x86.Build.0 = Release|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
-		{B04EE0C4-8D5D-389B-84D4-5F2D9CA392CF}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 		{2DDCA757-1909-364A-852A-7FCC0E7A0B68}.Debug|x64.ActiveCfg = Debug|Win32
 		{2DDCA757-1909-364A-852A-7FCC0E7A0B68}.Debug|x86.ActiveCfg = Debug|Win32
 		{2DDCA757-1909-364A-852A-7FCC0E7A0B68}.Debug|x86.Build.0 = Debug|Win32

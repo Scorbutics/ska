@@ -19,7 +19,7 @@ TEST_CASE("[Layer]"){
     auto tiles = BuildTiles();
 	SUBCASE("Loading") {
         auto layer = ska::Layer { tiles };
-        /*
+        
         CHECK(layer.getBlocksX() == 10);
         CHECK(layer.getBlocksY() == 10);
 
@@ -28,6 +28,5 @@ TEST_CASE("[Layer]"){
 
         CHECK(layer.getCollision(4, 9) == ska::TileCollision::Void);
         CHECK(layer.getBlock(4, 9) == nullptr);
-        */
 	}
 }
