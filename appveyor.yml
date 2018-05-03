@@ -100,3 +100,7 @@ build_script:
     copy %PROJECT_PATH%\Debug\ska_gui_test.exe %PROJECT_PATH%
     cd %PROJECT_PATH%
     ska_gui_test.exe
+	
+    copy %PROJECT_PATH%\Debug\ska_world_test.exe %PROJECT_PATH%
+    cd %PROJECT_PATH%
+    ska_world_test.exe

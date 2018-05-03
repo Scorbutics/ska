@@ -17,16 +17,21 @@ ska::Vector2<std::optional<ska::Tile>> BuildTiles() {
 TEST_CASE("[Layer]"){
 
     auto tiles = BuildTiles();
-	SUBCASE("Loading") {
-        auto layer = ska::Layer { tiles };
-        
+	auto layer = ska::Layer{ tiles };
+
+	SUBCASE("Size") {
         CHECK(layer.getBlocksX() == 10);
         CHECK(layer.getBlocksY() == 10);
-
-		CHECK(layer.getCollision(1, 7) == ska::TileCollision::Yes);
-        CHECK(layer.getBlock(1, 7) != nullptr);
-
-        CHECK(layer.getCollision(4, 9) == ska::TileCollision::Void);
-        CHECK(layer.getBlock(4, 9) == nullptr);
 	}
+
+	SUBCASE("Collision") {
+		CHECK(layer.getCollision(1, 7) == ska::TileCollision::Yes);
+		CHECK(layer.getCollision(4, 9) == ska::TileCollision::Void);
+	}
+
+	SUBCASE("Block") {
+		CHECK(layer.getBlock(1, 7) != nullptr);
+		CHECK(layer.getBlock(4, 9) == nullptr);
+	}
+
 }
