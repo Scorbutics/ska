@@ -89,4 +89,4 @@ build_script:
 
   # Unit Tests
   - |-
-    call test_all.bat %PROJECT_PATH%
+    test_all.bat %PROJECT_PATH%
