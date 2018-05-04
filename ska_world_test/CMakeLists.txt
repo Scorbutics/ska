@@ -30,6 +30,7 @@ include_directories(${SKA_WORLD_DIR})
 
 link_directories(${LIBRARY_DIR})
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR})
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external/lib/${CMAKE_CXX_COMPILER_ID}/${SKA_DEBUG_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -38,13 +39,11 @@ file(GLOB_RECURSE SOURCES
 )
 
 string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
-set(SKA_DEBUG_DIR "Debug")
-set(SKA_RELEASE_DIR "Release")
 
 add_executable(ska_world_test ${SOURCES})
 set_target_properties(ska_world_test PROPERTIES
-					  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
-                      ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
-                      ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
+					  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
+                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
+                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
 target_link_libraries(ska_world_test ska_world ska_draw ska_core SDL2_ttf SDL2_image SDL2_gif SDL2)
