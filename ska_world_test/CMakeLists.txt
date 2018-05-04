@@ -17,9 +17,11 @@ set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
 set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_draw)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_world)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
+set(SDL2_GIF_INCLUDE_DIR ${CMAKE_BINARY_DIR}/../external/SDL2_gif/src)
 
 include_directories(${GSL_DIR})
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_GIF_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${DOCTEST_DIR})
 include_directories(${FAKEIT_DIR})
@@ -45,4 +47,4 @@ set_target_properties(ska_world_test PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-target_link_libraries(ska_world_test ska_world ska_draw ska_core SDL2)
+target_link_libraries(ska_world_test ska_world ska_draw ska_core SDL2_ttf SDL2_image SDL2_gif SDL2)
