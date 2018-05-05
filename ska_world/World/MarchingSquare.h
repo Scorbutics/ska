@@ -5,7 +5,7 @@
 #include "Tile.h"
 
 namespace ska {
-	class TileWorld;
+	class CollisionProfile;
 
 	enum class StepDirection {
 		Up,
@@ -17,5 +17,5 @@ namespace ska {
 
 	using MarchingSquarePredicate = std::function<TileCollision(const Tile*)>;
 
-	std::pair<bool, std::list<Point<int>>> MarchingSquare(const TileWorld& world, std::unordered_set<Point<int>>& doneBlocks, const MarchingSquarePredicate& pred);
+	std::pair<bool, std::list<Point<int>>> MarchingSquare(const CollisionProfile& world, std::unordered_set<Point<int>>& doneBlocks, const MarchingSquarePredicate& pred);
 }

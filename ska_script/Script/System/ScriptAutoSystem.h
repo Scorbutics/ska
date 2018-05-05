@@ -6,18 +6,17 @@
 #include "Data/MemoryScript.h"
 #include "../ScriptComponent.h"
 #include "ECS/System.h"
-#include "ECS/Basics/Script/ScriptRegisterer.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class TileWorld;
 
-	class ScriptAutoSystem : public ScriptRegisterer,
+	class ScriptAutoSystem :
 		public System<std::unordered_set<EntityId>, RequiredComponent<ScriptComponent>, PossibleComponent<ScriptSleepComponent, ScriptComponent>> {
 	public:
 
 		MemoryScript& getSavegame();
-		void registerScript(ScriptComponent* parent, EntityId scriptSleepEntity, EntityId origin) override;
+		void registerScript(ScriptComponent* parent, EntityId scriptSleepEntity, EntityId origin);
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		//void kill(const std::string& keyScript);

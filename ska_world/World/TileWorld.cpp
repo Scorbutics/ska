@@ -1,5 +1,4 @@
 
-#include "Layer.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
 #include "LayerEvent.h"
@@ -17,7 +16,8 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
 	m_blocksX(0),
 	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
-	m_tileset(&tileset) {
+	m_tileset(&tileset),
+	m_physicLayers(tileset.getTileSize()) {
 }
 
 ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const TileWorldLoader& loader) :
@@ -25,32 +25,15 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const Tile
 	load(loader);
 }
 
-ska::Point<int> ska::TileWorld::getBlockId(const Point<int>& pos, int layerIndex) const {
-	const auto p1Block = pos / m_blockSize;
-	if (p1Block.x >= static_cast<int>(m_blocksX) ||
-		p1Block.y >= static_cast<int>(m_blocksY)) {
-		return {-1, -1};
-	}
-
-	const auto& b = m_physicLayers.getBlock(layerIndex, p1Block.x, p1Block.y);
-	return b != nullptr ? b->id : Point<int> {-1, -1};
-}
-
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
 	const auto blockPos = pos / m_blockSize;
-	if (blockPos.x >= m_blocksX || blockPos.y >= m_blocksY) {
-		return true;
-	}
 	const auto& b = m_physicLayers.getBlock(0, blockPos.x, blockPos.y);
 	const auto result = b != nullptr ? (authorizedBlocks.find(b->id.x + b->id.y * m_tileset->getWidth()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
-bool ska::TileWorld::getCollision(const unsigned int x, const unsigned int y) const {
-	return m_physicLayers.collide(x, y);
-}
-
 void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
+	//Animations update
 	for (auto& graphicLayer : m_graphicLayers) {
 		graphicLayer->update(cameraPos);
 	}
@@ -60,17 +43,6 @@ void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 	for (const auto& graphicLayer : m_graphicLayers) {
 		drawables.add(*graphicLayer);
 	}
-}
-
-const ska::Tile* ska::TileWorld::getHighestBlock(const std::size_t x, const std::size_t y) const {
-	const int layers = m_physicLayers.layers();
-	for(auto i = layers - 1; i >= 0; i--) {
-		const auto& b = m_physicLayers.getBlock(i, x, y);
-		if(b != nullptr && b->collision != ska::TileCollision::Void) {
-			return b;
-		}
-	}
-	return nullptr;
 }
 
 void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChange) {
@@ -92,8 +64,8 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
 		}
 
-		m_blocksX = m_physicLayers.getLayer(0).getBlocksX();
-		m_blocksY = m_physicLayers.getLayer(0).getBlocksY();
+		m_blocksX = m_physicLayers.getBlocksX();
+		m_blocksY = m_physicLayers.getBlocksY();
 
 		auto priority = 0;
 		for (const auto& graphicLayer : m_graphicLayers) {
@@ -107,7 +79,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 		//Tileset based layer events
 		const auto layers = m_physicLayers.layers();
 		for (auto i = 0u; i < layers; i++) {
-			m_events.push_back(std::make_unique<LayerEvent>(LayerEventLoaderTilesetEvent{ m_physicLayers.getLayer(i), m_tileset->getTilesetEvent() }, m_blocksX, m_blocksY));
+			m_events.push_back(std::make_unique<LayerEvent>(LayerEventLoaderTilesetEvent{ m_physicLayers, i, m_tileset->getTilesetEvent() }, m_blocksX, m_blocksY));
 		}
 
         const ska::FileNameData fndata(m_fullName);
@@ -150,7 +122,7 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 			effectiveBlockPosition.y >= m_blocksX) {
 			continue;
 		}
-		auto& blockScript = layerScriptsPtr->getScript(effectiveBlockPosition);
+		auto& blockScript = layerScriptsPtr->getScripts(effectiveBlockPosition);
 
 		const auto newBlock = frontPos / m_blockSize;
 		const auto oldBlock = oldCenterPos / m_blockSize;
@@ -172,75 +144,8 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 
 }
 
-ska::Point<int> ska::TileWorld::alignOnBlock(const Rectangle& hitbox) const {
-	const auto hitBoxBlock = (Point<int>(hitbox) / m_blockSize) * m_blockSize;
-	return Point<int>(hitbox) - hitBoxBlock;
-}
-
-ska::Rectangle ska::TileWorld::placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const {
-	std::vector<Rectangle> blocksPos;
-	auto hitBoxBlock = (Point<int>(hitBox) + Point<int>(hitBox.w, hitBox.h) / 2) / m_blockSize;
-	auto result = hitBox;
-
-	if (radius == 0) {
-		return result;
-	}
-
-	const auto maxWidth = getBlocksX();
-	const auto maxHeight = getBlocksY();
-
-	auto blockArea = Rectangle { 
-		static_cast<int>(hitBoxBlock.x - radius) , 
-		static_cast<int>(hitBoxBlock.y - radius), 
-		static_cast<int>((radius << 1) + 1), 
-		static_cast<int>((radius << 1) + 1) 
-	};
-
-	if (blockArea.x < 0) {
-		blockArea.x = 0;
-	}
-
-	if (blockArea.y < 0) {
-		blockArea.y = 0;
-	}
-
-	if (blockArea.x + 1 > static_cast<int>(maxWidth)) {
-		blockArea.x = maxWidth - 1;
-	}
-
-	if (blockArea.y + 1 > static_cast<int>(maxHeight)) {
-		blockArea.y = maxHeight - 1;
-	}
-
-	if (blockArea.x + blockArea.w > static_cast<int>(maxWidth)) {
-		blockArea.w = maxWidth - blockArea.x;
-	}
-
-	if (blockArea.y + blockArea.h > static_cast<int>(maxHeight)) {
-		blockArea.h = maxHeight - blockArea.y;
-	}
-
-	for (unsigned int x = 0; x != static_cast<unsigned int>(blockArea.w); x++) {
-		for (unsigned int y = 0; y != static_cast<unsigned int>(blockArea.h); y++) {
-			const Rectangle rect{ static_cast<int>(x + blockArea.x), static_cast<int>(y + blockArea.y), hitBox.w, hitBox.h};
-			blocksPos.push_back(rect);
-		}
-	}
-
-	std::sort(blocksPos.begin(), blocksPos.end(), [hitBoxBlock](decltype(*blocksPos.begin())& it1, decltype(*blocksPos.begin())& it2) -> bool {
-		return RectangleUtils::distanceSquared<int>(it1, hitBoxBlock) < RectangleUtils::distanceSquared<int>(it2, hitBoxBlock);
-	});
-
-	for (const auto& r : blocksPos) {
-		if (!getCollision(r.x, r.y)) {
-			result = r;
-			result.x *= m_blockSize;
-			result.y *= m_blockSize;
-			break;
-		}
-	}
-
-	return result;
+const ska::CollisionProfile& ska::TileWorld::getCollisionProfile() const {
+	return m_physicLayers;
 }
 
 std::size_t ska::TileWorld::getBlocksX() const{

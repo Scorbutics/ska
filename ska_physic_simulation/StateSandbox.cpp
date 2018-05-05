@@ -112,7 +112,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		addLogic(std::make_unique<ska::MovementSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::CollisionSystem>(m_entityManager, m_eventDispatcher));
-		addLogic(std::make_unique<ska::WorldCollisionSystem>(m_entityManager, m_world, m_eventDispatcher));
+		addLogic(std::make_unique<ska::WorldCollisionSystem>(m_entityManager, m_world.getCollisionProfile(), m_eventDispatcher));
 		addLogic(std::make_unique<ska::DebugCollisionDrawerSystem>(m_entityManager));
 		addLogic(std::make_unique<ska::GravitySystem>(m_entityManager));
 		addLogic(std::make_unique<ska::DeleterSystem>(m_entityManager));

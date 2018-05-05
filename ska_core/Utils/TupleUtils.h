@@ -18,16 +18,23 @@ namespace ska {
 		template<unsigned int ArgsSizeof>
 		using SeqRange = typename Gens<ArgsSizeof>::type;
 
-		template<typename T, typename F, int... Is>
-		static void for_each(T&& t, F&& f, SeqList<Is...>) {
-			int dummy[] = { 0, ((void)std::forward<F>(f)(std::get<Is>(t)), 0)... };
-			(void)dummy;
+		namespace detailforeach {
+			template<typename T, typename F, int... Is>
+			static void for_each(T&& t, F&& f, SeqList<Is...>) {
+				int dummy[] = { 0, ((void)std::forward<F>(f)(std::get<Is>(t)), 0)... };
+				(void)dummy;
+			}
 		}
 
+		template <class ... Args, class Function>
+		static void for_each(Args&&...args, const Function& func) {
+			int _[] = { 0, (func(std::forward<Args>(args)...) , 0)... };
+			(void)_;
+		}
 
 		template<typename... Ts, typename F>
 		static void for_each_in_tuple(std::tuple<Ts...>& t, F&& f) {
-			for_each(t, std::forward<F>(f), SeqRange<sizeof...(Ts)>());
+			detailforeach::for_each(t, std::forward<F>(f), SeqRange<sizeof...(Ts)>());
 		}
 
 		template<int Index, class Search, class First, class... Types>

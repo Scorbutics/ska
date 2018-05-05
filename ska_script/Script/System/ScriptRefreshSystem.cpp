@@ -11,17 +11,15 @@
 #include "Inputs/InputContextManager.h"
 #include "Data/Events/ScriptEvent.h"
 
-ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg, BlockAllowance& world) :
+ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg) :
 	ScriptRefreshSystemBase(entityManager),
 	ScriptPositionSystemAccess(entityManager),
 	SubObserver<InputKeyEvent>(std::bind(&ScriptRefreshSystem::onKeyEvent, this, std::placeholders::_1), ged),
 	SubObserver<CollisionEvent>(std::bind(&ScriptRefreshSystem::onCollisionEvent, this, std::placeholders::_1), ged),
 	SubObserver<ScriptEvent>(std::bind(&ScriptRefreshSystem::onScriptEvent, this, std::placeholders::_1), ged),
-	m_scriptPositionedGetter(spg),
-	m_world(world),
+	m_scriptPositionedGetter(spg),	
 	m_scriptAutoSystem(scriptAutoSystem),
-	m_action(false),
-	m_eventDispatcher(ged) {	
+	m_action(false) {	
 }
 
 bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
@@ -82,7 +80,7 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 	return true;
 }
 
-bool ska::ScriptRefreshSystem::onScriptEvent(ScriptEvent& se) {
+void ska::ScriptRefreshSystem::triggerChangeBlockScripts(const ScriptEvent& se) {
 	const auto entityId = se.entityId;
 	auto worldScripts = std::vector<ScriptSleepComponent*>{};
 
@@ -107,7 +105,49 @@ bool ska::ScriptRefreshSystem::onScriptEvent(ScriptEvent& se) {
 	}
 
 	createScriptFromSleeping(worldScripts, entityId);
+}
+
+bool ska::ScriptRefreshSystem::onScriptEvent(ScriptEvent& se) {
+	auto& componentsSP = ScriptPositionSystemAccess::m_componentAccessor;
+
+	switch(se.type) {
+	case ScriptEventType::EntityChangeBlockId:
+		triggerChangeBlockScripts(se);
+		break;
+
+	case ScriptEventType::ScriptCreate:
+		if(startScript(se.entityId, se.parent)) {
+			componentsSP.remove<ScriptSleepComponent>(se.entityId);
+		}
+		break;
+
+	default:
+		break;
+	}
 	return true;
+}
+
+void ska::ScriptRefreshSystem::createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent) {
+	auto& components = ScriptRefreshSystemBase::m_componentAccessor;
+	auto& componentsSP = ScriptPositionSystemAccess::m_componentAccessor;
+
+	const auto& pc = components.get<PositionComponent>(parent);
+	std::vector<EntityId> toDelete;
+	for (const auto& ssc : sleepings) {
+		if (ssc != nullptr) {
+			auto scriptCreated = ScriptRefreshSystemBase::createEntity();
+			components.add<PositionComponent>(scriptCreated, PositionComponent(pc));
+			componentsSP.add<ScriptSleepComponent>(scriptCreated, ScriptSleepComponent(*ssc));
+			componentsSP.get<ScriptSleepComponent>(scriptCreated).deleteEntityWhenFinished = true;
+			if(startScript(scriptCreated, parent)) {
+				toDelete.push_back(scriptCreated);
+			}
+		}
+	}
+
+	for (const auto& targets : toDelete) {
+		componentsSP.remove<ScriptSleepComponent>(targets);
+	}
 }
 
 void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
@@ -149,10 +189,6 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 			}
 		}
 
-		/* TileWorld based events */
-		const auto worldScripts = refreshScripts(entityId);
-		createScriptFromSleeping(worldScripts, entityId);
-
 	}
 
 	for (const auto& targets : toDelete) {
@@ -162,71 +198,6 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 
 	m_scriptAutoSystem.update(ellapsedTime);
 
-}
-
-void ska::ScriptRefreshSystem::createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent) {
-	auto& components = ScriptRefreshSystemBase::m_componentAccessor;
-	auto& componentsSP = ScriptPositionSystemAccess::m_componentAccessor;
-
-	const auto& pc = components.get<PositionComponent>(parent);
-	std::vector<EntityId> toDelete;
-	for (const auto& ssc : sleepings) {
-		if (ssc != nullptr) {
-			auto scriptCreated = ScriptRefreshSystemBase::createEntity();
-			components.add<PositionComponent>(scriptCreated, PositionComponent(pc));
-			components.add<ScriptSleepComponent>(scriptCreated, ScriptSleepComponent(*ssc));
-			componentsSP.get<ScriptSleepComponent>(scriptCreated).deleteEntityWhenFinished = true;
-			startScript(scriptCreated, parent);
-			if (ssc->triggeringType == ScriptTriggerType::AUTO) {
-				toDelete.push_back(scriptCreated);
-			}
-		}
-	}
-
-	for (const auto& targets : toDelete) {
-		components.remove<ScriptSleepComponent>(targets);
-	}
-}
-
-std::vector<ska::ScriptSleepComponent*> ska::ScriptRefreshSystem::refreshScripts(const ska::EntityId& entityId) {
-	auto& components = ScriptRefreshSystemBase::m_componentAccessor;
-
-	const auto& pc = components.get<PositionComponent>(entityId);
-	auto& sac = components.get<ScriptAwareComponent>(entityId);
-	const auto& hc = components.get<HitboxComponent>(entityId);
-	const Point<int>& centerPos = PositionComponent::getCenterPosition(pc, hc);
-	
-	const auto blockSize = m_world.getBlockSize();
-	const auto oldCenterPos = Point<int>(sac.lastBlockPos);
-
-	auto worldScripts = std::vector<ScriptSleepComponent*>{};
-	auto autosScript = m_scriptPositionedGetter.getScriptsAuto();
-	for (auto& autoScript : autosScript) {
-		worldScripts.push_back(&autoScript.get());
-	}
-
-	/* If we are moving to another block, triggers a MOVE_OUT event on previous block and MOVE_IN on the next one */
-	constexpr auto layers = 2u;
-
-	auto sameBlock = false;
-	for(auto i = 0u; i < layers; i++) {
-		const auto lastBlockId = m_world.getBlockId(oldCenterPos, i);
-		const auto newBlockId = m_world.getBlockId(centerPos, i);
-		sameBlock |= lastBlockId != newBlockId;
-
-		if (!sameBlock) {
-			auto scriptEvent = ScriptEvent { ScriptEventType::EntityChangeBlockId, entityId, lastBlockId, newBlockId, oldCenterPos, centerPos };
-			m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(scriptEvent);
-			break;
-		}
-	}
-
-	if (oldCenterPos / blockSize != centerPos / blockSize) {
-		sac.lastBlockPos.x = centerPos.x;
-		sac.lastBlockPos.y = centerPos.y;
-	}
-
-	return worldScripts;
 }
 
 void ska::ScriptRefreshSystem::update(unsigned int ellapsedTime) {
@@ -241,12 +212,16 @@ void ska::ScriptRefreshSystem::clearNamedScriptedEntities() {
 	m_scriptAutoSystem.clearNamedScriptedEntities();
 }
 
-void ska::ScriptRefreshSystem::startScript(const EntityId scriptEntity, const EntityId origin) {
+bool ska::ScriptRefreshSystem::startScript(const EntityId scriptEntity, const EntityId origin) {
 	m_scriptAutoSystem.registerScript(nullptr, scriptEntity, origin);
+
+	//Auto scripts are "one shots"	
+	auto& componentsSp = ScriptPositionSystemAccess::m_componentAccessor;
+	auto& ssc = componentsSp.get<ScriptSleepComponent>(scriptEntity);
+	return ssc.triggeringType == ScriptTriggerType::AUTO;
 }
 
-ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script) const {
-	const auto blockSizeSquared = m_world.getBlockSize() * m_world.getBlockSize();
+ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, const unsigned int distance) const {
 	auto& componentsSp = ScriptPositionSystemAccess::m_componentAccessor;
 
 	auto& scriptPos = componentsSp.get<PositionComponent>(script);
@@ -254,8 +229,8 @@ ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const Posi
 	const int varX = (scriptPos.x - entityPos.x);
 	const int varY = (scriptPos.y - entityPos.y);
 	const int varZ = (scriptPos.z - entityPos.z);
-	const unsigned int distanceSquared = varX * varX + varY * varY + varZ * varZ;
-	if (distanceSquared < blockSizeSquared) {
+	const unsigned int effectiveDistanceSquared = varX * varX + varY * varY + varZ * varZ;
+	if (effectiveDistanceSquared < (distance * distance)) {
 		return script;
 	}
 

@@ -15,11 +15,12 @@ ska::TileWorldLoaderAggregate::TileWorldLoaderAggregate(
 }
 
 ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tileset) const {
-	CollisionProfile profile;
+	auto layers = std::vector<LayerPtr> {m_loaders.size()};
 	for (const auto& l : m_loaders) {
-		profile.addLayer(std::make_unique<Layer>(l->loadPhysics(tileset)));
+		layers.emplace_back(std::make_unique<Layer>(l->loadPhysics(tileset)));
 	}
-	return profile;
+	
+	return CollisionProfile{ tileset.getTileSize(), std::move(layers) };
 }
 
 std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {

@@ -15,8 +15,7 @@ ska::Vector2<std::optional<ska::Tile>> BuildTiles() {
 }
 
 TEST_CASE("[Layer]"){
-
-    auto tiles = BuildTiles();
+	const auto tiles = BuildTiles();
 	auto layer = ska::Layer{ tiles };
 
 	SUBCASE("Size") {
@@ -29,9 +28,17 @@ TEST_CASE("[Layer]"){
 		CHECK(layer.getCollision(4, 9) == ska::TileCollision::Void);
 	}
 
+	SUBCASE("Collision out of bounds") {
+		CHECK(layer.getCollision(10000, 7041) == ska::TileCollision::Yes);
+	}
+
 	SUBCASE("Block") {
 		CHECK(layer.getBlock(1, 7) != nullptr);
 		CHECK(layer.getBlock(4, 9) == nullptr);
+	}
+
+	SUBCASE("Block out of bounds") {
+		CHECK(layer.getBlock(1000, 7000) == nullptr);
 	}
 
 }

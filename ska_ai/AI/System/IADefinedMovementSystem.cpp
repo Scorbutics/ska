@@ -6,7 +6,9 @@
 #include "ECS/Basics/Physic/CollidableComponent.h"
 #include "Core/CodeDebug/CodeDebug.h"
 
-ska::IADefinedMovementSystem::IADefinedMovementSystem(EntityManager& entityManager, ScriptRegisterer* scriptSystem) : System(entityManager), m_scriptSystem(scriptSystem) {
+ska::IADefinedMovementSystem::IADefinedMovementSystem(EntityManager& entityManager, GameEventDispatcher& ged) : 
+	System(entityManager), 
+	m_eventDispatcher(ged) {
 }
 
 void ska::IADefinedMovementSystem::refresh(unsigned int) {
@@ -60,12 +62,12 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 				iamc.directionIndex = 0;
 			} else {
 				finished = true;
-				if (m_scriptSystem != nullptr && iamc.callbackActive) {
-					//TODO Event pour remplacer ça
+				if (iamc.callbackActive) {
 					/* triggers callback */
-					auto scriptEntity = createEntity();
+					const auto scriptEntity = createEntity();
 					m_componentAccessor.add<ScriptSleepComponent>(scriptEntity, std::move(iamc.callback));
-					m_scriptSystem->registerScript(nullptr, scriptEntity, entityId);
+					auto se = ScriptEvent{ ScriptEventType::ScriptCreate, scriptEntity, entityId, {}, {}, {}, pc };
+					m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(se);
 				}
 				/* removes component */
 				entityWithComponentsToDelete.push_back(entityId);

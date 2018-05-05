@@ -2,7 +2,6 @@
 
 #include <unordered_set>
 #include <vector>
-#include "Inputs/Readers/IniReader.h"
 #include "Draw/CameraAware.h"
 #include "ChipsetHolder.h"
 #include "LayerEvent.h"
@@ -25,7 +24,6 @@ namespace ska {
 
 	class TileWorld :
 		public MovableNonCopyable,
-	    public BlockAllowance,
 	    public ScriptPositionedGetter {
 	public:
 		TileWorld(GameEventDispatcher& ged, Tileset& tileset);
@@ -42,22 +40,15 @@ namespace ska {
 		std::size_t getBlocksX() const;
 		std::size_t getBlocksY() const;
 
-		Point<int> getBlockId(const Point<int>& pos, int layerIndex) const override;
 		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
-		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const override;
-		bool getCollision(unsigned int x, unsigned int y) const override;
+		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const;
 
-		unsigned int getBlockSize() const override;
+		unsigned int getBlockSize() const;
 
 		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type) override;
 		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScriptsAuto() override;
 
-		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, const unsigned int radius) const;
-		Point<int> alignOnBlock(const Rectangle& hitbox) const;
-
-		const Tile* getHighestBlock(std::size_t x, std::size_t y) const;
-
-		ska::DrawableFixedPriority& getLayerRenderable(std::size_t index);
+		const CollisionProfile& getCollisionProfile() const;
 
 	private:
 		bool m_autoScripts {};
@@ -72,8 +63,8 @@ namespace ska {
 
 		std::vector<LayerRenderablePtr> m_graphicLayers{};
 		std::vector<LayerEventPtr> m_events;
-		CollisionProfile m_physicLayers;
-
+		
 		gsl::not_null<Tileset*> m_tileset;
+		CollisionProfile m_physicLayers;
 	};
 }

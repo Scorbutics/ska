@@ -3,12 +3,12 @@
 #include "Point.h"
 
 namespace ska {
-	class TileWorld;
+	class CollisionProfile;
 
 	struct PointArea {
 		std::list<Point<int>> pointList;
 	};
 
-	std::vector<PointArea> GenerateAgglomeratedTileMap(const ska::TileWorld& world);
+	std::vector<PointArea> GenerateAgglomeratedTileMap(const CollisionProfile& world);
 	std::vector<Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas);
 }

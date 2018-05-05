@@ -1,10 +1,11 @@
 #pragma once
 #include <unordered_map>
+#include <unordered_set>
+#include <gsl/pointers>
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "TilesetEventLoader.h"
 #include "Point.h"
-#include <gsl/pointers>
 
 namespace ska {
 
@@ -19,10 +20,11 @@ namespace ska {
 		~TilesetEvent() override = default;
 
 	private:
+		std::string createNameFromScript(ScriptTriggerType type, const Point<int>& id) const;
 		void load(const TilesetEventLoader& loader);
 
 		std::unordered_map<std::string, ScriptSleepComponent> m_triggeredScripts;
-		std::unordered_map<int, ScriptSleepComponent> m_autoScripts;
+		std::vector<ScriptSleepComponent> m_autoScripts;
 
 		const std::string m_tilesetName;
 	};

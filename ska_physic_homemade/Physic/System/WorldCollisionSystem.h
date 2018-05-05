@@ -9,21 +9,22 @@
 #include "ECS/System.h"
 #include "Data/Events/GameEventDispatcher.h"
 
+
 namespace ska {
 	class WorldCollisionComponent;
-    class BlockAllowance;
+	class CollisionProfile;
 
 	class WorldCollisionSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
-		WorldCollisionSystem(EntityManager& entityManager, BlockAllowance& w, GameEventDispatcher& ged);
+		WorldCollisionSystem(EntityManager& entityManager, const CollisionProfile& w, GameEventDispatcher& ged);
 		WorldCollisionSystem& operator=(const WorldCollisionSystem&) = delete;
-		virtual ~WorldCollisionSystem();
+		~WorldCollisionSystem() override = default;
 	protected:
 		Rectangle calculateOverlap(Rectangle nextPos, const std::vector<Rectangle>& points);
 		virtual void refresh(unsigned int ellapsedTime) override;
 	private:
 		inline Rectangle createHitBox(EntityId entityId, bool xaxis, bool noMove) const;
-		BlockAllowance& m_collisionProfile;
+		const CollisionProfile& m_collisionProfile;
 		GameEventDispatcher& m_ged;
 	};
 }

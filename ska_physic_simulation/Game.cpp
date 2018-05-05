@@ -10,7 +10,7 @@
 #include "Exceptions/IllegalStateException.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
-#include "Utils/SkaConstants.h"
+#include "Inputs/Readers/IniReader.h"
 
 namespace ska {
 	class FileException;

@@ -5,15 +5,15 @@
 #include "Utils/RectangleUtils.h"
 #include "TileWorldPhysics.h"
 
-std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const ska::TileWorld& world) {
+std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const CollisionProfile& world) {
 	std::vector<ska::PointArea> result;
 	std::unordered_set<ska::Point<int>> remainingBlocks;
 
 	auto done = false;
 	do {
 		PointArea pointList{};
-		std::tie(done, pointList.pointList) = ska::MarchingSquare(world, remainingBlocks, [](const ska::Tile* b) {
-			return b != nullptr ? b->collision : ska::TileCollision::No;
+		std::tie(done, pointList.pointList) = MarchingSquare(world, remainingBlocks, [](const Tile* b) {
+			return b != nullptr ? b->collision : TileCollision::No;
 		});
 		result.push_back(pointList);
 	} while (!done);
@@ -105,6 +105,6 @@ std::vector<ska::Rectangle> ska::GenerateContourTileMap(const std::vector<PointA
 	return contours;
 }
 
-std::vector<ska::Rectangle> GenerateAgglomeratedTileMapBasic(const ska::TileWorld& world) {
+std::vector<ska::Rectangle> GenerateAgglomeratedTileMapBasic(const ska::CollisionProfile& world) {
 	return TileAgglomerate(world);
 }

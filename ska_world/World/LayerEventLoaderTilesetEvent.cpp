@@ -1,10 +1,19 @@
 #include "LayerEventLoaderTilesetEvent.h"
 #include "Layer.h"
+#include "CollisionProfile.h"
+#include "Exceptions/IllegalArgumentException.h"
+#include "Utils/StringUtils.h"
 
-ska::LayerEventLoaderTilesetEvent::LayerEventLoaderTilesetEvent(const Layer& layer, const TilesetEvent& tilesetEvent) :
+ska::LayerEventLoaderTilesetEvent::LayerEventLoaderTilesetEvent(const CollisionProfile& collisionProfile, const std::size_t layer, const TilesetEvent& tilesetEvent) :
+	m_collisionProfile(collisionProfile),
 	m_layer(layer),
 	m_tilesetEvent(tilesetEvent),
 	m_name("tilesetEvent") {
+
+	if(m_collisionProfile.layers() <= m_layer) {
+		throw IllegalArgumentException("The chosen layer doesn't exist : its index is too high (index " + 
+				StringUtils::toString(m_layer) + " of " + StringUtils::toString(m_collisionProfile.layers()) + " layers available in total)" );
+	}
 }
 
 ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderTilesetEvent::loadPositioned(unsigned int width, unsigned int height) const {
@@ -15,7 +24,7 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderTilesetEvent::loadPositioned(
 
 	for (auto x = 0u; x < width; x++ ) {
 		for (auto y = 0u; y < height; y++) {
-			const auto& b = m_layer.getBlock(x, y);
+			const auto& b = m_collisionProfile.getBlock(m_layer, x, y);
 			if (b != nullptr) {
 				for (const auto& scriptType : allValidScriptTypes) {
 					auto scripts = m_tilesetEvent.getScript(scriptType, b->id);

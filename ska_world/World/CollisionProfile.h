@@ -2,31 +2,44 @@
 #include "Tile.h"
 #include "Layer.h"
 #include "Utils/MovableNonCopyable.h"
+#include "Utils/TupleUtils.h"
 
 namespace ska {
 	class CollisionProfile : public MovableNonCopyable {
 	using LayerPtr = std::unique_ptr<Layer>;
 	public:
-		CollisionProfile() = default;
+		explicit CollisionProfile(unsigned int blockSize);
+		CollisionProfile(unsigned int blockSize, std::vector<LayerPtr> layers);
+		
 		CollisionProfile(CollisionProfile&&) = default;
 		CollisionProfile& operator=(CollisionProfile&&) = default;
 		~CollisionProfile() = default;
 
-		Layer& addLayer(LayerPtr l);
-		Layer& getLayer(unsigned int index);
-		bool collide(unsigned int x, unsigned int y) const;
-		const Tile* getBlock(unsigned int layer, unsigned x, unsigned y) const;
+		unsigned int getBlockSize() const;
+		std::size_t getBlocksX() const;
+		std::size_t getBlocksY() const;
 		bool empty() const;
 		std::size_t layers() const;
-		void clear();
+
+		bool collide(std::size_t blockX, std::size_t blockY) const;
+		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, unsigned int radius) const;
+		Point<int> alignOnBlock(const Rectangle& hitbox) const;
+		const Tile* getBlock(std::size_t layer, std::size_t blockX, std::size_t blockY) const;
+		const Tile* getHighestCollidingBlock(std::size_t blockX, std::size_t blockY) const;
+		const Tile* getHighestNonCollidingBlock(std::size_t blockX, std::size_t blockY) const;
 
 	private:
-		std::pair<unsigned, unsigned> safeGetSizes() const;
-		TileCollision getHigherCollision(unsigned int x, unsigned int y) const;
+		std::pair<std::size_t, std::size_t> safeGetSizes() const;
 		void calculate();
 
-		ska::Vector2<TileCollision> m_collisions;
+		Vector2<TileCollision> m_collisions;
+		
+		std::vector<Layer*> m_allLayers;
+		std::vector<LayerPtr> m_topLayers;
+		std::vector<LayerPtr> m_botLayers;
 
-		std::vector<LayerPtr> m_layers;
+		std::size_t m_blocksX{};
+		std::size_t m_blocksY{};
+		unsigned int m_blockSize;
 	};
 }

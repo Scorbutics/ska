@@ -2,11 +2,12 @@
 #include <vector>
 #include <string>
 #include "ScriptTriggerType.h"
+#include "../../../Point.h"
 
 namespace ska {
 	class ScriptSleepComponent {
 	public:
-		int id;
+		Point<int> id;
 		std::string name;
 		std::string context;
 		ScriptTriggerType triggeringType;

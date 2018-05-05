@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <string>
 #include <memory>
 
@@ -20,10 +19,11 @@ namespace ska {
 		LayerEvent(LayerEvent&&) = default;
         ~LayerEvent() override = default;
 
-		ScriptPack& getScript(const ska::Point<int>& coordinates);
+		ScriptPack& getScripts(const ska::Point<int>& coordinates);
 		ScriptPack& getAutoScript();
 
 	private:
+		void forcesAutoOnGlobalScripts();
 	    void load(const LayerEventLoader& loader, unsigned int width, unsigned int height);
 
 		std::string m_fileName;

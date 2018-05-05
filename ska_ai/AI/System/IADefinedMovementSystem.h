@@ -8,16 +8,15 @@
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 
 
-namespace ska {
-    class ScriptRegisterer;
+namespace ska { 
 	class IADefinedMovementSystem : public System<std::unordered_set<EntityId>, RequiredComponent<IADefinedMovementComponent, MovementComponent, PositionComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
-		explicit IADefinedMovementSystem(EntityManager& entityManager, ScriptRegisterer* scriptSystem = nullptr);
+		explicit IADefinedMovementSystem(EntityManager& entityManager, GameEventDispatcher& ged);
 		virtual ~IADefinedMovementSystem();
 	protected:
-		virtual void refresh(unsigned int ellapsedTime) override;
+		void refresh(unsigned int ellapsedTime) override;
 	private:
-		ScriptRegisterer* m_scriptSystem;
+		GameEventDispatcher& m_eventDispatcher;
 	};
 }
 

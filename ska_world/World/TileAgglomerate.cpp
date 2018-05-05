@@ -1,7 +1,7 @@
 #include <optional>
+#include <unordered_set>
 #include "TileAgglomerate.h"
-#include "TileWorld.h"
-
+#include "CollisionProfile.h"
 
 struct MergedTile {
 	std::optional<ska::Rectangle> area;
@@ -44,7 +44,7 @@ MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectan
 }
 
 //TODO rendre le code plus lisible et explicite
-void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
+void TileAgglomerate(const ska::CollisionProfile& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
 	const int blockSize = world.getBlockSize();
 	const auto width = world.getBlocksX();
 	const auto height = world.getBlocksY();
@@ -61,7 +61,7 @@ void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& laye
 
 		const auto x = horizontal ? i % width : i / height;
 		const auto y = horizontal ? i / width : i % height;
-		const auto col = world.getCollision(x, y);
+		const auto col = world.collide(x, y);
 		
 		const auto isMerged = layer[x][y].merged != nullptr;
 		if (col && !isMerged) {
@@ -75,7 +75,7 @@ void TileAgglomerate(const ska::TileWorld& world, ska::Vector2<MergedTile>& laye
 	
 }
 
-std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::TileWorld& world, ska::TileAgglomerationPriority priority) {
+std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::CollisionProfile& world, ska::TileAgglomerationPriority priority) {
 	ska::Vector2<MergedTile> layer;
 	const auto width = world.getBlocksX();
 	const auto height = world.getBlocksY();
@@ -84,7 +84,7 @@ std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::TileWorld& world, sk
 	TileAgglomerate(world, layer, priority == ska::TileAgglomerationPriority::HORIZONTAL);
 	TileAgglomerate(world, layer, priority == ska::TileAgglomerationPriority::VERTICAL);
 
-	std::unordered_set<ska::Rectangle> set;
+	std::unordered_set<Rectangle> set;
 	for(const auto& b : layer) {
 		if(b.area.has_value()) {
 			set.emplace(b.area.value());

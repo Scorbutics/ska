@@ -9,16 +9,16 @@
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "EntityCollisionResponse.h"
 
-ska::WorldCollisionResponse::WorldCollisionResponse(BlockAllowance& cp, GameEventDispatcher& ged, EntityManager& em) :
+ska::WorldCollisionResponse::WorldCollisionResponse(ska::TileWorld& world, GameEventDispatcher& ged, EntityManager& em) :
 	WorldCollisionObserver(std::bind(&WorldCollisionResponse::onWorldCollision, this, std::placeholders::_1), ged),
 	m_entityManager(em),
-	m_collisionProfile(cp) {
+	m_world(world) {
 }
 
-ska::WorldCollisionResponse::WorldCollisionResponse(const std::function<bool(CollisionEvent&)>& onEntityCollision, BlockAllowance& cp, GameEventDispatcher& ged, EntityManager& em) :
+ska::WorldCollisionResponse::WorldCollisionResponse(const std::function<bool(CollisionEvent&)>& onEntityCollision, TileWorld& world, GameEventDispatcher& ged, EntityManager& em) :
 	WorldCollisionObserver(onEntityCollision, ged),
 	m_entityManager(em),
-	m_collisionProfile(cp) {
+	m_world(world) {
 }
 
 bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
@@ -39,7 +39,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	 
 	if (wcol.xaxis) {
 		for (const auto& p : wcol.blockColPosX) {
-			colX |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
+			colX |= !m_world.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
 			if (colX) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);
@@ -58,7 +58,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	auto colY = false;
 	if (wcol.yaxis) {
 		for (const auto& p : wcol.blockColPosY) {
-			colY |= !m_collisionProfile.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
+			colY |= !m_world.isBlockAuthorizedAtPos(p, colE.collidableComponent.authorizedBlockIds);
 			if (colY) {
 				auto& movementComponent = m_entityManager.getComponent<ska::MovementComponent>(colE.entity);
 				auto& forceComponent = m_entityManager.getComponent<ska::ForceComponent>(colE.entity);

@@ -5,8 +5,9 @@
 #include "ECS/Basics/Physic/CollisionContact.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Utils/RectangleUtils.h"
+#include "World/CollisionProfile.h"
 
-ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, BlockAllowance& cp, GameEventDispatcher& ged) :
+ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, const CollisionProfile& cp, GameEventDispatcher& ged) :
 	System(entityManager),
 	m_collisionProfile(cp),
 	m_ged(ged) {
@@ -56,7 +57,7 @@ void FindAndEraseDoublons(std::vector<ska::Rectangle>& outputX, std::vector<ska:
 
 }
 
-bool IntersectBlocksAtPos(const ska::BlockAllowance& world, const ska::Rectangle& hitbox, std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
+bool IntersectBlocksAtPos(const ska::CollisionProfile& world, const ska::Rectangle& hitbox, std::vector<ska::Rectangle>& outputX, std::vector<ska::Rectangle>& outputY) {
 	auto horizontalSegment = ska::Point<int> { hitbox.x, hitbox.x + hitbox.w };
 	auto verticalSegment = ska::Point<int> { hitbox.y, hitbox.y + hitbox.h };
 	const auto m_blockSize = world.getBlockSize();
@@ -70,7 +71,7 @@ bool IntersectBlocksAtPos(const ska::BlockAllowance& world, const ska::Rectangle
 
 	for (auto x = horizontalSegment.x; x <= horizontalSegment.y; x++) {
 		for (auto y = verticalSegment.x; y <= verticalSegment.y; y++) {
-			if (world.getCollision(x, y)) {
+			if (world.collide(x, y)) {
 				const ska::Rectangle hitboxBlock{ static_cast<int>(x * m_blockSize), static_cast<int>(y * m_blockSize), static_cast<int>(m_blockSize), static_cast<int>(m_blockSize) };
 
 				//Vertical
@@ -180,5 +181,3 @@ ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool ,
 	return hitBox;
 }
 
-ska::WorldCollisionSystem::~WorldCollisionSystem() {
-}

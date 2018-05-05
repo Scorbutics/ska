@@ -8,7 +8,7 @@ namespace ska {
 
 	struct Tile {
 		Tile() = default;
-		Tile(Point<int> posChipset, TileProperties properties, TileCollision col);
+		Tile(Point<int> posChipset, TileProperties properties = {}, TileCollision col = TileCollision::No);
 	
 		Point<int> id {};
 		TileCollision collision {};
