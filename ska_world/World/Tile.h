@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Point.h"
-#include "../../ska_world/World/TileCollision.h"
-#include "../../ska_world/World/TileProperties.h"
+#include "TileCollision.h"
+#include "TileProperties.h"
 
 namespace ska {
 
