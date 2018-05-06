@@ -11,9 +11,9 @@ namespace ska {
 		~FpsRenderable() = default;
 
 		void setVisible(bool v);
-		void update(const double value);
+		void update(double value);
 
-		bool isVisible() const override;
+		bool isVisible() const;
 		void render(const Renderer& renderer) const override;
 
 	private:

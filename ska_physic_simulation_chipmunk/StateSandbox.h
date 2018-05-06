@@ -25,10 +25,6 @@ public:
 			}
 		}*/
 	}
-	
-	bool isVisible() const override {
-		return true;
-	}
 
 	//ska::Vector2<ska::TileRenderable*> layerRenderableBlocks;
 	std::unique_ptr<ska::Tileset> chipset;

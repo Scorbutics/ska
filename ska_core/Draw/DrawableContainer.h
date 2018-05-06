@@ -35,19 +35,17 @@ namespace ska {
 		 * \param d The drawable to add
 		 */
 		void add(const Drawable& d) {
-			if (d.isVisible()) {
-				const auto currentPriority = d.getPriority();
-				const auto currentPriority2D = d.getPriority2D();
-				if (currentPriority2D > m_topPriority2D) {
-					m_topPriority2D = currentPriority2D;
-				}
-
-				if (currentPriority > m_topPriority) {
-					m_topPriority = currentPriority;
-				}
-
-				push(d);
+			const auto currentPriority = d.getPriority();
+			const auto currentPriority2D = d.getPriority2D();
+			if (currentPriority2D > m_topPriority2D) {
+				m_topPriority2D = currentPriority2D;
 			}
+
+			if (currentPriority > m_topPriority) {
+				m_topPriority = currentPriority;
+			}
+
+			push(d);			
 		}
 
 		/**
@@ -55,10 +53,8 @@ namespace ska {
 		 * \param d The Drawable
 		 */
 		void addHead(DrawableFixedPriority& d) {
-			if (d.isVisible()) {
-				d.setPriority(++m_topPriority);
-				add(d);
-			}
+			d.setPriority(++m_topPriority);
+			add(d);			
 		}
 
 		/**
@@ -66,10 +62,8 @@ namespace ska {
 		* \param d The Drawable
 		*/
 		void addHead2D(DrawableFixedPriority& d) {
-			if (d.isVisible()) {
-				d.setPriority(++m_topPriority2D);
-				add(d);
-			}
+			d.setPriority(++m_topPriority2D);
+			add(d);			
 		}
 
 	protected:

@@ -2,13 +2,13 @@
 
 #include <unordered_set>
 #include <vector>
-#include "LayerEvent.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include "LayerRenderable.h"
 #include "TilesetEvent.h"
 #include "Tileset.h"
 #include "CollisionProfile.h"
+#include "LayerRenderable.h"
+#include "LayerEvent.h"
 
 namespace ska {
 	class TileWorldLoader;
@@ -28,12 +28,10 @@ namespace ska {
 		std::size_t getPixelWidth() const;
 		std::size_t getPixelHeight() const;
 
-		void update(const ska::Rectangle& cameraPos);
-
 		std::size_t getBlocksX() const;
 		std::size_t getBlocksY() const;
 
-		virtual void graphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables);
+		void graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const;
 
 		unsigned int getBlockSize() const;
@@ -58,6 +56,6 @@ namespace ska {
 		std::vector<LayerEventPtr> m_events;
 		
 		gsl::not_null<Tileset*> m_tileset;
-		CollisionProfile m_physicLayers;
+		CollisionProfile m_collisionProfile;
 	};
 }

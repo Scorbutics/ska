@@ -66,11 +66,5 @@ namespace ska {
 		*/
 		virtual int getPriority() const = 0;
 
-
-		/**
-		 * \brief Visibility accessor
-		 * \return true if the current Drawable is visible, false otherwise
-		 */
-		virtual bool isVisible() const = 0;
 	};
 }

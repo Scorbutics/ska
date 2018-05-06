@@ -1,7 +1,7 @@
 #pragma once
-#include "LayerRenderable.h"
 #include "LayerEvent.h"
 #include "CollisionProfile.h"
+#include "LayerRenderable.h"
 
 namespace ska {
 	class Tileset;

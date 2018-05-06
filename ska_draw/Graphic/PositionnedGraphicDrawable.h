@@ -46,9 +46,6 @@ namespace ska {
 			m_angle = angle;
 		}
 
-		virtual bool isVisible() const override {
-			return true;
-		}
 		virtual ~PositionnedGraphicDrawable() = default;
 
 	private:

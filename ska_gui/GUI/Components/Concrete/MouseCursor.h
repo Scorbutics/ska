@@ -10,7 +10,7 @@ namespace ska {
 		explicit MouseCursor(const std::string& styleName);
 		void move(const Point<int>& mousePos);
 
-		bool isVisible() const override;
+		bool isVisible() const;
 
 		void grab();
 		void basic();

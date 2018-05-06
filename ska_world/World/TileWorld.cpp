@@ -17,7 +17,7 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset) :
 	m_blocksY(0),
 	m_blockSize(tileset.getTileSize()),
 	m_tileset(&tileset),
-	m_physicLayers(tileset.getTileSize()) {
+	m_collisionProfile(tileset.getTileSize()) {
 }
 
 ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const TileWorldLoader& loader) :
@@ -27,21 +27,14 @@ ska::TileWorld::TileWorld(GameEventDispatcher& ged, Tileset& tileset, const Tile
 
 bool ska::TileWorld::isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const {
 	const auto blockPos = pos / m_blockSize;
-	const auto& b = m_physicLayers.getBlock(0, blockPos.x, blockPos.y);
+	const auto& b = m_collisionProfile.getBlock(0, blockPos.x, blockPos.y);
 	const auto result = b != nullptr ? (authorizedBlocks.find(b->id.x + b->id.y * m_tileset->getWidth()) != authorizedBlocks.end()) : false;
 	return result;
 }
 
-void ska::TileWorld::update(const ska::Rectangle& cameraPos) {
-	//Animations update
-	for (auto& graphicLayer : m_graphicLayers) {
-		graphicLayer->update(cameraPos);
-	}
-}
-
-void ska::TileWorld::graphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
+void ska::TileWorld::graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables) {
 	for (const auto& graphicLayer : m_graphicLayers) {
-		drawables.add(*graphicLayer);
+		graphicLayer->graphicUpdate(cameraPos, drawables);
 	}
 }
 
@@ -57,29 +50,23 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	if (worldChanged || tilesetChanged) {
 		m_fullName = loader.getName();
 
-		m_physicLayers = loader.loadPhysics(*m_tileset);
+		m_collisionProfile = loader.loadPhysics(*m_tileset);
 		m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
 
-		if (m_physicLayers.empty() || m_graphicLayers.empty() || m_physicLayers.layers() != m_graphicLayers.size()) {
+		if (m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
 			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
 		}
 
-		m_blocksX = m_physicLayers.getBlocksX();
-		m_blocksY = m_physicLayers.getBlocksY();
-
-		auto priority = 0;
-		for (const auto& graphicLayer : m_graphicLayers) {
-			graphicLayer->setPriority(priority);
-			priority++;
-		}
+		m_blocksX = m_collisionProfile.getBlocksX();
+		m_blocksY = m_collisionProfile.getBlocksY();
 
 		//Layer Events
 		m_events = loader.loadEvents(m_blocksX, m_blocksY);
 
 		//Tileset based layer events
-		const auto layers = m_physicLayers.layers();
+		const auto layers = m_collisionProfile.layers();
 		for (auto i = 0u; i < layers; i++) {
-			m_events.push_back(std::make_unique<LayerEvent>(LayerEventLoaderTilesetEvent{ m_physicLayers, i, m_tileset->getTilesetEvent() }, m_blocksX, m_blocksY));
+			m_events.push_back(std::make_unique<LayerEvent>(LayerEventLoaderTilesetEvent{ m_collisionProfile, i, m_tileset->getTilesetEvent() }, m_blocksX, m_blocksY));
 		}
 
         const ska::FileNameData fndata(m_fullName);
@@ -145,7 +132,7 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 }
 
 const ska::CollisionProfile& ska::TileWorld::getCollisionProfile() const {
-	return m_physicLayers;
+	return m_collisionProfile;
 }
 
 std::size_t ska::TileWorld::getBlocksX() const{

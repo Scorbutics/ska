@@ -4,6 +4,7 @@
 #include "LayerRenderable.h"
 #include "TileWorld.h"
 #include "LayerEventLoaderText.h"
+#include "LayerYIndexRenderable.h"
 
 ska::TileWorldLoaderAggregate::TileWorldLoaderAggregate(
                                                 std::string levelPath,
@@ -25,9 +26,17 @@ ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tilese
 
 std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
 	std::vector<LayerRenderablePtr> renderables;
-	for (const auto& l : m_loaders) {
-		renderables.push_back(std::make_unique<LayerRenderable>(l->loadAnimations(tileset), tileset.getTexture(), blockSize));
+	if(m_loaders.empty()) {
+		return renderables;
 	}
+
+	auto index = 0u;
+	renderables.push_back(std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize));
+	while (index < m_loaders.size()) {
+		auto layer = std::make_unique<LayerYIndexRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize, index);
+		renderables.push_back(std::move(layer));
+	}
+
 	return renderables;
 }
 

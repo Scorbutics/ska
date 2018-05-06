@@ -26,7 +26,7 @@ namespace ska {
 
 		Widget(Widget& parent, Point<int>& position);
 
-		bool isVisible() const override;
+		bool isVisible() const;
 
 		virtual void setWidth(unsigned int w);
 

@@ -64,10 +64,6 @@ namespace ska {
 			}
 		}
 
-		bool isVisible() const override {
-			return m_visible;
-		}
-
 		void setColor(ska::Color color) {
 			m_color = std::move(color);
 		}

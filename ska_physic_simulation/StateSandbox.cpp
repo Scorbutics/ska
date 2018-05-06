@@ -156,7 +156,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 }
 
 void StateSandbox::onGraphicUpdate(unsigned int ellapsedTime, ska::DrawableContainer& drawables) {
-	m_world.graphicUpdate(ellapsedTime, drawables);
+	m_world.graphicUpdate(m_cameraSystem->getDisplay(), drawables);
 }
 
 void StateSandbox::onEventUpdate(unsigned int) {

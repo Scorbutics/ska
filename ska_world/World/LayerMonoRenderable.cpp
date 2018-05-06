@@ -1,8 +1,9 @@
 #include "TileWorld.h"
-#include "LayerRenderable.h"
+#include "LayerMonoRenderable.h"
 #include "Draw/Renderer.h"
+#include "Draw/DrawableContainer.h"
 
-ska::LayerRenderable::LayerRenderable(Vector2<TileAnimation*> block, const Texture& tileset, const unsigned int blockSize) :
+ska::LayerMonoRenderable::LayerMonoRenderable(Vector2<TileAnimation*> block, const Texture& tileset, const unsigned int blockSize) :
 	m_tileSize(blockSize),
 	m_animations(std::move(block)),
 	m_tileset(tileset),
@@ -10,19 +11,12 @@ ska::LayerRenderable::LayerRenderable(Vector2<TileAnimation*> block, const Textu
 	m_height(m_width == 0 ? 0 : (m_animations.size() / m_animations.lineSize()) * m_tileSize ) {
 }
 
-void ska::LayerRenderable::update(const ska::Rectangle& cameraPos) {
+void ska::LayerMonoRenderable::graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables) {
 	m_lastCameraPos = cameraPos;
+	drawables.add(*this);
 }
 
-bool ska::LayerRenderable::isVisible() const {
-	return !m_animations.empty();
-}
-
-void ska::LayerRenderable::clear() {
-	m_animations.clear();
-}
-
-void ska::LayerRenderable::render(const Renderer& renderer) const {
+void ska::LayerMonoRenderable::render(const Renderer& renderer) const {
 	const auto absORelX = NumberUtils::absolute(m_lastCameraPos.x);
 	const auto absORelY = NumberUtils::absolute(m_lastCameraPos.y);
 	const auto cameraPositionStartBlockX = absORelX / m_tileSize;

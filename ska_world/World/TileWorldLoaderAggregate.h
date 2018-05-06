@@ -2,7 +2,7 @@
 #include <string>
 #include "TileWorldLoader.h"
 #include "Tileset.h"
-#include "LayerRenderable.h"
+#include "LayerMonoRenderable.h"
 #include "CollisionProfile.h"
 #include "LayerLoader.h"
 
