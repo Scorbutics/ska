@@ -27,8 +27,8 @@ namespace ska {
 		}
 
 		template <class ... Args, class Function>
-		static void for_each(Args&&...args, const Function& func) {
-			int _[] = { 0, (func(std::forward<Args>(args)...) , 0)... };
+		static void for_each(const Function& func, Args&&...args) {
+			int _[] = { 0, (func(std::forward<Args>(args)) , 0)... };
 			(void)_;
 		}
 
