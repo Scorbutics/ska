@@ -1,11 +1,9 @@
 #pragma once
-#include <optional>
 #include <memory>
 #include "TilesetRenderable.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "TilesetLoader.h"
 #include "TilesetEvent.h"
-#include "Graphic/Animation.h"
 
 namespace ska {
 	struct Tile;

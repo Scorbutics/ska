@@ -62,6 +62,8 @@ namespace ska {
 
 		float rotationX{};
 		float rotationY{};
+
+		std::size_t layer{};
 	};
 }
 

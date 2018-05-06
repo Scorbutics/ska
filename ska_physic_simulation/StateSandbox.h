@@ -10,6 +10,10 @@
 #include "Physic/System/WorldCollisionResponse.h"
 #include "Physic/System/DebugWorldCollisionResponse.h"
 
+namespace ska {
+	class CameraSystem;
+}
+
 class StateSandbox :
 	public ska::StateBase,
 	public ska::SubObserver<ska::GameEvent> {

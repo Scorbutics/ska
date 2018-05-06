@@ -2,12 +2,15 @@
 #include "MarchingSquare.h"
 #include "CollisionProfile.h"
 
-ska::Point<int> MarchingSquareGetStartingPoint(const ska::CollisionProfile& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred);
-ska::StepDirection MarchingSquareNextStep(const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep);
-void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path);
+namespace ska {
+	Point<int> MarchingSquareGetStartingPoint(std::size_t layerMax, const CollisionProfile& world, const std::unordered_set<Point<int>>& in, const MarchingSquarePredicate& pred);
+	void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<Point<int>>& path);
+	TileCollision GetCollisionBoundChecked(std::size_t layerMax, const CollisionProfile& world, const Point<int>& point, const MarchingSquarePredicate& pred);
+	StepDirection MarchingSquareNextStep(std::size_t layerMax, const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep);
+}
 
-std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::CollisionProfile& world, std::unordered_set<ska::Point<int>>& doneBlocks, const ska::MarchingSquarePredicate& pred) {
-	const auto startPoint = MarchingSquareGetStartingPoint(world, doneBlocks, pred);
+std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const std::size_t layerMax, const ska::CollisionProfile& world, std::unordered_set<ska::Point<int>>& doneBlocks, const ska::MarchingSquarePredicate& pred) {
+	const auto startPoint = MarchingSquareGetStartingPoint(layerMax, world, doneBlocks, pred);
 	std::list<ska::Point<int>> path;
 
 	const auto width = world.getBlocksX();
@@ -25,7 +28,7 @@ std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::Colli
 			path.push_back(point * world.getBlockSize());
 		}
 		
-		const auto direction = MarchingSquareNextStep(world, point, pred, lastDirection);
+		const auto direction = MarchingSquareNextStep(layerMax, world, point, pred, lastDirection);
 		switch(direction) {
 		case ska::StepDirection::Down:
 			point.y++;
@@ -53,7 +56,7 @@ std::pair<bool, std::list<ska::Point<int>>> ska::MarchingSquare(const ska::Colli
 	return {false, path};
 }
 
-void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
+void ska::ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
 	if(!path.empty()) {
 		auto& lastPoint = path.back();
 		auto& firstPoint = path.front();
@@ -67,13 +70,13 @@ void ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
 	}
 }
 
-ska::Point<int> MarchingSquareGetStartingPoint(const ska::CollisionProfile& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred) {
+ska::Point<int> ska::MarchingSquareGetStartingPoint(const std::size_t layerMax, const ska::CollisionProfile& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred) {
 	const int width = world.getBlocksX();
 	const int height = world.getBlocksY();
 
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
-			const auto& block = world.getHighestCollidingBlock(x, y);
+			const auto& block = world.getHighestCollidingBlock(layerMax, x, y);
 			if(pred(block) == ska::TileCollision::Yes) {
 				if (in.count({ x, y }) == 0) {
 					return { x, y };
@@ -85,24 +88,24 @@ ska::Point<int> MarchingSquareGetStartingPoint(const ska::CollisionProfile& worl
 	return { static_cast<int>(width), static_cast<int>(height) };
 }
 
-ska::TileCollision GetCollisionBoundChecked(const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred) {
+ska::TileCollision ska::GetCollisionBoundChecked(const std::size_t layerMax, const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred) {
 	const int width = world.getBlocksX();
 	const int height = world.getBlocksY();
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
-		const auto& b = world.getHighestCollidingBlock(point.x, point.y);
+		const auto& b = world.getHighestCollidingBlock(layerMax, point.x, point.y);
 		return pred(b);
 	}
 	return ska::TileCollision::No;
 }
 
-ska::StepDirection MarchingSquareNextStep(const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep) {
+ska::StepDirection ska::MarchingSquareNextStep(const std::size_t layerMax, const ska::CollisionProfile& world, const ska::Point<int>& point, const ska::MarchingSquarePredicate& pred, const ska::StepDirection& previousStep) {
 	ska::StepDirection result;
 
-	const auto upLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y - 1 }, pred) != ska::TileCollision::No;
-	const auto upRight = GetCollisionBoundChecked(world, { point.x, point.y - 1 }, pred) != ska::TileCollision::No;
-	const auto downLeft = GetCollisionBoundChecked(world, { point.x - 1, point.y }, pred) != ska::TileCollision::No;
-	const auto downRight = GetCollisionBoundChecked(world, { point.x, point.y }, pred) != ska::TileCollision::No;
+	const auto upLeft = GetCollisionBoundChecked(layerMax, world, { point.x - 1, point.y - 1 }, pred) != ska::TileCollision::No;
+	const auto upRight = GetCollisionBoundChecked(layerMax, world, { point.x, point.y - 1 }, pred) != ska::TileCollision::No;
+	const auto downLeft = GetCollisionBoundChecked(layerMax, world, { point.x - 1, point.y }, pred) != ska::TileCollision::No;
+	const auto downRight = GetCollisionBoundChecked(layerMax, world, { point.x, point.y }, pred) != ska::TileCollision::No;
 
 	const auto state = upLeft + (upRight << 1) + (downLeft << 2) + (downRight << 3);
 

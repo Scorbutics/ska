@@ -9,6 +9,6 @@ namespace ska {
 		std::list<Point<int>> pointList;
 	};
 
-	std::vector<PointArea> GenerateAgglomeratedTileMap(const CollisionProfile& world);
-	std::vector<Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas);
+	std::vector<PointArea> GenerateAgglomeratedTileMap(const std::size_t layerMax, const CollisionProfile& world);
+	std::vector<Rectangle> GenerateContourTileMap(const std::vector<PointArea>& areas);	
 }

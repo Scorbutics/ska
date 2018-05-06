@@ -2,10 +2,9 @@
 #include "TileWorld.h"
 #include <cassert>
 
-ska::Layer::Layer(Vector2<std::optional<Tile>> block, const bool top) :
+ska::Layer::Layer(Vector2<std::optional<Tile>> block) :
 	m_fileWidth(0),
-	m_fileHeight(0),
-	m_top(top) {
+	m_fileHeight(0) {
 	reset(std::move(block));
 }
 
@@ -23,10 +22,6 @@ ska::Tile const* ska::Layer::getBlock(const std::size_t x, const std::size_t y) 
 	}
 	
 	return m_block[x][y].has_value() ? &m_block[x][y].value() : nullptr;
-}
-
-bool ska::Layer::isTop() const {
-	return m_top;
 }
 
 ska::TileCollision ska::Layer::getCollision(const std::size_t x, const std::size_t y) const {

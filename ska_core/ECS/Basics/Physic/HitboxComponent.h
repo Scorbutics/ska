@@ -2,7 +2,6 @@
 
 namespace ska {
 	struct HitboxComponent {
-	public:
 	    HitboxComponent();
 	    ~HitboxComponent() = default;
 		int xOffset;

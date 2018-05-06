@@ -10,5 +10,5 @@ namespace ska {
 		VERTICAL
 	};
 	
-	std::vector<ska::Rectangle> TileAgglomerate(const ska::CollisionProfile& world, TileAgglomerationPriority priority = TileAgglomerationPriority::HORIZONTAL);
+	std::vector<ska::Rectangle> TileAgglomerate(std::size_t layerMax, const ska::CollisionProfile& world, TileAgglomerationPriority priority = TileAgglomerationPriority::HORIZONTAL);
 }

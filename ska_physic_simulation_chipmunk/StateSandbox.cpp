@@ -75,7 +75,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		const auto world = ska::TileWorld { m_eventDispatcher, tileset, levelLoader };
 
-		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(world.getCollisionProfile());
+		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(1, world.getCollisionProfile());
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
 
 		m_space.setGravity({ 0., 300 });
@@ -103,14 +103,16 @@ void StateSandbox::onGraphicUpdate(unsigned int, ska::DrawableContainer& drawabl
 	}
 }
 
-void StateSandbox::onEventUpdate(unsigned int timeStep) {
+void StateSandbox::onEventUpdate(const unsigned int timeStep) {
 	m_space.step(timeStep/1000.);
 }
 
 void StateSandbox::createBall(const ska::Point<float>& point) {
 	auto ballEntity = m_entityManager.createEntity();
 
-	m_entityManager.addComponent(ballEntity, ska::PositionComponent{});
+	auto pc = ska::PositionComponent{};
+	pc.layer = 1;
+	m_entityManager.addComponent(ballEntity, std::move(pc));
 
 	ska::GraphicComponent gc;
 	gc.sprites.push_back(m_ballTexture);

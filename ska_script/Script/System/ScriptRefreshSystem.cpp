@@ -5,7 +5,6 @@
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
-#include "ECS/Basics/Physic/BlockAllowance.h"
 #include "Data/Events/InputKeyEvent.h"
 #include "Inputs/InputAction.h"
 #include "Inputs/InputContextManager.h"

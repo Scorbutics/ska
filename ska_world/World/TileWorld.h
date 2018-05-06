@@ -2,10 +2,7 @@
 
 #include <unordered_set>
 #include <vector>
-#include "Draw/CameraAware.h"
-#include "ChipsetHolder.h"
 #include "LayerEvent.h"
-#include "ECS/Basics/Physic/BlockAllowance.h"
 #include "ECS/Basics/Script/ScriptPositionedGetter.h"
 #include "Data/Events/GameEventDispatcher.h"
 #include "LayerRenderable.h"
@@ -15,10 +12,6 @@
 
 namespace ska {
 	class TileWorldLoader;
-	class CameraSystem;
-	class PhysicObject;
-	struct Tile;
-	class PrefabEntityManager;
 	class ScriptSleepComponent;
 	class DrawableContainer;
 

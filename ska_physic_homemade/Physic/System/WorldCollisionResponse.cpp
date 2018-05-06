@@ -1,12 +1,7 @@
 #include "Data/Events/CollisionEvent.h"
 #include "WorldCollisionResponse.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "ECS/Basics/Physic/CollidableComponent.h"
 #include "ECS/EntityManager.h"
-#include "ECS/Basics/Physic/BlockAllowance.h"
-#include "ECS/Basics/Physic/ForceComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
 #include "EntityCollisionResponse.h"
 
 ska::WorldCollisionResponse::WorldCollisionResponse(ska::TileWorld& world, GameEventDispatcher& ged, EntityManager& em) :

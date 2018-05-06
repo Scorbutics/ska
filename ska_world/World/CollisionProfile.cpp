@@ -10,12 +10,17 @@ void ska::CollisionProfile::calculate() {
 	std::tie(m_blocksX, m_blocksY) = safeGetSizes();
 	
 	if (m_blocksX != 0 && m_blocksY != 0) {
-		m_collisions.resize(m_blocksX, m_blocksY);
-		for (auto x = 0u; x < m_blocksX; x++) {
-			for (auto y = 0u; y < m_blocksY; y++) {
-				const auto collision = getHighestCollidingBlock(x, y);
-				m_collisions[x][y] = collision == nullptr ? TileCollision::No : TileCollision::Yes;
+		m_collisions.resize(m_layers.size());
+		auto index = 0u;
+		for (auto& col : m_collisions) {
+			col.resize(m_blocksX, m_blocksY);
+			for (auto x = 0u; x < m_blocksX; x++) {
+				for (auto y = 0u; y < m_blocksY; y++) {
+					const auto collision = getHighestCollidingBlock(index, x, y);
+					col[x][y] = collision == nullptr ? TileCollision::No : TileCollision::Yes;
+				}
 			}
+			index++;
 		}
 	}
 }
@@ -25,35 +30,26 @@ ska::CollisionProfile::CollisionProfile(const unsigned int blockSize) :
 }
 
 ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, std::vector<LayerPtr> layers) :
-	m_allLayers(layers.size()),
+	m_layers(layers.size()),
 	m_blockSize(blockSize) {
 	
 	for (auto& l : layers) {
 		assert(l != nullptr);
-		if (l->isTop()) {
-			m_topLayers.emplace_back(std::move(l));
-		} else {
-			m_botLayers.emplace_back(std::move(l));
-		}
-	}
-
-	for(auto& l : m_botLayers) {
-		m_allLayers.emplace_back(l.get());
-	}
-
-	for (auto& l : m_topLayers) {
-		m_allLayers.emplace_back(l.get());
+		m_layers.emplace_back(std::move(l));
 	}
 
 	calculate();
 }
 
-bool ska::CollisionProfile::collide(const std::size_t blockX, const std::size_t blockY) const {
-	return !m_collisions.has(blockX, blockY) || m_collisions[blockX][blockY] == TileCollision::Yes;
+bool ska::CollisionProfile::collide(const std::size_t layerMax, const std::size_t blockX, const std::size_t blockY) const {
+	if(layerMax >= m_collisions.size()) {
+		return true;
+	}
+	return !m_collisions[layerMax].has(blockX, blockY) || m_collisions[layerMax][blockX][blockY] == TileCollision::Yes;
 }
 
 const ska::Tile* ska::CollisionProfile::getBlock(const std::size_t layer, const std::size_t blockX, const std::size_t blockY) const {
-	return m_allLayers[layer]->getBlock(blockX, blockY);
+	return 	m_layers[layer]->getBlock(blockX, blockY);
 }
 
 bool ska::CollisionProfile::empty() const {
@@ -61,10 +57,10 @@ bool ska::CollisionProfile::empty() const {
 }
 
 std::size_t ska::CollisionProfile::layers() const {
-	return m_topLayers.size() + m_botLayers.size();
+	return m_layers.size();
 }
 
-ska::Rectangle ska::CollisionProfile::placeOnNearestPracticableBlock(const Rectangle& hitBox, unsigned int radius) const {
+ska::Rectangle ska::CollisionProfile::placeOnNearestPracticableBlock(const std::size_t layerMax, const Rectangle& hitBox, unsigned int radius) const {
 	std::vector<Rectangle> blocksPos;
 	auto hitBoxBlock = (Point<int>(hitBox) + Point<int>(hitBox.w, hitBox.h) / 2) / m_blockSize;
 	auto result = hitBox;
@@ -119,7 +115,7 @@ ska::Rectangle ska::CollisionProfile::placeOnNearestPracticableBlock(const Recta
 	});
 
 	for (const auto& r : blocksPos) {
-		if (!collide(r.x, r.y)) {
+		if (!collide(layerMax, r.x, r.y)) {
 			result = r;
 			result.x *= m_blockSize;
 			result.y *= m_blockSize;
@@ -148,10 +144,13 @@ std::size_t ska::CollisionProfile::getBlocksY() const {
 	return m_blocksY;
 }
 
-const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size_t blockX, const std::size_t blockY) const {
+const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
 	const Tile* voidCollidingTile = nullptr;
+	if(layerTop >= m_layers.size()) {
+		return nullptr;
+	}
 
-	for (auto it = m_botLayers.crbegin(); it != m_botLayers.crend(); ++it) {
+	for (auto it = m_layers.crbegin() + layerTop; it != m_layers.crend(); ++it) {
 		auto& l = *it->get();
 
 		const auto& collision = l.getCollision(blockX, blockY);
@@ -174,8 +173,12 @@ const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size
 	return voidCollidingTile;
 }
 
-const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::size_t blockX, const std::size_t blockY) const {
-	for (auto it = m_botLayers.crbegin(); it != m_botLayers.crend(); ++it) {
+const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
+	if (layerTop >= m_layers.size()) {
+		return nullptr;
+	}
+
+	for (auto it = m_layers.crbegin() + layerTop; it != m_layers.crend(); ++it) {
 		auto& l = *it->get();
 
 		const auto& collision = l.getCollision(blockX, blockY);
@@ -190,7 +193,7 @@ std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
 	std::optional<unsigned int> width;
 	std::optional<unsigned int> height;
 
-	for(const auto& lRef : m_allLayers) {
+	for(const auto& lRef : m_layers) {
 		const auto& l = *lRef;
 		if (!width.has_value() || !height.has_value()) {
 			width = l.getBlocksX();

@@ -1,7 +1,6 @@
 #include "IADefinedMovementSystem.h"
 #include "Utils/TimeUtils.h"
 #include "Utils/RectangleUtils.h"
-#include "ECS/Basics/Script/ScriptRegisterer.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Physic/CollidableComponent.h"
 #include "Core/CodeDebug/CodeDebug.h"

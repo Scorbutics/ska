@@ -21,22 +21,20 @@ namespace ska {
 		bool empty() const;
 		std::size_t layers() const;
 
-		bool collide(std::size_t blockX, std::size_t blockY) const;
-		Rectangle placeOnNearestPracticableBlock(const Rectangle& hitBox, unsigned int radius) const;
+		bool collide(std::size_t layerMax, std::size_t blockX, std::size_t blockY) const;
+		Rectangle placeOnNearestPracticableBlock(std::size_t layerMax, const Rectangle& hitBox, unsigned int radius) const;
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
 		const Tile* getBlock(std::size_t layer, std::size_t blockX, std::size_t blockY) const;
-		const Tile* getHighestCollidingBlock(std::size_t blockX, std::size_t blockY) const;
-		const Tile* getHighestNonCollidingBlock(std::size_t blockX, std::size_t blockY) const;
+		const Tile* getHighestCollidingBlock(std::size_t layerTop, std::size_t blockX, std::size_t blockY) const;
+		const Tile* getHighestNonCollidingBlock(std::size_t layerTop, std::size_t blockX, std::size_t blockY) const;
 
 	private:
 		std::pair<std::size_t, std::size_t> safeGetSizes() const;
 		void calculate();
 
-		Vector2<TileCollision> m_collisions;
+		std::vector<Vector2<TileCollision>> m_collisions;
 		
-		std::vector<Layer*> m_allLayers;
-		std::vector<LayerPtr> m_topLayers;
-		std::vector<LayerPtr> m_botLayers;
+		std::vector<LayerPtr> m_layers;
 
 		std::size_t m_blocksX{};
 		std::size_t m_blocksY{};

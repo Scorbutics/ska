@@ -3,21 +3,32 @@
 #include "TileAgglomerate.h"
 #include "CollisionProfile.h"
 
-struct MergedTile {
-	std::optional<ska::Rectangle> area;
-	MergedTile* merged = nullptr;
+namespace ska {
+	namespace detail {
+		struct MergedTile {
+			std::optional<ska::Rectangle> area;
+			MergedTile* merged = nullptr;
 
-	MergedTile& operator=(const MergedTile& mergedTile) = default;
-};
+			MergedTile& operator=(const MergedTile& mergedTile) = default;
+		};
 
-bool TileAgglomerateCheckSizeNotMerged(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal) {
+		bool TileAgglomerateCheckSizeNotMerged(unsigned int blockSize, const std::optional<Rectangle>& value, bool horizontal);
+		MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal);
+		void TileAgglomerate(const std::size_t layerMax, const ska::CollisionProfile& world, ska::Vector2<MergedTile>& layer, bool horizontal);
+	}
+
+}
+
+
+
+bool ska::detail::TileAgglomerateCheckSizeNotMerged(unsigned int blockSize, const std::optional<ska::Rectangle>& value, bool horizontal) {
 	if (!value.has_value()) {
 		return false;
 	}
 	return horizontal ? value->h == blockSize : value->w == blockSize;
 }
 
-MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
+ska::detail::MergedTile& ska::detail::TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectangle currentArea, unsigned int blockSize, MergedTile* withLastTile, bool horizontal) {
 	const auto canBeMerged = withLastTile != nullptr && (TileAgglomerateCheckSizeNotMerged(blockSize, withLastTile->area, horizontal));
 	if (!canBeMerged) {
 		currentTileToMerge.area = currentArea;
@@ -44,7 +55,7 @@ MergedTile& TileAgglomerateMergeTile(MergedTile& currentTileToMerge, ska::Rectan
 }
 
 //TODO rendre le code plus lisible et explicite
-void TileAgglomerate(const ska::CollisionProfile& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
+void ska::detail::TileAgglomerate(const std::size_t layerMax, const ska::CollisionProfile& world, ska::Vector2<MergedTile>& layer, bool horizontal) {
 	const int blockSize = world.getBlockSize();
 	const auto width = world.getBlocksX();
 	const auto height = world.getBlocksY();
@@ -61,7 +72,7 @@ void TileAgglomerate(const ska::CollisionProfile& world, ska::Vector2<MergedTile
 
 		const auto x = horizontal ? i % width : i / height;
 		const auto y = horizontal ? i / width : i % height;
-		const auto col = world.collide(x, y);
+		const auto col = world.collide(layerMax, x, y);
 		
 		const auto isMerged = layer[x][y].merged != nullptr;
 		if (col && !isMerged) {
@@ -75,14 +86,14 @@ void TileAgglomerate(const ska::CollisionProfile& world, ska::Vector2<MergedTile
 	
 }
 
-std::vector<ska::Rectangle> ska::TileAgglomerate(const ska::CollisionProfile& world, ska::TileAgglomerationPriority priority) {
-	ska::Vector2<MergedTile> layer;
+std::vector<ska::Rectangle> ska::TileAgglomerate(const std::size_t layerMax, const ska::CollisionProfile& world, ska::TileAgglomerationPriority priority) {
+	Vector2<detail::MergedTile> layer;
 	const auto width = world.getBlocksX();
 	const auto height = world.getBlocksY();
 	layer.resize(width, height);
 
-	TileAgglomerate(world, layer, priority == ska::TileAgglomerationPriority::HORIZONTAL);
-	TileAgglomerate(world, layer, priority == ska::TileAgglomerationPriority::VERTICAL);
+	TileAgglomerate(layerMax, world, layer, priority == ska::TileAgglomerationPriority::HORIZONTAL);
+	TileAgglomerate(layerMax, world, layer, priority == ska::TileAgglomerationPriority::VERTICAL);
 
 	std::unordered_set<Rectangle> set;
 	for(const auto& b : layer) {

@@ -5,14 +5,29 @@
 #include "Utils/RectangleUtils.h"
 #include "TileWorldPhysics.h"
 
-std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const CollisionProfile& world) {
-	std::vector<ska::PointArea> result;
-	std::unordered_set<ska::Point<int>> remainingBlocks;
+namespace ska {
+	namespace detail {
+		enum class Align {
+			Horizontal,
+			Vertical,
+			None
+		};
+
+		Align GetPointAlignment(const Point<int>& currentPoint, const Point<int>& lastPoint);
+		std::vector<PointArea> FilterAlignedSuccessivePoints(const std::vector<PointArea>& areas);
+		std::vector<Rectangle> GenerateAgglomeratedTileMapBasic(std::size_t layerMax, const CollisionProfile & world);
+		Rectangle GenerateRect(const Point<int>& start, const Point<int>& end);
+	}
+}
+
+std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t layerMax, const CollisionProfile& world) {
+	std::vector<PointArea> result;
+	std::unordered_set<Point<int>> remainingBlocks;
 
 	auto done = false;
 	do {
 		PointArea pointList{};
-		std::tie(done, pointList.pointList) = MarchingSquare(world, remainingBlocks, [](const Tile* b) {
+		std::tie(done, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, [](const Tile* b) {
 			return b != nullptr ? b->collision : TileCollision::No;
 		});
 		result.push_back(pointList);
@@ -21,7 +36,7 @@ std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const CollisionProf
 	return result;
 }
 
-ska::Rectangle GenerateRect(const ska::Point<int>& start, const ska::Point<int>& end) {
+ska::Rectangle ska::detail::GenerateRect(const Point<int>& start, const Point<int>& end) {
 	static constexpr auto depth = 3;
 	auto rect = ska::RectangleUtils::createRectangleFromPoints(start, end);
 	if (rect.w == 0) {
@@ -39,19 +54,13 @@ ska::Rectangle GenerateRect(const ska::Point<int>& start, const ska::Point<int>&
 	return rect;
 }
 
-enum class Align {
-	Horizontal,
-	Vertical,
-	None
-};
-
-Align GetPointAlignment(const ska::Point<int>& currentPoint, const ska::Point<int>& lastPoint) {
+ska::detail::Align ska::detail::GetPointAlignment(const Point<int>& currentPoint, const Point<int>& lastPoint) {
 	const auto sameDirectionY = currentPoint.x == lastPoint.x && currentPoint.y != lastPoint.y;
 	const auto sameDirectionX = currentPoint.y == lastPoint.y && currentPoint.x != lastPoint.x;
 	return sameDirectionX ? Align::Horizontal : (sameDirectionY ? Align::Vertical : Align::None);
 }
 
-std::vector<ska::PointArea> FilterAlignedSuccessivePoints(const std::vector<ska::PointArea>& areas) {
+std::vector<ska::PointArea> ska::detail::FilterAlignedSuccessivePoints(const std::vector<ska::PointArea>& areas) {
 	std::vector<ska::PointArea> filteredPointAreas;
 	filteredPointAreas.reserve(areas.size());
 
@@ -91,13 +100,13 @@ std::vector<ska::PointArea> FilterAlignedSuccessivePoints(const std::vector<ska:
 }
 
 std::vector<ska::Rectangle> ska::GenerateContourTileMap(const std::vector<PointArea>& areas) {
-	const auto filteredPointAreas = FilterAlignedSuccessivePoints(areas);
+	const auto filteredPointAreas = detail::FilterAlignedSuccessivePoints(areas);
 
 	std::vector<ska::Rectangle> contours;
 	for (const auto& pa : filteredPointAreas) {
 		auto lastPointIt = pa.pointList.cbegin();
 		for (auto pIt = lastPointIt; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
-			auto rect = GenerateRect(*lastPointIt, *pIt);
+			auto rect = detail::GenerateRect(*lastPointIt, *pIt);
 			contours.push_back(std::move(rect));
 		}
 	}
@@ -105,6 +114,6 @@ std::vector<ska::Rectangle> ska::GenerateContourTileMap(const std::vector<PointA
 	return contours;
 }
 
-std::vector<ska::Rectangle> GenerateAgglomeratedTileMapBasic(const ska::CollisionProfile& world) {
-	return TileAgglomerate(world);
+std::vector<ska::Rectangle> ska::detail::GenerateAgglomeratedTileMapBasic(const std::size_t layerMax, const ska::CollisionProfile& world) {
+	return TileAgglomerate(layerMax, world);
 }
