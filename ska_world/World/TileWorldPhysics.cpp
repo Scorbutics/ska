@@ -35,7 +35,10 @@ std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t l
 		std::tie(lastStartPoint, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, [](const Tile* b) {
 			return b != nullptr ? b->collision : TileCollision::No;
 		}, lastStartPoint);
-		result.push_back(pointList);
+		
+		if (!pointList.pointList.empty()) {
+			result.push_back(pointList);
+		}
 	} while (lastStartPoint.x != width || lastStartPoint.y != height);
 
 	return result;

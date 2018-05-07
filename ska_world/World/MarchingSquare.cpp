@@ -23,7 +23,7 @@ std::pair<ska::Point<int>, std::list<ska::Point<int>>> ska::MarchingSquare(const
 	auto point = startPoint;
 	auto lastDirection = ska::StepDirection::None;
 	do {
-		if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
+		if(point.x <= width && point.y <= height && point.x >= 0 && point.y >= 0) {
 			doneBlocks.insert(point);
 			path.push_back(point * world.getBlockSize());
 		}
@@ -51,9 +51,14 @@ std::pair<ska::Point<int>, std::list<ska::Point<int>>> ska::MarchingSquare(const
 		}
 		lastDirection = direction;
 	} while (point != startPoint);
-	
+
+	//Unique point = noise
+	if(path.size() == 1) {
+		return { startPoint, std::list<ska::Point<int>>() };
+	}
+
 	ReorganizeFirstPointToBeAlwaysTopLeft(path);
-	return { startPoint, path};
+	return { startPoint, path };
 }
 
 void ska::ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path) {
@@ -73,9 +78,9 @@ void ska::ReorganizeFirstPointToBeAlwaysTopLeft(std::list<ska::Point<int>>& path
 ska::Point<int> ska::MarchingSquareGetStartingPoint(const std::size_t layerMax, const ska::CollisionProfile& world, const std::unordered_set<ska::Point<int>>& in, const ska::MarchingSquarePredicate& pred, const Point<int>& start) {
 	const int width = world.getBlocksX();
 	const int height = world.getBlocksY();
-
-	for (auto x = start.x; x < width; x++) {
-		for (auto y = start.y; y < height; y++) {
+	auto startPoint = start;
+	for (auto x = startPoint.x; x < width; x++) {
+		for (auto y = startPoint.y; y < height; y++) {
 			const auto& block = world.getHighestCollidingBlock(layerMax, x, y);
 			if(pred(block) == ska::TileCollision::Yes) {
 				if (in.count({ x, y }) == 0) {
@@ -83,6 +88,7 @@ ska::Point<int> ska::MarchingSquareGetStartingPoint(const std::size_t layerMax, 
 				}
 			}
 		}
+		startPoint.y = 0;
 	}
 
 	return { static_cast<int>(width), static_cast<int>(height) };
