@@ -51,7 +51,7 @@ ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::Tilese
     auto eventLoaders = std::vector<std::unique_ptr<ska::LayerEventLoader>> {};
     eventLoaders.push_back(std::make_unique<ska::LayerEventLoaderText>(levelName + "/" + levelFileName.name + "E.txt"));
 
-    return { levelName, std::move(loaders), std::move(eventLoaders) };
+    return { levelName, 1, std::move(loaders), std::move(eventLoaders) };
 }
 
 bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
