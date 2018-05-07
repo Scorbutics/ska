@@ -115,7 +115,9 @@ std::vector<ska::Rectangle> ska::GenerateContourTileMap(const std::vector<PointA
 		auto lastPointIt = pa.pointList.cbegin();
 		for (auto pIt = lastPointIt; pIt != pa.pointList.cend(); lastPointIt = pIt, ++pIt) {
 			auto rect = detail::GenerateRect(*lastPointIt, *pIt);
-			contours.push_back(std::move(rect));
+			if (rect.h > 0 && rect.w > 0) {
+				contours.push_back(std::move(rect));
+			}
 		}
 	}
 

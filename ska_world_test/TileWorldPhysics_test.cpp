@@ -31,6 +31,7 @@ namespace TileWorldPhysics {
 	}
 
 }
+
 TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 	
 	SUBCASE("1 tile 1 collision") {
@@ -101,7 +102,7 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		}
 	}
 
-	SUBCASE("4x4 tile 'hollow rectangle'") {
+	SUBCASE("4x4 tiles 'hollow rectangle'") {
 		static constexpr auto width = 4u;
 		const auto collisions = ska::Vector2<char>{ width, {
 			'#', '#', '#', '#',
@@ -166,7 +167,26 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		}
 	}
 
-	SUBCASE("4x4 tile 'hollow donut'") {
+	SUBCASE("5x5 tiles 'hollow rectangle with center'") {
+		static constexpr auto width = 5u;
+		const auto collisions = ska::Vector2<char>{ width,{
+			'#', '#', '#', '#', '#',
+			'#',  0,   0,   0,  '#',
+			'#',  0,  '#',  0,  '#',
+			'#',  0,   0,   0,  '#',
+			'#', '#', '#', '#', '#'
+		} };
+		const auto collisionProfile = TileWorldPhysics::BuildCollisionProfile(collisions);
+		auto tileMap = GenerateAgglomeratedTileMap(0, collisionProfile);
+
+		CHECK(tileMap.size() == 3);
+		CHECK(tileMap[0].pointList.size() == 20);
+		CHECK(tileMap[1].pointList.size() == 12);
+		CHECK(tileMap[2].pointList.size() == 4);
+
+	}
+
+	SUBCASE("4x4 tiles 'hollow donut'") {
 		static constexpr auto width = 4u;
 		const auto collisions = ska::Vector2<char>{ width,{
 			 0,  '#', '#',  0,
@@ -253,6 +273,20 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		}
 	}
 
+	SUBCASE("4x4 tiles no collision") {
+		static constexpr auto width = 4u;
+		const auto collisions = ska::Vector2<char>{ width,{
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0
+		} };
+		const auto collisionProfile = TileWorldPhysics::BuildCollisionProfile(collisions);
+		auto tileMap = GenerateAgglomeratedTileMap(0, collisionProfile);
+
+		CHECK(tileMap.empty());
+	}
+
 	SUBCASE("Complex") {
 		static constexpr auto width = 10u;
 
@@ -278,4 +312,33 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		CHECK(!tileMap.empty());
 	}
 
+}
+
+TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
+	
+	SUBCASE("4x4 tiles 'hollow rectangle'") {
+		auto points = std::vector<ska::Point<int>>{};
+		points.emplace_back(0, 0);
+		points.emplace_back(0, 10);
+		points.emplace_back(0, 20);
+		points.emplace_back(0, 30);
+		points.emplace_back(0, 40);
+		points.emplace_back(10, 40);
+		points.emplace_back(20, 40);
+		points.emplace_back(30, 40);
+		points.emplace_back(40, 40);
+		points.emplace_back(40, 30);
+		points.emplace_back(40, 20);
+		points.emplace_back(40, 10);
+		points.emplace_back(40, 0);
+		points.emplace_back(30, 0);
+		points.emplace_back(20, 0);
+		points.emplace_back(10, 0);
+
+		auto pointArea = ska::PointArea{};
+		pointArea.pointList.insert(std::end(pointArea.pointList), std::begin(points), std::end(points));
+
+		auto contourMap = ska::GenerateContourTileMap(std::vector<ska::PointArea>{pointArea});
+		CHECK(!contourMap.empty());
+	}
 }
