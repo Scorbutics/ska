@@ -17,5 +17,5 @@ namespace ska {
 
 	using MarchingSquarePredicate = std::function<TileCollision(const Tile*)>;
 
-	std::pair<bool, std::list<Point<int>>> MarchingSquare(std::size_t layerMax, const CollisionProfile& world, std::unordered_set<Point<int>>& doneBlocks, const MarchingSquarePredicate& pred);
+	std::pair<Point<int>, std::list<Point<int>>> MarchingSquare(std::size_t layerMax, const CollisionProfile& world, std::unordered_set<Point<int>>& doneBlocks, const MarchingSquarePredicate& pred, const Point<int>& lastStartPoint);
 }

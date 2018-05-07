@@ -20,15 +20,16 @@ void ska::ShadowSystem::refresh(unsigned int) {
 	
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
-		auto& pos = m_componentAccessor.get<ska::PositionComponent>(entityId);
-		auto& hc = m_componentAccessor.get<ska::HitboxComponent>(entityId);
+		auto& pos = m_componentAccessor.get<PositionComponent>(entityId);
+		auto& hc = m_componentAccessor.get<HitboxComponent>(entityId);
 
-		const auto relPosX = static_cast<int>(pos.x + hc.xOffset - camera.x);
-		const auto relPosY = static_cast<int>(pos.y + hc.yOffset - camera.y - m_shadow.getHeight()/3);
-		const auto priority = static_cast<int>(pos.y - camera.h - 10);
+		const auto relPosX = static_cast<int>(pos.x + 12 - camera.x);
+		const auto relPosY = static_cast<int>(pos.y + hc.yOffset / 2 - camera.y - m_shadow.getHeight()/2);
+
+		const auto priority = static_cast<int>(10);
 		if (!((((static_cast<int>(relPosX + m_shadow.getWidth())) < 0) || (relPosX >= camera.w)) ||
 			((static_cast<int>(relPosY + m_shadow.getHeight()) < 0) || (relPosY >= camera.h)))) {
-			m_pgd.push_back(PositionnedGraphicDrawable{ m_shadow, relPosX, relPosY, priority, priority });
+			m_pgd.emplace_back(m_shadow, relPosX, relPosY, priority, priority);
 		}
 	}
 

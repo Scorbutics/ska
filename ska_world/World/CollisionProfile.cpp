@@ -30,7 +30,6 @@ ska::CollisionProfile::CollisionProfile(const unsigned int blockSize) :
 }
 
 ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, std::vector<LayerPtr> layers) :
-	m_layers(layers.size()),
 	m_blockSize(blockSize) {
 	
 	for (auto& l : layers) {

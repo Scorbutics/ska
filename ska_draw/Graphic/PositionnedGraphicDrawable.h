@@ -19,7 +19,7 @@ namespace ska {
 
 		void operator=(const PositionnedGraphicDrawable&) = delete;
 
-		virtual void render(const Renderer& renderer) const override {
+		void render(const Renderer& renderer) const override {
 			m_graphic.render(renderer, m_position.x, m_position.y, nullptr, m_angle, m_rotationCenter.has_value() ? &m_rotationCenter.value() : nullptr);
 		}
 

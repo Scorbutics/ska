@@ -4,6 +4,7 @@
 #include "MarchingSquare.h"
 #include "Utils/RectangleUtils.h"
 #include "TileWorldPhysics.h"
+#include "CollisionProfile.h"
 
 namespace ska {
 	namespace detail {
@@ -24,14 +25,18 @@ std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t l
 	std::vector<PointArea> result;
 	std::unordered_set<Point<int>> remainingBlocks;
 
-	auto done = false;
+	Point<int> lastStartPoint = {};
+
+	const int width = world.getBlocksX();
+	const int height = world.getBlocksY();
+
 	do {
 		PointArea pointList{};
-		std::tie(done, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, [](const Tile* b) {
+		std::tie(lastStartPoint, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, [](const Tile* b) {
 			return b != nullptr ? b->collision : TileCollision::No;
-		});
+		}, lastStartPoint);
 		result.push_back(pointList);
-	} while (!done);
+	} while (lastStartPoint.x != width || lastStartPoint.y != height);
 
 	return result;
 }

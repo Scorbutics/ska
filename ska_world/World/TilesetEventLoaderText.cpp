@@ -3,13 +3,15 @@
 #include "TilesetEventLoaderText.h"
 #include "Exceptions/FileException.h"
 #include "Utils/StringUtils.h"
+#include "Utils/FileUtils.h"
 
 ska::TilesetEventLoaderText::TilesetEventLoaderText(std::string tilesetName) :
 	m_tilesetName(std::move(tilesetName)) {
 }
 
 std::vector<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::load() const {
-	const auto& tilesetFolder = m_tilesetName.substr(0, m_tilesetName.find_last_of('.'));
+	const auto tilesetFolderFn = ska::FileNameData{ m_tilesetName };
+	const auto tilesetFolder = tilesetFolderFn.path + "/" + tilesetFolderFn.name;
 	std::ifstream scriptList((tilesetFolder + "/scripts.txt").c_str(), std::ifstream::in);
 	std::string ss;
 

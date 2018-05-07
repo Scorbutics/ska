@@ -5,11 +5,11 @@ ska::LayerYIndexRenderable::LayerYIndexRenderable(Vector2<TileAnimation*> block,
 	m_tileset(tileset) {
 
 	const auto width = block.lineSize();
-	const auto height = width == 0 ? 0 : (block.size() / block.lineSize()) * m_blockSize;
+	const auto height = width == 0 ? 0 : (block.size() / block.lineSize());
 
 	if (height != 0) {
 		m_lines.reserve(height);
-		for(auto i = 0u; i < width; i++) {
+		for(auto i = 0u; i < height; i++) {
 			auto row = LayerRenderableRow{};
 			row.load(i, block, m_tileset, blockSize);
 			row.setPriority(priority + i * blockSize);
@@ -19,9 +19,22 @@ ska::LayerYIndexRenderable::LayerYIndexRenderable(Vector2<TileAnimation*> block,
 }
 
 void ska::LayerYIndexRenderable::graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables) {
-	for(auto& line : m_lines) {
-		line.graphicUpdate(cameraPos, drawables);
+	const auto absORelY = NumberUtils::absolute(cameraPos.y);
+	const auto cameraPositionStartBlockY = absORelY / m_blockSize;
+	auto cameraPositionEndBlockY = (absORelY + cameraPos.w) / m_blockSize;
+
+	if(cameraPositionStartBlockY > m_lines.size()) {
+		return;
 	}
+
+	if (cameraPositionEndBlockY >= m_lines.size()) {
+		cameraPositionEndBlockY = m_lines.size() - 1;
+	}
+
+	for (auto i = cameraPositionStartBlockY; i <= cameraPositionEndBlockY; i++) {
+		m_lines[i].graphicUpdate(cameraPos, drawables);
+	}
+	
 }
 
 void ska::LayerYIndexRenderable::setPriority(unsigned int priority) {

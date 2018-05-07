@@ -11,9 +11,8 @@ void ska::LayerRenderableRow::load(std::size_t rowIndex, Vector2<TileAnimation*>
 	m_rowIndex = rowIndex;
 	m_animations.resize(blocks.lineSize());
 
-	auto row = blocks[rowIndex];
-	for (auto i = 0u; i < row.lineSize; i++) {
-		m_animations[i] = row[i];
+	for (auto x = 0u; x < blocks.lineSize(); x++) {
+		m_animations[x] = blocks[x][rowIndex];		
 	}
 	Priorized::setPriority(rowIndex * blockSize);
 }

@@ -8,15 +8,18 @@
 
 ska::TileWorldLoaderAggregate::TileWorldLoaderAggregate(
                                                 std::string levelPath,
+												const std::size_t layerFixed,
                                                 std::vector<std::unique_ptr<LayerLoader>> loaders,
                                                 std::vector<std::unique_ptr<LayerEventLoader>> eventLoaders) :
-    m_levelPath(std::move(levelPath)),
+	m_layerFixed(layerFixed > loaders.size() ? loaders.size() : layerFixed),
+	m_levelPath(std::move(levelPath)),
     m_loaders(std::move(loaders)),
     m_eventLoaders(std::move(eventLoaders)) {
 }
 
 ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tileset) const {
-	auto layers = std::vector<LayerPtr> {m_loaders.size()};
+	auto layers = std::vector<LayerPtr> {};
+	layers.reserve(m_loaders.size());
 	for (const auto& l : m_loaders) {
 		layers.emplace_back(std::make_unique<Layer>(l->loadPhysics(tileset)));
 	}
@@ -31,7 +34,9 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics
 	}
 
 	auto index = 0u;
-	renderables.push_back(std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize));
+	while (index < m_layerFixed) {
+		renderables.push_back(std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize));
+	}
 	while (index < m_loaders.size()) {
 		auto layer = std::make_unique<LayerYIndexRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize, index);
 		renderables.push_back(std::move(layer));
