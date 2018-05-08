@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_physic_homemade)
 
-find_path(SDL2_INCLUDE_DIR NAME SDL.h)
-if(NOT SDL2_INCLUDE_DIR)
-	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
-endif()
-
+set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
 set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_draw)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_world)

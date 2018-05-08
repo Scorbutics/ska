@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core)
 
-find_path(SDL2_INCLUDE_DIR NAME SDL.h)
-if(NOT SDL2_INCLUDE_DIR)
-	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
-endif()
-
+set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
 
 include_directories(${SDL2_INCLUDE_DIR})

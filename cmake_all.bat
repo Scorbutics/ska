@@ -1,4 +1,4 @@
-cd ../../../ska_core
+cd ska_core
 call ../cmake_.bat %*
 cd ../ska_core_test
 call ../cmake_.bat %*
