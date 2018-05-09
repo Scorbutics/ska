@@ -42,5 +42,27 @@ namespace ska {
         #endif
 
 
+		namespace detail {
+			template <const char* TypeToFind, const char* FirstType, const char* ... RemainingTypes>
+			struct containsCharImpl {
+				static constexpr bool value = containsCharImpl<TypeToFind, FirstType>::value || containsCharImpl<TypeToFind, RemainingTypes...>::value;
+			};
+
+			template <const char* TypeToFind, const char* Type>
+			struct containsCharImpl<TypeToFind, Type> {
+				static constexpr bool value = TypeToFind == Type;
+			};
+
+		}
+
+		template <const char* TypeToFind, const char* ... Types>
+		struct containsChar {
+			static constexpr bool value = detail::containsCharImpl<TypeToFind, Types...>::value;
+		};
+
+		template <const char* TypeToFind>
+		struct containsChar <TypeToFind> {
+			static constexpr bool value = false;
+		};
     }
 }

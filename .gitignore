@@ -2,7 +2,6 @@
 *.dll
 *.exe
 *.tmp
-*.lib
 *.pdb
 *.ilk
 *.tlog
@@ -26,7 +25,6 @@
 /*/*.sln*
 /*/*.vcxproj*
 /*/cmake_install.cmake
-/*/Debug
-/*/Release
 /ska_physic_chipmunk/ska_physic_chipmunk.dir/Debug
 /ska_physic_homemade/ska_physic_homemade.dir/Debug
+/ska_physic_simulation_chipmunk/Debug
