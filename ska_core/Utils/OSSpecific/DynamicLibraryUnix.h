@@ -11,8 +11,8 @@
 namespace ska {
 	class DynamicLibraryUnix {
 	public:
-		DynamicLibraryUnix(const char* lib) {
-			auto errorMessage = loadLibrary(lib);
+		DynamicLibraryUnix(const std::string& lib) {
+			auto errorMessage = loadLibrary(("lib" + lib + ".so").c_str());
 			if(m_handle == nullptr) {
 				throw ska::InputException(std::move(errorMessage));
 			}

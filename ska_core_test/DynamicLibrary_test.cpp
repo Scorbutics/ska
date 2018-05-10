@@ -15,8 +15,11 @@ namespace sdldynlib {
 		SDL_LOG_CRITICAL,
 		SDL_INIT
 	};
-
+	
+	template<>
 	std::string IdNamedFunction<SDLCalls::SDL_LOG_CRITICAL>::name = "SDL_LogCritical";
+	
+	template<>
 	std::string IdNamedFunction<SDLCalls::SDL_INIT>::name = "SDL_Init";
 
 

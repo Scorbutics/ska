@@ -33,7 +33,7 @@ void ska::FileUtilsUnix::createDirectory(const std::string& directoryName) {
 	}
 }
 
-std::string ska::FileUtilsWin::getExecutablePath() {
+std::string ska::FileUtilsUnix::getExecutablePath() {
   std::vector<char> buf(1024, 0);
   size_t size = buf.size();
   auto havePath = false;
