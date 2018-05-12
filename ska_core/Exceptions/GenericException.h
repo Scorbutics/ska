@@ -1,16 +1,17 @@
 #pragma once
-#include <exception>
 #include <string>
+#include <exception>
 
 namespace ska {
 	class GenericException : public std::exception {
 	public:
-		GenericException(std::string message, std::string type) throw();
-		const char* what() const throw() override;
-		virtual ~GenericException() throw();
-
+		GenericException(const char*  message = "Error", const char* type = nullptr);
+		const char* what() const noexcept override;
+		~GenericException() = default;
+	
 	private:
-		std::string m_message, m_typedMessage;
+		std::string m_message;
+		std::string m_typedMessage;
 	};
 
 }

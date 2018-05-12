@@ -1,5 +1,6 @@
 #include <doctest.h>
 #include <SDL.h>
+#include <iostream>
 #include "Utils/DynamicLibrary.h"
 #include "Utils/StringConstExpr.h"
 
@@ -30,7 +31,7 @@ class SDLLibrary : public sdldynlib::SDLDynLib {
 
 public:
 	SDLLibrary() : 
-		sdldynlib::SDLDynLib("SDL2") {
+		sdldynlib::SDLDynLib("libc++") {
 	}
 
 	int init(Uint32 flags) {
@@ -43,7 +44,11 @@ public:
 };
 
 TEST_CASE("[DynamicLibrary]") {
-	auto sdlLib = SDLLibrary{};
-	sdlLib.init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-	sdlLib.logCritical(SDL_LOG_CATEGORY_AUDIO, "toto");
+	try {
+		auto sdlLib = SDLLibrary{};
+		sdlLib.init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+		sdlLib.logCritical(SDL_LOG_CATEGORY_AUDIO, "toto");
+	} catch (std::exception& e) {
+		CHECK(false);
+	}
 }

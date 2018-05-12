@@ -4,10 +4,10 @@ namespace ska {
 	class ScriptException : public GenericException {
 	public:
 
-		ScriptException(std::string message) : GenericException(message, "ScriptException") {
+		ScriptException(const char* message) : GenericException(message, "ScriptException") {
 		}
 
-		ScriptException(std::string message, const std::string& type) : GenericException(message, type) {
+		ScriptException(const char* message, const char* type) : GenericException(message, type) {
 		}
 
 		virtual ~ScriptException() throw() {

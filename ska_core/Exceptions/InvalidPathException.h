@@ -5,7 +5,7 @@ namespace ska {
 	class InvalidPathException : public InputException {
 	public:
 
-		InvalidPathException(std::string message) : InputException(message, "InvalidPathException") {
+		InvalidPathException(const char* message) : InputException(message, "InvalidPathException") {
 		}
 
 		virtual ~InvalidPathException() {

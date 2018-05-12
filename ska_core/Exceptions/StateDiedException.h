@@ -5,7 +5,7 @@ namespace ska {
 	class StateDiedException : public GenericException {
 	public:
 
-		explicit StateDiedException(std::string message) : GenericException(message, "StateDiedException") {
+		explicit StateDiedException(const char* message) : GenericException(message, "StateDiedException") {
 		}
 
 		virtual ~StateDiedException() {

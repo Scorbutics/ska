@@ -5,10 +5,10 @@ namespace ska {
 	class InputException : public GenericException {
 	public:
 
-		InputException(std::string message) : GenericException(message, "InputException") {
+		InputException(const char* message) : GenericException(message, "InputException") {
 		}
 
-		InputException(std::string message, const std::string& type) : GenericException(message, type) {
+		InputException(const char* message, const char* type) : GenericException(message, type) {
 		}
 
 		virtual ~InputException() {

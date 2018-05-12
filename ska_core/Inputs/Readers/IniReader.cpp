@@ -18,7 +18,7 @@ ska::IniReader::IniReader() {
 ska::IniReader::IniReader(const std::string& inifilename) : 
 IniReader() {
 	if(!load(inifilename)) {
-		throw ska::FileException("File not found : " + inifilename);
+		throw ska::FileException(("File not found : " + inifilename).c_str());
 	}
 }
 

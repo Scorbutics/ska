@@ -53,7 +53,7 @@ namespace ska {
 			if (function != nullptr) {
 				m_cache.set(Func::id, std::move(function));
 			} else {
-				throw InputException("Unable to find the function " + funcName + " in the module " + m_libraryPath + ". Error logged : " + error);
+				throw InputException(("Unable to find the function " + funcName + " in the module " + m_libraryPath + ". Error logged : " + error).c_str());
 			}
 			
 		}

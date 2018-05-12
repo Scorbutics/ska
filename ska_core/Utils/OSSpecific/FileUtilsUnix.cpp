@@ -28,7 +28,7 @@ void ska::FileUtilsUnix::createDirectory(const std::string& directoryName) {
 	if (stat(directoryName.c_str(), &st) == -1) {
 		status = mkdir(directoryName.c_str(), 0700);
 		if(status == -1) {
-			throw FileException("Unknown error during creation of the directory " + directoryName);
+			throw FileException(("Unknown error during creation of the directory " + directoryName).c_str());
 		}
 	}
 }

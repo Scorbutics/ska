@@ -32,13 +32,13 @@ namespace ska {
 		template<typename T>
 		T get(const std::string& path) const {
 			/* unimplemented default */
-			throw IllegalArgumentException("Unsupported converted type for path " + path);
+			throw IllegalArgumentException(("Unsupported converted type for path " + path).c_str());
 		}
 
 	private:
 		void existsOrThrow(const std::string& path) const {
 			if (!exists(path)) {
-				throw InvalidPathException("Unable to find the ini path " + path);
+				throw InvalidPathException(("Unable to find the ini path " + path).c_str());
 			}
 		}
 

@@ -41,7 +41,7 @@ bool ska::StringUtils::isInt(const std::string& s, const int base) {
 int ska::StringUtils::strToInt(const std::string& str) {
 	const auto& sTrimed = trim(str);
 	if (!isInt(sTrimed, 10)) {
-		throw NumberFormatException(sTrimed);
+		throw NumberFormatException(sTrimed.c_str());
 	}
 	return atoi(sTrimed.c_str());
 }
@@ -49,7 +49,7 @@ int ska::StringUtils::strToInt(const std::string& str) {
 unsigned int ska::StringUtils::strToUint(const std::string& str) {
 	const auto& sTrimed = trim(str);
 	if (!isInt(sTrimed, 10)) {
-		throw NumberFormatException(sTrimed);
+		throw NumberFormatException(sTrimed.c_str());
 	}
 	return stoul(sTrimed);
 }
@@ -68,7 +68,7 @@ bool ska::StringUtils::isDecimal(const std::string& s) {
 
 float ska::StringUtils::strToFloat(const std::string& str) {
 	if (!isDecimal(str)) {
-		throw NumberFormatException(str);
+		throw NumberFormatException(str.c_str());
 	}
 	return static_cast<float>(atof(str.c_str()));
 }

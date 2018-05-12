@@ -6,10 +6,10 @@ namespace ska {
 	class IllegalArgumentException : public GenericException {
 	public:
 
-		IllegalArgumentException(std::string message) : IllegalArgumentException(message, "IllegalArgumentException") {
+		IllegalArgumentException(const char* message) : IllegalArgumentException(message, "IllegalArgumentException") {
 		}
 
-		IllegalArgumentException(std::string message, const std::string& type) : GenericException(message, type) {
+		IllegalArgumentException(const char* message, const char* type) : GenericException(message, type) {
 		}
 
 		virtual ~IllegalArgumentException() throw() {

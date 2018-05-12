@@ -5,10 +5,10 @@ namespace ska {
 	class TerminateProcessException : public GenericException {
 	public:
 
-		TerminateProcessException(std::string message) : TerminateProcessException(message, "TerminateProcessException") {
+		TerminateProcessException(const char* message) : TerminateProcessException(message, "TerminateProcessException") {
 		}
 
-		TerminateProcessException(std::string message, const std::string& type) : GenericException(message, type) {
+		TerminateProcessException(const char* message, const char* type) : GenericException(message, type) {
 		}
 
 		virtual ~TerminateProcessException() {

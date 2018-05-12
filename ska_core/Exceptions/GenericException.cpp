@@ -1,14 +1,14 @@
 #include "GenericException.h"
 
 
-ska::GenericException::GenericException(std::string message, std::string type) throw() {
-	m_message = message;
-	m_typedMessage = (type.empty() ? "" : (type + " : ")) + m_message;
+ska::GenericException::GenericException(const char* message, const char* type) {
+	m_message = std::string(message);
+	m_typedMessage = std::string((type == nullptr ? "" : (std::string(type) + " : ")) + m_message);
 }
 
-const char* ska::GenericException::what() const throw() {
+const char* ska::GenericException::what() const noexcept {
 	return m_typedMessage.c_str();
 }
 
-ska::GenericException::~GenericException() throw()
-{}
+
+

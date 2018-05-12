@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_core_test)
 
+set(CMAKE_CXX_STANDARD 17)
+
 set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
 
 set(SKA_DEBUG_DIR "Debug")

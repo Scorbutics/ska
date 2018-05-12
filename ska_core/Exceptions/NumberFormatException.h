@@ -3,7 +3,7 @@
 namespace ska {
 	class NumberFormatException : public GenericException {
 	public:
-		explicit NumberFormatException(std::string message) : GenericException(message, "NumberFormatException") {
+		explicit NumberFormatException(const char* message) : GenericException(message, "NumberFormatException") {
 		}
 
 		virtual ~NumberFormatException() {

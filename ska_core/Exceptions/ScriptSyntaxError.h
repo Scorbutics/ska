@@ -5,7 +5,7 @@ namespace ska {
 	class ScriptSyntaxError : public ScriptException {
 	public:
 
-		ScriptSyntaxError(std::string message) : ScriptException(message, "ScriptSyntaxError")
+		ScriptSyntaxError(const char* message) : ScriptException(message, "ScriptSyntaxError")
 		{
 		}
 
