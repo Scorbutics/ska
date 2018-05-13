@@ -5,6 +5,7 @@
 #include "FunctionUtils.h"
 #include "ContainsTypeTuple.h"
 #include "TupleUtils.h"
+#include "../Exceptions/ExceptionTrigger.h"
 
 #if defined(SKA_PLATFORM_WIN)
 #include "OSSpecific/DynamicLibraryWindows.h"
@@ -53,7 +54,7 @@ namespace ska {
 			if (function != nullptr) {
 				m_cache.set(Func::id, std::move(function));
 			} else {
-				throw InputException(("Unable to find the function " + funcName + " in the module " + m_libraryPath + ". Error logged : " + error).c_str());
+				ExceptionTrigger<InputException>(("Unable to find the function " + funcName + " in the module " + m_libraryPath + ". Error logged : " + error).c_str(), ExceptionAbort);
 			}
 			
 		}

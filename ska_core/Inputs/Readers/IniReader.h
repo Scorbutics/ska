@@ -8,6 +8,7 @@
 #include "../../Utils/StringUtils.h"
 #include "../../Exceptions/InvalidPathException.h"
 #include "../../Exceptions/IllegalArgumentException.h"
+#include "../../Exceptions/ExceptionTrigger.h"
 
 namespace ska {
 	class IniReader {
@@ -32,13 +33,13 @@ namespace ska {
 		template<typename T>
 		T get(const std::string& path) const {
 			/* unimplemented default */
-			throw IllegalArgumentException(("Unsupported converted type for path " + path).c_str());
+			assert(false && ("Unsupported converted type for path " + path).c_str());
 		}
 
 	private:
 		void existsOrThrow(const std::string& path) const {
 			if (!exists(path)) {
-				throw InvalidPathException(("Unable to find the ini path " + path).c_str());
+				ExceptionTrigger<InvalidPathException>(("Unable to find the ini path " + path).c_str(), ExceptionAbort);
 			}
 		}
 

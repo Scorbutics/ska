@@ -44,11 +44,11 @@ public:
 };
 
 TEST_CASE("[DynamicLibrary]") {
-	try {
+	
 		auto sdlLib = SDLLibrary{};
 		sdlLib.init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 		sdlLib.logCritical(SDL_LOG_CATEGORY_AUDIO, "toto");
-	} catch (std::exception& e) {
-		CHECK(false);
-	}
+	
+	//	CHECK(false);
+	
 }

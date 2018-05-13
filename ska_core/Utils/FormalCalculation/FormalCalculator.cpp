@@ -5,6 +5,7 @@
 #include "../../Utils/StringUtils.h"
 #include "../../Utils/NumberUtils.h"
 #include "../../Exceptions/ScriptSyntaxError.h"
+#include "../../Exceptions/ExceptionTrigger.h"
 
 ska::FormalCalculator::FormalCalculator()
 {
@@ -145,7 +146,7 @@ int ska::FormalCalculator::positionOfAnyFirstOperator(const std::string& s) {
 
 void ska::FormalCalculator::calculSyntaxError(const std::string& s)
 {
-	throw ScriptSyntaxError(("La ligne suivante est impossible à traduire en calcul formel : \"" + s + "\"").c_str());
+	ExceptionTrigger<ScriptSyntaxError>(("La ligne suivante est impossible à traduire en calcul formel : \"" + s + "\"").c_str(), ExceptionAbort);
 }
 
 ska::FormalCalculator::~FormalCalculator()

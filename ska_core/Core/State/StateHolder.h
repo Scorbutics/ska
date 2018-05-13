@@ -62,7 +62,7 @@ namespace ska {
          *
          * That is the function that manages every state changes, loading, unloading,
          */
-        void update();
+        bool update();
 
 	private:
 		StatePtr m_nextState;

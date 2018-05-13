@@ -1,5 +1,6 @@
 #pragma once
 #include "../SkaConstants.h"
+#include "../../Logging/Logger.h"
 #if defined(SKA_PLATFORM_LINUX)
 #include <optional>
 #include <string>
@@ -11,15 +12,17 @@
 namespace ska {
 	class DynamicLibraryUnix {
 	public:
-		DynamicLibraryUnix(const std::string& lib) {
-			auto errorMessage = loadLibrary(("lib" + lib + ".so").c_str());
+		DynamicLibraryUnix(const std::string& lib) : 
+			m_name("lib" + lib + ".so") {
+			auto errorMessage = loadLibrary(m_name.c_str());
 			if(m_handle == nullptr) {
-				throw ska::InputException(errorMessage.c_str());
+				ExceptionTrigger<InputException>(errorMessage, ExceptionAbort);
 			}
 		}
 
 		~DynamicLibraryUnix() {
 			if(m_handle != nullptr) {
+				SKA_LOG_INFO("Unloading dynamic library ", m_name);
 				dlclose(m_handle);
 			}
 		}
@@ -30,15 +33,17 @@ namespace ska {
 		}
 
 	private:
-		std::string loadLibrary(const char* lib) {
+		const char* loadLibrary(const char* lib) {
+			SKA_LOG_INFO("Loading dynamic library ", lib);
 			m_handle = dlopen(lib, RTLD_NOW);
 			if (m_handle == nullptr) {
-				return std::string(dlerror());
+				return dlerror();
 			}
 			return "";
 		}
 
 		void* m_handle {};
+		std::string m_name;
 	};
 }
 #endif

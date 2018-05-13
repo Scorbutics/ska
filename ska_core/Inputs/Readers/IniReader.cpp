@@ -6,6 +6,7 @@
 #include "IniReader.h"
 #include "../../Logging/Logger.h"
 #include "../../Exceptions/FileException.h"
+#include "../../Exceptions/ExceptionTrigger.h"
 
 void IniListSet(std::list<std::string>& lines, const std::string& path, const std::string& content);
 std::list<std::string>::iterator IniListSearchPath(std::list<std::string>& lines, const std::string& path);
@@ -18,7 +19,7 @@ ska::IniReader::IniReader() {
 ska::IniReader::IniReader(const std::string& inifilename) : 
 IniReader() {
 	if(!load(inifilename)) {
-		throw ska::FileException(("File not found : " + inifilename).c_str());
+		ExceptionTrigger<FileException>(("File not found : " + inifilename).c_str(), ExceptionAbort);
 	}
 }
 

@@ -2,7 +2,6 @@
 #include <functional>
 #include "../Exceptions/IllegalArgumentException.h"
 
-
 namespace ska {
     template <typename T, typename ...Args>
 	class Observable;
@@ -16,9 +15,7 @@ namespace ska {
 
 		explicit Observer(std::function<bool(T&, Args...)> handler) : 
 			m_handler(std::move(handler)) {
-			if(m_handler == nullptr) {
-				throw IllegalArgumentException("Function cannot be null", "Error");
-			}
+			assert(m_handler != nullptr && "Function cannot be null");
 		}
 
 		virtual ~Observer() = default;

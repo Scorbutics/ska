@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "RawInputListener.h"
 #include "../Exceptions/TerminateProcessException.h"
+#include "../Exceptions/ExceptionTrigger.h"
 #include "../Utils/StringUtils.h"
 
 const ska::KeyInput& ska::RawInputListener::getKeyInput() const {
@@ -82,7 +83,7 @@ void ska::RawInputListener::update() {
 				m_textInput += StringUtils::toUTF8(event.edit.text);
 				break;
             case SDL_QUIT:
-				throw TerminateProcessException("Program quitted");
+				ExceptionTrigger<TerminateProcessException>("Program quitted", ExceptionAbort);
 		default:
                 break;
 		}

@@ -15,7 +15,7 @@ void ska::StateHolder::eventUpdate(unsigned int ellapsedTime) {
 	m_currentState->eventUpdate(ellapsedTime);
 }
 
-void ska::StateHolder::update() {
+bool ska::StateHolder::update() {
 	if (m_nextState != nullptr) {
 		bool firstState;
 		bool triggerChangeScene;
@@ -38,7 +38,7 @@ void ska::StateHolder::update() {
 				StateEvent se(StateEventType::STATE_CHANGE);
 				m_eventDispatcher.ska::Observable<ska::StateEvent>::notifyObservers(se);
 				m_currentState->loadAfter(lastScene.get());
-				throw StateDiedException("");
+				return false;
 			} 
 
 			StateEvent se(StateEventType::FIRST_STATE_LOAD);
@@ -49,4 +49,6 @@ void ska::StateHolder::update() {
 
 	/* If exists, an helper that executes current running task once */
 	refresh();
+	return true;
 }
+

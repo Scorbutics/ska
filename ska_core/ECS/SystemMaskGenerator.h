@@ -1,6 +1,7 @@
 #pragma once
 #include "EntityManager.h"
 #include "../Exceptions/IllegalStateException.h"
+#include "../Exceptions/ExceptionTrigger.h"
 
 namespace ska {
     template <class ... ComponentType>
@@ -18,10 +19,10 @@ namespace ska {
          * \param ecm Entity component mask
          */
         void generate(EntityComponentsMask& ecm) {
-			SKA_LOG_DEBUG("Initializing system with components :");
-            int _[] = { 0, (buildSystemMask<ComponentType>(ecm) , 0)... };
-			(void)_;
-			SKA_LOG_DEBUG("End system initialization\n\n");;
+		SKA_LOG_DEBUG("Initializing system with components :");
+        	int _[] = { 0, (buildSystemMask<ComponentType>(ecm) , 0)... };
+		(void)_;
+		SKA_LOG_DEBUG("End system initialization\n\n");;
         }
 
     private:
@@ -29,7 +30,7 @@ namespace ska {
 		void buildSystemMask(EntityComponentsMask& systemComponentMask) {
 			unsigned int mask = m_entityManager.template getMask<T>();
 			if (mask >= systemComponentMask.size()) {
-				throw IllegalStateException("Too many components are used in the game. Unable to continue.");
+				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.", ExceptionAbort);
 			}
 			SKA_LOG_DEBUG("\t - mask ", mask);
 
