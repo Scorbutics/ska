@@ -16,20 +16,15 @@ public:
 	void run() override {
 		doctest::Context context;
 		auto resultCode = 0;
-		try {
 
-			// sort the test cases by their name
-			context.setOption("order-by", "name");
-			context.setOption("success", "true");
-			std::cout << "Running..." << std::endl;
-			resultCode = context.run();
-		}
-		catch (const std::exception& e) {
-			std::cout << "Error : " << e.what() << std::endl;
-		}
+		// sort the test cases by their name
+		context.setOption("order-by", "name");
+		context.setOption("success", "true");
+		std::cout << "Running..." << std::endl;
+		resultCode = context.run();
 
 		if (context.shouldExit() || resultCode != 0) {
-			throw ska::TerminateProcessException("Context exit");
+			exit(-1);
 		}
 	}
 

@@ -30,6 +30,7 @@
 #include <iosfwd>
 #include <atomic>
 #include <tuple>
+#include <cassert>
 
 
 namespace fakeit {
@@ -563,13 +564,13 @@ namespace fakeit {
 
     inline RepeatedSequence operator*(const Sequence &s, int times) {
         if (times <= 0)
-            throw std::invalid_argument("times");
+            assert(false && "times");
         return RepeatedSequence(s, times);
     }
 
     inline RepeatedSequence operator*(int times, const Sequence &s) {
         if (times <= 0)
-            throw std::invalid_argument("times");
+            assert(false && "times");
         return RepeatedSequence(s, times);
     }
 
@@ -1141,21 +1142,21 @@ namespace fakeit {
         virtual void handle(const UnexpectedMethodCallEvent &evt) override {
             std::string format = _formatter.format(evt);
             UnexpectedMethodCallException ex(format);
-            throw ex;
+            assert(false);
         }
 
         virtual void handle(const SequenceVerificationEvent &evt) override {
             std::string format(formatLineNumner(evt.file(), evt.line()) + ": " + _formatter.format(evt));
             SequenceVerificationException e(format);
             e.setFileInfo(evt.file(), evt.line(), evt.callingMethod());
-            throw e;
+            assert(false);
         }
 
         virtual void handle(const NoMoreInvocationsVerificationEvent &evt) override {
             std::string format(formatLineNumner(evt.file(), evt.line()) + ": " + _formatter.format(evt));
             NoMoreInvocationsVerificationException e(format);
             e.setFileInfo(evt.file(), evt.line(), evt.callingMethod());
-            throw e;
+            assert(false);
         }
 
     private:
@@ -5262,7 +5263,7 @@ namespace fakeit {
         template<typename C>
         static typename std::enable_if<!std::has_virtual_destructor<C>::value, unsigned int>::type
         getDestructorOffset() {
-            throw NoVirtualDtor();
+            assert(false && "NoVirtualDtor");
         }
 
         template<typename C>
@@ -6065,7 +6066,7 @@ namespace fakeit {
             if (delta > 0) {
 
 
-                throw std::invalid_argument(std::string("multiple inheritance is not supported"));
+                assert(false && "multiple inheritance is not supported");
             }
         }
 
@@ -6203,7 +6204,7 @@ namespace fakeit {
                 }
             };
 
-            throw Exception();
+            assert(false && "Exception");
         }
     };
 
@@ -6851,17 +6852,14 @@ namespace fakeit {
                 auto &matcher = invocationHandler->getMatcher();
                 actualInvocation->setActualMatcher(&matcher);
                 _actualInvocations.push_back(actualInvocationDtor);
-                try {
-                    return invocationHandler->handleMethodInvocation(actualInvocation->getActualArguments());
-                } catch (NoMoreRecordedActionException &) {
-                }
+                return invocationHandler->handleMethodInvocation(actualInvocation->getActualArguments());
             }
 
             UnexpectedMethodCallEvent event(UnexpectedType::Unmatched, *actualInvocation);
             _fakeit.handle(event);
             std::string format{_fakeit.format(event)};
             UnexpectedMethodCallException e(format);
-            throw e;
+            assert(false && "UnexpectedMethodCallException");
         }
 
         void scanActualInvocations(const std::function<void(ActualInvocation<arglist...> &)> &scanner) {
@@ -6959,7 +6957,7 @@ namespace fakeit {
 
     _Time(unsigned long long n) {
         if (n != 1)
-            throw std::invalid_argument("Only 1_Time is supported. Use X_Times (with s) if X is bigger than 1");
+            assert(false && "Only 1_Time is supported. Use X_Times (with s) if X is bigger than 1");
         return QuantifierFunctor((int) n);
     }
 
@@ -7120,14 +7118,14 @@ namespace fakeit {
 
         template<typename E>
         MethodStubbingProgress<R, arglist...> &Throw(const E &e) {
-            return Do([e](const typename fakeit::test_arg<arglist>::type...) -> R { throw e; });
+            return Do([e](const typename fakeit::test_arg<arglist>::type...) -> R { assert(false && e.c_str()); });
         }
 
         template<typename E>
         MethodStubbingProgress<R, arglist...> &
         Throw(const Quantifier<E> &q) {
             const E &value = q.value;
-            auto method = [value](const arglist &...) -> R { throw value; };
+            auto method = [value](const arglist &...) -> R { assert(false && value.c_str()); };
             return DoImpl(new Repeat<R, arglist...>(method, q.quantity));
         }
 
@@ -7140,7 +7138,7 @@ namespace fakeit {
 
         template<typename E>
         void AlwaysThrow(const E &e) {
-            return AlwaysDo([e](const typename fakeit::test_arg<arglist>::type...) -> R { throw e; });
+            return AlwaysDo([e](const typename fakeit::test_arg<arglist>::type...) -> R { assert(false && e.c_str()); });
         }
 
         virtual MethodStubbingProgress<R, arglist...> &
@@ -7205,14 +7203,14 @@ namespace fakeit {
 
         template<typename E>
         MethodStubbingProgress<void, arglist...> &Throw(const E &e) {
-            return Do([e](const typename fakeit::test_arg<arglist>::type...) -> void { throw e; });
+            return Do([e](const typename fakeit::test_arg<arglist>::type...) -> void { assert(false && e.c_str()); });
         }
 
         template<typename E>
         MethodStubbingProgress<void, arglist...> &
         Throw(const Quantifier<E> &q) {
             const E &value = q.value;
-            auto method = [value](const typename fakeit::test_arg<arglist>::type...) -> void { throw value; };
+            auto method = [value](const typename fakeit::test_arg<arglist>::type...) -> void { assert(false && value.c_str()); };
             return DoImpl(new Repeat<void, arglist...>(method, q.quantity));
         }
 
@@ -7225,7 +7223,7 @@ namespace fakeit {
 
         template<typename E>
         void AlwaysThrow(const E e) {
-            return AlwaysDo([e](const typename fakeit::test_arg<arglist>::type...) -> void { throw e; });
+            return AlwaysDo([e](const typename fakeit::test_arg<arglist>::type...) -> void { assert(false && e.c_str()); });
         }
 
            template<typename F>
@@ -7317,7 +7315,7 @@ namespace fakeit {
 
 
             virtual R invoke(const ArgumentsTuple<arglist...> &) override {
-                throw NoMoreRecordedActionException();
+                assert(false && "NoMoreRecordedActionException");
             }
 
             virtual bool isDone() override {
@@ -8057,7 +8055,7 @@ namespace fakeit {
 
             std::string format = fakeit.format(event);
             UnexpectedMethodCallException e(format);
-            throw e;
+            assert(false && "UnexpectedMethodCallException");
         }
 
         static C *createFakeInstance() {
@@ -8742,11 +8740,11 @@ namespace fakeit {
     class ThrowFalseEventHandler : public VerificationEventHandler {
 
         void handle(const SequenceVerificationEvent &) override {
-            throw false;
+            assert(false);
         }
 
         void handle(const NoMoreInvocationsVerificationEvent &) override {
-            throw false;
+            assert(false);
         }
     };
 }
@@ -8798,14 +8796,9 @@ namespace fakeit {
             smart_ptr<SequenceVerificationExpectation> _expectationPtr;
 
             bool toBool() {
-                try {
-                    ThrowFalseEventHandler eh;
-                    _expectationPtr->VerifyExpectation(eh);
-                    return true;
-                }
-                catch (bool e) {
-                    return e;
-                }
+	    ThrowFalseEventHandler eh;
+		    _expectationPtr->VerifyExpectation(eh);
+		    return true;
             }
 
         public:
@@ -8850,7 +8843,7 @@ namespace fakeit {
 
         Terminator Exactly(const int times) {
             if (times < 0) {
-                throw std::invalid_argument(std::string("bad argument times:").append(fakeit::to_string(times)));
+                assert(false && "bad argument times");
             }
             verifyInvocations(times);
             return Terminator(_expectationPtr);
@@ -8863,8 +8856,8 @@ namespace fakeit {
 
         Terminator AtLeast(const int times) {
             if (times < 0) {
-                throw std::invalid_argument(std::string("bad argument times:").append(fakeit::to_string(times)));
-            }
+                assert(false && "bad argument times:");
+	    }
             verifyInvocations(-times);
             return Terminator(_expectationPtr);
         }
@@ -9055,14 +9048,9 @@ namespace fakeit {
         }
 
         bool toBool() {
-            try {
-                ThrowFalseEventHandler ev;
+		ThrowFalseEventHandler ev;
                 _ptr->VerifyExpectation(ev);
                 return true;
-            }
-            catch (bool e) {
-                return e;
-            }
         }
 
     public:

@@ -49,6 +49,6 @@ TEST_CASE("[DynamicLibrary]") {
 		sdlLib.init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 		sdlLib.logCritical(SDL_LOG_CATEGORY_AUDIO, "toto");
 	
-	//	CHECK(false);
+		CHECK(true);
 	
 }

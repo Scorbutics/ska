@@ -15,8 +15,6 @@ namespace ska {
 		#endif
 	}
 
-	std::function<void(const GenericException& ge)> ExceptionAbort = [] (const GenericException& ge) {
-		SKA_STATIC_LOG_ERROR(ska::GenericException)(std::string(ge.what()));
-		exit(-1);
-	};
+	static const std::function<void(const GenericException& ge)> ExceptionAbort;
+	
 }

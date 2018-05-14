@@ -45,16 +45,16 @@ TEST_CASE("[StateHolder]"){
 		//Next state
 		stateHolder.nextState(std::make_unique<MockState>(mockState2));
 
-		try {
+		//try {
 			stateHolder.update();
-			CHECK(false);
-		} catch (ska::StateDiedException& sde) {
+			//CHECK(false);
+		//} catch (ska::StateDiedException& sde) {
 			Verify(Method(mockState, unload));
 			Verify(Method(mockState2, loadBefore));
 			Verify(Method(mockState2, loadAfter));
 
 			auto lastEvent = stateListener.getLastStateEventTriggered();
 			CHECK(lastEvent->type == ska::StateEventType::STATE_CHANGE);
-		}
+		//}
 	}
 }
