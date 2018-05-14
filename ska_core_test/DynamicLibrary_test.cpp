@@ -4,7 +4,7 @@
 #include "Utils/DynamicLibrary.h"
 #include "Utils/StringConstExpr.h"
 
-namespace sdldynlib {
+namespace dynlib {
 
 	template<int Id>
 	struct IdNamedFunction {
@@ -25,32 +25,88 @@ namespace sdldynlib {
 
 
 	using SDLDynLib = ska::DynamicLibrary<IdNamedFunction<SDLCalls::SDL_LOG_CRITICAL>, IdNamedFunction<SDLCalls::SDL_INIT>>;
+
+	enum CCalls {
+		C_STRLEN = SDL_INIT + 1,
+		C_PRINTF
+	};
+
+	template<>
+	std::string IdNamedFunction<CCalls::C_STRLEN>::name = "strlen";
+
+	template<>
+	std::string IdNamedFunction<CCalls::C_PRINTF>::name = "printf";
+
+	using CDynLib = ska::DynamicLibrary<
+		IdNamedFunction<CCalls::C_STRLEN>,
+		IdNamedFunction<CCalls::C_PRINTF>
+	      >;
 }
 
-class SDLLibrary : public sdldynlib::SDLDynLib {
-
+class CLibrary : public dynlib::CDynLib {
 public:
-	SDLLibrary() : 
-		sdldynlib::SDLDynLib("libc++") {
+	CLibrary() : dynlib::CDynLib("c") {}
+
+	int len(const std::string& str) {
+		return call<dynlib::IdNamedFunction<dynlib::CCalls::C_STRLEN>, int(const char*)>(str.c_str());
 	}
 
-	int init(Uint32 flags) {
-		return call<sdldynlib::IdNamedFunction<sdldynlib::SDLCalls::SDL_INIT>, int(Uint32)>(std::move(flags));
-	}
-
-	void logCritical(int category, const std::string& mess) {
-		call < sdldynlib::IdNamedFunction<sdldynlib::SDLCalls::SDL_LOG_CRITICAL>, void(int, const char*) > (std::move(category), mess.c_str());
+	template <class ... Str>
+	int print(const char* format, Str&& ... str) {
+		return call<dynlib::IdNamedFunction<dynlib::CCalls::C_PRINTF>, int(const char*, Str...)>(std::move(format), std::forward<Str>(str)...);
 	}
 };
 
-TEST_CASE("[DynamicLibrary] Loading") {
-	SDLLibrary sdlLib;
+class SDLLibrary : public dynlib::SDLDynLib {
+public:
+	SDLLibrary() : dynlib::SDLDynLib("SDL") {}
+
+	int init(Uint32 flags) {
+		return call<dynlib::IdNamedFunction<dynlib::SDLCalls::SDL_INIT>, int(Uint32)>(std::move(flags));
+	}
+
+	void logCritical(int category, const std::string& mess) {
+		call<dynlib::IdNamedFunction<dynlib::SDLCalls::SDL_LOG_CRITICAL>, void(int, const char*)>(std::move(category), mess.c_str());
+	}
+};
+
+TEST_CASE("[DynamicLibrary] Loading failure") {
 	skaTryCatch({
-		sdlLib = SDLLibrary{};
-		/*sdlLib.init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-		sdlLib.logCritical(SDL_LOG_CATEGORY_AUDIO, "toto");*/
+		auto sdlLib = SDLLibrary{};
 	}, ska::GenericException, ge, {
 		CHECK(true);
 	});
 }
+
+#ifdef SKA_PLATFORM_LINUX
+//Conditional TUs : cannot test "libc.so" on Windows
+
+
+TEST_CASE("[DynamicLibrary] Loading") {
+	auto clib = std::optional<CLibrary>{};
+	skaTryCatch({
+		clib = CLibrary{};
+	}, ska::GenericException, ge, {
+		CHECK(false);
+	});
+
+	SUBCASE("calling strlen") {
+		skaTryCatch({
+			CHECK(4 == clib->len("Test"));
+		}, ska::GenericException, ge, {
+			CHECK(false);
+		});
+	}
+
+	SUBCASE("calling a varargs function : printf") {
+		skaTryCatch({
+			clib->print("%s LOL %i\n", "test !", 45);
+			CHECK(true);
+		}, ska::GenericException, ge, {
+			CHECK(false);
+		});
+	}
+}
+
+#endif
 

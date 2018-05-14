@@ -22,7 +22,6 @@ namespace ska {
 		}
 
 		~ExceptionCatcher() {
-			SKA_LOG_INFO("Poping Exception");
 			if(!m_container.empty()) {
 				m_container.pop();
 			}
@@ -48,7 +47,6 @@ namespace ska {
 			if (!m_exceptions.empty()) {
 				m_exceptions.top().get()(ge);
 				decltype(m_exceptions)().swap(m_exceptions);
-				//m_exceptions.clear();
 			}
 		}
 
@@ -57,7 +55,6 @@ namespace ska {
 		}
 
 		void addCallback(ExceptionCatcher& catcher) {
-			SKA_LOG_INFO("Pushing Exception");
 			m_exceptions.push(catcher);
 		}
 
