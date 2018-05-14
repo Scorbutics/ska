@@ -19,7 +19,7 @@ ska::IniReader::IniReader() {
 ska::IniReader::IniReader(const std::string& inifilename) : 
 IniReader() {
 	if(!load(inifilename)) {
-		ExceptionTrigger<FileException>(("File not found : " + inifilename).c_str(), ExceptionAbort);
+		ExceptionTrigger<FileException>(("File not found : " + inifilename).c_str());
 	}
 }
 

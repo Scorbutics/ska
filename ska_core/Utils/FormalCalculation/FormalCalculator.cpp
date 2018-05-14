@@ -146,7 +146,7 @@ int ska::FormalCalculator::positionOfAnyFirstOperator(const std::string& s) {
 
 void ska::FormalCalculator::calculSyntaxError(const std::string& s)
 {
-	ExceptionTrigger<ScriptSyntaxError>(("La ligne suivante est impossible à traduire en calcul formel : \"" + s + "\"").c_str(), ExceptionAbort);
+	ExceptionTrigger<ScriptSyntaxError>(("La ligne suivante est impossible à traduire en calcul formel : \"" + s + "\"").c_str());
 }
 
 ska::FormalCalculator::~FormalCalculator()

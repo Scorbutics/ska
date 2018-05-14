@@ -30,7 +30,7 @@ namespace ska {
 		void buildSystemMask(EntityComponentsMask& systemComponentMask) {
 			unsigned int mask = m_entityManager.template getMask<T>();
 			if (mask >= systemComponentMask.size()) {
-				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.", ExceptionAbort);
+				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.");
 			}
 			SKA_LOG_DEBUG("\t - mask ", mask);
 

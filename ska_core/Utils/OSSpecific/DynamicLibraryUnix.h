@@ -16,7 +16,7 @@ namespace ska {
 			m_name("lib" + lib + ".so") {
 			auto errorMessage = loadLibrary(m_name.c_str());
 			if(m_handle == nullptr) {
-				ExceptionTrigger<InputException>(errorMessage, ExceptionAbort);
+				ExceptionTrigger<InputException>(errorMessage);
 			}
 		}
 

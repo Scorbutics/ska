@@ -77,7 +77,7 @@ bool ska::EntityManager::checkEntitiesNumber() const {
 ska::EntityId ska::EntityManager::createEntity() {
     if (!checkEntitiesNumber()) {
         ExceptionTrigger<ska::IllegalStateException>("Too many entities are currently in use. Unable to create a new one. "
-            "Increase SKA_ECS_MAX_ENTITIES at compile time to avoid the problem.", ExceptionAbort);
+            "Increase SKA_ECS_MAX_ENTITIES at compile time to avoid the problem.");
     }
 
 	return createEntityNoThrow();

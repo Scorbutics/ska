@@ -39,7 +39,7 @@ namespace ska {
 	private:
 		void existsOrThrow(const std::string& path) const {
 			if (!exists(path)) {
-				ExceptionTrigger<InvalidPathException>(("Unable to find the ini path " + path).c_str(), ExceptionAbort);
+				ExceptionTrigger<InvalidPathException>(("Unable to find the ini path " + path).c_str());
 			}
 		}
 
