@@ -4,6 +4,7 @@
 //#include "SDLLibrary.h"
 #include "Data/Events/StateEvent.h"
 #include "Data/Events/GameEventDispatcher.h"
+#include "SDLLibrary.h"
 
 namespace ska {
 	class StateHolder;
@@ -23,11 +24,9 @@ namespace ska {
 		void graphicUpdate(unsigned int ellapsedTime, StateHolder& sh);
 		virtual ~GraphicModule();
 
-    private:
-        GameEventDispatcher& m_eventDispatcher;
-	/*SDLTTFLibrary m_ttf;
-	SDLImageLibrary m_image;*/
-	DrawableContainerPtr m_drawables;
+	private:    
+		GameEventDispatcher& m_eventDispatcher;
+		DrawableContainerPtr m_drawables;
         RendererPtr m_renderer;
         WindowPtr m_mainWindow;
 		bool onStateEvent(StateEvent& se);

@@ -4,14 +4,14 @@
 #include "Font.h"
 #include "SDLSurface.h"
 #include "Logging/Logger.h"
-#include "Utils/SkaConstants.h"
 #include "Core/CodeDebug/CodeDebug.h"
+#include "../GraphicModule.h"
 
 SDL_Color ColorToNative(const ska::Color& c){
 	return SDL_Color{ c.r, c.g, c.b, c.a };
 }
 
-ska::SDLSurface::SDLSurface(): m_r(0), m_g(0), m_b(0), m_a(255) {
+ska::SDLSurface::SDLSurface() : m_a(255) {
 	m_surface = nullptr;
 }
 
@@ -83,7 +83,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 	}
 
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
-		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Après tentative de récupération, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
+		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
 	});
 
 	return m_surface != nullptr;

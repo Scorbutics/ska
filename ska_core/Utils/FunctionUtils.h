@@ -17,7 +17,7 @@ namespace ska {
 		template<class Ret, class ... Args>
 		struct Caller<false, Ret, Args...> {
 			static void call(void* functionPtr, Args&&... args) {
-				auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
+				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
 				(*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};
@@ -25,13 +25,24 @@ namespace ska {
 		template<class Ret, class ... Args>
 		struct Caller<true, Ret, Args...> {
 			static Ret call(void* functionPtr, Args&&... args) {
-				auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
+				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
 				return (*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};
 	}
 
 	template <typename Function> struct function_caller;
+
+	template <typename Ret, typename ... Args>
+	struct function_caller<Ret(Args...) const> {
+	private:
+		using FunctionType = Ret(Args...);
+	public:
+		using ReturnType = Ret;
+		static constexpr auto HasReturn = !std::is_same<Ret, void>::value;
+
+		using Caller = detail::Caller<HasReturn, Ret, Args...>;
+	};
 
 	template <typename Ret, typename ... Args>
 	struct function_caller<Ret(Args...)> {

@@ -18,8 +18,19 @@ namespace ska {
 }
 #endif
 
+#define SKA_LIB_CALLS_DEFINE(STRUCT_NAME, ENUM, FUNCTION, NAME)\
+template <>\
+std::string STRUCT_NAME<ENUM>::name = NAME;\
+template <>\
+struct HasFunctionFormatTrait<STRUCT_NAME<ENUM>> {\
+using FunctionFormat = FUNCTION;\
+}
+
 namespace ska {
 
+	template <class T>
+	struct HasFunctionFormatTrait;
+	
 	template<class ... FunctionName>
 	class DynamicLibrary {
 	public:
@@ -55,16 +66,25 @@ namespace ska {
 			}
 		}
 
-		template <class Name, class Function, class ... Args, class = std::enable_if_t<function_caller<Function>::HasReturn>>
-		auto call(Args&&... args) {
+		template <class Name>
+		using Caller = function_caller<typename HasFunctionFormatTrait<Name>::FunctionFormat>;
+
+		template <class Name>
+		using EnabledReturn = std::enable_if_t<Caller<Name>::HasReturn>;
+
+		template <class Name>
+		using DisabledReturn = std::enable_if_t<!Caller<Name>::HasReturn>;
+
+		template <class Name, class ... Args, class = EnabledReturn<Name>>
+		auto call(Args&&... args) const {
 			checkType<Name>();
-			return function_caller<Function>::Caller::call(*m_cache.template get<Name>(), std::forward<Args>(args)...);
+			return Caller<Name>::Caller::call(*m_cache.template get<Name>(), std::forward<Args>(args)...);
 		}
 
-		template <class Name, class Function, class ... Args, class = std::enable_if_t<!function_caller<Function>::HasReturn>>
-		void call(Args&&... args) {
+		template <class Name, class ... Args, class = DisabledReturn<Name>>
+		void call(Args&&... args) const {
 			checkType<Name>();
-			function_caller<Function>::Caller::call(*m_cache.template get<Name>(), std::forward<Args>(args)...);
+			Caller<Name>::Caller::call(*m_cache.template get<Name>(), std::forward<Args>(args)...);
 		}
 
 	private:
