@@ -1,7 +1,7 @@
+#include <cassert>
 #include "LayerEvent.h"
 #include "LayerEventLoaderText.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "Exceptions/IllegalArgumentException.h"
 
 ska::LayerEvent::LayerEvent(const LayerEventLoader& loader, unsigned int width, unsigned int height) :
     m_fileName(loader.getName()),

@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <cassert>
 #include "../Exceptions/IllegalArgumentException.h"
 
 namespace ska {

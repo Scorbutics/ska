@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "Utils/SubObserver.h"
-#include "SDLLibrary.h"
+//#include "SDLLibrary.h"
 #include "Data/Events/StateEvent.h"
 #include "Data/Events/GameEventDispatcher.h"
 
@@ -25,8 +25,8 @@ namespace ska {
 
     private:
         GameEventDispatcher& m_eventDispatcher;
-	SDLTTFLibrary m_ttf;
-	SDLImageLibrary m_image;
+	/*SDLTTFLibrary m_ttf;
+	SDLImageLibrary m_image;*/
 	DrawableContainerPtr m_drawables;
         RendererPtr m_renderer;
         WindowPtr m_mainWindow;

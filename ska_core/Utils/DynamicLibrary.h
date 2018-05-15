@@ -4,7 +4,7 @@
 #include "CharCache.h"
 #include "FunctionUtils.h"
 #include "ContainsTypeTuple.h"
-#include "TupleUtils.h"
+#include "../Logging/Logger.h"
 
 #if defined(SKA_PLATFORM_WIN)
 #include "OSSpecific/DynamicLibraryWindows.h"

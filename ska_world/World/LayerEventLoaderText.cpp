@@ -101,22 +101,22 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
     events.resize(width, height);
 
 	auto i = 0u;
-	skaTryCatch(({
+	try {
 		for (const auto& line : m_fileContent) {
-			auto [event, ssc] = buildFromLine(line, i++);
-			switch(ssc.triggeringType) {
+			auto[event, ssc] = buildFromLine(line, i++);
+			switch (ssc.triggeringType) {
 			case ScriptTriggerType::AUTO:
 				//Global scripts ignored in this function
 				continue;
 			default:
 				break;
 			}
-			
+
 			events[event.position.x][event.position.y].push_back(std::move(ssc));
 		}
-	}), ska::NumberFormatException, nfe, ({
+	} catch (ska::NumberFormatException& nfe) {
 		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
-	}));
+	}
 
 	return events;
 }
@@ -124,7 +124,7 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
 ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
 	auto events = ScriptPack{};
 	auto i = 0u;
-	skaTryCatch (({
+	try {
 		for (const auto& line : m_fileContent) {
 			i++;
 			
@@ -139,9 +139,9 @@ ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
 
 			events.push_back(std::move(ssc));
 		}
-	}), ska::NumberFormatException, nfe, ({
+	} catch(ska::NumberFormatException& nfe) {
 		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
-	}));
+	}
 	return events;
 }
 

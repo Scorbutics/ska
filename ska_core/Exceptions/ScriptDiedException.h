@@ -5,7 +5,7 @@ namespace ska {
 	class ScriptDiedException : public ScriptException {
 	public:
 
-		ScriptDiedException(std::string message) : ScriptException(message, "ScriptDiedException"), m_script(message) {
+		ScriptDiedException(std::string message) : ScriptException(message.c_str(), "ScriptDiedException"), m_script(message) {
 		}
 
 		const std::string& getScript() {

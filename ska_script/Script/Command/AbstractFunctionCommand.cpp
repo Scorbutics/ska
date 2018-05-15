@@ -16,7 +16,7 @@ std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, Memor
 		for (std::string& arg : args) {
 			syntaxErrorMsg += arg + " ";
 		}
-		throw ScriptSyntaxError(syntaxErrorMsg);
+		throw ScriptSyntaxError(syntaxErrorMsg.c_str());
 	}
 
 	return execute(script, memory, args);
