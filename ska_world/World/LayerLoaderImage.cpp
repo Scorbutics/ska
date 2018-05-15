@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "LayerLoaderImage.h"
 #include "Exceptions/FileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/Vector2.h"
 #include "Utils/StringUtils.h"
 #include "Graphic/SDLSurface.h"
@@ -22,7 +23,7 @@ ska::Vector2<ska::TileAnimation*> ska::LayerLoaderImage::loadAnimations(Tileset&
 			} else {
 				if (map.find(color) == map.end()) {
                     const auto& ss = StringUtils::intToStr(color.r) + "; " + StringUtils::intToStr(color.g) + "; " + StringUtils::intToStr(color.b);
-					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
+					ExceptionTrigger<CorruptedFileException>("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
 				const auto& tilePosition = map.at(color);
 				auto& anim = chipset.getAnimation(tilePosition);
@@ -49,7 +50,7 @@ ska::Vector2<std::optional<ska::Tile>> ska::LayerLoaderImage::loadPhysics(Tilese
 			} else {
 				if (map.find(color) == map.end()) {
                     const auto ss = StringUtils::intToStr(color.r) + "; " + StringUtils::intToStr(color.g) + "; " + StringUtils::intToStr(color.b);
-					throw CorruptedFileException("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
+					ExceptionTrigger<CorruptedFileException>("Impossible de trouver la correspondance en pixel de " + ss + " (fichier niveau corrompu)");
 				}
 				physics.push_back(chipset.getTile(map.at(color)));
 			}
@@ -62,7 +63,7 @@ ska::SDLSurface ska::LayerLoaderImage::loadFrom32(const std::string& layerFilena
 	SDLSurface file;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDL_GetError()));
+		ExceptionTrigger<FileException>("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDL_GetError()));
 	}
 	return file;
 }

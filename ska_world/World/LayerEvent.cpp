@@ -20,7 +20,7 @@ void ska::LayerEvent::load(const LayerEventLoader& loader, unsigned int width, u
 
 ska::ScriptPack& ska::LayerEvent::getScripts(const Point<int>& coordinates) {
 	if(!m_events.has(coordinates.x, coordinates.y)) {
-		throw IllegalArgumentException("Coordinates out of bound");
+		assert(false && "Coordinates out of bound");
 	}
 	return m_events[coordinates.x][coordinates.y];
 }

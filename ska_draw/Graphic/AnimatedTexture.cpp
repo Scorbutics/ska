@@ -56,10 +56,10 @@ void ska::AnimatedTexture::operator=(const AnimatedTexture& text) {
 
 void ska::AnimatedTexture::switchToFrame(unsigned int index) {
 	if(m_gifMode) {
-		throw ska::IllegalStateException("unimplemented");
+		assert(false && "unimplemented");
+	} else {
+		m_anim.switchToFrame(index);
 	}
-	
-	m_anim.switchToFrame(index);	
 }
 
 void ska::AnimatedTexture::setBlendMode(int blendMode) {

@@ -4,7 +4,7 @@
 namespace ska {
 	class CorruptedFileException : public FileException {
 	public:
-		CorruptedFileException(std::string message) : FileException(message, "CorruptedFileException") {
+		CorruptedFileException(const char* message) : FileException(message, "CorruptedFileException") {
 		}
 
 		virtual ~CorruptedFileException() {

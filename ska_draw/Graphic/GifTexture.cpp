@@ -3,6 +3,7 @@
 
 #include "GifTexture.h"
 #include "Exceptions/FileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Logging/Logger.h"
 #include "Core/CodeDebug/CodeDebug.h"
 
@@ -57,17 +58,17 @@ void ska::GifTexture::load(const std::string& spriteName) {
 	m_animation = nullptr;//CEV_gifAnimLoad(spriteName.c_str(), m_renderer->unwrap());
 
 	if(m_animation == NULL) {
-		throw ska::FileException("unable to load gif file : " + spriteName);
+		ExceptionTrigger<ska::FileException>("unable to load gif file : " + spriteName);
 	}
-    SKA_LOG_INFO("Loaded GIF file ", spriteName, " (0x", m_animation, ")");
+	SKA_LOG_INFO("Loaded GIF file ", spriteName, " (0x", m_animation, ")");
 
 	m_actTexture = CEV_gifTexture(m_animation);
 	if(m_actTexture == NULL) {
 		CEV_gifAnimFree(m_animation);
 		m_animation = NULL;
-		throw ska::FileException("unable to create texture from gif file : " + spriteName);
+		ExceptionTrigger<ska::FileException>("unable to create texture from gif file : " + spriteName);
 	}
-    SKA_LOG_INFO("Loaded Texture GIF file ", spriteName, " (0x", m_actTexture, ")");
+	SKA_LOG_INFO("Loaded Texture GIF file ", spriteName, " (0x", m_actTexture, ")");
 
 	int w, h;
 	if (!SDL_QueryTexture(m_actTexture, NULL, NULL, &w, &h)) {

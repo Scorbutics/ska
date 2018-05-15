@@ -5,6 +5,7 @@
 
 #include "GraphicModule.h"
 #include "Exceptions/IllegalStateException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Logging/Logger.h"
 #include "Draw/Renderer.h"
 #include "Core/State/StateHolder.h"
@@ -21,7 +22,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	SDL_SetMainReady();
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		throw ska::IllegalStateException("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
+		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
 	}
 
 	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
@@ -34,7 +35,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	}
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-		throw ska::IllegalStateException("Erreur lors de l'initialisation de SDL_image : " + std::string(IMG_GetError()));
+		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de SDL_image : " + std::string(IMG_GetError()));
 	}
 
 	if (TTF_Init() == -1) {

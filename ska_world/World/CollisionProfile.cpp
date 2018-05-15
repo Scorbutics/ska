@@ -2,6 +2,7 @@
 #include <optional>
 
 #include "Exceptions/IllegalStateException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "CollisionProfile.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
@@ -198,7 +199,7 @@ std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
 			width = l.getBlocksX();
 			height = l.getBlocksY();
 		} else if(width != l.getBlocksX() || height != l.getBlocksY()) {
-			throw IllegalStateException("Not every layer has same dimensions meaning that this map is invalid (expected " + 
+			ExceptionTrigger<IllegalStateException>("Not every layer has same dimensions meaning that this map is invalid (expected " + 
 				StringUtils::uintToStr(width.value()) + " width and " + StringUtils::uintToStr(height.value()) + " height for every layer).");
 		}
 	}

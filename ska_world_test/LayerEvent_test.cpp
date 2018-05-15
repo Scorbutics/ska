@@ -82,14 +82,4 @@ TEST_CASE("[LayerEvent]") {
 
 	}
 
-	SUBCASE("Position scripts out of bound") {
-		try {
-			layer.getScripts({ 1234, 447 });
-			CHECK(false);
-		} catch (const ska::IllegalArgumentException& e) {
-			CHECK(true);
-		}
-		
-	}
-
 }

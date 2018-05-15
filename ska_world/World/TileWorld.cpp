@@ -1,4 +1,4 @@
-
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "Utils/RectangleUtils.h"
 #include "LayerEvent.h"
@@ -54,7 +54,7 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 		m_graphicLayers = loader.loadGraphics(*m_tileset, m_blockSize);
 
 		if (m_collisionProfile.empty() || m_graphicLayers.empty() || m_collisionProfile.layers() != m_graphicLayers.size()) {
-			throw IllegalStateException("Map invalide : pas suffisamment de donnees concernant les couches.");
+			ExceptionTrigger<IllegalStateException>("Map invalide : pas suffisamment de donnees concernant les couches.");
 		}
 
 		m_blocksX = m_collisionProfile.getBlocksX();

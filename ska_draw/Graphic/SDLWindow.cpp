@@ -25,7 +25,7 @@ void ska::SDLWindow::lazyInit() {
 
 	if (m_screen == nullptr) {
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDL_GetError());
-		throw IllegalArgumentException("Bad instanciation : screen is null");
+		assert(false && "Bad instanciation : screen is null");
 	}
 }
 

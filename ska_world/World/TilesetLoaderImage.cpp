@@ -1,4 +1,5 @@
 #include "Exceptions/FileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "TilesetLoaderImage.h"
 #include "Utils/AllEquals.h"
 #include "Utils/Vector2.h"
@@ -9,7 +10,7 @@ ska::SDLSurface LoadTilesetImage(const std::string& tilesetName) {
 	ska::SDLSurface result;
 	result.load32(tilesetName + ".png");
 	if (result.getInstance() == nullptr) {
-		throw ska::FileException("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png\", fichier du tileset. " + std::string(SDL_GetError()));
+		ska::ExceptionTrigger<ska::FileException>("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png\", fichier du tileset. " + std::string(SDL_GetError()));
 	}
 	return result;
 }
@@ -18,7 +19,7 @@ ska::SDLSurface LoadTilesetImageCollisions(const std::string& tilesetName) {
 	ska::SDLSurface result;
 	result.load32(tilesetName + ".png.col");
 	if (result.getInstance() == nullptr) {
-		throw ska::FileException("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png.col\", fichier de collsions du tileset. " + std::string(SDL_GetError()));
+		ska::ExceptionTrigger<ska::FileException>("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png.col\", fichier de collsions du tileset. " + std::string(SDL_GetError()));
 	}
 	return result;
 }
@@ -27,7 +28,7 @@ ska::SDLSurface LoadTilesetImageProperties(const std::string& tilesetName) {
 	ska::SDLSurface result;
 	result.load32(tilesetName + ".png.prop");
 	if (result.getInstance() == nullptr) {
-		throw ska::FileException("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png.prop\", fichier de proprietes du tileset. " + std::string(SDL_GetError()));
+		ska::ExceptionTrigger<ska::FileException>("Erreur lors de l'ouverture du fichier \"" + tilesetName + ".png.prop\", fichier de proprietes du tileset. " + std::string(SDL_GetError()));
 	}
 	return result;
 }
@@ -36,7 +37,7 @@ ska::SDLSurface LoadTilesetImageProperties(const std::string& tilesetName) {
 void ska::TilesetLoaderImage::checkSizes() const {
 	if(!AllEquals(m_sCol.getInstance()->w, m_sProperties.getInstance()->w) ||
 	   !AllEquals(m_sCol.getInstance()->h, m_sProperties.getInstance()->h)) {
-		throw FileException("Unable to load the tileset " + m_tilesetName + " from image loader : image files don't have the same dimensions");
+		ExceptionTrigger<FileException>("Unable to load the tileset " + m_tilesetName + " from image loader : image files don't have the same dimensions");
 	}
 }
 

@@ -2,6 +2,7 @@
 #include <optional>
 #include "TilesetEventLoaderText.h"
 #include "Exceptions/FileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "Utils/FileUtils.h"
 
@@ -16,7 +17,7 @@ std::vector<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::load() const
 	std::string ss;
 
 	if (scriptList.fail()) {
-		throw FileException("Erreur lors de l'ouverture du fichier \"" + tilesetFolder + "/scripts.txt" + "\", fichier de scripts du tileset. ");
+		ExceptionTrigger<FileException>("Erreur lors de l'ouverture du fichier \"" + tilesetFolder + "/scripts.txt" + "\", fichier de scripts du tileset. ");
 	}
 
 	auto scripts = std::vector<ScriptSleepComponent>{};

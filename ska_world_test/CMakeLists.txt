@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_world_test)
 
+set(CMAKE_CXX_STANDARD 17)
 set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
 
 set(SKA_DEBUG_DIR "Debug")
@@ -36,8 +37,8 @@ string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_world_test ${SOURCES})
 set_target_properties(ska_world_test PROPERTIES
-					  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
+			RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-target_link_libraries(ska_world_test ska_world ska_draw ska_core SDL2_ttf SDL2_image SDL2_gif SDL2)
+target_link_libraries(ska_world_test ska_world ska_draw ska_core)

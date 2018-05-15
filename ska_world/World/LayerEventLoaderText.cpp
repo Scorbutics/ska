@@ -3,6 +3,7 @@
 #include "LayerEventLoaderText.h"
 #include "Utils/FileUtils.h"
 #include "Exceptions/CorruptedFileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "Exceptions/NumberFormatException.h"
 
@@ -13,7 +14,7 @@ ska::LayerEventLoaderText::LayerEventLoaderText(std::string layerFileName) :
 	const auto nomFichier = fndata.name.substr(0, fndata.name.find_last_of('E'));
 	std::ifstream flux(m_fileName.c_str());
 	if (flux.fail()) {
-		throw CorruptedFileException("Erreur (classe LayerEvent) : Impossible d'ouvrir le fichier event demande: " + m_fileName);
+		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Impossible d'ouvrir le fichier event demande: " + m_fileName);
 	}
 
 	std::string line;
@@ -62,7 +63,7 @@ std::pair<ska::BlockEvent, ska::ScriptSleepComponent> ska::LayerEventLoaderText:
 
 	currentScript.open(event.script, std::ios_base::in);
 	if (currentScript.fail()) {
-		throw ska::FileException("Script not found : " + event.script + " at line " + ska::StringUtils::intToStr(lineIndex) + " of the level " + m_fileName);
+		ExceptionTrigger<ska::FileException>("Script not found : " + event.script + " at line " + ska::StringUtils::intToStr(lineIndex) + " of the level " + m_fileName);
 	}
 
 	ssc.id = -1;
@@ -100,7 +101,7 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
     events.resize(width, height);
 
 	auto i = 0u;
-	try {
+	skaTryCatch(({
 		for (const auto& line : m_fileContent) {
 			auto [event, ssc] = buildFromLine(line, i++);
 			switch(ssc.triggeringType) {
@@ -113,9 +114,9 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
 			
 			events[event.position.x][event.position.y].push_back(std::move(ssc));
 		}
-	} catch (NumberFormatException& nfe) {
-		throw CorruptedFileException("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
-	}
+	}), ska::NumberFormatException, nfe, ({
+		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
+	}));
 
 	return events;
 }
@@ -123,7 +124,7 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
 ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
 	auto events = ScriptPack{};
 	auto i = 0u;
-	try {
+	skaTryCatch (({
 		for (const auto& line : m_fileContent) {
 			i++;
 			
@@ -138,10 +139,9 @@ ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
 
 			events.push_back(std::move(ssc));
 		}
-	}
-	catch (NumberFormatException& nfe) {
-		throw CorruptedFileException("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
-	}
+	}), ska::NumberFormatException, nfe, ({
+		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));
+	}));
 	return events;
 }
 

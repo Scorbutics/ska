@@ -1,6 +1,7 @@
 #include "Graphic/SDLSurface.h"
 #include "Point.h"
 #include "Exceptions/CorruptedFileException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "TilesetCorrespondanceMapper.h"
 
@@ -8,7 +9,7 @@ ska::TilesetCorrespondanceMapper::TilesetCorrespondanceMapper(const std::string&
 	SDLSurface surf;
 	surf.load32(filenameCorr);
 	if(surf.getInstance() == nullptr) {
-		throw FileException("Erreur lors du chargement de \"" + filenameCorr + "\", fichier de correspondance entre tuiles du monde et position dans le chipset. "
+		ExceptionTrigger<FileException>("Erreur lors du chargement de \"" + filenameCorr + "\", fichier de correspondance entre tuiles du monde et position dans le chipset. "
 			"Sans ce fichier, le chargement d'un chipset (et donc d'un monde) est impossible. " + std::string(SDL_GetError()));
 	}
 	m_fileWidth = surf.getInstance()->w;
@@ -31,7 +32,7 @@ void ska::TilesetCorrespondanceMapper::buildCorrMap(const SDLSurface& fichierMCo
 				m_corr.insert(std::make_pair(c, Point<int>(x, y)));
 			} else {
 				auto& pos2 = m_corr[c];
-				throw CorruptedFileException("Chipset correspondance file (\"corr.png\") has several tiles with same color at ("
+				ExceptionTrigger<CorruptedFileException>("Chipset correspondance file (\"corr.png\") has several tiles with same color at ("
 					+ StringUtils::intToStr(pos2.x) + "; " + StringUtils::intToStr(pos2.y) + ") and (" + StringUtils::intToStr(x) + "; " + StringUtils::intToStr(y)
 					+ "). Please keep only one color correspondance per tile");
 			}

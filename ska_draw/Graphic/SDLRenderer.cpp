@@ -1,4 +1,5 @@
 #include "Exceptions/IllegalArgumentException.h"
+#include "Exceptions/ExceptionTrigger.h"
 #include "SDLRenderer.h"
 #include "Logging/Logger.h"
 #include "SDLWindow.h"
@@ -28,8 +29,8 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
 	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
     if(m_renderer == nullptr) {
-		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDL_GetError());
-        throw IllegalArgumentException("Bad instanciation : renderer cannot be null");
+	SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDL_GetError());
+        ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
 }
 

@@ -75,13 +75,13 @@ namespace ska {
 	#ifdef SKA_EXCEPTIONS_DISABLED
 		#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
 		auto ExcepNameEnglober = ska::ExceptionTriggerer::get().createCatcher([&](const ska::GenericException& ExcepName) {\
-			do { CatchCode } while (0);\
+			do { CatchCode; } while (0);\
 		});\
 		ska::ExceptionTriggerer::get().addCallback(ExcepNameEnglober);\
-		do { TryCode } while (0);
+		do { TryCode; } while (0);
 	#else
 		#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
-		try { do { TryCode } while (0); } catch (ExcepType& ExcepName) { do { CatchCode } while (0); }
+		try { do { TryCode; } while (0); } catch (ExcepType& ExcepName) { do { CatchCode; } while (0); }
 	#endif
 
 }
