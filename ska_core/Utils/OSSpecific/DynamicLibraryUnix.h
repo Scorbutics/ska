@@ -14,10 +14,14 @@ namespace ska {
 	public:
 		DynamicLibraryUnix(const std::string& lib) : 
 			m_name("lib" + lib + ".so") {
-			auto errorMessage = loadLibrary(m_name.c_str());
-			if(m_handle == nullptr) {
-				ExceptionTrigger<InputException>(errorMessage);
+			m_errorMessage = loadLibrary(m_name.c_str());
+			if(!isLoaded()) {
+				SKA_LOG_MESSAGE(m_errorMessage);
 			}
+		}
+
+		bool isLoaded() const {
+			return m_handle != nullptr;
 		}
 
 		~DynamicLibraryUnix() {
@@ -44,6 +48,7 @@ namespace ska {
 
 		void* m_handle {};
 		std::string m_name;
+		std::string m_errorMessage;
 	};
 }
 #endif

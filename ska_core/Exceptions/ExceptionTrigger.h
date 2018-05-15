@@ -32,8 +32,6 @@ namespace ska {
 		std::stack<std::reference_wrapper<ExceptionCatcher>>& m_container;
 	};
 
-	static const std::function<void(const GenericException& ge)> ExceptionAbort;
-	
 	class ExceptionTriggerer {
 	public:
 		~ExceptionTriggerer() = default;

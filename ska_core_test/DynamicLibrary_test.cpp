@@ -1,6 +1,7 @@
 #include <doctest.h>
 #include <SDL.h>
 #include <iostream>
+#include "Exceptions/ExceptionTrigger.h"
 #include "Utils/DynamicLibrary.h"
 #include "Utils/StringConstExpr.h"
 
@@ -71,11 +72,8 @@ public:
 };
 
 TEST_CASE("[DynamicLibrary] Loading failure") {
-	skaTryCatch({
-		auto sdlLib = SDLLibrary{};
-	}, ska::GenericException, ge, {
-		CHECK(true);
-	});
+	auto sdlLib = SDLLibrary{};
+	CHECK(!sdlLib.isLoaded());
 }
 
 #ifdef SKA_PLATFORM_LINUX
@@ -84,27 +82,17 @@ TEST_CASE("[DynamicLibrary] Loading failure") {
 
 TEST_CASE("[DynamicLibrary] Loading") {
 	auto clib = std::optional<CLibrary>{};
-	skaTryCatch({
-		clib = CLibrary{};
-	}, ska::GenericException, ge, {
-		CHECK(false);
-	});
+	clib = CLibrary{};
+	CHECK(clib->isLoaded());
 
 	SUBCASE("calling strlen") {
-		skaTryCatch({
-			CHECK(4 == clib->len("Test"));
-		}, ska::GenericException, ge, {
-			CHECK(false);
-		});
+		CHECK(clib->hasLoaded<dynlib::IdNamedFunction<dynlib::CCalls::C_STRLEN>>());
+		CHECK(4 == clib->len("Test"));
 	}
 
 	SUBCASE("calling a varargs function : printf") {
-		skaTryCatch({
-			clib->print("%s LOL %i\n", "test !", 45);
-			CHECK(true);
-		}, ska::GenericException, ge, {
-			CHECK(false);
-		});
+		CHECK(clib->hasLoaded<dynlib::IdNamedFunction<dynlib::CCalls::C_PRINTF>>());
+		clib->print("%s LOL %i\n", "test !", 45);
 	}
 }
 
