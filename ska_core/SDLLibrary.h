@@ -7,6 +7,12 @@
 
 namespace ska {
 
+	template<int Id>
+	struct SDLIdNamedFunction {
+		static constexpr auto id = Id;
+		static std::string name;
+	};
+
 	enum SDLCalls {
 		SDL_UPPER_BLIT,
 		SDL_INIT,
@@ -29,12 +35,6 @@ namespace ska {
 		SDL_CREATE_RGB_SURFACE
 	};
 
-	template<int Id>
-	struct SDLIdNamedFunction {
-		static constexpr auto id = Id;
-		static std::string name;
-	};
-		
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, void(), "SDL_UpperBlit");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_POLL_EVENT, void(), "SDL_PollEvent");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_INIT, int(Uint32), "SDL_Init");
@@ -54,19 +54,21 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_TEXTURE, void(SDL_Texture *), "SDL_DestroyTexture");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_DELAY, Uint32(), "SDL_Delay");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_RGB_SURFACE, SDL_Surface *(Uint32, int, int, int, Uint32, Uint32, Uint32, Uint32), "SDL_CreateRGBSurface");
-	
+
 	using SDLDynLib = DynamicLibrary <
 		SDLIdNamedFunction<SDL_UPPER_BLIT>,
 		SDLIdNamedFunction<SDL_INIT>,
 		SDLIdNamedFunction<SDL_POLL_EVENT>,
 		SDLIdNamedFunction<SDL_RENDER_PRESENT>,
 		SDLIdNamedFunction<SDL_RENDER_CLEAR>>;
-	
+
 
 	class SDLLibrary : public SDLDynLib {
+        #define callSDL(enumIndex) call<SDLIdNamedFunction<enumIndex>>
+
 	public:
 		int init(Uint32 flags) const {
-			return call<SDLIdNamedFunction<SDL_INIT>>(std::move(flags));
+			return callSDL<SDL_INIT>(std::move(flags));
 		}
 
 		static SDLLibrary& get() {
@@ -76,5 +78,7 @@ namespace ska {
 
 	private:
 		SDLLibrary() : SDLDynLib("SDL") {}
+
+		#undef callSDL
 	};
 }

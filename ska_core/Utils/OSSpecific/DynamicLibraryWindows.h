@@ -29,7 +29,9 @@ namespace ska {
 		std::pair<void*, std::string> getFunction(const char* name) const {
 			char errbuf[512];
 
-			auto function = static_cast<void *>(GetProcAddress(m_handle, name));
+			//On Windows, pointers to non-member functions and pointers to objects are the same size
+			//So we can cast from FARPROC to void* without problem
+			auto function = reinterpret_cast<void *>(GetProcAddress(m_handle, name));
 			if (function == NULL) {
 				FormatMessage((FORMAT_MESSAGE_IGNORE_INSERTS |
 					FORMAT_MESSAGE_FROM_SYSTEM),
