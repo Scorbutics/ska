@@ -35,11 +35,11 @@ namespace ska {
 		SDL_CREATE_RGB_SURFACE
 	};
 
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, void(), "SDL_UpperBlit");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_POLL_EVENT, void(), "SDL_PollEvent");
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, int(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*), "SDL_UpperBlit");
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_POLL_EVENT, int(SDL_Event*), "SDL_PollEvent");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_INIT, int(Uint32), "SDL_Init");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_PRESENT, void(), "SDL_RenderPresent");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_CLEAR, void(), "SDL_RenderClear");
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_PRESENT, void(SDL_Renderer*), "SDL_RenderPresent");
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_CLEAR, int(SDL_Renderer*), "SDL_RenderClear");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_ALPHA_MOD, int (SDL_Texture*, Uint8), "SDL_SetTextureAlphaMod");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_SURFACE_ALPHA_MOD, int (SDL_Surface*, Uint8), "SDL_SetSurfaceAlphaMod");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_COLOR_MOD, int (SDL_Texture*, Uint8, Uint8, Uint8), "SDL_SetTextureBlendMode");
@@ -57,10 +57,24 @@ namespace ska {
 
 	using SDLDynLib = DynamicLibrary <
 		SDLIdNamedFunction<SDL_UPPER_BLIT>,
-		SDLIdNamedFunction<SDL_INIT>,
 		SDLIdNamedFunction<SDL_POLL_EVENT>,
+		SDLIdNamedFunction<SDL_INIT>,
 		SDLIdNamedFunction<SDL_RENDER_PRESENT>,
-		SDLIdNamedFunction<SDL_RENDER_CLEAR>>;
+		SDLIdNamedFunction<SDL_RENDER_CLEAR>,
+		SDLIdNamedFunction<SDL_SET_TEXTURE_ALPHA_MOD>,
+		SDLIdNamedFunction<SDL_SET_SURFACE_ALPHA_MOD>,
+		SDLIdNamedFunction<SDL_SET_TEXTURE_COLOR_MOD>,
+		SDLIdNamedFunction<SDL_SET_TEXTURE_BLEND_MOD>,
+		SDLIdNamedFunction<SDL_SET_COLOR_KEY>,
+		SDLIdNamedFunction<SDL_MAP_RGBA>,
+		SDLIdNamedFunction<SDL_GET_TICKS>,
+		SDLIdNamedFunction<SDL_GET_RGB>,
+		SDLIdNamedFunction<SDL_GET_ERROR>,
+		SDLIdNamedFunction<SDL_FREE_SURFACE>,
+		SDLIdNamedFunction<SDL_FILL_RECT>,
+		SDLIdNamedFunction<SDL_DESTROY_TEXTURE>,
+		SDLIdNamedFunction<SDL_DELAY>,
+		SDLIdNamedFunction<SDL_CREATE_RGB_SURFACE>>;
 
 
 	class SDLLibrary : public SDLDynLib {
@@ -68,7 +82,11 @@ namespace ska {
 
 	public:
 		int init(Uint32 flags) const {
-			return callSDL<SDL_INIT>(std::move(flags));
+			return callSDL(SDL_INIT)(std::move(flags));
+		}
+
+        int upperBlit(SDL_Surface& src, const SDL_Rect* srcRect, SDL_Surface& dst, SDL_Rect* dstRect) const {
+			return callSDL(SDL_UPPER_BLIT)(&src, std::move(srcRect), &dst, std::move(dstRect));
 		}
 
 		static SDLLibrary& get() {
@@ -77,7 +95,7 @@ namespace ska {
 		}
 
 	private:
-		SDLLibrary() : SDLDynLib("SDL") {}
+		SDLLibrary() : SDLDynLib("SDL2") {}
 
 		#undef callSDL
 	};

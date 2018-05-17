@@ -6,8 +6,10 @@
 #include <utility>
 
 //Windows only
+#undef NOMINMAX
 #define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 namespace ska {
 	class DynamicLibraryWindows {

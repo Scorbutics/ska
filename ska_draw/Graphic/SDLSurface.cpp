@@ -1,6 +1,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cassert>
+#include "SDLLibrary.h"
 #include "Font.h"
 #include "SDLSurface.h"
 #include "Logging/Logger.h"
@@ -100,7 +101,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 		}
 
 		/* Copie l'image image_ram de moins de 32 bits vers image_result qui fait 32 bits */
-		SDL_UpperBlit(imageRam, nullptr, m_surface, nullptr);
+		SDLLibrary::get().upperBlit(*imageRam, nullptr, *m_surface, nullptr);
 
 		/* Clean up phase */
 	loadImage32Free:
