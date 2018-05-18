@@ -1,5 +1,6 @@
 #include "SDLTexture.h"
 #include "SDLSurface.h"
+#include "SDLLibrary.h"
 #include "TextureData.h"
 #include "Font.h"
 #include "Task/WorkNode.h"
@@ -9,7 +10,7 @@
 
 ska::SDLTexture::SDLTexture(TextureData& data) :
 	m_texture(nullptr),
-	m_w(0), 
+	m_w(0),
 	m_h(0) {
 
 	m_surface = std::make_unique<SDLSurface>();
@@ -52,7 +53,7 @@ void ska::SDLTexture::loadFromRenderer(const Renderer& renderer) {
 	while (m_whenLoadedTasks->hasRunningTask()) {
 		m_whenLoadedTasks->refresh();
 	}
-	
+
 }
 
 bool ska::SDLTexture::isInitialized() const {
@@ -61,7 +62,7 @@ bool ska::SDLTexture::isInitialized() const {
 
 void ska::SDLTexture::free() {
 	if (m_texture != nullptr) {
-		SDL_DestroyTexture(m_texture);
+		SDLLibrary::get().destroyTexture(m_texture);
 		m_texture = nullptr;
 	}
 }
@@ -72,7 +73,7 @@ ska::SDLTexture::~SDLTexture() {
 
 void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
 	const auto action = [&]() {
-		SDL_SetTextureColorMod(m_texture, r, g, b);
+		SDLLibrary::get().setTextureColorMod(*m_texture, r, g, b);
 		return false;
 	};
 
@@ -85,7 +86,7 @@ void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
 
 void ska::SDLTexture::setBlendMode(int blending) const {
 	auto action = [&]() {
-		SDL_SetTextureBlendMode(m_texture, static_cast<SDL_BlendMode>(blending));
+		SDLLibrary::get().setTextureBlendMode(*m_texture, static_cast<SDL_BlendMode>(blending));
 		return false;
 	};
 
@@ -98,7 +99,7 @@ void ska::SDLTexture::setBlendMode(int blending) const {
 
 void ska::SDLTexture::setAlpha(Uint8 alpha) const {
 	auto action = [&]() {
-		SDL_SetTextureAlphaMod(m_texture, alpha);
+		SDLLibrary::get().setTextureAlphaMod(*m_texture, alpha);
 		return false;
 	};
 
@@ -110,10 +111,10 @@ void ska::SDLTexture::setAlpha(Uint8 alpha) const {
 }
 
 unsigned ska::SDLTexture::getWidth() const{
-	 return m_w;	
+	 return m_w;
 }
 
-unsigned ska::SDLTexture::getHeight() const{	
+unsigned ska::SDLTexture::getHeight() const{
 	return m_h;
 }
 

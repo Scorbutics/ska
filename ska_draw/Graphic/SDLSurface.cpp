@@ -37,7 +37,7 @@ void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Co
 
 void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& rect) {
 	free();
-	m_surface = SDL_CreateRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
+	m_surface = SDLLibrary::get().createRGBSurface(0, rect.w, rect.h, 32, 0, 0, 0, 0);
 
 	if (!checkSurfaceValidity("(Rectangle)")) {
 		return;
@@ -45,7 +45,7 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 
 	SDL_Rect sRect = { 0, 0, rect.w, rect.h };
 	color.fill(m_r, m_g, m_b, &m_a);
-	SDL_FillRect(m_surface, &sRect, SDL_MapRGBA(m_surface->format, color.r, color.g, color.b, color.a));
+	SDLLibrary::get().fillRect(*m_surface, &sRect, SDLLibrary::get().mapRGBA(*m_surface->format, color.r, color.g, color.b, color.a));
 }
 
 void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
@@ -58,11 +58,11 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 
 	if (colorKey != nullptr) {
 		colorKey->fill(m_r, m_g, m_b, &m_a);
-		SDL_SetColorKey(m_surface, SDL_TRUE, SDL_MapRGBA(m_surface->format, m_r, m_g, m_b, m_a));
+		SDLLibrary::get().setColorKey(*m_surface, SDL_TRUE, SDLLibrary::get().mapRGBA(*m_surface->format, m_r, m_g, m_b, m_a));
 	}
 
 	if (m_a < 255) {
-		SDL_SetSurfaceAlphaMod(m_surface, m_a);
+		SDLLibrary::get().setSurfaceAlphaMod(*m_surface, m_a);
 	}
 }
 
@@ -72,7 +72,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 	}
 
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
-		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDL_GetError());
+		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDLLibrary::get().getError());
 	});
 
 	if (m_surface == nullptr) {
@@ -84,7 +84,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 	}
 
 	SKA_DBG_ONLY(if (m_surface == nullptr) {
-		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDL_GetError()));
+		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDLLibrary::get().getError()));
 	});
 
 	return m_surface != nullptr;
@@ -95,7 +95,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 	m_surface = nullptr;
 	const auto imageRam = IMG_Load(file.c_str());
 	if (imageRam != nullptr) {
-		m_surface = SDL_CreateRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
+		m_surface = SDLLibrary::get().createRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
 		if (m_surface == nullptr) {
 			goto loadImage32Free;
 		}
@@ -105,7 +105,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 
 		/* Clean up phase */
 	loadImage32Free:
-		SDL_FreeSurface(imageRam);
+		SDLLibrary::get().freeSurface(imageRam);
 	}
 
 	checkSurfaceValidity(file);
@@ -119,7 +119,7 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 
 	Color c;
 	const auto pix = getPixel32(x, y);
-	SDL_GetRGB(pix, getFormat(), &c.r, &c.g, &c.b);
+	SDLLibrary::get().getRGB(pix, *getFormat(), &c.r, &c.g, &c.b);
 	return c;
 }
 
@@ -136,7 +136,7 @@ uint32_t ska::SDLSurface::getPixel32(int pixIndex) const {
 }
 
 void ska::SDLSurface::free() {
-	SDL_FreeSurface(m_surface);
+	SDLLibrary::get().freeSurface(m_surface);
 	m_surface = nullptr;
 	m_r = m_g = m_b = 0;
 	m_a = 255;
