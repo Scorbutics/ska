@@ -3,6 +3,7 @@
 #include "../Exceptions/TerminateProcessException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "../Utils/StringUtils.h"
+#include "../SDLLibrary.h"
 
 const ska::KeyInput& ska::RawInputListener::getKeyInput() const {
     return m_keyIn;
@@ -28,7 +29,7 @@ void ska::RawInputListener::update() {
 	m_keyIn.resetTriggers();
 	m_mouseIn.resetTriggers();
 
-	while(SDL_PollEvent(&event)) {
+	while(SDLLibrary::get().pollEvent(event)) {
 		switch (event.type) {
             case SDL_APP_TERMINATING:
                 /* Terminate the app.

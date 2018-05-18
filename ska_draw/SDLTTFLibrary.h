@@ -66,6 +66,6 @@ namespace ska {
 		}
 
 	private:
-		SDLTTFLibrary() : SDLTFFDynLib("SDL") {}
+		SDLTTFLibrary() : SDLTFFDynLib("SDL2_ttf") {}
 	};
 }

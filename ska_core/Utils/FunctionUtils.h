@@ -1,6 +1,7 @@
 #pragma once
 #include <tuple>
 #include <type_traits>
+#include <cassert>
 
 namespace ska {
 	template <typename Function> struct split_function_args;
@@ -14,18 +15,22 @@ namespace ska {
 		template <bool, class Ret, class ... Args>
 		struct Caller;
 		
-		template<class Ret, class ... Args>
-		struct Caller<false, Ret, Args...> {
+		template<class Ret, class ... ArgsF>
+		struct Caller<false, Ret, ArgsF...> {
+			template <class ... Args>
 			static void call(void* functionPtr, Args&&... args) {
 				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
+				assert(typeSafeFunctionPtr != nullptr);
 				(*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};
 
-		template<class Ret, class ... Args>
-		struct Caller<true, Ret, Args...> {
+		template<class Ret, class ... ArgsF>
+		struct Caller<true, Ret, ArgsF...> {
+			template <class ... Args>
 			static Ret call(void* functionPtr, Args&&... args) {
 				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
+				assert(typeSafeFunctionPtr != nullptr);
 				return (*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};

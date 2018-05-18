@@ -11,6 +11,9 @@
 #include "Core/State/StateHolder.h"
 #include "Draw/DrawableContainer.h"
 #include "Core/Window.h"
+#include "SDLTTFLibrary.h"
+#include "SDLImageLibrary.h"
+#include "SDLLibrary.h"
 
 ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window):
 	SubObserver<StateEvent>(std::bind(&GraphicModule::onStateEvent, this, std::placeholders::_1), ged),
@@ -19,27 +22,28 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	m_renderer(std::move(renderer)),
 	m_mainWindow(std::move(window)) {
 
-	SDL_SetMainReady();
+	//TODO
+	//SDLMainLibrary::get().setMainReady();
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de la SDL : " + std::string(SDL_GetError()));
+	if (SDLLibrary::get().init(SDL_INIT_VIDEO) < 0) {
+		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de la SDL : " + std::string(SDLLibrary::get().getError()));
 	}
 
 	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
-	if (!SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
+	if (!SDLLibrary::get().setHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
 		SKA_LOG_MESSAGE("Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.");
 	}
 
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
+	if (!SDLLibrary::get().setHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
 		SKA_LOG_MESSAGE("Attention : Linear texture filtering impossible à activer.");
 	}
 
-	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de SDL_image : " + std::string(IMG_GetError()));
+	if (!(SDLImageLibrary::get().init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de SDL_image : " + std::string(SDLLibrary::get().getError()));
 	}
 
-	if (TTF_Init() == -1) {
-		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", TTF_GetError());
+	if (SDLTTFLibrary::get().init() == -1) {
+		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", SDLLibrary::get().getError());
 	}
 
 	m_mainWindow->load();
@@ -68,7 +72,7 @@ void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& s
 }
 
 ska::GraphicModule::~GraphicModule() {
-	TTF_Quit();
-	IMG_Quit();
-	SDL_Quit();
+	SDLTTFLibrary::get().quit();
+	SDLImageLibrary::get().quit();
+	SDLLibrary::get().quit();
 }

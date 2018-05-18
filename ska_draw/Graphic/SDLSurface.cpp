@@ -7,6 +7,8 @@
 #include "Logging/Logger.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "../GraphicModule.h"
+#include "../SDLTTFLibrary.h"
+#include "../SDLImageLibrary.h"
 
 SDL_Color ColorToNative(const ska::Color& c){
 	return SDL_Color{ c.r, c.g, c.b, c.a };
@@ -26,7 +28,7 @@ SDL_Surface* ska::SDLSurface::getInstance() const {
 
 void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Color c) {
 	free();
-	m_surface = TTF_RenderText_Blended(font.getInstance(), text.c_str(), ColorToNative(c));
+	m_surface = SDLTTFLibrary::get().renderTextBlended(*font.getInstance(), text.c_str(), ColorToNative(c));
 
 	if (!checkSurfaceValidity("(Text) : " + text)) {
 		return;
@@ -50,7 +52,7 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 
 void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 	free();
-	m_surface = IMG_Load(file.c_str());
+	m_surface = SDLImageLibrary::get().load(file);
 
 	if(!checkSurfaceValidity(file)) {
 		return;
@@ -93,7 +95,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 void ska::SDLSurface::load32(const std::string& file) {
 	free();
 	m_surface = nullptr;
-	const auto imageRam = IMG_Load(file.c_str());
+	const auto imageRam = SDLImageLibrary::get().load(file);
 	if (imageRam != nullptr) {
 		m_surface = SDLLibrary::get().createRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
 		if (m_surface == nullptr) {

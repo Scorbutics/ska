@@ -4,6 +4,8 @@
 #include "Exceptions/IllegalArgumentException.h"
 #include "Logging/Logger.h"
 #include <cassert>
+#include "SDLLibrary.h"
+#include "../SDLImageLibrary.h"
 
 #define TAILLEBLOCFENETRE 32
 #define TAILLEECRANMINX TAILLEBLOCFENETRE*15
@@ -17,21 +19,21 @@ ska::SDLWindow::SDLWindow(const std::string& title, unsigned int w, unsigned int
 }
 
 void ska::SDLWindow::lazyInit() {
-	m_screen = SDL_CreateWindow(m_wName.c_str(),
+	m_screen = SDLLibrary::get().createWindow(m_wName.c_str(),
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		m_width, m_height,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	if (m_screen == nullptr) {
-		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDL_GetError());
+		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDLLibrary::get().getError());
 		assert(false && "Bad instanciation : screen is null");
 	}
 }
 
 void ska::SDLWindow::show() {
 	assert(m_screen != nullptr && "Window must be loaded");
-	SDL_ShowWindow(m_screen);
+	SDLLibrary::get().showWindow(*m_screen);
 }
 
 void ska::SDLWindow::load() {
@@ -39,18 +41,18 @@ void ska::SDLWindow::load() {
 }
 
 void ska::SDLWindow::setWindowIcon(const std::string& filename) {
-	SDL_FreeSurface(m_iconFile);
-	m_iconFile = IMG_Load(filename.c_str());
+	SDLLibrary::get().freeSurface(m_iconFile);
+	m_iconFile = SDLImageLibrary::get().load(filename);
 	assert(m_screen != nullptr && "Screen must be loaded");
-	SDL_SetWindowIcon(m_screen, m_iconFile);
+	SDLLibrary::get().setWindowIcon(*m_screen, m_iconFile);
 }
 
 void ska::SDLWindow::showMessageBox(uint32_t flags, const std::string& title, const std::string& message) const {
 	assert(m_screen != nullptr && "Screen must be loaded");
-	SDL_ShowSimpleMessageBox(flags,
-            title.c_str(),
-            message.c_str(),
-            m_screen);
+	SDLLibrary::get().showSimpleMessageBox(flags,
+            title,
+            message,
+            *m_screen);
 }
 
 unsigned int ska::SDLWindow::getWidth() const {
@@ -67,6 +69,6 @@ void ska::SDLWindow::resize(unsigned int w, unsigned int h) {
 }
 
 ska::SDLWindow::~SDLWindow() {
-	SDL_FreeSurface(m_iconFile);
-	SDL_DestroyWindow(m_screen);
+	SDLLibrary::get().freeSurface(m_iconFile);
+	SDLLibrary::get().destroyWindow(m_screen);
 }

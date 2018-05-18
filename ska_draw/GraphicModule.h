@@ -1,10 +1,8 @@
 #pragma once
 #include <memory>
 #include "Utils/SubObserver.h"
-//#include "SDLLibrary.h"
 #include "Data/Events/StateEvent.h"
 #include "Data/Events/GameEventDispatcher.h"
-#include "SDLLibrary.h"
 
 namespace ska {
 	class StateHolder;

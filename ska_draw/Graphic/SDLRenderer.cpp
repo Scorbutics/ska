@@ -7,6 +7,7 @@
 #include "SDL_RectConverter.h"
 #include <cassert>
 #include "SDL_PointConverter.h"
+#include "SDLLibrary.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
     m_renderer(nullptr),
@@ -17,7 +18,7 @@ ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
 
 void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
 	m_currentRenderColor = c;
-	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, c.r, c.g, c.b, c.a);
 }
 
 void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
@@ -25,11 +26,11 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
         free();
     }
 
-    m_renderer = SDL_CreateRenderer(window, index, flags);
+    m_renderer = SDLLibrary::get().createRenderer(*window, index, flags);
 	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
     if(m_renderer == nullptr) {
-	SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDL_GetError());
+	SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDLLibrary::get().getError());
         ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
 }
@@ -39,38 +40,38 @@ SDL_Renderer * ska::SDLRenderer::unwrap() const {
 }
 
 void ska::SDLRenderer::renderClear() const {
-    SDL_RenderClear(m_renderer);
+	SDLLibrary::get().renderClear(*m_renderer);
 }
 
 void ska::SDLRenderer::renderPresent() const {
-    SDL_RenderPresent(m_renderer);
+	SDLLibrary::get().renderPresent(*m_renderer);
 }
 
 SDL_Texture* ska::SDLRenderer::createTextureFromSurface(const SDLSurface& s) const {
-    return SDL_CreateTextureFromSurface(m_renderer, s.m_surface);
+    return SDLLibrary::get().createTextureFromSurface(*m_renderer, *s.m_surface);
 }
 
 void ska::SDLRenderer::drawColorPoint(const Color& c, const Point<int>& pos) const {
-	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
-	SDL_RenderDrawPoint(m_renderer, pos.x, pos.y);
-	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, c.r, c.g, c.b, c.a);
+	SDLLibrary::get().renderDrawPoint(*m_renderer, pos.x, pos.y);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
 void ska::SDLRenderer::drawColorRect(const Color& c, const Rectangle& r) const {
-	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, c.r, c.g, c.b, c.a);
 	auto rNative = ToSDL_Rect(r);
-	SDL_RenderFillRect(m_renderer, &rNative);
-	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+	SDLLibrary::get().renderFillRect(*m_renderer, &rNative);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
 void ska::SDLRenderer::drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const {
-	SDL_SetRenderDrawColor(m_renderer, c.r, c.g, c.b, c.a);
-	SDL_RenderDrawLine(m_renderer, p1.x, p1.y, p2.x, p2.y);
-	SDL_SetRenderDrawColor(m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, c.r, c.g, c.b, c.a);
+	SDLLibrary::get().renderDrawLine(*m_renderer, p1.x, p1.y, p2.x, p2.y);
+	SDLLibrary::get().setRenderDrawColor(*m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
 }
 
 void ska::SDLRenderer::free() {
-    SDL_DestroyRenderer(m_renderer);
+	SDLLibrary::get().destroyRenderer(m_renderer);
 	m_renderer = nullptr;
 }
 
@@ -100,7 +101,7 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
 		SDL_Point pRotationCenter;
 		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }
-		SDL_RenderCopyEx(m_renderer, instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE);
+		SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE);
 	}
 }
 
@@ -118,7 +119,7 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 		auto rTmp = ToSDL_Rect(tmp);
 		SDL_Rect rClip;
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
-		SDL_RenderCopy(m_renderer, at.m_gif.m_actTexture, clip != nullptr ? &rClip : nullptr, &rTmp);
+		SDLLibrary::get().renderCopy(*m_renderer, *at.m_gif.m_actTexture, clip != nullptr ? &rClip : nullptr, &rTmp);
 	} else {
 		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp, angle, rotationCenter);
 	}

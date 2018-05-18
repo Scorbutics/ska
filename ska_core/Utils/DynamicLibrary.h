@@ -76,7 +76,7 @@ namespace ska {
 		using DisabledReturn = std::enable_if_t<!Caller<Name>::HasReturn>;
 
 		template <class Name, class ... Args, class = EnabledReturn<Name>>
-		auto call(Args&&... args) const {
+		typename Caller<Name>::ReturnType call(Args&&... args) const {
 			checkType<Name>();
 			return Caller<Name>::Caller::call(*m_cache.template get<Name>(), std::forward<Args>(args)...);
 		}

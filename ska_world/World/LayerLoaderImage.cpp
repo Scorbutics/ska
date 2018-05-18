@@ -7,6 +7,7 @@
 #include "Graphic/SDLSurface.h"
 #include "Tileset.h"
 #include "Exceptions/CorruptedFileException.h"
+#include "SDLLibrary.h"
 
 ska::Vector2<ska::TileAnimation*> ska::LayerLoaderImage::loadAnimations(Tileset& chipset) const {
 	auto graphics = ska::Vector2<TileAnimation*>{};
@@ -63,7 +64,7 @@ ska::SDLSurface ska::LayerLoaderImage::loadFrom32(const std::string& layerFilena
 	SDLSurface file;
 	file.load32(layerFilename);
 	if (file.getInstance() == nullptr) {
-		ExceptionTrigger<FileException>("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDL_GetError()));
+		ExceptionTrigger<FileException>("Erreur lors de l'ouverture du fichier \"" + layerFilename + "\"" + std::string(SDLLibrary::get().getError()));
 	}
 	return file;
 }

@@ -16,6 +16,7 @@ void ska::StateHolder::eventUpdate(unsigned int ellapsedTime) {
 }
 
 bool ska::StateHolder::update() {
+	auto resultStateChange = false;
 	if (m_nextState != nullptr) {
 		bool firstState;
 		bool triggerChangeScene;
@@ -44,11 +45,12 @@ bool ska::StateHolder::update() {
 			StateEvent se(StateEventType::FIRST_STATE_LOAD);
 			m_eventDispatcher.ska::Observable<ska::StateEvent>::notifyObservers(se);
 			m_currentState->loadAfter(nullptr);
+			resultStateChange = true;
 		}
 	}
 
 	/* If exists, an helper that executes current running task once */
 	refresh();
-	return true;
+	return resultStateChange;
 }
 
