@@ -28,11 +28,11 @@ namespace ska {
 	
 	SKA_GIF_LIB_CALLS_DEFINE(GIF_TEXTURE, SDL_Texture* (CEV_GifAnim*), "CEV_gifTexture");
 	SKA_GIF_LIB_CALLS_DEFINE(GIF_FRAME_NEXT, void(CEV_GifAnim*), "CEV_gifFrameNext");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_TIME_SET, void(CEV_GifAnim* anim, unsigned int index, uint16_t timeMs), "CEV_gifTimeSet");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_MODE, void(), "CEV_gifLoopMode");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_RESET, void(), "CEV_gifLoopReset");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_AUTO, void(), "CEV_gifAnimAuto");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_FREE, void(), "CEV_gifAnimFree");
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_TIME_SET, void(CEV_GifAnim*, unsigned int, uint16_t), "CEV_gifTimeSet");
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_MODE, void(CEV_GifAnim*, unsigned int), "CEV_gifLoopMode");
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_RESET, void(CEV_GifAnim*), "CEV_gifLoopReset");
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_AUTO, void(CEV_GifAnim*), "CEV_gifAnimAuto");
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_FREE, void(CEV_GifAnim*), "CEV_gifAnimFree");
 
 	using SDLGifDynLib = DynamicLibrary <
 		SDLGifIdNamedFunction<GIF_TEXTURE>,

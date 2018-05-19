@@ -52,7 +52,7 @@ void ska::SDLWindow::showMessageBox(uint32_t flags, const std::string& title, co
 	SDLLibrary::get().showSimpleMessageBox(flags,
             title,
             message,
-            *m_screen);
+            m_screen);
 }
 
 unsigned int ska::SDLWindow::getWidth() const {

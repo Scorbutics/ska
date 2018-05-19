@@ -37,7 +37,7 @@ namespace ska {
 			return callSDLImage(IMG_INIT)(std::move(flags));
 		}
 
-		gsl::not_null<SDL_Surface*> load(const std::string& file) const {
+		SDL_Surface* load(const std::string& file) const {
 			return callSDLImage(IMG_LOAD)(file.c_str());
 		}
 

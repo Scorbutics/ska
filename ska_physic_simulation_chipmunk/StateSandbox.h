@@ -14,19 +14,19 @@
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
 	void render(const ska::Renderer& renderer) const override{
-		/*const auto width = layerRenderableBlocks.lineSize();
+		const auto width = layerRenderableBlocks.lineSize();
 		const auto height = width == 0 ? 0 : layerRenderableBlocks.size() / width;
 		for (auto x = 0; x < width; x++) {
 			for (auto y = 0; y < height; y++) {
 				const auto& b = layerRenderableBlocks[x][y];
-				if (b != nullptr) {
-					//chipset->getRenderable().render(renderer, { x * 48, y * 48 }, *b);
-				}
+				
+				chipset->getTexture().render(renderer, x * 48, y * 48, &b, 0, nullptr);
+				
 			}
-		}*/
+		}
 	}
 
-	//ska::Vector2<ska::TileRenderable*> layerRenderableBlocks;
+	ska::Vector2<ska::Rectangle> layerRenderableBlocks;
 	std::unique_ptr<ska::Tileset> chipset;
 };
 

@@ -30,7 +30,7 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
 	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
     if(m_renderer == nullptr) {
-	SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL (renderer) :", SDLLibrary::get().getError());
+		SKA_LOG_ERROR("Erreur lors de la creation de la fenetre SDL (renderer) : ", SDLLibrary::get().getError());
         ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
 }
@@ -101,7 +101,7 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
 		SDL_Point pRotationCenter;
 		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }
-		SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE);
+		assert(SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE) == 0);
 	}
 }
 

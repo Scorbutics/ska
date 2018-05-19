@@ -1,4 +1,3 @@
-#include "Draw/Renderer.h"
 #include "TilesetRenderable.h"
 #include "TilesetLoader.h"
 
@@ -17,14 +16,18 @@ ska::TileAnimation& ska::TilesetRenderable::getAnimation(const Point<int>& pos) 
 }
 
 void ska::TilesetRenderable::update() {
-	for (auto& anim : m_animations) {
-		if (anim.animated) {
-			anim.animation.updateFrame();
-		}
+	for (auto& anim : m_animatedAnimations) {
+		anim.get().updateFrame();
 	}
 }
 
 void ska::TilesetRenderable::load(const TilesetLoader& loader) {
     m_tileset = loader.loadGraphics();
 	m_animations = loader.loadAnimations(m_tileSize);
+	m_animatedAnimations = Vector2<std::reference_wrapper<Animation>> { m_animations.lineSize()};
+	for (auto& anim : m_animations) {
+		if (anim.animated) {
+			m_animatedAnimations.push_back(anim.animation);
+		}
+	}
 }

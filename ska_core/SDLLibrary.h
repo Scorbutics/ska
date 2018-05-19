@@ -49,7 +49,8 @@ namespace ska {
 		SDL_SHOW_WINDOW, 
 		SDL_DESTROY_WINDOW, 
 		SDL_SHOW_SIMPLE_MESSAGE_BOX,
-		SDL_QUERY_TEXTURE
+		SDL_QUERY_TEXTURE,
+		SDL_SET_MAIN_READY
 	};
 
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, int(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*), "SDL_UpperBlit");
@@ -88,7 +89,8 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_WINDOW, void(SDL_Window*), "SDL_DestroyWindow");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_SIMPLE_MESSAGE_BOX, int(Uint32, const char*, const char*, SDL_Window*), "SDL_ShowSimpleMessageBox");
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUERY_TEXTURE, int (SDL_Texture*, Uint32*, int*, int*, int*), "SDL_QueryTexture");
-	
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_MAIN_READY, void(), "SDL_SetMainReady");
+
 	using SDLDynLib = DynamicLibrary <
 		SDLIdNamedFunction<SDL_UPPER_BLIT>,
 		SDLIdNamedFunction<SDL_POLL_EVENT>,
@@ -125,7 +127,8 @@ namespace ska {
 		SDLIdNamedFunction<SDL_SHOW_WINDOW>,
 		SDLIdNamedFunction<SDL_DESTROY_WINDOW>,
 		SDLIdNamedFunction<SDL_SHOW_SIMPLE_MESSAGE_BOX>,
-		SDLIdNamedFunction<SDL_QUERY_TEXTURE>
+		SDLIdNamedFunction<SDL_QUERY_TEXTURE>,
+		SDLIdNamedFunction<SDL_SET_MAIN_READY>
 	>;
 
 
@@ -236,11 +239,11 @@ namespace ska {
 		}
 
 		int renderCopy(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst) const {
-			return callSDL(SDL_RENDER_COPY)(&renderer, &texture, std::move(src), std::move(dst));
+			return callSDL(SDL_RENDER_COPY)(&renderer, &texture, src, dst);
 		}
 
 		int renderCopyEx(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst, double angle, const SDL_Point* center, const SDL_RendererFlip flip) const {
-			return callSDL(SDL_RENDER_COPY_EX)(&renderer, &texture, src, dst, std::move(angle), std::move(center), flip);
+			return callSDL(SDL_RENDER_COPY_EX)(&renderer, &texture, src, dst, angle, center, flip);
 		}
 
 		void destroyRenderer(SDL_Renderer* renderer) const {
@@ -263,12 +266,12 @@ namespace ska {
 			return callSDL(SDL_DESTROY_WINDOW)(window);
 		}
 
-		void showSimpleMessageBox(Uint32 flags, const std::string& title, const std::string& message, SDL_Window& window) const {
-			callSDL(SDL_SHOW_SIMPLE_MESSAGE_BOX)(std::move(flags), title.c_str(), message.c_str(), &window);
+		void showSimpleMessageBox(Uint32 flags, const std::string& title, const std::string& message, SDL_Window* window) const {
+			callSDL(SDL_SHOW_SIMPLE_MESSAGE_BOX)(std::move(flags), title.c_str(), message.c_str(), window);
 		}
 
 		int queryTexture(SDL_Texture& actTexture, Uint32* format, int* access, int* w, int* h) const {
-			return callSDL(SDL_QUERY_TEXTURE)(actTexture, format, access, w, h);
+			return callSDL(SDL_QUERY_TEXTURE)(&actTexture, format, access, w, h);
 		}
 
 		int renderDrawPoint(SDL_Renderer& renderer, int x, int y) const {
@@ -277,6 +280,14 @@ namespace ska {
 
 		int renderDrawLine(SDL_Renderer& renderer, int x1, int y1, int x2, int y2) const {
 			return callSDL(SDL_RENDER_DRAW_LINE)(&renderer, x1, y1, x2, y2);
+		}
+
+		void setMainReady() const {
+			callSDL(SDL_SET_MAIN_READY)();
+		}
+
+		void showCursor(bool b) const {
+			//TODO
 		}
 
 		static SDLLibrary& get() {

@@ -94,7 +94,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 }
 
 void StateSandbox::onGraphicUpdate(unsigned int, ska::DrawableContainer& drawables) {
-	drawables.addHead(m_layerHolder);
+	//drawables.addHead(m_layerHolder);
 	for (auto& l : m_layerContours) {
 		drawables.addHead(l);
 	}

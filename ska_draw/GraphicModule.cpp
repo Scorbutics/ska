@@ -22,8 +22,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	m_renderer(std::move(renderer)),
 	m_mainWindow(std::move(window)) {
 
-	//TODO
-	//SDLMainLibrary::get().setMainReady();
+	SDLLibrary::get().setMainReady();
 
 	if (SDLLibrary::get().init(SDL_INIT_VIDEO) < 0) {
 		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de la SDL : " + std::string(SDLLibrary::get().getError()));
@@ -48,6 +47,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 
 	m_mainWindow->load();
 	m_renderer->load();
+	m_renderer->setDefaultColor({ 127, 127, 127, 255 });
 
 	m_mainWindow->show();
 }

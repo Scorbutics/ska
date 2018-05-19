@@ -19,8 +19,7 @@ namespace ska {
 		struct Caller<false, Ret, ArgsF...> {
 			template <class ... Args>
 			static void call(void* functionPtr, Args&&... args) {
-				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
-				assert(typeSafeFunctionPtr != nullptr);
+				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(ArgsF...)>(functionPtr);
 				(*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};
@@ -29,8 +28,7 @@ namespace ska {
 		struct Caller<true, Ret, ArgsF...> {
 			template <class ... Args>
 			static Ret call(void* functionPtr, Args&&... args) {
-				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(Args...)>(functionPtr);
-				assert(typeSafeFunctionPtr != nullptr);
+				const auto typeSafeFunctionPtr = reinterpret_cast<Ret(*)(ArgsF...)>(functionPtr);
 				return (*typeSafeFunctionPtr)(std::forward<Args>(args)...);
 			}
 		};

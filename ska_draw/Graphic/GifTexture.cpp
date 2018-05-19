@@ -106,8 +106,8 @@ void ska::GifTexture::free() {
 	SKA_DBG_ONLY(
 	if (m_animation != nullptr) {
 		SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
+		SDLGifLibrary::get().animFree(m_animation);
 	});
-	SDLGifLibrary::get().animFree(m_animation);
 	m_animation = NULL;
 }
 
