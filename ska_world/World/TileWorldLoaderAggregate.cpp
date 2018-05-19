@@ -38,7 +38,7 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics
 		renderables.push_back(std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize));
 	}
 	while (index < m_loaders.size()) {
-		auto layer = std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize);
+		auto layer = std::make_unique<LayerYIndexRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize, index);
 		renderables.push_back(std::move(layer));
 	}
 

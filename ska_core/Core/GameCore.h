@@ -59,7 +59,7 @@ namespace ska {
 		}
 
     private:
-		bool reduceAccumulatorAndEventUpdate(unsigned int accumulator, unsigned int ti) {
+		bool reduceAccumulatorAndEventUpdate(float& accumulator, const float ti) {
 			while (accumulator >= ti) {
 				if(eventUpdate(ti)) { return true; }
 				accumulator -= ti;
@@ -79,13 +79,14 @@ namespace ska {
 
 				accumulator += ellapsedTime;
 				if(reduceAccumulatorAndEventUpdate(accumulator, ti)) {
+					graphicUpdate(ellapsedTime);
 					break;
 				}
 
 				graphicUpdate(ellapsedTime);
 			}
 	
-		return true;
+			return true;
         }
 
         void graphicUpdate(unsigned int ellapsedTime) {
