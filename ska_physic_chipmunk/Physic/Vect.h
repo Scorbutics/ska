@@ -18,6 +18,10 @@ namespace ska {
 				m_vect(cpv(p.x, p.y)) {
 			}
 
+			Vect(cpVect v) : 
+				m_vect(std::move(v)) {
+			}
+
 			Vect() : 
 				m_vect(cpvzero) {
 			}

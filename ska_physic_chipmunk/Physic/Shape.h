@@ -28,6 +28,7 @@ namespace ska {
 			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius = 0.);
 
 			void setFriction(float friction);
+			void setBounciness(float bouncinesss);
 
 		private:
 			void loadFromSegment(cpBody *body, const Vect& a, const Vect& b, double radius);

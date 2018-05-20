@@ -19,6 +19,8 @@
 #include "World/LayerLoaderImage.h"
 #include "Utils/FileUtils.h"
 #include "Graphic/System/CameraFixedStrategy.h"
+#include "Graphic/System/WalkAnimationStateMachine.h"
+#include "Graphic/System/AnimationSystem.h"
 constexpr auto BLOCKSIZE = 48u;
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
@@ -88,6 +90,22 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		m_layerContours.emplace_back(contourRectangleTile);
 
+		using GameAnimationSystem = ska::AnimationSystem<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>;
+		auto animSystemPtr = std::make_unique<GameAnimationSystem>(m_entityManager);
+		auto& animSystem = *animSystemPtr;
+		addLogic(std::move(animSystemPtr));
+		m_walkASM = &animSystem.setup<ska::WalkAnimationStateMachine>(true, std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
+		animSystem.setup<ska::JumpAnimationStateMachine>(false, std::make_unique<ska::JumpAnimationStateMachine>(m_entityManager));
+
+		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
+			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
+			return ska::NumberUtils::absolute(mov.vz) > 0.1;
+		});
+
+		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
+			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
+			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
+		});
 		
 	}
 	return true;

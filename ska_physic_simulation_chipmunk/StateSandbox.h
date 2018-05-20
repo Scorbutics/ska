@@ -10,6 +10,8 @@
 #include "World/Tileset.h"
 #include "Graphic/System/CameraSystem.h"
 #include "Physic/SpaceCollisionEventSender.h"
+#include "Graphic/System/AnimationSystem.h"
+#include "Graphic/System/JumpAnimationStateMachine.h"
 
 class LayerHolder : public ska::DrawableFixedPriority {
 public:
@@ -61,6 +63,6 @@ private:
 	std::vector<ska::EntityId> m_balls{};
 
 	ska::cp::SpaceCollisionEventSender m_spaceCollisionEventSender;
-
+	ska::WalkAnimationStateMachine* m_walkASM;
 };
 

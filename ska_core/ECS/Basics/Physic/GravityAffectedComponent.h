@@ -6,5 +6,6 @@ namespace ska {
 	    GravityAffectedComponent();
 	    ~GravityAffectedComponent() = default;
 		float friction;
+		float rotationFriction;
 	};
 }
