@@ -52,6 +52,10 @@ void ska::cp::Shape::setFriction(float friction) {
 	cpShapeSetFriction(m_shape, friction);
 }
 
+void ska::cp::Shape::setBounciness(float bouncinesss) {
+	cpShapeSetElasticity(m_shape, bouncinesss);
+}
+
 void ska::cp::Shape::loadFromSegment(cpBody *body, const Vect& a, const Vect& b, double radius) {
 	free();
 	m_shape = cpSegmentShapeNew(body, a.vect(), b.vect(), radius);

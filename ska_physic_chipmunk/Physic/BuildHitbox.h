@@ -1,7 +1,7 @@
 #pragma once
 #include "HitboxComponent.h"
 #include "Point.h"
-#include "../../ska_draw/Graphic/DebugEntityCollisionResponse.h"
+#include "ECS/ECSDefines.h"
 
 namespace ska {
 	namespace cp {

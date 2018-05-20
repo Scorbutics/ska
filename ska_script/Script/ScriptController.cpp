@@ -11,7 +11,7 @@ std::string ska::ScriptController::nextLine() {
 ska::ScriptController::ScriptController(const std::string& scriptFileName) {
     std::ifstream scriptFile(scriptFileName);
     if (scriptFile.fail()) {
-        throw InvalidPathException("Impossible d'ouvrir le fichier script " + scriptFileName);
+        throw InvalidPathException(("Impossible d'ouvrir le fichier script " + scriptFileName).c_str());
     }
 
     for (std::string line; getline(scriptFile, line);) {

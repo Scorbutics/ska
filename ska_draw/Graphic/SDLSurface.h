@@ -7,6 +7,7 @@
 #include "../../external/gsl/gsl/pointers"
 
 namespace ska {
+
 	class Font;
 
 	/**
@@ -38,12 +39,12 @@ namespace ska {
 		bool checkSurfaceValidity(const std::string& fileName, bool is32 = false);
 		void free();
 
-		uint8_t m_r;
-		uint8_t m_g;
-		uint8_t m_b;
-		uint8_t m_a;
+		uint8_t m_r {};
+		uint8_t m_g {};
+		uint8_t m_b {};
+		uint8_t m_a {};
 
-		gsl::owner<SDL_Surface*> m_surface;
+		gsl::owner<SDL_Surface*> m_surface {};
 
 	};
 }

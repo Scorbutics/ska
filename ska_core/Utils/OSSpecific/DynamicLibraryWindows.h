@@ -2,25 +2,24 @@
 #include "../SkaConstants.h"
 #if defined(SKA_PLATFORM_WIN)
 
-#include <algorithm>
 #include <string>
 #include <utility>
-#include <optional>
-
-#include "../../Exceptions/InputException.h"
 
 //Windows only
+#undef NOMINMAX
 #define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 namespace ska {
 	class DynamicLibraryWindows {
 	public:
 		DynamicLibraryWindows(const std::string& lib) {
-			const auto errorMessage = loadLibrary((lib + ".dll").c_str());
-			if (m_handle == nullptr) {
-				throw ska::InputException(std::move(errorMessage));
-			}
+			m_errorMessage = loadLibrary((lib + ".dll").c_str());
+		}
+
+		bool isLoaded() const {
+			return m_handle != nullptr;
 		}
 
 		~DynamicLibraryWindows() {
@@ -32,7 +31,9 @@ namespace ska {
 		std::pair<void*, std::string> getFunction(const char* name) const {
 			char errbuf[512];
 
-			auto function = static_cast<void *>(GetProcAddress(m_handle, name));
+			//On Windows, pointers to non-member functions and pointers to objects are the same size
+			//So we can cast from FARPROC to void* without problem
+			auto function = reinterpret_cast<void *>(GetProcAddress(m_handle, name));
 			if (function == NULL) {
 				FormatMessage((FORMAT_MESSAGE_IGNORE_INSERTS |
 					FORMAT_MESSAGE_FROM_SYSTEM),
@@ -63,6 +64,7 @@ namespace ska {
 		}
 
 		HMODULE m_handle{};
+		std::string m_errorMessage;
 	};
 }
 #endif

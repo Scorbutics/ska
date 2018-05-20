@@ -3,6 +3,7 @@
 #include "Music.h"
 #include "SoundRenderer.h"
 #include "Logging/Logger.h"
+#include "SDLLibrary.h"
 
 ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
 	ska::SubObserver<SoundEvent>(std::bind(&SoundRenderer::handleSoundEvent, this, std::placeholders::_1), ged),
@@ -10,14 +11,14 @@ ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
 	m_currentPlayed(nullptr) {
 
 	if(Mix_AllocateChannels(10) != static_cast<int>(10)) {
-		SKA_LOG_ERROR("SoundManager error : ", Mix_GetError());
+		SKA_LOG_ERROR("SoundManager error : ", ska::SDLLibrary::get().getError());
 	}
 }
 
 void ska::SoundRenderer::play(Mix_Music* m_instance) {
 	Mix_PauseMusic();
 	if(Mix_PlayMusic(m_instance, -1) == -1) {
-		SKA_LOG_ERROR("SoundManager error : ", Mix_GetError());
+		SKA_LOG_ERROR("SoundManager error : ", ska::SDLLibrary::get().getError());
 		m_currentPlayed = nullptr;
 	} else {
 		m_currentPlayed = m_instance;

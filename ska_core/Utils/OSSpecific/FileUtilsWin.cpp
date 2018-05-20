@@ -60,13 +60,13 @@ void ska::FileUtilsWin::createDirectory(const std::string& directoryName) {
 		if (CreateDirectoryA(directoryName.c_str(), 0) == 0) {
 			const DWORD& errorCode = GetLastError();
 			if (errorCode == ERROR_PATH_NOT_FOUND) {
-				throw InvalidPathException("Unable to create directory " + directoryName);
+				throw InvalidPathException(("Unable to create directory " + directoryName).c_str());
 			}
 			else if (errorCode == ERROR_ALREADY_EXISTS) {
-				throw FileException("Directory already exists : " + directoryName);
+				throw FileException(("Directory already exists : " + directoryName).c_str());
 			}
 			else {
-				throw FileException("Unknown error during creation of the directory " + directoryName);
+				throw FileException(("Unknown error during creation of the directory " + directoryName).c_str());
 			}
 		}
 	}

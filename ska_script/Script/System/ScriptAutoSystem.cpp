@@ -31,7 +31,7 @@ m_saveGame(saveGame) {
 std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
 	std::vector<std::string> keys = StringUtils::split(key, '.');
 	if (keys.size() != 2) {
-		throw ScriptSyntaxError("Error during recuperation of the global variable " + key);
+		throw ScriptSyntaxError(("Error during recuperation of the global variable " + key).c_str());
 	}
 
 	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
@@ -97,14 +97,14 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 		if (fscript.fail()) {
 			fscript.open(validPath.c_str());
 			if (fscript.fail()) {
-				throw InvalidPathException("Impossible d'ouvrir le fichier script " + currentDir + "\\" + scriptData.name);
+				throw InvalidPathException(("Impossible d'ouvrir le fichier script " + currentDir + "\\" + scriptData.name).c_str());
 			}
 		} else {
 			validPath = scriptData.name;
 		}
 
 		if (validPath.empty()) {
-			throw InvalidPathException("Le script de nom " + scriptData.name + " est introuvable");
+			throw InvalidPathException(("Le script de nom " + scriptData.name + " est introuvable").c_str());
 		}
 
 		sc.active = 0;
@@ -314,7 +314,7 @@ std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, MemoryScri
 		try {
 			return m_commands[cmdName]->process(*this, script, streamCmd);
 		} catch (const NumberFormatException& nfe) {
-			throw ScriptException("Commande " + cmdName + " : " + std::string(nfe.what()));
+			throw ScriptException(("Commande " + cmdName + " : " + std::string(nfe.what())).c_str());
 		}
 	}
 	else {

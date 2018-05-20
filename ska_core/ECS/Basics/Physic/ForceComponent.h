@@ -12,5 +12,6 @@ namespace ska {
 
 		float weight;
 		float bounciness;
+		float maxSpeed;
 	};
 }

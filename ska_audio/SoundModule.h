@@ -2,6 +2,7 @@
 #include <SDL_mixer.h>
 #include <string>
 #include "Data/Events/GameEventDispatcher.h"
+#include "SDLLibrary.h"
 
 namespace ska {
 
@@ -13,7 +14,7 @@ namespace ska {
 		explicit SoundModule(const std::string& moduleName, SM&& ged) :
             m_soundManager(std::forward<SM>(ged)) {
             if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
-                SKA_LOG_ERROR("Impossible d'initialiser SDL_mixer : ", Mix_GetError());
+                SKA_LOG_ERROR("Impossible d'initialiser SDL_mixer : ", ska::SDLLibrary::get().getError());
             }
         }
 

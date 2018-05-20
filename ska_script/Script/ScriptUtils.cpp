@@ -1,17 +1,14 @@
 #include <fstream>
 #include <sstream>
+#include <cstddef>
 #include "ScriptUtils.h"
 #include "Utils/FormalCalculation/FormalCalculator.h"
 #include "../Script/ScriptSymbolsConstants.h"
 #include "Utils/StringUtils.h"
-#include "Utils/SkaConstants.h"
 #include "../Script/System/ScriptAutoSystem.h"
 #include "Exceptions/ScriptSyntaxError.h"
-#include "Exceptions/NumberFormatException.h"
 
-ska::ScriptUtils::ScriptUtils()
-{
-}
+ska::ScriptUtils::ScriptUtils() {}
 
 std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
 	const auto pipePos = v.find_first_of('$');
@@ -65,10 +62,9 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 	return varNumber;
 }
 
-std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol)
-{
+std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol) {
 	auto it = line;
-	size_t posLeft, posRight;
+	std::size_t posLeft, posRight;
 
 	while ((posLeft = it.find_first_of(varStartSymbol)) != std::string::npos)
 	{
@@ -105,9 +101,8 @@ Retourne la première expression sur "line" après calculs et formattage
 Ex : si line = " [|bidule|] %random 100% [|chance|] %truc 200% " , la fonction va calculer "random 100" et renvoyer le résultat de ce calcul.
 Ex : si line = " [|bidule|] %random %truc 200%% [|chance|]" , la fonction va calculer "random %truc 200%", lui-même va rappeler cette fonction et renvoyer le résultat de ce calcul total.
 */
-std::string ska::ScriptUtils::getFirstExpressionFromLine(ScriptAutoSystem& system, const std::string& line, ScriptComponent& script, size_t* outputCommandSize)
-{
-	size_t indexFirstChar;
+std::string ska::ScriptUtils::getFirstExpressionFromLine(ScriptAutoSystem& system, const std::string& line, ScriptComponent& script, std::size_t* outputCommandSize) {
+	std::size_t indexFirstChar;
 	for (indexFirstChar = 0; line[indexFirstChar] != ScriptSymbolsConstants::METHOD && line[indexFirstChar] != '\n' && indexFirstChar < line.size(); indexFirstChar++);
 
 	if (line[indexFirstChar] == '\n' || line.size() <= indexFirstChar) {
@@ -215,7 +210,7 @@ std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, con
 		for (unsigned int i = 0; ss >> cmds[i] && i <= 2; i++);
 
 		if (!ss.eof()) {
-			throw ScriptSyntaxError("Error while interpreting global var (not enough arguments) : " + v);
+			throw ScriptSyntaxError(("Error while interpreting global var (not enough arguments) : " + v).c_str());
 		}
 
 		return script.parent->map(cmds[0], getValueFromVarOrSwitchNumber(saveGame, script, cmds[1]));

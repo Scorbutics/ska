@@ -3,13 +3,15 @@
 #include "ECS/System.h"
 #include "HitboxComponent.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
+#include "ECS/Basics/Physic/MovementComponent.h"
+#include "Body.h"
 
 namespace ska {
 	namespace cp {
 		class Space;
 
 		class MovementSystem :
-			public System<std::unordered_set<EntityId>, RequiredComponent<ForceComponent, PositionComponent, HitboxComponent>, PossibleComponent<>> {
+			public System<std::unordered_set<EntityId>, RequiredComponent<ForceComponent, PositionComponent, HitboxComponent, MovementComponent>, PossibleComponent<>> {
 		public:
 			explicit MovementSystem(ska::EntityManager& em, Space& space);
 			~MovementSystem() override = default;
@@ -18,6 +20,7 @@ namespace ska {
 			void refresh(unsigned int ellapsedTime) override;
 
 		private:
+			void adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity);
 			Space& m_space;
 		};
 	}

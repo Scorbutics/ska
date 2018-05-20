@@ -48,7 +48,7 @@ std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstre
 		}
 
 		if (script.controller->eof()) {
-			throw ScriptSyntaxError("Un " + getCommandEndIf() + " est manquant");
+			throw ScriptSyntaxError(("Un " + getCommandEndIf() + " est manquant").c_str());
 		}
 
 	}

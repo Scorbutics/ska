@@ -11,7 +11,7 @@
 #define SKA_PLATFORM_UNKNOWN
 #endif
 
-#if defined(__cpp_exceptions) && __cpp_exceptions < 199711L || __EXCEPTIONS != 1
+#if defined(__cpp_exceptions) && __cpp_exceptions < 199711L 
 #define SKA_EXCEPTIONS_DISABLED
 #endif
 

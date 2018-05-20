@@ -29,11 +29,16 @@ namespace ska {
 			ss << value;
 			set(path, ss.str());
 		}
-		
+
+        template<typename T>
+        struct AlwaysFalse {
+            static constexpr auto value = false;
+        };
 		template<typename T>
 		T get(const std::string& path) const {
 			/* unimplemented default */
-			assert(false && ("Unsupported converted type for path " + path).c_str());
+			auto t = ("Unsupported converted type for path " + path).c_str();
+			assert(AlwaysFalse<T>::value && t);
 		}
 
 	private:

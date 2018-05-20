@@ -29,5 +29,6 @@ namespace ska {
 
 		const std::string m_tilesetName;
 		const unsigned int m_tileSize;
+		Vector2<std::reference_wrapper<Animation>> m_animatedAnimations;
 	};
 }

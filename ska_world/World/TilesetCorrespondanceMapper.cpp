@@ -4,13 +4,14 @@
 #include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "TilesetCorrespondanceMapper.h"
+#include "SDLLibrary.h"
 
 ska::TilesetCorrespondanceMapper::TilesetCorrespondanceMapper(const std::string& filenameCorr) {
 	SDLSurface surf;
 	surf.load32(filenameCorr);
 	if(surf.getInstance() == nullptr) {
 		ExceptionTrigger<FileException>("Erreur lors du chargement de \"" + filenameCorr + "\", fichier de correspondance entre tuiles du monde et position dans le chipset. "
-			"Sans ce fichier, le chargement d'un chipset (et donc d'un monde) est impossible. " + std::string(SDL_GetError()));
+			"Sans ce fichier, le chargement d'un chipset (et donc d'un monde) est impossible. " + std::string(SDLLibrary::get().getError()));
 	}
 	m_fileWidth = surf.getInstance()->w;
 	buildCorrMap(surf);

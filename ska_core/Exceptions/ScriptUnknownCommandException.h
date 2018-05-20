@@ -5,7 +5,7 @@ namespace ska {
 	class ScriptUnknownCommandException : public ScriptException {
 	public:
 
-		ScriptUnknownCommandException(std::string message) : ScriptException(message, "ScriptUnknownCommandException") {
+		ScriptUnknownCommandException(std::string message) : ScriptException(message.c_str(), "ScriptUnknownCommandException") {
 		}
 
 		virtual ~ScriptUnknownCommandException() {

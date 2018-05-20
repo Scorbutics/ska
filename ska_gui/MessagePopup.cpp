@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "MessagePopup.h"
 #include "Core/Window.h"
+#include "SDLLibrary.h"
 
 ska::MessagePopup::MessagePopup(MessageType::Enum mt, const std::string& title, const std::string& message, Window* w) {
 	Uint32 flags = 0;
@@ -22,7 +23,7 @@ ska::MessagePopup::MessagePopup(MessageType::Enum mt, const std::string& title, 
 	if(w != nullptr) {
         w->showMessageBox(flags, title, message);
 	} else {
-        SDL_ShowSimpleMessageBox(flags,
+        ska::SDLLibrary::get().showSimpleMessageBox(flags,
             title.c_str(),
             message.c_str(),
             nullptr);

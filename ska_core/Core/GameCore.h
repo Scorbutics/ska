@@ -2,7 +2,6 @@
 #include <memory>
 
 #include "State/StateHolder.h"
-#include "../Exceptions/StateDiedException.h"
 #include "../Utils/TimeUtils.h"
 #include "../GameApp.h"
 
@@ -60,47 +59,48 @@ namespace ska {
 		}
 
     private:
-	
-	bool reduceAccumulatorAndEventUpdate(unsigned int accumulator, unsigned int ti) {
-		while (accumulator >= ti) {
-			if(eventUpdate(ti)) { return true; }
-			accumulator -= ti;
+		bool reduceAccumulatorAndEventUpdate(float& accumulator, const float ti) {
+			while (accumulator >= ti) {
+				if(eventUpdate(ti)) { return true; }
+				accumulator -= ti;
+			}
+			return false;
 		}
-		return false;
-	}
 
         bool refreshInternal() {
   	        unsigned long t0 = TimeUtils::getTicks();
-		const auto ti = ticksWanted();
-		auto accumulator = ti;
+			const auto ti = ticksWanted();
+			auto accumulator = ti;
 
-		for (;;) {
-			const unsigned long t = TimeUtils::getTicks();
-			const auto ellapsedTime = t - t0;
-			t0 = t;
+			for (;;) {
+				const unsigned long t = TimeUtils::getTicks();
+				const auto ellapsedTime = t - t0;
+				t0 = t;
 
-			accumulator += ellapsedTime;
-			if(reduceAccumulatorAndEventUpdate(accumulator)) {
-				break;
+				accumulator += ellapsedTime;
+				if(reduceAccumulatorAndEventUpdate(accumulator, ti)) {
+					graphicUpdate(ellapsedTime);
+					break;
+				}
+
+				graphicUpdate(ellapsedTime);
 			}
-
-			graphicUpdate(ellapsedTime);
-		}
 	
-		return true;
+			return true;
         }
 
         void graphicUpdate(unsigned int ellapsedTime) {
-		m_gameConfig->graphicUpdate(ellapsedTime, m_stateHolder);
+			m_gameConfig->graphicUpdate(ellapsedTime, m_stateHolder);
         }
 
-        void eventUpdate(unsigned int ellapsedTime) {
-		m_stateHolder.update();
-		m_stateHolder.eventUpdate(ellapsedTime);
-		m_gameConfig->eventUpdate(ellapsedTime);
+        bool eventUpdate(unsigned int ellapsedTime) {
+			const auto stateChange = m_stateHolder.update();
+			m_stateHolder.eventUpdate(ellapsedTime);
+			m_gameConfig->eventUpdate(ellapsedTime);
+			return stateChange;
         }
 
-	GameConfPtr m_gameConfig;
+		GameConfPtr m_gameConfig;
 
     protected:
         EventDispatcher& m_eventDispatcher;

@@ -3,7 +3,6 @@
 #include <stack>
 #include "../Utils/SkaConstants.h"
 #include "GenericException.h"
-#include "../Logging/Logger.h"
 
 namespace ska {
 
@@ -13,7 +12,8 @@ namespace ska {
 				m_handler(std::move(callback)),
 				m_container(container) {
 		}
-		
+
+		ExceptionCatcher(ExceptionCatcher&&) = default;
 		ExceptionCatcher(const ExceptionCatcher&) = delete;
 		ExceptionCatcher& operator=(const ExceptionCatcher&) = delete;
 		
@@ -32,8 +32,6 @@ namespace ska {
 		std::stack<std::reference_wrapper<ExceptionCatcher>>& m_container;
 	};
 
-	static const std::function<void(const GenericException& ge)> ExceptionAbort;
-	
 	class ExceptionTriggerer {
 	public:
 		~ExceptionTriggerer() = default;
@@ -72,16 +70,21 @@ namespace ska {
 		#endif
 	}
 
-	#ifdef SKA_EXCEPTIONS_DISABLED
-		#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
+#ifdef SKA_EXCEPTIONS_DISABLED
+#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
 		auto ExcepNameEnglober = ska::ExceptionTriggerer::get().createCatcher([&](const ska::GenericException& ExcepName) {\
 			do { CatchCode; } while (0);\
 		});\
 		ska::ExceptionTriggerer::get().addCallback(ExcepNameEnglober);\
 		do { TryCode; } while (0);
-	#else
-		#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
-		try { do { TryCode; } while (0); } catch (ExcepType& ExcepName) { do { CatchCode; } while (0); }
+#else
+#define skaTryCatch(TryCode, ExcepType, ExcepName, CatchCode) \
+		try { \
+			TryCode; \
+		} catch (ExcepType& ExcepName) {  \
+			CatchCode; \
+		} 
+		
 	#endif
 
 }

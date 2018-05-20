@@ -1,5 +1,5 @@
+#include <cassert>
 #include "AnimatedTexture.h"
-#include "Exceptions/IllegalStateException.h"
 #include "Draw/Renderer.h"
 
 ska::AnimatedTexture::AnimatedTexture()
