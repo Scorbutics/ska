@@ -23,7 +23,7 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 		//Blocks positioned events
 		const auto lastBlock = m_world.getCollisionProfile().getHighestNonCollidingBlock(pc.layer, oldPos.x / blockSize, oldPos.y / blockSize);
 		const auto newBlock = m_world.getCollisionProfile().getHighestNonCollidingBlock(pc.layer, centerPos.x / blockSize, centerPos.y / blockSize);
-		const auto sameBlock = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->id != lastBlock->id);
+		const auto sameBlock = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->id == lastBlock->id);
 
 		if (!sameBlock) {
 			/* If we are moving to another block, triggers a MOVE_OUT event on previous block and MOVE_IN on the next one */
