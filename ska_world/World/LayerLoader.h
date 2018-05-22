@@ -9,7 +9,7 @@ namespace ska {
 
 	class LayerLoader : public MovableNonCopyable {
 	public :
-		virtual Vector2<std::optional<Tile>> loadPhysics(Tileset& chipset) const = 0;
+		virtual Vector2<std::optional<Tile>> loadPhysics(const Tileset& chipset) const = 0;
 		virtual Vector2<TileAnimation*> loadAnimations(Tileset& chipset) const = 0;
 		~LayerLoader() override = default;
 	};

@@ -13,7 +13,10 @@ namespace ska {
 		Tileset(Tileset&&) = default;
 
 		Tile& getTile(const Point<int>& coordinates);
+		const Tile& getTile(const Point<int>& coordinates) const;
+
 		TileAnimation& getAnimation(const Point<int>& coordinates);
+		const TileAnimation& getAnimation(const Point<int>& coordinates) const;
 
 		const Texture& getTexture() const;
 		const std::string& getName() const;
@@ -25,6 +28,8 @@ namespace ska {
 		~Tileset() override = default;
 		unsigned int getTileSize() const;
 		const TilesetEvent& getTilesetEvent() const;
+
+		void setPropertiesBitMask(std::size_t x, std::size_t y, unsigned int bitmask);
 
 	private:
 		std::string m_tilesetName;

@@ -16,6 +16,7 @@ namespace ska {
 
 		const Texture& getTexture() const;
 		TileAnimation& getAnimation(const Point<int>& pos);
+		const TileAnimation& getAnimation(const Point<int>& pos) const;
 
 		void update();
 

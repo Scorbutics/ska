@@ -38,10 +38,22 @@ ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) {
 	return m_blocks[coordinates.x][coordinates.y];
 }
 
+const ska::Tile& ska::Tileset::getTile(const Point<int>& coordinates) const {
+	return m_blocks[coordinates.x][coordinates.y];
+}
+
 void ska::Tileset::update() {
 	m_renderable.update();
 }
 
+void ska::Tileset::setPropertiesBitMask(std::size_t x, std::size_t y, unsigned int bitmask) {
+	m_blocks[x][y].properties.bitMask |= bitmask;
+}
+
 ska::TileAnimation& ska::Tileset::getAnimation(const Point<int>& coordinates) {
+	return m_renderable.getAnimation(coordinates);
+}
+
+const ska::TileAnimation& ska::Tileset::getAnimation(const Point<int>& coordinates) const {
 	return m_renderable.getAnimation(coordinates);
 }

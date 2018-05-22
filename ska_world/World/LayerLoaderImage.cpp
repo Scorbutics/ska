@@ -36,7 +36,7 @@ ska::Vector2<ska::TileAnimation*> ska::LayerLoaderImage::loadAnimations(Tileset&
 	return graphics;
 }
 
-ska::Vector2<std::optional<ska::Tile>> ska::LayerLoaderImage::loadPhysics(Tileset& chipset) const {
+ska::Vector2<std::optional<ska::Tile>> ska::LayerLoaderImage::loadPhysics(const Tileset& chipset) const {
 	auto physics = ska::Vector2<std::optional<Tile>> {};
 	physics.reserve(m_fileWidth, m_fileHeight);
 

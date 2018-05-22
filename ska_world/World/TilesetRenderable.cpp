@@ -15,6 +15,10 @@ ska::TileAnimation& ska::TilesetRenderable::getAnimation(const Point<int>& pos) 
 	return m_animations[pos.x][pos.y];
 }
 
+const ska::TileAnimation& ska::TilesetRenderable::getAnimation(const Point<int>& pos) const {
+	return m_animations[pos.x][pos.y];
+}
+
 void ska::TilesetRenderable::update() {
 	for (auto& anim : m_animatedAnimations) {
 		anim.get().updateFrame();

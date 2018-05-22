@@ -1,7 +1,6 @@
 #include <unordered_set>
 
 #include "TileAgglomerate.h"
-#include "MarchingSquare.h"
 #include "Utils/RectangleUtils.h"
 #include "TileWorldPhysics.h"
 #include "CollisionProfile.h"
@@ -21,7 +20,7 @@ namespace ska {
 	}
 }
 
-std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t layerMax, const CollisionProfile& world) {
+std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t layerMax, const CollisionProfile& world, const MarchingSquarePredicate& pred) {
 	std::vector<PointArea> result;
 	std::unordered_set<Point<int>> remainingBlocks;
 
@@ -32,9 +31,7 @@ std::vector<ska::PointArea> ska::GenerateAgglomeratedTileMap(const std::size_t l
 
 	do {
 		PointArea pointList{};
-		std::tie(lastStartPoint, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, [](const Tile* b) {
-			return b != nullptr ? b->collision : TileCollision::No;
-		}, lastStartPoint);
+		std::tie(lastStartPoint, pointList.pointList) = MarchingSquare(layerMax, world, remainingBlocks, pred, lastStartPoint);
 		
 		if (!pointList.pointList.empty()) {
 			result.push_back(pointList);
