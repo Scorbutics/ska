@@ -3,11 +3,7 @@
 #include <SDL_ttf.h>
 #include <gsl/pointers>
 
-#define SKA_TTF_LIB_CALLS_DEFINE(ENUM, FUNCTION, NAME) \
-			SKA_LIB_CALLS_DEFINE(TTFIdNamedFunction, ENUM, FUNCTION, NAME)
-
 namespace ska {
-
 	
 		template<int Id>
 		struct TTFIdNamedFunction {
@@ -23,11 +19,14 @@ namespace ska {
 			TTF_RENDER_TEXT_BLENDED
 		};
 
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_INIT, int(), "TTF_Init");
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_QUIT, void(), "TTF_Quit");
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_OPEN_FONT, TTF_Font*(const char*, int), "TTF_OpenFont");
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_CLOSE_FONT, void(TTF_Font*), "TTF_CloseFont");
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_RENDER_TEXT_BLENDED, SDL_Surface*(TTF_Font *, const char *, SDL_Color), "TTF_RenderText_Blended");
+	#define SKA_TTF_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
+			SKA_LIB_CALLS_DEFINE(TTFIdNamedFunction, ENUM, FUNCTION)
+
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_INIT, int());
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_QUIT, void());
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_OPEN_FONT, TTF_Font*(const char*, int));
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_CLOSE_FONT, void(TTF_Font*));
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_RENDER_TEXT_BLENDED, SDL_Surface*(TTF_Font *, const char *, SDL_Color));
 
 		using SDLTFFDynLib = ska::DynamicLibrary <
 			TTFIdNamedFunction<TTFCalls::TTF_INIT>,

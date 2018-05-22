@@ -1,11 +1,9 @@
 #pragma once
 #include "Utils/DynamicLibrary.h"
 #include <gsl/pointers>
-#include <SDL.h>
-#include "CEV_gif.h"
 
-#define SKA_GIF_LIB_CALLS_DEFINE(ENUM, FUNCTION, NAME) \
-			SKA_LIB_CALLS_DEFINE(SDLGifIdNamedFunction, ENUM, FUNCTION, NAME)
+struct SDL_Texture;
+struct CEV_GifAnim;
 
 namespace ska {
 
@@ -15,7 +13,7 @@ namespace ska {
 		static std::string name;
 	};
 
-	enum SDLGifCalls {
+	enum class SDLGifCalls {
 		GIF_TEXTURE,
 		GIF_FRAME_NEXT,
 		GIF_TIME_SET,
@@ -25,27 +23,31 @@ namespace ska {
 		GIF_ANIM_FREE
 	};
 
-	
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_TEXTURE, SDL_Texture* (CEV_GifAnim*), "CEV_gifTexture");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_FRAME_NEXT, void(CEV_GifAnim*), "CEV_gifFrameNext");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_TIME_SET, void(CEV_GifAnim*, unsigned int, uint16_t), "CEV_gifTimeSet");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_MODE, void(CEV_GifAnim*, unsigned int), "CEV_gifLoopMode");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_RESET, void(CEV_GifAnim*), "CEV_gifLoopReset");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_AUTO, void(CEV_GifAnim*), "CEV_gifAnimAuto");
-	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_FREE, void(CEV_GifAnim*), "CEV_gifAnimFree");
+#define SKA_GIF_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
+			SKA_LIB_CALLS_DEFINE(SDLGifIdNamedFunction, static_cast<int>(SDLGifCalls::ENUM), FUNCTION)
+
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_TEXTURE, SDL_Texture* (CEV_GifAnim*));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_FRAME_NEXT, void(CEV_GifAnim*));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_TIME_SET, void(CEV_GifAnim*, unsigned int, uint16_t));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_MODE, void(CEV_GifAnim*, unsigned int));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_LOOP_RESET, void(CEV_GifAnim*));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_AUTO, void(CEV_GifAnim*));
+	SKA_GIF_LIB_CALLS_DEFINE(GIF_ANIM_FREE, void(CEV_GifAnim*));
+
+#define SKA_GIF_DYN_LIB_NAME_ENTRY(ENUM) SDLGifIdNamedFunction<static_cast<int>(SDLGifCalls::ENUM)>
 
 	using SDLGifDynLib = DynamicLibrary <
-		SDLGifIdNamedFunction<GIF_TEXTURE>,
-		SDLGifIdNamedFunction<GIF_FRAME_NEXT>,
-		SDLGifIdNamedFunction<GIF_TIME_SET>,
-		SDLGifIdNamedFunction<GIF_LOOP_MODE>,
-		SDLGifIdNamedFunction<GIF_LOOP_RESET>,
-		SDLGifIdNamedFunction<GIF_ANIM_AUTO>,
-		SDLGifIdNamedFunction<GIF_ANIM_FREE>
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_TEXTURE),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_FRAME_NEXT),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_TIME_SET),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_LOOP_MODE),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_LOOP_RESET),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_ANIM_AUTO),
+		SKA_GIF_DYN_LIB_NAME_ENTRY(GIF_ANIM_FREE)
 	>;
 
 	class SDLGifLibrary : public SDLGifDynLib {
-#define callSDLGif(enumIndex) call<SDLGifIdNamedFunction<enumIndex>>
+#define callSDLGif(enumIndex) call<SKA_GIF_DYN_LIB_NAME_ENTRY(enumIndex)>
 	public:
 
 		SDL_Texture& getTexture(CEV_GifAnim& anim) const {

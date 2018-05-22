@@ -3,9 +3,6 @@
 #include <SDL.h>
 #include <gsl/pointers>
 
-#define SKA_IMG_LIB_CALLS_DEFINE(ENUM, FUNCTION, NAME) \
-			SKA_LIB_CALLS_DEFINE(SDLImageIdNamedFunction, ENUM, FUNCTION, NAME)
-
 namespace ska {
 
 	template<int Id>
@@ -19,10 +16,13 @@ namespace ska {
 		IMG_QUIT,
 		IMG_LOAD
 	};
-	
-	SKA_IMG_LIB_CALLS_DEFINE(IMG_INIT, int(int), "IMG_Init");
-	SKA_IMG_LIB_CALLS_DEFINE(IMG_LOAD, SDL_Surface* (const char *), "IMG_Load");
-	SKA_IMG_LIB_CALLS_DEFINE(IMG_QUIT, void(), "IMG_Quit");
+
+#define SKA_IMG_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
+			SKA_LIB_CALLS_DEFINE(SDLImageIdNamedFunction, ENUM, FUNCTION)
+
+	SKA_IMG_LIB_CALLS_DEFINE(IMG_INIT, int(int));
+	SKA_IMG_LIB_CALLS_DEFINE(IMG_LOAD, SDL_Surface* (const char *));
+	SKA_IMG_LIB_CALLS_DEFINE(IMG_QUIT, void());
 
 	using SDLImageDynLib = DynamicLibrary <
 		SDLImageIdNamedFunction<IMG_INIT>,

@@ -3,6 +3,7 @@
 #include "Rectangle.h"
 
 struct CEV_GifAnim;
+struct SDL_Texture;
 
 namespace ska {
 	class SDLRenderer;

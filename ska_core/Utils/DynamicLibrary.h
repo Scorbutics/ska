@@ -18,13 +18,15 @@ namespace ska {
 }
 #endif
 
-#define SKA_LIB_CALLS_DEFINE(STRUCT_NAME, ENUM, FUNCTION, NAME)\
-template <>\
-std::string STRUCT_NAME<ENUM>::name = NAME;\
+#define SKA_LIB_CALLS_DEFINE(STRUCT_NAME, ENUM, FUNCTION)\
 template <>\
 struct HasFunctionFormatTrait<STRUCT_NAME<ENUM>> {\
 using FunctionFormat = FUNCTION;\
 }
+
+#define SKA_LIB_NAME_DEFINE(STRUCT_NAME, ENUM, NAME)\
+template <>\
+std::string STRUCT_NAME<ENUM>::name = NAME;
 
 namespace ska {
 

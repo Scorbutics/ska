@@ -2,9 +2,6 @@
 #include "Utils/DynamicLibrary.h"
 #include <SDL.h>
 
-#define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION, NAME) \
-			SKA_LIB_CALLS_DEFINE(SDLIdNamedFunction, static_cast<int>(SDLCalls::ENUM), FUNCTION, NAME)
-
 namespace ska {
 
 	template<int Id>
@@ -53,43 +50,46 @@ namespace ska {
 		SDL_SET_MAIN_READY
 	};
 
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, int(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*), "SDL_UpperBlit");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_POLL_EVENT, int(SDL_Event*), "SDL_PollEvent");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_INIT, int(Uint32), "SDL_Init");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUIT_F, void(), "SDL_Quit");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_HINT, int (const char*, const char*), "SDL_SetHint");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_PRESENT, void(SDL_Renderer*), "SDL_RenderPresent");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_CLEAR, int(SDL_Renderer*), "SDL_RenderClear");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_ALPHA_MOD, int (SDL_Texture*, Uint8), "SDL_SetTextureAlphaMod");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_SURFACE_ALPHA_MOD, int (SDL_Surface*, Uint8), "SDL_SetSurfaceAlphaMod");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_COLOR_MOD, int (SDL_Texture*, Uint8, Uint8, Uint8), "SDL_SetTextureBlendMode");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_BLEND_MOD, int(SDL_Texture*, SDL_BlendMode), "SDL_SetTextureBlendMode");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_COLOR_KEY, int(SDL_Surface*, int, Uint32), "SDL_SetColorKey");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_MAP_RGBA, Uint32(const SDL_PixelFormat*, Uint8, Uint8, Uint8, Uint8), "SDL_MapRGBA");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TICKS, Uint32(), "SDL_GetTicks");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_RGB, void (Uint32, const SDL_PixelFormat*, Uint8*, Uint8*, Uint8*), "SDL_GetRGB");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_ERROR, const char*(), "SDL_GetError");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_FREE_SURFACE, void(SDL_Surface*), "SDL_FreeSurface");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_FILL_RECT, int (SDL_Surface *, const SDL_Rect *, Uint32), "SDL_FillRect");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_TEXTURE, void(SDL_Texture *), "SDL_DestroyTexture");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_DELAY, void(Uint32), "SDL_Delay");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_RGB_SURFACE, SDL_Surface* (Uint32, int, int, int, Uint32, Uint32, Uint32, Uint32), "SDL_CreateRGBSurface");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_RENDERER, SDL_Renderer*(SDL_Window *, int, Uint32), "SDL_CreateRenderer");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_TEXTURE_FROM_SURFACE, SDL_Texture*(SDL_Renderer*, SDL_Surface*), "SDL_CreateTextureFromSurface");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_COLOR, int(SDL_Renderer*, Uint8, Uint8, Uint8, Uint8), "SDL_SetRenderDrawColor");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_DRAW_POINT, int(SDL_Renderer *, int, int), "SDL_RenderDrawPoint");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_DRAW_LINE, int(SDL_Renderer*, int, int, int, int), "SDL_RenderDrawLine");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_FILL_RECT, int(SDL_Renderer*, const SDL_Rect*), "SDL_RenderFillRect");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_COPY, int(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*), "SDL_RenderCopy");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_COPY_EX, int(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*, const double, const SDL_Point*, const SDL_RendererFlip), "SDL_RenderCopyEx");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_RENDERER, void(SDL_Renderer*), "SDL_DestroyRenderer");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_WINDOW, SDL_Window*(const char*, int, int, int, int, Uint32), "SDL_CreateWindow");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_WINDOW_ICON, void(SDL_Window*, SDL_Surface*), "SDL_SetWindowIcon");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_WINDOW, void(SDL_Window *), "SDL_ShowWindow");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_WINDOW, void(SDL_Window*), "SDL_DestroyWindow");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_SIMPLE_MESSAGE_BOX, int(Uint32, const char*, const char*, SDL_Window*), "SDL_ShowSimpleMessageBox");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUERY_TEXTURE, int (SDL_Texture*, Uint32*, int*, int*, int*), "SDL_QueryTexture");
-	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_MAIN_READY, void(), "SDL_SetMainReady");
+#define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
+			SKA_LIB_CALLS_DEFINE(SDLIdNamedFunction, static_cast<int>(SDLCalls::ENUM), FUNCTION)
+
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_UPPER_BLIT, int(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_POLL_EVENT, int(SDL_Event*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_INIT, int(Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUIT_F, void());
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_HINT, int(const char*, const char*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_PRESENT, void(SDL_Renderer*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_CLEAR, int(SDL_Renderer*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_ALPHA_MOD, int(SDL_Texture*, Uint8));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_SURFACE_ALPHA_MOD, int(SDL_Surface*, Uint8));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_COLOR_MOD, int(SDL_Texture*, Uint8, Uint8, Uint8));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_TEXTURE_BLEND_MOD, int(SDL_Texture*, SDL_BlendMode));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_COLOR_KEY, int(SDL_Surface*, int, Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_MAP_RGBA, Uint32(const SDL_PixelFormat*, Uint8, Uint8, Uint8, Uint8));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TICKS, Uint32());
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_RGB, void(Uint32, const SDL_PixelFormat*, Uint8*, Uint8*, Uint8*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_ERROR, const char*());
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_FREE_SURFACE, void(SDL_Surface*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_FILL_RECT, int(SDL_Surface *, const SDL_Rect *, Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_TEXTURE, void(SDL_Texture *));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_DELAY, void(Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_RGB_SURFACE, SDL_Surface* (Uint32, int, int, int, Uint32, Uint32, Uint32, Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_RENDERER, SDL_Renderer*(SDL_Window *, int, Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_TEXTURE_FROM_SURFACE, SDL_Texture*(SDL_Renderer*, SDL_Surface*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_COLOR, int(SDL_Renderer*, Uint8, Uint8, Uint8, Uint8));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_DRAW_POINT, int(SDL_Renderer *, int, int));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_DRAW_LINE, int(SDL_Renderer*, int, int, int, int));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_FILL_RECT, int(SDL_Renderer*, const SDL_Rect*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_COPY, int(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_COPY_EX, int(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*, const double, const SDL_Point*, const SDL_RendererFlip));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_RENDERER, void(SDL_Renderer*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_WINDOW, SDL_Window*(const char*, int, int, int, int, Uint32));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_WINDOW_ICON, void(SDL_Window*, SDL_Surface*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_WINDOW, void(SDL_Window *));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_WINDOW, void(SDL_Window*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_SIMPLE_MESSAGE_BOX, int(Uint32, const char*, const char*, SDL_Window*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUERY_TEXTURE, int(SDL_Texture*, Uint32*, int*, int*, int*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_MAIN_READY, void());
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
 
