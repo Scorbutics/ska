@@ -36,5 +36,5 @@ set_target_properties(ska_particle_benchmarker PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-set(YOUR_APP_ALL_DEPS ska_particle ska_draw ska_core SDL2_gif SDL2main SDL2_ttf SDL2_image SDL2)
+set(YOUR_APP_ALL_DEPS ska_particle ska_draw ska_core)
 target_link_libraries(ska_particle_benchmarker ${YOUR_APP_ALL_DEPS})
