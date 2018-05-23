@@ -342,3 +342,63 @@ TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
 		CHECK(!contourMap.empty());
 	}
 }
+
+ska::Vector2<std::optional<ska::Tile>> TileWorldPhysicsLoad(const ska::Vector2<char>& collisions, const ska::Vector2<int>& properties) {
+	const auto width = collisions.lineSize();
+	const auto height = collisions.size() / width;
+	
+	auto tiles = ska::Vector2<std::optional<ska::Tile>>{};
+	tiles.resize(width, height);
+	for (auto x = 0; x < width; x++) {
+		for (auto y = 0; y < height; y++) {
+			auto tileProperties = ska::TileProperties{};
+			tileProperties.bitMask = properties[x][y];
+			tiles[x][y] = ska::Tile{ { x, y }, tileProperties, 
+				collisions[x][y] == 0 ? ska::TileCollision::No : 
+				(collisions[x][y] == '-' ? ska::TileCollision::Void : ska::TileCollision::Yes) 
+			};
+		}
+	}
+	return tiles;
+}
+
+/*TEST_CASE("[TileWorldPhysics] MarchingSquare") {
+
+	SUBCASE("4x4 tiles") {
+		static constexpr auto width = 10u;
+
+		const auto collisions = ska::Vector2<char>{ width,
+		 { '#','#', 0,   0,   0, '#', '#', 0, 0, 0,
+		   '#', 0,  0,   0,   0,  0,  '#', 0, 0, 0,
+			0,  0, '#', '#',  0, '#', '#', 0, 0, 0,
+			0,  0, '#', '#',  0, '#',  0,  0, 0, 0,
+			0,  0, '#', '#',  0, '#',  0,  0, 0, 0,
+			0,  0, '#', '#',  0, '#',  0,  0, 0, 0,
+			0,  0, '#', '#',  0,  0,   0,  0, 0, 0,
+			0,  0, '#', '#',  0,  0,   0,  0, 0, 0,
+			0,  0, '#', '#',  0,  0,   0,  0, 0, 0,
+			0,  0,  0,  '#',  0,  0,   0,  0, 0, 0 } };
+
+		const auto properties = ska::Vector2<int>{ width,
+		  { 1, 1, 0, 0, 0, 1, 1, 0, 0, 0,
+		    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+		auto tiles = TileWorldPhysicsLoad(collisions, properties);
+		auto cp = ska::CollisionProfile{ 1, std::vector<ska::LayerPtr>{std::make_unique<ska::Layer>(std::move(tiles)) } };
+		auto doneBlocks = std::unordered_set<ska::Point<int>>{};
+		auto lastStartPoint = ska::Point<int>{};
+		auto contourMap = ska::MarchingSquare(0, std::move(cp), doneBlocks, [](const ska::Tile* t) {
+			return ska::TileCollision::No;
+		}, lastStartPoint);
+
+		CHECK(!contourMap.second.empty());
+	}
+}*/
