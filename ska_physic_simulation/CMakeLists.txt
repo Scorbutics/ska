@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_physic_simulation)
 
+set(CMAKE_CXX_STANDARD 17)
+
 set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
 
 set(SKA_DEBUG_DIR "Debug")
@@ -40,5 +42,5 @@ set_target_properties(ska_physic_simulation PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-set(YOUR_APP_ALL_DEPS ska_world ska_physic_homemade ska_gui ska_draw ska_core SDL2main SDL2_ttf SDL2_image SDL2_gif SDL2)
+set(YOUR_APP_ALL_DEPS ska_world ska_physic_homemade ska_gui ska_draw ska_core)
 target_link_libraries(ska_physic_simulation ${YOUR_APP_ALL_DEPS})

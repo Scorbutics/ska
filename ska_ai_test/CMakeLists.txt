@@ -36,4 +36,4 @@ set_target_properties(ska_ai_test PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-target_link_libraries(ska_ai_test ska_ai ska_core SDL2)
+target_link_libraries(ska_ai_test ska_ai ska_core)

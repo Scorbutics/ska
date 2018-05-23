@@ -42,5 +42,5 @@ set_target_properties(ska_physic_simulation_chipmunk PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
 
-set(YOUR_APP_ALL_DEPS ska_world ska_physic_chipmunk ska_physic_homemade ska_gui ska_draw ska_core SDL2main SDL2_ttf SDL2_image SDL2_gif SDL2 chipmunk)
+set(YOUR_APP_ALL_DEPS ska_world ska_physic_chipmunk ska_physic_homemade ska_gui ska_draw ska_core chipmunk)
 target_link_libraries(ska_physic_simulation_chipmunk ${YOUR_APP_ALL_DEPS})
