@@ -81,7 +81,7 @@ ska::Point<int> ska::MarchingSquareGetStartingPoint(const std::size_t layerMax, 
 	auto startPoint = start;
 	for (auto x = startPoint.x; x < width; x++) {
 		for (auto y = startPoint.y; y < height; y++) {
-			const auto& block = world.getHighestCollidingBlock(layerMax, x, y);
+			const auto& block = world.getHighestBlockOnPredicate(layerMax, x, y, pred);
 			if(pred(block) == ska::TileCollision::Yes) {
 				if (in.count({ x, y }) == 0) {
 					return { x, y };
@@ -99,7 +99,7 @@ ska::TileCollision ska::GetCollisionBoundChecked(const std::size_t layerMax, con
 	const int height = world.getBlocksY();
 
 	if(point.x < width && point.y < height && point.x >= 0 && point.y >= 0) {
-		const auto& b = world.getHighestCollidingBlock(layerMax, point.x, point.y);
+		const auto& b = world.getHighestBlockOnPredicate(layerMax, point.x, point.y, pred);
 		return pred(b);
 	}
 	return ska::TileCollision::No;

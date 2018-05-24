@@ -144,6 +144,35 @@ std::size_t ska::CollisionProfile::getBlocksY() const {
 	return m_blocksY;
 }
 
+const ska::Tile* ska::CollisionProfile::getHighestBlockOnPredicate(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY, const MarchingSquarePredicate& pred) const {
+	const Tile* voidCollidingTile = nullptr;
+	if (layerTop >= m_layers.size()) {
+		return nullptr;
+	}
+
+	for (auto it = m_layers.crbegin() + layerTop; it != m_layers.crend(); ++it) {
+		auto& l = *it->get();
+
+		const auto& block = l.getBlock(blockX, blockY);
+		const auto& collision = pred(block);
+		switch (collision) {
+		case TileCollision::Yes:
+			return block;
+
+			//We consider that if the last layer (= bottom) block is a void one and the upper blocks are not colliding, then the void block is a colliding block.
+		case TileCollision::Void:
+			voidCollidingTile = block;
+			break;
+
+		case TileCollision::No:
+		default:
+			voidCollidingTile = nullptr;
+			break;
+		}
+	}
+	return voidCollidingTile;
+}
+
 const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
 	const Tile* voidCollidingTile = nullptr;
 	if(layerTop >= m_layers.size()) {
