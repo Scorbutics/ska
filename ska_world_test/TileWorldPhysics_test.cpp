@@ -13,7 +13,7 @@ namespace TileWorldPhysics {
 
 		auto tiles = ska::Vector2<std::optional<ska::Tile>>{};
 		tiles.resize(width, height);
-		
+
 		for (auto x = 0; x < width; x++) {
 			for (auto y = 0; y < height; y++) {
 				tiles[x][y] = { { x, y }, ska::TileProperties{}, collisions[x][y] != 0 ? ska::TileCollision::Yes : ska::TileCollision::No };
@@ -33,7 +33,7 @@ namespace TileWorldPhysics {
 }
 
 TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
-	
+
 	SUBCASE("1 tile 1 collision") {
 		static constexpr auto width = 1u;
 		const auto collisions = ska::Vector2<char>{ width, { '#' } };
@@ -42,7 +42,7 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 
 		CHECK(tileMap.size() == 1);
 		CHECK(tileMap[0].pointList.size() == 4);
-		
+
 		bool checkPoint[4];
 		checkPoint[0] = tileMap[0].pointList.front() == ska::Point<int>{0, 0};
 		tileMap[0].pointList.pop_front();
@@ -86,10 +86,10 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		CHECK(tileMap.size() == 1);
 		CHECK(tileMap[0].pointList.size() == 40);
 
-		auto collisionPath = std::vector<ska::Point<int>> {}; 
+		auto collisionPath = std::vector<ska::Point<int>> {};
 		collisionPath.reserve(tileMap[0].pointList.size());
 		std::copy(std::begin(tileMap[0].pointList), std::end(tileMap[0].pointList), std::back_inserter(collisionPath));
-		
+
 		bool checkPoint[5];
 		checkPoint[0] = collisionPath[0] == ska::Point<int>{0, 0};
 		checkPoint[1] = collisionPath[10] == ska::Point<int>{0, 10};
@@ -154,13 +154,13 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 			auto check = std::vector<bool>{};
 			check.push_back(collisionPath[0] == ska::Point<int>{1, 3});
 			check.push_back(collisionPath[1] == ska::Point<int>{1, 2});
-			check.push_back(collisionPath[2] == ska::Point<int>{1, 1});	
+			check.push_back(collisionPath[2] == ska::Point<int>{1, 1});
 			check.push_back(collisionPath[3] == ska::Point<int>{2, 1});
 			check.push_back(collisionPath[4] == ska::Point<int>{3, 1});
 			check.push_back(collisionPath[5] == ska::Point<int>{3, 2});
 			check.push_back(collisionPath[6] == ska::Point<int>{3, 3});
 			check.push_back(collisionPath[7] == ska::Point<int>{2, 3});
-			
+
 			for (const auto& c : check) {
 				CHECK(c);
 			}
@@ -308,14 +308,14 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		const auto collisionProfile = ska::CollisionProfile{ 1, std::move(layers) };
 
 		auto tileMap = ska::GenerateAgglomeratedTileMap(0, collisionProfile);
-	
+
 		CHECK(!tileMap.empty());
 	}
 
 }
 
 TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
-	
+
 	SUBCASE("4x4 tiles 'hollow rectangle'") {
 		auto points = std::vector<ska::Point<int>>{};
 		points.emplace_back(0, 0);
@@ -346,23 +346,23 @@ TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
 ska::Vector2<std::optional<ska::Tile>> TileWorldPhysicsLoad(const ska::Vector2<char>& collisions, const ska::Vector2<int>& properties) {
 	const auto width = collisions.lineSize();
 	const auto height = collisions.size() / width;
-	
+
 	auto tiles = ska::Vector2<std::optional<ska::Tile>>{};
 	tiles.resize(width, height);
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
 			auto tileProperties = ska::TileProperties{};
 			tileProperties.bitMask = properties[x][y];
-			tiles[x][y] = ska::Tile{ { x, y }, tileProperties, 
-				collisions[x][y] == 0 ? ska::TileCollision::No : 
-				(collisions[x][y] == '-' ? ska::TileCollision::Void : ska::TileCollision::Yes) 
+			tiles[x][y] = ska::Tile{ { x, y }, tileProperties,
+				collisions[x][y] == 0 ? ska::TileCollision::No :
+				(collisions[x][y] == '-' ? ska::TileCollision::Void : ska::TileCollision::Yes)
 			};
 		}
 	}
 	return tiles;
 }
 
-/*TEST_CASE("[TileWorldPhysics] MarchingSquare") {
+TEST_CASE("[TileWorldPhysics] MarchingSquare") {
 
 	SUBCASE("4x4 tiles") {
 		static constexpr auto width = 10u;
@@ -392,13 +392,32 @@ ska::Vector2<std::optional<ska::Tile>> TileWorldPhysicsLoad(const ska::Vector2<c
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 		auto tiles = TileWorldPhysicsLoad(collisions, properties);
-		auto cp = ska::CollisionProfile{ 1, std::vector<ska::LayerPtr>{std::make_unique<ska::Layer>(std::move(tiles)) } };
+		auto layers = std::vector<ska::LayerPtr>{};
+		layers.emplace_back(std::make_unique<ska::Layer>(std::move(tiles)));
+		auto cp = ska::CollisionProfile{ 1, std::move(layers) };
 		auto doneBlocks = std::unordered_set<ska::Point<int>>{};
 		auto lastStartPoint = ska::Point<int>{};
 		auto contourMap = ska::MarchingSquare(0, std::move(cp), doneBlocks, [](const ska::Tile* t) {
-			return ska::TileCollision::No;
+			if(t == nullptr) {
+                return ska::TileCollision::No;
+            }
+			return t->properties.bitMask == 1 ? ska::TileCollision::Yes : ska::TileCollision::No;
 		}, lastStartPoint);
 
-		CHECK(!contourMap.second.empty());
+
+		auto pointsExpected = std::vector<ska::Point<int>> {};
+		pointsExpected.push_back(ska::Point<int>{0,0});
+		pointsExpected.push_back(ska::Point<int>{0,1});
+		pointsExpected.push_back(ska::Point<int>{1,1});
+		pointsExpected.push_back(ska::Point<int>{2,1});
+		pointsExpected.push_back(ska::Point<int>{2,0});
+		pointsExpected.push_back(ska::Point<int>{1,0});
+
+		CHECK(contourMap.second.size() == pointsExpected.size());
+
+		auto index = 0u;
+		for(const auto& p : contourMap.second) {
+            CHECK(p == pointsExpected[index++]);
+		}
 	}
-}*/
+}
