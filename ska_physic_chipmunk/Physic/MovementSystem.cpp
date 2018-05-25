@@ -7,7 +7,7 @@ ska::cp::MovementSystem::MovementSystem(ska::EntityManager& em, Space& space) :
 	m_space(space) {
 }
 
-void ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity) {
+std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity) {
 	auto& mc = m_componentAccessor.get<ska::MovementComponent>(entityId);
 	auto bodyVelocity = body.getVelocity();
 	auto xDone = false;
@@ -31,6 +31,7 @@ void ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska:
 	mc.vy = bodyVelocity.y / 50;
 
 	body.setVelocity(std::move(bodyVelocity));
+	return std::make_pair(xDone, yDone);
 }
 
 void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
@@ -42,9 +43,9 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 
 		auto& body = m_space.getBodies()[bc.bodyIndex];
 
-		adjustVelocity(entity, body, fc.maxSpeed);
+		auto [xDone, yDone] = adjustVelocity(entity, body, fc.maxSpeed);
 
-		body.applyImpulse({fc.x, fc.y});
+		body.applyImpulse({xDone ? 0.F : fc.x, yDone ? 0.F : fc.y});
 		fc.z = fc.y = fc.x = 0;
 		const auto position = body.getPosition();
 		const auto& shape = m_space.getShapes()[bc.shapeIndex];

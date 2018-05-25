@@ -20,7 +20,7 @@ namespace ska {
 			void refresh(unsigned int ellapsedTime) override;
 
 		private:
-			void adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity);
+			std::pair<bool, bool> adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity);
 			Space& m_space;
 		};
 	}

@@ -179,7 +179,7 @@ const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size
 		return nullptr;
 	}
 
-	for (auto it = m_layers.crbegin() + layerTop; it != m_layers.crend(); ++it) {
+	for (auto it = m_layers.crbegin() + (m_layers.size() - layerTop) - 1; it != m_layers.crend(); ++it) {
 		auto& l = *it->get();
 
 		const auto& collision = l.getCollision(blockX, blockY);

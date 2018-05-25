@@ -130,7 +130,11 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	auto pc = ska::PositionComponent{};
 	pc.layer = 1;
+	pc.x = point.x;
+	pc.y = point.y;
 	m_entityManager.addComponent(ballEntity, std::move(pc));
+
+	m_entityManager.addComponent(ballEntity, ska::MovementComponent{});
 
 	ska::GraphicComponent gc;
 	gc.sprites.push_back(m_ballTexture);
@@ -141,6 +145,11 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	ska::InputComponent ic;
 	ic.movePower = 10.;
+
+	auto hc = ska::HitboxComponent{};
+	hc.width = 16;
+	hc.height = 16;
+	m_entityManager.addComponent(ballEntity, std::move(hc));
 
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 

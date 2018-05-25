@@ -1,4 +1,4 @@
-del CMakeCache.txt
+REM del CMakeCache.txt
 set method=%1
 set method=%method:"=%
 SHIFT
