@@ -4,6 +4,7 @@
 #include "World/Layer.h"
 #include "World/CollisionProfile.h"
 #include "World/TileWorldPhysics.h"
+#include "Logging/Logger.h"
 
 namespace TileWorldPhysics {
 	ska::Vector2<std::optional<ska::Tile>> BuildTiles(const ska::Vector2<char>& collisions, const ska::Vector2<int>& properties) {
@@ -344,7 +345,22 @@ TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
 		pointArea.pointList.insert(std::end(pointArea.pointList), std::begin(points), std::end(points));
 
 		auto contourMap = ska::GenerateContourTileMap(std::vector<ska::PointArea>{pointArea});
-		CHECK(!contourMap.empty());
+
+		static constexpr auto depth = 3;
+
+		auto pointsExpected = std::vector<ska::Point<int>>{};
+		pointsExpected.emplace_back(- depth / 2, depth / 2);
+		pointsExpected.emplace_back(depth / 2, 40 - depth / 2);
+		pointsExpected.emplace_back(40 - depth / 2, depth / 2);
+		pointsExpected.emplace_back(depth / 2, - depth / 2);
+
+		CHECK(contourMap.size() == pointsExpected.size());
+
+		auto index = 0u;
+		for(const auto& p : contourMap) {
+            SKA_STATIC_LOG_DEBUG(ska::PointArea)("Rectangle {", p.x, "; ", p.y, "; ", p.w, "; ", p.h, "}");
+            CHECK(ska::Point<int>{p.x, p.y} == pointsExpected[index++]);
+		}
 	}
 }
 
@@ -358,11 +374,11 @@ TEST_CASE("[TileWorldPhysics] GenerateAgglomeratedTileMap : Custom predicate") {
 		   '#', 0 } };
 
 		const auto properties = ska::Vector2<int>{ width,
-		  { 1, 1, 
+		  { 1, 1,
 		    0, 0 } };
 
 		auto cp = TileWorldPhysics::BuildCollisionProfile(collisions, properties);
-		
+
 		auto contourMap = ska::GenerateAgglomeratedTileMap(0, std::move(cp), [](const ska::Tile* t) {
 			if(t == nullptr) {
                 return ska::TileCollision::No;
