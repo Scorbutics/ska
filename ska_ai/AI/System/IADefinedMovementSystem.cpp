@@ -47,7 +47,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		} else {
 			collisioned = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId) != nullptr;
 			
-			SKA_DBG_ONLY(if (collisioned) {
+			SKA_DEBUG_ONLY(if (collisioned) {
 				SKA_LOG_DEBUG("World collision ", collisioned);
 			});
 		}

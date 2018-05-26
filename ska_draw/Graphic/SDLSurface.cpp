@@ -73,7 +73,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 		return true;
 	}
 
-	SKA_DBG_ONLY(if (m_surface == nullptr) {
+	SKA_DEBUG_ONLY(if (m_surface == nullptr) {
 		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDLLibrary::get().getError());
 	});
 
@@ -85,7 +85,7 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
         }
 	}
 
-	SKA_DBG_ONLY(if (m_surface == nullptr) {
+	SKA_DEBUG_ONLY(if (m_surface == nullptr) {
 		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDLLibrary::get().getError()));
 	});
 

@@ -14,8 +14,8 @@ namespace ska {
 			}
 
 
-			const ska::Point<T> value;
-			const bool linked;
+			ska::Point<T> value;
+			bool linked;
 		};
 
 	public:

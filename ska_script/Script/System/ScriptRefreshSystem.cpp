@@ -68,7 +68,7 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 
 		for (const auto& frontPos : ce.wcollisionComponent->blockContacts) {
 			auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH);
-			SKA_DBG_ONLY(
+			SKA_DEBUG_ONLY(
 				if (!tmp.empty()) {
 					SKA_LOG_DEBUG("Chipset script TOUCH");
 				}
@@ -87,7 +87,7 @@ void ska::ScriptRefreshSystem::triggerChangeBlockScripts(const ScriptEvent& se) 
 	auto worldScripts = std::vector<ScriptSleepComponent*>{};
 
 	auto tmpOut = m_scriptPositionedGetter.getScripts(se.oldPos, se.newPos, ScriptTriggerType::MOVE_OUT);
-	SKA_DBG_ONLY(
+	SKA_DEBUG_ONLY(
 		if (!tmpOut.empty()) {
 			SKA_LOG_DEBUG("Chipset script MOVE_OUT");
 		}
@@ -97,7 +97,7 @@ void ska::ScriptRefreshSystem::triggerChangeBlockScripts(const ScriptEvent& se) 
 	}
 
 	auto tmpIn = m_scriptPositionedGetter.getScripts(se.oldPos, se.newPos, ScriptTriggerType::MOVE_IN);
-	SKA_DBG_ONLY(
+	SKA_DEBUG_ONLY(
 		if (!tmpIn.empty()) {
 			SKA_LOG_DEBUG("Chipset script MOVE_IN");
 		}

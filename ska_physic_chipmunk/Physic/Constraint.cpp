@@ -16,7 +16,7 @@ ska::cp::Constraint& ska::cp::Constraint::operator=(Constraint&& c) noexcept {
 	return *this;
 }
 
-ska::cp::Constraint::Constraint(cpBody& body1, cpBody& body2, const Vect& anchor1, const Vect& anchor2) :
+ska::cp::Constraint::Constraint(cpBody& body1, cpBody& body2, Vect anchor1, Vect anchor2) :
 	m_joint(cpPivotJointNew2(&body1, &body2, anchor1.vect(), anchor2.vect())) {
 }
 
@@ -40,8 +40,8 @@ ska::cp::Constraint ska::cp::Constraint::buildGearJoint(cpBody& body1, cpBody& b
 	return Constraint(body1, body2, phase, ratio);
 }
 
-ska::cp::Constraint ska::cp::Constraint::buildPivotJoint(cpBody& body1, cpBody& body2, const Vect& anchor1, const Vect& anchor2) {
-	return Constraint(body1, body2, anchor1, anchor2);
+ska::cp::Constraint ska::cp::Constraint::buildPivotJoint(cpBody& body1, cpBody& body2, Vect anchor1, Vect anchor2) {
+	return Constraint(body1, body2, std::move(anchor1), std::move(anchor2));
 }
 
 void ska::cp::Constraint::setMaxForce(double maxForce) {

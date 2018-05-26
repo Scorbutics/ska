@@ -9,7 +9,7 @@ ska::cp::MovementSystem::MovementSystem(ska::EntityManager& em, Space& space) :
 
 std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, const ska::ForceComponent& fc) {
 	auto& mc = m_componentAccessor.get<ska::MovementComponent>(entityId);
-	auto bodyVelocity = body.getVelocity();
+	auto bodyVelocity = ska::Point<int>{};
 	auto xDone = false;
 	auto yDone = false;
 
@@ -40,16 +40,20 @@ std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityI
 
 void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 	const auto& entities = getEntities();
-	for(const auto& entity : entities) {
+	for (const auto& entity : entities) {
 		auto& fc = m_componentAccessor.get<ska::ForceComponent>(entity);
 		auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
 		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
 
-		const auto& body = m_space.getBodies()[bc.bodyIndex];
 		auto& controlBody = m_space.getBodies()[bc.controlBodyIndex];
+		const auto& body = m_space.getBodies()[bc.bodyIndex];
 
 		//Movement
-		auto [xDone, yDone] = adjustVelocity(entity, controlBody, fc);
+		//controlBody.setVelocity({});
+		auto[xDone, yDone] = adjustVelocity(entity, controlBody, fc);
+		
+		
+		//controlBody.setVelocity(controlBody.getPosition() + body.getPosition());
 
 		//body.applyImpulse({xDone ? 0.F : fc.x, yDone ? 0.F : fc.y});
 		fc.z = fc.y = fc.x = 0;
@@ -65,6 +69,6 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		pc.rotationX = rotation.x;
 		pc.rotationY = rotation.y;
 
-		controlBody.setPosition(body.getPosition());
+		controlBody.setPosition(position + controlBody.getVelocity());
 	}
 }

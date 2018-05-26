@@ -37,9 +37,7 @@ namespace ska {
 		}
 
 		ska::cp::HitboxComponent BuildRectangleHitbox(ska::cp::Space& space, const ska::Rectangle& box, float friction, float rotateFriction, EntityId entityId) {
-			const auto ballControlBodyIndex = space.addBody(ska::cp::Body::fromKinematic());
-
-			const auto ballBodyIndex = space.addBody(ska::cp::Body::fromMassAndSizeForBox(1., box.w, box.h));
+			const auto ballBodyIndex = space.addBody(ska::cp::Body::fromMoment(10., INFINITY));
 			const auto ballShapeIndex = space.addShape(ska::cp::Shape::fromBox(space.getBodies()[ballBodyIndex].body(), {0, 0, box.w, box.h}));
 
 			{
@@ -48,12 +46,14 @@ namespace ska {
 				ballBody.setEntity(entityId);
 			}
 
-			
-			auto& ballControlBody = space.getBodies()[ballControlBodyIndex];		
-			ballControlBody.setPosition(space.getBodies()[ballBodyIndex].getPosition());
-			ballControlBody.setEntity(entityId);
+			const auto ballControlBodyIndex = space.addBody(ska::cp::Body::fromKinematic());
+			{
+				auto& ballControlBody = space.getBodies()[ballControlBodyIndex];
+				ballControlBody.setEntity(entityId);
+			}
 
 			{
+				auto& ballControlBody = space.getBodies()[ballControlBodyIndex];
 				auto pjIndex = space.addConstraint(ska::cp::Constraint::buildPivotJoint(*ballControlBody.body(), *space.getBodies()[ballBodyIndex].body()));
 				auto& pj = space.getConstaints()[pjIndex];
 				pj.setMaxForce(friction);
@@ -61,6 +61,7 @@ namespace ska {
 			}
     
 			{
+				auto& ballControlBody = space.getBodies()[ballControlBodyIndex];
 				auto gjIndex = space.addConstraint(ska::cp::Constraint::buildGearJoint(*ballControlBody.body(), *space.getBodies()[ballBodyIndex].body(), 0., 1.));
 				auto& gj = space.getConstaints()[gjIndex];
 				gj.setMaxForce(rotateFriction);
