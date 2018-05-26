@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska_ai)
 
+set(CMAKE_CXX_STANDARD 17)
+
 find_path(SDL2_INCLUDE_DIR NAME SDL.h)
 if(NOT SDL2_INCLUDE_DIR)
 	set(SDL2_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include)
