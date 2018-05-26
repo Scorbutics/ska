@@ -36,6 +36,7 @@ namespace ska {
 			void loadFromCircle(cpBody *body, double radius, const Vect& offset);
 
 			void free();
+
 			gsl::owner<cpShape*> m_shape;
 		};
 	}

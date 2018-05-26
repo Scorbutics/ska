@@ -107,7 +107,7 @@ namespace ska {
 		}
 
 		bool has(const std::size_t x, const std::size_t y) const {
-			return x * y < size();
+			return x < m_lineSize && y < (size() / m_lineSize);
 		}
 
 	private:

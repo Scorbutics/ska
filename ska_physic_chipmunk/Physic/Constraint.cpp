@@ -51,3 +51,7 @@ void ska::cp::Constraint::setMaxForce(double maxForce) {
 void ska::cp::Constraint::setMaxBias(double maxBias) {
 	cpConstraintSetMaxBias(m_joint, maxBias);
 }
+
+void ska::cp::Constraint::setErrorBias(double errorBias) {
+	cpConstraintSetErrorBias(m_joint, errorBias);
+}

@@ -138,7 +138,7 @@ namespace ska {
 		PolarPoint(const PolarPoint<U>& p);
 
 		template <class U>
-		void operator=(const PolarPoint<U>& p) {
+		PolarPoint<T>& operator=(const PolarPoint<U>& p) {
 			radius = static_cast<T>(p.radius);
 			angle = p.angle;
 		}

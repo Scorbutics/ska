@@ -7,11 +7,14 @@ ska::cp::Body::Body() :
 
 ska::cp::Body::Body(Body&& b) noexcept{
 	m_body = b.m_body;
+	setEntity(b.m_entity);
 	b.m_body = nullptr;
+	b.m_entity = 0;
 }
 
 ska::cp::Body& ska::cp::Body::operator=(Body&& b) noexcept{
 	std::swap(m_body, b.m_body);
+	std::swap(m_entity, b.m_entity);
 	return *this;
 }
 
@@ -52,7 +55,13 @@ ska::cp::Body ska::cp::Body::fromRadius(double mass, double radius) {
 	return body;
 }
 
-cpVect ska::cp::Body::getPosition() const{
+ska::cp::Body ska::cp::Body::fromKinematic() {
+	auto body = Body{};
+	body.loadFromKinematic();
+	return body;
+}
+
+cpVect ska::cp::Body::getPosition() const {
 	return cpBodyGetPosition(m_body);
 }
 
@@ -92,6 +101,11 @@ void ska::cp::Body::loadFromMoment(double mass, double moment) {
 void ska::cp::Body::loadFromRadius(double mass, double radius) {
 	const auto moment = cpMomentForCircle(mass, 0, radius, cpvzero);
 	loadFromMoment(mass, moment);
+}
+
+void ska::cp::Body::loadFromKinematic() {
+	free();
+	m_body = cpBodyNewKinematic();
 }
 
 void ska::cp::Body::free() {

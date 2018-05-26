@@ -18,7 +18,8 @@ ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, Game
 	SubObserver<ScriptEvent>(std::bind(&ScriptRefreshSystem::onScriptEvent, this, std::placeholders::_1), ged),
 	m_scriptPositionedGetter(spg),	
 	m_scriptAutoSystem(scriptAutoSystem),
-	m_action(false) {	
+	m_action(false),
+	m_entityManager(entityManager) {
 }
 
 bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
@@ -54,10 +55,12 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 	//Filter only world collision
 	if (ce.wcollisionComponent != nullptr) {
 		const auto entityId = ce.entity;
+	
+		if (!m_entityManager.hasComponent<ScriptAwareComponent>(entityId)) {
+			return false;
+		}
 
-		auto& components = ScriptRefreshSystemBase::m_componentAccessor;
-		
-		auto& sac = components.get<ScriptAwareComponent>(entityId);
+		auto& sac = m_entityManager.getComponent<ScriptAwareComponent>(entityId);
 
 		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 

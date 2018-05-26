@@ -21,6 +21,7 @@ namespace ska {
 
 			void setMaxForce(double maxForce);
 			void setMaxBias(double maxBias);
+			void setErrorBias(double errorBias);
 
 		private:
 			Constraint(cpBody& body1, cpBody& body2, const Vect& anchor1, const Vect& anchor2);

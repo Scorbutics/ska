@@ -30,6 +30,7 @@ namespace ska {
 
 			static Body fromMoment(double mass, double moment);
 			static Body fromRadius(double mass, double radius);
+			static Body fromKinematic();
 
 			cpVect getPosition() const;
 			cpVect getVelocity() const;
@@ -41,6 +42,7 @@ namespace ska {
 		private:
 			void loadFromMoment(double mass, double moment);
 			void loadFromRadius(double mass, double radius);
+			void loadFromKinematic();
 
 			void free();
 			gsl::owner<cpBody*> m_body;

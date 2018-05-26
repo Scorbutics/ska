@@ -42,7 +42,7 @@ namespace ska {
 		static std::vector<Point<int>> createIntermediatePoints(const Point<int>& pointA, const Point<int>& pointB, bool step = 1);
 
 	private:
-		RectangleUtils();
+		RectangleUtils() = default;
 
 	};
 }

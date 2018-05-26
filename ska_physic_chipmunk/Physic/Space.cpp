@@ -6,7 +6,7 @@
 #include "../CollisionHandlerType.h"
 
 template <ska::cp::CollisionHandlerType type>
-bool Call(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
+bool CollisionCallbackCall(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
 	auto result = true;
 
@@ -17,37 +17,37 @@ bool Call(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	auto arbiter = ska::cp::Arbiter{ *arb };
 
 	const auto entityBody = cpSpaceGetStaticBody(space) == a ? b : a;
-	auto& bodyEntityId = *static_cast<ska::EntityId*>(cpBodyGetUserData(entityBody));
+	auto bodyEntityId = static_cast<ska::EntityId*>(cpBodyGetUserData(entityBody));
 
 	if constexpr (type == ska::cp::CollisionHandlerType::PRE || type == ska::cp::CollisionHandlerType::BEGIN) {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
 		for (auto& callback : callbacks) {
-			result &= callback.second(arbiter, userData.space, &bodyEntityId);
+			result &= callback.second(arbiter, userData.space, bodyEntityId);
 		}
 		return result;
 	} else {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
 		for (auto& callback : callbacks) {
-			callback.second(arbiter, userData.space, &bodyEntityId);
+			callback.second(arbiter, userData.space, bodyEntityId);
 		}
 	}
 	return true;
 }
 
 cpBool CollisionCallbackPre(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	return Call<ska::cp::CollisionHandlerType::PRE>(arb, space, userDataPtr);
+	return CollisionCallbackCall<ska::cp::CollisionHandlerType::PRE>(arb, space, userDataPtr);
 }
 
 cpBool CollisionCallbackBegin(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	return Call<ska::cp::CollisionHandlerType::BEGIN>(arb, space, userDataPtr);
+	return CollisionCallbackCall<ska::cp::CollisionHandlerType::BEGIN>(arb, space, userDataPtr);
 }
 
 void CollisionCallbackPost(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	Call<ska::cp::CollisionHandlerType::POST>(arb, space, userDataPtr);
+	CollisionCallbackCall<ska::cp::CollisionHandlerType::POST>(arb, space, userDataPtr);
 }
 
 void CollisionCallbackSeparate(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
-	Call<ska::cp::CollisionHandlerType::SEPARATE>(arb, space, userDataPtr);
+	CollisionCallbackCall<ska::cp::CollisionHandlerType::SEPARATE>(arb, space, userDataPtr);
 }
 
 void ska::cp::Space::initCollisionHandlers() {
@@ -99,25 +99,22 @@ void ska::cp::Space::addDefaultCollisionHandler(CollisionHandlerData collisionHa
 	collisionHandlerData.setupCollisionHandler(*col);
 }
 
-ska::cp::Constraint& ska::cp::Space::addConstraint(Constraint c) {
+std::size_t ska::cp::Space::addConstraint(Constraint c) {
 	m_constraints.emplace_back(std::move(c));
-	auto& ref = m_constraints.back();
-	cpSpaceAddConstraint(m_space, ref.constraint());
-	return ref;
+	cpSpaceAddConstraint(m_space, m_constraints.back().constraint());
+	return m_constraints.size() - 1;
 }
 
-ska::cp::Shape& ska::cp::Space::addShape(Shape shape) {
-	m_shapes.push_back(std::move(shape));
-	auto& ref = m_shapes.back();
-	cpSpaceAddShape(m_space, ref.shape());
-	return ref;
+std::size_t ska::cp::Space::addShape(Shape shape) {
+	m_shapes.emplace_back(std::move(shape));
+	cpSpaceAddShape(m_space, m_shapes.back().shape());
+	return m_shapes.size() - 1;
 }
 
-ska::cp::Body& ska::cp::Space::addBody(Body body) {
+std::size_t ska::cp::Space::addBody(Body body) {
 	m_bodies.emplace_back(std::move(body));
-	auto& ref = m_bodies.back();
-	cpSpaceAddBody(m_space, ref.body());
-	return ref;
+	cpSpaceAddBody(m_space, m_bodies.back().body());
+	return m_bodies.size() - 1;
 }
 
 void ska::cp::Space::eraseShapes(std::size_t firstIndex, std::size_t lastIndex) {
@@ -152,8 +149,20 @@ std::vector<ska::cp::Shape>& ska::cp::Space::getShapes() {
 	return m_shapes;
 }
 
+std::vector<ska::cp::Constraint>& ska::cp::Space::getConstaints() {
+	return m_constraints;
+}
+
 void ska::cp::Space::step(double timestep) {
 	cpSpaceStep(m_space, timestep);
+}
+
+void ska::cp::Space::setIterations(int iterations) {
+	cpSpaceSetIterations(m_space, iterations);
+}
+
+void ska::cp::Space::setSleepTimeThreshold(float threshold) {
+	cpSpaceSetSleepTimeThreshold(m_space, threshold);
 }
 
 cpBody* ska::cp::Space::getStaticBody() {

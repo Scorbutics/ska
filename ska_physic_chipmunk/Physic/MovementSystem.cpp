@@ -7,18 +7,22 @@ ska::cp::MovementSystem::MovementSystem(ska::EntityManager& em, Space& space) :
 	m_space(space) {
 }
 
-std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, float maxVelocity) {
+std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, const ska::ForceComponent& fc) {
 	auto& mc = m_componentAccessor.get<ska::MovementComponent>(entityId);
 	auto bodyVelocity = body.getVelocity();
 	auto xDone = false;
 	auto yDone = false;
-	if (NumberUtils::absolute(bodyVelocity.x) > maxVelocity) {
-		bodyVelocity.x = bodyVelocity.x > 0 ? maxVelocity : -maxVelocity;
+
+	bodyVelocity.x = fc.x * 10;
+	bodyVelocity.y = fc.y * 10;
+
+	if (NumberUtils::absolute(bodyVelocity.x) > fc.maxSpeed) {
+		bodyVelocity.x = bodyVelocity.x > 0 ? fc.maxSpeed : -fc.maxSpeed;
 		xDone = true;
 	}
 
-	if (NumberUtils::absolute(bodyVelocity.y) > maxVelocity) {
-		bodyVelocity.y = bodyVelocity.y > 0 ? maxVelocity : -maxVelocity;
+	if (NumberUtils::absolute(bodyVelocity.y) > fc.maxSpeed) {
+		bodyVelocity.y = bodyVelocity.y > 0 ? fc.maxSpeed : -fc.maxSpeed;
 		yDone = true;
 	}
 
@@ -41,19 +45,22 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
 		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
 
-		auto& body = m_space.getBodies()[bc.bodyIndex];
+		auto& controlBody = m_space.getBodies()[bc.bodyIndex];
 
-		auto [xDone, yDone] = adjustVelocity(entity, body, fc.maxSpeed);
+		//Movement
+		auto [xDone, yDone] = adjustVelocity(entity, controlBody, fc);
 
-		body.applyImpulse({xDone ? 0.F : fc.x, yDone ? 0.F : fc.y});
+		//body.applyImpulse({xDone ? 0.F : fc.x, yDone ? 0.F : fc.y});
 		fc.z = fc.y = fc.x = 0;
-		const auto position = body.getPosition();
+		
+		//Rotation
+		const auto position = controlBody.getPosition();
 		const auto& shape = m_space.getShapes()[bc.shapeIndex];
 		const auto& entityDimensions = shape.getDimensions();
 		pc.x = static_cast<long>(position.x - entityDimensions.w / 2.F);
 		pc.y = static_cast<long>(position.y - entityDimensions.h / 2.F);
 
-		const auto rotation = body.getRotation();
+		const auto rotation = controlBody.getRotation();
 		pc.rotationX = rotation.x;
 		pc.rotationY = rotation.y;
 

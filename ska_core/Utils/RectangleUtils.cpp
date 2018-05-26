@@ -2,7 +2,6 @@
 #include "RectangleUtils.h"
 #include "NumberUtils.h"
 
-ska::RectangleUtils::RectangleUtils() {}
 
 bool ska::RectangleUtils::collisionBoxABoxB(const Rectangle& rectA, const Rectangle& rectB) {
 

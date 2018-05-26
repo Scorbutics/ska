@@ -45,6 +45,7 @@ namespace ska {
 		ScriptPositionedGetter& m_scriptPositionedGetter;
 		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;
+		ska::EntityManager& m_entityManager;
 	};
 
 }
