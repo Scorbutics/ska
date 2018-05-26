@@ -55,6 +55,12 @@ ska::cp::Body ska::cp::Body::fromRadius(double mass, double radius) {
 	return body;
 }
 
+ska::cp::Body ska::cp::Body::fromMassAndSizeForBox(double mass, unsigned int w, unsigned int h) {
+	Body body;
+	body.loadBoxFromMassAndSize(mass, w, h);
+	return body;
+}
+
 ska::cp::Body ska::cp::Body::fromKinematic() {
 	auto body = Body{};
 	body.loadFromKinematic();
@@ -91,6 +97,10 @@ void ska::cp::Body::setType(BodyType type) {
 	default:
 		break;
 	}
+}
+
+void ska::cp::Body::loadBoxFromMassAndSize(double mass, unsigned int w, unsigned int h) {
+	loadFromMoment(mass, cpMomentForBox(mass, w, h));
 }
 
 void ska::cp::Body::loadFromMoment(double mass, double moment) {

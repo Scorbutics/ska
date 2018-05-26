@@ -16,7 +16,7 @@ std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityI
 	bodyVelocity.x = fc.x * 10;
 	bodyVelocity.y = fc.y * 10;
 
-	if (NumberUtils::absolute(bodyVelocity.x) > fc.maxSpeed) {
+	/*if (NumberUtils::absolute(bodyVelocity.x) > fc.maxSpeed) {
 		bodyVelocity.x = bodyVelocity.x > 0 ? fc.maxSpeed : -fc.maxSpeed;
 		xDone = true;
 	}
@@ -29,7 +29,7 @@ std::pair<bool, bool> ska::cp::MovementSystem::adjustVelocity(const ska::EntityI
 	if (xDone && yDone) {
 		bodyVelocity.x *= 0.717;
 		bodyVelocity.y *= 0.717;
-	}
+	}*/
 
 	mc.vx = bodyVelocity.x / 50;
 	mc.vy = bodyVelocity.y / 50;
@@ -45,7 +45,8 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
 		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
 
-		auto& controlBody = m_space.getBodies()[bc.bodyIndex];
+		const auto& body = m_space.getBodies()[bc.bodyIndex];
+		auto& controlBody = m_space.getBodies()[bc.controlBodyIndex];
 
 		//Movement
 		auto [xDone, yDone] = adjustVelocity(entity, controlBody, fc);
@@ -54,16 +55,16 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		fc.z = fc.y = fc.x = 0;
 		
 		//Rotation
-		const auto position = controlBody.getPosition();
+		const auto position = body.getPosition();
 		const auto& shape = m_space.getShapes()[bc.shapeIndex];
 		const auto& entityDimensions = shape.getDimensions();
 		pc.x = static_cast<long>(position.x - entityDimensions.w / 2.F);
 		pc.y = static_cast<long>(position.y - entityDimensions.h / 2.F);
 
-		const auto rotation = controlBody.getRotation();
+		const auto rotation = body.getRotation();
 		pc.rotationX = rotation.x;
 		pc.rotationY = rotation.y;
 
-
+		controlBody.setPosition(body.getPosition());
 	}
 }

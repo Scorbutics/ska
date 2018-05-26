@@ -57,13 +57,16 @@ namespace ska {
 			std::size_t addConstraint(Constraint c);
 			std::size_t addShape(Shape shape);
 			std::size_t addBody(Body body);
+			
 			void clear();
+
 			std::vector<Body>& getBodies();
 			std::vector<Shape>& getShapes();
 			std::vector<Constraint>& getConstaints();
 
 			void eraseShapes(std::size_t firstIndex, std::size_t lastIndex = 0);
 			void eraseBodies(std::size_t firstIndex, std::size_t lastIndex = 0);
+			void eraseConstraints(std::size_t firstIndex, std::size_t lastIndex = 0);
 
 			void setIterations(int iterations);
 			void setSleepTimeThreshold(float threshold);

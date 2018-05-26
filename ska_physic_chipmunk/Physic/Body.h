@@ -31,6 +31,7 @@ namespace ska {
 			static Body fromMoment(double mass, double moment);
 			static Body fromRadius(double mass, double radius);
 			static Body fromKinematic();
+			static Body fromMassAndSizeForBox(double mass, unsigned int w, unsigned int h);
 
 			cpVect getPosition() const;
 			cpVect getVelocity() const;
@@ -42,6 +43,7 @@ namespace ska {
 		private:
 			void loadFromMoment(double mass, double moment);
 			void loadFromRadius(double mass, double radius);
+			void loadBoxFromMassAndSize(double mass, unsigned int w, unsigned int h);
 			void loadFromKinematic();
 
 			void free();

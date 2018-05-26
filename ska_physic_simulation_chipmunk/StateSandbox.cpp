@@ -80,7 +80,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		const auto agglomeratedTiles = GenerateAgglomeratedTileMap(1, world.getCollisionProfile());
 		const auto contourRectangleTile = GenerateContourTileMap(agglomeratedTiles);
 
-		m_space.setGravity({ 0., 300 });
+		//m_space.setGravity({ 0., 300 });
 
 		m_ballTexture.load("Resources/Sprites/2.png");
 

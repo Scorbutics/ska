@@ -5,6 +5,8 @@
 #include "Shape.h"
 #include "../CollisionHandlerType.h"
 
+#include "Logging/Logger.h"
+
 template <ska::cp::CollisionHandlerType type>
 bool CollisionCallbackCall(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
@@ -136,9 +138,20 @@ void ska::cp::Space::eraseBodies(std::size_t firstIndex, std::size_t lastIndex) 
 	m_bodies.erase(startBodiesIt, endBodiesIt);
 }
 
+void ska::cp::Space::eraseConstraints(std::size_t firstIndex, std::size_t lastIndex) {
+	auto startConstraintsIt = m_constraints.begin() + firstIndex;
+	auto endConstraintsIt = lastIndex == 0 ? m_constraints.end() : m_constraints.begin() + lastIndex;
+	for (auto it = startConstraintsIt; it != endConstraintsIt; it++) {
+		cpSpaceRemoveConstraint(m_space, it->constraint());
+	}
+
+	m_constraints.erase(startConstraintsIt, endConstraintsIt);
+}
+
 void ska::cp::Space::clear() {
 	eraseShapes(0);
 	eraseBodies(0);
+	eraseConstraints(0);
 }
 
 std::vector<ska::cp::Body>& ska::cp::Space::getBodies() {
@@ -154,6 +167,13 @@ std::vector<ska::cp::Constraint>& ska::cp::Space::getConstaints() {
 }
 
 void ska::cp::Space::step(double timestep) {
+	static auto accu = 0.;
+	if (accu >= 1. && m_bodies.size() >= 2) {
+		SKA_LOG_DEBUG("Body 0 pos : (", m_bodies[0].getPosition().x, "; ", m_bodies[0].getPosition().y, ")");
+		SKA_LOG_DEBUG("Body 1 pos : (", m_bodies[1].getPosition().x, "; ", m_bodies[1].getPosition().y, ")", "\n");
+		accu = 0.;
+	}
+	accu += timestep;
 	cpSpaceStep(m_space, timestep);
 }
 

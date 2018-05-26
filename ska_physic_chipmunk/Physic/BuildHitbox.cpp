@@ -39,7 +39,7 @@ namespace ska {
 		ska::cp::HitboxComponent BuildRectangleHitbox(ska::cp::Space& space, const ska::Rectangle& box, float friction, float rotateFriction, EntityId entityId) {
 			const auto ballControlBodyIndex = space.addBody(ska::cp::Body::fromKinematic());
 
-			const auto ballBodyIndex = space.addBody(ska::cp::Body::fromMoment(1., INFINITY));
+			const auto ballBodyIndex = space.addBody(ska::cp::Body::fromMassAndSizeForBox(1., box.w, box.h));
 			const auto ballShapeIndex = space.addShape(ska::cp::Shape::fromBox(space.getBodies()[ballBodyIndex].body(), {0, 0, box.w, box.h}));
 
 			{
@@ -69,7 +69,8 @@ namespace ska {
 			}
 			
 			ska::cp::HitboxComponent bc{};
-			bc.bodyIndex = ballControlBodyIndex;
+			bc.bodyIndex = ballBodyIndex;
+			bc.controlBodyIndex = ballControlBodyIndex;
 			bc.shapeIndex = ballShapeIndex;
 
 			return bc;
