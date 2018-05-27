@@ -53,21 +53,21 @@ namespace ska {
         AnimationSystem& operator=(const AnimationSystem&) = delete;
         virtual ~AnimationSystem() = default;
 
-      virtual void refresh(unsigned int ) override {
-        const auto& processed = getEntities();
-        for (auto entityId : processed) {
-          auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);
-		  auto afsm = c.getASM();
-		  if(afsm == nullptr) {
-			afsm = m_defaultASM;
-			c.setASM(*afsm, entityId);
-		  }
-	        const auto next =  afsm->animate(c, entityId);
-          if(next != nullptr) {
-              c.setASM(*next, entityId);
-          }
-        }
-      }
+		virtual void refresh(unsigned int) override {
+			const auto& processed = getEntities();
+			for (auto entityId : processed) {
+				auto& c = m_componentAccessor.get<ska::AnimationComponent>(entityId);
+				auto afsm = c.getASM();
+				if (afsm == nullptr) {
+					afsm = m_defaultASM;
+					c.setASM(*afsm, entityId);
+				}
+				const auto next = afsm->animate(c, entityId);
+				if (next != nullptr) {
+					c.setASM(*next, entityId);
+				}
+			}
+		}
 
     private:
       std::tuple<ASMPtr<ASM>...> m_asm;

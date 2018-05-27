@@ -8,12 +8,7 @@ ska::cp::MovementSystem::MovementSystem(ska::EntityManager& em, Space& space) :
 }
 
 void ska::cp::MovementSystem::adjustVelocity(const ska::EntityId& entityId, ska::cp::Body& body, const ska::ForceComponent& fc) {
-	auto& mc = m_componentAccessor.get<ska::MovementComponent>(entityId);
 	auto bodyVelocity = ska::Point<float>{ fc.x * 10 , fc.y * 10 };
-
-	mc.vx = bodyVelocity.x / 50;
-	mc.vy = bodyVelocity.y / 50;
-
 	body.setVelocity(std::move(bodyVelocity));
 }
 
@@ -23,11 +18,17 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		auto& fc = m_componentAccessor.get<ska::ForceComponent>(entity);
 		auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
 		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
+		auto& mc = m_componentAccessor.get<ska::MovementComponent>(entity);
 
 		auto& controlBody = m_space.getBody(bc.controlBodyIndex);
 
 		//Velocity : control body
-		adjustVelocity(entity, controlBody, fc);		
+		if (bc.controlBodyIndex != bc.bodyIndex) {
+			adjustVelocity(entity, controlBody, fc);
+		}
+
+		mc.vx = controlBody.getVelocity().x / 50;
+		mc.vy = controlBody.getVelocity().y / 50;
 		fc.z = fc.y = fc.x = 0;
 		
 		const auto& body = m_space.getBody(bc.bodyIndex);

@@ -90,19 +90,21 @@ namespace ska {
 			void eraseShapes(const Container& containerSrcSorted) {
 				auto iteration = 0u;
 				for (const auto& index : containerSrcSorted) {
-					auto it = m_shapes.begin() + index - iteration++;
+					auto it = m_shapes.begin() + (index - iteration);
 					cpSpaceRemoveShape(m_space, &it->shape());
 					m_shapes.erase(it);
+					iteration++;
 				}
 			}
 
 			template <class Container>
 			void eraseConstraints(const Container& containerSrcSorted) {
-				auto iteration = 0u;
+				auto iteration = 0u;			
 				for (const auto& index : containerSrcSorted) {
-					auto it = m_constraints.begin() + index - iteration++;
+					auto it = m_constraints.begin() + (index - iteration);
 					cpSpaceRemoveConstraint(m_space, &it->constraint());
 					m_constraints.erase(it);
+					iteration++;
 				}
 			}
 

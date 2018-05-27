@@ -31,13 +31,13 @@ namespace ska {
 		}
 
 		unsigned int add(EntityId& entityId, T&& comp) {
-			const auto componentIdForEntity = m_components.size();
-			if(componentIdForEntity < m_components.size()) {
-				m_components[componentIdForEntity] = std::forward<T>(comp);
+			const auto componentIdForEntity = m_entitiesWithComponent[entityId];
+			if(componentIdForEntity.has_value() && componentIdForEntity.value() < m_components.size()) {
+				m_components[componentIdForEntity.value()] = std::forward<T>(comp);
 			} else {
 				m_components.push_back(std::forward<T>(comp));
+				m_entitiesWithComponent[entityId] = m_components.size() - 1;
 			}
-			m_entitiesWithComponent[entityId] = componentIdForEntity;
 			return m_mask;
 		}
 
@@ -45,7 +45,7 @@ namespace ska {
 			if(m_entitiesWithComponent[entityId].has_value()) {
 				const auto componentIdForEntity = m_entitiesWithComponent[entityId].value();
 				m_components[componentIdForEntity] = std::optional<T>();
-				m_entitiesWithComponent[entityId] = std::optional<ComponentId>();
+				//m_entitiesWithComponent[entityId] = std::optional<ComponentId>();
 			}
 			return m_mask;
 		}
