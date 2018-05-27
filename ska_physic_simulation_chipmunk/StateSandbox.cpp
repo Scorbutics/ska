@@ -21,6 +21,7 @@
 #include "Graphic/System/CameraFixedStrategy.h"
 #include "Graphic/System/WalkAnimationStateMachine.h"
 #include "Graphic/System/AnimationSystem.h"
+
 constexpr auto BLOCKSIZE = 48u;
 
 StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispatcher<>& ed) :
@@ -153,7 +154,8 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
-	auto bc = ska::cp::BuildRectangleHitbox(m_space, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 200.f, 500.f, ballEntity);
+	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 65.F, ballEntity);
+	ska::cp::AddTopDownConstraints(m_space, m_space.getStaticBody(), m_space.getBody(bc.controlBodyIndex), 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

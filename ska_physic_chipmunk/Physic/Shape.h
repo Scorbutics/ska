@@ -20,20 +20,23 @@ namespace ska {
 			Shape& operator=(Shape&& sh) noexcept;
 
 			virtual ~Shape();
-			cpShape* shape() const;
+			
+			const cpShape& shape() const;
+			cpShape& shape();
+
 			ska::Rectangle getDimensions() const;
 
-			static Shape fromSegment(cpBody* body, const Vect& a, const Vect& b, double radius);
-			static Shape fromCircle(cpBody* body, double radius, const Vect& offset = Vect{});
-			static Shape fromBox(cpBody* body, const ska::Rectangle& r, double radius = 0.);
+			static Shape fromSegment(cpBody& body, const Vect& a, const Vect& b, double radius);
+			static Shape fromCircle(cpBody& body, double radius, const Vect& offset = Vect{});
+			static Shape fromBox(cpBody& body, const ska::Rectangle& r, double radius = 0.);
 
 			void setFriction(float friction);
 			void setBounciness(float bouncinesss);
 
 		private:
-			void loadFromSegment(cpBody *body, const Vect& a, const Vect& b, double radius);
-			void loadFromBox(cpBody* body, const ska::Rectangle& r, double radius);
-			void loadFromCircle(cpBody *body, double radius, const Vect& offset);
+			void loadFromSegment(cpBody& body, const Vect& a, const Vect& b, double radius);
+			void loadFromBox(cpBody& body, const ska::Rectangle& r, double radius);
+			void loadFromCircle(cpBody& body, double radius, const Vect& offset);
 
 			void free();
 

@@ -50,7 +50,7 @@ namespace ska {
 			Space(Space&&) noexcept;
 			virtual ~Space();
 
-			cpBody* getStaticBody();
+			cpBody& getStaticBody();
 			
 			void setGravity(const Vect& v);
 
@@ -60,9 +60,9 @@ namespace ska {
 			
 			void clear();
 
-			std::vector<Body>& getBodies();
-			std::vector<Shape>& getShapes();
-			std::vector<Constraint>& getConstaints();
+			Body& getBody(std::size_t index);
+			Shape& getShape(std::size_t index);
+			Constraint& getConstaint(std::size_t index);
 
 			void eraseShapes(std::size_t firstIndex, std::size_t lastIndex = 0);
 			void eraseBodies(std::size_t firstIndex, std::size_t lastIndex = 0);

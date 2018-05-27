@@ -16,7 +16,7 @@ set(SKA_PHYSIC_CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_physic_chipmunk)
 set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_draw)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_world)
 set(SKA_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_gui)
-set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk)
+set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk/include/chipmunk)
 set(SDL2_GIF_INCLUDE_DIR ${CMAKE_BINARY_DIR}/../external/SDL2_gif/src)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
 

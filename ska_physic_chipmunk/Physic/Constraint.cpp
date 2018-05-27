@@ -32,8 +32,12 @@ ska::cp::Constraint::~Constraint() {
 	free();
 }
 
-cpConstraint* ska::cp::Constraint::constraint() {
-	return m_joint;
+const cpConstraint& ska::cp::Constraint::constraint() const {
+	return *m_joint;
+}
+
+cpConstraint& ska::cp::Constraint::constraint() {
+	return *m_joint;
 }
 
 ska::cp::Constraint ska::cp::Constraint::buildGearJoint(cpBody& body1, cpBody& body2, double phase, double ratio){

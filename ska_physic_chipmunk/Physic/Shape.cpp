@@ -7,26 +7,30 @@ ska::cp::Shape::Shape() :
 	m_shape(nullptr) {
 }
 
-ska::cp::Shape ska::cp::Shape::fromSegment(cpBody* body, const Vect& a, const Vect& b, double radius) {
+ska::cp::Shape ska::cp::Shape::fromSegment(cpBody& body, const Vect& a, const Vect& b, double radius) {
 	Shape sh;
 	sh.loadFromSegment(body, a, b, radius);
 	return sh;
 }
 
-ska::cp::Shape ska::cp::Shape::fromCircle(cpBody* body, double radius, const Vect& offset) {
+ska::cp::Shape ska::cp::Shape::fromCircle(cpBody& body, double radius, const Vect& offset) {
 	Shape sh;
 	sh.loadFromCircle(body, radius, offset);
 	return sh;
 }
 
-ska::cp::Shape ska::cp::Shape::fromBox(cpBody* body, const ska::Rectangle& relative, double radius) {
+ska::cp::Shape ska::cp::Shape::fromBox(cpBody& body, const ska::Rectangle& relative, double radius) {
 	Shape sh;
 	sh.loadFromBox(body, relative, radius);
 	return sh;
 }
 
-cpShape* ska::cp::Shape::shape() const {
-	return m_shape;
+const cpShape& ska::cp::Shape::shape() const {
+	return *m_shape;
+}
+
+cpShape& ska::cp::Shape::shape() {
+	return *m_shape;
 }
 
 ska::Rectangle ska::cp::Shape::getDimensions() const {
@@ -56,20 +60,20 @@ void ska::cp::Shape::setBounciness(float bouncinesss) {
 	cpShapeSetElasticity(m_shape, bouncinesss);
 }
 
-void ska::cp::Shape::loadFromSegment(cpBody *body, const Vect& a, const Vect& b, double radius) {
+void ska::cp::Shape::loadFromSegment(cpBody& body, const Vect& a, const Vect& b, double radius) {
 	free();
-	m_shape = cpSegmentShapeNew(body, a.vect(), b.vect(), radius);
+	m_shape = cpSegmentShapeNew(&body, a.vect(), b.vect(), radius);
 }
 
-void ska::cp::Shape::loadFromBox(cpBody *body, const ska::Rectangle& relative, double radius) {
+void ska::cp::Shape::loadFromBox(cpBody& body, const ska::Rectangle& relative, double radius) {
 	free();
 	const cpBB dBox{ relative.x, relative.y, relative.x + relative.w, relative.y + relative.h };
-	m_shape = cpBoxShapeNew2(body, dBox, radius);
+	m_shape = cpBoxShapeNew2(&body, dBox, radius);
 }
 
-void ska::cp::Shape::loadFromCircle(cpBody *body, double radius, const Vect& offset) {
+void ska::cp::Shape::loadFromCircle(cpBody& body, double radius, const Vect& offset) {
 	free();
-	m_shape = cpCircleShapeNew(body, radius, offset.vect());
+	m_shape = cpCircleShapeNew(&body, radius, offset.vect());
 }
 
 void ska::cp::Shape::free() {

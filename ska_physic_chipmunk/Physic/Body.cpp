@@ -22,8 +22,12 @@ ska::cp::Body::~Body() {
 	free();
 }
 
-cpBody* ska::cp::Body::body() const {
-	return m_body;
+cpBody& ska::cp::Body::body() {
+	return *m_body;
+}
+
+const cpBody& ska::cp::Body::body() const {
+	return *m_body;
 }
 
 cpVect ska::cp::Body::getRotation() const {

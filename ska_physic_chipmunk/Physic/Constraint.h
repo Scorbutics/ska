@@ -14,8 +14,10 @@ namespace ska {
 			Constraint(Constraint&&) noexcept;
 			Constraint& operator=(Constraint&&) noexcept;
 			virtual ~Constraint();
-			cpConstraint* constraint();
 			
+			cpConstraint& constraint();
+			const cpConstraint& constraint() const;
+
 			static Constraint buildGearJoint(cpBody& body1, cpBody& body2, double phase, double ratio);
 			static Constraint buildPivotJoint(cpBody& body1, cpBody& body2, Vect anchor1 = Vect{}, Vect anchor2 = Vect{});
 

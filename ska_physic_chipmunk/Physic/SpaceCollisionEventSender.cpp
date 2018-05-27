@@ -17,7 +17,7 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 	std::optional<ska::Point<int>> lastBlockPoint;
 	for (auto i = 0; i < cpSet.count; i++) {
 		ska::Point<int> blockPoint;
-		if (bodyA != space.getStaticBody()) {
+		if (bodyA != &space.getStaticBody()) {
 			blockPoint = ska::Point<int>{ static_cast<int>(cpSet.points[i].pointA.x / blockSize), static_cast<int>(cpSet.points[i].pointA.y / blockSize) };
 		} else {
 			blockPoint = ska::Point<int>{ static_cast<int>(cpSet.points[i].pointB.x / blockSize), static_cast<int>(cpSet.points[i].pointB.y / blockSize) };
@@ -51,7 +51,7 @@ ska::cp::SpaceCollisionEventSender::SpaceCollisionEventSender(Space& space, Game
 	m_space(space) {
 	m_callbackIndex = m_space.addDefaultCollisionCallback<CollisionHandlerType::BEGIN>([&ged, blockSize](ska::cp::Arbiter& arb, ska::cp::Space& space, ska::EntityId* entityId) {
 		auto[bodyA, bodyB] = arb.getBodies();
-		const auto isWorldCollision = bodyA == space.getStaticBody() || bodyB == space.getStaticBody();
+		const auto isWorldCollision = bodyA == &space.getStaticBody() || bodyB == &space.getStaticBody();
 
 		if (entityId != nullptr && isWorldCollision) {
 			auto wcc = CreateWorldCollisionFromArbiter(space, arb, entityId, blockSize);

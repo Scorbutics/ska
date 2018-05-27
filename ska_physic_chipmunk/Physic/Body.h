@@ -21,8 +21,10 @@ namespace ska {
 			Body(Body&&) noexcept;
 			Body& operator=(Body&&) noexcept;
 			virtual ~Body();
-			cpBody* body() const;
-			cpVect getRotation() const;
+
+			cpBody& body();
+			const cpBody& body() const;
+
 			void applyForce(const Vect& force);
 			void applyImpulse(const Vect& impulse);
 			
@@ -34,6 +36,7 @@ namespace ska {
 			static Body fromMassAndSizeForBox(double mass, unsigned int w, unsigned int h);
 
 			cpVect getPosition() const;
+			cpVect getRotation() const;
 			cpVect getVelocity() const;
 
 			void setPosition(const Vect& p);

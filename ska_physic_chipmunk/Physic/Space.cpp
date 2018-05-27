@@ -103,19 +103,19 @@ void ska::cp::Space::addDefaultCollisionHandler(CollisionHandlerData collisionHa
 
 std::size_t ska::cp::Space::addConstraint(Constraint c) {
 	m_constraints.emplace_back(std::move(c));
-	cpSpaceAddConstraint(m_space, m_constraints.back().constraint());
+	cpSpaceAddConstraint(m_space, &m_constraints.back().constraint());
 	return m_constraints.size() - 1;
 }
 
 std::size_t ska::cp::Space::addShape(Shape shape) {
 	m_shapes.emplace_back(std::move(shape));
-	cpSpaceAddShape(m_space, m_shapes.back().shape());
+	cpSpaceAddShape(m_space, &m_shapes.back().shape());
 	return m_shapes.size() - 1;
 }
 
 std::size_t ska::cp::Space::addBody(Body body) {
 	m_bodies.emplace_back(std::move(body));
-	cpSpaceAddBody(m_space, m_bodies.back().body());
+	cpSpaceAddBody(m_space, &m_bodies.back().body());
 	return m_bodies.size() - 1;
 }
 
@@ -123,7 +123,7 @@ void ska::cp::Space::eraseShapes(std::size_t firstIndex, std::size_t lastIndex) 
 	auto startShapesIt = m_shapes.begin() + firstIndex;
 	auto endShapesIt = lastIndex == 0 ? m_shapes.end() : m_shapes.begin() + lastIndex;
 	for (auto it = startShapesIt; it != endShapesIt; it++) {
-		cpSpaceRemoveShape(m_space, it->shape());
+		cpSpaceRemoveShape(m_space, &it->shape());
 	}
 	m_shapes.erase(startShapesIt, endShapesIt);
 }
@@ -132,7 +132,7 @@ void ska::cp::Space::eraseBodies(std::size_t firstIndex, std::size_t lastIndex) 
 	auto startBodiesIt = m_bodies.begin() + firstIndex;
 	auto endBodiesIt = lastIndex == 0 ? m_bodies.end() : m_bodies.begin() + lastIndex;
 	for (auto it = startBodiesIt; it != endBodiesIt; it++) {
-		cpSpaceRemoveBody(m_space, it->body());
+		cpSpaceRemoveBody(m_space, &it->body());
 	}
 
 	m_bodies.erase(startBodiesIt, endBodiesIt);
@@ -142,7 +142,7 @@ void ska::cp::Space::eraseConstraints(std::size_t firstIndex, std::size_t lastIn
 	auto startConstraintsIt = m_constraints.begin() + firstIndex;
 	auto endConstraintsIt = lastIndex == 0 ? m_constraints.end() : m_constraints.begin() + lastIndex;
 	for (auto it = startConstraintsIt; it != endConstraintsIt; it++) {
-		cpSpaceRemoveConstraint(m_space, it->constraint());
+		cpSpaceRemoveConstraint(m_space, &it->constraint());
 	}
 
 	m_constraints.erase(startConstraintsIt, endConstraintsIt);
@@ -154,16 +154,16 @@ void ska::cp::Space::clear() {
 	eraseConstraints(0);
 }
 
-std::vector<ska::cp::Body>& ska::cp::Space::getBodies() {
-	return m_bodies;
+ska::cp::Body& ska::cp::Space::getBody(std::size_t index) {
+	return m_bodies[index];
 }
 
-std::vector<ska::cp::Shape>& ska::cp::Space::getShapes() {
-	return m_shapes;
+ska::cp::Shape& ska::cp::Space::getShape(std::size_t index) {
+	return m_shapes[index];
 }
 
-std::vector<ska::cp::Constraint>& ska::cp::Space::getConstaints() {
-	return m_constraints;
+ska::cp::Constraint& ska::cp::Space::getConstaint(std::size_t index) {
+	return m_constraints[index];
 }
 
 void ska::cp::Space::step(double timestep) {
@@ -185,8 +185,8 @@ void ska::cp::Space::setSleepTimeThreshold(float threshold) {
 	cpSpaceSetSleepTimeThreshold(m_space, threshold);
 }
 
-cpBody* ska::cp::Space::getStaticBody() {
-	return cpSpaceGetStaticBody(m_space);
+cpBody& ska::cp::Space::getStaticBody() {
+	return *cpSpaceGetStaticBody(m_space);
 }
 
 void ska::cp::Space::load() {
