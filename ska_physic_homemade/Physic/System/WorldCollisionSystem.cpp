@@ -94,7 +94,7 @@ namespace ska {
 
 		FindAndEraseDoublons(outputX, outputY);
 
-		SKA_DBG_ONLY(
+		SKA_DEBUG_ONLY(
 			if (!outputX.empty()) {
 				SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("X blocks : ", outputX.size());
 			}
