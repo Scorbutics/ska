@@ -15,16 +15,18 @@ namespace ska {
 			return {};
 		}
 
-		void AddTopDownConstraints(Space& space, cpBody& bodyToBeLinked, Body& bodyCreated, const float friction, const float rotateFriction) {
+		void AddTopDownConstraints(Space& space, Body* bodyToBeLinked, Body& bodyCreated, const float friction, const float rotateFriction) {
+			auto& nativeBodyToBeLinked = bodyToBeLinked == nullptr ? space.getStaticBody() : bodyToBeLinked->body();
+
 			{
-				auto pjIndex = space.addConstraint(ska::cp::Constraint::buildPivotJoint(bodyToBeLinked, bodyCreated.body()));
+				auto pjIndex = space.addConstraint(bodyToBeLinked, bodyCreated, ska::cp::Constraint::buildPivotJoint(nativeBodyToBeLinked, bodyCreated.body()));
 				auto& pj = space.getConstaint(pjIndex);
 				pj.setMaxForce(friction);
 				pj.setMaxBias(0);
 			}
 
 			{
-				auto gjIndex = space.addConstraint(ska::cp::Constraint::buildGearJoint(bodyToBeLinked, bodyCreated.body(), 0., 1.));
+				auto gjIndex = space.addConstraint(bodyToBeLinked, bodyCreated, ska::cp::Constraint::buildGearJoint(nativeBodyToBeLinked, bodyCreated.body(), 0., 1.));
 				auto& gj = space.getConstaint(gjIndex);
 				gj.setMaxForce(rotateFriction);
 				gj.setErrorBias(0);
@@ -34,7 +36,7 @@ namespace ska {
 
 		ska::cp::HitboxComponent BuildRectangleHitbox(Space& space, const ska::Rectangle& box, double mass, EntityId entityId) {
 			const auto ballBodyIndex = space.addBody(Body::fromMoment(mass / 65.F, INFINITY));
-			const auto ballShapeIndex = space.addShape(Shape::fromBox(space.getBody(ballBodyIndex).body(), {0, 0, box.w, box.h}));
+			const auto ballShapeIndex = space.addShape(&space.getBody(ballBodyIndex), Shape::fromBox(space.getBody(ballBodyIndex).body(), {0, 0, box.w, box.h}));
 
 			{
 				auto& ballBody = space.getBody(ballBodyIndex);

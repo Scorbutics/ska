@@ -86,7 +86,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		m_ballTexture.load("Resources/Sprites/2.png");
 
 		for (const auto& r : contourRectangleTile) {
-			m_space.addShape(ska::cp::Shape::fromBox(m_space.getStaticBody(), r));
+			m_space.addShape(nullptr, ska::cp::Shape::fromBox(m_space.getStaticBody(), r));
 		}
 
 		m_layerContours.emplace_back(contourRectangleTile);
@@ -155,7 +155,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
 	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 65.F, ballEntity);
-	ska::cp::AddTopDownConstraints(m_space, m_space.getStaticBody(), m_space.getBody(bc.controlBodyIndex), 200.f, 500.f);
+	ska::cp::AddTopDownConstraints(m_space, nullptr, m_space.getBody(bc.controlBodyIndex), 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);

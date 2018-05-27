@@ -1,4 +1,5 @@
 #include <array>
+#include <unordered_set>
 #include <chipmunk.h>
 #include "Space.h"
 #include "Vect.h"
@@ -101,15 +102,23 @@ void ska::cp::Space::addDefaultCollisionHandler(CollisionHandlerData collisionHa
 	collisionHandlerData.setupCollisionHandler(*col);
 }
 
-std::size_t ska::cp::Space::addConstraint(Constraint c) {
+std::size_t ska::cp::Space::addConstraint(Body* linked, Body& linked2, Constraint c) {
 	m_constraints.emplace_back(std::move(c));
 	cpSpaceAddConstraint(m_space, &m_constraints.back().constraint());
+	if (linked != nullptr) {
+		linked->linkConstraint(m_constraints.size() - 1);
+	}
+	linked2.linkConstraint(m_constraints.size() - 1);
+	
 	return m_constraints.size() - 1;
 }
 
-std::size_t ska::cp::Space::addShape(Shape shape) {
+std::size_t ska::cp::Space::addShape(Body* linked, Shape shape) {
 	m_shapes.emplace_back(std::move(shape));
 	cpSpaceAddShape(m_space, &m_shapes.back().shape());
+	if (linked != nullptr) {
+		linked->linkShape(m_shapes.size() - 1);
+	}
 	return m_shapes.size() - 1;
 }
 
@@ -119,39 +128,32 @@ std::size_t ska::cp::Space::addBody(Body body) {
 	return m_bodies.size() - 1;
 }
 
-void ska::cp::Space::eraseShapes(std::size_t firstIndex, std::size_t lastIndex) {
-	auto startShapesIt = m_shapes.begin() + firstIndex;
-	auto endShapesIt = lastIndex == 0 ? m_shapes.end() : m_shapes.begin() + lastIndex;
-	for (auto it = startShapesIt; it != endShapesIt; it++) {
-		cpSpaceRemoveShape(m_space, &it->shape());
-	}
-	m_shapes.erase(startShapesIt, endShapesIt);
-}
-
 void ska::cp::Space::eraseBodies(std::size_t firstIndex, std::size_t lastIndex) {
 	auto startBodiesIt = m_bodies.begin() + firstIndex;
 	auto endBodiesIt = lastIndex == 0 ? m_bodies.end() : m_bodies.begin() + lastIndex;
+	
+	std::unordered_set<std::size_t> constraintsToDelete;
+	std::unordered_set<std::size_t> shapesToDelete;
+	
+	for (auto it = startBodiesIt; it != endBodiesIt; it++) {
+		const auto& constraints = it->getConstraints();
+		const auto& shapes = it->getShapes();
+
+		constraintsToDelete.insert(constraints.begin(), constraints.end());
+		shapesToDelete.insert(shapes.begin(), shapes.end());
+	}
+	
+	eraseConstraints(constraintsToDelete);
+	eraseShapes(shapesToDelete);
+
 	for (auto it = startBodiesIt; it != endBodiesIt; it++) {
 		cpSpaceRemoveBody(m_space, &it->body());
 	}
-
 	m_bodies.erase(startBodiesIt, endBodiesIt);
 }
 
-void ska::cp::Space::eraseConstraints(std::size_t firstIndex, std::size_t lastIndex) {
-	auto startConstraintsIt = m_constraints.begin() + firstIndex;
-	auto endConstraintsIt = lastIndex == 0 ? m_constraints.end() : m_constraints.begin() + lastIndex;
-	for (auto it = startConstraintsIt; it != endConstraintsIt; it++) {
-		cpSpaceRemoveConstraint(m_space, &it->constraint());
-	}
-
-	m_constraints.erase(startConstraintsIt, endConstraintsIt);
-}
-
 void ska::cp::Space::clear() {
-	eraseShapes(0);
 	eraseBodies(0);
-	eraseConstraints(0);
 }
 
 ska::cp::Body& ska::cp::Space::getBody(std::size_t index) {

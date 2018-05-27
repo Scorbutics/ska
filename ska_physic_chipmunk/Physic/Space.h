@@ -54,8 +54,8 @@ namespace ska {
 			
 			void setGravity(const Vect& v);
 
-			std::size_t addConstraint(Constraint c);
-			std::size_t addShape(Shape shape);
+			std::size_t addConstraint(Body* linked, Body& linked2, Constraint c);
+			std::size_t addShape(Body* linked, Shape shape);
 			std::size_t addBody(Body body);
 			
 			void clear();
@@ -64,9 +64,7 @@ namespace ska {
 			Shape& getShape(std::size_t index);
 			Constraint& getConstaint(std::size_t index);
 
-			void eraseShapes(std::size_t firstIndex, std::size_t lastIndex = 0);
 			void eraseBodies(std::size_t firstIndex, std::size_t lastIndex = 0);
-			void eraseConstraints(std::size_t firstIndex, std::size_t lastIndex = 0);
 
 			void setIterations(int iterations);
 			void setSleepTimeThreshold(float threshold);
@@ -88,6 +86,26 @@ namespace ska {
 			}
 
 		private:
+			template <class Container>
+			void eraseShapes(const Container& containerSrcSorted) {
+				auto iteration = 0u;
+				for (const auto& index : containerSrcSorted) {
+					auto it = m_shapes.begin() + index - iteration++;
+					cpSpaceRemoveShape(m_space, &it->shape());
+					m_shapes.erase(it);
+				}
+			}
+
+			template <class Container>
+			void eraseConstraints(const Container& containerSrcSorted) {
+				auto iteration = 0u;
+				for (const auto& index : containerSrcSorted) {
+					auto it = m_constraints.begin() + index - iteration++;
+					cpSpaceRemoveConstraint(m_space, &it->constraint());
+					m_constraints.erase(it);
+				}
+			}
+
 			void addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData);
 			void addDefaultCollisionHandler(CollisionHandlerData collisionHandlerData);
 

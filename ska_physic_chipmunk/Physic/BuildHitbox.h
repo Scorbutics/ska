@@ -12,6 +12,6 @@ namespace ska {
 		
 		HitboxComponent BuildControlledRectangleHitbox(Space& space, const ska::Rectangle& box, double mass, EntityId entityId);
 		HitboxComponent BuildRectangleHitbox(Space& space, const ska::Rectangle& box, double mass, EntityId entityId);
-		void AddTopDownConstraints(Space& space, cpBody& bodyToBeLinked, Body& bodyCreated, const float friction, const float rotateFriction);
+		void AddTopDownConstraints(Space& space, Body* bodyToBeLinked, Body& bodyCreated, const float friction, const float rotateFriction);
 	}
 }

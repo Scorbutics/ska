@@ -39,6 +39,12 @@ namespace ska {
 			cpVect getRotation() const;
 			cpVect getVelocity() const;
 
+			void linkConstraint(std::size_t constraintSpaceIndex);
+			void linkShape(std::size_t shapeSpaceIndex);
+
+			const std::vector<std::size_t>& getConstraints() const;
+			const std::vector<std::size_t>& getShapes() const;
+
 			void setPosition(const Vect& p);
 			void setType(BodyType type);
 			void setVelocity(const Vect& v);
@@ -53,6 +59,8 @@ namespace ska {
 			gsl::owner<cpBody*> m_body;
 
 			EntityId m_entity;
+			std::vector<std::size_t> m_constraints;
+			std::vector<std::size_t> m_shapes;
 		};
 	}
 }
