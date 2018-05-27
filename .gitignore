@@ -50,3 +50,8 @@
 /external/chipmunk/ALL_BUILD.vcxproj.filters
 /external/chipmunk/ALL_BUILD.vcxproj
 /external/chipmunk/.gitignore
+/external/chipmunk/CMakeFiles
+/external/chipmunk/src/CMakeFiles
+/external/chipmunk/src/Debug
+/external/chipmunk/src/cmake_install.cmake
+/external/chipmunk/cmake_install.cmake

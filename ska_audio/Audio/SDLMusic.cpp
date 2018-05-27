@@ -1,8 +1,8 @@
-#include <SDL_mixer.h>
+#include "SDLMixerLibrary.h"
 #include "SDLMusic.h"
 
 ska::SDLMusic::SDLMusic(const std::string& musicPath) : m_volume(-1) {
-	m_instance = Mix_LoadMUS(musicPath.c_str());
+	m_instance = SDLMixerLibrary::get().loadMusic(musicPath.c_str());
 }
 
 void ska::SDLMusic::setVolume(float vol) {
@@ -10,5 +10,5 @@ void ska::SDLMusic::setVolume(float vol) {
 }
 
 ska::SDLMusic::~SDLMusic() {
-	Mix_FreeMusic(m_instance);
+	SDLMixerLibrary::get().freeMusic(m_instance);
 }
