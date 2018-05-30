@@ -30,7 +30,7 @@ namespace ska {
 			return m_mask;
 		}
 
-		unsigned int add(EntityId& entityId, T&& comp) {
+		unsigned int add(const EntityId& entityId, T&& comp) {
 			const auto componentIdForEntity = m_entitiesWithComponent[entityId];
 			if(componentIdForEntity.has_value() && componentIdForEntity.value() < m_components.size()) {
 				m_components[componentIdForEntity.value()] = std::forward<T>(comp);
@@ -45,7 +45,6 @@ namespace ska {
 			if(m_entitiesWithComponent[entityId].has_value()) {
 				const auto componentIdForEntity = m_entitiesWithComponent[entityId].value();
 				m_components[componentIdForEntity] = std::optional<T>();
-				//m_entitiesWithComponent[entityId] = std::optional<ComponentId>();
 			}
 			return m_mask;
 		}
@@ -53,7 +52,6 @@ namespace ska {
 		std::string getComponentField(const EntityId& id, const std::string& field) override {
 			return ska::SerializeComponent<T>::serialize(getComponent(id), field);
 		}
-
 
 		T& getComponent(const EntityId& id) {
 			assert(id < m_entitiesWithComponent.size() && m_entitiesWithComponent[id].has_value() && "This entity has no component with this id");
