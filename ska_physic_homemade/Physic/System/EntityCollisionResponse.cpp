@@ -19,11 +19,10 @@ ska::EntityCollisionResponse::EntityCollisionResponse(std::function<bool(Collisi
 void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origin, ska::PositionComponent& target, const float invMassOrigin, const float invMassTarget, const CollisionContact& cc, const float slope, const float percent) {
 	const auto penetration = cc.penetration();
 	const auto& n = cc.normal();
-
-	ska::Point<float> correction;
+	
 	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
-	correction.x = constCorrection * n.x;
-	correction.y = constCorrection * n.y;
+	
+	auto correction = ska::Point<float>{ constCorrection * n.x , constCorrection * n.y };
 	target.x -= invMassTarget * correction.x;
 	target.y -= invMassTarget * correction.y;
 	origin.x += invMassOrigin * correction.x;

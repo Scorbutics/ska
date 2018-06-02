@@ -12,8 +12,8 @@
 
 namespace ska {
 
-	typedef std::bitset<SKA_ECS_MAX_COMPONENTS> EntityComponentsMask;
-	typedef std::pair<EntityComponentsMask*, EntityId> EntityData;
+	using EntityComponentsMask = std::bitset<SKA_ECS_MAX_COMPONENTS>;
+	using EntityData = std::pair<EntityComponentsMask*, EntityId>;
 
 	enum class EntityEventType {
 		COMPONENT_ADD,
@@ -31,7 +31,6 @@ namespace ska {
 			m_ged(ged), 
 			m_componentMaskCounter(0) { }
 
-		bool checkEntitiesNumber() const;
 		EntityId createEntity();
 		EntityId createEntityNoThrow();
 		void removeEntity(const EntityId& entity);
@@ -78,6 +77,8 @@ namespace ska {
 		virtual ~EntityManager() = default;
 
 	private:
+		bool checkEntitiesNumber() const;
+
 		GameEventDispatcher& m_ged;
 		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
 		std::unordered_set<EntityId> m_entities;
@@ -91,7 +92,8 @@ namespace ska {
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			static ComponentHandler<T> components(m_componentMaskCounter++, NAME_MAPPED_COMPONENT);
+			static ComponentHandler<T> components(m_componentMaskCounter, NAME_MAPPED_COMPONENT);
+			m_componentMaskCounter++;
 			return components;
 		}
 
