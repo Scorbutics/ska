@@ -30,25 +30,77 @@ TEST_CASE("[EntityManager]") {
 
 	};
 
+	using ComponentObserverParentTest = ska::Observer<const ska::EntityEventType, const ska::EntityComponentsMask&, ska::EntityId>;
+
+	struct ComponentAlterDataEvent {
+		ska::EntityEventType event;
+		ska::EntityComponentsMask mask;
+		ska::EntityId entityId;
+	};
+
+	class ComponentObserverTest : 
+		public ComponentObserverParentTest {
+	public:
+		ComponentObserverTest() : 
+			ComponentObserverParentTest(std::bind(&ComponentObserverTest::onComponentModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)) {
+		}
+
+		bool onComponentModified(const ska::EntityEventType& event, const ska::EntityComponentsMask& mask, ska::EntityId entityId) {
+			eventType.push_back(ComponentAlterDataEvent { event, mask, entityId });
+			return true;
+		}
+
+		std::vector<ComponentAlterDataEvent> eventType;
+	};
+	
+	auto componentObserver = ComponentObserverTest {};
 	auto entityObserver = EntityManagerObserverTest{};
 	ged.ska::Observable<ska::ECSEvent>::addObserver(entityObserver);
+	em.addObserver(componentObserver);
 
-	SUBCASE("AddComponent + GetComponent") {
+	SUBCASE("AddComponent + GetComponent + refresh") {
 		ska::EntityId entity = 0;
 		em.addComponent(entity, 14);
 		auto component = em.getComponent<int>(entity);
+
+		CHECK(componentObserver.eventType.empty());
+
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 1);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].entityId == entity);
+
 		CHECK(component == 14);
 	}
 
 	SUBCASE("createEntity (differents)") {
 		ska::EntityId entity1 = em.createEntity();
 		ska::EntityId entity2 = em.createEntity();
+		
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 2);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].entityId == entity1);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].entityId == entity2);
+		
 		CHECK(entity1 != entity2);
 	}
 
 	SUBCASE("createEntityNoThrow (differents)") {
 		ska::EntityId entity1 = em.createEntityNoThrow();
 		ska::EntityId entity2 = em.createEntityNoThrow();
+		
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 2);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].entityId == entity1);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].entityId == entity2);
+
 		CHECK(entity1 != entity2);
 	}
 
@@ -78,10 +130,22 @@ TEST_CASE("[EntityManager]") {
 		ska::EntityId entity = em.createEntity();
 		em.addComponent<int>(entity, 22);
 		
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 1);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].entityId == entity);
+
 		CHECK(entityObserver.events.empty());
 		em.removeEntity(entity);
 		CHECK(!em.hasComponent<int>(entity));
 		
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 2);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].entityId == entity);
+
 		CHECK(!entityObserver.events.empty());
 		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
 
@@ -94,19 +158,31 @@ TEST_CASE("[EntityManager]") {
 	SUBCASE("removeEntities") {
 		auto entity = em.createEntity();
 		auto entity2 = em.createEntity();
+		auto entityX = em.createEntity();
 		
+		em.refresh();
+		componentObserver.eventType.clear();
+
 		CHECK(entityObserver.events.empty());
 
 		auto setToNotRemove = std::unordered_set<ska::EntityId>{};
 		setToNotRemove.insert(entity2);
 		em.removeEntities(setToNotRemove);
 
+		em.refresh();
+
+		CHECK(componentObserver.eventType.size() == 2);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].entityId == entity);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].entityId == entityX);
+
 		CHECK(!entityObserver.events.empty());
 		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
 		
 		auto entity3 = em.createEntity();
 
-		CHECK(entity == entity3);
+		CHECK(entityX == entity3);
 	}
 
 }

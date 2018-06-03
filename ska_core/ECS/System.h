@@ -83,18 +83,6 @@ namespace ska {
 	        const auto resultMask = mask & m_systemComponentMask;
 
             switch (e) {
-            case EntityEventType::COMPONENT_ADD:
-                if (resultMask == m_systemComponentMask && m_processed.count(entityId) == 0) {
-                    m_processed.insert(entityId);
-                }
-                break;
-
-            case EntityEventType::COMPONENT_REMOVE:
-                if (resultMask != m_systemComponentMask && m_processed.count(entityId) > 0) {
-                    m_processed.erase(entityId);
-                }
-                break;
-
             case EntityEventType::COMPONENT_ALTER:
                 if(resultMask == m_systemComponentMask) {
                     m_processed.insert(entityId);

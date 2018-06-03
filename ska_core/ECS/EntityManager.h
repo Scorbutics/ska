@@ -16,8 +16,6 @@ namespace ska {
 	using EntityData = std::pair<EntityComponentsMask*, EntityId>;
 
 	enum class EntityEventType {
-		COMPONENT_ADD,
-		COMPONENT_REMOVE,
 		COMPONENT_ALTER
 	};
 
