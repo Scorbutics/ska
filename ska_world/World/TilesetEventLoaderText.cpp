@@ -2,6 +2,7 @@
 #include <optional>
 #include "TilesetEventLoaderText.h"
 #include "Exceptions/FileException.h"
+#include "Exceptions/CorruptedFileException.h"
 #include "Exceptions/ExceptionTrigger.h"
 #include "Utils/StringUtils.h"
 #include "Utils/FileUtils.h"
@@ -25,6 +26,7 @@ std::vector<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::load() const
 	while (getline(scriptList, ss)) {
 		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::MOVE_OUT));
 		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::MOVE_IN));
+		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::TOUCH));
 		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::ACTION));
 		addScriptIfExists(scripts, fillScript(tilesetFolder, ss, ScriptTriggerType::AUTO));
 	}
@@ -47,8 +49,13 @@ std::optional<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::fillScript
 		return std::optional<ScriptSleepComponent>();
 	}
 
+	auto idSplitter = StringUtils::split(id, '_');
+	if (idSplitter.size() != 2) {
+		throw ska::CorruptedFileException(("Cannot read the tile event id \"" + id + "\" for the script " + fullName).c_str());
+	}
+
 	ScriptSleepComponent ssc;
-	ssc.id = StringUtils::strToInt(id);
+	ssc.id = ska::Point<int>{ StringUtils::strToInt(idSplitter[0]), StringUtils::strToInt(idSplitter[1])};
 	ssc.triggeringType = type;
 	ssc.name = fullName;
 	ssc.period = 1000;

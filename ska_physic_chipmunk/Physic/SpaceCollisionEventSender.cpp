@@ -37,7 +37,7 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 
 	auto wcc = ska::WorldCollisionComponent{};
 	for (const auto& blockPoint : uniqueBlockPoints) {
-		wcc.blockContacts.push_back(blockPoint);
+		wcc.blockContacts.push_back(blockPoint * blockSize);
 	}
 
 	wcc.normal = ska::Point<float>{
