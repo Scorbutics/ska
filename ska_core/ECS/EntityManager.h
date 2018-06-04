@@ -26,8 +26,7 @@ namespace ska {
 	    public Observable<const EntityEventType, const EntityComponentsMask&, EntityId> {
 	public:
 		explicit EntityManager(GameEventDispatcher& ged) : 
-			m_ged(ged), 
-			m_componentMaskCounter(0) { }
+			m_ged(ged) { }
 
 		EntityId createEntity();
 		EntityId createEntityNoThrow();
@@ -82,7 +81,7 @@ namespace ska {
 		std::unordered_set<EntityId> m_entities;
 		std::unordered_set<EntityId> m_alteredEntities;
 		EntityIdContainer m_deletedEntities;
-		unsigned int m_componentMaskCounter;
+		static unsigned int m_componentMaskCounter;
 
 		std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
 

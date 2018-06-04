@@ -4,6 +4,8 @@
 #include "../Utils/StringUtils.h"
 #include "../Data/Events/ECSEvent.h"
 
+unsigned int ska::EntityManager::m_componentMaskCounter = 0;
+
 void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentSerializer& components) {
     const auto removedComponentMask = components.remove(entity);
     m_componentMask[entity][removedComponentMask] = false;

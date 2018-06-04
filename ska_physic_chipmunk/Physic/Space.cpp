@@ -169,13 +169,13 @@ ska::cp::Constraint& ska::cp::Space::getConstaint(std::size_t index) {
 }
 
 void ska::cp::Space::step(double timestep) {
-	static auto accu = 0.;
+	/*static auto accu = 0.;
 	if (accu >= 1. && m_bodies.size() >= 2) {
 		SKA_LOG_DEBUG("Body 0 pos : (", m_bodies[0].getPosition().x, "; ", m_bodies[0].getPosition().y, ")");
 		SKA_LOG_DEBUG("Body 1 pos : (", m_bodies[1].getPosition().x, "; ", m_bodies[1].getPosition().y, ")", "\n");
 		accu = 0.;
 	}
-	accu += timestep;
+	accu += timestep;*/
 	cpSpaceStep(m_space, timestep);
 }
 
