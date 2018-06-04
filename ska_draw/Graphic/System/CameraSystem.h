@@ -14,7 +14,7 @@ namespace ska {
 	struct Point;
 
 	class CameraSystem :
-		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, CameraFocusedComponent>, PossibleComponent<HitboxComponent>>,
+		public System< RequiredComponent<PositionComponent, CameraFocusedComponent>, PossibleComponent<HitboxComponent>>,
 		public SubObserver<GameEvent>,
 		public SubObserver<WorldEvent> {
 

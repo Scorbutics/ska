@@ -7,7 +7,7 @@ namespace ska {
 	class TileWorld;
 
 	class ScriptWorldTriggerSystem : 
-		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<>> {
+		public System< RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<>> {
 	public:
 		ScriptWorldTriggerSystem(EntityManager& em, GameEventDispatcher& ged, TileWorld& world);
 		~ScriptWorldTriggerSystem() override = default;

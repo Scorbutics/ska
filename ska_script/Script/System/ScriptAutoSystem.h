@@ -12,7 +12,7 @@ namespace ska {
 	class TileWorld;
 
 	class ScriptAutoSystem :
-		public System<std::unordered_set<EntityId>, RequiredComponent<ScriptComponent>, PossibleComponent<ScriptSleepComponent, ScriptComponent>> {
+		public System< RequiredComponent<ScriptComponent>, PossibleComponent<ScriptSleepComponent, ScriptComponent>> {
 	public:
 
 		MemoryScript& getSavegame();

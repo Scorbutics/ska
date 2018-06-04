@@ -13,8 +13,8 @@ namespace ska {
 	struct InputKeyEvent;
 	class ScriptPositionedGetter;
 
-	using ScriptPositionSystemAccess = System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, ScriptSleepComponent>, PossibleComponent<>>;
-	using ScriptRefreshSystemBase = System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent>>;
+	using ScriptPositionSystemAccess = System< RequiredComponent<PositionComponent, ScriptSleepComponent>, PossibleComponent<>>;
+	using ScriptRefreshSystemBase = System< RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent>>;
 	class ScriptRefreshSystem :
 		public ScriptRefreshSystemBase,
 		/* Allows easy access to each entity that contains ScriptSleepComponent and PositionComponent */

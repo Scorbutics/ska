@@ -10,7 +10,7 @@
 namespace ska {
     template <class ... ASM>
     class AnimationSystem :
-        public System<std::unordered_set<EntityId>, RequiredComponent<GraphicComponent, MovementComponent, AnimationComponent>, PossibleComponent<PositionComponent>> {
+        public System< RequiredComponent<GraphicComponent, MovementComponent, AnimationComponent>, PossibleComponent<PositionComponent>> {
       using Predicate = std::function<bool(EntityId&)>;
 
       template <class T>

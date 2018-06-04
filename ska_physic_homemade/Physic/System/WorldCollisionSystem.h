@@ -14,7 +14,7 @@ namespace ska {
 	class WorldCollisionComponent;
 	class CollisionProfile;
 
-	class WorldCollisionSystem : public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
+	class WorldCollisionSystem : public System< RequiredComponent<PositionComponent, MovementComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
 		WorldCollisionSystem(EntityManager& entityManager, const CollisionProfile& w, GameEventDispatcher& ged);
 		WorldCollisionSystem& operator=(const WorldCollisionSystem&) = delete;

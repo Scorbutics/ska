@@ -3,7 +3,7 @@
 #include "SystemMaskGenerator.h"
 #include "ComponentSafeAccessor.h"
 #include "ISystem.h"
-#include "../Utils/Observer.h"
+#include "../Utils/SubObserver.h"
 #include "../Utils/Refreshable.h"
 #include "ComponentUnsafeAccessor.h"
 
@@ -14,12 +14,11 @@ namespace ska {
     template <class ... ComponentType>
     struct PossibleComponent;
 
-	template <class Storage, class RComponentType, class PComponentType>
+	template <class RComponentType, class PComponentType>
 	class System;
 
 	/**
      * \brief Base class of a system, where system is defined as the "S" of "Entity Component System" (ECS).
-     * \tparam Storage A storage class that indicates the way entities must be stored in the system
      * \tparam RComponentType List of the required component types
      * \tparam PComponentType List of the possible component types
      * 
@@ -31,31 +30,30 @@ namespace ska {
      * Entities are automatically added / removed to the internal Storage of the system depending on which (required) component they have.
      * Possible components do not influate on this.
      */
-    template <class Storage, class ... RComponentType, class ... PComponentType>
-    class System <Storage, RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>> :
-        public Observer<const EntityEventType, const EntityComponentsMask&, EntityId>,
+    template <class ... RComponentType, class ... PComponentType>
+    class System <RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>> :
+        public SubObserver<const EntityEventType, const EntityComponentsMask&, EntityId>,
         virtual public ISystem,
         virtual protected Refreshable {
 
     protected:
-        using SystemType = System <Storage, RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>>;
+        using SystemType = System <RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>>;
         using MaskGenerator = SystemMaskGenerator<RComponentType...>;
 
     public :
         explicit System(EntityManager& entityManager) :
-            Observer(std::bind(&System::onComponentModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)),
+			SubObserver(std::bind(&System::onComponentModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), entityManager),
             m_entityManager(entityManager),
             m_componentAccessor(entityManager),
     		m_componentPossibleAccessor(entityManager) {
-            m_entityManager.addObserver(*this);
-
-            MaskGenerator smg(m_entityManager);
+            
+			auto smg = MaskGenerator{ m_entityManager };
             smg.generate(m_systemComponentMask);
         }
 
         void operator=(const SystemType& sys) = delete;
 
-	    virtual void update(unsigned int ellapsedTime) override {
+	    void update(unsigned int ellapsedTime) override {
             refresh(ellapsedTime);
             if (!m_toDelete.empty()) {
                 for (auto entity : m_toDelete) {
@@ -69,13 +67,13 @@ namespace ska {
             m_toDelete.emplace(e);
         }
 
-        virtual ~System(){ m_entityManager.removeObserver(*this); }
+		virtual ~System() = default;
 
     private:
         EntityManager& m_entityManager;
         std::unordered_set<EntityId> m_toDelete;
-        EntityComponentsMask m_systemComponentMask;
-        Storage m_processed;
+		std::unordered_set<EntityId> m_processed;
+		EntityComponentsMask m_systemComponentMask;
 
         bool onComponentModified(const EntityEventType& e, const EntityComponentsMask& mask, EntityId entityId) {
 
@@ -103,7 +101,7 @@ namespace ska {
         ComponentAccessor m_componentAccessor;
 		ComponentPossibleAccessor m_componentPossibleAccessor;
 
-        const Storage& getEntities() {
+        const std::unordered_set<EntityId>& getEntities() {
             return m_processed;
         }
 

@@ -7,7 +7,7 @@
 #include "Ticked.h"
 
 namespace ska {
-	class MovementSystem : public System<std::unordered_set<EntityId>, ska::RequiredComponent<PositionComponent, MovementComponent, ForceComponent>, ska::PossibleComponent<>> {
+	class MovementSystem : public System< ska::RequiredComponent<PositionComponent, MovementComponent, ForceComponent>, ska::PossibleComponent<>> {
 	public:
 		MovementSystem(EntityManager& entityManager);
 		MovementSystem& operator=(const MovementSystem&) = delete;

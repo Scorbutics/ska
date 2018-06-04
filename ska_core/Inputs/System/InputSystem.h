@@ -11,7 +11,7 @@ namespace ska {
 	struct InputKeyEvent;
 
 	class InputSystem : 
-		public System<std::unordered_set<EntityId>, RequiredComponent<PositionComponent, InputComponent, ForceComponent>, PossibleComponent<>>,
+		public System<RequiredComponent<PositionComponent, InputComponent, ForceComponent>, PossibleComponent<>>,
 		public SubObserver<InputKeyEvent> {
 	public:
 		InputSystem(EntityManager& entityManager, GameEventDispatcher& ged);

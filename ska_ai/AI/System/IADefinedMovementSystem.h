@@ -9,7 +9,7 @@
 
 
 namespace ska { 
-	class IADefinedMovementSystem : public System<std::unordered_set<EntityId>, RequiredComponent<IADefinedMovementComponent, MovementComponent, PositionComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
+	class IADefinedMovementSystem : public System< RequiredComponent<IADefinedMovementComponent, MovementComponent, PositionComponent, HitboxComponent, CollidableComponent>, PossibleComponent<WorldCollisionComponent>> {
 	public:
 		explicit IADefinedMovementSystem(EntityManager& entityManager, GameEventDispatcher& ged);
 		virtual ~IADefinedMovementSystem();

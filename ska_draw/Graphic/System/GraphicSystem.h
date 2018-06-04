@@ -10,7 +10,7 @@
 
 namespace ska {
     class GraphicSystem : public AbstractGraphicSystem, 
-		public System<std::unordered_set<EntityId>, RequiredComponent<GraphicComponent, PositionComponent, HitboxComponent>, PossibleComponent<DialogComponent>> {
+		public System< RequiredComponent<GraphicComponent, PositionComponent, HitboxComponent>, PossibleComponent<DialogComponent>> {
     public:
 		GraphicSystem(EntityManager& entityManager, ska::GameEventDispatcher& ged, CameraSystem& camera);
         GraphicSystem& operator=(const GraphicSystem&) = delete;

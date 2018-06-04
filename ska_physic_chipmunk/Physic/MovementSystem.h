@@ -11,7 +11,7 @@ namespace ska {
 		class Space;
 
 		class MovementSystem :
-			public System<std::unordered_set<EntityId>, RequiredComponent<ForceComponent, PositionComponent, HitboxComponent, MovementComponent>, PossibleComponent<>> {
+			public System< RequiredComponent<ForceComponent, PositionComponent, HitboxComponent, MovementComponent>, PossibleComponent<>> {
 		public:
 			explicit MovementSystem(ska::EntityManager& em, Space& space);
 			~MovementSystem() override = default;
