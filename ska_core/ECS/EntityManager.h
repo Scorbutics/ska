@@ -90,8 +90,7 @@ namespace ska {
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			static ComponentHandler<T> components(m_componentMaskCounter, NAME_MAPPED_COMPONENT);
-			m_componentMaskCounter++;
+			static ComponentHandler<T> components(m_componentMaskCounter++, NAME_MAPPED_COMPONENT);
 			return components;
 		}
 

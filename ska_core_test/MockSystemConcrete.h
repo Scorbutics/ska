@@ -14,14 +14,14 @@ template <class ... RComponentType, class ... PComponentType>
 class MockSystemConcrete<ska::RequiredComponent<RComponentType...>, ska::PossibleComponent<PComponentType...>> :
 	public ska::System <ska::RequiredComponent<RComponentType...>, ska::PossibleComponent<PComponentType...>>,
 	public ExposeImmutable<ImmutableSystemConcreteTracer> {
-
+	using SystemParent = ska::System <ska::RequiredComponent<RComponentType...>, ska::PossibleComponent<PComponentType...>>;
 public:
-	using System::System;
+	using SystemParent::System;
 
 private:
 	void refresh(unsigned int) {
 		refresh_ = true;
-		entitiesRefreshed_ = getEntities();
+		entitiesRefreshed_ = SystemParent::getEntities();
 	}
 
 };
