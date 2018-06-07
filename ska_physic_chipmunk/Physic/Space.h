@@ -34,9 +34,11 @@ namespace ska {
 				//POST
 				SpaceCollisionCallbackContainer<void>,
 				//SEPARATE
-				SpaceCollisionCallbackContainer<void>> callbacks;
+				SpaceCollisionCallbackContainer<void>> defaultCallbacks;
 			
 		};
+
+		std::pair<ska::EntityId*, ska::cp::SpaceUserData&> SpaceCollisionCallbackExtractUserData(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr);
 
 		class Space :
 			public MovableNonCopyable {
@@ -73,7 +75,7 @@ namespace ska {
 
 			template <CollisionHandlerType type>
 			std::size_t addDefaultCollisionCallback(CollisionHandlerCallbackFromType<type> callback) {
-				auto& container = std::get<static_cast<int>(type)>(m_userData.callbacks);
+				auto& container = std::get<static_cast<int>(type)>(m_userData.defaultCallbacks);
 				auto id = container.size();
 				container.emplace(id, std::forward<CollisionHandlerCallbackFromType<type>>(callback));
 				return id;
@@ -81,9 +83,12 @@ namespace ska {
 
 			template <CollisionHandlerType type>
 			bool removeDefaultCollisionCallback(std::size_t index) {
-				auto& container = std::get<static_cast<int>(type)>(m_userData.callbacks);
+				auto& container = std::get<static_cast<int>(type)>(m_userData.defaultCallbacks);
 				return container.erase(index) > 0;
 			}
+
+			void addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData);
+			void addWildcardCollisionHandler(unsigned int collisionType, CollisionHandlerData collisionHandlerData);
 
 		private:
 			template <class Container>
@@ -108,7 +113,6 @@ namespace ska {
 				}
 			}
 
-			void addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData);
 			void addDefaultCollisionHandler(CollisionHandlerData collisionHandlerData);
 
 			void load();

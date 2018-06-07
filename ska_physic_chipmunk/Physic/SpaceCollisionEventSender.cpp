@@ -5,6 +5,8 @@
 #include "Data/Events/CollisionEvent.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "Data/Events/GameEventDispatcher.h"
+#include "PredefinedCollisionTypes.h"
+#include "../CollisionHandlerType.h"
 
 ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& space, ska::cp::Arbiter& arb, ska::EntityId* entityId, unsigned int blockSize) {
 	auto[bodyA, bodyB] = arb.getBodies();
@@ -28,7 +30,7 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 		bodyBlock.x = bodyBlock.x < bodyEntity.x ? ska::NumberUtils::round(bodyBlock.x - blockSize / 2) : ska::NumberUtils::round(bodyBlock.x + blockSize / 2);
 		bodyBlock.y = bodyBlock.y < bodyEntity.y ? ska::NumberUtils::round(bodyBlock.y - blockSize / 2) : ska::NumberUtils::round(bodyBlock.y + blockSize / 2);
 
-		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", bodyBlock.x, "; ", bodyBlock.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
+		//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", bodyBlock.x, "; ", bodyBlock.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
 
 		auto blockPoint = ska::Point<int> { 
 			static_cast<int>(bodyBlock.x / blockSize),
@@ -48,10 +50,10 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 	}
 
 	auto wcc = ska::WorldCollisionComponent{};
-	SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision");
+	//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision");
 	for (const auto& blockPoint : uniqueBlockPoints) {
 		wcc.blockContacts.push_back(blockPoint * blockSize);
-		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)(blockPoint.x, "; ", blockPoint.y);
+		//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)(blockPoint.x, "; ", blockPoint.y);
 	}
 
 	wcc.normal = ska::Point<float>{
@@ -76,6 +78,7 @@ ska::cp::SpaceCollisionEventSender::SpaceCollisionEventSender(Space& space, Game
 		}
 		return true;
 	});
+
 }
 
 ska::cp::SpaceCollisionEventSender::~SpaceCollisionEventSender() {

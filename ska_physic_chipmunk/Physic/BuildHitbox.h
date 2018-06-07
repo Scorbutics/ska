@@ -1,5 +1,5 @@
 #pragma once
-#include "HitboxComponent.h"
+#include "ECS/Basics/Physic/HitboxComponent.h"
 #include "Point.h"
 #include "ECS/ECSDefines.h"
 

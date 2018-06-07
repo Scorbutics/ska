@@ -7,7 +7,7 @@ namespace ska {
 	class IADefinedMovementComponent {
 	public:
 		IADefinedMovementComponent(): 
-			speed(5.F) {
+			speed(12.F) {
 			delay = 0;
 			directionIndex = 0;
 			loop = false;

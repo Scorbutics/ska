@@ -25,6 +25,8 @@ namespace ska {
 			cpShape& shape();
 
 			ska::Rectangle getDimensions() const;
+			cpShapeFilter getFilter() const;
+			cpCollisionType getCollisionType() const;
 
 			static Shape fromSegment(cpBody& body, const Vect& a, const Vect& b, double radius);
 			static Shape fromCircle(cpBody& body, double radius, const Vect& offset = Vect{});
@@ -32,6 +34,8 @@ namespace ska {
 
 			void setFriction(float friction);
 			void setBounciness(float bouncinesss);
+			void setFilter(cpGroup group, cpBitmask categories, cpBitmask mask);
+			void setCollisionType(cpCollisionType collisionType);
 
 		private:
 			void loadFromSegment(cpBody& body, const Vect& a, const Vect& b, double radius);

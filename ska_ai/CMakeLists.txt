@@ -9,11 +9,15 @@ if(NOT SDL2_INCLUDE_DIR)
 endif()
 
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_core)
+set(SKA_PHYSIC_CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ska_physic_chipmunk)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
+set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk/include/chipmunk)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
+include_directories(${SKA_PHYSIC_CHIPMUNK_DIR})
 include_directories(${GSL_DIR})
+include_directories(${CHIPMUNK_DIR})
 
 file(GLOB_RECURSE SOURCES
 	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}

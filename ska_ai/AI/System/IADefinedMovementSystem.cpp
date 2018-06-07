@@ -4,9 +4,12 @@
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "ECS/Basics/Physic/CollidableComponent.h"
 #include "Core/CodeDebug/CodeDebug.h"
+#include "Physic/Space.h"
+#include "Physic/PredefinedCollisionTypes.h"
 
-ska::IADefinedMovementSystem::IADefinedMovementSystem(EntityManager& entityManager, GameEventDispatcher& ged) : 
+ska::IADefinedMovementSystem::IADefinedMovementSystem(cp::Space& space, EntityManager& entityManager, GameEventDispatcher& ged) : 
 	System(entityManager), 
+	m_space(space),
 	m_eventDispatcher(ged) {
 }
 
@@ -15,10 +18,12 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
+		auto& fc = m_componentAccessor.get<ForceComponent>(entityId);
 		auto& mc = m_componentAccessor.get<MovementComponent>(entityId);
 		auto& pc = m_componentAccessor.get<PositionComponent>(entityId);
 		auto& iamc = m_componentAccessor.get<IADefinedMovementComponent>(entityId);
 		auto& cc = m_componentAccessor.get<CollidableComponent>(entityId);
+		const auto& hcChipmunk = m_componentAccessor.get<ska::cp::HitboxComponent>(entityId);
 		const auto& hc = m_componentAccessor.get<HitboxComponent>(entityId);
 		const auto& centerPos = PositionComponent::getCenterPosition(pc, hc);
 
@@ -77,18 +82,24 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 
 		if (!finished) {
 			SKA_LOG_DEBUG("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
-			mc.vx = finalMovement.x;
-			mc.vy = finalMovement.y;
+			fc.x = finalMovement.x;
+			fc.y = finalMovement.y;
+			//TODO dans un autre système ?
+			auto& entityShape = m_space.getShape(hcChipmunk.shapeIndex);
+			entityShape.setFilter(CP_SHAPE_FILTER_NONE.group, CP_SHAPE_FILTER_NONE.categories, CP_SHAPE_FILTER_NONE.mask);
 			mc.ay = 0;
 			mc.ax = 0;
 		} else if (directionChanged) {
-			mc.vx = 0;
-			mc.vy = 0;
+			fc.x = 0;
+			fc.y = 0;
 			mc.ay = 0;
 			mc.ax = 0;
 		} 
 		
 		if (finished) {
+			//TODO dans un autre système ?
+			auto& entityShape = m_space.getShape(hcChipmunk.shapeIndex);
+			entityShape.setFilter(CP_SHAPE_FILTER_ALL.group, CP_SHAPE_FILTER_ALL.categories, CP_SHAPE_FILTER_ALL.mask);
 			cc.ghost = false;
 		}
 	}

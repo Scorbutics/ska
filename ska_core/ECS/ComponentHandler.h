@@ -44,7 +44,7 @@ namespace ska {
 		unsigned int remove(const EntityId& entityId) override {
 			if(m_entitiesWithComponent[entityId].has_value()) {
 				const auto componentIdForEntity = m_entitiesWithComponent[entityId].value();
-				m_components[componentIdForEntity] = std::optional<T>();
+				m_components[componentIdForEntity] = T();
 			}
 			return m_mask;
 		}
@@ -57,7 +57,7 @@ namespace ska {
 			assert(id < m_entitiesWithComponent.size() && m_entitiesWithComponent[id].has_value() && "This entity has no component with this id");
 			auto& componentIdForEntity = m_entitiesWithComponent[id].value();
 			assert(componentIdForEntity < m_components.size() && "Invalid component for this entity");
-			return m_components[componentIdForEntity].value();
+			return m_components[componentIdForEntity];
 		}
 
 		unsigned int getMask() const {
@@ -67,7 +67,7 @@ namespace ska {
 		virtual ~ComponentHandler() = default;
 
 	private:
-		std::vector<std::optional<T>> m_components;
+		std::vector<T> m_components;
 		std::vector<std::optional<ComponentId>> m_entitiesWithComponent;
 		const unsigned int m_mask;
 	};

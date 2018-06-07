@@ -8,28 +8,34 @@
 
 #include "Logging/Logger.h"
 
-template <ska::cp::CollisionHandlerType type>
-bool CollisionCallbackCall(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
+std::pair<ska::EntityId*, ska::cp::SpaceUserData&> ska::cp::SpaceCollisionCallbackExtractUserData(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
 	auto& userData = *static_cast<ska::cp::SpaceUserData*>(userDataPtr);
 	auto result = true;
-
+	
 	cpBody* a;
 	cpBody* b;
 	cpArbiterGetBodies(arb, &a, &b);
 
-	auto arbiter = ska::cp::Arbiter{ *arb };
-
 	const auto entityBody = cpSpaceGetStaticBody(space) == a ? b : a;
 	auto bodyEntityId = static_cast<ska::EntityId*>(cpBodyGetUserData(entityBody));
 
+	return std::pair<ska::EntityId*, ska::cp::SpaceUserData&>(bodyEntityId, userData);
+}
+
+template <ska::cp::CollisionHandlerType type>
+bool CollisionCallbackCall(cpArbiter *arb, cpSpace *space, cpDataPointer userDataPtr) {
+	auto result = true;
+	auto [bodyEntityId, userData] = ska::cp::SpaceCollisionCallbackExtractUserData(arb, space, userDataPtr);
+	auto arbiter = ska::cp::Arbiter{ *arb };
+
 	if constexpr (type == ska::cp::CollisionHandlerType::PRE || type == ska::cp::CollisionHandlerType::BEGIN) {
-		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
+		auto& callbacks = std::get<static_cast<int>(type)>(userData.defaultCallbacks);
 		for (auto& callback : callbacks) {
 			result &= callback.second(arbiter, userData.space, bodyEntityId);
 		}
 		return result;
 	} else {
-		auto& callbacks = std::get<static_cast<int>(type)>(userData.callbacks);
+		auto& callbacks = std::get<static_cast<int>(type)>(userData.defaultCallbacks);
 		for (auto& callback : callbacks) {
 			callback.second(arbiter, userData.space, bodyEntityId);
 		}
@@ -92,6 +98,12 @@ void ska::cp::Space::setGravity(const Vect& v) {
 
 void ska::cp::Space::addCollisionHandler(unsigned int collisionTypeA, unsigned int collisionTypeB, CollisionHandlerData collisionHandlerData) {
 	const auto col = cpSpaceAddCollisionHandler(m_space, collisionTypeA, collisionTypeB);
+	col->userData = &m_userData;
+	collisionHandlerData.setupCollisionHandler(*col);
+}
+
+void ska::cp::Space::addWildcardCollisionHandler(unsigned int collisionType, CollisionHandlerData collisionHandlerData) {
+	const auto col = cpSpaceAddWildcardHandler(m_space, collisionType);
 	col->userData = &m_userData;
 	collisionHandlerData.setupCollisionHandler(*col);
 }

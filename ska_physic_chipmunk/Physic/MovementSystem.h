@@ -1,7 +1,7 @@
 #pragma once
 #include "ECS/Basics/Physic/ForceComponent.h"
 #include "ECS/System.h"
-#include "HitboxComponent.h"
+#include "ECS/Basics/Physic/HitboxComponent.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/Basics/Physic/MovementComponent.h"
 #include "Body.h"

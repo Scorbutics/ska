@@ -47,7 +47,7 @@ std::string ska::CommandScript::execute(ScriptComponent& script, MemoryScript&, 
 	ssc.triggeringType = ScriptTriggerType::AUTO;
 	ssc.name = scriptName;
 	m_entityManager.addComponent<ScriptSleepComponent>(newScript, std::move(ssc));
-	//TODO l'instanciation de nouveaux scripts devrait se faire depuis un controlleur intégré directement dans le script component (à allouer sur le tas pour éviter la lourdeur du composant)
+
 	script.parent->registerScript(&script, newScript, script.getOrigin());
 	return StringUtils::intToStr(newScript);
 

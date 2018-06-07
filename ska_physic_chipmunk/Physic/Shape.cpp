@@ -76,6 +76,22 @@ void ska::cp::Shape::loadFromCircle(cpBody& body, double radius, const Vect& off
 	m_shape = cpCircleShapeNew(&body, radius, offset.vect());
 }
 
+cpShapeFilter ska::cp::Shape::getFilter() const {
+	return cpShapeGetFilter(m_shape);
+}
+
+void ska::cp::Shape::setFilter(cpGroup group, cpBitmask categories, cpBitmask mask) {
+	cpShapeSetFilter(m_shape, cpShapeFilterNew(std::move(group), std::move(categories), std::move(mask)));
+}
+
+cpCollisionType ska::cp::Shape::getCollisionType() const {
+	return cpShapeGetCollisionType(m_shape);
+}
+
+void ska::cp::Shape::setCollisionType(cpCollisionType collisionType) {
+	cpShapeSetCollisionType(m_shape, collisionType);
+}
+
 void ska::cp::Shape::free() {
 	cpShapeFree(m_shape);
 	m_shape = nullptr;
