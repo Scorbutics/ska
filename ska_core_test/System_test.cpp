@@ -19,11 +19,11 @@ TEST_CASE("[System]") {
 		system.update(0);
 		CHECK(system.read.entitiesRefreshed_.empty());
 
-		//Describes an entity with 2 components with respectively component id 0 and 2 (here, those are int and std::string component ids)
+		//Describes an entity with 2 components (int and std::string)
 		//A group of components id is called a system mask
 		ska::EntityComponentsMask mask;
-		mask[0] = true;
-		mask[2] = true;
+		mask[em.getMask<int>()] = true;
+		mask[em.getMask<std::string>()] = true;
 		
 		//As the system masks requirements are matching (the one provided in parameter and the system internal one), the system will now register the entity with id "0"
 		componentAltererObservable.notifyObservers(ska::EntityEventType::COMPONENT_ALTER, mask, 0);
@@ -31,8 +31,8 @@ TEST_CASE("[System]") {
 		system.update(0);
 		CHECK(system.read.entitiesRefreshed_.size() == 1);
 
-		//Now, we alter the previously created system mask by "removing" the first component
-		mask[0] = false;
+		//Now, we alter the previously created system mask by "removing" the first required component (int)
+		mask[em.getMask<int>()] = false;
 
 		//As the system masks requirements are no longer matching (the one provided in parameter and the system internal one), the system will now unregister the entity with id "0"
 		componentAltererObservable.notifyObservers(ska::EntityEventType::COMPONENT_ALTER, mask, 0);

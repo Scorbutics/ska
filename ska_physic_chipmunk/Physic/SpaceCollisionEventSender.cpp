@@ -1,27 +1,39 @@
 #include "SpaceCollisionEventSender.h"
 #include "Utils/RectangleUtils.h"
+#include "Utils/NumberUtils.h"
 #include "ECS/Basics/Physic/CollidableComponent.h"
 #include "Data/Events/CollisionEvent.h"
 #include "ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "Data/Events/GameEventDispatcher.h"
 
 ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& space, ska::cp::Arbiter& arb, ska::EntityId* entityId, unsigned int blockSize) {
-
-	//std::cout << "Point A " << " : " << cpSet.points[0].pointA.x << "; " << cpSet.points[0].pointA.y << std::endl;
-	//std::cout << "Point B " << " : " << cpSet.points[0].pointB.x << "; " << cpSet.points[0].pointB.y << std::endl;
-	
 	auto[bodyA, bodyB] = arb.getBodies();
 	const auto cpSet = arb.getContactPoints();
 
 	auto uniqueBlockPoints = std::unordered_set<ska::Point<int>>{};
 	std::optional<ska::Point<int>> lastBlockPoint;
+	
 	for (auto i = 0; i < cpSet.count; i++) {
-		ska::Point<int> blockPoint;
-		if (bodyA != &space.getStaticBody()) {
-			blockPoint = ska::Point<int>{ static_cast<int>(cpSet.points[i].pointA.x / blockSize), static_cast<int>(cpSet.points[i].pointA.y / blockSize) };
+		cpVect bodyBlock;
+		cpVect bodyEntity;
+		
+		if (bodyA == &space.getStaticBody()) {
+			bodyBlock = cpSet.points[i].pointB;
+			bodyEntity = cpSet.points[i].pointA;
 		} else {
-			blockPoint = ska::Point<int>{ static_cast<int>(cpSet.points[i].pointB.x / blockSize), static_cast<int>(cpSet.points[i].pointB.y / blockSize) };
+			bodyBlock = cpSet.points[i].pointA;
+			bodyEntity = cpSet.points[i].pointB;
 		}
+		
+		bodyBlock.x = bodyBlock.x < bodyEntity.x ? ska::NumberUtils::round(bodyBlock.x - blockSize / 2) : ska::NumberUtils::round(bodyBlock.x + blockSize / 2);
+		bodyBlock.y = bodyBlock.y < bodyEntity.y ? ska::NumberUtils::round(bodyBlock.y - blockSize / 2) : ska::NumberUtils::round(bodyBlock.y + blockSize / 2);
+
+		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", bodyBlock.x, "; ", bodyBlock.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
+
+		auto blockPoint = ska::Point<int> { 
+			static_cast<int>(bodyBlock.x / blockSize),
+			static_cast<int>(bodyBlock.y / blockSize)
+		};
 
 		//When possible, manages intermediate blocks
 		if (lastBlockPoint.has_value()) {
@@ -36,8 +48,10 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 	}
 
 	auto wcc = ska::WorldCollisionComponent{};
+	SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision");
 	for (const auto& blockPoint : uniqueBlockPoints) {
 		wcc.blockContacts.push_back(blockPoint * blockSize);
+		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)(blockPoint.x, "; ", blockPoint.y);
 	}
 
 	wcc.normal = ska::Point<float>{
