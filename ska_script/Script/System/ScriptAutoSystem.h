@@ -49,6 +49,8 @@ namespace ska {
 		std::unordered_map<std::string, CommandPtr> m_commands;
 		std::unordered_map<std::string, EntityId> m_namedScriptedEntities;
 
+		std::vector<std::pair<EntityId, ScriptComponent>> m_componentToAddQueue;
+
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
 		struct ScriptCommandHelper {

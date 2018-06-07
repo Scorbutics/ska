@@ -134,7 +134,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 		i++;
 	}
 
-	m_componentAccessor.add<ScriptComponent>(scriptSleepEntity, std::move(sc));
+	m_componentToAddQueue.push_back(std::make_pair(scriptSleepEntity, std::move(sc)));
 }
 
 void ska::ScriptAutoSystem::registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity) {
@@ -154,6 +154,11 @@ ska::MemoryScript& ska::ScriptAutoSystem::getSavegame() {
 }
 
 void ska::ScriptAutoSystem::refresh(unsigned int) {
+	for (auto& c : m_componentToAddQueue) {
+		m_componentAccessor.add<ScriptComponent>(c.first, std::move(c.second));
+	}
+	m_componentToAddQueue.clear();
+
 	auto nextScript = getHighestPriorityScript();
 	if (nextScript == nullptr) {
 		return;

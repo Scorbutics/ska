@@ -20,7 +20,7 @@ namespace ska {
         }
 
     private:
-        unsigned int currentLine;
+        unsigned int currentLine = 0;
 		std::vector<std::string> file;
 	};
 }

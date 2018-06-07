@@ -140,7 +140,8 @@ void ska::ScriptRefreshSystem::createScriptFromSleeping(const std::vector<Script
 			auto scriptCreated = ScriptRefreshSystemBase::createEntity();
 			components.add<PositionComponent>(scriptCreated, PositionComponent(pc));
 			componentsSP.add<ScriptSleepComponent>(scriptCreated, ScriptSleepComponent(*ssc));
-			componentsSP.get<ScriptSleepComponent>(scriptCreated).deleteEntityWhenFinished = true;
+			auto& script = componentsSP.get<ScriptSleepComponent>(scriptCreated);
+			script.deleteEntityWhenFinished = true;
 			if(startScript(scriptCreated, parent)) {
 				toDelete.push_back(scriptCreated);
 			}
