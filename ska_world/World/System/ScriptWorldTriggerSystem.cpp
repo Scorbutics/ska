@@ -21,8 +21,8 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 		const auto oldPos = Point<int>(sac.lastBlockPos);
 	
 		//Blocks positioned events
-		const auto lastBlock = m_world.getCollisionProfile().getHighestNonCollidingBlock(pc.layer, oldPos.x / blockSize, oldPos.y / blockSize);
-		const auto newBlock = m_world.getCollisionProfile().getHighestNonCollidingBlock(pc.layer, centerPos.x / blockSize, centerPos.y / blockSize);
+		const auto lastBlock = m_world.getCollisionProfile().getBlock(pc.layer, oldPos.x / blockSize, oldPos.y / blockSize);
+		const auto newBlock = m_world.getCollisionProfile().getBlock(pc.layer, centerPos.x / blockSize, centerPos.y / blockSize);
 		const auto sameBlock = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->id == lastBlock->id);
 
 		if (!sameBlock) {

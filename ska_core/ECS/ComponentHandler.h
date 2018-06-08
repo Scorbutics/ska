@@ -5,7 +5,7 @@
 #include <cassert>
 #include "ECSDefines.h"
 #include "SerializeComponent.h"
-#include "ComponentSerializer.h"
+#include "ComponentPool.h"
 #include "../Logging/Logger.h"
 
 namespace ska {
@@ -15,14 +15,19 @@ namespace ska {
 	 */
 	template <typename T>
 	class ComponentHandler :
-        public ComponentSerializer {
+        public ComponentPool {
 
 	public:
-		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentSerializer*>& mapComponentNames):
+		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentPool*>& mapComponentNames):
 			m_mask(mask) {
 			SKA_LOG_DEBUG("Initializing component type ", "", " with mask ", m_mask);
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
-			mapComponentNames.emplace("", this);
+			
+			if constexpr(has_getClassName<T>::value) {
+				mapComponentNames.emplace(T::getClassName(), this);
+			} else {
+				mapComponentNames.emplace("", this);
+			}
 		}
 
 		unsigned int addEmpty(const EntityId&) override {
@@ -49,10 +54,6 @@ namespace ska {
 			return m_mask;
 		}
 
-		std::string getComponentField(const EntityId& id, const std::string& field) override {
-			return ska::SerializeComponent<T>::serialize(getComponent(id), field);
-		}
-
 		T& getComponent(const EntityId& id) {
 			assert(id < m_entitiesWithComponent.size() && m_entitiesWithComponent[id].has_value() && "This entity has no component with this id");
 			auto& componentIdForEntity = m_entitiesWithComponent[id].value();
@@ -62,6 +63,23 @@ namespace ska {
 
 		unsigned int getMask() const {
 			return m_mask;
+		}
+
+		std::string serialize(const EntityId& entityId, const std::string& field) override {
+			if constexpr(has_getClassName<T>::value) {
+				return ska::SerializeComponent<T>::serialize(getComponent(entityId), field);
+			}
+
+			assert(has_getClassName<T>::value && ("This component should be serializable in order to be serialized (field required : " + field + ")").c_str());
+			return "";	
+		}
+
+		void deserialize(const EntityId& entityId, const std::string& field, const std::string& value) override {
+			if constexpr(has_getClassName<T>::value) {
+				ska::SerializeComponent<T>::deserialize(getComponent(entityId), field, value);
+			} else {
+				assert(has_getClassName<T>::value && ("This component should be serializable in order to be deserialized (field required : " + field + ")").c_str());
+			}
 		}
 
 		virtual ~ComponentHandler() = default;

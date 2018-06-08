@@ -66,19 +66,15 @@ std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& sav
 	auto it = line;
 	std::size_t posLeft, posRight;
 
-	while ((posLeft = it.find_first_of(varStartSymbol)) != std::string::npos)
-	{
-		if ((posRight = it.substr(posLeft + 1).find_first_of(varEndSymbol)) != std::string::npos)
-		{
+	while ((posLeft = it.find_first_of(varStartSymbol)) != std::string::npos) {
+		if ((posRight = it.substr(posLeft + 1).find_first_of(varEndSymbol)) != std::string::npos) {
 			posRight += posLeft + 1;
 
 			const auto var = it.substr(posLeft, posRight - posLeft + 1);
 			const auto varValue = getValueFromVarOrSwitchNumber(saveGame, script, var);
 
 			it = it.substr(0, posLeft) + varValue + it.substr(posRight + 1, it.size());
-		}
-		else
-		{
+		} else {
 			FormalCalculator::calculSyntaxError(line);
 			return "";
 		}
@@ -164,6 +160,16 @@ std::string ska::ScriptUtils::getLocalVariableKey(const std::string& v)
 	return "";
 }
 
+std::string ska::ScriptUtils::getComponentVariableKey(const std::string& v) {
+	const auto pipePos = v.find_first_of(ScriptSymbolsConstants::COMPONENT_VARIABLE_LEFT);
+	if (pipePos == 0 && v.find_last_of(ScriptSymbolsConstants::COMPONENT_VARIABLE_RIGHT) == v.size() - 1) {
+		//Component variable
+		return v.substr(1, v.size() - 2);
+	}
+
+	return "";
+}
+
 void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, const std::string& scriptExtendedName, std::string varNumber, std::string value, std::unordered_map<std::string, std::string>& varMap) {
 	if (value.empty())
 		return;
@@ -181,6 +187,12 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 		auto keyGlobal = getGlobalVariableKey(v);
 		if(!keyGlobal.empty()) {
 			saveGame.setGameVariable(keyGlobal, ska::StringUtils::strToInt(value));
+			return;
+		}
+
+		auto keyComponent = getComponentVariableKey(v);
+		if (!keyComponent.empty()) {
+			saveGame.setComponentVariable(keyComponent, value);
 		}
 
 	} else if (varNumber[0] == '#' && varNumber[varNumber.size() - 1] == '#') {
@@ -190,21 +202,20 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 }
 
 /* Récupère la valeur d'une variable GLOBALE en utilisant potentiellement des sous-variables locales en paramètres */
-std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v)
-{
+std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v) {
 	/*
 	$variable$   : variable globale à tout le jeu
 	_variable_ : variable "constante" (intégrée au jeu)
 	_variable param1 param2_ : variable intégrée au jeu avec paramètres
-	#variable# : numéro d'argument de script en cours entre symboles dièse
+	#variable# : numéro d'argument de script en cours entre symboles dièse : #arg0# #arg1# #arg2# etc...
 	|variable| : variable utilisateur (créée en script et utilisée en script, morte à la fin du script)
+	<variable param> : composant à sérialiser / désérializer, le paramètre est souvent l'id de l'entité propriétaire
 	*/
 
 	std::stringstream ss;
 	std::string cmds[2];
 
-	if (v[0] == '_' && v[v.size()-1] == '_')
-	{
+	if (v[0] == '_' && v[v.size()-1] == '_') {
 		ss << v.substr(1, v.size()-2);
 
 		for (unsigned int i = 0; ss >> cmds[i] && i <= 2; i++);

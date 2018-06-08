@@ -1,10 +1,11 @@
-#ifndef DEF_SCRIPTSYMBOLSCONSTANTS
-#define DEF_SCRIPTSYMBOLSCONSTANTS
+#pragma once
 
 namespace ska {
 	namespace ScriptSymbolsConstants
 	{
 		static const char METHOD = '%';
+		static const char COMPONENT_VARIABLE_LEFT = '<';
+		static const char COMPONENT_VARIABLE_RIGHT = '>';
 		static const char LOCAL_VARIABLE = '|';
 		static const char VARIABLE_LEFT = '[';
 		static const char VARIABLE_RIGHT = ']';
@@ -14,4 +15,3 @@ namespace ska {
 		static const char ARGUMENT_SEPARATOR = ',';
 	}
 }
-#endif

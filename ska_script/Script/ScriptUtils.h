@@ -12,6 +12,7 @@ namespace ska {
 	public:
 		ScriptUtils();
 		static std::string getGlobalVariableKey(const std::string& v);
+		static std::string getComponentVariableKey(const std::string& v);
 		static std::string getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber);
 		static std::string replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line);
 		static std::string replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol);

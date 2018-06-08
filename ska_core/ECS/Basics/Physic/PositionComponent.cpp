@@ -5,9 +5,14 @@ ska::PositionComponent::PositionComponent() {
     static auto initialized = false;
     if (!initialized) {
         initialized = true;
+		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeX, "x");
+		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeY, "y");
+		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeZ, "z");
+		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeLayer, "layer");
         SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldSerializer(serializeX, "x");
         SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldSerializer(serializeY, "y");
         SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldSerializer(serializeZ, "z");
+		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldSerializer(serializeLayer, "layer");
     }
 }
 

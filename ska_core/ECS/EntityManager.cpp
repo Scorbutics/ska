@@ -6,7 +6,7 @@
 
 unsigned int ska::EntityManager::m_componentMaskCounter = 0;
 
-void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentSerializer& components) {
+void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentPool& components) {
     const auto removedComponentMask = components.remove(entity);
     m_componentMask[entity][removedComponentMask] = false;
 
@@ -27,12 +27,17 @@ void ska::EntityManager::commonAddComponent(const EntityId& entity, const unsign
     m_alteredEntities.insert(entity);
 }
 
-
 std::string ska::EntityManager::serializeComponent(const EntityId& entityId, const std::string& component, const std::string& field) const {
     if (NAME_MAPPED_COMPONENT.find(component) != NAME_MAPPED_COMPONENT.end()) {
-        return NAME_MAPPED_COMPONENT.at(component)->getComponentField(entityId, field);
+        return NAME_MAPPED_COMPONENT.at(component)->serialize(entityId, field);
     }
     return "";
+}
+
+void ska::EntityManager::deserializeComponent(const EntityId& entityId, const std::string& component, const std::string& field, const std::string& value) {
+	if (NAME_MAPPED_COMPONENT.find(component) != NAME_MAPPED_COMPONENT.end()) {
+		NAME_MAPPED_COMPONENT.at(component)->deserialize(entityId, field, value);
+	}
 }
 
 void ska::EntityManager::removeComponent(const EntityId& entity, const std::string& component) {

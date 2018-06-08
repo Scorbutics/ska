@@ -6,7 +6,7 @@
 #include "ECSDefines.h"
 #include "ComponentHandler.h"
 #include "../Utils/Observable.h"
-#include "ComponentSerializer.h"
+#include "../Utils/StringUtils.h"
 #include "../Data/Events/ECSEvent.h"
 #include "../Data/Events/GameEventDispatcher.h"
 
@@ -37,6 +37,8 @@ namespace ska {
         void refresh();
 
 		std::string serializeComponent(const EntityId& entityId, const std::string& component, const std::string& field) const;
+		void deserializeComponent(const EntityId& entityId, const std::string& component, const std::string& field, const std::string& value);
+
 		void removeComponent(const EntityId& entity, const std::string& component);
 		void addComponent(const EntityId& entity, const std::string& component);
 
@@ -83,7 +85,7 @@ namespace ska {
 		EntityIdContainer m_deletedEntities;
 		static unsigned int m_componentMaskCounter;
 
-		std::unordered_map<std::string, ComponentSerializer*> NAME_MAPPED_COMPONENT;
+		std::unordered_map<std::string, ComponentPool*> NAME_MAPPED_COMPONENT;
 
 		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
 
@@ -93,7 +95,7 @@ namespace ska {
 			return components;
 		}
 
-		void commonRemoveComponent(const EntityId& entity, ComponentSerializer& components);
+		void commonRemoveComponent(const EntityId& entity, ComponentPool& components);
 		void commonAddComponent(const EntityId& entity, const unsigned int componentMask);
 
 	};
