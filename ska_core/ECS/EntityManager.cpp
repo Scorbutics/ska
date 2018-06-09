@@ -116,18 +116,20 @@ void ska::EntityManager::innerRemoveEntity(const EntityId& entity, ECSEvent& ecs
 }
 
 void ska::EntityManager::removeEntities(const std::unordered_set<EntityId>& exceptions) {
-	auto ecsEvent = ECSEvent { ENTITIES_REMOVED };
-	auto entities = m_entities;
-    for (const auto& entity : entities) {
-        if (exceptions.find(entity) == exceptions.end()) {
-            innerRemoveEntity(entity, ecsEvent);
-        }
-    }
-	m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+	if (!m_entities.empty()) {
+		auto ecsEvent = ECSEvent{ ENTITIES_REMOVED };
+		auto entities = m_entities;
+		for (const auto& entity : entities) {
+			if (exceptions.find(entity) == exceptions.end()) {
+				innerRemoveEntity(entity, ecsEvent);
+			}
+		}
+		m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
 
-	for(auto& entity : ecsEvent.entities) {
-		/* Reset all components */
-		m_componentMask[entity] &= 0;
+		for(auto& entity : ecsEvent.entities) {
+			/* Reset all components */
+			m_componentMask[entity] &= 0;
+		}
 	}
 }
 

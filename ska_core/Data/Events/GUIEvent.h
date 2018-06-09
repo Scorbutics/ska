@@ -17,7 +17,10 @@ namespace ska {
 	* \brief Declares an event struct that is sent to observers when a GUI modification is asked programatically
 	*/
 	struct GUIEvent {
-		explicit GUIEvent(const GUIEventType& t) : balloonHandle(nullptr), delay(0), type(t) {
+		explicit GUIEvent(const GUIEventType& t) : 
+			balloonHandle(nullptr), 
+			delay(0), 
+			type(t) {
 		}
 
 		void operator=(const GUIEvent&) = delete;

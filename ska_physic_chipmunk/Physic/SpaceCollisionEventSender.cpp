@@ -31,19 +31,19 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 			bodyEntity = cpSet.points[i].pointB;
 		}
 		
-		const auto signX = contactNormalAbs.x;
-		const auto signY = contactNormalAbs.y;
-		const int offsetY = contactNormalAbs.y == 0 ? signY : (signY * static_cast<int>(blockSize / 2));
-		const int offsetX = contactNormalAbs.x == 0 ? signX : (signX * static_cast<int>(blockSize / 2));
-		bodyBlock.x = ska::NumberUtils::round(bodyBlock.x + offsetX);
-		bodyBlock.y = ska::NumberUtils::round(bodyBlock.y + offsetY);
+		const auto signX = bodyBlock.x < bodyEntity.x ? -1 : 1;
+		const auto signY = bodyBlock.y < bodyEntity.y ? -1 : 1;
+		const int offsetY = contactNormalAbs.y == 0 ? 0 : (signY * static_cast<int>(1));
+		const int offsetX = contactNormalAbs.x == 0 ? 0 : (signX * static_cast<int>(1));
 
-		//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", bodyBlock.x, "; ", bodyBlock.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
+		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks float positions : block ", bodyBlock.x / blockSize, "; ", bodyBlock.y / blockSize);
 
 		auto blockPoint = ska::Point<int> { 
 			static_cast<int>(bodyBlock.x / blockSize),
 			static_cast<int>(bodyBlock.y / blockSize)
 		};
+
+		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", blockPoint.x, "; ", blockPoint.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
 
 		//When possible, manages intermediate blocks
 		if (lastBlockPoint.has_value()) {

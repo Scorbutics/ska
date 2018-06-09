@@ -32,7 +32,7 @@ namespace ska {
         virtual ~GUI();
 		GUI& operator=(const GUI&) = delete;
 
-		void refresh(unsigned int ellapsedTime);
+		virtual void refresh(unsigned int ellapsedTime);
 		bool isVisible() const;
 		void hide(bool x);
 		void render(const Renderer& renderer) const override;

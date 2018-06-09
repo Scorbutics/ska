@@ -6,7 +6,7 @@
 namespace ska {
 	class Label : public Widget {
 	public:
-		Label(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos);
+		Label(Widget& parent, const std::string& text, int fontSize = 11, Point<int> relativePos = Point<int>{});
 		virtual ~Label() = default;
 
 		void setFontColor(int r, int g, int b, int a);
