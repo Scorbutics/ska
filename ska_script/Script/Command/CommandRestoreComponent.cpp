@@ -2,20 +2,15 @@
 #include "Utils/StringUtils.h"
 #include "../System/ScriptAutoSystem.h"
 
-ska::CommandRestoreComponent::CommandRestoreComponent(EntityManager& entityManager) : AbstractFunctionCommand(entityManager)
-{
-}
-
-
-ska::CommandRestoreComponent::~CommandRestoreComponent()
-{
+ska::CommandRestoreComponent::CommandRestoreComponent(EntityManager& entityManager) : 
+	AbstractFunctionCommand(entityManager) {
 }
 
 int ska::CommandRestoreComponent::argumentsNumber() {
 	return 2;
 }
 
-std::string ska::CommandRestoreComponent::execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) {
+std::string ska::CommandRestoreComponent::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
 	const auto& componentName = args[0];
 	const auto& entity = args[1];
 

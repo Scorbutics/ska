@@ -11,6 +11,10 @@
 ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& space, ska::cp::Arbiter& arb, ska::EntityId* entityId, unsigned int blockSize) {
 	auto[bodyA, bodyB] = arb.getBodies();
 	const auto cpSet = arb.getContactPoints();
+	const auto contactNormalAbs = ska::Point<int>{
+		static_cast<int>(arb.getNormal().x),
+		static_cast<int>(arb.getNormal().y)
+	};
 
 	auto uniqueBlockPoints = std::unordered_set<ska::Point<int>>{};
 	std::optional<ska::Point<int>> lastBlockPoint;
@@ -27,8 +31,12 @@ ska::WorldCollisionComponent CreateWorldCollisionFromArbiter(ska::cp::Space& spa
 			bodyEntity = cpSet.points[i].pointB;
 		}
 		
-		bodyBlock.x = bodyBlock.x < bodyEntity.x ? ska::NumberUtils::round(bodyBlock.x - blockSize / 2) : ska::NumberUtils::round(bodyBlock.x + blockSize / 2);
-		bodyBlock.y = bodyBlock.y < bodyEntity.y ? ska::NumberUtils::round(bodyBlock.y - blockSize / 2) : ska::NumberUtils::round(bodyBlock.y + blockSize / 2);
+		const auto signX = contactNormalAbs.x;
+		const auto signY = contactNormalAbs.y;
+		const int offsetY = contactNormalAbs.y == 0 ? signY : (signY * static_cast<int>(blockSize / 2));
+		const int offsetX = contactNormalAbs.x == 0 ? signX : (signX * static_cast<int>(blockSize / 2));
+		bodyBlock.x = ska::NumberUtils::round(bodyBlock.x + offsetX);
+		bodyBlock.y = ska::NumberUtils::round(bodyBlock.y + offsetY);
 
 		//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks collision positions : block ", bodyBlock.x, "; ", bodyBlock.y, " entity ", bodyEntity.x, "; ", bodyEntity.y);
 

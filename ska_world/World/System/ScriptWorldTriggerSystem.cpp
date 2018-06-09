@@ -23,13 +23,21 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 		//Blocks positioned events
 		const auto lastBlock = m_world.getCollisionProfile().getBlock(pc.layer, oldPos.x / blockSize, oldPos.y / blockSize);
 		const auto newBlock = m_world.getCollisionProfile().getBlock(pc.layer, centerPos.x / blockSize, centerPos.y / blockSize);
-		const auto sameBlock = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->id == lastBlock->id);
+		auto events = std::vector<ScriptEventType>{};
 
-		if (!sameBlock) {
+		const auto sameBlockId = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->id == lastBlock->id);	
+		if (!sameBlockId) {
 			/* If we are moving to another block, triggers a MOVE_OUT event on previous block and MOVE_IN on the next one */
-			auto scriptEvent = ScriptEvent{ ScriptEventType::EntityChangeBlockId, entityId, 0, lastBlock == nullptr ? -1 : lastBlock->id, newBlock == nullptr ? -1 : newBlock->id, oldPos, centerPos };
-			m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(scriptEvent);
+			events.push_back(ScriptEventType::EntityChangeBlockId);
 		}
+
+		/*const auto sameBlockProperty = newBlock == lastBlock || (newBlock != nullptr && lastBlock != nullptr && newBlock->properties.bitMask == lastBlock->properties.bitMask);
+		if (!sameBlockProperty) {
+			events.push_back(ScriptEventType::EntityChangeBlockProperty);
+		}*/
+
+		auto scriptEvent = ScriptEvent{ std::move(events) , entityId, 0, lastBlock == nullptr ? -1 : lastBlock->id, newBlock == nullptr ? -1 : newBlock->id, oldPos, centerPos };
+		m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(scriptEvent);
 
 		//Auto events
 		auto worldScripts = std::vector<ScriptSleepComponent*>{};
@@ -61,7 +69,9 @@ void ska::ScriptWorldTriggerSystem::createScriptFromSleeping(const std::vector<S
 			sscAdd.deleteEntityWhenFinished = true;
 			components.add<ScriptSleepComponent>(scriptCreated, std::move(sscAdd));
 
-			auto se = ScriptEvent{ ScriptEventType::ScriptCreate, scriptCreated, parent, {}, {}, {}, pc };
+			auto events = std::vector<ScriptEventType>();
+			events.push_back(ScriptEventType::ScriptCreate);
+			auto se = ScriptEvent{ std::move(events), scriptCreated, parent, {}, {}, {}, pc };
 			m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(se);
 		}
 	}

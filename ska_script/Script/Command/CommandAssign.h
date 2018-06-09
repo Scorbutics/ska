@@ -7,9 +7,9 @@ namespace ska {
 	public:
 		explicit CommandAssign(EntityManager& entityManager);
 		void operator=(const CommandAssign&) = delete;
-		virtual ~CommandAssign();
+		virtual ~CommandAssign() = default;
 
-		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) override;
+		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) override;
 		virtual int argumentsNumber() override;
 	};
 }

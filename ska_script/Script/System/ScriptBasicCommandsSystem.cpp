@@ -1,6 +1,7 @@
 #include "ScriptBasicCommandsSystem.h"
 
 #include "../Command/CommandEnd.h"
+#include "../Command/CommandLogical.h"
 #include "../Command/CommandCalculate.h"
 #include "../Command/CommandAssignSwitch.h"
 #include "../Command/CommandEndScript.h"
@@ -15,15 +16,14 @@
 #include "../Command/CommandRemoveComponent.h"
 #include "../Command/CommandRestoreComponent.h"
 #include "../Command/CommandBlockAuthorize.h"
+#include "../Command/CommandHasBlockProperty.h"
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(entityManager), saveGame) {
-
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(w, entityManager), saveGame) {
 }
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
 	ScriptAutoSystem(entityManager, sch, saveGame) {
-
 }
 
 void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c) const {
@@ -42,4 +42,6 @@ void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std
 	c["remove_component"] = std::unique_ptr<Command>(std::make_unique<CommandRemoveComponent>(m_entityManager));
 	c["restore_component"] = std::unique_ptr<Command>(std::make_unique<CommandRestoreComponent>(m_entityManager));
 	c["block_authorize"] = std::unique_ptr<Command>(std::make_unique<CommandBlockAuthorize>(m_entityManager));
+	c["has_block_property"] = std::unique_ptr<Command>(std::make_unique<CommandHasBlockProperty>(m_world, m_entityManager));
+	c["logical"] = std::unique_ptr<Command>(std::make_unique<CommandLogical>(m_entityManager));
 }

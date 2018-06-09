@@ -4,13 +4,8 @@
 #include "Data/MemoryScript.h"
 #include "Exceptions/ScriptDiedException.h"
 
-ska::CommandEnd::CommandEnd(EntityManager& e) : AbstractFunctionCommand(e)
-{
-}
-
-
-ska::CommandEnd::~CommandEnd()
-{
+ska::CommandEnd::CommandEnd(EntityManager& e) : 
+	AbstractFunctionCommand(e) {
 }
 
 int ska::CommandEnd::argumentsNumber() {
@@ -22,6 +17,6 @@ const std::string& ska::CommandEnd::getCmdName() {
 	return cmdName;
 }
 
-std::string ska::CommandEnd::execute(ScriptComponent&, MemoryScript&, std::vector<std::string>&) {
+std::string ska::CommandEnd::execute(ScriptComponent&, MemoryScript&, const std::vector<std::string>&) {
 	throw ScriptDiedException("");
 }

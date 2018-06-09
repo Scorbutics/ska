@@ -115,14 +115,16 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 		const auto oldBlock = oldCenterPos / m_blockSize;
 
 		for (auto& ssc : blockScript) {
-			ssc.args.clear();
-			ssc.args.push_back(StringUtils::intToStr(oldBlock.x));
-			ssc.args.push_back(StringUtils::intToStr(oldBlock.y));
-			ssc.args.push_back(StringUtils::intToStr(newBlock.x));
-			ssc.args.push_back(StringUtils::intToStr(newBlock.y));
-			ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-			ssc.context = m_fullName;
-			result.emplace_back(ssc);
+			if (type == ssc.triggeringType) {
+				ssc.args.clear();
+				ssc.args.push_back(StringUtils::intToStr(oldBlock.x));
+				ssc.args.push_back(StringUtils::intToStr(oldBlock.y));
+				ssc.args.push_back(StringUtils::intToStr(newBlock.x));
+				ssc.args.push_back(StringUtils::intToStr(newBlock.y));
+				ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+				ssc.context = m_fullName;
+				result.emplace_back(ssc);
+			}
 		}
 		
 	}

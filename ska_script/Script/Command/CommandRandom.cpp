@@ -4,20 +4,15 @@
 #include "Data/MemoryScript.h"
 #include "Utils/NumberUtils.h"
 
-ska::CommandRandom::CommandRandom(EntityManager& entityManager) : AbstractFunctionCommand(entityManager)
-{
-}
-
-
-ska::CommandRandom::~CommandRandom()
-{
+ska::CommandRandom::CommandRandom(EntityManager& entityManager) : 
+	AbstractFunctionCommand(entityManager) {
 }
 
 int ska::CommandRandom::argumentsNumber() {
 	return 1;
 }
 
-std::string ska::CommandRandom::execute(ScriptComponent&, MemoryScript&, std::vector<std::string>& args) {
+std::string ska::CommandRandom::execute(ScriptComponent&, MemoryScript&, const std::vector<std::string>& args) {
 	std::string s, value, commandCall;
 	int valueInt, resultInt;
 

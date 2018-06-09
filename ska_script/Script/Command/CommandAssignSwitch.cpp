@@ -3,20 +3,15 @@
 #include "../ScriptUtils.h"
 #include "../ScriptSymbolsConstants.h"
 
-ska::CommandAssignSwitch::CommandAssignSwitch(EntityManager& entityManager) : AbstractFunctionCommand(entityManager)
-{
-}
-
-
-ska::CommandAssignSwitch::~CommandAssignSwitch()
-{
+ska::CommandAssignSwitch::CommandAssignSwitch(EntityManager& entityManager) : 
+	AbstractFunctionCommand(entityManager) {
 }
 
 int ska::CommandAssignSwitch::argumentsNumber() {
 	return 2;
 }
 
-std::string ska::CommandAssignSwitch::execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) {
+std::string ska::CommandAssignSwitch::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
 	const auto varValue = args[0];
 	const auto varNumber = args[1];
 

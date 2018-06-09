@@ -9,7 +9,8 @@ namespace ska {
 		public:
 			Arbiter(cpArbiter& arb);
 			~Arbiter() = default;
-
+			
+			cpVect getNormal() const;
 			cpContactPointSet getContactPoints() const;
 			std::size_t getContactPointsNumber() const;
 			std::pair<cpBody*, cpBody*> getBodies() const;

@@ -4,19 +4,19 @@
 #include "../ScriptSymbolsConstants.h"
 #include "../ScriptComponent.h"
 
-ska::AbstractFunctionCommand::AbstractFunctionCommand(EntityManager& entityManager) : AbstractCommand(entityManager)
-{
+ska::AbstractFunctionCommand::AbstractFunctionCommand(EntityManager& entityManager) : 
+	AbstractCommand(entityManager) {
 }
 
-std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, MemoryScript& memory, std::stringstream&, std::vector<std::string>& args) {
+std::string ska::AbstractFunctionCommand::process(ScriptComponent& script, MemoryScript& memory, std::stringstream&, const std::vector<std::string>& args) {
 	int argNumber = argumentsNumber();
 	if (argNumber != -1 && static_cast<std::size_t>(argNumber) != args.size()) {
 		/* Syntax error */
-		std::string syntaxErrorMsg("Syntax error with parameters : ");
-		for (std::string& arg : args) {
+		auto syntaxErrorMsg = std::string { "Syntax error with parameters : " };
+		for (const auto& arg : args) {
 			syntaxErrorMsg += arg + " ";
 		}
-		throw ScriptSyntaxError(syntaxErrorMsg.c_str());
+		throw ScriptSyntaxError((syntaxErrorMsg + " (wrong arguments number ?)").c_str());
 	}
 
 	return execute(script, memory, args);

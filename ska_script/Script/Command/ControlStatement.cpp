@@ -1,11 +1,11 @@
 #include "Data/MemoryScript.h"
 #include "ControlStatement.h"
 
-ska::ControlStatement::ControlStatement(EntityManager& e) : AbstractCommand(e)
-{
+ska::ControlStatement::ControlStatement(EntityManager& e) : 
+	AbstractCommand(e) {
 }
 
-std::string ska::ControlStatement::process(ScriptComponent& script, MemoryScript& memory, std::stringstream& streamCmd, std::vector<std::string>& args) {
+std::string ska::ControlStatement::process(ScriptComponent& script, MemoryScript& memory, std::stringstream& streamCmd, const std::vector<std::string>& args) {
 	return analyzeLine(script, streamCmd, args);
 }
 
@@ -28,6 +28,3 @@ const std::string& ska::ControlStatement::getCommandIf() {
 	return COMMAND_IF;
 }
 
-ska::ControlStatement::~ControlStatement()
-{
-}

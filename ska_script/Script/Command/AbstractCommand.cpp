@@ -21,10 +21,9 @@ std::string ska::AbstractCommand::process(ScriptAutoSystem& system, ScriptCompon
 
 	std::vector<std::string> args = StringUtils::split(line, getSeparator());
 
-	for (std::string& arg : args) {
-		arg = StringUtils::trim(arg);
+	for (auto& arg : args) {
 		/* Pour chaque argument, explicite les valeurs des variables */
-		arg = ScriptUtils::getValueFromVarOrSwitchNumber(system.getSavegame(), script, arg);
+		arg = ScriptUtils::getValueFromVarOrSwitchNumber(system.getSavegame(), script, StringUtils::trim(arg));
 	}
 
 
@@ -52,6 +51,3 @@ std::string ska::AbstractCommand::interpretSubCommands(ScriptAutoSystem& system,
 	return "";
 }
 
-ska::AbstractCommand::~AbstractCommand()
-{
-}

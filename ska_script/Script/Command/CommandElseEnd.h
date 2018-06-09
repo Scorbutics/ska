@@ -12,7 +12,7 @@ namespace ska {
 		}
 
 	protected:
-		virtual std::string analyzeLine(ScriptComponent&, std::stringstream&, std::vector<std::string>&) override {
+		virtual std::string analyzeLine(ScriptComponent&, std::stringstream&, const std::vector<std::string>&) override {
 			return "";
 		}
 

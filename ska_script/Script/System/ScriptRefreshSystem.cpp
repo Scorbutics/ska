@@ -111,20 +111,22 @@ void ska::ScriptRefreshSystem::triggerChangeBlockScripts(const ScriptEvent& se) 
 
 bool ska::ScriptRefreshSystem::onScriptEvent(ScriptEvent& se) {
 	auto& componentsSP = ScriptPositionSystemAccess::m_componentAccessor;
+	for (const auto& type : se.type) {
+		switch (type) {
+		case ScriptEventType::EntityChangeBlockProperty:
+		case ScriptEventType::EntityChangeBlockId:
+			triggerChangeBlockScripts(se);
+			break;
 
-	switch(se.type) {
-	case ScriptEventType::EntityChangeBlockId:
-		triggerChangeBlockScripts(se);
-		break;
+		case ScriptEventType::ScriptCreate:
+			if (startScript(se.entityId, se.parent)) {
+				componentsSP.remove<ScriptSleepComponent>(se.entityId);
+			}
+			break;
 
-	case ScriptEventType::ScriptCreate:
-		if(startScript(se.entityId, se.parent)) {
-			componentsSP.remove<ScriptSleepComponent>(se.entityId);
+		default:
+			break;
 		}
-		break;
-
-	default:
-		break;
 	}
 	return true;
 }

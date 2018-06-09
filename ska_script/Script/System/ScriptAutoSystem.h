@@ -39,7 +39,7 @@ namespace ska {
 
 		void operator=(const ScriptAutoSystem&) = delete;
 
-		virtual ~ScriptAutoSystem();
+		virtual ~ScriptAutoSystem() = default;
 
 	private:
 		MemoryScript& m_saveGame;

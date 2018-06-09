@@ -6,9 +6,9 @@ namespace ska {
 	public:
 		explicit CommandRemoveComponent(EntityManager& e);
 		void operator=(const CommandRemoveComponent&) = delete;
-		virtual ~CommandRemoveComponent();
+		virtual ~CommandRemoveComponent() = default;
 
-		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args) override;
+		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) override;
 		virtual int argumentsNumber() override;
 	};
 }

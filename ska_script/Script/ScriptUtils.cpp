@@ -10,16 +10,6 @@
 
 ska::ScriptUtils::ScriptUtils() {}
 
-std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
-	const auto pipePos = v.find_first_of('$');
-	if (pipePos == 0 && v.find_last_of('$') == v.size() - 1) {
-		//variable globale
-		return v.substr(1, v.size() - 2);
-	}
-
-	return "";
-}
-
 /* Récupère la valeur une variable LOCALE (dans varMap) */
 std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber) {
 
@@ -31,7 +21,7 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 		}
 	} else if (varNumber[0] == '[' && varNumber[varNumber.size() - 1] == ']') {
 		const auto& formattedVarNumber = varNumber.substr(1, varNumber.size() - 2);
-		auto keyLocal = getLocalVariableKey(formattedVarNumber);
+		const auto keyLocal = getLocalVariableKey(formattedVarNumber);
 		if (!keyLocal.empty()) {
 			if (script.varMap.find(keyLocal) != script.varMap.end()) {
 				return script.varMap.at(keyLocal);
@@ -39,13 +29,18 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 			return formattedVarNumber;
 		}
 
-		auto keyGlobal = getGlobalVariableKey(formattedVarNumber);
+		const auto keyGlobal = getGlobalVariableKey(formattedVarNumber);
 		if (!keyGlobal.empty()) {
 			return StringUtils::intToStr(saveGame.getGameVariable(keyGlobal));
 		}
 
+		const auto keyComponent = getComponentVariableKey(formattedVarNumber);
+		if (!keyComponent.empty()) {
+			return saveGame.getComponentVariable(keyComponent);
+		}
+
 		const auto lastVarName = interpretVarName(saveGame, script, formattedVarNumber);
-		return lastVarName;
+		return varNumber;
 	} else if (varNumber[0] == '#' && varNumber[varNumber.size() - 1] == '#') {
 		const auto& key = varNumber + script.extendedName;
 		if (script.varMap.find(key) != script.varMap.end()) {
@@ -142,6 +137,16 @@ std::string ska::ScriptUtils::getCommandCall(const std::string& s)
 		const auto posEndSubCmd = s.find_last_of(ScriptSymbolsConstants::METHOD);
 		if (posEndSubCmd != std::string::npos)
 			return s.substr(1, posEndSubCmd - 1);
+	}
+
+	return "";
+}
+
+std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
+	const auto pipePos = v.find_first_of('$');
+	if (pipePos == 0 && v.find_last_of('$') == v.size() - 1) {
+		//variable globale
+		return v.substr(1, v.size() - 2);
 	}
 
 	return "";

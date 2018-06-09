@@ -44,23 +44,18 @@ std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string
 
 void ska::ScriptAutoSystem::removeComponent(const std::string& componentName, const std::string& id) const {
 	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
-		EntityId entity = m_namedScriptedEntities.at(id);
-		//const auto idInt = StringUtils::strToInt(id);
+		const auto entity = m_namedScriptedEntities.at(id);
 		m_componentAccessor.remove(entity, componentName);
-		//m_entityManager.refreshEntity(idInt);
 	}
 }
 
 void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, const std::string& id) const {
 	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
-		EntityId entity = m_namedScriptedEntities.at(id);
-		//const auto idInt = StringUtils::strToInt(id);
+		const auto entity = m_namedScriptedEntities.at(id);
 		m_componentAccessor.add(entity, componentName);
-		//m_entityManager.refreshEntity(idInt);
 	}
 }
 
-/*m_scripts[keyScript] = (move(ScriptPtr(new Script(*this, triggeringType, period == NULL || *period == 0 ? SCRIPT_DEFAULT_PERIOD : *period, validPath, extendedName, context, keyScript, args)))); */
 void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scriptSleepEntity, const EntityId origin) {
 
 	const auto& scriptCPtr = m_componentPossibleAccessor.get<ScriptSleepComponent>(scriptSleepEntity);
@@ -269,7 +264,7 @@ bool ska::ScriptAutoSystem::play(ScriptComponent& script, MemoryScript& savegame
 
 	/* Read commands */
 	while (!script.controller->eof()) {
-		const auto cmd = script.controller->nextLine();
+		const auto cmd = StringUtils::trim(script.controller->nextLine());
 		if (cmd != "") {
 			script.lastResult = interpret(script, savegame, cmd);
 			/* We need to "manageCurrentState" to keep a valid state for the script at each command except the last one (when scriptStop is true) */
@@ -315,14 +310,12 @@ std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, MemoryScri
 	}
 
 	if (m_commands.find(cmdName) != m_commands.end()) {
-		//auto& varMap = script.varMap;
 		try {
 			return m_commands[cmdName]->process(*this, script, streamCmd);
 		} catch (const NumberFormatException& nfe) {
 			throw ScriptException(("Commande " + cmdName + " : " + std::string(nfe.what())).c_str());
 		}
-	}
-	else {
+	} else {
 		throw ScriptUnknownCommandException("Impossible de trouver la commande " + cmdName + " dans le moteur de scripts.");
 	}
 }
@@ -378,6 +371,3 @@ void ska::ScriptAutoSystem::stop(ScriptComponent& script) {
 	script.triggeringType = ScriptTriggerType::NONE;
 }
 
-ska::ScriptAutoSystem::~ScriptAutoSystem()
-{
-}

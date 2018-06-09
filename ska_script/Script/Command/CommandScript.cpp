@@ -6,21 +6,15 @@
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "ECS/EntityManager.h"
 
-ska::CommandScript::CommandScript(EntityManager& entityManager) : AbstractFunctionCommand(entityManager)
-{
-}
-
-
-ska::CommandScript::~CommandScript()
-{
+ska::CommandScript::CommandScript(EntityManager& entityManager) : 
+	AbstractFunctionCommand(entityManager) {
 }
 
 int ska::CommandScript::argumentsNumber() {
 	return -1;
 }
 
-std::string ska::CommandScript::execute(ScriptComponent& script, MemoryScript&, std::vector<std::string>& args)
-{
+std::string ska::CommandScript::execute(ScriptComponent& script, MemoryScript&, const std::vector<std::string>& args) {
 	std::string scriptName;
 	std::vector<std::string> extraArgs;
 	std::string periodStr;

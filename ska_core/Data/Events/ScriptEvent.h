@@ -5,11 +5,12 @@
 namespace ska {
 	enum class ScriptEventType {
 		EntityChangeBlockId,
+		EntityChangeBlockProperty,
 		ScriptCreate
 	};
 
 	struct ScriptEvent {
-		const ScriptEventType type;
+		std::vector<ScriptEventType> type;
 		const EntityId entityId;
 		const EntityId parent;
 		const Point<int> oldBlockId;

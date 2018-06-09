@@ -4,21 +4,15 @@
 #include "../ScriptUtils.h"
 #include "../ScriptSymbolsConstants.h"
 
-ska::CommandAssign::CommandAssign(EntityManager& entityManager) : AbstractFunctionCommand(entityManager)
-{
-}
-
-
-ska::CommandAssign::~CommandAssign()
-{
+ska::CommandAssign::CommandAssign(EntityManager& entityManager) : 
+	AbstractFunctionCommand(entityManager) {
 }
 
 int ska::CommandAssign::argumentsNumber() {
 	return 2;
 }
 
-std::string ska::CommandAssign::execute(ScriptComponent& script, MemoryScript& memory, std::vector<std::string>& args)
-{
+std::string ska::CommandAssign::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
 	std::string valeur, varNumber, line, commandCall;
 
 	valeur = args[0];

@@ -20,6 +20,10 @@ std::pair<cpBody*, cpBody*> ska::cp::Arbiter::getBodies() const {
 	return std::make_pair(a, b);
 }
 
+cpVect ska::cp::Arbiter::getNormal() const {
+	return cpArbiterGetNormal(m_instance);
+}
+
 std::pair<unsigned int, ska::Rectangle> ska::cp::Arbiter::calculateOverlap() const {
 	auto overlaps = std::vector<ska::Rectangle>{};
 

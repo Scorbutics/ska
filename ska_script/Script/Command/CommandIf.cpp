@@ -5,20 +5,15 @@
 #include "Exceptions/ScriptSyntaxError.h"
 #include "../System/ScriptAutoSystem.h"
 
-ska::CommandIf::CommandIf(EntityManager& e) : ControlStatement(e)
-{
-}
-
-
-ska::CommandIf::~CommandIf()
-{
+ska::CommandIf::CommandIf(EntityManager& e) : 
+	ControlStatement(e) {
 }
 
 const std::string& ska::CommandIf::getCmdName() {
 	return getCommandIf();
 }
 
-std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstream&, std::vector<std::string>& args) {
+std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstream&, const std::vector<std::string>& args) {
 	int ifEnd = 1, num1, num2;
 	std::string varNumber, op, valeur, line;
 	std::stringstream ss;
