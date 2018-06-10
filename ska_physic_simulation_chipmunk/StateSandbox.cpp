@@ -29,7 +29,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	SubObserver<ska::InputMouseEvent>(std::bind(&StateSandbox::onMouseEvent, this, std::placeholders::_1), ed),
 	m_eventDispatcher(ed),
 	m_entityManager(em),
-	m_spaceCollisionEventSender{ m_space, m_eventDispatcher, BLOCKSIZE } {
+	m_spaceCollisionEventSender{em, m_space, m_eventDispatcher, BLOCKSIZE } {
 }
 
 bool StateSandbox::onMouseEvent(ska::InputMouseEvent& ime){

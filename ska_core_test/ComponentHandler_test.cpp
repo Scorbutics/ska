@@ -3,7 +3,7 @@
 
 TEST_CASE("[ComponentHandler]") {
 	constexpr auto mask = 1u;
-	auto mapComponentName = std::unordered_map<std::string, ska::ComponentSerializer*> {};
+	auto mapComponentName = std::unordered_map<std::string, ska::ComponentPool*> {};
 	auto componentHandlerTest = ska::ComponentHandler<int> { mask, mapComponentName };
 	
 	SUBCASE("Add") {
