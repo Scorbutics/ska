@@ -96,7 +96,7 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 	return {};
 }
 
-std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type) {
+std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<float>* normal) {
 	std::vector<std::reference_wrapper<ScriptSleepComponent>> result;
 	if (type == ScriptTriggerType::AUTO) {
 		return result;
@@ -121,7 +121,11 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 				ssc.args.push_back(StringUtils::intToStr(oldBlock.y));
 				ssc.args.push_back(StringUtils::intToStr(newBlock.x));
 				ssc.args.push_back(StringUtils::intToStr(newBlock.y));
-				ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+				if (normal != nullptr) {
+					ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(newBlock * m_blockSize, ska::Point<int>(newBlock.x - normal->x, newBlock.y - normal->y) * m_blockSize)));
+				} else {
+					ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+				}
 				ssc.context = m_fullName;
 				result.emplace_back(ssc);
 			}

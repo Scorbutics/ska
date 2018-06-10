@@ -33,7 +33,7 @@ bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 			auto& sac = components.get<ScriptAwareComponent>(entityId);
 			const auto& hc = components.get<HitboxComponent>(entityId);
 			const auto& dac = components.get<AnimationComponent>(entityId);
-
+			
 			const Point<int>& frontPos = PositionComponent::getFrontPosition(pc, hc, dac);
 			const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
@@ -67,7 +67,7 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 		auto worldScripts = std::vector<ScriptSleepComponent*>{};
 
 		for (const auto& frontPos : ce.wcollisionComponent->blockContacts) {
-			auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH);
+			auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::TOUCH, &ce.wcollisionComponent->normal);
 			SKA_DEBUG_ONLY(
 				if (!tmp.empty()) {
 					SKA_LOG_DEBUG("Chipset script TOUCH");

@@ -16,6 +16,7 @@
 #include "../Command/CommandRemoveComponent.h"
 #include "../Command/CommandRestoreComponent.h"
 #include "../Command/CommandBlockAuthorize.h"
+#include "../Command/CommandGetEntityBlock.h"
 #include "../Command/CommandHasBlockProperty.h"
 
 ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, MemoryScript& saveGame) :
@@ -42,6 +43,7 @@ void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std
 	c["remove_component"] = std::unique_ptr<Command>(std::make_unique<CommandRemoveComponent>(m_entityManager));
 	c["restore_component"] = std::unique_ptr<Command>(std::make_unique<CommandRestoreComponent>(m_entityManager));
 	c["block_authorize"] = std::unique_ptr<Command>(std::make_unique<CommandBlockAuthorize>(m_entityManager));
+	c["get_entity_block"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityBlock>(m_world, m_entityManager));
 	c["has_block_property"] = std::unique_ptr<Command>(std::make_unique<CommandHasBlockProperty>(m_world, m_entityManager));
 	c["logical"] = std::unique_ptr<Command>(std::make_unique<CommandLogical>(m_entityManager));
 }

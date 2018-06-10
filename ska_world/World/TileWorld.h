@@ -36,7 +36,7 @@ namespace ska {
 
 		unsigned int getBlockSize() const;
 
-		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type) override;
+		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<float>* normal) override;
 		std::vector<std::reference_wrapper<ScriptSleepComponent>> getScriptsAuto() override;
 
 		const CollisionProfile& getCollisionProfile() const;

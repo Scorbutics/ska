@@ -49,8 +49,8 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 
 		//Update Script Aware Component
 		if (oldPos / blockSize != centerPos / blockSize) {
-			sac.lastBlockPos.x = centerPos.x;
-			sac.lastBlockPos.y = centerPos.y;
+			sac.lastBlockPos.x = (centerPos.x / blockSize) * blockSize;
+			sac.lastBlockPos.y = (centerPos.y / blockSize) * blockSize;
 		}
 	}
 }
