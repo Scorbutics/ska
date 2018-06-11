@@ -18,16 +18,17 @@
 #include "../Command/CommandBlockAuthorize.h"
 #include "../Command/CommandGetEntityBlock.h"
 #include "../Command/CommandHasBlockProperty.h"
+#include "../Command/CommandGetEntityId.h"
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(w, entityManager), saveGame) {
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, GameEventDispatcher& ged, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(w, entityManager), saveGame, ged) {
 }
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, sch, saveGame) {
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, GameEventDispatcher& ged, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, sch, saveGame, ged) {
 }
 
-void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c) const {
+void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c, EntityLocator& locator) const {
 	c[CommandEnd::getCmdName()] = std::unique_ptr<Command>(std::make_unique<CommandEnd>(m_entityManager));
 	c[ControlStatement::getCommandIf()] = std::unique_ptr<Command>(std::make_unique<CommandIf>(m_entityManager));
 	c[ControlStatement::getCommandElse()] = std::unique_ptr<Command>(std::make_unique<CommandElse>(m_entityManager));
@@ -43,7 +44,8 @@ void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std
 	c["remove_component"] = std::unique_ptr<Command>(std::make_unique<CommandRemoveComponent>(m_entityManager));
 	c["restore_component"] = std::unique_ptr<Command>(std::make_unique<CommandRestoreComponent>(m_entityManager));
 	c["block_authorize"] = std::unique_ptr<Command>(std::make_unique<CommandBlockAuthorize>(m_entityManager));
-	c["get_entity_block"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityBlock>(m_world, m_entityManager));
 	c["has_block_property"] = std::unique_ptr<Command>(std::make_unique<CommandHasBlockProperty>(m_world, m_entityManager));
 	c["logical"] = std::unique_ptr<Command>(std::make_unique<CommandLogical>(m_entityManager));
+	c["get_entity_block"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityBlock>(m_world, m_entityManager));
+	c["get_entity_id"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityId>(m_entityManager, locator));
 }

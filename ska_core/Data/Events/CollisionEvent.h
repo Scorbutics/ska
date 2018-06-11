@@ -8,7 +8,7 @@ namespace ska {
 	class CollidableComponent;
 
 	/**
-	 * \brief Declares an event struct that is sent to observers when a collision happen
+	 * \brief Declares an event struct that is sent to observers when a collision happens
 	 */
 	struct CollisionEvent {
 		CollisionEvent(const EntityId e, WorldCollisionComponent* wcolComp, CollisionComponent* colComp, const CollidableComponent& colliComp) :

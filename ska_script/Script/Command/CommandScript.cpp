@@ -42,7 +42,7 @@ std::string ska::CommandScript::execute(ScriptComponent& script, MemoryScript&, 
 	ssc.name = scriptName;
 	m_entityManager.addComponent<ScriptSleepComponent>(newScript, std::move(ssc));
 
-	script.parent->registerScript(&script, newScript, script.getOrigin());
+	script.parent->registerScript(std::move(ssc), script.getOrigin());
 	return StringUtils::intToStr(newScript);
 
 }

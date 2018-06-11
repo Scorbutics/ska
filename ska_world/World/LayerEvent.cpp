@@ -5,15 +5,15 @@
 
 ska::LayerEvent::LayerEvent(const LayerEventLoader& loader, unsigned int width, unsigned int height) :
     m_fileName(loader.getName()),
-    m_events(loader.loadPositioned(width, height)),
-	m_autoEvents(loader.loadGlobal()){
+    m_events(std::move(loader.loadPositioned(width, height))),
+	m_autoEvents(std::move(loader.loadGlobal())){
 	forcesAutoOnGlobalScripts();
 }
 
 void ska::LayerEvent::load(const LayerEventLoader& loader, unsigned int width, unsigned int height) {
-    m_events = loader.loadPositioned(width, height);
-	m_autoEvents = loader.loadGlobal();
-    m_fileName = loader.getName();
+    m_events = std::move(loader.loadPositioned(width, height));
+	m_autoEvents = std::move(loader.loadGlobal());
+    m_fileName = std::move(loader.getName());
 
 	forcesAutoOnGlobalScripts();
 }

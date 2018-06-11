@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../ECS/ECSDefines.h"
+#include "../../ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	enum class ScriptEventType {
@@ -11,7 +12,7 @@ namespace ska {
 
 	struct ScriptEvent {
 		std::vector<ScriptEventType> type;
-		const EntityId entityId;
+		ScriptSleepComponent scriptSleep;
 		const EntityId parent;
 		const Point<int> oldBlockId;
 		const Point<int> newBlockId;

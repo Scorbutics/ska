@@ -16,8 +16,8 @@ namespace ska {
 
 		static Point<float> getCenterPosition(const PositionComponent& pc, const HitboxComponent& hc) {
 			Point<float> result;
-			result.x = pc.x + hc.xOffset + hc.width / 2.F;
-			result.y = pc.y + hc.yOffset + hc.height / 2.F;
+			result.x = pc.x + (hc.xOffset + hc.width / 2.F);
+			result.y = pc.y + (hc.yOffset + hc.height / 2.F);
 			return result;
 		}
 

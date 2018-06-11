@@ -1,6 +1,7 @@
 #pragma once
 #include <bitset>
 #include <unordered_set>
+#include <unordered_map>
 #include <array>
 #include <unordered_map>
 #include "ECSDefines.h"
@@ -28,10 +29,10 @@ namespace ska {
 		explicit EntityManager(GameEventDispatcher& ged) : 
 			m_ged(ged) { }
 
-		EntityId createEntity();
-		EntityId createEntityNoThrow();
+		EntityId createEntity(const std::string& name = "");
+
 		void removeEntity(const EntityId& entity);
-		void removeEntities(const std::unordered_set<EntityId>& exceptions);
+		void removeEntities(const std::unordered_set<EntityId>& exceptions = std::unordered_set<ska::EntityId>{});
 		void refreshEntity(const EntityId& entity);
 		void refreshEntities();
         void refresh();
@@ -76,6 +77,7 @@ namespace ska {
 		virtual ~EntityManager() = default;
 
 	private:
+		EntityId createEntityNoThrow(const std::string& name = "");
 		bool checkEntitiesNumber() const;
 
 		GameEventDispatcher& m_ged;
@@ -85,13 +87,13 @@ namespace ska {
 		EntityIdContainer m_deletedEntities;
 		static unsigned int m_componentMaskCounter;
 
-		std::unordered_map<std::string, ComponentPool*> NAME_MAPPED_COMPONENT;
+		std::unordered_map<std::string, ComponentPool*> m_componentsNameMap;
 
 		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			static ComponentHandler<T> components(m_componentMaskCounter++, NAME_MAPPED_COMPONENT);
+			static ComponentHandler<T> components(m_componentMaskCounter++, m_componentsNameMap);
 			return components;
 		}
 

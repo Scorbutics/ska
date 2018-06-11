@@ -13,20 +13,15 @@ namespace ska {
 	struct InputKeyEvent;
 	class ScriptPositionedGetter;
 
-	using ScriptPositionSystemAccess = System< RequiredComponent<PositionComponent, ScriptSleepComponent>, PossibleComponent<>>;
-	using ScriptRefreshSystemBase = System< RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent>>;
+	using ScriptRefreshSystemBase = System< RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent, ScriptSleepComponent>>;
 	class ScriptRefreshSystem :
 		public ScriptRefreshSystemBase,
-		/* Allows easy access to each entity that contains ScriptSleepComponent and PositionComponent */
-		public ScriptPositionSystemAccess,
 		public SubObserver<InputKeyEvent>,
 		public SubObserver<CollisionEvent>,
 		public SubObserver<ScriptEvent> {
 
 	public:
 		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg);
-		void registerNamedScriptedEntity(const std::string& nameEntity, EntityId entity);
-		void clearNamedScriptedEntities();
 		~ScriptRefreshSystem() override = default;
 		void update(unsigned int ellapsedTime) override;
 
@@ -38,9 +33,9 @@ namespace ska {
 		bool onCollisionEvent(CollisionEvent& ce);
 		void triggerChangeBlockScripts(const ScriptEvent& se);
 		bool onScriptEvent(ScriptEvent& se);
-		void createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent);
+		void createScriptFromSleeping(std::vector<ScriptSleepComponent> sleepings, const EntityId& parent);
 		EntityId findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, unsigned int distance = 48) const;
-		bool startScript(EntityId scriptEntity, EntityId origin);
+		bool startScript(ScriptSleepComponent script, EntityId origin);
 
 		ScriptPositionedGetter& m_scriptPositionedGetter;
 		ScriptAutoSystem& m_scriptAutoSystem;

@@ -31,13 +31,13 @@ bool CollisionCallbackCall(cpArbiter *arb, cpSpace *space, cpDataPointer userDat
 	if constexpr (type == ska::cp::CollisionHandlerType::PRE || type == ska::cp::CollisionHandlerType::BEGIN) {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.defaultCallbacks);
 		for (auto& callback : callbacks) {
-			result &= callback.second(arbiter, userData.space, bodyEntityId);
+			result &= callback.second(arbiter, *userData.space, bodyEntityId);
 		}
 		return result;
 	} else {
 		auto& callbacks = std::get<static_cast<int>(type)>(userData.defaultCallbacks);
 		for (auto& callback : callbacks) {
-			callback.second(arbiter, userData.space, bodyEntityId);
+			callback.second(arbiter, *userData.space, bodyEntityId);
 		}
 	}
 	return true;
@@ -72,9 +72,9 @@ void ska::cp::Space::initCollisionHandlers() {
 	}
 }
 
-ska::cp::Space::Space() :
-	m_userData(*this),
-	m_space(nullptr) {
+ska::cp::Space::Space() {
+	m_userData.space = this;
+	m_space = nullptr;
 	load();
 	initCollisionHandlers();
 }
@@ -83,13 +83,8 @@ ska::cp::Space::~Space() {
 	free();
 }
 
-ska::cp::Space::Space(Space&& sh) noexcept :
-	m_userData(*this) {
-	m_space = sh.m_space;
-	m_shapes = std::move(sh.m_shapes);
-	m_bodies = std::move(sh.m_bodies);
-	sh.m_space = nullptr;
-	initCollisionHandlers();
+ska::cp::Space::Space(Space&& sh) noexcept {
+	*this = std::move(sh);
 }
 
 void ska::cp::Space::setGravity(const Vect& v) {
@@ -206,6 +201,16 @@ cpBody& ska::cp::Space::getStaticBody() {
 void ska::cp::Space::load() {
 	free();
 	m_space = cpSpaceNew();
+}
+
+ska::cp::Space& ska::cp::Space::operator=(Space&& space) noexcept {
+	m_userData.space = this;
+	m_space = space.m_space;
+	m_shapes = std::move(space.m_shapes);
+	m_bodies = std::move(space.m_bodies);
+	space.m_space = nullptr;
+	initCollisionHandlers();
+	return *this;
 }
 
 void ska::cp::Space::free() {

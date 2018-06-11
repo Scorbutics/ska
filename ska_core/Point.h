@@ -61,12 +61,24 @@ namespace ska {
 			return Point<T>(x - p.x, y - p.y);
 		}
 
-		Point<T> operator/(const unsigned int i) const {
+		template<class U>
+		Point<T> operator/(const U i) const {
 			return Point<T>(x / i, y / i);
 		}
 
-		Point<T> operator*(const unsigned int i) const {
+		template<class U>
+		Point<T> operator*(const U i) const {
 			return Point<T>(x * i, y * i);
+		}
+
+		template<class U>
+		Point<T> operator*(const Point<U>& p) const {
+			return Point<T>(x * p.x, y * p.y);
+		}
+
+		template<class U>
+		Point<T> operator/(const Point<U>& p) const {
+			return Point<T>(x / p.x, y / p.y);
 		}
 
 		Point<T> operator+(const Point<T>& p) const {

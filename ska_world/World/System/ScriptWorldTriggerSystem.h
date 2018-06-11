@@ -15,7 +15,7 @@ namespace ska {
 		void refresh(unsigned int ellapsedTime) override;
 		
 	private:
-		void createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent);
+		void createScriptFromSleeping(std::vector<ScriptSleepComponent> sleepings, const EntityId& parent);
 
 		GameEventDispatcher& m_eventDispatcher;		
 		TileWorld& m_world;

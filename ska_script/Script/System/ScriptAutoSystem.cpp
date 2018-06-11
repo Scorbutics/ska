@@ -16,16 +16,18 @@
 #include "Utils/NumberUtils.h"
 #include "ECS/Basics/Script/ScriptTriggerType.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
-
+#include "ECS/Basics/Physic/PositionComponent.h"
 
 //Par défaut, un script "permanent" se rafraîchit toutes les 1 ms
 #define SCRIPT_DEFAULT_PERIOD 1
 #define MAX_CONSECUTIVE_COMMANDS_PLAYED 5
 
 
-ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame) : System(entityManager),
-m_saveGame(saveGame) {
-	sch.setupCommands(m_commands);
+ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame, GameEventDispatcher& ged) : System(entityManager),
+	m_saveGame(saveGame),
+	m_entityManager(entityManager),
+	m_entityLocator(ged) {
+	sch.setupCommands(m_commands, m_entityLocator);
 }
 
 std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
@@ -56,20 +58,7 @@ void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, c
 	}
 }
 
-void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scriptSleepEntity, const EntityId origin) {
-
-	const auto& scriptCPtr = m_componentPossibleAccessor.get<ScriptSleepComponent>(scriptSleepEntity);
-	if (scriptCPtr == nullptr) {
-		throw IllegalArgumentException("The script entity to register has no ScriptSleepComponent");
-	}
-
-	/* If the script is already running, return */
-	if (m_componentPossibleAccessor.get<ScriptComponent>(scriptSleepEntity) != nullptr) {
-		return;
-	}
-
-	ScriptSleepComponent& scriptData = *scriptCPtr;
-
+void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId origin) {
 	std::string extendedName;
 	std::string validPath;
 	std::string keyArgs;
@@ -119,7 +108,6 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 	sc.extraArgs = scriptData.args;
 	sc.context = scriptData.context;
 	sc.triggeringType = ScriptTriggerType::AUTO;
-	sc.entityId = scriptSleepEntity;
 	sc.deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
 
 	/* Setup next args for the future script */
@@ -129,19 +117,7 @@ void ska::ScriptAutoSystem::registerScript(ScriptComponent*, const EntityId scri
 		i++;
 	}
 
-	m_componentToAddQueue.push_back(std::make_pair(scriptSleepEntity, std::move(sc)));
-}
-
-void ska::ScriptAutoSystem::registerNamedScriptedEntity(const std::string& nameEntity, const EntityId entity) {
-	m_namedScriptedEntities[nameEntity] = entity;
-}
-
-void ska::ScriptAutoSystem::clearNamedScriptedEntities() {
-	m_namedScriptedEntities.clear();
-}
-
-ska::EntityId ska::ScriptAutoSystem::getEntityFromName(const std::string& nameEntity) {
-	return m_namedScriptedEntities[nameEntity];
+	m_componentToAddQueue.push_back(std::move(sc));
 }
 
 ska::MemoryScript& ska::ScriptAutoSystem::getSavegame() {
@@ -150,7 +126,8 @@ ska::MemoryScript& ska::ScriptAutoSystem::getSavegame() {
 
 void ska::ScriptAutoSystem::refresh(unsigned int) {
 	for (auto& c : m_componentToAddQueue) {
-		m_componentAccessor.add<ScriptComponent>(c.first, std::move(c.second));
+		auto entity = m_entityManager.createEntity();
+		m_componentAccessor.add<ScriptComponent>(entity, std::move(c));
 	}
 	m_componentToAddQueue.clear();
 
@@ -186,6 +163,7 @@ void ska::ScriptAutoSystem::refresh(unsigned int) {
 }
 
 void ska::ScriptAutoSystem::killAndSave(ScriptComponent& script, const MemoryScript&) const {
+	//TODO suppression de scripts dans la save
 	//string& tmpScritFileName = ("." FILE_SEPARATOR "Data" FILE_SEPARATOR "Saves" FILE_SEPARATOR + savegame.getSaveName() + FILE_SEPARATOR "tmpscripts.data");
 	//std::ofstream scriptList;
 	/*scriptList.open(tmpScritFileName.c_str(), ios::app);
@@ -194,11 +172,6 @@ void ska::ScriptAutoSystem::killAndSave(ScriptComponent& script, const MemoryScr
 		scriptList.close();
 	}*/
 
-	if (!script.deleteEntityWhenFinished) {
-		m_componentAccessor.remove<ScriptComponent>(script.entityId);
-	} else {
-		removeEntity(script.entityId);
-	}
 	script.state = EnumScriptState::DEAD;
 }
 

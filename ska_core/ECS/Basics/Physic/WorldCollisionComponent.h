@@ -8,6 +8,7 @@ namespace ska {
 		~WorldCollisionComponent() = default;
 
 		std::vector<Point<int>> blockContacts;
+		Point<int> lastBlockDirection;
 		Point<float> normal;
 	};
 }

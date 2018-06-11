@@ -36,16 +36,16 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 			events.push_back(ScriptEventType::EntityChangeBlockProperty);
 		}*/
 
-		auto scriptEvent = ScriptEvent{ std::move(events) , entityId, 0, lastBlock == nullptr ? -1 : lastBlock->id, newBlock == nullptr ? -1 : newBlock->id, oldPos, centerPos };
+		auto scriptEvent = ScriptEvent{ std::move(events), {}, 0, lastBlock == nullptr ? -1 : lastBlock->id, newBlock == nullptr ? -1 : newBlock->id, oldPos, centerPos };
 		m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(scriptEvent);
 
 		//Auto events
-		auto worldScripts = std::vector<ScriptSleepComponent*>{};
+		auto worldScripts = std::vector<ScriptSleepComponent>{};
 		auto autosScript = m_world.getScriptsAuto();
 		for (auto& autoScript : autosScript) {
-			worldScripts.push_back(&autoScript.get());
+			worldScripts.push_back(std::move(autoScript));
 		}
-		createScriptFromSleeping(worldScripts, entityId);
+		createScriptFromSleeping(std::move(worldScripts), entityId);
 
 		//Update Script Aware Component
 		if (oldPos / blockSize != centerPos / blockSize) {
@@ -55,25 +55,23 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 	}
 }
 
-void ska::ScriptWorldTriggerSystem::createScriptFromSleeping(const std::vector<ScriptSleepComponent*>& sleepings, const EntityId& parent) {
+void ska::ScriptWorldTriggerSystem::createScriptFromSleeping(std::vector<ScriptSleepComponent> sleepings, const EntityId& parent) {
 	auto& components = m_componentAccessor;
 
 	const auto& pc = components.get<PositionComponent>(parent);
 	
-	for (const auto& ssc : sleepings) {
-		if (ssc != nullptr) {
-			const auto scriptCreated = createEntity();
+	for (auto& ssc : sleepings) {
+		//const auto scriptCreated = createEntity();
 			
-			components.add<PositionComponent>(scriptCreated, PositionComponent(pc));
-			auto sscAdd = ScriptSleepComponent(*ssc);
-			sscAdd.deleteEntityWhenFinished = true;
-			components.add<ScriptSleepComponent>(scriptCreated, std::move(sscAdd));
+		//components.add<PositionComponent>(scriptCreated, PositionComponent(pc));
+		auto sscAdd = std::move(ssc);
+		sscAdd.deleteEntityWhenFinished = true;
+		//components.add<ScriptSleepComponent>(scriptCreated, std::move(sscAdd));
 
-			auto events = std::vector<ScriptEventType>();
-			events.push_back(ScriptEventType::ScriptCreate);
-			auto se = ScriptEvent{ std::move(events), scriptCreated, parent, {}, {}, {}, pc };
-			m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(se);
-		}
+		auto events = std::vector<ScriptEventType>();
+		events.push_back(ScriptEventType::ScriptCreate);
+		auto se = ScriptEvent{ std::move(events), std::move(ssc), parent, {}, {}, {}, pc };
+		m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(se);	
 	}
 
 	

@@ -13,18 +13,21 @@
 namespace ska {
 	namespace cp {
 		
-		std::pair<cpVect, cpVect> ExtractBlockAndEntityFromContact(Space& space, const cpContactPointSet& cpSet, cpBody* body, const std::size_t index) {
+		std::tuple<cpVect, cpVect, Point<int>> ExtractBlockAndEntityFromContact(Space& space, const cpContactPointSet& cpSet, cpBody* body, const std::size_t index) {
 			cpVect bodyBlock;
 			cpVect bodyEntity;
 
+			int sign;
 			if (body == &space.getStaticBody()) {
+				sign = 1;
 				bodyBlock = cpSet.points[index].pointB;
 				bodyEntity = cpSet.points[index].pointA;
 			} else {
+				sign = -1;
 				bodyBlock = cpSet.points[index].pointA;
 				bodyEntity = cpSet.points[index].pointB;
 			}
-			return std::make_pair(bodyBlock, bodyEntity);
+			return std::make_tuple(bodyBlock, bodyEntity, cpSet.normal * sign);
 		}
 	}
 }
@@ -33,34 +36,28 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 	const auto& pc = m_entityManager.getComponent<PositionComponent>(*entityId);
 	const auto& hc = m_entityManager.getComponent<ska::HitboxComponent>(*entityId);
 	const auto centerEntityPosition = ska::PositionComponent::getCenterPosition(pc, hc);
-	const auto centerEntityBlock = ska::Point<int>{ centerEntityPosition / blockSize };
+	const auto centerEntityBlock = ska::Point<float>{
+		centerEntityPosition.x / blockSize,
+		centerEntityPosition.y / blockSize
+	};
 
 	auto[bodyA, bodyB] = arb.getBodies();
-	const auto cpSet = arb.getContactPoints();
-
 	auto uniqueBlockPoints = std::unordered_set<ska::Point<int>>{};
-
+	
+	const auto cpSet = arb.getContactPoints();
 	ska::Point<int> normal;
-
+	ska::Point<int> lastBlockDirection;
 	for(auto i = 0u; i < cpSet.count; i++) {
-		auto[bodyBlockPos, bodyEntityPos] = ExtractBlockAndEntityFromContact(m_space, cpSet, bodyA, i);
+		const auto [bodyBlockPos, bodyEntityPos, bodyNormal] = ExtractBlockAndEntityFromContact(m_space, cpSet, bodyA, i);
 
-		auto blockPoint = ska::Point<int>{
+		if (i == 0) {
+			normal = bodyNormal;
+		}
+
+		const auto blockPoint = ska::Point<int>{
 			static_cast<int>(bodyBlockPos.x / blockSize),
 			static_cast<int>(bodyBlockPos.y / blockSize)
 		};
-
-		if (i == 0) {
-			const auto sign = ska::Point<int>{
-				bodyBlockPos.x < bodyEntityPos.x ? -1 : 1,
-				bodyBlockPos.y < bodyEntityPos.y ? -1 : 1
-			};
-
-			normal = ska::Point<int>{				
-				static_cast<int>(ska::NumberUtils::absolute(arb.getNormal().x) * sign.x),
-				static_cast<int>(ska::NumberUtils::absolute(arb.getNormal().y) * sign.y)
-			};
-		}
 		
 		const auto calculatedBlockOffset = ska::Point<int>{ 
 			static_cast<int>(static_cast<int>(bodyBlockPos.x) % blockSize),
@@ -83,10 +80,13 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 		
 
 		uniqueBlockPoints.insert(blockPoint);
-		if (centerEntityBlock == blockPoint) {
-			uniqueBlockPoints.insert(blockPoint + normal);
-		} else {
+		const auto variation = (ska::Point<int>(centerEntityBlock) - blockPoint) * normal;
+		if (variation == 0) {
+			lastBlockDirection = normal;
 			uniqueBlockPoints.insert(blockPoint - normal);
+		} else {
+			lastBlockDirection = variation * normal;
+			uniqueBlockPoints.insert(centerEntityBlock);
 		}
 	}
 
@@ -94,10 +94,10 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 	for (const auto& blockPoint : uniqueBlockPoints) {
 		wcc.blockContacts.push_back(blockPoint * blockSize);
 	}
-
+	wcc.lastBlockDirection = lastBlockDirection;
 	wcc.normal = ska::Point<float>{
-		static_cast<float>(-normal.x),
-		static_cast<float>(-normal.y)
+		static_cast<float>(normal.x),
+		static_cast<float>(normal.y)
 	};
 	return wcc;
 }

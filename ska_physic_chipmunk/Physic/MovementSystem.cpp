@@ -16,7 +16,7 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 	const auto& entities = getEntities();
 	for (const auto& entity : entities) {
 		auto& fc = m_componentAccessor.get<ska::ForceComponent>(entity);
-		auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
+		const auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
 		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
 		auto& mc = m_componentAccessor.get<ska::MovementComponent>(entity);
 
@@ -37,8 +37,8 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		const auto position = body.getPosition();
 		const auto& shape = m_space.getShape(bc.shapeIndex);
 		const auto& entityDimensions = shape.getDimensions();
-		pc.x = static_cast<long>(position.x - entityDimensions.w / 2.F);
-		pc.y = static_cast<long>(position.y - entityDimensions.h / 2.F);
+		pc.x = position.x;
+		pc.y = position.y;
 
 		//Rotation : body
 		const auto rotation = body.getRotation();

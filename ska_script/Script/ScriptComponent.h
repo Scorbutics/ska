@@ -28,7 +28,6 @@ namespace ska {
 			commandsPlayed = 0;
 			lastTimeDelayed = 0;
 			delay = 0;
-			entityId = std::numeric_limits<unsigned int>::max();
 			active = 0;
 			parent = nullptr;
 		}
@@ -46,10 +45,6 @@ namespace ska {
 		std::string fullPath;
 		std::string key;
 
-		EntityId getEntity() const {
-			return entityId;
-		}
-
 		EntityId getOrigin() const {
 			return origin;
 		}
@@ -62,7 +57,6 @@ namespace ska {
 		std::string lastResult;
 		unsigned int lastTimeDelayed;
 		unsigned int delay;
-		EntityId entityId;
 		EntityId origin;
 	};
 }

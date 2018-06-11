@@ -1,10 +1,11 @@
 #pragma once
-#include <unordered_set>
+#include <unordered_map>
 #include "../../ECS/ECSDefines.h"
 
 namespace ska {
-	enum ECSEventType {
-		ENTITIES_REMOVED
+	enum class ECSEventType {
+		ENTITIES_REMOVED,
+		ENTITIES_ADDED
 	};
 
 	/**
@@ -16,6 +17,6 @@ namespace ska {
 		}
 
 		const ECSEventType ecsEventType;
-		std::unordered_set<ska::EntityId> entities;
+		std::unordered_map<ska::EntityId, std::string> entities;
 	};
 }

@@ -14,7 +14,7 @@ ska::LayerEventLoaderText::LayerEventLoaderText(std::string layerFileName) :
 	const auto nomFichier = fndata.name.substr(0, fndata.name.find_last_of('E'));
 	std::ifstream flux(m_fileName.c_str());
 	if (flux.fail()) {
-		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Impossible d'ouvrir le fichier event demande: " + m_fileName);
+		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEventLoaderText) : Impossible d'ouvrir le fichier event demande: " + m_fileName);
 	}
 
 	std::string line;

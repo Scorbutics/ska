@@ -81,8 +81,8 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	}
 }
 
-std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScriptsAuto() {
-	std::vector<std::reference_wrapper<ScriptSleepComponent>> result;
+std::vector<ska::ScriptSleepComponent> ska::TileWorld::getScriptsAuto() {
+	std::vector<ScriptSleepComponent> result;
 	if (m_autoScripts) {
 		for (auto& layerScriptsPtr : m_events) {
 			auto& autosScript = layerScriptsPtr->getAutoScript();
@@ -96,8 +96,8 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 	return {};
 }
 
-std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<float>* normal) {
-	std::vector<std::reference_wrapper<ScriptSleepComponent>> result;
+std::vector<ska::ScriptSleepComponent> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection) {
+	std::vector<ScriptSleepComponent> result;
 	if (type == ScriptTriggerType::AUTO) {
 		return result;
 	}
@@ -113,21 +113,22 @@ std::vector<std::reference_wrapper<ska::ScriptSleepComponent>> ska::TileWorld::g
 
 		const auto newBlock = frontPos / m_blockSize;
 		const auto oldBlock = oldCenterPos / m_blockSize;
-
+		
 		for (auto& ssc : blockScript) {
 			if (type == ssc.triggeringType) {
-				ssc.args.clear();
-				ssc.args.push_back(StringUtils::intToStr(oldBlock.x));
-				ssc.args.push_back(StringUtils::intToStr(oldBlock.y));
-				ssc.args.push_back(StringUtils::intToStr(newBlock.x));
-				ssc.args.push_back(StringUtils::intToStr(newBlock.y));
-				if (normal != nullptr) {
-					ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(newBlock * m_blockSize, ska::Point<int>(newBlock.x - normal->x, newBlock.y - normal->y) * m_blockSize)));
-				} else {
-					ssc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
-				}
-				ssc.context = m_fullName;
 				result.emplace_back(ssc);
+				auto& addedSsc = result.back();
+				addedSsc.args.push_back(StringUtils::intToStr(oldBlock.x));
+				addedSsc.args.push_back(StringUtils::intToStr(oldBlock.y));
+				addedSsc.args.push_back(StringUtils::intToStr(newBlock.x));
+				addedSsc.args.push_back(StringUtils::intToStr(newBlock.y));
+				if (lastBlockDirection != nullptr) {
+					const auto oldBlockCalculated = ska::Point<int>(newBlock.x + lastBlockDirection->x, newBlock.y + lastBlockDirection->y);
+					addedSsc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlockCalculated * m_blockSize, newBlock * m_blockSize)));
+				} else {
+					addedSsc.args.push_back(StringUtils::intToStr(RectangleUtils::getDirectionFromPos(oldBlock * m_blockSize, newBlock * m_blockSize)));
+				}
+				addedSsc.context = m_fullName;
 			}
 		}
 		

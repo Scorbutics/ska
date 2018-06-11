@@ -69,10 +69,9 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 				if (iamc.callbackActive) {
 					/* triggers callback */
 					const auto scriptEntity = createEntity();
-					m_componentAccessor.add<ScriptSleepComponent>(scriptEntity, std::move(iamc.callback));
 					auto events = std::vector<ScriptEventType>();
 					events.push_back(ScriptEventType::ScriptCreate);
-					auto se = ScriptEvent{ std::move(events), scriptEntity, entityId, {}, {}, {}, pc };
+					auto se = ScriptEvent{ std::move(events), std::move(iamc.callback), entityId, {}, {}, {}, pc };
 					m_eventDispatcher.Observable<ScriptEvent>::notifyObservers(se);
 				}
 				/* removes component */

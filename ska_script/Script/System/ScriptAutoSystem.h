@@ -7,6 +7,7 @@
 #include "../ScriptComponent.h"
 #include "ECS/System.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "ECS/EntityLocator.h"
 
 namespace ska {
 	class TileWorld;
@@ -16,16 +17,13 @@ namespace ska {
 	public:
 
 		MemoryScript& getSavegame();
-		void registerScript(ScriptComponent* parent, EntityId scriptSleepEntity, EntityId origin);
+		void registerScript(const ScriptSleepComponent& scriptData, EntityId origin);
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		//void kill(const std::string& keyScript);
 		virtual std::string map(const std::string& key, const std::string& id) const;
-		void registerNamedScriptedEntity(const std::string& nameEntity, EntityId entity);
-		void clearNamedScriptedEntities();
 		void removeComponent(const std::string& componentName, const std::string& id) const;
 		void restoreComponent(const std::string& componentName, const std::string& id) const;
-		EntityId getEntityFromName(const std::string& nameEntity);
 
 		/* ScriptComponent methods */
 		float getPriority(ScriptComponent& script, unsigned int currentTimeMillis);
@@ -42,14 +40,16 @@ namespace ska {
 		virtual ~ScriptAutoSystem() = default;
 
 	private:
+		EntityManager& m_entityManager;
 		MemoryScript& m_saveGame;
+		EntityLocator m_entityLocator;
 		ScriptComponent* getHighestPriorityScript();
 
 		std::unordered_map<std::string, ScriptComponent> m_cache;
 		std::unordered_map<std::string, CommandPtr> m_commands;
 		std::unordered_map<std::string, EntityId> m_namedScriptedEntities;
 
-		std::vector<std::pair<EntityId, ScriptComponent>> m_componentToAddQueue;
+		std::vector<ScriptComponent> m_componentToAddQueue;
 
 	protected:
 		virtual void refresh(unsigned int ellapsedTime) override;
@@ -57,11 +57,11 @@ namespace ska {
 			ScriptCommandHelper(EntityManager& parent) : m_entityManager(parent) {}
 			virtual ~ScriptCommandHelper() = default;
 			void operator=(const ScriptCommandHelper&) = delete;
-			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& commands) const = 0;
+			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& commands, EntityLocator& locator) const = 0;
 			EntityManager& m_entityManager;
 		};
 
-		ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame);
+		ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame, GameEventDispatcher& ged);
 	};
 
 }

@@ -6,7 +6,8 @@
 #include "../System/ScriptAutoSystem.h"
 #include "../ScriptComponent.h"
 
-ska::AbstractCommand::AbstractCommand(EntityManager& entityManager) : Command(entityManager) {
+ska::AbstractCommand::AbstractCommand(EntityManager& entityManager) : 
+	Command(entityManager) {
 }
 
 std::string ska::AbstractCommand::process(ScriptAutoSystem& system, ScriptComponent& script, std::stringstream& streamCmd) {

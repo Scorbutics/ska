@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <chipmunk.h>
 #include <gsl/pointers>
 #include "Utils/MovableNonCopyable.h"

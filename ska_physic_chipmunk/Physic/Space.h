@@ -23,8 +23,8 @@ namespace ska {
 			template <class ReturnType>
 			using SpaceCollisionCallbackContainer = std::unordered_map<std::size_t, SpaceCollisionCallback<ReturnType>>;
 
-			Space& space;
-			SpaceUserData(Space& space) : space(space) {};
+			Space* space {};
+			SpaceUserData() = default;
 
 			std::tuple<
 				//BEGIN
@@ -50,6 +50,7 @@ namespace ska {
 			void initCollisionHandlers();
 			Space();
 			Space(Space&&) noexcept;
+			Space& operator=(Space&&) noexcept;
 			virtual ~Space();
 
 			cpBody& getStaticBody();
