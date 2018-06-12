@@ -91,6 +91,9 @@ void ska::Button::resetTexture() {
 	m_textureSelector = m_lastTextureSelector;
 }
 
+void ska::Button::setClip(Rectangle clip) {
+	m_clip = std::move(clip);
+}
 
 void ska::Button::initHandlers() {
 	addHeadHandler<ClickEventListener>([this](Widget*, ClickEvent& e) {

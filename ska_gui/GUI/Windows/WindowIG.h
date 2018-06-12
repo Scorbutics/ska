@@ -13,7 +13,7 @@ namespace ska{
 	public:
 		static constexpr auto TAILLEBLOCFENETRE = 32;
 
-		WindowIG(Widget& parent, const Rectangle& box, const std::string& styleName) :
+		WindowIG(Widget& parent, const Rectangle& box, const std::string& styleName = "") :
 			WidgetPanel<HL...>(parent),
 			m_drawStyle(!styleName.empty()) {
 			if(m_drawStyle) {
@@ -39,6 +39,7 @@ namespace ska{
 				return;
 			}
 
+			//TODO -> dans un Widget (ça ne devrait pas être "obligatoire" pour chaque fenêtre)
             /* Draw the window using menu tiles */
 			if (m_drawStyle) {
                 Rectangle backgroundTileClip = { 0, 0, TAILLEBLOCFENETRE, TAILLEBLOCFENETRE };

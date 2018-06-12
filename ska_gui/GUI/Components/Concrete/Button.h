@@ -15,6 +15,7 @@ namespace ska {
 		virtual void render(const Renderer& renderer) const override;
 		virtual ~Button();
 
+		void setClip(Rectangle clip);
 		void forceState(ButtonState::Enum e);
 
 	protected:

@@ -47,7 +47,8 @@ namespace ska {
 		SDL_DESTROY_WINDOW, 
 		SDL_SHOW_SIMPLE_MESSAGE_BOX,
 		SDL_QUERY_TEXTURE,
-		SDL_SET_MAIN_READY
+		SDL_SET_MAIN_READY,
+		SDL_SHOW_CURSOR
 	};
 
 #define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -90,6 +91,7 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_SIMPLE_MESSAGE_BOX, int(Uint32, const char*, const char*, SDL_Window*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUERY_TEXTURE, int(SDL_Texture*, Uint32*, int*, int*, int*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_MAIN_READY, void());
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_CURSOR, int(int toggle));
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
 
@@ -130,7 +132,8 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_DESTROY_WINDOW),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_SIMPLE_MESSAGE_BOX),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_QUERY_TEXTURE),
-		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_MAIN_READY)
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_MAIN_READY),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_CURSOR)
 	>;
 
 
@@ -288,8 +291,8 @@ namespace ska {
 			callSDL(SDL_SET_MAIN_READY)();
 		}
 
-		void showCursor(bool b) const {
-			//TODO
+		int showCursor(bool b) const {
+			return callSDL(SDL_SHOW_CURSOR)(static_cast<int>(b));
 		}
 
 		static SDLLibrary& get() {
