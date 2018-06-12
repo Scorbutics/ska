@@ -5,7 +5,9 @@
 bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId& entity) {
 	if (event.ecsEventType == ska::ECSEventType::ENTITIES_REMOVED) {
 		auto& entitiesRemoved = event.entities;
-		auto foundEntity = std::find(entitiesRemoved.begin(), entitiesRemoved.end(), entity);
+		auto foundEntity = std::find_if(entitiesRemoved.begin(), entitiesRemoved.end(), [&](const auto& t) {
+			return t.first == entity;
+		});
 		return foundEntity != entitiesRemoved.end();
 	}
 	return false;
@@ -86,21 +88,6 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[1].entityId == entity2);
 		
-		CHECK(entity1 != entity2);
-	}
-
-	SUBCASE("createEntityNoThrow (differents)") {
-		ska::EntityId entity1 = em.createEntityNoThrow();
-		ska::EntityId entity2 = em.createEntityNoThrow();
-		
-		em.refresh();
-
-		CHECK(componentObserver.eventType.size() == 2);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[0].entityId == entity1);
-		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[1].entityId == entity2);
-
 		CHECK(entity1 != entity2);
 	}
 

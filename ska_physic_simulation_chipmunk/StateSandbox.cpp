@@ -98,12 +98,12 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		m_walkASM = &animSystem.setup<ska::WalkAnimationStateMachine>(true, std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
 		animSystem.setup<ska::JumpAnimationStateMachine>(false, std::make_unique<ska::JumpAnimationStateMachine>(m_entityManager));
 
-		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](const ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) > 0.1;
 		});
 
-		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](const ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
 		});
@@ -154,7 +154,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
-	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 65.F, ballEntity);
+	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, point, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 65.F, ballEntity);
 	ska::cp::AddTopDownConstraints(m_space, nullptr, m_space.getBody(bc.controlBodyIndex), 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 

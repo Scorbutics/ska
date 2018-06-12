@@ -123,12 +123,12 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
         m_walkASM = &animSystem.setup<ska::WalkAnimationStateMachine>(true, std::make_unique<ska::WalkAnimationStateMachine>(m_entityManager));
 		animSystem.setup<ska::JumpAnimationStateMachine>(false, std::make_unique<ska::JumpAnimationStateMachine>(m_entityManager));
 
-		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::WalkAnimationStateMachine, ska::JumpAnimationStateMachine>([&](const ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) > 0.1;
 		});
 
-		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](ska::EntityId& e) {
+		animSystem.link<ska::JumpAnimationStateMachine, ska::WalkAnimationStateMachine>([&](const ska::EntityId& e) {
 			auto& mov = m_entityManager.getComponent<ska::MovementComponent>(e);
 			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
 		});

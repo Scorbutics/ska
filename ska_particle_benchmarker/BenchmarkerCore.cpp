@@ -136,7 +136,7 @@ void BenchmarkerCore::graphicUpdate(const unsigned long) const {
 	
 	m_particles.render(m_renderer);
 	//m_particleSystem.render(m_renderer);
-	m_fpsCalculator.getRenderable().render(m_renderer);
+	//m_fpsCalculator.getRenderable().render(m_renderer);
 	m_renderer.update();
 	
 }
