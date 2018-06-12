@@ -9,8 +9,8 @@ namespace ska {
 		public AnimationStateMachine<WalkAnimationStateMachine> {
 	public:
 		explicit JumpAnimationStateMachine(ska::EntityManager& em);
-		virtual void update(ska::AnimationComponent& ac, EntityId& entityId) override;
-		virtual void onEnter(EntityId&) override;
+		virtual void update(ska::AnimationComponent& ac, const EntityId& entityId) override;
+		virtual void onEnter(const EntityId&) override;
 	private:
 		ska::EntityManager& m_entityManager;
 	};

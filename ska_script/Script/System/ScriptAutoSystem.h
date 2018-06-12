@@ -42,7 +42,6 @@ namespace ska {
 	private:
 		EntityManager& m_entityManager;
 		MemoryScript& m_saveGame;
-		EntityLocator m_entityLocator;
 		ScriptComponent* getHighestPriorityScript();
 
 		std::unordered_map<std::string, ScriptComponent> m_cache;
@@ -57,7 +56,7 @@ namespace ska {
 			ScriptCommandHelper(EntityManager& parent) : m_entityManager(parent) {}
 			virtual ~ScriptCommandHelper() = default;
 			void operator=(const ScriptCommandHelper&) = delete;
-			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& commands, EntityLocator& locator) const = 0;
+			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& commands) const = 0;
 			EntityManager& m_entityManager;
 		};
 

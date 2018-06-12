@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "Draw/DrawableContainer.h"
 #include "Data/Events/GameEventDispatcher.h"
+#include "WindowIG.h"
 
 namespace ska {
 	class GUI;
@@ -35,5 +36,6 @@ namespace ska {
 		std::unordered_map<std::string, Widget*> m_labels;
 		GUI& m_gui;
 		GameEventDispatcher& m_ged;
+		ska::WindowIG<>* m_dbgWindow = nullptr;
 	};
 }

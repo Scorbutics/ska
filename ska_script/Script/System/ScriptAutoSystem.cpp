@@ -25,9 +25,8 @@
 
 ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, const ScriptCommandHelper& sch, MemoryScript& saveGame, GameEventDispatcher& ged) : System(entityManager),
 	m_saveGame(saveGame),
-	m_entityManager(entityManager),
-	m_entityLocator(ged) {
-	sch.setupCommands(m_commands, m_entityLocator);
+	m_entityManager(entityManager) {
+	sch.setupCommands(m_commands);
 }
 
 std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {

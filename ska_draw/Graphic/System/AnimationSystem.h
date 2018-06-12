@@ -11,7 +11,7 @@ namespace ska {
     template <class ... ASM>
     class AnimationSystem :
         public System< RequiredComponent<GraphicComponent, MovementComponent, AnimationComponent>, PossibleComponent<PositionComponent>> {
-      using Predicate = std::function<bool(EntityId&)>;
+      using Predicate = std::function<bool(const EntityId&)>;
 
       template <class T>
       using ASMPtr = std::unique_ptr<T>;

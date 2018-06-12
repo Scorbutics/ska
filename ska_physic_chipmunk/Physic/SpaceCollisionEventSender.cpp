@@ -63,21 +63,13 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 			static_cast<int>(static_cast<int>(bodyBlockPos.x) % blockSize),
 			static_cast<int>(static_cast<int>(bodyBlockPos.y) % blockSize) };
 
+		/*
 		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Blocks float positions : block ",
 			bodyBlockPos.x / blockSize, "; ", bodyBlockPos.y / blockSize,
 			" integer : ",
 			blockPoint.x, "; ", blockPoint.y,
 			" offset (", calculatedBlockOffset.x, "; ", calculatedBlockOffset.y, ")");
-
-		/*const auto calculatedEntityOffset = ska::Point<int>{
-			static_cast<int>(static_cast<int>(bodyEntity.x) % blockSize),
-			static_cast<int>(static_cast<int>(bodyEntity.y) % blockSize) };
-
-		SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Entity float positions : block ", bodyEntity.x / blockSize, "; ", bodyEntity.y / blockSize,
-			" offset (", calculatedEntityOffset.x, "; ", calculatedEntityOffset.y, ")");*/
-
-		//SKA_STATIC_LOG_DEBUG(ska::cp::SpaceCollisionEventSender)("Normal ", contactNormalAbs.x, "; ", contactNormalAbs.y, " sign ", sign.x, "; ", sign.y);
-		
+		*/
 
 		uniqueBlockPoints.insert(blockPoint);
 		const auto variation = (ska::Point<int>(centerEntityBlock) - blockPoint) * normal;

@@ -16,7 +16,7 @@ ska::AnimationComponent::AnimationComponent() :
 
 ska::AnimationComponent::~AnimationComponent(){}
 
-void ska::AnimationComponent::setASM(IAnimationStateMachine& afsm, EntityId& entityId){
+void ska::AnimationComponent::setASM(IAnimationStateMachine& afsm, const EntityId& entityId){
 	animationFiniteStateMachine = &afsm;
 	animationFiniteStateMachine->onEnter(entityId);
 }

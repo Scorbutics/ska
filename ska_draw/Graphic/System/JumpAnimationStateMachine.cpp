@@ -10,7 +10,7 @@ ska::JumpAnimationStateMachine::JumpAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {
 }
 
-void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
+void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, const EntityId& entityId) {
 	auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
 	auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
 
@@ -61,7 +61,7 @@ void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, EntityI
 	texture.setOffset(spritePos);
 }
 
-void ska::JumpAnimationStateMachine::onEnter(EntityId& e) {
+void ska::JumpAnimationStateMachine::onEnter(const EntityId& e) {
 	auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(e);
 	gc.animatedSprites[0].setOffset(Point<int>(3 * 48, 0));
 	gc.animatedSprites[0].stop(true);

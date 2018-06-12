@@ -9,7 +9,7 @@ namespace ska {
 	class ScriptBasicCommandsSystem : public ScriptAutoSystem {
 		
 	public :
-		ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, GameEventDispatcher& ged, MemoryScript& saveGame);
+		ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, const EntityLocator& locator, GameEventDispatcher& ged, MemoryScript& saveGame);
 		~ScriptBasicCommandsSystem() override = default;
 
 	protected:
@@ -18,18 +18,21 @@ namespace ska {
 		struct BasicScriptCommandHelper : public ScriptCommandHelper {
 			friend class ScriptBasicCommandsSystem;
 		    BasicScriptCommandHelper() = default;		
-			BasicScriptCommandHelper(TileWorld& w, EntityManager& entityManager) :
+			BasicScriptCommandHelper(TileWorld& w, EntityManager& entityManager, const EntityLocator& locator) :
 				ScriptCommandHelper(entityManager),
-				m_world(w) {
+				m_world(w),
+				m_locator(locator) {
 			}
 
 			void operator=(const BasicScriptCommandHelper&) = delete;
 			virtual ~BasicScriptCommandHelper() = default;
 
-			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& c, EntityLocator& locator) const override;
+			virtual void setupCommands(std::unordered_map<std::string, CommandPtr>& c) const override;
 
 		private:
 			TileWorld& m_world;
+		protected:
+			const EntityLocator& m_locator;
 		};
 	};
 

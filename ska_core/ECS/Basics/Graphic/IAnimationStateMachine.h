@@ -7,7 +7,7 @@ namespace ska {
 	class IAnimationStateMachine {
 	public:
 		virtual ~IAnimationStateMachine() = default;
-		virtual IAnimationStateMachine* animate(AnimationComponent& ac, EntityId& e) = 0;
-		virtual void onEnter(EntityId&) = 0;
+		virtual IAnimationStateMachine* animate(AnimationComponent& ac, const EntityId& e) = 0;
+		virtual void onEnter(const EntityId&) = 0;
 	};
 }

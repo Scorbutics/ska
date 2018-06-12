@@ -20,15 +20,15 @@
 #include "../Command/CommandHasBlockProperty.h"
 #include "../Command/CommandGetEntityId.h"
 
-ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, GameEventDispatcher& ged, MemoryScript& saveGame) :
-	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(w, entityManager), saveGame, ged) {
+ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, const EntityLocator& locator, GameEventDispatcher& ged, MemoryScript& saveGame) :
+	ScriptAutoSystem(entityManager, BasicScriptCommandHelper(w, entityManager, locator), saveGame, ged) {
 }
 
 ska::ScriptBasicCommandsSystem::ScriptBasicCommandsSystem(ska::TileWorld& w, EntityManager& entityManager, GameEventDispatcher& ged, const ScriptCommandHelper& sch, MemoryScript& saveGame) :
 	ScriptAutoSystem(entityManager, sch, saveGame, ged) {
 }
 
-void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c, EntityLocator& locator) const {
+void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std::unordered_map<std::string, CommandPtr>& c) const {
 	c[CommandEnd::getCmdName()] = std::unique_ptr<Command>(std::make_unique<CommandEnd>(m_entityManager));
 	c[ControlStatement::getCommandIf()] = std::unique_ptr<Command>(std::make_unique<CommandIf>(m_entityManager));
 	c[ControlStatement::getCommandElse()] = std::unique_ptr<Command>(std::make_unique<CommandElse>(m_entityManager));
@@ -47,5 +47,5 @@ void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std
 	c["has_block_property"] = std::unique_ptr<Command>(std::make_unique<CommandHasBlockProperty>(m_world, m_entityManager));
 	c["logical"] = std::unique_ptr<Command>(std::make_unique<CommandLogical>(m_entityManager));
 	c["get_entity_block"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityBlock>(m_world, m_entityManager));
-	c["get_entity_id"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityId>(m_entityManager, locator));
+	c["get_entity_id"] = std::unique_ptr<Command>(std::make_unique<CommandGetEntityId>(m_entityManager, m_locator));
 }

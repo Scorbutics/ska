@@ -10,7 +10,7 @@ ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {
 }
 
-void ska::WalkAnimationStateMachine::onEnter(EntityId& e) {
+void ska::WalkAnimationStateMachine::onEnter(const EntityId& e) {
 	auto& gc = m_entityManager.getComponent<ska::GraphicComponent>(e);
 	if (gc.animatedSprites.empty()) {
 		return;
@@ -18,7 +18,7 @@ void ska::WalkAnimationStateMachine::onEnter(EntityId& e) {
 	gc.animatedSprites[0].setOffset(Point<int>(0, 0));
 }
 
-void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, EntityId& entityId) {
+void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, const EntityId& entityId) {
 	auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
 	auto& pc = m_entityManager.getComponent<PositionComponent>(entityId);
 	auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);

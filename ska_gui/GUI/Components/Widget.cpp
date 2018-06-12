@@ -1,8 +1,9 @@
 #include "Widget.h"
 
-ska::Widget::Widget() : m_parent(nullptr),
-m_visible(true),
-m_focused(false) {
+ska::Widget::Widget() : 
+	m_parent(nullptr),
+	m_visible(true),
+	m_focused(false) {
 	m_box.x = 0;
 	m_box.y = 0;
 	m_box.w = 1;
@@ -11,9 +12,9 @@ m_focused(false) {
 }
 
 ska::Widget::Widget(Widget& parent) :
-m_parent(&parent),
-m_visible(true),
-m_focused(false) {
+	m_parent(&parent),
+	m_visible(true),
+	m_focused(false) {
 	m_box.x = 0;
 	m_box.y = 0;
 	m_box.w = 1;
@@ -21,9 +22,9 @@ m_focused(false) {
 }
 
 ska::Widget::Widget(Widget& parent, Point<int>& position) :
-m_parent(&parent),
-m_visible(true),
-m_focused(false) {
+	m_parent(&parent),
+	m_visible(true),
+	m_focused(false) {
 	m_box.x = position.x;
 	m_box.y = position.y;
 	m_box.w = 1;

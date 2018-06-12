@@ -11,7 +11,7 @@ namespace ska {
 	class AnimationStateMachine :
 		public IAnimationStateMachine {
 
-		using Predicate = std::function<bool(EntityId&)>;
+		using Predicate = std::function<bool(const EntityId&)>;
 
 		template <class ASM>
 		struct MetaDataAnimationStateMachine {
@@ -27,7 +27,7 @@ namespace ska {
 
 			using asmType = ASM;
 
-			bool check(EntityId& e) const {
+			bool check(const EntityId& e) const {
 				return defined && condition(e);
 			}
 
@@ -47,7 +47,7 @@ namespace ska {
 			l.nextASM = toASM;
 		}
 
-		IAnimationStateMachine* animate(AnimationComponent& ac, EntityId& e) override {
+		IAnimationStateMachine* animate(AnimationComponent& ac, const EntityId& e) override {
 			IAnimationStateMachine* next = nullptr;
 			auto index = 0;
 			update(ac, e);
@@ -63,7 +63,7 @@ namespace ska {
 		virtual ~AnimationStateMachine() = default;
 
 	protected:
-		virtual void update(AnimationComponent& ac, EntityId& e) = 0;
+		virtual void update(AnimationComponent& ac, const EntityId& e) = 0;
 
 	private:
 		std::tuple<MetaDataAnimationStateMachine<S>...> m_linkedTo;
