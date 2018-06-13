@@ -38,7 +38,7 @@ TEST_CASE("[CollisionProfile]"){
 		auto cp = ska::CollisionProfile{ 10, std::move(layers) };
 
 		SUBCASE("Block size, dimensions") {
-		    CHECK(cp.getBlockSize() == 1);
+		    CHECK(cp.getBlockSize() == 10);
 		    CHECK(cp.getBlocksX() == 4);
 		    CHECK(cp.getBlocksY() == 4);
 		}
@@ -116,29 +116,47 @@ TEST_CASE("[CollisionProfile]"){
 
         SUBCASE("getBlock layer 1") {
 			SUBCASE("0 0") {
-				CHECK(cp.getBlock(1, 0, 0) == nullptr);
+			    const auto* block = cp.getBlock(1, 0, 0);
+				CHECK(block != nullptr);
+				CHECK(block->id == ska::Point<int>{0, 0});
+				CHECK(block->properties.bitMask == 1);
 			}
 
 			SUBCASE("1 0") {
-				CHECK(cp.getBlock(1, 1, 0) != nullptr);
+				const auto* block = cp.getBlock(1, 1, 0);
+				CHECK(block != nullptr);
+				CHECK(block->id == ska::Point<int>{1, 0});
+				CHECK(block->properties.bitMask == 1);
 			}
 
 			SUBCASE("1 2") {
-				CHECK(cp.getBlock(1, 1, 2) == nullptr);
+                const auto* block = cp.getBlock(1, 1, 2);
+				CHECK(block != nullptr);
+				CHECK(block->id == ska::Point<int>{1, 2});
+				CHECK(block->properties.bitMask == 1);
 			}
 		}
 
 		SUBCASE("getBlock layer 0") {
 			SUBCASE("0 0") {
-				CHECK(cp.getBlock(0, 0, 0) == nullptr);
+			    const auto* block = cp.getBlock(0, 0, 0);
+                CHECK(block != nullptr);
+                CHECK(block->id == ska::Point<int>{0, 0});
+				CHECK(block->properties.bitMask == 0);
 			}
 
 			SUBCASE("1 0") {
-				CHECK(cp.getBlock(0, 1, 0) == nullptr);
+				const auto* block = cp.getBlock(0, 1, 0);
+                CHECK(block != nullptr);
+                CHECK(block->id == ska::Point<int>{1, 0});
+				CHECK(block->properties.bitMask == 0);
 			}
 
 			SUBCASE("1 2") {
-				CHECK(cp.getBlock(0, 1, 2) != nullptr);
+                const auto* block = cp.getBlock(0, 1, 2);
+                CHECK(block != nullptr);
+                CHECK(block->id == ska::Point<int>{1, 2});
+				CHECK(block->properties.bitMask == 0);
 			}
 		}
 
