@@ -1,6 +1,6 @@
 #include "Widget.h"
 
-ska::Widget::Widget() : 
+ska::Widget::Widget() :
 	m_parent(nullptr),
 	m_visible(true),
 	m_focused(false) {
@@ -21,7 +21,7 @@ ska::Widget::Widget(Widget& parent) :
 	m_box.h = 1;
 }
 
-ska::Widget::Widget(Widget& parent, Point<int>& position) :
+ska::Widget::Widget(Widget& parent, const Point<int>& position) :
 	m_parent(&parent),
 	m_visible(true),
 	m_focused(false) {

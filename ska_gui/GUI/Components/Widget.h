@@ -24,7 +24,7 @@ namespace ska {
 		Widget();
 		explicit Widget(Widget& parent);
 
-		Widget(Widget& parent, Point<int>& position);
+		Widget(Widget& parent, const Point<int>& position);
 
 		bool isVisible() const;
 
