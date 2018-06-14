@@ -8,8 +8,8 @@
 #include "Utils/SkaConstants.h"
 
 #define SCROLL_BUTTON_SPEED 3
-static constexpr auto TAILLEECRANMINX = ska::WindowIG<>::TAILLEBLOCFENETRE*15;
-static constexpr auto TAILLEECRANMINY = ska::WindowIG<>::TAILLEBLOCFENETRE*13;
+static constexpr auto TAILLEECRANMINX = 32*15;
+static constexpr auto TAILLEECRANMINY = 32*13;
 
 std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "./Menu/default_theme/";
 
@@ -24,9 +24,9 @@ ska::GUI::GUI(GameEventDispatcher& ged) :
     m_hovered(nullptr),
     m_clicked(nullptr),
     m_lastFocused(nullptr),
-    m_wMaster(this, this, this, Rectangle{ 0, 0, TAILLEECRANMINX, TAILLEECRANMINY }, "") {
+    m_wMaster(this, this, this, Rectangle{ 0, 0, TAILLEECRANMINX, TAILLEECRANMINY }) {
 
-    m_wFocusable = &m_wMaster.addWidget<TimeScrollableWindowIG<KeyEventListener>>(Rectangle{ 0, 0, TAILLEECRANMINX, TAILLEECRANMINY }, "");
+    m_wFocusable = &m_wMaster.addWidget<TimeScrollableWindowIG<KeyEventListener>>(Rectangle{ 0, 0, TAILLEECRANMINX, TAILLEECRANMINY });
     DrawableFixedPriority::setPriority(std::numeric_limits<int>().max());
 
 	m_ged.addMultipleObservers<GUIEvent, GameEvent, InputMouseEvent, InputKeyEvent>(*this, *this, *this, *this);
@@ -208,7 +208,7 @@ bool ska::GUI::onGUIEvent(GUIEvent& ge) {
     }
 
 	if(ge.type == GUIEventType::ADD_BALLOON) {
- 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, ska::WindowIG<>::TAILLEBLOCFENETRE * 2, ska::WindowIG<>::TAILLEBLOCFENETRE * 10, ska::WindowIG<>::TAILLEBLOCFENETRE * 2 }, ge.text, ge.delay, 16);
+ 		auto& bd = addWindow<BalloonDialog>(ge.windowName, Rectangle{ 0, 64, 320, 64 }, ge.text, ge.delay, 16);
 		bd.addHandler<TimeEventListener>([&](Widget* tthis, TimeEvent&) {
 			auto& balloon = static_cast<BalloonDialog&>(*tthis);
 			if(balloon.isExpired()) {

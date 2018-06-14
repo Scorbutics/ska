@@ -45,8 +45,8 @@ void ska::Texture::loadFromText(unsigned int fontSize, std::string text, Color c
 	loadFromKey(TextureData(text, c, ska::Rectangle{}, EnumTextureType::TEXT, fontSize));
 }
 
-void ska::Texture::loadFromColoredRect(unsigned int width, unsigned int height, Color c) {
-	loadFromKey(TextureData("", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, EnumTextureType::RECT, 0));
+void ska::Texture::loadFromColoredRect(unsigned int width, unsigned int height, Color c, const Color* outlineColor) {
+	loadFromKey(TextureData("", c, { 0, 0, static_cast<int>(width), static_cast<int>(height) }, EnumTextureType::RECT, 0, outlineColor));
 	lifetimeSeparation();
 	resize(width, height);
 }

@@ -90,7 +90,7 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 	if (instance != nullptr) {
 		instance->load(*this);
 
-		SDL_Rect destBuf = { posX, posY, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
+		auto destBuf = SDL_Rect{ posX, posY, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
 
 		if (clip != nullptr) {
 			destBuf.w = clip->w;

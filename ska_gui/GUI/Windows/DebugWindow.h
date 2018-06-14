@@ -40,12 +40,12 @@ namespace ska {
 		GUI& m_gui;
 		GameEventDispatcher& m_ged;
 		MoveableWindow<>* m_dbgWindow = nullptr;
-		ImageRectangle* m_background = nullptr;
 		Label* m_title = nullptr;
 
 		static constexpr auto VERTICAL_OFFSET = 5;
 		static constexpr auto HORIZONTAL_OFFSET = 5;
 		static constexpr auto FONT_SIZE = 14;
+		
 		static constexpr uint8_t OPACITY = 120;
 	};
 }

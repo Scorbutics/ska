@@ -24,7 +24,7 @@ namespace ska {
 			HandledWidget<HL...>(parent) {
 		}
 
-		WidgetPanel(Widget& parent, Point<int>& position) :
+		WidgetPanel(Widget& parent, const Point<int>& position) :
 			HandledWidget<HL...>(parent, position) {
 		}
 
@@ -98,7 +98,9 @@ namespace ska {
 
 		void render(const Renderer& renderer) const override {
 			for (auto w = m_globalList.cbegin(); w != m_globalList.cend(); ++w) {
-				(*w)->render(renderer);
+				if ((*w)->isVisible()) {
+					(*w)->render(renderer);
+				}
 			}
 		}
 
@@ -111,10 +113,6 @@ namespace ska {
 		}
 
 		virtual ~WidgetPanel() = default;
-
-		static void switchTextureAndMemorize() {}
-
-		static void resetTexture() {}
 
 		void resort() {
 			organizeHandledWidgets();
@@ -143,7 +141,7 @@ namespace ska {
 		}
 
 		void sortZIndexWidgets() {
-			auto comparatorAsc = [](const std::unique_ptr<Widget>& w1, const std::unique_ptr<Widget>& w2) {
+			static const auto comparatorAsc = [](const std::unique_ptr<Widget>& w1, const std::unique_ptr<Widget>& w2) {
 				auto v1 = w1->isVisible() ? 0 : 1;
 				auto v2 = w2->isVisible() ? 0 : 1;
 
@@ -154,7 +152,7 @@ namespace ska {
 				return v1 < v2;
 			};
 
-            auto comparatorDescRaw = [](const Widget* w1, const Widget* w2) {
+            static const auto comparatorDescRaw = [](const Widget* w1, const Widget* w2) {
 				auto v1 = w1->isVisible() ? 0 : 1;
 				auto v2 = w2->isVisible() ? 0 : 1;
 

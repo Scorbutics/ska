@@ -13,9 +13,10 @@ namespace ska {
 		public TimeObserver {
 	public:
 
-		TimeScrollableWindowIG(Widget& parent, const Rectangle& box, const std::string& styleName) :
-			DynamicWindowIG<TimeEventListener, HL...>(parent, box, styleName),
-			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), m_moving(false),
+		TimeScrollableWindowIG(Widget& parent, const Rectangle& box) :
+			DynamicWindowIG<TimeEventListener, HL...>(parent, box),
+			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), 
+			m_moving(false),
 			m_timeObservable(nullptr) {
 
 			HandledWidget<ClickEventListener, HoverEventListener, TimeEventListener, HL...>::template addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
@@ -23,9 +24,10 @@ namespace ska {
 			});
 		}
 
-		TimeScrollableWindowIG(TimeObservable* timeObservable, MouseObservable* guiObservable, KeyObservable* keyObservable, const Rectangle& box, const std::string& styleName) :
-			DynamicWindowIG<TimeEventListener, HL...>(guiObservable, keyObservable, box, styleName),
-			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), m_moving(false),
+		TimeScrollableWindowIG(TimeObservable* timeObservable, MouseObservable* guiObservable, KeyObservable* keyObservable, const Rectangle& box) :
+			DynamicWindowIG<TimeEventListener, HL...>(guiObservable, keyObservable, box),
+			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), 
+			m_moving(false),
 			m_timeObservable(timeObservable) {
 
 			if (m_timeObservable != nullptr) {

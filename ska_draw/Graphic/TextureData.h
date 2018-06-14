@@ -4,22 +4,30 @@
 #include "Rectangle.h"
 
 namespace ska {
-    
+
 	enum class EnumTextureType {
 		SPRITE,
 		TEXT,
 		RECT
 	};
 
+	struct TextureDataDescriptor {
+		std::string text;
+		ska::Color color;
+		const ska::Color* outlineColor = nullptr;
+	};
+
+	bool operator==(const ska::TextureDataDescriptor& t1, const ska::TextureDataDescriptor& t2);
+
 	/**
 	 * \brief A key used to index every SDL_Texture in the memory map (see ManagedResource for more information)
 	 */
 	class TextureData {
 	public:
-		TextureData(const std::string& texturePath, Color col, const ska::Rectangle& rect, EnumTextureType type, unsigned int fs);
+		TextureData(const std::string& texturePath, Color col, const ska::Rectangle& rect, EnumTextureType type, unsigned int fontSiz, const Color* outlineColor = nullptr);
         TextureData();
 
-		std::pair<std::string, Color> getData() const;
+		const TextureDataDescriptor& getData() const;
 
 		virtual ~TextureData() = default;
 
@@ -28,7 +36,7 @@ namespace ska {
 		ska::Rectangle rect;
 
 	private:
-		std::pair<std::string, Color> m_data;
+		TextureDataDescriptor m_data;
 	};
 }
 
@@ -41,8 +49,8 @@ namespace std {
 			using std::hash;
 
 			auto d = k.getData();
-			auto hashSeed = hash<string>()(d.first);
-			ska::NumberUtils::hashCombine<ska::Color>(hashSeed, d.second);
+			auto hashSeed = hash<string>()(d.text);
+			ska::NumberUtils::hashCombine<ska::Color>(hashSeed, d.color);
 			ska::NumberUtils::hashCombine<unsigned int>(hashSeed, k.fontSize);
 			ska::NumberUtils::hashCombine<int>(hashSeed, static_cast<int>(k.type));
 			return hashSeed;

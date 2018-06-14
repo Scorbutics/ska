@@ -2,9 +2,9 @@
 #include "ImageRectangle.h"
 #include "Draw/Renderer.h"
 
-ska::ImageRectangle::ImageRectangle(Widget& parent, Rectangle box, Color c) :
+ska::ImageRectangle::ImageRectangle(Widget& parent, Rectangle box, Color c, const Color* outline) :
 	Widget(parent, ska::Point<int>{box.x, box.y}) {
-	m_img.loadFromColoredRect(box.w, box.h, std::move(c));
+	m_img.loadFromColoredRect(box.w, box.h, std::move(c), outline);
 	m_box = box;
 
 	ImageRectangle::setWidth(box.w);

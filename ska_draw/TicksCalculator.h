@@ -3,11 +3,11 @@
 #include "FpsRenderable.h"
 
 namespace ska {
-	class FpsCalculator {
+	class TicksCalculator {
 	public:
-		FpsCalculator();
+		TicksCalculator();
 		double calculate(long newtick);
-		~FpsCalculator() = default;
+		~TicksCalculator() = default;
 
 	private:
 		const static int MAXSAMPLES = 100;

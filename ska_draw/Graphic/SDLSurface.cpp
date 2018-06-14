@@ -37,12 +37,10 @@ void ska::SDLSurface::loadFromText(const Font& font, const std::string& text, Co
 	c.fill(m_r, m_g, m_b, &m_a);
 }
 
-void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& rect) {
+void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& rect, const Color* outlineColor) {
 	free();
 	Uint32 rmask, gmask, bmask, amask;
 
-	/* SDL interprets each pixel as a 32-bit number, so our masks must depend
-	on the endianness (byte order) of the machine */
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	rmask = 0xff000000;
 	gmask = 0x00ff0000;
@@ -54,14 +52,27 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 	bmask = 0x00ff0000;
 	amask = 0xff000000;
 #endif
+	if (rect.w == 0 || rect.h == 0) {
+		SKA_LOG_ERROR("Unable to load a texture from an empty rectangle");
+		assert(false);
+		return;
+	}
+
 	m_surface = SDLLibrary::get().createRGBSurface(0, rect.w, rect.h, 32, rmask, gmask, bmask, amask);
 
 	if (!checkSurfaceValidity("(Rectangle)")) {
 		return;
 	}
-
-	SDL_Rect sRect = { 0, 0, rect.w, rect.h };
+	
+	const auto offset = outlineColor != nullptr ? 2 : 0;
+	const auto sRect = SDL_Rect { offset, offset, rect.w - offset, rect.h - offset };
 	color.fill(m_r, m_g, m_b, &m_a);
+
+	if (outlineColor != nullptr) {
+		const auto sRectOutline = SDL_Rect { 0, 0, rect.w, rect.h };
+		SDLLibrary::get().fillRect(*m_surface, &sRectOutline, SDLLibrary::get().mapRGBA(*m_surface->format, outlineColor->r, outlineColor->g, outlineColor->b, outlineColor->a));
+	}
+
 	SDLLibrary::get().fillRect(*m_surface, &sRect, SDLLibrary::get().mapRGBA(*m_surface->format, color.r, color.g, color.b, color.a));
 }
 

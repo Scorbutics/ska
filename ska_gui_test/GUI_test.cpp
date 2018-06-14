@@ -15,16 +15,16 @@ void printVector(std::vector<T>& v) {
 }
 
 template<class ... T>
-class StaticWindowTest : public ska::WindowIG<T...> {
+class StaticWindowTest : public ska::WidgetPanel<T...> {
 public:
-	StaticWindowTest(ska::Widget& parent, const ska::Rectangle& box, const std::string& styleName) : ska::WindowIG<T...>(parent, box, styleName) {
+	StaticWindowTest(ska::Widget& parent, const ska::Rectangle& box) : ska::WidgetPanel<T...>(parent, box) {
 	}
 
-	StaticWindowTest(const ska::Rectangle& box, const std::string& styleName) : ska::WindowIG<T...>(box, styleName) {
+	StaticWindowTest(const ska::Rectangle& box) : ska::WindowIG<T...>(box) {
 	}
 
 	virtual void render(const ska::Renderer& r) const override {
-	    ska::WindowIG<T...>::render(r);
+	    ska::WidgetPanel<T...>::render(r);
 	    m_callbackDisplay();
 	}
 
@@ -79,7 +79,7 @@ TEST_CASE("[GUI]Affichage fenetre") {
     SubGUIMock gui;
     auto displayed = false;
 
-	gui.mockAddWindow<StaticWindowTest<ska::ClickEventListener>>("noname", ska::Rectangle{ 0, 0, 0, 0 }, "nostyle")
+	gui.mockAddWindow<StaticWindowTest<ska::ClickEventListener>>("noname", ska::Rectangle{ 0, 0, 0, 0 })
 	.whenDisplayed([&]() {
         displayed = true;
     });

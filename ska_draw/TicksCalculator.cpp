@@ -1,11 +1,11 @@
 #include <iostream>
-#include "FpsCalculator.h"
+#include "TicksCalculator.h"
 
-ska::FpsCalculator::FpsCalculator() : m_tickindex(0), m_ticksum(0) {
+ska::TicksCalculator::TicksCalculator() : m_tickindex(0), m_ticksum(0) {
 	m_ticklist.fill(0);
 }
 
-double ska::FpsCalculator::calculate(long newtick) {
+double ska::TicksCalculator::calculate(long newtick) {
 	/* subtract value falling off */
 	m_ticksum -= m_ticklist[m_tickindex];
 

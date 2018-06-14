@@ -33,7 +33,8 @@ namespace ska {
 		explicit BaseHandledWidget(Widget& parent) : Widget(parent) {
         }
 
-        BaseHandledWidget(Widget& parent, Point<int>& position) : Widget(parent, position) {
+        BaseHandledWidget(Widget& parent, const Point<int>& position) : 
+			Widget(parent, position) {
         }
 
         virtual ~BaseHandledWidget() = default;
@@ -59,7 +60,7 @@ namespace ska {
 			(void)_;
 		}
 
-		HandledWidget(Widget& parent, Point<int>& position) :
+		HandledWidget(Widget& parent, const Point<int>& position) :
 		    BaseHandledWidget(parent, position),
 			m_currentMaskIndex(sizeof ...(HL)-1),
 			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {

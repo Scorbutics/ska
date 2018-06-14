@@ -5,7 +5,7 @@
 #include "../Utils/KeyObservable.h"
 #include "../Utils/MouseObservable.h"
 #include "../Events/ClickEventListener.h"
-#include "WindowIG.h"
+#include "../Components/WidgetPanel.h"
 
 namespace ska {
 
@@ -15,25 +15,22 @@ namespace ska {
 
 	template <class ...HL>
 	class DynamicWindowIG :
-		public WindowIG<ClickEventListener, HoverEventListener, HL...>,
+		public WidgetPanel<ClickEventListener, HoverEventListener, HL...>,
 		public HoverStateController<DynamicWindowIG<HL...>>,
 		public MouseObserver,
 		public KeyObserver {
-
+		using Parent = WidgetPanel<ClickEventListener, HoverEventListener, HL...>;
 	public:
-		DynamicWindowIG(Widget& parent, const Rectangle& box, const std::string& styleName = "") :
-			WindowIG<ClickEventListener, HoverEventListener, HL...>(parent, box, styleName),
+		DynamicWindowIG(Widget& parent, const Rectangle& box) :
+			Parent(parent),
 			MouseObserver(std::bind(&DynamicWindowIG<HL...>::hoverEvent, this, std::placeholders::_1), std::bind(&DynamicWindowIG<HL...>::clickEvent, this, std::placeholders::_1)),
-			KeyObserver(std::bind(&DynamicWindowIG<HL...>::keyEvent, this, std::placeholders::_1)),
-			m_guiObservable(nullptr),
-			m_keyObservable(nullptr) {
+			KeyObserver(std::bind(&DynamicWindowIG<HL...>::keyEvent, this, std::placeholders::_1)) {
 				this->move(box);
 				this->setWidth(box.w);
 				this->setHeight(box.h);
 		}
 
-		DynamicWindowIG(MouseObservable* guiObservable, KeyObservable* keyObservable, const Rectangle& box, const std::string& styleName) :
-			WindowIG<ClickEventListener, HoverEventListener, HL...>(box, styleName),
+		DynamicWindowIG(MouseObservable* guiObservable, KeyObservable* keyObservable, const Rectangle& box) :
 			MouseObserver(std::bind(&DynamicWindowIG<HL...>::hoverEvent, this, std::placeholders::_1), std::bind(&DynamicWindowIG<HL...>::clickEvent, this, std::placeholders::_1)),
 			KeyObserver(std::bind(&DynamicWindowIG<HL...>::keyEvent, this, std::placeholders::_1)),
 			m_guiObservable(guiObservable),
@@ -71,7 +68,7 @@ namespace ska {
 		}
 
 	private:
-		MouseObservable *const m_guiObservable;
-		KeyObservable *const m_keyObservable;
+		MouseObservable *const m_guiObservable = nullptr;
+		KeyObservable *const m_keyObservable = nullptr;
 	};
 }

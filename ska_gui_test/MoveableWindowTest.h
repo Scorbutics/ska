@@ -4,10 +4,10 @@
 template<class ... T>
 class MoveableWindowTest : public ska::MoveableWindow<T...> {
 public:
-	MoveableWindowTest(ska::Widget& parent, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(parent, box, styleName) {
+	MoveableWindowTest(ska::Widget& parent, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(parent, box) {
 	}
 
-	MoveableWindowTest(ska::MouseObservable& mo, ska::KeyObservable& ko, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(mo, ko, box, styleName) {
+	MoveableWindowTest(ska::MouseObservable& mo, ska::KeyObservable& ko, const ska::Rectangle& box) : ska::MoveableWindow<T...>(mo, ko, box) {
 	}
 
 	virtual void render(const ska::Renderer& r) const override {

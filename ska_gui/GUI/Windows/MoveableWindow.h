@@ -1,37 +1,61 @@
 #pragma once
 #include "DynamicWindowIG.h"
 #include "../Components/Concrete/Button.h"
+#include "../Components/Concrete/Label.h"
 #include "../Components/Concrete/ButtonQuit.h"
 #include "../Events/HoverEvent.h"
 #include "../GUI.h"
 
 namespace ska {
-
+	
 	template <class ...HL>
 	class MoveableWindow : public DynamicWindowIG<HL...> {
+		static constexpr auto BAR_HEIGHT = 16;
 	public:
-		MoveableWindow(MouseObservable& guiObservable, KeyObservable& keyboardObservable, const Rectangle& box, const std::string& styleName = "") :
-			DynamicWindowIG<HL...>(&guiObservable, &keyboardObservable, box, styleName),
+		MoveableWindow(MouseObservable& guiObservable, KeyObservable& keyboardObservable, const Rectangle& box, const std::string& title = "") :
+			DynamicWindowIG<HL...>(&guiObservable, &keyboardObservable, box),
 			m_moving(false) {
-			initHandlers();
+			initHandlers(title);
 		}
 
-		MoveableWindow(Widget& parent, const Rectangle& box, const std::string& styleName = "") :
-			DynamicWindowIG<HL...>(parent, box, styleName),
+		MoveableWindow(Widget& parent, const Rectangle& box, const std::string& title = "") :
+			DynamicWindowIG<HL...>(parent, box),
 			m_moving(false) {
-			initHandlers();
+			initHandlers(title);
 		}
 
 		void setWidth(unsigned int w) override {
 			DynamicWindowIG<HL...>::setWidth(w);
-			m_dragBar->setWidth(w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2);
-			m_dragBar->setClip(Rectangle{ 0, 0, static_cast<int>(w), ska::WindowIG<>::TAILLEBLOCFENETRE / 2 });
-			m_quit->move(ska::Point<int>{static_cast<int>(w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2), m_quit->getBox().y});
+			m_dragBar->setWidth(w - BAR_HEIGHT);
+			m_dragBar->setClip(Rectangle{ 0, 0, static_cast<int>(w), BAR_HEIGHT });
+			m_quit->move(ska::Point<int>{static_cast<int>(w - BAR_HEIGHT), m_quit->getBox().y});
+			m_title->move({ getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
+			if (m_background != nullptr) {
+				m_background->setWidth(w);
+			}
+		}
+
+		void setHeight(unsigned int h) override {
+			DynamicWindowIG<HL...>::setHeight(h);
+			if (m_background != nullptr) {
+				m_background->setHeight(h - BAR_HEIGHT);
+			}
+		}
+	
+		template <class Widget, class ... Args>
+		void setBackground(Args&& ... args) {
+			if (m_background != nullptr) {
+				this->removeWidget(m_background);
+			}
+			m_background = &this->template addWidget<Widget>(std::forward<Args>(args)...);
+			m_background->move({ 0, BAR_HEIGHT });
+			m_background->setWidth(getBox().w);
+			m_background->setHeight(getBox().h - BAR_HEIGHT);
 		}
 
 	private:
-		void initHandlers() {
-			const auto& clip = Rectangle{ 0, 0, this->getBox().w, ska::WindowIG<>::TAILLEBLOCFENETRE / 2 };
+		void initHandlers(const std::string& title) {
+			const auto& clip = Rectangle{ 0, 0, this->getBox().w, BAR_HEIGHT };
 			m_dragBar = &this->template addWidget<Button>(Point<int>(), GUI::MENU_DEFAULT_THEME_PATH + "button", &clip, [&](Widget* tthis, ClickEvent& e) {
 				if (e.getState() == MOUSE_CLICK) {
 					m_moving = true;
@@ -40,9 +64,9 @@ namespace ska {
 					m_moving = false;
 				}
 			});
-			auto wButtonWidth = this->getBox().w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2;
+			auto wButtonWidth = this->getBox().w - BAR_HEIGHT;
 			m_dragBar->setWidth((wButtonWidth > 0) ? wButtonWidth : this->getBox().w);
-			m_dragBar->setHeight(ska::WindowIG<>::TAILLEBLOCFENETRE / 2);
+			m_dragBar->setHeight(BAR_HEIGHT);
 			m_dragBar->template addHandler<HoverEventListener> ([&](Widget*, HoverEvent& e) {
 				if (m_moving && e.getState() != MOUSE_ENTER) {
 					const auto& clickAbsPos = e.getMousePosition();
@@ -51,16 +75,20 @@ namespace ska {
 				}
 			});
 
-			m_quit = &this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - ska::WindowIG<>::TAILLEBLOCFENETRE / 2, 0), GUI::MENU_DEFAULT_THEME_PATH + "close_button");
+			m_quit = &this->template addWidget<ButtonQuit>(Point<int>(this->getBox().w - BAR_HEIGHT, 0), GUI::MENU_DEFAULT_THEME_PATH + "close_button");
 			m_quit->setPriority(std::numeric_limits<int>::max() - 1);
 
 			m_dragBar->setPriority(std::numeric_limits<int>::max());
-
+			m_title = &this->template addWidget<Label>(title.empty() ? " " : title, 11, ska::Point<int>{ 0, 0 });
+			m_title->move({ getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
+			m_title->setFontColor(255, 255, 255, 255);
 		}
 
 		bool m_moving;
 		Point<int> m_offsetWindowOrigin;
 		Button* m_dragBar = nullptr;
 		Button* m_quit = nullptr;
+		Widget* m_background = nullptr;
+		Label* m_title = nullptr;
 	};
 }

@@ -10,7 +10,7 @@ class ObservableTest : public ska::MouseObservable, public ska::KeyObservable {
 
 TEST_CASE("[MoveableWindow]Déplacement") {
 	ObservableTest obs;
-	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 }, "nostyle");
+	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 });
 
 	//Clic sur la barre de titre pour "grab" la fenêtre
 	ska::Point<int> cePoint(5, 2);
@@ -34,7 +34,7 @@ TEST_CASE("[MoveableWindow]Déplacement") {
 
 TEST_CASE("[MoveableWindow]Clic sur le bouton de fermeture") {
 	ObservableTest obs;
-	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 }, "nostyle");
+	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 });
 
 	CHECK(dw.isVisible());
 

@@ -1,9 +1,8 @@
 #include "GUIScrollButtonWindowIG.h"
 
-ska::GUIScrollButtonWindowIG::GUIScrollButtonWindowIG(Widget& parent, const Rectangle& box, const std::string& styleName) :
-TimeScrollableWindowIG<>(parent, box, styleName),
-m_realPos(0, 0) {
-
+ska::GUIScrollButtonWindowIG::GUIScrollButtonWindowIG(Widget& parent, const Rectangle& box) :
+	TimeScrollableWindowIG<>(parent, box),
+	m_realPos(0, 0) {
 }
 
 ska::WorkNode<ska::TimeScrollableWindowIG<>>& ska::GUIScrollButtonWindowIG::scrollTo(const Point<int>& targetPos, unsigned int speed) {

@@ -2,7 +2,7 @@
 #include "GameApp.h"
 #include "ParticleEffect.h"
 #include "Inputs/RawInputListener.h"
-#include "FpsCalculator.h"
+#include "TicksCalculator.h"
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "ParticleSystem.h"
 #include "Graphic/SDLRenderer.h"
@@ -33,7 +33,7 @@ private:
 	ska::ParticleEffect m_particles;
 	ska::ParticleSystem m_particleSystem;
 	ska::EulerAttractorParticleUpdater* m_attractor;
-	ska::FpsCalculator m_fpsCalculator;
+	ska::TicksCalculator m_fpsCalculator;
 	ska::SDLRenderer m_renderer;
 };
 

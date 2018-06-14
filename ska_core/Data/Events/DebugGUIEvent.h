@@ -12,9 +12,8 @@ namespace ska {
 	struct DebugGUIEvent {
 		using Refresher = std::function<std::string()>;
 
-		explicit DebugGUIEvent(const DebugGUIEventType& t, Refresher r) :
-			type(t),
-			refresher(std::move(r)) {
+		explicit DebugGUIEvent(const DebugGUIEventType& t) :
+			type(t) {
 		}
 
 		void operator=(const DebugGUIEvent&) = delete;

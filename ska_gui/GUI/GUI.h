@@ -70,6 +70,10 @@ namespace ska {
 		void pushWindowToFront(Widget* w);
 		Widget* addTopWidget(std::unique_ptr<Widget>& w);
 
+		template <class Window>
+		Window* getWindowAs(const std::string& name) {
+			return static_cast<Window*>(m_windowAnnuary[name]);
+		}
 
 		Widget* getWindow(const std::string& name) {
 			return m_windowAnnuary[name];

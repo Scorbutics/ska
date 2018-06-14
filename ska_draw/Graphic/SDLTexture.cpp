@@ -15,17 +15,17 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 
 	m_surface = std::make_unique<SDLSurface>();
 
-	const auto& color = data.getData().second;
+	const auto& color = data.getData().color;
 
 	switch (data.type) {
 	case EnumTextureType::TEXT:
-		m_surface->loadFromText(Font(data.fontSize), data.getData().first, data.getData().second);
+		m_surface->loadFromText(Font(data.fontSize), data.getData().text, data.getData().color);
 		break;
 	case EnumTextureType::SPRITE:
-		m_surface->load(data.getData().first, &color);
+		m_surface->load(data.getData().text, &color);
 		break;
 	case EnumTextureType::RECT:
-		m_surface->loadFromColoredRect(data.getData().second, ToSDL_Rect(data.rect));
+		m_surface->loadFromColoredRect(data.getData().color, ToSDL_Rect(data.rect), data.getData().outlineColor);
 		break;
 	default:
 		break;
