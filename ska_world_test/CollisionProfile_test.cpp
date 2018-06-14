@@ -9,16 +9,16 @@ TEST_CASE("[CollisionProfile]"){
 		const auto& collisions1 = ska::Vector2<char>{ width, {
 			0, 0, 0, 0,
 			0, 1, 0, 0,
-			0, 1, 1, 0,
-			0, 0, 1, 0
+			0, 1, 1, '-',
+			0, 0, 1, '-'
 		} };
 		const auto& properties1 = ska::Vector2<int>{};
 
 		const auto& collisions2 = ska::Vector2<char>{ width,{
 			0, 1, 1, 0,
-			0, 1, 1, 0,
+			0, 1, 1, '-',
 			0, 0, 0, 0,
-			0, 0, 0, 0
+			0, 0, 0, '-'
 		} };
 
 		const auto& properties2 = ska::Vector2<int>{ width, {
@@ -227,6 +227,7 @@ TEST_CASE("[CollisionProfile]"){
 		    }
 		}
 
+		//TODO tests sur les collisions quand TileCollision est à Void
 		//TODO placeOnNearestPracticableBlock
 	}
 }
