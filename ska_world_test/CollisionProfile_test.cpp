@@ -9,16 +9,16 @@ TEST_CASE("[CollisionProfile]"){
 		const auto& collisions1 = ska::Vector2<char>{ width, {
 			0, 0, 0, 0,
 			0, 1, 0, 0,
-			0, 1, 1, 0,
-			0, 0, 1, 0
+			0, 1, 1, '-',
+			0, 0, 1, '-'
 		} };
 		const auto& properties1 = ska::Vector2<int>{};
 
 		const auto& collisions2 = ska::Vector2<char>{ width,{
 			0, 1, 1, 0,
-			0, 1, 1, 0,
+			0, 1, 1, '-',
 			0, 0, 0, 0,
-			0, 0, 0, 0
+			0, 0, 0, '-'
 		} };
 
 		const auto& properties2 = ska::Vector2<int>{ width, {
@@ -83,6 +83,50 @@ TEST_CASE("[CollisionProfile]"){
 				CHECK(tile != nullptr);
 				CHECK(tile->id == ska::Point<int>{1, 2});
 				CHECK(tile->properties.bitMask == 0);
+			}
+		}
+
+        SUBCASE("getHighestNonCollidingBlock layer top max 1") {
+			SUBCASE("0 0") {
+			    const auto* block = cp.getHighestNonCollidingBlock(1, 0, 0);
+				CHECK(block != nullptr);
+				CHECK(block->id == ska::Point<int>{0, 0});
+				CHECK(block->properties.bitMask == 1);
+			}
+
+			SUBCASE("1 0") {
+				const auto* tile = cp.getHighestNonCollidingBlock(1, 1, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 2") {
+				const auto* tile = cp.getHighestNonCollidingBlock(1, 1, 2);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 2});
+				CHECK(tile->properties.bitMask == 1);
+			}
+		}
+
+        SUBCASE("getHighestNonCollidingBlock layer top max 0") {
+			SUBCASE("0 0") {
+			    const auto* tile = cp.getHighestNonCollidingBlock(0, 0, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{0, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 0") {
+			    const auto* tile = cp.getHighestNonCollidingBlock(0, 1, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 2") {
+				const auto* tile = cp.getHighestNonCollidingBlock(0, 1, 2);
+				CHECK(tile == nullptr);
 			}
 		}
 
@@ -183,6 +227,7 @@ TEST_CASE("[CollisionProfile]"){
 		    }
 		}
 
+		//TODO tests sur les collisions quand TileCollision est à Void
 		//TODO placeOnNearestPracticableBlock
 	}
 }
