@@ -9,7 +9,7 @@
 
 void ska::CollisionProfile::calculate() {
 	std::tie(m_blocksX, m_blocksY) = safeGetSizes();
-	
+
 	if (m_blocksX != 0 && m_blocksY != 0) {
 		m_collisions.resize(m_layers.size());
 		auto index = 0u;
@@ -32,7 +32,7 @@ ska::CollisionProfile::CollisionProfile(const unsigned int blockSize) :
 
 ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, std::vector<LayerPtr> layers) :
 	m_blockSize(blockSize) {
-	
+
 	for (auto& l : layers) {
 		assert(l != nullptr);
 		m_layers.emplace_back(std::move(l));
@@ -124,7 +124,7 @@ ska::Rectangle ska::CollisionProfile::placeOnNearestPracticableBlock(const std::
 	}
 
 	return result;
-	
+
 }
 
 ska::Point<int> ska::CollisionProfile::alignOnBlock(const Rectangle& hitbox) const {
@@ -203,6 +203,7 @@ const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size
 }
 
 const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
+	const Tile* voidCollidingTile = nullptr;
 	if (layerTop >= m_layers.size()) {
 		return nullptr;
 	}
@@ -210,9 +211,15 @@ const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::s
 	for (auto it = m_layers.crbegin() + (m_layers.size() - layerTop) - 1; it != m_layers.crend(); ++it) {
 		auto& l = *it->get();
 
-		const auto& collision = l.getCollision(blockX, blockY);
-		if(collision == TileCollision::No) {		
-			return l.getBlock(blockX, blockY);
+        const auto& block = l.getBlock(blockX, blockY);
+		switch (block->collision) {
+		case TileCollision::No:
+			return block;
+
+		case TileCollision::Void:
+		case TileCollision::Yes:
+		default:
+			break;
 		}
 	}
 	return nullptr;
@@ -228,7 +235,7 @@ std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
 			width = l.getBlocksX();
 			height = l.getBlocksY();
 		} else if(width != l.getBlocksX() || height != l.getBlocksY()) {
-			ExceptionTrigger<IllegalStateException>("Not every layer has same dimensions meaning that this map is invalid (expected " + 
+			ExceptionTrigger<IllegalStateException>("Not every layer has same dimensions meaning that this map is invalid (expected " +
 				StringUtils::uintToStr(width.value()) + " width and " + StringUtils::uintToStr(height.value()) + " height for every layer).");
 		}
 	}

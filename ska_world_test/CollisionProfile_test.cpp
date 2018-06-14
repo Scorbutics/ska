@@ -86,6 +86,50 @@ TEST_CASE("[CollisionProfile]"){
 			}
 		}
 
+        SUBCASE("getHighestNonCollidingBlock layer top max 1") {
+			SUBCASE("0 0") {
+			    const auto* block = cp.getHighestNonCollidingBlock(1, 0, 0);
+				CHECK(block != nullptr);
+				CHECK(block->id == ska::Point<int>{0, 0});
+				CHECK(block->properties.bitMask == 1);
+			}
+
+			SUBCASE("1 0") {
+				const auto* tile = cp.getHighestNonCollidingBlock(1, 1, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 2") {
+				const auto* tile = cp.getHighestNonCollidingBlock(1, 1, 2);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 2});
+				CHECK(tile->properties.bitMask == 1);
+			}
+		}
+
+        SUBCASE("getHighestNonCollidingBlock layer top max 0") {
+			SUBCASE("0 0") {
+			    const auto* tile = cp.getHighestNonCollidingBlock(0, 0, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{0, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 0") {
+			    const auto* tile = cp.getHighestNonCollidingBlock(0, 1, 0);
+				CHECK(tile != nullptr);
+				CHECK(tile->id == ska::Point<int>{1, 0});
+				CHECK(tile->properties.bitMask == 0);
+			}
+
+			SUBCASE("1 2") {
+				const auto* tile = cp.getHighestNonCollidingBlock(0, 1, 2);
+				CHECK(tile == nullptr);
+			}
+		}
+
         SUBCASE("collide layer top max 0") {
 			SUBCASE("0 0") {
 				CHECK(!cp.collide(0, 0, 0));
