@@ -50,7 +50,7 @@ struct HandledWidgetTest : public ska::HandledWidget<EL...>, public DisplayCount
 	HandledWidgetTest(ska::Widget& parent, ska::Point<int>& p) : ska::HandledWidget<EL...>(parent, p) {
 	}
 
-	void render(const ska::Renderer& ) const override {
+	void render(ska::Renderer& ) const override {
 		if (ska::HandledWidget<EL...>::isVisible()) {
 			DisplayCounter::increment();
 		} else {

@@ -13,6 +13,17 @@ bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId&
 	return false;
 }
 
+bool EntityManagerTestIsEntityAdded(ska::ECSEvent& event, const ska::EntityId& entity) {
+	if (event.ecsEventType == ska::ECSEventType::ENTITIES_ADDED) {
+		auto& entitiesRemoved = event.entities;
+		auto foundEntity = std::find_if(entitiesRemoved.begin(), entitiesRemoved.end(), [&](const auto& t) {
+			return t.first == entity;
+		});
+		return foundEntity != entitiesRemoved.end();
+	}
+	return false;
+}
+
 TEST_CASE("[EntityManager]") {
 	auto ged = ska::GameEventDispatcher {};
 	auto em = ska::EntityManager { ged };
@@ -115,6 +126,8 @@ TEST_CASE("[EntityManager]") {
 
 	SUBCASE("removeEntity") {
 		ska::EntityId entity = em.createEntity();
+		CHECK(entityObserver.events.size() == 1);
+		CHECK(EntityManagerTestIsEntityAdded(entityObserver.events[0], entity));
 		em.addComponent<int>(entity, 22);
 		
 		em.refresh();
@@ -123,7 +136,6 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
-		CHECK(entityObserver.events.empty());
 		em.removeEntity(entity);
 		CHECK(!em.hasComponent<int>(entity));
 		
@@ -134,7 +146,7 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[1].entityId == entity);
 
 		CHECK(!entityObserver.events.empty());
-		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
+		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[1], entity));
 
 		ska::EntityId entity2 = em.createEntity();
 		//Reused deleted entity
@@ -147,10 +159,13 @@ TEST_CASE("[EntityManager]") {
 		auto entity2 = em.createEntity();
 		auto entityX = em.createEntity();
 		
+		CHECK(entityObserver.events.size() == 3);
+		CHECK(EntityManagerTestIsEntityAdded(entityObserver.events[0], entity));
+		CHECK(EntityManagerTestIsEntityAdded(entityObserver.events[1], entity2));
+		CHECK(EntityManagerTestIsEntityAdded(entityObserver.events[2], entityX));
+
 		em.refresh();
 		componentObserver.eventType.clear();
-
-		CHECK(entityObserver.events.empty());
 
 		auto setToNotRemove = std::unordered_set<ska::EntityId>{};
 		setToNotRemove.insert(entity2);
@@ -165,7 +180,7 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[1].entityId == entityX);
 
 		CHECK(!entityObserver.events.empty());
-		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
+		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[3], entity));
 		
 		auto entity3 = em.createEntity();
 

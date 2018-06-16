@@ -11,5 +11,5 @@ struct WidgetTest : public ska::Widget {
 	WidgetTest(ska::Widget& parent, ska::Point<int>& p) : ska::Widget(parent, p) {
 	}
 
-	void render(const ska::Renderer& renderer) const override {}
+	void render(ska::Renderer& renderer) const override {}
 };

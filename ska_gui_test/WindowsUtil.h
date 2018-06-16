@@ -18,6 +18,9 @@ struct MockRenderer : public ska::Renderer {
 	void drawColorPoint(const ska::Color& c, const ska::Point<int>& pos) const override {}
 	void drawColorRect(const ska::Color& c, const ska::Rectangle& r) const override {}
 	void drawColorLine(const ska::Color& c, const ska::Point<int>& p1, const ska::Point<int>& p2) const override {}
+	void setRenderTarget(ska::Texture* t) override {}
+	void setRenderDrawBlendMode(int blendMode) override {}
+	SDL_Texture* createTextureTarget(unsigned int width, unsigned int height) const override { return nullptr;  }
 };
 
 MockRenderer& MakeMockRenderer();

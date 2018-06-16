@@ -14,7 +14,7 @@ public:
 	DynamicWindowTest(ska::MouseObservable* mo, ska::KeyObservable* ko, const ska::Rectangle& box) : ska::DynamicWindowIG<T...>(mo, ko, box) {
 	}
 
-	virtual void render(const ska::Renderer& r) const override {
+	virtual void render(ska::Renderer& r) const override {
 		ska::DynamicWindowIG<T...>::render(r);
 		m_callbackDisplay();
 	}

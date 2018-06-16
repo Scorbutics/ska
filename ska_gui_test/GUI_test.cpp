@@ -23,7 +23,7 @@ public:
 	StaticWindowTest(const ska::Rectangle& box) : ska::WidgetPanel<T...>(box) {
 	}
 
-	virtual void render(const ska::Renderer& r) const override {
+	virtual void render(ska::Renderer& r) const override {
 	    ska::WidgetPanel<T...>::render(r);
 	    m_callbackDisplay();
 	}
