@@ -26,7 +26,7 @@ void ska::ButtonSprite::replaceWith(const std::string& path, const Rectangle& cl
 	m_clip = clip;
 }
 
-void ska::ButtonSprite::render(const Renderer& renderer) const {
+void ska::ButtonSprite::render(Renderer& renderer) const {
 	if (!isVisible()) {
 		return;
 	}

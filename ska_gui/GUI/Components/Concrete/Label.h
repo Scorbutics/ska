@@ -10,9 +10,9 @@ namespace ska {
 		virtual ~Label() = default;
 
 		void setFontColor(int r, int g, int b, int a);
-		void modifyText(const std::string& text);
+		void modifyText(std::string text);
 		void setClip(Rectangle* r);
-		void render(const ska::Renderer& renderer) const override;
+		void render(ska::Renderer& renderer) const override;
 		void clear();
 
 	private:

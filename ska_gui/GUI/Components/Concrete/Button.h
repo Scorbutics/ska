@@ -12,11 +12,11 @@ namespace ska {
 		public Hoverable<ValueChangedEventListener<bool>, ClickEventListener> {
 	public:
 		Button(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback);
-		virtual void render(const Renderer& renderer) const override;
+		virtual void render(Renderer& renderer) const override;
 		virtual ~Button();
 
 		void setClip(Rectangle clip);
-		void forceState(ButtonState::Enum e);
+		void forceState(ButtonState e);
 
 	protected:
 		Button();

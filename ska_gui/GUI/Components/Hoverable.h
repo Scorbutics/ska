@@ -68,7 +68,7 @@ namespace ska {
 		virtual void resetTexture() {}
 
 	protected:
-		ButtonState::Enum m_state;
+		ButtonState m_state;
 	};
 
 
@@ -87,7 +87,7 @@ namespace ska {
 			HandledWidget<HoverEventListener, HL...>(parent) {
 			}
 
-		virtual void render(const Renderer&) const override {
+		virtual void render(Renderer&) const override {
 		}
 
 		virtual ~Hoverable() = default;

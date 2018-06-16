@@ -28,6 +28,6 @@ void ska::FpsRenderable::setVisible(bool v) {
 	m_toggleVisible = v;
 }
 
-void ska::FpsRenderable::render(const ska::Renderer& renderer) const {
+void ska::FpsRenderable::render(ska::Renderer& renderer) const {
 	renderer.render(m_fps, 0, 0, nullptr, 0.);
 }

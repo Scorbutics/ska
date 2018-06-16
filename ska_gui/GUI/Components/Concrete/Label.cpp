@@ -25,8 +25,8 @@ void ska::Label::setFontColor(int r, int g, int b, int a) {
 	m_stext.loadFromText(m_fontSize, m_text, m_color);
 }
 
-void ska::Label::modifyText(const std::string& text) {
-	m_text = text;
+void ska::Label::modifyText(std::string text) {
+	m_text = std::move(text);
 	m_stext.loadFromText(m_fontSize, m_text, m_color);
 	setWidth(m_stext.getWidth());
 	setHeight(m_stext.getHeight());
@@ -36,7 +36,7 @@ void ska::Label::setClip(Rectangle* r) {
 	m_clip = r;
 }
 
-void ska::Label::render(const ska::Renderer& renderer) const {
+void ska::Label::render(ska::Renderer& renderer) const {
 	if (!isVisible()) {
 		return;
 	}

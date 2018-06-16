@@ -8,7 +8,8 @@ namespace ska {
 	enum class EnumTextureType {
 		SPRITE,
 		TEXT,
-		RECT
+		RECT,
+		NONE
 	};
 
 	struct TextureDataDescriptor {

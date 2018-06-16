@@ -16,7 +16,7 @@ namespace ska {
 		void basic();
 
 		virtual ~MouseCursor();
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 
 	private:
 		Texture m_basicCursor;

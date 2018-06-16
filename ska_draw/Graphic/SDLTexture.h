@@ -11,7 +11,7 @@ namespace ska {
 	/**
 	* \brief SDL specific, a RAII wrapper of a SDL_Texture instance
 	*/
-	class SDLTexture {
+	class SDLTexture final {
 		friend class SDLRenderer;
 		friend class Renderer;
 	public:
@@ -32,6 +32,8 @@ namespace ska {
 		unsigned int getHeight() const;
 		void resize(unsigned width, unsigned height);
 		void load(const Renderer& renderer);
+		void loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height);
+		void asTarget(SDL_Renderer& renderer);
 
 	private:
 		void loadFromRenderer(const Renderer& renderer);
@@ -41,7 +43,7 @@ namespace ska {
 		using DeferredTasksPtr = std::unique_ptr<TaskQueue>;
 		
 		SDLSurfacePtr m_surface;
-		SDL_Texture* m_texture;
+		gsl::owner<SDL_Texture*> m_texture;
 		unsigned int m_w;
 		unsigned int m_h;
 

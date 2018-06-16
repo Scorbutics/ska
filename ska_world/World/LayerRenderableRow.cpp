@@ -22,7 +22,7 @@ void ska::LayerRenderableRow::graphicUpdate(const Rectangle & cameraPos, Drawabl
 	drawables.add(*this);
 }
 
-void ska::LayerRenderableRow::render(const Renderer & renderer) const {
+void ska::LayerRenderableRow::render(Renderer & renderer) const {
 	const auto absORelX = NumberUtils::absolute(m_lastCameraPos.x);
 	const auto absORelY = NumberUtils::absolute(m_lastCameraPos.y);
 	const auto cameraPositionStartBlockX = absORelX / m_blockSize;

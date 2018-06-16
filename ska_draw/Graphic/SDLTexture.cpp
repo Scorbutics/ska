@@ -13,24 +13,26 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 	m_w(0),
 	m_h(0) {
 
-	m_surface = std::make_unique<SDLSurface>();
+	if (data.type != EnumTextureType::NONE) {
+		m_surface = std::make_unique<SDLSurface>();
+		const auto& color = data.getData().color;
 
-	const auto& color = data.getData().color;
-
-	switch (data.type) {
-	case EnumTextureType::TEXT:
-		m_surface->loadFromText(Font(data.fontSize), data.getData().text, data.getData().color);
-		break;
-	case EnumTextureType::SPRITE:
-		m_surface->load(data.getData().text, &color);
-		break;
-	case EnumTextureType::RECT:
-		m_surface->loadFromColoredRect(data.getData().color, ToSDL_Rect(data.rect), data.getData().outlineColor);
-		break;
-	default:
-		break;
+		switch (data.type) {
+		case EnumTextureType::TEXT:
+			m_surface->loadFromText(Font(data.fontSize), data.getData().text, data.getData().color);
+			break;
+		case EnumTextureType::SPRITE:
+			m_surface->load(data.getData().text, &color);
+			break;
+		case EnumTextureType::RECT:
+			m_surface->loadFromColoredRect(data.getData().color, ToSDL_Rect(data.rect), data.getData().outlineColor);
+			break;
+		default:
+			break;
+		}
 	}
-	if (m_surface->getInstance() != nullptr) {
+
+	if (m_surface != nullptr && m_surface->getInstance() != nullptr) {
 		m_h = m_surface->getInstance()->h;
 		m_w = m_surface->getInstance()->w;
 	} else {
@@ -71,8 +73,12 @@ ska::SDLTexture::~SDLTexture() {
 	free();
 }
 
+void ska::SDLTexture::asTarget(SDL_Renderer& renderer) {
+	ska::SDLLibrary::get().setRenderTarget(renderer, m_texture);
+}
+
 void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
-	const auto action = [&]() {
+	const auto action = [&, r, g, b]() {
 		SDLLibrary::get().setTextureColorMod(*m_texture, r, g, b);
 		return false;
 	};
@@ -85,7 +91,7 @@ void ska::SDLTexture::setColor(Uint8 r, Uint8 g, Uint8 b) {
 }
 
 void ska::SDLTexture::setBlendMode(int blending) const {
-	auto action = [&]() {
+	auto action = [&, blending]() {
 		SDLLibrary::get().setTextureBlendMode(*m_texture, static_cast<SDL_BlendMode>(blending));
 		return false;
 	};
@@ -98,7 +104,7 @@ void ska::SDLTexture::setBlendMode(int blending) const {
 }
 
 void ska::SDLTexture::setAlpha(Uint8 alpha) const {
-	auto action = [&]() {
+	auto action = [&, alpha]() {
 		SDLLibrary::get().setTextureAlphaMod(*m_texture, alpha);
 		return false;
 	};
@@ -126,6 +132,17 @@ void ska::SDLTexture::resize(unsigned width, unsigned height) {
 void ska::SDLTexture::load(const Renderer& renderer) {
 	if(!isInitialized()) {
 		loadFromRenderer(renderer);
+	}
+}
+
+void ska::SDLTexture::loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height) {
+	free();
+
+	m_texture = renderer.createTextureTarget(width, height);
+	resize(width, height);
+
+	while (m_whenLoadedTasks->hasRunningTask()) {
+		m_whenLoadedTasks->refresh();
 	}
 }
 

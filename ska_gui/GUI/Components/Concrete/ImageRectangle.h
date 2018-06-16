@@ -9,7 +9,7 @@ namespace ska {
 		virtual ~ImageRectangle() = default;
 		virtual void setWidth(unsigned int w) override;
 		virtual void setHeight(unsigned int h) override;
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 
 	private:
 		Texture m_img;

@@ -41,7 +41,7 @@ void ska::Image::setHeight(unsigned int h) {
 	m_img.resize(m_img.getWidth(), h);
 }
 
-void ska::Image::render(const Renderer& renderer) const {
+void ska::Image::render(Renderer& renderer) const {
 	if(!isVisible()) {
 		return;
 	}

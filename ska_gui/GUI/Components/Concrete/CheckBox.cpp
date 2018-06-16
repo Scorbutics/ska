@@ -24,7 +24,7 @@ void ska::CheckBox::forceValue(bool b) {
 	m_value = b;
 }
 
-void ska::CheckBox::render(const Renderer& renderer) const {
+void ska::CheckBox::render(Renderer& renderer) const {
 	Button::render(renderer);
 	if (m_value) {
 		const auto& absPos = getAbsolutePosition();

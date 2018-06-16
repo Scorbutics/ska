@@ -7,15 +7,15 @@
 namespace ska {
 	class IWidgetEvent;
 
-	namespace ButtonState {
-		enum Enum {
-			NONE,
-			PRESSED,
-			HOVER,
-			ENTER,
-			DISABLED
-		};
-	}
+	
+	enum class ButtonState {
+		NONE,
+		PRESSED,
+		HOVER,
+		ENTER,
+		DISABLED
+	};
+	
 
 	class Widget :
 		public DrawableFixedPriority {

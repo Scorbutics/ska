@@ -178,7 +178,7 @@ void ska::GUI::hide(bool x) {
     m_hide = x;
 }
 
-void ska::GUI::render(const Renderer& renderer) const {
+void ska::GUI::render(Renderer& renderer) const {
 	if (m_hide) {
 		return;
 	}

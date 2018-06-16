@@ -38,19 +38,27 @@ namespace ska {
 		void setHeight(unsigned int h) override {
 			DynamicWindowIG<HL...>::setHeight(h);
 			if (m_background != nullptr) {
-				m_background->setHeight(h - BAR_HEIGHT);
+				const auto& requiredHeight = static_cast<int>(h) - BAR_HEIGHT;
+				m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
 			}
 		}
 	
 		template <class Widget, class ... Args>
-		void setBackground(Args&& ... args) {
+		Widget& setBackground(Args&& ... args) {
 			if (m_background != nullptr) {
 				this->removeWidget(m_background);
 			}
-			m_background = &this->template addWidget<Widget>(std::forward<Args>(args)...);
+			auto& typedWidget = this->template addWidget<Widget>(std::forward<Args>(args)...);
+			m_background = &typedWidget;
 			m_background->move({ 0, BAR_HEIGHT });
 			m_background->setWidth(getBox().w);
-			m_background->setHeight(getBox().h - BAR_HEIGHT);
+			const auto& requiredHeight = getBox().h - BAR_HEIGHT;
+			m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
+			return typedWidget;
+		}
+
+		void setTitle(std::string title) {
+			m_title->modifyText(title);
 		}
 
 	private:

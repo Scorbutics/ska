@@ -21,7 +21,7 @@ namespace ska {
 		void graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables) override;
 
 	private:
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 
 		const unsigned int m_tileSize;
 

@@ -14,7 +14,7 @@ namespace ska {
 		public DrawableContainerBase<std::vector<const Drawable*>> {
 
 	public:
-		VectorDrawableContainer(const Renderer& renderer);
+		VectorDrawableContainer(Renderer& renderer);
 
         virtual void reserve(const unsigned int size);
 		virtual void clear() override;
@@ -25,6 +25,6 @@ namespace ska {
 		virtual void push(const Drawable& d) override;
 
 	private:
-		const Renderer& m_renderer;
+		Renderer& m_renderer;
 	};
 }

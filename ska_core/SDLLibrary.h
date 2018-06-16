@@ -48,7 +48,10 @@ namespace ska {
 		SDL_SHOW_SIMPLE_MESSAGE_BOX,
 		SDL_QUERY_TEXTURE,
 		SDL_SET_MAIN_READY,
-		SDL_SHOW_CURSOR
+		SDL_SHOW_CURSOR,
+		SDL_SET_RENDER_TARGET,
+		SDL_CREATE_TEXTURE,
+		SDL_SET_RENDER_DRAW_BLEND_MODE
 	};
 
 #define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -92,6 +95,9 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_QUERY_TEXTURE, int(SDL_Texture*, Uint32*, int*, int*, int*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_MAIN_READY, void());
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_CURSOR, int(int toggle));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_TARGET, int(SDL_Renderer* renderer, SDL_Texture*  texture));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_TEXTURE, SDL_Texture*(SDL_Renderer* renderer, Uint32 format, int access, int w, int h) );
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_BLEND_MODE, int(SDL_Renderer* renderer, SDL_BlendMode blendMode));
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
 
@@ -133,7 +139,10 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_SIMPLE_MESSAGE_BOX),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_QUERY_TEXTURE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_MAIN_READY),
-		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_CURSOR)
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_CURSOR),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_TARGET),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_CREATE_TEXTURE),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_DRAW_BLEND_MODE)
 	>;
 
 
@@ -293,6 +302,18 @@ namespace ska {
 
 		int showCursor(bool b) const {
 			return callSDL(SDL_SHOW_CURSOR)(static_cast<int>(b));
+		}
+
+		SDL_Texture* createTexture(SDL_Renderer& renderer, Uint32 format, int access, int w, int h)  const {
+			return callSDL(SDL_CREATE_TEXTURE)(&renderer, format, access, w, h);
+		}
+
+		int setRenderTarget(SDL_Renderer& renderer, SDL_Texture* texture) const {
+			return callSDL(SDL_SET_RENDER_TARGET)(&renderer, texture);
+		}
+
+		int setRenderDrawBlendMode(SDL_Renderer& renderer, SDL_BlendMode blendMode) const {
+			return callSDL(SDL_SET_RENDER_DRAW_BLEND_MODE)(&renderer, blendMode);
 		}
 
 		static SDLLibrary& get() {

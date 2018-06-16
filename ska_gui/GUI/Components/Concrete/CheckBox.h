@@ -9,7 +9,7 @@ namespace ska {
 		bool getValue() const;
 		void forceValue(bool b);
 
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 	private:
 		bool m_value;
 		Texture m_check;

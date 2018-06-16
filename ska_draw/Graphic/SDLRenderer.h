@@ -27,6 +27,8 @@ namespace ska {
 		* \param color New color to set
 		*/
 		void setRenderColor(const Color& c);
+		void setRenderTarget(Texture* t) override;
+		void setRenderDrawBlendMode(int blendMode) override;
 
         SDL_Texture* createTextureFromSurface(const SDLSurface& s) const override;
 
@@ -47,6 +49,8 @@ namespace ska {
 		* \brief Makes the renderer renders
 		*/
 		void render(const AnimatedTexture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
+
+		SDL_Texture* createTextureTarget(unsigned int width, unsigned int height) const override;
 
 		void update() const override;
 

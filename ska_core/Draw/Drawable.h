@@ -12,7 +12,7 @@ namespace ska {
 		Drawable() = default;
 		virtual ~Drawable() = default;
 		
-		virtual void render(const Renderer& renderer) const = 0;
+		virtual void render(Renderer& renderer) const = 0;
 
 		static bool staticOperatorInf(const Drawable* a, const Drawable* b) {
 			const auto p1 = a->getPriority();

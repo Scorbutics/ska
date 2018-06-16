@@ -17,6 +17,12 @@ void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, EnumTextureType::SPRITE, 0));
 }
 
+void ska::Texture::loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height) {
+	loadFromKey(TextureData{});
+	lifetimeSeparation();
+	m_value->loadAsTarget(renderer, width, height);
+}
+
 void ska::Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
 	if (m_value != nullptr) {
 		m_value->setColor(red, green, blue);
@@ -31,7 +37,7 @@ void ska::Texture::setBlendMode(int blending) {
 
 void ska::Texture::setAlpha(Uint8 alpha) {
 	if (m_value != nullptr) {
-		m_value->setBlendMode(alpha);
+		m_value->setAlpha(alpha);
 	}
 }
 

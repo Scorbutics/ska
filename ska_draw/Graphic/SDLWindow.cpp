@@ -2,6 +2,7 @@
 
 #include "SDLWindow.h"
 #include "Exceptions/IllegalArgumentException.h"
+#include "Exceptions/IllegalStateException.h"
 #include "Logging/Logger.h"
 #include <cassert>
 #include "SDLLibrary.h"
@@ -27,7 +28,7 @@ void ska::SDLWindow::lazyInit() {
 
 	if (m_screen == nullptr) {
 		SKA_LOG_ERROR("Erreur lors de la création de la fenêtre SDL :", SDLLibrary::get().getError());
-		assert(false && "Bad instanciation : screen is null");
+		throw ska::IllegalStateException("Bad instanciation : screen is null");
 	}
 }
 

@@ -21,7 +21,7 @@ void ska::ImageRectangle::setHeight(unsigned int h) {
 	m_img.resize(m_img.getWidth(), h);
 }
 
-void ska::ImageRectangle::render(const Renderer& renderer) const {
+void ska::ImageRectangle::render(Renderer& renderer) const {
 	if(!isVisible()) {
 		return;
 	}

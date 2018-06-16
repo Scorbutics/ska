@@ -2,7 +2,7 @@
 #include "VectorDrawableContainer.h"
 
 
-ska::VectorDrawableContainer::VectorDrawableContainer(const Renderer& renderer):
+ska::VectorDrawableContainer::VectorDrawableContainer(Renderer& renderer):
 	m_renderer(renderer) {
 }
 

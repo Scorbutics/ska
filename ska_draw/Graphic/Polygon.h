@@ -48,7 +48,7 @@ namespace ska {
 			m_offset = offset;
 		}
 
-		void render(const ska::Renderer& renderer) const override {
+		void render(ska::Renderer& renderer) const override {
 			auto lastPointIt = m_points.cbegin();
 
 			auto pIt = m_points.cbegin();

@@ -2,15 +2,16 @@
 #include "../GUI.h"
 #include "../Components/Concrete/Label.h"
 #include "../Components/Concrete/ImageRectangle.h"
+#include "../Components/Concrete/TileSurface.h"
 
 ska::DebugWindow::DebugWindow(GUI& gui, GameEventDispatcher& ged) :
 	SubObserver<ska::DebugGUIEvent>(std::bind(&DebugWindow::onDebugGUIEvent, this, std::placeholders::_1), ged),
 	m_gui(gui),
 	m_ged(ged) {
-	m_dbgWindow = &m_gui.addWindow<ska::MoveableWindow<>>("DEBUG_WINDOW", ska::Rectangle{ 0, 0, 1, 1 });
-	m_title = &m_dbgWindow->addWidget<ska::Label>("Debug", 11, ska::Point<int>{0, 0});
-	m_title->setFontColor(255, 255, 255, 255);
-	m_dbgWindow->setBackground<ska::ImageRectangle>(Rectangle{ 0, 0, 1, 1 }, ska::Color{ 220, 220, 220, OPACITY });
+	m_dbgWindow = &m_gui.addWindow<ska::MoveableWindow<>>("DEBUG_WINDOW", ska::Rectangle{ 10, 10, 1, 1 });
+	m_dbgWindow->setTitle("Debug");
+	auto& tileSurface = m_dbgWindow->setBackground<ska::TileSurface>(Rectangle{ 0, 0, 2, 2 }, ska::GUI::MENU_DEFAULT_THEME_PATH + "menu.png");
+	tileSurface.setOpacity(OPACITY);
 }
 
 void ska::DebugWindow::refresh(unsigned int ellapsedTime) {
@@ -26,12 +27,11 @@ void ska::DebugWindow::refresh(unsigned int ellapsedTime) {
 }
 
 void ska::DebugWindow::editText(ska::Label& w, std::string text) {
-	w.modifyText(text);
+	w.modifyText(std::move(text));
 	auto currentLabelWidth = w.getBox().w;
 	if (currentLabelWidth > m_dbgWindow->getBox().w) {
 		const auto calculatedWidth = currentLabelWidth + 2 * HORIZONTAL_OFFSET;
 		m_dbgWindow->setWidth(calculatedWidth);
-		m_title->move({ calculatedWidth / 2 - m_title->getBox().w / 2, m_title->getBox().y });
 	}
 }
 

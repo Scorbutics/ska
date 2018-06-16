@@ -25,13 +25,14 @@ namespace ska {
 		void loadFromText(unsigned int fontSize, std::string text, Color c);
 		void loadFromColoredRect(unsigned int width, unsigned int height, Color c, const Color* outlineColor = nullptr);
 		void load(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
+		void loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height);
 		virtual ~Texture() = default;
 
 		void setColor(Uint8 red, Uint8 green, Uint8 blue);
 		void setBlendMode(int blending);
 		void setAlpha(Uint8 alpha);
 		void resize(unsigned int width, unsigned int height);
-
+		
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 

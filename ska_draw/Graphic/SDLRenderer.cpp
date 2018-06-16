@@ -85,6 +85,25 @@ void ska::SDLRenderer::load() {
 	load(m_window.getInstance(), m_index, m_flags);
 }
 
+SDL_Texture* ska::SDLRenderer::createTextureTarget(const unsigned int width, const unsigned int height) const {
+	assert(m_renderer != nullptr && "Renderer is not loaded");
+	return ska::SDLLibrary::get().createTexture(*m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+}
+
+void ska::SDLRenderer::setRenderDrawBlendMode(int blendMode) {
+	assert(m_renderer != nullptr && "Renderer is not loaded");
+	ska::SDLLibrary::get().setRenderDrawBlendMode(*m_renderer, static_cast<SDL_BlendMode>(blendMode));
+}
+
+void ska::SDLRenderer::setRenderTarget(Texture* t) {
+	assert(m_renderer != nullptr && "Renderer is not loaded");
+	if (t != nullptr && t->getInstance() != nullptr) {
+		t->getInstance()->asTarget(*m_renderer);
+	} else {
+		ska::SDLLibrary::get().setRenderTarget(*m_renderer, nullptr);
+	}
+}
+
 void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
 	auto instance = t.getInstance();
 	if (instance != nullptr) {

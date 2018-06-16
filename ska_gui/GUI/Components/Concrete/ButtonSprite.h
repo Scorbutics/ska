@@ -15,7 +15,7 @@ namespace ska {
 
 		void replaceWith(const std::string& path, const Rectangle& clip);
 
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 		virtual void move(const Point<int>& pos) override;
 
 	private:

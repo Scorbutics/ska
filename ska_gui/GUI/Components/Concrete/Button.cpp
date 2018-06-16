@@ -121,12 +121,12 @@ void ska::Button::initHandlers() {
 	});
 }
 
-void ska::Button::forceState(ButtonState::Enum e) {
+void ska::Button::forceState(ButtonState e) {
 	m_state = e;
 	switchTextureAndMemorize();
 }
 
-void ska::Button::render(const Renderer& renderer) const {
+void ska::Button::render(Renderer& renderer) const {
 
 	if (!m_drawStyle || m_textureSelector == nullptr) {
 		return;

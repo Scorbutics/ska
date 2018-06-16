@@ -10,7 +10,7 @@ ska::TextureData::TextureData(const std::string& texturePath, Color col, const s
 }
 
 ska::TextureData::TextureData() :
-	type(EnumTextureType::SPRITE),
+	type(EnumTextureType::NONE),
 	fontSize(0), 
 	rect{ 0, 0, 0, 0 } {
 }

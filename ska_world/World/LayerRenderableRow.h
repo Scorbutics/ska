@@ -16,7 +16,7 @@ namespace ska {
 
 		void load(std::size_t rowIndex, Vector2<TileAnimation*>& blocks, const Texture& tileset, unsigned int blockSize);
 		void graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables);
-		void render(const Renderer& renderer) const override;
+		void render(Renderer& renderer) const override;
 
 	private:
 		const Texture* m_tileset {};
