@@ -29,7 +29,7 @@ namespace ska {
 			m_dragBar->setWidth(w - BAR_HEIGHT);
 			m_dragBar->setClip(Rectangle{ 0, 0, static_cast<int>(w), BAR_HEIGHT });
 			m_quit->move(ska::Point<int>{static_cast<int>(w - BAR_HEIGHT), m_quit->getBox().y});
-			m_title->move({ getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
+			m_title->move({ this->getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
 			if (m_background != nullptr) {
 				m_background->setWidth(w);
 			}
@@ -51,8 +51,8 @@ namespace ska {
 			auto& typedWidget = this->template addWidget<Widget>(std::forward<Args>(args)...);
 			m_background = &typedWidget;
 			m_background->move({ 0, BAR_HEIGHT });
-			m_background->setWidth(getBox().w);
-			const auto& requiredHeight = getBox().h - BAR_HEIGHT;
+			m_background->setWidth(this->getBox().w);
+			const auto& requiredHeight = this->getBox().h - BAR_HEIGHT;
 			m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
 			return typedWidget;
 		}
@@ -88,7 +88,7 @@ namespace ska {
 
 			m_dragBar->setPriority(std::numeric_limits<int>::max());
 			m_title = &this->template addWidget<Label>(title.empty() ? " " : title, 11, ska::Point<int>{ 0, 0 });
-			m_title->move({ getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
+			m_title->move({ this->getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
 			m_title->setFontColor(255, 255, 255, 255);
 		}
 
