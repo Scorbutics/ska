@@ -20,7 +20,7 @@ public:
 	StaticWindowTest(ska::Widget& parent, const ska::Rectangle& box) : ska::WidgetPanel<T...>(parent, box) {
 	}
 
-	StaticWindowTest(const ska::Rectangle& box) : ska::WindowIG<T...>(box) {
+	StaticWindowTest(const ska::Rectangle& box) : ska::WidgetPanel<T...>(box) {
 	}
 
 	virtual void render(const ska::Renderer& r) const override {
@@ -73,7 +73,7 @@ public:
 };
 
 
-TEST_CASE("[GUI]Affichage fenetre") {	
+TEST_CASE("[GUI]Affichage fenetre") {
 	auto mockRenderer = MakeMockRenderer();
 
     SubGUIMock gui;
@@ -214,7 +214,7 @@ TEST_CASE("[GUI]Evenements : Mouse ENTER, OVER, OUT") {
 }
 
 TEST_CASE("[GUI]Evenements : CLICK et RELEASE") {
-	
+
 	resetMouse();
 
 	SubGUIMock gui;
