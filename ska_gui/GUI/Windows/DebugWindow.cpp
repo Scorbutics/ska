@@ -1,7 +1,5 @@
 #include "DebugWindow.h"
 #include "../GUI.h"
-#include "../Components/Concrete/Label.h"
-#include "../Components/Concrete/ImageRectangle.h"
 #include "../Components/Concrete/TileSurface.h"
 
 ska::DebugWindow::DebugWindow(GUI& gui, GameEventDispatcher& ged) :
