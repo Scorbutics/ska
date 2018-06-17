@@ -1,17 +1,12 @@
 #include "AnimationComponent.h"
 #include "IAnimationStateMachine.h"
+#include "../../SerializeComponent.h"
 
 ska::AnimationComponent::AnimationComponent() :
 	state(0),
     animationFiniteStateMachine(nullptr) {
-    /*type(DirectionalAnimationType::MOVEMENT), looked(0) {
-    static auto initialized = false;
-    if (!initialized) {
-        initialized = true;
-        const auto className = ComponentHandler<std::remove_reference<decltype(*this)>::type>::getClassName();
-        addFieldSerializer(serializeDirection, "direction", className);
-    }
-    direction = 0;*/
+	SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeState, "state");
+	SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldSerializer(serializeState, "state");
 }
 
 ska::AnimationComponent::~AnimationComponent(){}

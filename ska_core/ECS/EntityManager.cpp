@@ -76,8 +76,10 @@ ska::EntityId ska::EntityManager::createEntityNoThrow(const std::string& name) {
 
 	m_alteredEntities.insert(newId);
 
-	ecsEvent.entities.emplace(newId, name);
-	m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+	if (!name.empty()) {
+		ecsEvent.entities.emplace(newId, name);
+		m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+	}
 
 	return newId;
 }

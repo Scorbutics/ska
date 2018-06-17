@@ -20,7 +20,7 @@ bool ska::EntityLocator::onECSEvent(ECSEvent& ecsEvent) {
 	} else {
 		for (const auto& entityEntry : ecsEvent.entities) {
 			m_entitiesReverseNameMap[entityEntry.first] = entityEntry.second;
-			m_entitiesNameMap.emplace(entityEntry.second, entityEntry.first);
+			m_entitiesNameMap[entityEntry.second] = entityEntry.first;
 		}
 	}
 	return true;

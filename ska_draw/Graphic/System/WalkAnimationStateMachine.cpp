@@ -20,26 +20,16 @@ void ska::WalkAnimationStateMachine::onEnter(const EntityId& e) {
 
 void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, const EntityId& entityId) {
 	auto& gc = m_entityManager.getComponent<GraphicComponent>(entityId);
-	auto& pc = m_entityManager.getComponent<PositionComponent>(entityId);
-	auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
-
-	/*PositionComponent lastPos;
-	if (m_lastPos.find(entityId) != m_lastPos.end()) {
-		lastPos = m_lastPos[entityId];
-	}
-	m_lastPos[entityId] = pc;*/
 
 	if (gc.animatedSprites.empty()) {
 		return;
 	}
 
+	const auto& mov = m_entityManager.getComponent<MovementComponent>(entityId);
+
 	//ska::Rectangle base de l'animation
 	auto& texture = gc.animatedSprites[0];
 	auto spritePos = texture.getOffsetBase();
-	const int spriteHeight = texture.getHeight();
-
-	//const auto xMove = ska::NumberUtils::round(pc.x - lastPos.x);
-	//const auto yMove = ska::NumberUtils::round(pc.y - lastPos.y);
 
 	const auto xMove = ska::NumberUtils::round(mov.vx - mov.ax);
 	const auto yMove = ska::NumberUtils::round(mov.vy - mov.ay);
@@ -56,13 +46,8 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, const E
 		const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
 		texture.setDelay(delay > 200 ? 200 : static_cast<unsigned int>(delay));		
 	}
-	
-	/*const auto& pcPtr = m_entityManager.getComponent<PositionComponent>(ac.looked);
-	if (pcPtr != nullptr) {
-	auto& pcLooked = *pcPtr;
-	ac.state = RectangleUtils::getDirectionFromPos(*pcPtr, pcLooked);
-	}*/
 
+	const auto spriteHeight = texture.getHeight();
 	switch (ac.state) {
 	case 0:
 		spritePos.y = spriteHeight * 2;
@@ -91,7 +76,6 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, const E
 	default:
 		break;
 	}
-
-
+	
 	texture.setOffset(spritePos);
 }

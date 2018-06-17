@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../../Utils/StringUtils.h"
 #include "../../ECSDefines.h"
 
 namespace ska {
@@ -15,16 +16,20 @@ namespace ska {
 
 		long state;
 
+		static std::string getClassName() {
+			return "AnimationComponent";
+		}
+
 	private:
 		IAnimationStateMachine* animationFiniteStateMachine;
-		//int direction;
-		//DirectionalAnimationType::Enum type;
-		/*EntityId looked;
 
-	protected:
-		static std::string serializeDirection(const Component& component) {
-			return StringUtils::intToStr(static_cast<const AnimationComponent&>(component).direction);
-		}*/
+		static std::string serializeState(const AnimationComponent& component) {
+			return StringUtils::toString(component.state);
+		}
 
+		static void deserializeState(AnimationComponent& component, const std::string& value) {
+			component.state = StringUtils::fromString<long>(value);
+		}
+		
 	};
 }

@@ -16,7 +16,6 @@ namespace ska {
 		virtual void onEnter(const EntityId&) override;
     private:
 		ska::EntityManager& m_entityManager;
-		std::unordered_map<ska::EntityId, ska::PositionComponent> m_lastPos;
 	};
 }
 
