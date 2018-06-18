@@ -29,7 +29,7 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 
 		mc.vx = controlBody.getVelocity().x / 50;
 		mc.vy = controlBody.getVelocity().y / 50;
-		fc.z = fc.y = fc.x = 0;
+		fc.y = fc.x = 0;
 		
 		const auto& body = m_space.getBody(bc.bodyIndex);
 

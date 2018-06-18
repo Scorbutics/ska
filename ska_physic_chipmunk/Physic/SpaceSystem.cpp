@@ -17,7 +17,22 @@ void ska::cp::SpaceSystem::refresh(unsigned int ellapsedTime) {
 	const auto& entities = getEntities();
 	for (const auto& entity : entities) {
 		const auto& bc = m_componentAccessor.get<ska::cp::HitboxComponent>(entity);
-		const auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
+		auto& pc = m_componentAccessor.get<ska::PositionComponent>(entity);
+		auto& mc = m_componentAccessor.get<ska::MovementComponent>(entity);
+		auto& fc = m_componentAccessor.get<ska::ForceComponent>(entity);
+
+		//linear Z variation handled manually (fake 3D)
+		pc.z += mc.vz;
+		mc.vz -= FLUID_Z_FRICTION_FORCE * mc.vz;
+
+
+		if (pc.z < 0) {
+			pc.z = 0;
+			mc.vz = 0;
+		}
+
+		mc.vz += fc.z;
+		fc.z = 0;
 
 		auto& body = m_space.getBody(bc.bodyIndex);
 		const auto position = body.getPosition();
