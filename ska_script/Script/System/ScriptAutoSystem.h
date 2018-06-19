@@ -21,9 +21,9 @@ namespace ska {
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		//void kill(const std::string& keyScript);
-		virtual std::string map(const std::string& key, const std::string& id) const;
-		void removeComponent(const std::string& componentName, const std::string& id) const;
-		void restoreComponent(const std::string& componentName, const std::string& id) const;
+		virtual std::string map(const std::string& key, EntityId id) const;
+		void removeComponent(const std::string& componentName, EntityId id) const;
+		void restoreComponent(const std::string& componentName, EntityId id) const;
 
 		/* ScriptComponent methods */
 		float getPriority(ScriptComponent& script, unsigned int currentTimeMillis);
@@ -46,7 +46,6 @@ namespace ska {
 
 		std::unordered_map<std::string, ScriptComponent> m_cache;
 		std::unordered_map<std::string, CommandPtr> m_commands;
-		std::unordered_map<std::string, EntityId> m_namedScriptedEntities;
 
 		std::vector<ScriptComponent> m_componentToAddQueue;
 

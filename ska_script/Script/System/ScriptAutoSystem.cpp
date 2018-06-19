@@ -29,32 +29,21 @@ ska::ScriptAutoSystem::ScriptAutoSystem(EntityManager& entityManager, const Scri
 	sch.setupCommands(m_commands);
 }
 
-std::string ska::ScriptAutoSystem::map(const std::string& key, const std::string& id) const {
+std::string ska::ScriptAutoSystem::map(const std::string& key, const EntityId id) const {
 	std::vector<std::string> keys = StringUtils::split(key, '.');
 	if (keys.size() != 2) {
 		throw ScriptSyntaxError(("Error during recuperation of the global variable " + key).c_str());
 	}
 
-	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
-		EntityId entity = m_namedScriptedEntities.at(id);
-		return m_componentAccessor.serialize(entity, keys[0], keys[1]);
-	}
-
-	return "";
+	return m_componentAccessor.serialize(id, keys[0], keys[1]);
 }
 
-void ska::ScriptAutoSystem::removeComponent(const std::string& componentName, const std::string& id) const {
-	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
-		const auto entity = m_namedScriptedEntities.at(id);
-		m_componentAccessor.remove(entity, componentName);
-	}
+void ska::ScriptAutoSystem::removeComponent(const std::string& componentName, const EntityId id) const {
+	m_componentAccessor.remove(id, componentName);
 }
 
-void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, const std::string& id) const {
-	if (m_namedScriptedEntities.find(id) != m_namedScriptedEntities.end()) {
-		const auto entity = m_namedScriptedEntities.at(id);
-		m_componentAccessor.add(entity, componentName);
-	}
+void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, const EntityId id) const {
+	m_componentAccessor.add(id, componentName);	
 }
 
 void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId origin) {
@@ -272,7 +261,7 @@ std::string ska::ScriptAutoSystem::interpret(ScriptComponent& script, MemoryScri
 	streamCmd << cmd;
 	streamCmd >> cmdName;
 	/* No tabulation */
-	remove(cmdName.begin(), cmdName.end(), '\t');
+	std::remove(cmdName.begin(), cmdName.end(), '\t');
 
 	if (cmdName.empty()) {
 		if (streamCmd.eof()) {

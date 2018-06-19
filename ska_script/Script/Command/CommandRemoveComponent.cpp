@@ -12,7 +12,7 @@ int ska::CommandRemoveComponent::argumentsNumber() {
 
 std::string ska::CommandRemoveComponent::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
 	const auto& componentName = args[0];
-	const auto& entity = args[1];
+	const auto& entity = ska::StringUtils::fromString<ska::EntityId>(args[1]);
 
 	//TODO event ?
 	script.parent->removeComponent(componentName, entity);

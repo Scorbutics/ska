@@ -43,7 +43,7 @@ void ska::EntityManager::deserializeComponent(const EntityId& entityId, const st
 void ska::EntityManager::removeComponent(const EntityId& entity, const std::string& component) {
     if (m_componentsNameMap.find(component) != m_componentsNameMap.end()) {
 	    const auto components = m_componentsNameMap.at(component);
-        commonRemoveComponent(entity, *components);
+		commonRemoveComponent(entity, *components);
     }
 }
 

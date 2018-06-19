@@ -12,14 +12,7 @@ ska::ScriptUtils::ScriptUtils() {}
 
 /* Récupère la valeur une variable LOCALE (dans varMap) */
 std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber) {
-
-	if (varNumber[0] == '{' && varNumber[varNumber.size() - 1] == '}') {
-		if (saveGame.getGameSwitch(varNumber.substr(1, varNumber.size() - 2))) {
-			return "1";
-		} else {
-			return "0";
-		}
-	} else if (varNumber[0] == '[' && varNumber[varNumber.size() - 1] == ']') {
+	 if (varNumber[0] == ScriptSymbolsConstants::VARIABLE_LEFT && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::VARIABLE_RIGHT) {
 		const auto& formattedVarNumber = varNumber.substr(1, varNumber.size() - 2);
 		const auto keyLocal = getLocalVariableKey(formattedVarNumber);
 		if (!keyLocal.empty()) {
@@ -41,7 +34,7 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 
 		const auto lastVarName = interpretVarName(saveGame, script, formattedVarNumber);
 		return varNumber;
-	} else if (varNumber[0] == '#' && varNumber[varNumber.size() - 1] == '#') {
+	} else if (varNumber[0] == ScriptSymbolsConstants::ARG && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::ARG) {
 		const auto& key = varNumber + script.extendedName;
 		if (script.varMap.find(key) != script.varMap.end()) {
 			return script.varMap.at(key);
@@ -79,12 +72,9 @@ std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& sav
 
 }
 
-std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line)
-{
+std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line) {
 	std::string it = replaceVariablesByNumerics(saveGame, script, line, ScriptSymbolsConstants::VARIABLE_LEFT, ScriptSymbolsConstants::VARIABLE_RIGHT);
-	it = replaceVariablesByNumerics(saveGame, script, it, ScriptSymbolsConstants::ARG, ScriptSymbolsConstants::ARG);
-	it = replaceVariablesByNumerics(saveGame, script, it, ScriptSymbolsConstants::SWITCH_LEFT, ScriptSymbolsConstants::SWITCH_RIGHT);
-	return it;
+	return replaceVariablesByNumerics(saveGame, script, it, ScriptSymbolsConstants::ARG, ScriptSymbolsConstants::ARG);
 }
 
 /*
@@ -143,8 +133,8 @@ std::string ska::ScriptUtils::getCommandCall(const std::string& s)
 }
 
 std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
-	const auto pipePos = v.find_first_of('$');
-	if (pipePos == 0 && v.find_last_of('$') == v.size() - 1) {
+	const auto pipePos = v.find_first_of(ScriptSymbolsConstants::GLOBAL_VARIABLE);
+	if (pipePos == 0 && v.find_last_of(ScriptSymbolsConstants::GLOBAL_VARIABLE) == v.size() - 1) {
 		//variable globale
 		return v.substr(1, v.size() - 2);
 	}
@@ -154,12 +144,11 @@ std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
 
 std::string ska::ScriptUtils::getLocalVariableKey(const std::string& v)
 {
-	const auto pipePos = v.find_first_of('|');
-	if (pipePos == 0 && v.find_last_of('|') == v.size() - 1)
+	const auto pipePos = v.find_first_of(ScriptSymbolsConstants::LOCAL_VARIABLE);
+	if (pipePos == 0 && v.find_last_of(ScriptSymbolsConstants::LOCAL_VARIABLE) == v.size() - 1)
 	{
 		//variable temporaire => varMap
-		auto key = "[" + v.substr(1, v.size() - 2) + "]";
-		return key;
+		return "[" + v.substr(1, v.size() - 2) + "]";
 	}
 
 	return "";
@@ -179,9 +168,7 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 	if (value.empty())
 		return;
 
-	if (varNumber[0] == '{' && varNumber[varNumber.size() - 1] == '}') {
-		saveGame.setGameSwitch(varNumber.substr(1, varNumber.size() - 2), (value == "1"));
-	} else if (varNumber[0] == '[' && varNumber[varNumber.size() - 1] == ']') {
+	if (varNumber[0] == ScriptSymbolsConstants::VARIABLE_LEFT && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::VARIABLE_RIGHT) {
 		const auto v = varNumber.substr(1, varNumber.size() - 2);
 		auto key = getLocalVariableKey(v);
 		if (!key.empty()) {
@@ -200,37 +187,20 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 			saveGame.setComponentVariable(keyComponent, value);
 		}
 
-	} else if (varNumber[0] == '#' && varNumber[varNumber.size() - 1] == '#') {
+	} else if (varNumber[0] == ScriptSymbolsConstants::ARG && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::ARG) {
 		varMap[varNumber + scriptExtendedName] = value;
 	}
 
 }
 
-/* Récupère la valeur d'une variable GLOBALE en utilisant potentiellement des sous-variables locales en paramètres */
+/* Récupère la valeur d'une variable en utilisant potentiellement des sous-variables locales en paramètres */
 std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v) {
 	/*
 	$variable$   : variable globale à tout le jeu
-	_variable_ : variable "constante" (intégrée au jeu)
-	_variable param1 param2_ : variable intégrée au jeu avec paramètres
 	#variable# : numéro d'argument de script en cours entre symboles dièse : #arg0# #arg1# #arg2# etc...
-	|variable| : variable utilisateur (créée en script et utilisée en script, morte à la fin du script)
+	|variable| : variable locale (créée en script et utilisée en script, morte à la fin du script)
 	<variable param> : composant à sérialiser / désérializer, le paramètre est souvent l'id de l'entité propriétaire
 	*/
-
-	std::stringstream ss;
-	std::string cmds[2];
-
-	if (v[0] == '_' && v[v.size()-1] == '_') {
-		ss << v.substr(1, v.size()-2);
-
-		for (unsigned int i = 0; ss >> cmds[i] && i <= 2; i++);
-
-		if (!ss.eof()) {
-			throw ScriptSyntaxError(("Error while interpreting global var (not enough arguments) : " + v).c_str());
-		}
-
-		return script.parent->map(cmds[0], getValueFromVarOrSwitchNumber(saveGame, script, cmds[1]));
-	}
 
 	return getValueFromVarOrSwitchNumber(saveGame, script, v);
 }
@@ -265,6 +235,3 @@ bool ska::ScriptUtils::isScriptActivated(const MemoryScript& saveGame, const std
 	}
 }
 
-ska::ScriptUtils::~ScriptUtils()
-{
-}

@@ -7,10 +7,12 @@
 namespace ska {
 	class MemoryScript;
 	class ScriptAutoSystem;
-	class ScriptUtils
-	{
-	public:
+	
+	class ScriptUtils {
+	private:
 		ScriptUtils();
+	
+	public:
 		static std::string getGlobalVariableKey(const std::string& v);
 		static std::string getComponentVariableKey(const std::string& v);
 		static std::string getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber);
@@ -23,6 +25,6 @@ namespace ska {
 
 		static std::string interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v);
 		static bool isScriptActivated(const MemoryScript& saveGame, const std::string& script);
-		~ScriptUtils();
+		~ScriptUtils() = default;
 	};
 }

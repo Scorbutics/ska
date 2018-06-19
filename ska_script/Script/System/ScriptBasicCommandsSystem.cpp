@@ -3,7 +3,6 @@
 #include "../Command/CommandEnd.h"
 #include "../Command/CommandLogical.h"
 #include "../Command/CommandCalculate.h"
-#include "../Command/CommandAssignSwitch.h"
 #include "../Command/CommandEndScript.h"
 #include "../Command/CommandAssign.h"
 #include "../Command/CommandRandom.h"
@@ -36,7 +35,6 @@ void ska::ScriptBasicCommandsSystem::BasicScriptCommandHelper::setupCommands(std
 	c["end_script"] = std::unique_ptr<Command>(std::make_unique<CommandEndScript>(m_entityManager));
 	c["calculate"] = std::unique_ptr<Command>(std::make_unique<CommandCalculate>(m_entityManager));
 	c["assign"] = std::unique_ptr<Command>(std::make_unique<CommandAssign>(m_entityManager));
-	c["assign_switch"] = std::unique_ptr<Command>(std::make_unique<CommandAssignSwitch>(m_entityManager));
 	c["random"] = std::unique_ptr<Command>(std::make_unique<CommandRandom>(m_entityManager));
 	c["log"] = std::unique_ptr<Command>(std::make_unique<CommandLog>(m_entityManager));
 	c["script"] = std::unique_ptr<Command>(std::make_unique<CommandScript>(m_entityManager));
