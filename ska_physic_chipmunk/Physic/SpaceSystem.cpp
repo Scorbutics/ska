@@ -23,15 +23,13 @@ void ska::cp::SpaceSystem::refresh(unsigned int ellapsedTime) {
 
 		//linear Z variation handled manually (fake 3D)
 		pc.z += mc.vz;
-		mc.vz -= FLUID_Z_FRICTION_FORCE * mc.vz;
-
+		mc.vz += fc.z;
 
 		if (pc.z < 0) {
 			pc.z = 0;
 			mc.vz = 0;
 		}
-
-		mc.vz += fc.z;
+		mc.vz -= FLUID_Z_FRICTION_FORCE * mc.vz;
 		fc.z = 0;
 
 		auto& body = m_space.getBody(bc.bodyIndex);
