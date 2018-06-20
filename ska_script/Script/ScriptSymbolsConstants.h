@@ -7,7 +7,6 @@ namespace ska {
 		static const char METHOD = '%';
 		static const char COMPONENT_VARIABLE_LEFT = '<';
 		static const char COMPONENT_VARIABLE_RIGHT = '>';
-		static const char LOCAL_VARIABLE = '|';
 		static const char VARIABLE_LEFT = '[';
 		static const char VARIABLE_RIGHT = ']';
 		static const char ARG = '#';

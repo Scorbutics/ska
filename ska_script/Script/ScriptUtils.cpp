@@ -10,17 +10,9 @@
 
 ska::ScriptUtils::ScriptUtils() {}
 
-/* Récupère la valeur une variable LOCALE (dans varMap) */
 std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber) {
 	 if (varNumber[0] == ScriptSymbolsConstants::VARIABLE_LEFT && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::VARIABLE_RIGHT) {
 		const auto& formattedVarNumber = varNumber.substr(1, varNumber.size() - 2);
-		const auto keyLocal = getLocalVariableKey(formattedVarNumber);
-		if (!keyLocal.empty()) {
-			if (script.varMap.find(keyLocal) != script.varMap.end()) {
-				return script.varMap.at(keyLocal);
-			}
-			return formattedVarNumber;
-		}
 
 		const auto keyGlobal = getGlobalVariableKey(formattedVarNumber);
 		if (!keyGlobal.empty()) {
@@ -30,6 +22,10 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 		const auto keyComponent = getComponentVariableKey(formattedVarNumber);
 		if (!keyComponent.empty()) {
 			return saveGame.getComponentVariable(keyComponent);
+		}
+
+		if (!formattedVarNumber.empty() && script.varMap.find(formattedVarNumber) != script.varMap.end()) {			
+			return script.varMap.at(formattedVarNumber);
 		}
 
 		const auto lastVarName = interpretVarName(saveGame, script, formattedVarNumber);
@@ -142,18 +138,6 @@ std::string ska::ScriptUtils::getGlobalVariableKey(const std::string& v) {
 	return "";
 }
 
-std::string ska::ScriptUtils::getLocalVariableKey(const std::string& v)
-{
-	const auto pipePos = v.find_first_of(ScriptSymbolsConstants::LOCAL_VARIABLE);
-	if (pipePos == 0 && v.find_last_of(ScriptSymbolsConstants::LOCAL_VARIABLE) == v.size() - 1)
-	{
-		//variable temporaire => varMap
-		return "[" + v.substr(1, v.size() - 2) + "]";
-	}
-
-	return "";
-}
-
 std::string ska::ScriptUtils::getComponentVariableKey(const std::string& v) {
 	const auto pipePos = v.find_first_of(ScriptSymbolsConstants::COMPONENT_VARIABLE_LEFT);
 	if (pipePos == 0 && v.find_last_of(ScriptSymbolsConstants::COMPONENT_VARIABLE_RIGHT) == v.size() - 1) {
@@ -165,16 +149,12 @@ std::string ska::ScriptUtils::getComponentVariableKey(const std::string& v) {
 }
 
 void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, const std::string& scriptExtendedName, std::string varNumber, std::string value, std::unordered_map<std::string, std::string>& varMap) {
-	if (value.empty())
+	if (value.empty()) {
 		return;
+	}
 
 	if (varNumber[0] == ScriptSymbolsConstants::VARIABLE_LEFT && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::VARIABLE_RIGHT) {
 		const auto v = varNumber.substr(1, varNumber.size() - 2);
-		auto key = getLocalVariableKey(v);
-		if (!key.empty()) {
-			varMap[key] = value;
-			return;
-		}
 
 		auto keyGlobal = getGlobalVariableKey(v);
 		if(!keyGlobal.empty()) {
@@ -185,6 +165,11 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 		auto keyComponent = getComponentVariableKey(v);
 		if (!keyComponent.empty()) {
 			saveGame.setComponentVariable(keyComponent, value);
+		}
+
+		if (!v.empty()) {
+			varMap[v] = value;
+			return;
 		}
 
 	} else if (varNumber[0] == ScriptSymbolsConstants::ARG && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::ARG) {
