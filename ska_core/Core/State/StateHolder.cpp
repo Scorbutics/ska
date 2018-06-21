@@ -39,7 +39,7 @@ bool ska::StateHolder::update() {
 				StateEvent se(StateEventType::STATE_CHANGE);
 				m_eventDispatcher.ska::Observable<ska::StateEvent>::notifyObservers(se);
 				m_currentState->loadAfter(lastScene.get());
-				return false;
+				return true;
 			} 
 
 			StateEvent se(StateEventType::FIRST_STATE_LOAD);

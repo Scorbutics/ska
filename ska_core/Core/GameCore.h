@@ -61,7 +61,7 @@ namespace ska {
     private:
 		bool reduceAccumulatorAndEventUpdate(float& accumulator, const float ti) {
 			while (accumulator >= ti) {
-				if(eventUpdate(ti)) { return true; }
+				if(eventUpdate(ti) || m_accumulatorReset) { m_accumulatorReset = false; return true; }
 				accumulator -= ti;
 			}
 			return false;
@@ -101,9 +101,12 @@ namespace ska {
         }
 
 		GameConfPtr m_gameConfig;
-
+		bool m_accumulatorReset = false;
     protected:
         EventDispatcher& m_eventDispatcher;
+		void resetAccumulator() {
+			m_accumulatorReset = true;
+		}
 
 	private:
         StateHolder m_stateHolder;

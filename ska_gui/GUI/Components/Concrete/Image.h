@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include "../Widget.h"
 #include "Graphic/Texture.h"
 
@@ -15,6 +16,6 @@ namespace ska {
 
 	private:
 		Texture m_img;
-		Rectangle m_clip;
+		std::optional<Rectangle> m_clip;
 	};
 }

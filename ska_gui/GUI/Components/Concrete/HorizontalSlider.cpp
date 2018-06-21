@@ -9,11 +9,7 @@ WidgetPanel<ValueChangedEventListener<float>, HoverEventListener, ClickEventList
 	m_percents(0),
 	m_sliding(false) {
 
-	Rectangle clipImage{ 0, 0, 0, 0 };
-	clipImage.w = pixelWidth;
-	clipImage.h = std::numeric_limits<int>::max();
-
-	auto& img = addWidget<Image>(styleName + "_bar.png", Point<int>(0, 0), false, &clipImage);
+	auto& img = addWidget<Image>(styleName + "_bar.png", Point<int>(0, 0), false, nullptr);
 	img.setWidth(pixelWidth);
 
 	addWidget<Button>(Point<int>(0, 0), styleName, nullptr, [this](Widget*, ClickEvent& e) {
