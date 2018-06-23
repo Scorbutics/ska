@@ -31,12 +31,12 @@ TEST_CASE("[LayerEvent]") {
 
 	auto eventLoader = fakeit::Mock<ska::LayerEventLoader>{}; ;
 
-	auto sp = ska::ScriptPack{};
+	auto sp = ska::ScriptGlobalPack{};
 	auto ssc = ska::ScriptSleepComponent{};
 	ssc.id = { 44, 47 };
 	//Voluntarily set not an "AUTO" type, because it will be overriden by the event layer
 	ssc.triggeringType = ska::ScriptTriggerType::TOUCH;
-	sp.push_back(ssc);
+	sp.push_back({ ska::BlockEvent{}, ssc });
 
 	Method(eventLoader, loadGlobal) = sp;
 	Method(eventLoader, loadPositioned) = BuildScriptPack(width, height);
@@ -49,10 +49,10 @@ TEST_CASE("[LayerEvent]") {
 		auto& scriptPack = layer.getAutoScript();
 		CHECK(!scriptPack.empty());
 		
-		const auto checkId = scriptPack[0].id == ska::Point<int>{ 44, 47 };
+		const auto checkId = scriptPack[0].scripts.id == ska::Point<int>{ 44, 47 };
 		CHECK(checkId);
 
-		const auto checkType = scriptPack[0].triggeringType == ska::ScriptTriggerType::AUTO;
+		const auto checkType = scriptPack[0].scripts.triggeringType == ska::ScriptTriggerType::AUTO;
 		CHECK(checkType);
 	}
 
