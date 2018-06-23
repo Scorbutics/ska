@@ -1,5 +1,5 @@
 #pragma once
-#include "Point.h"
+#include "../../../Point.h"
 
 namespace ska {
 	struct BlockEvent {

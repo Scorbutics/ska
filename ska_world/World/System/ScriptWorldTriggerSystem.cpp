@@ -41,9 +41,9 @@ void ska::ScriptWorldTriggerSystem::refresh(unsigned int) {
 
 		//Auto events
 		auto worldScripts = std::vector<ScriptSleepComponent>{};
-		auto autosScript = m_world.getScriptsAuto();
-		for (auto& autoScript : autosScript) {
-			worldScripts.push_back(std::move(autoScript));
+		const auto autosScript = m_world.getScriptsAuto();
+		for (const auto& autoScript : autosScript) {
+			worldScripts.push_back(autoScript.get().scripts);
 		}
 		createScriptFromSleeping(std::move(worldScripts), entityId);
 

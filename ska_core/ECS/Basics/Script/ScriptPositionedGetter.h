@@ -1,6 +1,7 @@
 #pragma once
 #include "ScriptSleepComponent.h"
 #include "../../../Point.h"
+#include "ScriptGlobalData.h"
 
 namespace ska {
 
@@ -9,8 +10,8 @@ namespace ska {
         ScriptPositionedGetter() = default;
         virtual ~ScriptPositionedGetter() = default;
 
-        virtual std::vector<ScriptSleepComponent> getScripts(const Point<int>& oldCenterPos, const ska::Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection = nullptr) = 0;
-		virtual std::vector<ScriptSleepComponent> getScriptsAuto() = 0;
+        virtual ScriptPack getScripts(const Point<int>& oldCenterPos, const ska::Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection = nullptr) = 0;
+		virtual ScriptGlobalPtrPack getScriptsAuto() = 0;
     };
 }
 

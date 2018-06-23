@@ -11,6 +11,7 @@
 #include "LayerEvent.h"
 
 namespace ska {
+
 	class TileWorldLoader;
 	class ScriptSleepComponent;
 	class DrawableContainer;
@@ -36,8 +37,8 @@ namespace ska {
 
 		unsigned int getBlockSize() const;
 
-		std::vector<ScriptSleepComponent> getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection) override;
-		std::vector<ScriptSleepComponent> getScriptsAuto() override;
+		ScriptPack getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection) override;
+		ScriptGlobalPtrPack getScriptsAuto() override;
 
 		const CollisionProfile& getCollisionProfile() const;
 

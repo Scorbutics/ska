@@ -12,7 +12,7 @@ namespace ska {
 	public:
 		explicit LayerEventLoaderTilesetEvent(const CollisionProfile& collisionProfile, std::size_t layer, const TilesetEvent& tilesetEvent);
 		Vector2<ScriptPack> loadPositioned(unsigned int width, unsigned int height) const override;
-		ScriptPack loadGlobal() const override;
+		ScriptGlobalPack loadGlobal() const override;
         const std::string& getName() const override;
 
 	private:

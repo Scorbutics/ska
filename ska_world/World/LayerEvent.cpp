@@ -25,12 +25,12 @@ ska::ScriptPack& ska::LayerEvent::getScripts(const Point<int>& coordinates) {
 	return m_events[coordinates.x][coordinates.y];
 }
 
-ska::ScriptPack& ska::LayerEvent::getAutoScript() {
+ska::ScriptGlobalPack& ska::LayerEvent::getAutoScript() {
 	return m_autoEvents;
 }
 
 void ska::LayerEvent::forcesAutoOnGlobalScripts() {
 	for (auto& a : m_autoEvents) {
-		a.triggeringType = ScriptTriggerType::AUTO;
+		a.scripts.triggeringType = ScriptTriggerType::AUTO;
 	}
 }

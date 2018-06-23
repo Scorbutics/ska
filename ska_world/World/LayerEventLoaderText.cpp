@@ -121,8 +121,8 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderText::loadPositioned(unsigned
 	return events;
 }
 
-ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
-	auto events = ScriptPack{};
+ska::ScriptGlobalPack ska::LayerEventLoaderText::loadGlobal() const {
+	auto events = ScriptGlobalPack{};
 	auto i = 0u;
 	try {
 		for (const auto& line : m_fileContent) {
@@ -137,7 +137,7 @@ ska::ScriptPack ska::LayerEventLoaderText::loadGlobal() const {
 				continue;
 			}
 
-			events.push_back(std::move(ssc));
+			events.push_back({ std::move(event), std::move(ssc) });
 		}
 	} catch(ska::NumberFormatException& nfe) {
 		ExceptionTrigger<CorruptedFileException>("Erreur (classe LayerEvent) : Erreur lors de la lecture du fichier evenements (ligne : " + StringUtils::uintToStr(i) + ")\n" + std::string(nfe.what()));

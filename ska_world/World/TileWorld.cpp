@@ -81,19 +81,19 @@ void ska::TileWorld::load(const TileWorldLoader& loader, Tileset* tilesetToChang
 	}
 }
 
-std::vector<ska::ScriptSleepComponent> ska::TileWorld::getScriptsAuto() {
-	std::vector<ScriptSleepComponent> result;
+ska::ScriptGlobalPtrPack ska::TileWorld::getScriptsAuto() {
+	auto result = ScriptGlobalPtrPack{};
 	if (m_autoScripts) {
 		for (auto& layerScriptsPtr : m_events) {
 			auto& autosScript = layerScriptsPtr->getAutoScript();
-			for (auto& ssc : autosScript) {
-				ssc.context = m_fullName;
+			for (auto& scriptData : autosScript) {
+				scriptData.scripts.context = m_fullName;
 				m_autoScripts = false;
-				result.emplace_back(ssc);
+				result.emplace_back(scriptData);
 			}
 		}
 	}
-	return {};
+	return result;
 }
 
 std::vector<ska::ScriptSleepComponent> ska::TileWorld::getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection) {

@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
+#include <optional>
 #include <unordered_map>
 #include "../Script/ScriptComponent.h"
-
+#include "ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class MemoryScript;
@@ -24,6 +25,9 @@ namespace ska {
 
 		static std::string interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v);
 		static bool isScriptActivated(const MemoryScript& saveGame, const std::string& script);
+
+		static std::optional<ska::ScriptSleepComponent> instantiateScript(const std::vector<std::string>& args, std::size_t startIndex, const ScriptComponent& script);
+
 		~ScriptUtils() = default;
 	};
 }

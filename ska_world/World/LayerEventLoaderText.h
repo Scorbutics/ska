@@ -1,6 +1,6 @@
 #pragma once
 #include "LayerEventLoader.h"
-#include "BlockEvent.h"
+#include "ECS/Basics/Script/BlockEvent.h"
 
 namespace ska {
 	class LayerEventLoaderText :
@@ -10,7 +10,7 @@ namespace ska {
 		explicit LayerEventLoaderText(std::string layerFileName);
 		
 		Vector2<ScriptPack> loadPositioned(unsigned int width, unsigned int height) const override;
-		ScriptPack loadGlobal() const override;
+		ScriptGlobalPack loadGlobal() const override;
         const std::string& getName() const override;
 
 	private:

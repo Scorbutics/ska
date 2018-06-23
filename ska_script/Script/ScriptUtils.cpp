@@ -220,3 +220,24 @@ bool ska::ScriptUtils::isScriptActivated(const MemoryScript& saveGame, const std
 	}
 }
 
+std::optional<ska::ScriptSleepComponent> ska::ScriptUtils::instantiateScript(const std::vector<std::string>& args, std::size_t startIndex, const ScriptComponent& script) {
+	if (args.size() > startIndex) {
+		std::vector<std::string> extraArgs;
+
+		const auto& scriptName = args[startIndex];
+		/* Rebuild an argument string to be read by the new running script */
+		for (unsigned int i = startIndex + 1; i < args.size(); i++) {
+			extraArgs.push_back(args[i]);
+		}
+		ska::ScriptSleepComponent ssc;
+		ssc.context = script.context;
+		ssc.args = extraArgs;
+		ssc.period = 2000;
+		ssc.deleteEntityWhenFinished = true;
+		ssc.triggeringType = ska::ScriptTriggerType::AUTO;
+		ssc.name = scriptName;
+		return ssc;
+	}
+	return { };
+}
+

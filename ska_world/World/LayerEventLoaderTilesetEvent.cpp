@@ -39,13 +39,13 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderTilesetEvent::loadPositioned(
 	return events;
 }
 
-ska::ScriptPack ska::LayerEventLoaderTilesetEvent::loadGlobal() const {
+ska::ScriptGlobalPack ska::LayerEventLoaderTilesetEvent::loadGlobal() const {
 	auto autosScript = m_tilesetEvent.getScript(ScriptTriggerType::AUTO);
-	auto result = ScriptPack{};
+	auto result = ScriptGlobalPack{};
 	if (!autosScript.empty()) {
 		result.reserve(autosScript.size());
 		for (const auto& s : autosScript) {
-			result.push_back(s);
+			result.push_back({ ska::BlockEvent{}, s });
 		}
 	}
 	return result;

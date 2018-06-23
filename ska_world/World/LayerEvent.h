@@ -7,6 +7,7 @@
 #include "Utils/MovableNonCopyable.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/AnimatedTexture.h"
+#include "ECS/Basics/Script/ScriptGlobalData.h"
 
 namespace ska {
     class LayerEventLoader;
@@ -20,7 +21,7 @@ namespace ska {
         ~LayerEvent() override = default;
 
 		ScriptPack& getScripts(const ska::Point<int>& coordinates);
-		ScriptPack& getAutoScript();
+		ScriptGlobalPack& getAutoScript();
 
 	private:
 		void forcesAutoOnGlobalScripts();
@@ -30,7 +31,7 @@ namespace ska {
 		std::string m_chipsetname;
 
         Vector2<ScriptPack> m_events;
-		ScriptPack m_autoEvents;
+		ScriptGlobalPack m_autoEvents;
 	};
 
 	using LayerEventPtr = std::unique_ptr<LayerEvent>;
