@@ -7,7 +7,7 @@ namespace ska {
 	class StringUtils
 	{
 	private:
-		StringUtils();
+		StringUtils() = default;
 
 	public:
 		static std::string intToStr(const int x);
@@ -54,7 +54,7 @@ namespace ska {
 		static void replaceAll(std::string& str, const char from, const char to);
 		static bool isInt(const std::string& s, const int base);
 		static bool isDecimal(const std::string& s);
-		~StringUtils();
+		~StringUtils() = default;
 
 
 	};

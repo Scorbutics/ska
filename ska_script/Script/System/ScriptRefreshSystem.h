@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_set>
 #include <vector>
+#include <optional>
 #include "ECS/Basics/Script/ScriptAwareComponent.h"
 #include "ECS/Basics/Physic/PositionComponent.h"
 #include "ECS/Basics/Script/ScriptSleepComponent.h"
@@ -13,7 +14,23 @@ namespace ska {
 	struct InputKeyEvent;
 	class ScriptPositionedGetter;
 
-	using ScriptRefreshSystemBase = System< RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent, ScriptSleepComponent>>;
+	using ScriptRefreshSystemBase = System<RequiredComponent<PositionComponent, AnimationComponent, HitboxComponent, ScriptAwareComponent>, PossibleComponent<WorldCollisionComponent, ScriptSleepComponent>>;
+	using ScriptPositionSystemBase = System<RequiredComponent<PositionComponent, ScriptSleepComponent>, PossibleComponent<>>;
+
+	class ScriptRefreshSystem;
+
+	class ScriptPositionSystem :
+		public ScriptPositionSystemBase {
+		friend class ScriptRefreshSystem;
+	public:
+		using ScriptPositionSystemBase::ScriptPositionSystemBase;
+		~ScriptPositionSystem() override = default;
+
+	protected:
+		void refresh(unsigned int ellapsedTime) override {}
+	};
+	
+	
 	class ScriptRefreshSystem :
 		public ScriptRefreshSystemBase,
 		public SubObserver<InputKeyEvent>,
@@ -34,9 +51,10 @@ namespace ska {
 		void triggerChangeBlockScripts(const ScriptEvent& se);
 		bool onScriptEvent(ScriptEvent& se);
 		void createScriptFromSleeping(std::vector<ScriptSleepComponent> sleepings, const EntityId& parent);
-		EntityId findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, unsigned int distance = 48) const;
+		std::optional<EntityId> findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, unsigned int distance = 48) const;
 		bool startScript(ScriptSleepComponent script, EntityId origin);
 
+		ScriptPositionSystem m_scriptPositionSystem;
 		ScriptPositionedGetter& m_scriptPositionedGetter;
 		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;

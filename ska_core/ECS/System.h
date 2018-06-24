@@ -101,11 +101,11 @@ namespace ska {
         ComponentAccessor m_componentAccessor;
 		ComponentPossibleAccessor m_componentPossibleAccessor;
 
-        const std::unordered_set<EntityId>& getEntities() {
+        const std::unordered_set<EntityId>& getEntities() const {
             return m_processed;
         }
 
-		EntityId createEntity() const{
+		EntityId createEntity() const {
 			return m_entityManager.createEntity();
 		}
 

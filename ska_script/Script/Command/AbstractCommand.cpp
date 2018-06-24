@@ -20,11 +20,10 @@ std::string ska::AbstractCommand::process(ScriptAutoSystem& system, ScriptCompon
 	/* Avant tout traitement, effectue toutes les exécutions des sous-commandes possibles */
 	interpretSubCommands(system, line, script);
 
-	std::vector<std::string> args = StringUtils::split(line, getSeparator());
-
+	auto args = StringUtils::split(line, getSeparator());
 	for (auto& arg : args) {
 		/* Pour chaque argument, explicite les valeurs des variables */
-		arg = ScriptUtils::getValueFromVarOrSwitchNumber(system.getSavegame(), script, StringUtils::trim(arg));
+		arg = ScriptUtils::replaceVariablesByNumerics(system.getSavegame(), script, StringUtils::trim(arg));
 	}
 
 

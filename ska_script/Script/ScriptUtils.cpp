@@ -7,6 +7,7 @@
 #include "Utils/StringUtils.h"
 #include "../Script/System/ScriptAutoSystem.h"
 #include "Exceptions/ScriptSyntaxError.h"
+#include "Exceptions/NumberFormatException.h"
 
 ska::ScriptUtils::ScriptUtils() {}
 
@@ -19,8 +20,13 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 			return StringUtils::intToStr(saveGame.getGameVariable(keyGlobal));
 		}
 
-		const auto keyComponent = getComponentVariableKey(formattedVarNumber);
+		auto keyComponent = getComponentVariableKey(formattedVarNumber);
 		if (!keyComponent.empty()) {
+			const auto r = keyComponent.find_first_of(' ');
+			if (r != std::string::npos) {
+				keyComponent = keyComponent.substr(0, r) + " " + getValueFromVarOrSwitchNumber(saveGame, script, keyComponent.substr(r + 1));
+			}
+			
 			return saveGame.getComponentVariable(keyComponent);
 		}
 
@@ -28,39 +34,45 @@ std::string ska::ScriptUtils::getValueFromVarOrSwitchNumber(const MemoryScript& 
 			return script.varMap.at(formattedVarNumber);
 		}
 
-		const auto lastVarName = interpretVarName(saveGame, script, formattedVarNumber);
-		return varNumber;
 	} else if (varNumber[0] == ScriptSymbolsConstants::ARG && varNumber[varNumber.size() - 1] == ScriptSymbolsConstants::ARG) {
 		const auto& key = varNumber + script.extendedName;
 		if (script.varMap.find(key) != script.varMap.end()) {
 			return script.varMap.at(key);
-		} else {
-			return varNumber;
-		}
-	} else if (varNumber == "true") {
-		return "1";
-	} else if (varNumber == "false") {
-		return "0";
+		} 
+		return varNumber;
 	}
 
 	return varNumber;
 }
 
-std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol) {
-	auto it = line;
-	std::size_t posLeft, posRight;
+std::pair<std::size_t, std::size_t> ska::ScriptUtils::extractFirstVariableNameBoundaries(const std::string& line, char varStartSymbol, char varEndSymbol) {
+	std::size_t posLeft;
+	std::size_t posRight;
 
-	while ((posLeft = it.find_first_of(varStartSymbol)) != std::string::npos) {
-		if ((posRight = it.substr(posLeft + 1).find_first_of(varEndSymbol)) != std::string::npos) {
-			posRight += posLeft + 1;
+	if((posLeft = line.find_first_of(varStartSymbol)) != std::string::npos) {
+		if ((posRight = line.substr(posLeft + 1).find_first_of(varEndSymbol)) != std::string::npos) {
+			return std::make_pair(posLeft, posRight + posLeft + 1);
+		}
+		FormalCalculator::calculSyntaxError(line);
+	}
+	return std::make_pair(std::string::npos, std::string::npos);
+}
+
+std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol, const std::string& oldLine) {
+	auto validPos = true;
+	auto it = line;
+	while(validPos) {
+		auto [posLeft, posRight] = extractFirstVariableNameBoundaries(it, varStartSymbol, varEndSymbol);
+		validPos = (posLeft != std::string::npos && posRight != std::string::npos);
+		if (validPos) {
 
 			const auto var = it.substr(posLeft, posRight - posLeft + 1);
 			const auto varValue = getValueFromVarOrSwitchNumber(saveGame, script, var);
-
-			it = it.substr(0, posLeft) + varValue + it.substr(posRight + 1, it.size());
-		} else {
-			FormalCalculator::calculSyntaxError(line);
-			return "";
+			if (var == varValue) {
+				it = it.substr(posRight + 1);
+			} else {
+				it = it.substr(0, posLeft) + varValue + it.substr(posRight + 1);
+			}
 		}
 	}
 

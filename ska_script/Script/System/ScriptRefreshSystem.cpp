@@ -15,6 +15,7 @@ ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, Game
 	SubObserver<InputKeyEvent>(std::bind(&ScriptRefreshSystem::onKeyEvent, this, std::placeholders::_1), ged),
 	SubObserver<CollisionEvent>(std::bind(&ScriptRefreshSystem::onCollisionEvent, this, std::placeholders::_1), ged),
 	SubObserver<ScriptEvent>(std::bind(&ScriptRefreshSystem::onScriptEvent, this, std::placeholders::_1), ged),
+	m_scriptPositionSystem(entityManager),
 	m_scriptPositionedGetter(spg),	
 	m_scriptAutoSystem(scriptAutoSystem),
 	m_action(false),
@@ -42,6 +43,16 @@ bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 			for (auto& script : tmp) {
 				worldScripts.push_back(std::move(script));
 			}
+
+			const auto& entities = m_scriptPositionSystem.getEntities();
+			for (const auto& e : entities) {
+				auto scriptEntity = findNearScriptComponentEntity(pc, e);
+				if (scriptEntity.has_value()) {
+					auto ssc = m_entityManager.getComponent<ska::ScriptSleepComponent>(*scriptEntity);
+					startScript(std::move(ssc), *scriptEntity);
+				}
+			}
+
 			createScriptFromSleeping(std::move(worldScripts), entityId);
 		}
 		
@@ -223,7 +234,7 @@ bool ska::ScriptRefreshSystem::startScript(ScriptSleepComponent script, const En
 	return script.triggeringType == ScriptTriggerType::AUTO;
 }
 
-ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, const unsigned int distance) const {
+std::optional<ska::EntityId> ska::ScriptRefreshSystem::findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, const unsigned int distance) const {
 	auto& scriptPos = m_componentAccessor.get<PositionComponent>(script);
 
 	const int varX = (scriptPos.x - entityPos.x);
@@ -234,5 +245,5 @@ ska::EntityId ska::ScriptRefreshSystem::findNearScriptComponentEntity(const Posi
 		return script;
 	}
 
-	return std::numeric_limits<unsigned int>::max();
+	return {};
 }

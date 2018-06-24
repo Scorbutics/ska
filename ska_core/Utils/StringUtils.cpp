@@ -19,10 +19,6 @@ class deletable_facet : Facet {
     ~deletable_facet() {}
 };
 
-ska::StringUtils::StringUtils()
-{
-}
-
 std::string ska::StringUtils::intToStr(const int x) {
 	std::ostringstream oss;
 	oss << x;
@@ -39,13 +35,11 @@ bool ska::StringUtils::isInt(const std::string& s, const int base) {
 }
 
 int ska::StringUtils::strToInt(const std::string& str) {
-	const auto& sTrimed = trim(str);
-	return atoi(sTrimed.c_str());
+	return stoi(str);
 }
 
 unsigned int ska::StringUtils::strToUint(const std::string& str) {
-	const auto& sTrimed = trim(str);
-	return stoul(sTrimed);
+	return stoul(str);
 }
 
 bool ska::StringUtils::isDecimal(const std::string& s) {
@@ -88,7 +82,7 @@ std::vector<std::string> ska::StringUtils::split(const std::string &s, const cha
 
 // trim from start
 std::string ska::StringUtils::ltrim(const std::string &s) {
-	std::string tmp(s.c_str());
+	auto tmp = std::string (s.c_str());
 	auto firstCharIt = find_if(tmp.begin(), tmp.end(), [](const auto& c) {return !std::isspace(c); });
 	tmp.erase(tmp.begin(), firstCharIt);
 	return tmp;
@@ -127,10 +121,6 @@ std::wstring ska::StringUtils::toUTF8(const std::string& s) {
 	auto sNat = s.c_str();
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 	return converter.from_bytes(sNat);
-}
-
-ska::StringUtils::~StringUtils()
-{
 }
 
 std::string ska::StringUtils::floatToStr(const float f) {
