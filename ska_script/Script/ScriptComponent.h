@@ -22,7 +22,8 @@ namespace ska {
 			deleteEntityWhenFinished(false),
 			scriptPeriod(0),
 			triggeringType(ScriptTriggerType::NONE),
-			origin(0) {
+			origin(0),
+			target(0) {
 			state = EnumScriptState::STOPPED;
 			lastTimeStarted = 0;
 			commandsPlayed = 0;
@@ -49,6 +50,10 @@ namespace ska {
 			return origin;
 		}
 
+		EntityId getTarget() const {
+			return target;
+		}
+
 	private:
 		/* Manage states in order to dispatch all different scripts */
 		ScriptState state;
@@ -58,5 +63,6 @@ namespace ska {
 		unsigned int lastTimeDelayed;
 		unsigned int delay;
 		EntityId origin;
+		EntityId target;
 	};
 }

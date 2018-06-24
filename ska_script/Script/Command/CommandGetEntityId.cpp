@@ -11,9 +11,12 @@ ska::CommandGetEntityId::CommandGetEntityId(EntityManager& entityManager, const 
 
 std::string ska::CommandGetEntityId::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
 	const auto& name = args[0];
-	if (name == ".") {
+	if (name == ".target") {
+		return StringUtils::toString(script.getTarget());
+	} else if (name == ".origin") {
 		return StringUtils::toString(script.getOrigin());
 	}
+	
 	auto locatedPtr = m_locator.getEntityId(name);
 	if (locatedPtr != nullptr) {
 		return StringUtils::toString(*locatedPtr);

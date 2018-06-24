@@ -46,7 +46,7 @@ void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, c
 	m_componentAccessor.add(id, componentName);	
 }
 
-void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId origin) {
+void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId origin, const std::optional<EntityId> target) {
 	std::string extendedName;
 	std::string validPath;
 	std::string keyArgs;
@@ -84,6 +84,7 @@ void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptDat
 		sc.fullPath = validPath;
 		sc.key = keyScript;
 		sc.origin = origin;
+		sc.target = target.value_or(origin);
         sc.controller = std::make_unique<ScriptController>(sc.fullPath);
 
 		m_cache.insert(make_pair(sc.fullPath, sc));

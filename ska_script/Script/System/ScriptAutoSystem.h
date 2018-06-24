@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_set>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include "../Command/Command.h"
@@ -17,7 +18,7 @@ namespace ska {
 	public:
 
 		MemoryScript& getSavegame();
-		void registerScript(const ScriptSleepComponent& scriptData, EntityId origin);
+		void registerScript(const ScriptSleepComponent& scriptData, EntityId origin, std::optional<EntityId> target = {});
 		void registerCommand(const std::string& cmdName, CommandPtr& cmd);
 		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		//void kill(const std::string& keyScript);

@@ -49,7 +49,7 @@ bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 				auto scriptEntity = findNearScriptComponentEntity(pc, e);
 				if (scriptEntity.has_value()) {
 					auto ssc = m_entityManager.getComponent<ska::ScriptSleepComponent>(*scriptEntity);
-					startScript(std::move(ssc), *scriptEntity);
+					startScript(std::move(ssc), e);
 				}
 			}
 
