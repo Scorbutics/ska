@@ -14,7 +14,11 @@ std::string ska::CommandGetEntityId::execute(ScriptComponent& script, MemoryScri
 	if (name == ".") {
 		return StringUtils::toString(script.getOrigin());
 	}
-	return StringUtils::toString(m_locator.getEntityId(name));
+	auto locatedPtr = m_locator.getEntityId(name);
+	if (locatedPtr != nullptr) {
+		return StringUtils::toString(*locatedPtr);
+	}
+	return "";
 }
 
 int ska::CommandGetEntityId::argumentsNumber() {

@@ -50,8 +50,8 @@ std::pair<std::size_t, std::size_t> ska::ScriptUtils::extractFirstVariableNameBo
 	std::size_t posRight;
 
 	if((posLeft = line.find_first_of(varStartSymbol)) != std::string::npos) {
-		if ((posRight = line.substr(posLeft + 1).find_first_of(varEndSymbol)) != std::string::npos) {
-			return std::make_pair(posLeft, posRight + posLeft + 1);
+		if ((posRight = line.find_last_of(varEndSymbol)) != std::string::npos) {
+			return std::make_pair(posLeft, posRight);
 		}
 		FormalCalculator::calculSyntaxError(line);
 	}

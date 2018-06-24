@@ -36,7 +36,7 @@ bool ska::GUI::onGameEvent(GameEvent& ge) {
 	if (ge.getEventType() == GameEventType::GAME_WINDOW_READY ||
 		ge.getEventType() == GameEventType::GAME_WINDOW_RESIZED) {
 		m_wMaster.setWidth(ge.windowWidth);
-		m_wMaster.setHeight(ge.windowWidth);
+		m_wMaster.setHeight(ge.windowHeight);
 		return onScreenResized(ge.windowWidth, ge.windowHeight);
 	}
 	return false;

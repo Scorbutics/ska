@@ -54,6 +54,35 @@ namespace ska {
 			}
 		}
 
+		void setWidth(unsigned int w) override {
+			Parent::setWidth(w);
+			if (m_background != nullptr) {
+				m_background->setWidth(w);
+			}
+		}
+
+		void setHeight(unsigned int h) override {
+			Parent::setHeight(h);
+			if (m_background != nullptr) {
+				const auto& requiredHeight = static_cast<int>(h) - m_offsetTop;
+				m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
+			}
+		}
+
+		template <class Widget, class ... Args>
+		Widget& setBackground(Args&& ... args) {
+			if (m_background != nullptr) {
+				this->removeWidget(m_background);
+			}
+			auto& typedWidget = this->template addWidget<Widget>(std::forward<Args>(args)...);
+			m_background = &typedWidget;
+			m_background->move({ 0, m_offsetTop });
+			m_background->setWidth(this->getBox().w);
+			const auto& requiredHeight = this->getBox().h - m_offsetTop;
+			m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
+			return typedWidget;
+		}
+
 	protected:
 		bool keyEvent(KeyEvent& e) {
 			return this->notify(e);
@@ -67,8 +96,14 @@ namespace ska {
 			return this->notify(e);
 		}
 
+		void setOffsetTop(const int offsetTop) {
+			m_offsetTop = offsetTop;
+		}
+
 	private:
 		MouseObservable *const m_guiObservable = nullptr;
 		KeyObservable *const m_keyObservable = nullptr;
+		int m_offsetTop = 0;
+		Widget* m_background = nullptr;
 	};
 }

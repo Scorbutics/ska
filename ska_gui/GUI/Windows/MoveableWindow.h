@@ -16,45 +16,22 @@ namespace ska {
 			DynamicWindowIG<HL...>(&guiObservable, &keyboardObservable, box),
 			m_moving(false) {
 			initHandlers(title);
+			setOffsetTop(BAR_HEIGHT);
 		}
 
 		MoveableWindow(Widget& parent, const Rectangle& box, const std::string& title = "") :
 			DynamicWindowIG<HL...>(parent, box),
 			m_moving(false) {
 			initHandlers(title);
+			setOffsetTop(BAR_HEIGHT);
 		}
 
 		void setWidth(unsigned int w) override {
-			DynamicWindowIG<HL...>::setWidth(w);
 			m_dragBar->setWidth(w - BAR_HEIGHT);
 			m_dragBar->setClip(Rectangle{ 0, 0, static_cast<int>(w), BAR_HEIGHT });
 			m_quit->move(ska::Point<int>{static_cast<int>(w - BAR_HEIGHT), m_quit->getBox().y});
 			m_title->move({ this->getBox().w / 2 - m_title->getBox().w / 2, m_title->getBox().y });
-			if (m_background != nullptr) {
-				m_background->setWidth(w);
-			}
-		}
-
-		void setHeight(unsigned int h) override {
-			DynamicWindowIG<HL...>::setHeight(h);
-			if (m_background != nullptr) {
-				const auto& requiredHeight = static_cast<int>(h) - BAR_HEIGHT;
-				m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
-			}
-		}
-	
-		template <class Widget, class ... Args>
-		Widget& setBackground(Args&& ... args) {
-			if (m_background != nullptr) {
-				this->removeWidget(m_background);
-			}
-			auto& typedWidget = this->template addWidget<Widget>(std::forward<Args>(args)...);
-			m_background = &typedWidget;
-			m_background->move({ 0, BAR_HEIGHT });
-			m_background->setWidth(this->getBox().w);
-			const auto& requiredHeight = this->getBox().h - BAR_HEIGHT;
-			m_background->setHeight(requiredHeight <= 0 ? 1 : requiredHeight);
-			return typedWidget;
+			DynamicWindowIG<HL...>::setWidth(w);
 		}
 
 		void setTitle(std::string title) {
@@ -96,7 +73,6 @@ namespace ska {
 		Point<int> m_offsetWindowOrigin;
 		Button* m_dragBar = nullptr;
 		Button* m_quit = nullptr;
-		Widget* m_background = nullptr;
 		Label* m_title = nullptr;
 	};
 }
