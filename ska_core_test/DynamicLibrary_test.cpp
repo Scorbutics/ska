@@ -1,3 +1,4 @@
+/*
 #include <doctest.h>
 #include <SDL.h>
 #include "Exceptions/ExceptionTrigger.h"
@@ -114,4 +115,4 @@ TEST_CASE("[DynamicLibrary] Loading") {
 }
 
 #endif
-
+*/

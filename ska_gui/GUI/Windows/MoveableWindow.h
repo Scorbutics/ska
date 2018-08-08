@@ -16,14 +16,14 @@ namespace ska {
 			DynamicWindowIG<HL...>(&guiObservable, &keyboardObservable, box),
 			m_moving(false) {
 			initHandlers(title);
-			setOffsetTop(BAR_HEIGHT);
+			this->setOffsetTop(BAR_HEIGHT);
 		}
 
 		MoveableWindow(Widget& parent, const Rectangle& box, const std::string& title = "") :
 			DynamicWindowIG<HL...>(parent, box),
 			m_moving(false) {
 			initHandlers(title);
-			setOffsetTop(BAR_HEIGHT);
+			this->setOffsetTop(BAR_HEIGHT);
 		}
 
 		void setWidth(unsigned int w) override {
