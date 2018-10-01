@@ -161,7 +161,13 @@ namespace ska {
 		}
 	};
 
-	class LoggerFactory {
+    template<class T>
+    class LoggerClassFormatter {
+    public:
+        static std::string format(const char* className);
+    };
+
+    class LoggerFactory {
 	private:
 		LoggerFactory() = default;
 		static unsigned int m_classNameMaxLength;
@@ -179,13 +185,13 @@ namespace ska {
 		}
 
 		template <class T>
-		static Logger& staticAccess(const std::string& className) {
-			static Logger logger(className, m_classNameMaxLength);
+		static Logger& staticAccess(const char* className) {
+			static Logger logger(LoggerClassFormatter<T>::format(className), m_classNameMaxLength);
 			return logger;
 		}
 
 		template <class T>
-		static Logger& access(const std::string& className, T*) {
+		static Logger& access(const char* className, T*) {
 			return staticAccess<T>(className);
 		}
 	};
