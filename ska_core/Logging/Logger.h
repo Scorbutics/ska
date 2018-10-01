@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <typeinfo>
+#include <cassert>
 #include <iomanip>
 #include "../Utils/MovableNonCopyable.h"
 #include "ColorStream.h"
@@ -164,14 +165,29 @@ namespace ska {
     template<class T>
     class LoggerClassFormatter {
     public:
-        static std::string format(const char* className);
+        static std::string format(const char* className) {
+			return className;
+		}
     };
 
+	class LoggerGlobalFormatter {
+	public:
+        virtual std::string format(const char* className) {
+			return className;
+		}
+		
+		LoggerGlobalFormatter() = default;
+		~LoggerGlobalFormatter() = default;
+	};
+	
     class LoggerFactory {
 	private:
-		LoggerFactory() = default;
+		using LoggerGlobalFormatterPtr = std::unique_ptr<LoggerGlobalFormatter>;
+		
+		LoggerFactory();
 		static unsigned int m_classNameMaxLength;
-
+		static LoggerGlobalFormatterPtr m_formatter;
+		
 	public:
 		~LoggerFactory() = default;
 
@@ -186,7 +202,7 @@ namespace ska {
 
 		template <class T>
 		static Logger& staticAccess(const char* className) {
-			static Logger logger(LoggerClassFormatter<T>::format(className), m_classNameMaxLength);
+			static Logger logger(LoggerClassFormatter<T>::format(m_formatter->format(className).c_str()), m_classNameMaxLength);
 			return logger;
 		}
 
@@ -194,9 +210,12 @@ namespace ska {
 		static Logger& access(const char* className, T*) {
 			return staticAccess<T>(className);
 		}
+		
+		template <class GlobalFormatter>
+		static void setGlobalFormatter() {
+			m_formatter = std::make_unique<GlobalFormatter>();
+		}
 	};
-
-
 
 }
 
