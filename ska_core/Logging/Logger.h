@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <string>
 #include <iostream>
 #include <ctime>
@@ -172,7 +173,7 @@ namespace ska {
 
 	class LoggerGlobalFormatter {
 	public:
-        virtual std::string format(const char* className) {
+        virtual std::string format(const char* className) const {
 			return className;
 		}
 		
@@ -184,7 +185,7 @@ namespace ska {
 	private:
 		using LoggerGlobalFormatterPtr = std::unique_ptr<LoggerGlobalFormatter>;
 		
-		LoggerFactory();
+		LoggerFactory() = default;
 		static unsigned int m_classNameMaxLength;
 		static LoggerGlobalFormatterPtr m_formatter;
 		
@@ -202,7 +203,7 @@ namespace ska {
 
 		template <class T>
 		static Logger& staticAccess(const char* className) {
-			static Logger logger(LoggerClassFormatter<T>::format(m_formatter->format(className).c_str()), m_classNameMaxLength);
+			static Logger logger(LoggerClassFormatter<T>::format(LoggerFactory::m_formatter->format(className).c_str()), m_classNameMaxLength);
 			return logger;
 		}
 
