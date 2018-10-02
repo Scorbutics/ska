@@ -78,7 +78,7 @@ namespace ska {
 	class Logger : public LoggerLogLevel, public MovableNonCopyable {
 		friend class LoggerFactory;
 	private:
-		static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
+		/*static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
 			static const std::string classKeyword = "class ";
 			const auto paddedLength = maxLength;
 
@@ -91,11 +91,11 @@ namespace ska {
 				formattedCs += std::string(paddedLength - formattedCs.size(), ' ');
 			}
 			return "(" + formattedCs + ") ";
-		}
+		}*/
 
 		Logger(const std::string& className, unsigned int classNameMaxLength) :
 			m_logLevel(EnumLogLevel::SKA_DEBUG),
-			m_className(prettifyClassName(className, classNameMaxLength)){
+			m_className(className) {
 		}
 
 	public:
@@ -164,82 +164,51 @@ namespace ska {
 	};
 
     template<class T>
-    class LoggerClassFormatter {
-    public:
-        static std::string format(const char* className) {
-			return className;
-		}
-    };
+    class LoggerClassFormatter;
 
-	class LoggerGlobalFormatter {
-	public:
-        virtual std::string format(const char* className) const {
-			return className;
-		}
-		
-		LoggerGlobalFormatter() = default;
-		~LoggerGlobalFormatter() = default;
-	};
-	
     class LoggerFactory {
 	private:
-		using LoggerGlobalFormatterPtr = std::unique_ptr<LoggerGlobalFormatter>;
-		
 		LoggerFactory() = default;
 		static unsigned int m_classNameMaxLength;
-		static LoggerGlobalFormatterPtr m_formatter;
 		
 	public:
 		~LoggerFactory() = default;
 
-		static void setMaxLengthClassName(unsigned int classNameMaxLength) {
-			m_classNameMaxLength = classNameMaxLength;
-		}
-
 		template <class T>
-		static Logger& staticAccess() {
-			return staticAccess<T>(typeid(T).name());
-		}
-
-		template <class T>
-		static Logger& staticAccess(const char* className) {
-			static Logger logger(LoggerClassFormatter<T>::format(LoggerFactory::m_formatter->format(className).c_str()), m_classNameMaxLength);
+		static Logger& access() {
+			static Logger logger(LoggerClassFormatter<T>::format());
 			return logger;
 		}
 
 		template <class T>
-		static Logger& access(const char* className, T*) {
-			return staticAccess<T>(className);
+		static Logger& access(T*) {
+			return access<T>();
 		}
 		
-		template <class GlobalFormatter>
-		static void setGlobalFormatter() {
-			m_formatter = std::make_unique<GlobalFormatter>();
-		}
 	};
 
 }
 
 #define SKA_REGISTER_PARSE_TYPE(X) #X
-#define SKA_LOG_COMMON_PART_DEF_RTTI ska::LoggerFactory::access(typeid(*this).name(), this)
-#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::staticAccess<loggerClass>(SKA_REGISTER_PARSE_TYPE(loggerClass))
+#define SKA_LOG_COMMON_PART_DEF_ACCESS ska::LoggerFactory::access(this)
+#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>(SKA_REGISTER_PARSE_TYPE(loggerClass))
 
 
 #if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
-#define SKA_LOG_DEBUG true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.debug
-#define SKA_LOG_INFO true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.info
-#define SKA_LOG_MESSAGE true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.log
-#define SKA_LOG_ERROR true ? (void)0 : SKA_LOG_COMMON_PART_DEF_RTTI.error
+#define SKA_LOG_DEBUG true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.debug
+#define SKA_LOG_INFO true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.info
+#define SKA_LOG_MESSAGE true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.log
+#define SKA_LOG_ERROR true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.error
 
 #define SKA_STATIC_LOG_DEBUG(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
 #define SKA_STATIC_LOG_INFO(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
 #define SKA_STATIC_LOG_MESSAGE(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).log
 #define SKA_STATIC_LOG_ERROR(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
 #else
-#define SKA_LOG_DEBUG SKA_LOG_COMMON_PART_DEF_RTTI.debug
-#define SKA_LOG_INFO SKA_LOG_COMMON_PART_DEF_RTTI.info
-#define SKA_LOG_MESSAGE SKA_LOG_COMMON_PART_DEF_RTTI.log
-#define SKA_LOG_ERROR SKA_LOG_COMMON_PART_DEF_RTTI.error
+#define SKA_LOG_DEBUG SKA_LOG_COMMON_PART_DEF_ACCESS.debug
+#define SKA_LOG_INFO SKA_LOG_COMMON_PART_DEF_ACCESS.info
+#define SKA_LOG_MESSAGE SKA_LOG_COMMON_PART_DEF_ACCESS.log
+#define SKA_LOG_ERROR SKA_LOG_COMMON_PART_DEF_ACCESS.error
 
 #define SKA_STATIC_LOG_DEBUG(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
 #define SKA_STATIC_LOG_INFO(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
