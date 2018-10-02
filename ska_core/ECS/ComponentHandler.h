@@ -6,7 +6,7 @@
 #include "ECSDefines.h"
 #include "SerializeComponent.h"
 #include "ComponentPool.h"
-#include "../Logging/Logger.h"
+#include "../Logging/LoggerRTTI.h"
 
 namespace ska {
 	/**

@@ -1,3 +1,4 @@
+#include "../../../Logging/LoggerRTTI.h"
 #include "CollisionComponent.h"
 
 ska::CollisionComponent::CollisionComponent() {

@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include "../Logging/LoggerRTTI.h"
 #include "../Exceptions/IllegalStateException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "../Utils/StringUtils.h"

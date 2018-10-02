@@ -4,7 +4,7 @@
 #include <list>
 #include <algorithm>
 #include "IniReader.h"
-#include "../../Logging/Logger.h"
+#include "../../Logging/LoggerRTTI.h"
 #include "../../Exceptions/FileException.h"
 #include "../../Exceptions/ExceptionTrigger.h"
 

@@ -93,7 +93,7 @@ namespace ska {
 			return "(" + formattedCs + ") ";
 		}*/
 
-		Logger(const std::string& className, unsigned int classNameMaxLength) :
+		Logger(const std::string& className) :
 			m_logLevel(EnumLogLevel::SKA_DEBUG),
 			m_className(className) {
 		}
@@ -189,9 +189,8 @@ namespace ska {
 
 }
 
-#define SKA_REGISTER_PARSE_TYPE(X) #X
 #define SKA_LOG_COMMON_PART_DEF_ACCESS ska::LoggerFactory::access(this)
-#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>(SKA_REGISTER_PARSE_TYPE(loggerClass))
+#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>()
 
 
 #if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
