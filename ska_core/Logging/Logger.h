@@ -61,8 +61,20 @@ namespace ska {
         };
 
         struct Token {
-            std::string value;
-            TokenType type = TokenType::Empty;
+        public:
+			Token(std::string value, TokenType type, std::size_t length = 0) :
+				m_value(std::move(value)),
+				m_type(type), 
+				m_length(length) {
+				if(m_length == 0) {
+					m_length = m_value.size();
+				}
+			}
+		
+		private:
+			std::string m_value;
+            TokenType m_type = TokenType::Empty;
+			std::size_t m_length;
         };
 
         class Tokenizer {
