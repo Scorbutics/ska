@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <iostream>
+#include <ostream>
 #include <ctime>
 #include <typeinfo>
 #include <cassert>
@@ -32,53 +32,59 @@ namespace ska {
 
 		template<class T1, class ...T>
 		struct LoggerImpl<T1, T...> {
-			static void log(const T1& message, const T&... remainingMessages) {
-				std::cout << message;
+			static void log(std::ostream& output, const T1& message, const T&... remainingMessages) {
+				output << message;
 				LoggerImpl<T...>::log(std::forward<const T&>(remainingMessages)...);
 			}
-
-			static void error(const T1& message, const T&... remainingMessages) {
-				std::cerr << message;
-				LoggerImpl<T...>::error(std::forward<const T&>(remainingMessages)...);
-			}
-
-			static void info(const T1& message, const T&... remainingMessages) {
-				std::cout << message;
-				LoggerImpl<T...>::info(std::forward<const T&>(remainingMessages)...);
-			}
-
-			static void debug(const T1& message, const T&... remainingMessages) {
-				std::cout << message;
-				LoggerImpl<T...>::log(std::forward<const T&>(remainingMessages)...);
-			}
-
 		};
 
 		template<>
 		struct LoggerImpl<> {
-			static void log() {
-				std::cout << '\n';
-			}
-
-			static void info() {
-				std::cout << '\n';
-			}
-
-			static void error() {
-				std::cerr << std::endl;
-			}
-
-			static void debug() {
-				std::cout << '\n';
+			static void log(std::ostream& output) {
+				output << '\n';
 			}
 		};
+
+        enum class TokenType {
+            Color,
+            Message,
+            Year,
+            Month,
+            Day,
+            Hour,
+            Minute,
+            Second,
+            Literal,
+            Empty
+        };
+
+        struct Token {
+            std::string value;
+            TokenType type = TokenType::Empty;
+        };
+
+        class Tokenizer {
+        public:
+            Tokenizer(const std::string& str);
+            ~Tokenizer() = default;
+            const Token& next() const {
+                return m_cursor < m_tokens.size() ? m_tokens[m_cursor++] : m_emptyToken;
+            }
+
+        private:
+            static std::vector<Token> parse(const std::string& str);
+            std::vector<Token> m_tokens;
+            std::size_t m_cursor = 0;
+            const Token m_emptyToken;
+        };
 
 	}
 
 	class Logger : public LoggerLogLevel, public MovableNonCopyable {
 		friend class LoggerFactory;
 	private:
-		/*static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
+		/*
+         static std::string prettifyClassName(const std::string& cs, unsigned int maxLength){
 			static const std::string classKeyword = "class ";
 			const auto paddedLength = maxLength;
 
@@ -91,64 +97,71 @@ namespace ska {
 				formattedCs += std::string(paddedLength - formattedCs.size(), ' ');
 			}
 			return "(" + formattedCs + ") ";
-		}*/
+		}
+        */
 
-		Logger(const std::string& className, unsigned int classNameMaxLength) :
+		Logger(const std::string& className, unsigned int classNameMaxLength, std::ostream& output) :
 			m_logLevel(EnumLogLevel::SKA_DEBUG),
-			m_className(className) {
+			m_className(className),
+            m_output(output) {
 		}
 
 	public:
 		template<class ...T>
 		void debug(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
-				printDateTime(std::cout);
-				std::cout << EnumColorStream::CYAN;
+				printDateTime(m_output);
+				m_output << EnumColorStream::CYAN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::debug(m_className, std::forward<const T&>(message)...);
-				std::cout << EnumColorStream::WHITE;
+				m_output << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void info(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_INFO) {
-				printDateTime(std::cout);
-				std::cout << EnumColorStream::LIGHTGREEN;
+				printDateTime(m_output);
+				m_output << EnumColorStream::LIGHTGREEN;
 				loggerdetail::LoggerImpl<const std::string&, T...>::info(m_className, std::forward<const T&>(message)...);
-				std::cout << EnumColorStream::WHITE;
+				m_output << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void log(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_MESSAGE) {
-				printDateTime(std::cout);
-				std::cout << EnumColorStream::YELLOW;
+				printDateTime(m_output);
+				m_output << EnumColorStream::YELLOW;
 				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_className, std::forward<const T&>(message)...);
-				std::cout << EnumColorStream::WHITE;
+				m_output << EnumColorStream::WHITE;
 			}
 		}
 
 		template<class ...T>
 		void error(const T&... message) {
 			if (m_logLevel <= EnumLogLevel::SKA_ERROR) {
-				printDateTime(std::cerr);
-				std::cerr << EnumColorStream::LIGHTRED;
+				printDateTime(m_output);
+				m_output << EnumColorStream::LIGHTRED;
 				loggerdetail::LoggerImpl<const std::string&, T...>::error(m_className, std::forward<const T&>(message)...);
-				std::cerr << EnumColorStream::WHITE;
+				m_output << EnumColorStream::WHITE;
 			}
 		}
 
 		void configureLogLevel(EnumLogLevel logLevel) override {
 			m_logLevel = logLevel;
 		}
-
+        
+        void setPattern(std::string pattern) {
+            m_pattern = pattern;
+        }
 
 		~Logger() = default;
 
 	private:
 		EnumLogLevel m_logLevel;
 		const std::string m_className;
+        std::ostream& m_output;
+        std::string m_pattern;
 
 		static void printDateTime(std::ostream& os) {
 			auto t = std::time(nullptr);

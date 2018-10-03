@@ -1,4 +1,5 @@
 #include "CollisionComponent.h"
+#include "../../Logging/LoggerRTTI.h"
 
 ska::CollisionComponent::CollisionComponent() {
 	xaxis = false;
