@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iomanip>
 #include "Logger.h"
 
 unsigned int ska::LoggerFactory::m_classNameMaxLength = 20;
@@ -29,10 +30,22 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parsePlaceholder(const st
     //we avoid scanning the percent symbol '%'
     index++;
 
-    optionalNumeric();
-    symbol();
+    //optionalNumeric();
+    //symbol();
 
-    
+    return Token{ tokenValue.str(), TokenType::Empty };
+}
+
+void ska::Logger::printDateTime(std::ostream& os) {
+				auto t = std::time(nullptr);
+#ifdef _MSC_VER
+			struct tm buf;
+			localtime_s(&buf, &t);
+#else
+			struct tm buf = *std::localtime(&t);
+#endif
+			//std::cout << EnumColorStream::LIGHTMAGENTA;
+			os << "[" << std::put_time(&buf, "%H:%M:%S") << "] ";
 }
 
 ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parseLiteral(const std::string& str, std::size_t& index) {
@@ -42,5 +55,5 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parseLiteral(const std::s
         tokenValue << str[index];
     }
 
-    return {tokenValue, TokenType::Literal};
+    return Token{tokenValue.str(), TokenType::Literal};
 }

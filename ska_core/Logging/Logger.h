@@ -1,11 +1,13 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <ostream>
+#include <iostream>
 #include <ctime>
 #include <typeinfo>
 #include <cassert>
-#include <iomanip>
+//#include <iomanip>
+#include <vector>
+
 #include "../Utils/MovableNonCopyable.h"
 #include "ColorStream.h"
 
@@ -34,7 +36,7 @@ namespace ska {
 		struct LoggerImpl<T1, T...> {
 			static void log(std::ostream& output, const T1& message, const T&... remainingMessages) {
 				output << message;
-				LoggerImpl<T...>::log(std::forward<const T&>(remainingMessages)...);
+				LoggerImpl<T...>::log(output, std::forward<const T&>(remainingMessages)...);
 			}
 		};
 
@@ -67,13 +69,16 @@ namespace ska {
         public:
             Tokenizer(const std::string& str);
             ~Tokenizer() = default;
-            const Token& next() const {
+            const Token& next() {
                 return m_cursor < m_tokens.size() ? m_tokens[m_cursor++] : m_emptyToken;
             }
 
         private:
             static std::vector<Token> parse(const std::string& str);
-            std::vector<Token> m_tokens;
+            static Token parseLiteral(const std::string& str, std::size_t& index);
+			static Token parsePlaceholder(const std::string& str, std::size_t& index);
+			
+			std::vector<Token> m_tokens;
             std::size_t m_cursor = 0;
             const Token m_emptyToken;
         };
@@ -112,7 +117,7 @@ namespace ska {
 			if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
 				printDateTime(m_output);
 				m_output << EnumColorStream::CYAN;
-				loggerdetail::LoggerImpl<const std::string&, T...>::debug(m_className, std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_output, m_className, std::forward<const T&>(message)...);
 				m_output << EnumColorStream::WHITE;
 			}
 		}
@@ -122,7 +127,7 @@ namespace ska {
 			if (m_logLevel <= EnumLogLevel::SKA_INFO) {
 				printDateTime(m_output);
 				m_output << EnumColorStream::LIGHTGREEN;
-				loggerdetail::LoggerImpl<const std::string&, T...>::info(m_className, std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_output, m_className, std::forward<const T&>(message)...);
 				m_output << EnumColorStream::WHITE;
 			}
 		}
@@ -132,7 +137,7 @@ namespace ska {
 			if (m_logLevel <= EnumLogLevel::SKA_MESSAGE) {
 				printDateTime(m_output);
 				m_output << EnumColorStream::YELLOW;
-				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_className, std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_output, m_className, std::forward<const T&>(message)...);
 				m_output << EnumColorStream::WHITE;
 			}
 		}
@@ -142,7 +147,7 @@ namespace ska {
 			if (m_logLevel <= EnumLogLevel::SKA_ERROR) {
 				printDateTime(m_output);
 				m_output << EnumColorStream::LIGHTRED;
-				loggerdetail::LoggerImpl<const std::string&, T...>::error(m_className, std::forward<const T&>(message)...);
+				loggerdetail::LoggerImpl<const std::string&, T...>::log(m_output, m_className, std::forward<const T&>(message)...);
 				m_output << EnumColorStream::WHITE;
 			}
 		}
@@ -163,17 +168,7 @@ namespace ska {
         std::ostream& m_output;
         std::string m_pattern;
 
-		static void printDateTime(std::ostream& os) {
-			auto t = std::time(nullptr);
-#ifdef _MSC_VER
-			struct tm buf;
-			localtime_s(&buf, &t);
-#else
-			struct tm buf = *std::localtime(&t);
-#endif
-			std::cout << EnumColorStream::LIGHTMAGENTA;
-			os << "[" << std::put_time(&buf, "%H:%M:%S") << "] ";
-		}
+		static void printDateTime(std::ostream& os);
 	};
 
     template<class T>
@@ -188,22 +183,22 @@ namespace ska {
 		~LoggerFactory() = default;
 
 		template <class T>
-		static Logger& access() {
-			static Logger logger(LoggerClassFormatter<T>::format());
+		static Logger& access(std::ostream& output) {
+			static Logger logger(LoggerClassFormatter<T>::format(), output);
 			return logger;
 		}
 
 		template <class T>
-		static Logger& access(T*) {
-			return access<T>();
+		static Logger& access(T*, std::ostream& output) {
+			return access<T>(output);
 		}
 		
 	};
 
 }
-
-#define SKA_LOG_COMMON_PART_DEF_ACCESS ska::LoggerFactory::access(this)
-#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>()
+#define SKA_DEFAULT_OUTPUT std::cout
+#define SKA_LOG_COMMON_PART_DEF_ACCESS ska::LoggerFactory::access(this, SKA_DEFAULT_OUTPUT)
+#define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>(SKA_DEFAULT_OUTPUT)
 
 
 #if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
