@@ -6,7 +6,7 @@
 #include <typeinfo>
 #include <cassert>
 #include <sstream>
-//#include <iomanip>
+#include <unordered_map>
 #include <vector>
 
 #include "../Utils/MovableNonCopyable.h"
@@ -17,22 +17,16 @@ namespace ska {
 	enum class EnumLogLevel {
 		SKA_DEBUG = 0,
 		SKA_INFO = 1,
-		SKA_MESSAGE = 2,
+		SKA_WARN = 2,
 		SKA_ERROR = 3,
 		SKA_DISABLED = 100
-	};
-
-	class LoggerLogLevel {
-	public:
-		LoggerLogLevel() = default;
-		virtual void configureLogLevel(EnumLogLevel logLevel) = 0;
-		virtual ~LoggerLogLevel() = default;
 	};
 
 	namespace loggerdetail {
 
         enum class TokenType {
             Color,
+			Class,
             Value,
             Year,
             Month,
@@ -126,13 +120,7 @@ namespace ska {
         };
 	}
 
-    
-
-    
-
-
-
-	class Logger : public LoggerLogLevel, public MovableNonCopyable {
+	class Logger : public MovableNonCopyable {
 		friend class LoggerFactory;
 	private:
 		/*
@@ -155,12 +143,17 @@ namespace ska {
 		Logger(const std::string& className, std::ostream& output) :
 			m_logLevel(EnumLogLevel::SKA_DEBUG),
 			m_className(className),
-            m_output(output),
-            m_pattern("[%h:%m:%s] className %v") {
+            m_output(output) {
+			
+			const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
+			m_pattern.emplace(EnumLogLevel::SKA_DEBUG, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::SKA_INFO, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::SKA_ERROR, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::SKA_WARN, loggerdetail::Tokenizer { defaultPattern });
 		}
 
 
-        std::size_t applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, std::size_t index, const std::vector<std::string>& messages);
+        void applyTokenOnOutput(const tm& date, const loggerdetail::Token& token, const std::vector<std::string>& messages);
         void consumeTokens(const tm& date, const std::vector<std::string>& messages);
         
         template <class ...T>
@@ -174,31 +167,21 @@ namespace ska {
 	public:
         template<class ...T>
 		void debug(const T&... message) {
-			
-    m_output << "zizizizizizizizizizizizizizizizizizizizizizi"<< std::endl;        
             if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
-                commonLog(std::forward<const T&>(message)...);       
-
-                //m_output << EnumColorStream::CYAN;
-				//loggerdetail::LoggerImpl<const std::string&, T...>::log(m_output, date, m_className, std::forward<const T&>(message)...);
-				//m_output << EnumColorStream::WHITE;
+                commonLog(std::forward<const T&>(message)...);
 			}
 		}
 
 		template<class ...T>
 		void info(const T&... message) {
-			
-    m_output << "zizizizizizizizizizizizizizizizizizizizizizi"<< std::endl;        
             if (m_logLevel <= EnumLogLevel::SKA_INFO) {
 				commonLog(std::forward<const T&>(message)...);
 			}
 		}
 
 		template<class ...T>
-		void log(const T&... message) {
-			
-    m_output << "zizizizizizizizizizizizizizizizizizizizizizi"<< std::endl;        
-            if (m_logLevel <= EnumLogLevel::SKA_MESSAGE) {
+		void warn(const T&... message) {
+            if (m_logLevel <= EnumLogLevel::SKA_WARN) {
 				commonLog(std::forward<const T&>(message)...);
 			}
 		}
@@ -210,12 +193,16 @@ namespace ska {
 			}
 		}
 
-		void configureLogLevel(EnumLogLevel logLevel) override {
+		void configureLogLevel(EnumLogLevel logLevel) {
 			m_logLevel = logLevel;
 		}
         
-        void setPattern(std::string pattern) {
-            m_pattern = loggerdetail::Tokenizer {std::move(pattern)};
+        void setPattern(EnumLogLevel logLevel, std::string pattern) {
+            auto existingLoglevel = m_pattern.find(logLevel);
+			if(existingLoglevel != m_pattern.end()) {
+				m_pattern.erase(existingLoglevel);
+			}
+			m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
         }
 
 		~Logger() = default;
@@ -224,9 +211,9 @@ namespace ska {
 		EnumLogLevel m_logLevel;
 		const std::string m_className;
         std::ostream& m_output;
-        loggerdetail::Tokenizer m_pattern;
+        std::unordered_map<EnumLogLevel, loggerdetail::Tokenizer> m_pattern;
 
-		static struct tm printDateTime(std::ostream& os);
+		static tm printDateTime(std::ostream& os);
 	};
 
     template<class T>
@@ -263,21 +250,21 @@ namespace ska {
 #if defined(NDEBUG) && !defined(SKA_LOG_FORCE_ACTIVATE)
 #define SKA_LOG_DEBUG true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.debug
 #define SKA_LOG_INFO true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.info
-#define SKA_LOG_MESSAGE true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.log
+#define SKA_LOG_WARN true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.warn
 #define SKA_LOG_ERROR true ? (void)0 : SKA_LOG_COMMON_PART_DEF_ACCESS.error
 
 #define SKA_STATIC_LOG_DEBUG(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
 #define SKA_STATIC_LOG_INFO(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
-#define SKA_STATIC_LOG_MESSAGE(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).log
+#define SKA_STATIC_LOG_WARN(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).warn
 #define SKA_STATIC_LOG_ERROR(loggerClass) true ? (void)0 : SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
 #else
 #define SKA_LOG_DEBUG SKA_LOG_COMMON_PART_DEF_ACCESS.debug
 #define SKA_LOG_INFO SKA_LOG_COMMON_PART_DEF_ACCESS.info
-#define SKA_LOG_MESSAGE SKA_LOG_COMMON_PART_DEF_ACCESS.log
+#define SKA_LOG_WARN SKA_LOG_COMMON_PART_DEF_ACCESS.warn
 #define SKA_LOG_ERROR SKA_LOG_COMMON_PART_DEF_ACCESS.error
 
 #define SKA_STATIC_LOG_DEBUG(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).debug
 #define SKA_STATIC_LOG_INFO(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).info
-#define SKA_STATIC_LOG_MESSAGE(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).log
+#define SKA_STATIC_LOG_WARN(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).warn
 #define SKA_STATIC_LOG_ERROR(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
 #endif

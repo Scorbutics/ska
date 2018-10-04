@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "Observer.h"
-#include "../Logging/LoggerRTTI.h"
+#include "../Logging/Logger.h"
 
 namespace ska {
 
