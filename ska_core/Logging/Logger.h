@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include <iostream>
 
 #include "Tokenizer.h"
 #include "MessagesBuilder.h"
@@ -92,7 +91,7 @@ namespace ska {
 			}
 			m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
         }
-
+		
 		~Logger() = default;
 
 	private:
@@ -103,31 +102,11 @@ namespace ska {
 
 		static tm currentDateTime();
 	};
-
-    class LoggerFactory {
-	private:
-		LoggerFactory() = default;
-		static unsigned int m_classNameMaxLength;
-		
-	public:
-		~LoggerFactory() = default;
-
-		template <class T>
-		static Logger& access(std::ostream& output) {
-			static auto logger = Logger::build<T>(output);
-			return logger;
-		}
-
-		template <class T>
-		static Logger& access(T*, std::ostream& output) {
-			return access<T>(output);
-		}
-		
-	};
-
+	
+	Logger& operator<<(Logger& logger, const EnumLogLevel &);
 }
 
-
+/*
 #define SKA_DEFAULT_OUTPUT std::cout
 #define SKA_LOG_COMMON_PART_DEF_ACCESS ska::LoggerFactory::access(this, SKA_DEFAULT_OUTPUT)
 #define SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass) ska::LoggerFactory::access<loggerClass>(SKA_DEFAULT_OUTPUT)
@@ -154,4 +133,4 @@ namespace ska {
 #define SKA_STATIC_LOG_WARN(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).warn
 #define SKA_STATIC_LOG_ERROR(loggerClass) SKA_STATIC_LOG_COMMON_PART_DEF_(loggerClass).error
 #endif
-
+*/

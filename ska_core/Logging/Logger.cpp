@@ -130,6 +130,13 @@ void ska::Logger::consumeTokens(const tm& date, const std::vector<std::string>& 
     currentPattern.rewind();
 }
 
+Logger& ska::operator<<(Logger& logger, const EnumLogLevel& logLevel) {
+	
+	//TODO prendre en compte le log level
+	
+	return logger;
+}
+
 void ska::Logger::applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, const std::vector<std::string>& messages) {
 	
 	switch(token.type()) {
