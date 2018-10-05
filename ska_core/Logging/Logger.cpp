@@ -1,5 +1,8 @@
 #include <sstream>
 #include <iomanip>
+#include <cassert>
+
+#include "ColorStream.h"
 #include "Logger.h"
 #include "../Utils/StringUtils.h"
 

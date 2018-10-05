@@ -1,15 +1,7 @@
 #pragma once
-#include <memory>
 #include <string>
-#include <iostream>
-#include <ctime>
-#include <typeinfo>
-#include <cassert>
-#include <sstream>
 #include <unordered_map>
-#include <vector>
-
-#include "ColorStream.h"
+#include <iostream>
 
 #include "Tokenizer.h"
 #include "MessagesBuilder.h"

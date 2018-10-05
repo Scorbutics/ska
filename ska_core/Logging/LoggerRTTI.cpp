@@ -7,7 +7,7 @@
 #endif
 #endif
 
-#ifdef (__clang__)
+#ifdef __clang__
 	#include <cxxabi.h>
 #endif
 
