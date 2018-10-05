@@ -105,7 +105,7 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parsePlaceholder(const st
     return Token{ tokenSymbol, tokenType, tokenLength };
 }
 
-struct tm ska::Logger::printDateTime(std::ostream& os) {
+struct tm ska::Logger::currentDateTime() {
 			auto t = std::time(nullptr);
 #ifdef _MSC_VER
 			struct tm buf;
