@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <string>
 #include <unordered_map>
 
 #include "Tokenizer.h"
@@ -8,102 +9,94 @@
 namespace ska {
 
 	enum class EnumLogLevel {
-		SKA_DEBUG = 0,
-		SKA_INFO = 1,
-		SKA_WARN = 2,
-		SKA_ERROR = 3,
-		SKA_DISABLED = 100
+		Debug = 0,
+		Info = 1,
+		Warn = 2,
+		Error = 3,
+		Disabled = 100
 	};
 
 	template<class T>
-    class LoggerClassFormatter;
+	class LoggerClassFormatter;
 	
+	template<class T>
+	class Logger
+
+	namespace loggerdetail {
+		class LogEntry {
+		private:
+			LogEntry(Logger& instance, EnumLogLevel logLevel) : instance(instance), logLevel(logLevel), date(currentDateTime())  {}
+			~LogEntry() {
+				//MUST NOT throw !
+				instance.commonLog(ss.str());
+			}
+			
+			Logger& instance;
+			EnumLogLevel logLevel;
+			std::stringstream message;
+		public:
+			template <class T>
+			friend const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart);	
+		};
+	}
+
+	template <class T>
+	const loggerdetail::LogEntry& operator<<(const loggerdetail::LogEntry& logEntry, T&& logPart) {
+		if (logEntry.logLevel <= logEntry.instance.m_logLevel) {
+			logEntry.message << std::forward<T>(logPart);
+		}
+		return *this;
+	}
+
 	class Logger {
+		friend class loggerdetail::LogEntry;
 	private:
 		Logger(const Logger&) = delete;
+
+		void applyTokenOnOutput(const tm& date, const loggerdetail::Token& token, const std::string& messages);
+		void consumeTokens(const tm& date, const std::string& messages);
+		
+	public:
 		Logger(Logger&&) = default;
 		
 		Logger(std::string className, std::ostream& output) :
-			m_logLevel(EnumLogLevel::SKA_DEBUG),
+			m_logLevel(EnumLogLevel::Debug),
 			m_className(std::move(className)),
-            m_output(output) {
+			m_output(output) {
 			
 			const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
-			m_pattern.emplace(EnumLogLevel::SKA_DEBUG, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::SKA_INFO, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::SKA_ERROR, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::SKA_WARN, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::Debug, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::Info, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::Error, loggerdetail::Tokenizer { defaultPattern });
+			m_pattern.emplace(EnumLogLevel::Warn, loggerdetail::Tokenizer { defaultPattern });
 		}
 
-        void applyTokenOnOutput(const tm& date, const loggerdetail::Token& token, const std::vector<std::string>& messages);
-        void consumeTokens(const tm& date, const std::vector<std::string>& messages);
-        
-        template <class ...Args>
-        void commonLog(const Args& ... message) {
-            auto messages = std::vector<std::string>(sizeof ... (Args));
-            loggerdetail::MessagesBuilder<Args...>::buildMessages(messages, std::forward<const Args&>(message)...);
-            const auto date = currentDateTime();
-            consumeTokens(date, messages);
-        }
-
-	public:
-		template <class T>
-		static Logger build(std::ostream& output) {
-			return Logger(LoggerClassFormatter<T>::format(), output);
-		}
-	
-        template<class ...Args>
-		void debug(const Args&... message) {
-            if (m_logLevel <= EnumLogLevel::SKA_DEBUG) {
-                commonLog(std::forward<const Args&>(message)...);
-			}
-		}
-
-		template<class ...Args>
-		void info(const Args&... message) {
-            if (m_logLevel <= EnumLogLevel::SKA_INFO) {
-				commonLog(std::forward<const Args&>(message)...);
-			}
-		}
-
-		template<class ...Args>
-		void warn(const Args&... message) {
-            if (m_logLevel <= EnumLogLevel::SKA_WARN) {
-				commonLog(std::forward<const Args&>(message)...);
-			}
-		}
-
-		template<class ...Args>
-		void error(const Args&... message) {
-			if (m_logLevel <= EnumLogLevel::SKA_ERROR) {
-				commonLog(std::forward<const Args&>(message)...);
-			}
-		}
-
-		void configureLogLevel(EnumLogLevel logLevel) {
+		void configureLogLevel(const EnumLogLevel& logLevel) {
 			m_logLevel = logLevel;
 		}
-        
-        void setPattern(EnumLogLevel logLevel, std::string pattern) {
-            auto existingLoglevel = m_pattern.find(logLevel);
+
+		void setPattern(EnumLogLevel logLevel, std::string pattern) {
+			auto existingLoglevel = m_pattern.find(logLevel);
 			if(existingLoglevel != m_pattern.end()) {
 				m_pattern.erase(existingLoglevel);
 			}
 			m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
-        }
-		
+		}
+
+		loggerdetail::LogEntry operator<<(const EnumLogLevel &);
+
 		~Logger() = default;
 
 	private:
 		EnumLogLevel m_logLevel;
 		const std::string m_className;
-        std::ostream& m_output;
-        std::unordered_map<EnumLogLevel, loggerdetail::Tokenizer> m_pattern;
+		std::ostream& m_output;
+		std::unordered_map<EnumLogLevel, loggerdetail::Tokenizer> m_pattern;
 
 		static tm currentDateTime();
 	};
 	
-	Logger& operator<<(Logger& logger, const EnumLogLevel &);
+	
 }
 
 /*
