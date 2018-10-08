@@ -20,83 +20,108 @@ namespace ska {
 	class LoggerClassFormatter;
 	
 	template<class T>
-	class Logger
+	class LoggerClassLevel {
+        static constexpr auto level = EnumLogLevel::Debug;
+    };
 
 	namespace loggerdetail {
-		class LogEntry {
+	    class LogEntry;
+        class Logger {
+            friend class LogEntry;
+        private:
+            Logger(const Logger&) = delete;
+
+            void applyTokenOnOutput(const tm& date, const loggerdetail::Token& token, const std::string& messages);
+            void consumeTokens(const tm& date, const std::string& messages);
+            
+        protected:
+            Logger(std::string className, std::ostream& output) :
+                m_logLevel(EnumLogLevel::Debug),
+                m_className(std::move(className)),
+                m_output(output) {
+                
+                const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
+                m_pattern.emplace(EnumLogLevel::Debug, loggerdetail::Tokenizer { defaultPattern });
+                m_pattern.emplace(EnumLogLevel::Info, loggerdetail::Tokenizer { defaultPattern });
+                m_pattern.emplace(EnumLogLevel::Error, loggerdetail::Tokenizer { defaultPattern });
+                m_pattern.emplace(EnumLogLevel::Warn, loggerdetail::Tokenizer { defaultPattern });
+            }
+        
+        public:
+            Logger(Logger&&) = default;
+
+            void configureLogLevel(const EnumLogLevel& logLevel) {
+                m_logLevel = logLevel;
+            }
+        
+            void setPattern(EnumLogLevel logLevel, std::string pattern) {
+                auto existingLoglevel = m_pattern.find(logLevel);
+                if(existingLoglevel != m_pattern.end()) {
+                    m_pattern.erase(existingLoglevel);
+                }
+                m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
+            }
+
+            ~Logger() = default;
+
+        private:
+            EnumLogLevel m_logLevel;
+            const std::string m_className;
+            std::ostream& m_output;
+            std::unordered_map<EnumLogLevel, loggerdetail::Tokenizer> m_pattern;
+        };
+        
+        class LogEntry {
 		private:
-			LogEntry(Logger& instance, EnumLogLevel logLevel) : instance(instance), logLevel(logLevel), date(currentDateTime())  {}
-			~LogEntry() {
+			LogEntry(Logger& instance, EnumLogLevel logLevel) : instance(&instance), logLevel(logLevel), date(currentDateTime())  {}
+			LogEntry(){}
+
+            ~LogEntry() {
 				//MUST NOT throw !
-				instance.commonLog(ss.str());
+				if(instance != nullptr) {
+                    instance->consumeTokens(date, message.str());
+                }
 			}
 			
-			Logger& instance;
+			Logger* instance = nullptr;
 			EnumLogLevel logLevel;
 			std::stringstream message;
+            tm date;
+            static tm currentDateTime();
 		public:
 			template <class T>
 			friend const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart);	
 		};
-	}
+    }
 
 	template <class T>
 	const loggerdetail::LogEntry& operator<<(const loggerdetail::LogEntry& logEntry, T&& logPart) {
-		if (logEntry.logLevel <= logEntry.instance.m_logLevel) {
+        if (logEntry.logLevel >= logEntry.instance->m_logLevel) {
 			logEntry.message << std::forward<T>(logPart);
 		}
-		return *this;
+		return logEntry;
 	}
 
-	class Logger {
-		friend class loggerdetail::LogEntry;
-	private:
-		Logger(const Logger&) = delete;
+    
+	template <class Wrapped>
+    class Logger : public loggerdetail::Logger {
+    public:
+        Logger(std::ostream& output) :
+            loggerdetail::Logger(std::move(LoggerClassFormatter<Wrapped>::format()), output) {
+        }
 
-		void applyTokenOnOutput(const tm& date, const loggerdetail::Token& token, const std::string& messages);
-		void consumeTokens(const tm& date, const std::string& messages);
-		
-	public:
-		Logger(Logger&&) = default;
-		
-		Logger(std::string className, std::ostream& output) :
-			m_logLevel(EnumLogLevel::Debug),
-			m_className(std::move(className)),
-			m_output(output) {
-			
-			const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
-			m_pattern.emplace(EnumLogLevel::Debug, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::Info, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::Error, loggerdetail::Tokenizer { defaultPattern });
-			m_pattern.emplace(EnumLogLevel::Warn, loggerdetail::Tokenizer { defaultPattern });
-		}
 
-		void configureLogLevel(const EnumLogLevel& logLevel) {
-			m_logLevel = logLevel;
-		}
-
-		void setPattern(EnumLogLevel logLevel, std::string pattern) {
-			auto existingLoglevel = m_pattern.find(logLevel);
-			if(existingLoglevel != m_pattern.end()) {
-				m_pattern.erase(existingLoglevel);
-			}
-			m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
-		}
-
-		loggerdetail::LogEntry operator<<(const EnumLogLevel &);
-
-		~Logger() = default;
-
-	private:
-		EnumLogLevel m_logLevel;
-		const std::string m_className;
-		std::ostream& m_output;
-		std::unordered_map<EnumLogLevel, loggerdetail::Tokenizer> m_pattern;
-
-		static tm currentDateTime();
-	};
+        ~Logger() = default;
+    };
 	
-	
+	template <class Wrapped>
+    constexpr loggerdetail::LogEntry operator<<(Logger<Wrapped>& logger, const EnumLogLevel & logLevel) {
+        if constexpr (logLevel >= LoggerClassLevel<Wrapped>::level) {
+            return loggerdetail::LogEntry{ logger, logLevel};
+        } else {
+            return loggerdetail::LogEntry{};
+        }
+    }
 }
 
 /*

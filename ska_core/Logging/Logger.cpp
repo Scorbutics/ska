@@ -108,7 +108,7 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parsePlaceholder(const st
     return Token{ tokenSymbol, tokenType, tokenLength };
 }
 
-struct tm ska::Logger::currentDateTime() {
+struct tm ska::loggerdetail::LoggerEntry::currentDateTime() {
 	auto t = std::time(nullptr);
 #ifdef _MSC_VER
 	struct tm buf;
@@ -119,7 +119,7 @@ struct tm ska::Logger::currentDateTime() {
 	return buf;
 }
 
-void ska::Logger::consumeTokens(const tm& date, const std::string& message) {
+void ska::loggerdetail::Logger::consumeTokens(const tm& date, const std::string& message) {
     
 	auto& currentPattern = m_pattern.at(m_logLevel);
 	while(!currentPattern.empty()) {
@@ -130,11 +130,11 @@ void ska::Logger::consumeTokens(const tm& date, const std::string& message) {
     currentPattern.rewind();
 }
 
-ska::loggerdetail::LogEntry ska::Logger::operator<<(const EnumLogLevel& logLevel) {
+ska::loggerdetail::LogEntry ska::loggerdetail::Logger::operator<<(const EnumLogLevel& logLevel) {
 	return { *this, logLevel };
 }
 
-void ska::Logger::applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, const std::string& message) {
+void ska::loggerdetail::Logger::applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, const std::string& message) {
 	
 	switch(token.type()) {
 		case loggerdetail::TokenType::Color :

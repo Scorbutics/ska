@@ -24,7 +24,7 @@ namespace ska {
 			if (foundObs != std::end(m_head)) {
 				m_head.erase(foundObs);
 			} else {
-				SKA_LOG_ERROR("Trying to delete an observer but not found !");
+				logger << EnumLogLevel::Error << "Trying to delete an observer but not found !";
 			}
 		}
 
@@ -41,6 +41,7 @@ namespace ska {
 
 	private:
 		std::vector<ObserverType*> m_head;
+        static Logger<Observable<T, Args...>> logger;
 	};
 }
 
