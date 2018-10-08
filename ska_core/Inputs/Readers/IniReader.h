@@ -42,7 +42,7 @@ namespace ska {
 		}
 
 	private:
-		void existsOrThrow(const std::string& path) const {
+        void existsOrThrow(const std::string& path) const {
 			if (!exists(path)) {
 				ExceptionTrigger<InvalidPathException>(("Unable to find the ini path " + path).c_str());
 			}
@@ -50,7 +50,6 @@ namespace ska {
 
 		std::unordered_map<std::string, std::string> m_content;
 		bool m_isLoaded;
-
 	};
 
 

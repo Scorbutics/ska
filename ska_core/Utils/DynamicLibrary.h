@@ -66,7 +66,7 @@ namespace ska {
 				int _[] = { 0, (buildCache<FunctionName>(m_instance) , 0)... };
 				(void)_;
 			} else {
-				SKA_LOG_WARN("Library ", m_libraryPath, " cannot be loaded.");
+				logger.template log<LogLevel::Warn>() << "Library " <<  m_libraryPath << " cannot be loaded.";
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace ska {
 			const auto& funcName = Func::name;
 			auto [function, error] = impl.getFunction(funcName.c_str());
 			if (function == nullptr) {
-				SKA_LOG_WARN("Unable to find the function " + funcName + " in the module " + m_libraryPath + ". Error logged : " + error);
+				logger.template log<LogLevel::Warn>() << "Unable to find the function " << funcName << " in the module " << m_libraryPath << ". Error logged : " << error;
 			}
 			assert(function != nullptr);
 			m_cache.set(Func::id, std::move(function));
@@ -111,5 +111,6 @@ namespace ska {
 		dynlib::Cache<void*, FunctionName...> m_cache;
 		std::string m_libraryPath;
 		DynamicLibraryInstance m_instance;
+        static Logger<DynamicLibrary<FunctionName...>> logger;
 	};
 }

@@ -19,10 +19,10 @@ namespace ska {
          * \param ecm Entity component mask
          */
         void generate(EntityComponentsMask& ecm) {
-		SKA_LOG_DEBUG("Initializing system with components :");
+            logger.template log<LogLevel::Debug>() << "Initializing system with components :";
         	int _[] = { 0, (buildSystemMask<ComponentType>(ecm) , 0)... };
-		(void)_;
-		SKA_LOG_DEBUG("End system initialization\n\n");;
+            (void)_;
+            logger.template log<LogLevel::Debug>() << "End system initialization\n\n";
         }
 
     private:
@@ -32,10 +32,12 @@ namespace ska {
 			if (mask >= systemComponentMask.size()) {
 				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.");
 			}
-			SKA_LOG_DEBUG("\t - mask ", mask);
+			logger.template log<LogLevel::Debug>() << "\t - mask " << mask;
 
 			systemComponentMask[mask] = true;
 		}
+        
+        static Logger<SystemMaskGenerator<ComponentType...>> logger;
 
 		EntityManager& m_entityManager;
     };

@@ -12,6 +12,6 @@ namespace ska {
 	private:
 		std::string m_message;
 		std::string m_typedMessage;
-	};
+    };
 
 }

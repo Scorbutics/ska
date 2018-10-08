@@ -1,5 +1,6 @@
 #pragma once
 #include <bitset>
+#include <bitset>
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
@@ -99,6 +100,8 @@ namespace ska {
 
 		void commonRemoveComponent(const EntityId& entity, ComponentPool& components);
 		void commonAddComponent(const EntityId& entity, const unsigned int componentMask);
+        
+        Logger<EntityManager> logger;
 
 	};
 

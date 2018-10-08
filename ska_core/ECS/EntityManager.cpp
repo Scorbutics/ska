@@ -110,7 +110,7 @@ void ska::EntityManager::removeEntity(const EntityId& entity) {
 void ska::EntityManager::innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent) {
 	if (m_entities.find(entity) == m_entities.end()) {
 		const auto startMessage = ("Unable to delete entity #" + StringUtils::intToStr(static_cast<int>(entity)));
-		SKA_LOG_ERROR(startMessage + " : this entity doesn't exist or is already deleted");
+		logger.log<LogLevel::Error>() << (startMessage + " : this entity doesn't exist or is already deleted");
 		return;
 	}
 

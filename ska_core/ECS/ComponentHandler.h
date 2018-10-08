@@ -20,7 +20,7 @@ namespace ska {
 	public:
 		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentPool*>& mapComponentNames):
 			m_mask(mask) {
-			SKA_LOG_DEBUG("Initializing component type ", "", " with mask ", m_mask);
+			logger.template log<LogLevel::Debug>() << "Initializing component with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
 			
 			if constexpr(has_getClassName<T>::value) {
@@ -88,6 +88,8 @@ namespace ska {
 		std::vector<T> m_components;
 		std::vector<std::optional<ComponentId>> m_entitiesWithComponent;
 		const unsigned int m_mask;
+
+        Logger<ComponentHandler<T>> logger;
 	};
 
 

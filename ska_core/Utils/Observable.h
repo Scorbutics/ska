@@ -24,7 +24,7 @@ namespace ska {
 			if (foundObs != std::end(m_head)) {
 				m_head.erase(foundObs);
 			} else {
-				logger << EnumLogLevel::Error << "Trying to delete an observer but not found !";
+				logger.template log<LogLevel::Error>() << "Trying to delete an observer but not found !";
 			}
 		}
 

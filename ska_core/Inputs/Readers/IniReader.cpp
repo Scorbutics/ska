@@ -25,7 +25,9 @@ IniReader() {
 
 
 bool ska::IniReader::load(const std::string& inifilename) {
-	m_content.clear();
+    static Logger<IniReader> logger;
+    
+    m_content.clear();
 	
 	std::ifstream iniFile(inifilename.c_str());
 	std::string line;
@@ -63,7 +65,7 @@ bool ska::IniReader::load(const std::string& inifilename) {
 			currentContent = line.substr(posVar+1, line.length());
 
 			if (currentBlock.empty()) {
-				SKA_LOG_ERROR("Erreur (classe IniReader) : le fichier .ini " + inifilename + " contient une variable \"" + currentVar + "\" sans bloc entre crochets correspondant.");
+				logger.log<LogLevel::Error>() << "Erreur (classe IniReader) : le fichier .ini " << inifilename << " contient une variable \"" << currentVar << "\" sans bloc entre crochets correspondant.";
 			} else if (!currentContent.empty()) {
 				m_content[currentBlock + " " + currentVar] = currentContent;
 			}

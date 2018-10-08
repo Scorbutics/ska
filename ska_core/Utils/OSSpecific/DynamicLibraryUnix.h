@@ -16,7 +16,7 @@ namespace ska {
 			m_name("lib" + lib + ".so") {
 			m_errorMessage = loadLibrary(m_name.c_str());
 			if(!isLoaded()) {
-				SKA_LOG_MESSAGE(m_errorMessage);
+				logger.log<LogLevel::Warn>() << m_errorMessage;
 			}
 		}
 
@@ -26,7 +26,7 @@ namespace ska {
 
 		~DynamicLibraryUnix() {
 			if(m_handle != nullptr) {
-				SKA_LOG_INFO("Unloading dynamic library ", m_name);
+				logger.log<LogLevel::Info>() << "Unloading dynamic library " << m_name;
 				dlclose(m_handle);
 			}
 		}
@@ -38,7 +38,7 @@ namespace ska {
 
 	private:
 		const char* loadLibrary(const char* lib) {
-			SKA_LOG_INFO("Loading dynamic library ", lib);
+			logger.log<LogLevel::Info>() << "Loading dynamic library " << lib;
 			m_handle = dlopen(lib, RTLD_NOW);
 			if (m_handle == nullptr) {
 				return dlerror();
@@ -49,6 +49,7 @@ namespace ska {
 		void* m_handle {};
 		std::string m_name;
 		std::string m_errorMessage;
-	};
+	    static Logger<DynamicLibraryUnix> logger;
+    };
 }
 #endif

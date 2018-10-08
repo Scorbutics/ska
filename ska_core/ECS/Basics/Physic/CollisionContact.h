@@ -35,7 +35,6 @@ namespace ska {
 			return !m_noCollision;
 		}
 
-
 		CollisionContact(Rectangle overlap_, float penetration_, Point<float> normal_, bool collision) :
 			m_normal(normal_),
 			m_noCollision(!collision),
@@ -64,13 +63,13 @@ namespace ska {
 					normal.x = vectorAToBX < 0 ? -1.F : 1.F;
 					normal.y = 0;
 					penetration = static_cast<float>(overlap.w);
-					logger << EnumLogLevel::Info << (vectorAToBX < 0 ? "<" : ">");
+					logger.log<LogLevel::Info>() << (vectorAToBX < 0 ? "<" : ">");
 				} else if (overlap.w > overlap.h) {
 					const auto vectorAToBY = pcA.y - pcB.y;
 					normal.x = 0;
 					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 					penetration = static_cast<float>(overlap.h);
-					logger << EnumLogLevel::Info << (vectorAToBY < 0 ? "^" : "v");
+					logger.log<LogLevel::Info>() << (vectorAToBY < 0 ? "^" : "v");
 				} else {
 					const auto vectorAToBX = pcA.x - pcB.x;
 					const auto vectorAToBY = pcA.y - pcB.y;
@@ -78,7 +77,7 @@ namespace ska {
 					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 					penetration = static_cast<float>(overlap.w);
 
-					logger << EnumLogLevel::Info << (vectorAToBY < 0 ? "^" : "v", vectorAToBX < 0 ? "<" : ">");
+					logger.log<LogLevel::Info>() << (vectorAToBY < 0 ? "^" : "v", vectorAToBX < 0 ? "<" : ">");
 				}
 			}
 			return CollisionContact(overlap, penetration, normal, collision);

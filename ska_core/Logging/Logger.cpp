@@ -1,12 +1,11 @@
 #include <sstream>
+#include <iostream>
 #include <iomanip>
 #include <cassert>
 
 #include "ColorStream.h"
 #include "Logger.h"
 #include "../Utils/StringUtils.h"
-
-unsigned int ska::LoggerFactory::m_classNameMaxLength = 20;
 
 ska::loggerdetail::Tokenizer::Tokenizer(const std::string& str) {
     m_tokens = parse(str);
@@ -108,7 +107,7 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parsePlaceholder(const st
     return Token{ tokenSymbol, tokenType, tokenLength };
 }
 
-struct tm ska::loggerdetail::LoggerEntry::currentDateTime() {
+struct tm ska::loggerdetail::LogEntry::currentDateTime() {
 	auto t = std::time(nullptr);
 #ifdef _MSC_VER
 	struct tm buf;
@@ -130,8 +129,8 @@ void ska::loggerdetail::Logger::consumeTokens(const tm& date, const std::string&
     currentPattern.rewind();
 }
 
-ska::loggerdetail::LogEntry ska::loggerdetail::Logger::operator<<(const EnumLogLevel& logLevel) {
-	return { *this, logLevel };
+ska::loggerdetail::Logger::Logger(std::string className) :
+    Logger(std::move(className), std::cout) {
 }
 
 void ska::loggerdetail::Logger::applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, const std::string& message) {

@@ -2,9 +2,11 @@
 #include "../Logging/LoggerRTTI.h"
 
 ska::GenericException::GenericException(const char* message, const char* type) {
-	m_message = std::string(message);
+    static Logger<GenericException> logger;
+    
+    m_message = std::string(message);
 	m_typedMessage = std::string((type == nullptr ? "" : (std::string(type) + " : ")) + m_message);
-	SKA_LOG_WARN("Exception thrown : " + m_typedMessage);
+	logger.log<LogLevel::Warn>() << "Exception thrown : " <<  m_typedMessage;
 }
 
 const char* ska::GenericException::what() const noexcept {
