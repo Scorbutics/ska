@@ -18,7 +18,8 @@ namespace ska {
 		}
 
 		void removeObserver(ObserverType& obs) {
-			auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
+			static Logger<Observable<T, Args...>> logger;
+            auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
 				return &(*o) == &obs;
 			});
 			if (foundObs != std::end(m_head)) {
@@ -41,7 +42,7 @@ namespace ska {
 
 	private:
 		std::vector<ObserverType*> m_head;
-        static Logger<Observable<T, Args...>> logger;
+        
 	};
 }
 
