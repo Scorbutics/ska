@@ -8,8 +8,8 @@ ska::loggerdetail::Logger::Logger(std::string className) :
 
 ska::loggerdetail::Logger::Logger(std::string className, std::ostream& output) :
     m_logLevel(LogLevel::Debug),
-    m_className(std::move(className)),
-    m_output(output) {
+    m_className(std::move(className)) {
+    m_output.push_back(output);
     
     const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
     m_pattern.emplace(LogLevel::Debug, Tokenizer { defaultPattern });

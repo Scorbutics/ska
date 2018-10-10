@@ -1,4 +1,9 @@
 #pragma once
+
+//TODO reference_wrapper
+#include <functional>
+
+#include <vector>
 #include <unordered_map>
 
 #include "Tokenizer.h"
@@ -39,12 +44,23 @@ namespace ska {
                 m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
             }
 
+            void addOutputTarget(std::ostream& output) {
+                m_output.push_back(output);
+            }
+
             virtual ~Logger() = default;
 
         private:
+            template <class Arg>
+            void pushMessage(Arg&& item) {
+                for(auto& o : m_output) {
+                    (o.get()) << std::forward<Arg>(item);
+                }
+            }
+
             LogLevel m_logLevel;
             const std::string m_className;
-            std::ostream& m_output;
+            std::vector<std::reference_wrapper<std::ostream>> m_output;
             std::unordered_map<LogLevel, loggerdetail::Tokenizer> m_pattern;
             
             template <class T>

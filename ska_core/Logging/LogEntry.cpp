@@ -21,7 +21,7 @@ void ska::loggerdetail::LogEntry::consumeTokens(Logger& instance, const tm& date
         applyTokenOnOutput(instance, date, currentPattern.next(), message);
     }
 	
-	instance.m_output << std::endl;
+	instance.pushMessage("\n");
     currentPattern.rewind();
 }
 
@@ -29,43 +29,43 @@ void ska::loggerdetail::LogEntry::applyTokenOnOutput(Logger& instance, const str
 	
 	switch(token.type()) {
 		case loggerdetail::TokenType::Color :
-			instance.m_output << static_cast<EnumColorStream>(token.length());
+			instance.pushMessage(static_cast<EnumColorStream>(token.length()));
 			break;
 		
 		case loggerdetail::TokenType::Value :
-			instance.m_output << message;
+			instance.pushMessage(message);
 			break;
 
 		case loggerdetail::TokenType::Year :
-			instance.m_output << std::put_time(&date, "%Y");
+			instance.pushMessage(std::put_time(&date, "%Y"));
 			break;
 		
 		case loggerdetail::TokenType::Month :
-			instance.m_output << std::put_time(&date, "%m");
+			instance.pushMessage(std::put_time(&date, "%m"));
 			break;
 		
 		case loggerdetail::TokenType::Day :
-			instance.m_output << std::put_time(&date, "%d");
+			instance.pushMessage(std::put_time(&date, "%d"));
 			break;
 		
 		case loggerdetail::TokenType::Hour :
-			instance.m_output << std::put_time(&date, "%H");
+			instance.pushMessage(std::put_time(&date, "%H"));
 			break;
 		
 		case loggerdetail::TokenType::Minute :
-			instance.m_output << std::put_time(&date, "%M");
+			instance.pushMessage(std::put_time(&date, "%M"));
 			break;
 		
 		case loggerdetail::TokenType::Second :
-			instance.m_output << std::put_time(&date, "%S");
+			instance.pushMessage(std::put_time(&date, "%S"));
 			break;
 		
 		case loggerdetail::TokenType::Class:
-			instance.m_output << instance.m_className;
+			instance.pushMessage(instance.m_className);
 			break;
 		
 		case loggerdetail::TokenType::Literal:
-			instance.m_output << token.value();
+			instance.pushMessage(token.value());
 			break;
 
 		case loggerdetail::TokenType::Empty:

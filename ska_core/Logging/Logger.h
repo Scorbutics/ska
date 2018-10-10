@@ -2,7 +2,6 @@
 
 #include "LogEntry.h"
 #include "LoggerImpl.h"
-//#include "MessagesBuilder.h"
 
 namespace ska {
 
