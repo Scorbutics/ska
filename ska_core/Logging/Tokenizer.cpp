@@ -1,6 +1,5 @@
 #include <sstream>
-#include <iostream>
-#include <iomanip>
+//#include <iostream>
 #include <cassert>
 
 #include "ColorStream.h"
@@ -50,10 +49,10 @@ std::pair<std::string, ska::loggerdetail::TokenType> ska::loggerdetail::Tokenize
 		throw std::runtime_error("unexpected early end of input");
 	}
 	
-	auto ss = std::stringstream {};
-	
-	if(!ska::StringUtils::isInt(&str[index], 10)) {
-		ss << str[index];
+    const auto isIntValue = str[index] >= '0' && str[index] <= '9';
+	if(!isIntValue) {
+	    auto ss = std::stringstream {};
+        ss << str[index];
         auto characterSymbol = str[index];
         auto tokenType = TokenType{};
         switch(characterSymbol) {
@@ -91,6 +90,8 @@ std::pair<std::string, ska::loggerdetail::TokenType> ska::loggerdetail::Tokenize
         return std::make_pair(ss.str(), tokenType);
 
 	} else {
+        auto ss = std::stringstream {};
+        ss << str[index];
         throw std::runtime_error("expected a non numeric character but found \"" + ss.str() + "\" instead");    
     }
 }
@@ -107,83 +108,6 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parsePlaceholder(const st
     return Token{ tokenSymbol, tokenType, tokenLength };
 }
 
-struct tm ska::loggerdetail::LogEntry::currentDateTime() {
-	auto t = std::time(nullptr);
-#ifdef _MSC_VER
-	struct tm buf;
-	localtime_s(&buf, &t);
-#else
-	struct tm buf = *std::localtime(&t);
-#endif
-	return buf;
-}
-
-void ska::loggerdetail::Logger::consumeTokens(const tm& date, const std::string& message) {
-    
-	auto& currentPattern = m_pattern.at(m_logLevel);
-	while(!currentPattern.empty()) {
-        applyTokenOnOutput(date, currentPattern.next(), message);
-    }
-	
-	m_output << std::endl;
-    currentPattern.rewind();
-}
-
-ska::loggerdetail::Logger::Logger(std::string className) :
-    Logger(std::move(className), std::cout) {
-}
-
-void ska::loggerdetail::Logger::applyTokenOnOutput(const struct tm& date, const loggerdetail::Token& token, const std::string& message) {
-	
-	switch(token.type()) {
-		case loggerdetail::TokenType::Color :
-			m_output << static_cast<EnumColorStream>(token.length());
-			break;
-		
-		case loggerdetail::TokenType::Value :
-			m_output << message;
-			break;
-
-		case loggerdetail::TokenType::Year :
-			m_output << std::put_time(&date, "%Y");
-			break;
-		
-		case loggerdetail::TokenType::Month :
-			m_output << std::put_time(&date, "%m");
-			break;
-		
-		case loggerdetail::TokenType::Day :
-			m_output << std::put_time(&date, "%d");
-			break;
-		
-		case loggerdetail::TokenType::Hour :
-			m_output << std::put_time(&date, "%H");
-			break;
-		
-		case loggerdetail::TokenType::Minute :
-			m_output << std::put_time(&date, "%M");
-			break;
-		
-		case loggerdetail::TokenType::Second :
-			m_output << std::put_time(&date, "%S");
-			break;
-		
-		case loggerdetail::TokenType::Class:
-			m_output << m_className;
-			break;
-		
-		case loggerdetail::TokenType::Literal:
-			m_output << token.value();
-			break;
-
-		case loggerdetail::TokenType::Empty:
-			break;
-
-		default:
-			assert(false);
-	}
-}
-
 ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parseLiteral(const std::string& str, std::size_t& index) {
     auto tokenValue = std::stringstream {};
 
@@ -194,3 +118,6 @@ ska::loggerdetail::Token ska::loggerdetail::Tokenizer::parseLiteral(const std::s
 	
     return Token{tokenValue.str(), TokenType::Literal};
 }
+
+
+
