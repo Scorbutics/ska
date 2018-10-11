@@ -1,35 +1,25 @@
 #pragma once
 
-//TODO reference_wrapper
-#include <functional>
-
 #include <vector>
 #include <unordered_map>
 
+#include "LogLevel.h"
 #include "Tokenizer.h"
+#include "LogTarget.h"
 
 namespace ska {
-    enum class LogLevel {
-		Debug = 0,
-		Info = 1,
-		Warn = 2,
-		Error = 3,
-		Disabled = 100
-	};
 
     namespace loggerdetail {
 	    class LogEntry;
         class Logger {
             friend class LogEntry;
         
-        private:
-            Logger(const Logger&) = delete;
-
         protected:
             Logger(std::string className);
             Logger(std::string className, std::ostream& output);
         
         public:
+            Logger(const Logger&) = delete;
             Logger(Logger&&) = default;
 
             void configureLogLevel(const LogLevel& logLevel) {
@@ -41,11 +31,11 @@ namespace ska {
                 if(existingLoglevel != m_pattern.end()) {
                     m_pattern.erase(existingLoglevel);
                 }
-                m_pattern.emplace(logLevel, loggerdetail::Tokenizer {std::move(pattern)});
+                m_pattern.emplace(logLevel, Tokenizer {std::move(pattern)});
             }
 
             void addOutputTarget(std::ostream& output) {
-                m_output.push_back(output);
+                m_output.emplace_back(output);
             }
 
             virtual ~Logger() = default;
@@ -54,14 +44,14 @@ namespace ska {
             template <class Arg>
             void pushMessage(Arg&& item) {
                 for(auto& o : m_output) {
-                    (o.get()) << std::forward<Arg>(item);
+                    o << item;
                 }
             }
 
             LogLevel m_logLevel;
             const std::string m_className;
-            std::vector<std::reference_wrapper<std::ostream>> m_output;
-            std::unordered_map<LogLevel, loggerdetail::Tokenizer> m_pattern;
+            std::vector<LogTarget> m_output;
+            std::unordered_map<LogLevel, Tokenizer> m_pattern;
             
             template <class T>
 			friend const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart);

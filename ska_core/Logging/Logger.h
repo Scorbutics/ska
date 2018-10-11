@@ -2,6 +2,7 @@
 
 #include "LogEntry.h"
 #include "LoggerImpl.h"
+#include "LogLevel.h"
 
 namespace ska {
 

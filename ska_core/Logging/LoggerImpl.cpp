@@ -11,11 +11,10 @@ ska::loggerdetail::Logger::Logger(std::string className, std::ostream& output) :
     m_className(std::move(className)) {
     m_output.push_back(output);
     
-    const auto& defaultPattern = "%10c[%h:%m:%s] %14c%C %15c%v";
-    m_pattern.emplace(LogLevel::Debug, Tokenizer { defaultPattern });
-    m_pattern.emplace(LogLevel::Info, Tokenizer { defaultPattern });
-    m_pattern.emplace(LogLevel::Error, Tokenizer { defaultPattern });
-    m_pattern.emplace(LogLevel::Warn, Tokenizer { defaultPattern });
+    m_pattern.emplace(LogLevel::Debug, Tokenizer { "%10c[%h:%m:%s]%9c[Debug] %14c%C %15c%v" });
+    m_pattern.emplace(LogLevel::Info, Tokenizer { "%10c[%h:%m:%s]%10c[Info] %14c%C %15c%v" });
+    m_pattern.emplace(LogLevel::Warn, Tokenizer { "%10c[%h:%m:%s]%11c[Warn] %14c%C %15c%v" });
+    m_pattern.emplace(LogLevel::Error, Tokenizer { "%10c[%h:%m:%s]%12c[Error] %14c%C %15c%v" });
 }
 
 
