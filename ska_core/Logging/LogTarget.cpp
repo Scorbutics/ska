@@ -5,11 +5,7 @@
 #include "LogEntry.h"
 #include "ColorStream.h"
 
-ska::loggerdetail::LogFilter ska::loggerdetail::LogTarget::GetIdentityLogFilter() { 
-    return [](const ska::loggerdetail::LogEntry& entry) {
-        return true;
-    };
-}
+
 
 bool ska::loggerdetail::LogTarget::isATarget(const LogEntry& entry) {
     return m_filter(entry);

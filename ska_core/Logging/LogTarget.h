@@ -1,14 +1,13 @@
 #pragma once
 
-#include <functional>
 #include <ostream>
 
-namespace ska {
-    namespace loggerdetail {
-        class LogEntry;
-        class Token;
+#include "LogFilter.h"
 
-        using LogFilter = std::function<bool(const LogEntry&)>;
+namespace ska {
+    class LogEntry;
+    namespace loggerdetail {
+        class Token;
 
         class LogTarget {
         public:
@@ -20,8 +19,7 @@ namespace ska {
             bool applyTokenOnOutput(const LogEntry& entry, const Token& token);
         
         private:
-            bool isATarget(const LogEntry& entry);
-            static LogFilter GetIdentityLogFilter();
+            bool isATarget(const LogEntry& entry);    
 
             std::ostream& m_output;
             LogFilter m_filter;

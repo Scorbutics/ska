@@ -8,15 +8,18 @@
 #include "LogTarget.h"
 
 namespace ska {
+    class LogEntry;
+
+    template <class T>
+    const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart);
 
     namespace loggerdetail {
-	    class LogEntry;
         class Logger {
-            friend class LogEntry;
+            friend class ska::LogEntry;
         
         protected:
             Logger(std::string className);
-            Logger(std::string className, std::ostream& output);
+            Logger(std::string className, std::ostream& output, LogFilter filter);
         
         public:
             Logger(const Logger&) = delete;
@@ -34,8 +37,8 @@ namespace ska {
                 m_pattern.emplace(logLevel, Tokenizer {std::move(pattern)});
             }
 
-            void addOutputTarget(std::ostream& output) {
-                m_output.emplace_back(output);
+            void addOutputTarget(std::ostream& output, LogFilter filter) {
+                m_output.emplace_back(output, filter);
             }
 
             virtual ~Logger() = default;
@@ -54,7 +57,7 @@ namespace ska {
             std::unordered_map<LogLevel, Tokenizer> m_pattern;
             
             template <class T>
-			friend const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart);
+			friend const ska::LogEntry& ska::operator<<(const ska::LogEntry& logEntry, T&& logPart);
         };
         
     }

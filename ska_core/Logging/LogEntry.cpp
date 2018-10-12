@@ -4,7 +4,7 @@
 #include "LogEntry.h"
 #include "ColorStream.h"
 
-tm ska::loggerdetail::LogEntry::currentDateTime() {
+tm ska::LogEntry::currentDateTime() {
 	auto t = std::time(nullptr);
 #ifdef _MSC_VER
 	tm buf;
@@ -15,7 +15,7 @@ tm ska::loggerdetail::LogEntry::currentDateTime() {
 	return buf;
 }
 
-void ska::loggerdetail::LogEntry::consumeTokens() {
+void ska::LogEntry::consumeTokens() {
 	auto& currentPattern = instance.m_pattern.at(logLevel);
 	
     for(auto& o : instance.m_output) {

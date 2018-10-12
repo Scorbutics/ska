@@ -26,8 +26,8 @@ namespace ska {
 	template <class Wrapped>
     class Logger : public loggerdetail::Logger {
     public:
-        Logger(std::ostream& output) :
-            loggerdetail::Logger(std::move(LoggerClassFormatter<Wrapped>::format()), output) {
+        Logger(std::ostream& output, LogFilter filter) :
+            loggerdetail::Logger(std::move(LoggerClassFormatter<Wrapped>::format()), output, std::move(filter)) {
         }
         
         Logger() :
@@ -37,7 +37,7 @@ namespace ska {
         template<LogLevel logLevel>
         auto log() {
             if constexpr (logLevel >= LoggerClassLevel<Wrapped>::level) {
-                return loggerdetail::LogEntry{ *this, logLevel };
+                return LogEntry{ *this, logLevel };
             } else {
                 return loggerdetail::EmptyProxy{};
             }   
