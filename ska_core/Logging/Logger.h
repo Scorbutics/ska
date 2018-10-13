@@ -4,6 +4,8 @@
 #include "LoggerImpl.h"
 #include "LogLevel.h"
 
+#include "LogSync.h"
+
 namespace ska {
 
 	template<class T>
@@ -23,7 +25,7 @@ namespace ska {
         }
     }
     
-	template <class Wrapped>
+	template <class Wrapped, class LogMethod = LogSync>
     class Logger : public loggerdetail::Logger {
     public:
         Logger(std::ostream& output, LogFilter filter) :
@@ -37,13 +39,16 @@ namespace ska {
         template<LogLevel logLevel>
         auto log() {
             if constexpr (logLevel >= LoggerClassLevel<Wrapped>::level) {
-                return LogEntry{ *this, logLevel };
+                return loggerdetail::LogEntry<LogMethod>{ *this, logLevel, m_logMethod };
             } else {
                 return loggerdetail::EmptyProxy{};
             }   
         }
 
         ~Logger() = default;
+    
+    private:
+        LogMethod m_logMethod;
     };
 }
 

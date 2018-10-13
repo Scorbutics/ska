@@ -16,9 +16,15 @@ tm ska::LogEntry::currentDateTime() {
 }
 
 void ska::LogEntry::consumeTokens() {
-	auto& currentPattern = instance.m_pattern.at(logLevel);
+    if(alreadyLogged) {
+        return;
+    }
+
+    fullMessage << "\n";
+    
+    auto& currentPattern = instance->m_pattern.at(logLevel);
 	
-    for(auto& o : instance.m_output) {
+    for(auto& o : instance->m_output) {
         while(!currentPattern.empty()) {
             const auto& token = currentPattern.next();
             if(!o.applyTokenOnOutput(*this, token)) {
@@ -27,7 +33,8 @@ void ska::LogEntry::consumeTokens() {
         }
         currentPattern.rewind();
     }
-	
+
+    alreadyLogged = true;
 }
 
 

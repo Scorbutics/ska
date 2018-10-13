@@ -8,22 +8,23 @@
 namespace ska {
 
     class LogEntry {
-    public:
-        LogEntry(loggerdetail::Logger& instance, LogLevel logLevel) : 
-            instance(instance), 
+    protected:
+        LogEntry(loggerdetail::Logger& instance, LogLevel logLevel, std::size_t id) : 
+            id(id),
+            instance(&instance), 
             logLevel(logLevel), 
             date(currentDateTime()),
             className(instance.m_className) {
         }
-        
-        LogEntry(const LogEntry&) = delete;
-        LogEntry(LogEntry&&) = default;
 
-        ~LogEntry() {
-            //MUST NOT throw !
-            fullMessage << "\n";
-            consumeTokens();
-        }
+    public:
+        LogEntry(const LogEntry&) = delete;
+        LogEntry& operator=(const LogEntry&) = delete;
+
+        LogEntry(LogEntry&&) = default;
+        LogEntry& operator=(LogEntry&&) = default;
+
+        ~LogEntry() = default;
 
         const std::string& getClassName() const {
             return className;
@@ -41,16 +42,22 @@ namespace ska {
             return date;
         }
 
+        const std::size_t getId() const {
+            return id;
+        }
+
+        void consumeTokens();
+
     private:
-        loggerdetail::Logger& instance;
+        std::size_t id;
+        bool alreadyLogged = false;
+        loggerdetail::Logger* instance;
         LogLevel logLevel;
         //Mutable used because LogEntry is only a short time wrapper-class that is destroyed at the end of the log line
         mutable std::stringstream fullMessage;
         tm date;
         std::string className;
         
-        void consumeTokens();
-
         static tm currentDateTime();
         
         template <class T>
@@ -59,9 +66,39 @@ namespace ska {
     
     template <class T>
     const LogEntry& operator<<(const LogEntry& logEntry, T&& logPart) {
-        if (logEntry.logLevel >= logEntry.instance.m_logLevel) {
+        if (logEntry.logLevel >= logEntry.instance->m_logLevel) {
             logEntry.fullMessage << std::forward<T>(logPart);
         }
         return logEntry;
     }
+
+    //templated version containing the log method
+    namespace loggerdetail {
+        template <class LogMethod>
+        class LogEntry : public ska::LogEntry {
+        private:
+            LogMethod* m_logMethod;
+            static std::size_t InstanceCounter;
+        public:
+            LogEntry(Logger& instance, LogLevel logLevel, LogMethod& method) : 
+                ska::LogEntry(instance, logLevel, InstanceCounter++),
+                m_logMethod(&method) {
+            }
+            
+            LogEntry(const LogEntry&) = delete;
+            LogEntry& operator=(const LogEntry&) = delete;
+
+            LogEntry(LogEntry&&) = default;
+            LogEntry& operator=(LogEntry&&) = default;
+            
+            ~LogEntry() {
+                //MUST NOT throw !
+                m_logMethod->log(std::move(*this));
+            }
+        };
+
+        template <class LogMethod>
+        std::size_t LogEntry<LogMethod>::InstanceCounter = 0u;
+    }
 }
+

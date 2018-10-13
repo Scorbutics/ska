@@ -5,13 +5,11 @@
 #include "LogEntry.h"
 #include "ColorStream.h"
 
-
-
-bool ska::loggerdetail::LogTarget::isATarget(const LogEntry& entry) {
+bool ska::loggerdetail::LogTarget::isATarget(const ska::LogEntry& entry) {
     return m_filter(entry);
 }
 
-bool ska::loggerdetail::LogTarget::applyTokenOnOutput(const LogEntry& entry, const Token& token) {
+bool ska::loggerdetail::LogTarget::applyTokenOnOutput(const ska::LogEntry& entry, const Token& token) {
     if(!isATarget(entry)) {
         return false;
     }
@@ -52,7 +50,16 @@ bool ska::loggerdetail::LogTarget::applyTokenOnOutput(const LogEntry& entry, con
 		case TokenType::Second :
 			output << std::put_time(&date, "%S");
 			break;
-		
+	
+        case TokenType::MilliSecond :
+            //TODO : not available with localtime
+            output << "??";
+            break;
+
+        case TokenType::Identifier:
+            output << entry.getId();
+            break;
+
 		case TokenType::Class:
 			output << entry.getClassName();
 			break;

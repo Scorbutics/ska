@@ -7,7 +7,7 @@
 namespace ska {
     class LogEntry;
     namespace loggerdetail {
-        class Token;
+        struct Token;
 
         class LogTarget {
         public:

@@ -62,6 +62,9 @@ std::pair<std::string, ska::loggerdetail::TokenType> ska::loggerdetail::Tokenize
             case 'c':
                 tokenType = TokenType::Color;
                 break;
+            case 'i':
+                tokenType = TokenType::Identifier;
+                break;
             case 'v':
                 tokenType = TokenType::Value;
                 break;
@@ -83,7 +86,9 @@ std::pair<std::string, ska::loggerdetail::TokenType> ska::loggerdetail::Tokenize
             case 's':
                 tokenType = TokenType::Second;
                 break;
-
+            case 'T':
+                tokenType = TokenType::MilliSecond;
+                break;
             default:
                 throw std::runtime_error("unknown symbol : " + ss.str());
         }

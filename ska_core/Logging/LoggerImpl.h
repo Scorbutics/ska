@@ -41,7 +41,7 @@ namespace ska {
                 m_output.emplace_back(output, filter);
             }
 
-            virtual ~Logger() = default;
+            ~Logger() = default;
 
         private:
             template <class Arg>

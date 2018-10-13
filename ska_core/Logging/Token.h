@@ -6,6 +6,7 @@ namespace ska {
         enum class TokenType {
             Color,
 			Class,
+            Identifier,
             Value,
             Year,
             Month,
@@ -13,6 +14,7 @@ namespace ska {
             Hour,
             Minute,
             Second,
+            MilliSecond,
             Literal,
             Empty
         };
