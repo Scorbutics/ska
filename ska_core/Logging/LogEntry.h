@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sstream>
+#include <cassert>
 #include "LogLevel.h"
 #include "Tokenizer.h"
 #include "LoggerImpl.h"
@@ -88,12 +89,22 @@ namespace ska {
             LogEntry(const LogEntry&) = delete;
             LogEntry& operator=(const LogEntry&) = delete;
 
-            LogEntry(LogEntry&&) = default;
-            LogEntry& operator=(LogEntry&&) = default;
+			LogEntry(LogEntry&& e) {
+				*this = std::move(e);
+			}
+			
+			LogEntry& operator=(LogEntry&& e) {
+				m_logMethod = e.m_logMethod;
+				e.m_logMethod = nullptr;
+				ska::LogEntry::operator=(std::move(e));
+				return *this;
+			}
             
             ~LogEntry() {
-                //MUST NOT throw !
-                m_logMethod->log(std::move(*this));
+				if (m_logMethod != nullptr) {
+					//MUST NOT throw !
+					m_logMethod->log(std::move(*this));
+				}
             }
         };
 

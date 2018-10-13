@@ -1,28 +1,28 @@
 #pragma once
 
-#include <stack>
+#include <deque>
 #include <mutex>
 #include <condition_variable>
 
 namespace ska {
     template <class T>
-    class SharedStack {
+    class SharedFifo {
     private:
-        std::stack<T> m_container;
+        std::deque<T> m_container;
         mutable std::mutex m_mutex;
         std::condition_variable m_dataCondition;
 
-        SharedStack& operator=(const SharedStack&) = delete;
-        SharedStack(const SharedStack&) = delete;
+		SharedFifo& operator=(const SharedFifo&) = delete;
+		SharedFifo(const SharedFifo&) = delete;
     public:
-        SharedStack() = default;
-        SharedStack& operator=(SharedStack&&) = default;
-        SharedStack(SharedStack&&) = default;
+        SharedFifo() = default;
+        SharedFifo& operator=(SharedFifo&&) = default;
+        SharedFifo(SharedFifo&&) = default;
 
-        void push(T item) {
+        void push(T&& item) {
             {
                 std::lock_guard<std::mutex> lock { m_mutex };
-                m_container.push(std::move(item));
+                m_container.push_back(std::move(item));
             }
             m_dataCondition.notify_one();
         }
@@ -31,8 +31,8 @@ namespace ska {
             std::unique_lock<std::mutex> lock { m_mutex };
             m_dataCondition.wait(lock, [this]() { return !m_container.empty(); });
             
-            auto result = std::move(m_container.top());
-            m_container.pop();
+            auto result = std::move(m_container.front());
+            m_container.pop_front();
             return result;
         }
 

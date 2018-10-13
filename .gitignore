@@ -55,3 +55,9 @@
 /external/chipmunk/src/Debug
 /external/chipmunk/src/cmake_install.cmake
 /external/chipmunk/cmake_install.cmake
+*.un~
+*.h~
+*.cpp~
+.ninja_deps
+.ninja_log
+*.ninja
