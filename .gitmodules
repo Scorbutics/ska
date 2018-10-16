@@ -1,0 +1,4 @@
+[submodule "ska_core/skalog"]
+	path = ska_core/skalog
+	url = https://github.com/Scorbutics/skalog.git
+	branch = master

@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "Observer.h"
-#include "../Logging/LoggerRTTI.h"
+#include "LoggerConfig.h"
 
 namespace ska {
 
@@ -18,14 +18,14 @@ namespace ska {
 		}
 
 		void removeObserver(ObserverType& obs) {
-			static Logger<Observable<T, Args...>> logger;
+			static Logger<> logger;
             auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
 				return &(*o) == &obs;
 			});
 			if (foundObs != std::end(m_head)) {
 				m_head.erase(foundObs);
 			} else {
-				logger.template log<LogLevel::Error>() << "Trying to delete an observer but not found !";
+				logger.log<LogLevel::Error, decltype(*this)>() << "Trying to delete an observer but not found !";
 			}
 		}
 
