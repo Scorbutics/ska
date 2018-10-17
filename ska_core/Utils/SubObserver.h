@@ -14,11 +14,7 @@ namespace ska {
 		}
 
 		virtual ~SubObserver() {
-#ifdef _MSC_VER
-			m_observable.ska::Observable<T, Args...>::removeObserver(static_cast<Observer<T, Args...>&>(*this));
-#else
-			m_observable.template ska::Observable<T, Args...>::removeObserver(static_cast<Observer<T, Args...>&>(*this));
-#endif
+			m_observable.Observable<T, Args...>::removeObserver(static_cast<Observer<T, Args...>&>(*this));
 		}
 
 	private:
