@@ -6,7 +6,7 @@
 #include "ECSDefines.h"
 #include "SerializeComponent.h"
 #include "ComponentPool.h"
-#include "../Logging/LoggerRTTI.h"
+#include "../LoggerConfig.h"
 
 namespace ska {
 	/**
@@ -20,7 +20,8 @@ namespace ska {
 	public:
 		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentPool*>& mapComponentNames):
 			m_mask(mask) {
-			logger.template log<LogLevel::Debug>() << "Initializing component with mask " <<  m_mask;
+			//TODO
+            //SLOG(LogLevel::Debug) << "Initializing component with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
 			
 			if constexpr(has_getClassName<T>::value) {
@@ -88,8 +89,6 @@ namespace ska {
 		std::vector<T> m_components;
 		std::vector<std::optional<ComponentId>> m_entitiesWithComponent;
 		const unsigned int m_mask;
-
-        Logger<ComponentHandler<T>> logger;
 	};
 
 

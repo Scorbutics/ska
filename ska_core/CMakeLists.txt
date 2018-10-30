@@ -2,28 +2,25 @@ cmake_minimum_required(VERSION 3.9)
 project(ska_core)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 add_subdirectory(skalog)
 
-set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2)
-set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/gsl)
+set(SDL2_INCLUDE_DIR ../external/SDL2)
+set(GSL_DIR ../external/gsl)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${GSL_DIR})
+include_directories(skalog/src/src)
 
 file(GLOB_RECURSE SOURCES
-	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    *.h
-    *.cpp
+    src/*.h
+    src/*.cpp
 )
 
-string(REGEX REPLACE "CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
-
-set(SKA_DEBUG_DIR "Debug")
-set(SKA_RELEASE_DIR "Release")
+string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(ska_core STATIC ${SOURCES})
-set_target_properties(ska_core PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
-	      	ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_DEBUG_DIR}
-        	ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/../${SKA_RELEASE_DIR})
+

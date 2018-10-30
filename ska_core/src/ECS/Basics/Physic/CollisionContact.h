@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../Utils/RectangleUtils.h"
-#include "../../../Logging/Logger.h"
+#include "../../../LoggerConfig.h"
 
 namespace ska {
 	class CollisionContact {
@@ -48,8 +48,6 @@ namespace ska {
 		Rectangle m_overlap;
 		float m_penetration;
 
-        static Logger<CollisionContact> logger;
-
 		static CollisionContact build(Rectangle overlap, Point<int> pcA, Point<int> pcB) {
 			auto penetration = 0.F;
 			Point<float> normal;
@@ -63,13 +61,13 @@ namespace ska {
 					normal.x = vectorAToBX < 0 ? -1.F : 1.F;
 					normal.y = 0;
 					penetration = static_cast<float>(overlap.w);
-					logger.log<LogLevel::Info>() << (vectorAToBX < 0 ? "<" : ">");
+					SLOG_STATIC(LogLevel::Info, CollisionContact) << (vectorAToBX < 0 ? "<" : ">");
 				} else if (overlap.w > overlap.h) {
 					const auto vectorAToBY = pcA.y - pcB.y;
 					normal.x = 0;
 					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 					penetration = static_cast<float>(overlap.h);
-					logger.log<LogLevel::Info>() << (vectorAToBY < 0 ? "^" : "v");
+					SLOG_STATIC(LogLevel::Info, CollisionContact)<< (vectorAToBY < 0 ? "^" : "v");
 				} else {
 					const auto vectorAToBX = pcA.x - pcB.x;
 					const auto vectorAToBY = pcA.y - pcB.y;
@@ -77,7 +75,7 @@ namespace ska {
 					normal.y = vectorAToBY < 0 ? -1.F : 1.F;
 					penetration = static_cast<float>(overlap.w);
 
-					logger.log<LogLevel::Info>() << (vectorAToBY < 0 ? "^" : "v", vectorAToBX < 0 ? "<" : ">");
+					SLOG_STATIC(LogLevel::Info, CollisionContact) << (vectorAToBY < 0 ? "^" : "v", vectorAToBX < 0 ? "<" : ">");
 				}
 			}
 			return CollisionContact(overlap, penetration, normal, collision);

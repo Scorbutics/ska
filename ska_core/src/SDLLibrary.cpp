@@ -1,5 +1,5 @@
 #include "SDLLibrary.h"
-#include "Logging/LoggerRTTI.h"
+#include "LoggerConfig.h"
 
 #define SKA_SDL_LIB_NAME_DEFINE(ENUM, NAME) \
 	SKA_LIB_NAME_DEFINE(ska::SDLIdNamedFunction, static_cast<int>(ska::SDLCalls::ENUM), NAME)

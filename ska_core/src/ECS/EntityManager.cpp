@@ -1,5 +1,5 @@
 #include "EntityManager.h"
-#include "../Logging/LoggerRTTI.h"
+#include "../LoggerConfig.h"
 #include "../Exceptions/IllegalStateException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "../Utils/StringUtils.h"
@@ -110,7 +110,7 @@ void ska::EntityManager::removeEntity(const EntityId& entity) {
 void ska::EntityManager::innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent) {
 	if (m_entities.find(entity) == m_entities.end()) {
 		const auto startMessage = ("Unable to delete entity #" + StringUtils::intToStr(static_cast<int>(entity)));
-		logger.log<LogLevel::Error>() << (startMessage + " : this entity doesn't exist or is already deleted");
+		SLOG(LogLevel::Error) << (startMessage + " : this entity doesn't exist or is already deleted");
 		return;
 	}
 

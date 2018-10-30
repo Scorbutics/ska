@@ -1,4 +1,4 @@
-#include "../Logging/LoggerRTTI.h"
+#include "../LoggerConfig.h"
 #include "EntityLocator.h"
 
 ska::EntityLocator::EntityLocator(GameEventDispatcher& ged) :
