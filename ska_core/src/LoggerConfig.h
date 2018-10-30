@@ -12,5 +12,7 @@ namespace ska {
 
 	extern SkaLogger GlobalLogger;
 }
+#ifndef SLOG_STATIC
 #define SLOG_STATIC(level, currentClass) SKA_LOGC_STATIC(ska::GlobalLogger, level, currentClass)
 #define SLOG(level) SKA_LOGC(ska::GlobalLogger, level)
+#endif
