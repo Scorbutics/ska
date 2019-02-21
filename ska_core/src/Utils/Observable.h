@@ -6,15 +6,35 @@
 #include "../LoggerConfig.h"
 
 namespace ska {
+	namespace detail::observable {
+		template<typename C, typename T>
+		inline auto insert_in_container(C& c, T&& t) ->
+			decltype(c.insert(std::forward<T>(t)), void()) {
+			c.insert(std::forward<T>(t));
+		}
 
-	template <class T, class ...Args>
+		template<typename C, typename T>
+		inline auto insert_in_container(C& c, T&& t) ->
+			decltype(c.push(std::forward<T>(t)), void()) {
+			c.push(std::forward<T>(t));
+		}
+
+		template<typename C, typename T>
+		inline auto insert_in_container(C& c, T&& t) ->
+			decltype(c.insert(std::forward<T>(t)), void()) {
+			c.insert(std::forward<T>(t));
+		}
+	}
+
+	template <class T, template<typename T, typename...> class Container = std::vector>
 	class Observable {
-		using ObserverType = Observer<T, Args...>;
+		using ObserverType = Observer<T>;
 	public:
 		Observable() = default;
+		virtual ~Observable() = default;
 
 		void addObserver(ObserverType& obs) {
-			m_head.push_back(&obs);
+			detail::observable::insert_in_container(m_head, obs);
 		}
 
 		void removeObserver(ObserverType& obs) {
@@ -29,19 +49,16 @@ namespace ska {
 			}
 		}
 
-		bool notifyObservers(T& t, Args... args) {
+		bool notifyObservers(T& t) {
 			auto hasBeenHandled = false;
 			for (auto& obs : m_head) {
-				hasBeenHandled |= obs->receive(t, std::forward<Args&>(args)...);
+				hasBeenHandled |= obs->receive(t);
 			}
 			return hasBeenHandled;
 		}
 
-
-		virtual ~Observable() = default;
-
 	private:
-		std::vector<ObserverType*> m_head;
+		Container<ObserverType*> m_head;
         
 	};
 }

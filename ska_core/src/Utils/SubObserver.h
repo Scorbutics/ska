@@ -3,22 +3,21 @@
 
 namespace ska {
 
-	template <class T, class ...Args>
+	template <class T, template<typename T1, typename...> class Container = std::vector>
 	class SubObserver :
-		public Observer<T, Args...> {
+		public Observer<T> {
 	public:
-		explicit SubObserver(std::function<bool(T&, Args...)> const& handler, Observable<T, Args...>& observable) :
-			Observer<T, Args...>(handler),
+		explicit SubObserver(std::function<bool(T&)> const& handler, Observable<T, Container>& observable) :
+			Observer<T>(handler),
 			m_observable(observable) {
 			m_observable.addObserver(*this);
 		}
 
 		virtual ~SubObserver() {
-			m_observable.Observable<T, Args...>::removeObserver(static_cast<Observer<T, Args...>&>(*this));
+			m_observable.Observable<T, Container>::removeObserver(static_cast<Observer<T>&>(*this));
 		}
 
 	private:
-		Observable<T, Args...>& m_observable;
-
+		Observable<T>& m_observable;
 	};
 }
