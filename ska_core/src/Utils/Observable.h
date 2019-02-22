@@ -9,8 +9,8 @@ namespace ska {
 	namespace detail::observable {
 		template<typename C, typename T>
 		inline auto insert_in_container(C& c, T&& t) ->
-			decltype(c.insert(std::forward<T>(t)), void()) {
-			c.insert(std::forward<T>(t));
+			decltype(c.push_back(std::forward<T>(t)), void()) {
+			c.push_back(std::forward<T>(t));
 		}
 
 		template<typename C, typename T>
@@ -26,20 +26,20 @@ namespace ska {
 		}
 	}
 
-	template <class T, template<typename T, typename...> class Container = std::vector>
+	template <class T, template<typename T1, typename...> class Container = std::vector, template <typename T1> class ObserverT = Observer>
 	class Observable {
-		using ObserverType = Observer<T>;
+		using ObserverType = ObserverT<T>;
 	public:
 		Observable() = default;
 		virtual ~Observable() = default;
 
 		void addObserver(ObserverType& obs) {
-			detail::observable::insert_in_container(m_head, obs);
+			detail::observable::insert_in_container(m_head, &obs);        
 		}
 
 		void removeObserver(ObserverType& obs) {
 			static Logger<> logger;
-            auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
+			auto foundObs = std::find_if(std::begin(m_head), std::end(m_head), [&obs](const auto& o) {
 				return &(*o) == &obs;
 			});
 			if (foundObs != std::end(m_head)) {
@@ -59,7 +59,7 @@ namespace ska {
 
 	private:
 		Container<ObserverType*> m_head;
-        
 	};
+
 }
 

@@ -4,13 +4,11 @@
 #include "../Exceptions/IllegalArgumentException.h"
 
 namespace ska {
-    template <typename T, template<typename T1, typename...> class Container = std::vector>
-	class Observable;
 
 	template <class T>
 	class Observer {
-    public:
-        template <typename T1, template<typename T2, typename...> class Container>
+	public:
+		template <typename T1, template<typename T2, typename...> class Container, template <typename T2> class ObserverT>
 		friend class Observable;
 
 		explicit Observer(std::function<bool(T&)> handler) : 
@@ -28,4 +26,5 @@ namespace ska {
 		}
 
 	};
+
 }

@@ -2,22 +2,26 @@
 #include "Observer.h"
 
 namespace ska {
+	template <class T, template<typename T1, typename...> class Container, template <typename T1> class ObserverT>
+	class Observable;
 
-	template <class T, template<typename T1, typename...> class Container = std::vector>
+	template <class T, template<typename T1, typename...> class Container = std::vector, template <typename T2> class ObserverT = Observer>
 	class SubObserver :
-		public Observer<T> {
+		public ObserverT<T> {
+			using ObservableType = Observable<T, Container, ObserverT>;
 	public:
-		explicit SubObserver(std::function<bool(T&)> const& handler, Observable<T, Container>& observable) :
-			Observer<T>(handler),
+		template <class ... Args>
+		explicit SubObserver(std::function<bool(T&)> const& handler, ObservableType& observable, Args&& ... args) :
+			ObserverT<T>(std::forward<Args>(args)..., handler),
 			m_observable(observable) {
-			m_observable.addObserver(*this);
+			m_observable.ObservableType::addObserver(static_cast<ObserverT<T>&>(*this));
 		}
 
 		virtual ~SubObserver() {
-			m_observable.Observable<T, Container>::removeObserver(static_cast<Observer<T>&>(*this));
+			m_observable.ObservableType::removeObserver(static_cast<ObserverT<T>&>(*this));
 		}
 
 	private:
-		Observable<T>& m_observable;
+		ObservableType& m_observable;
 	};
 }
