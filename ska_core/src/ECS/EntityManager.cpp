@@ -16,7 +16,8 @@ void ska::EntityManager::commonRemoveComponent(const EntityId& entity, Component
 
 void ska::EntityManager::refresh() {
     for(const auto& entity : m_alteredEntities) {
-		notifyObservers(EntityEventType::COMPONENT_ALTER, m_componentMask[entity], entity);
+		auto event = EntityEventType {EntityEventTypeEnum::COMPONENT_ALTER, m_componentMask[entity], entity};
+		notifyObservers(event);
     }
     m_alteredEntities.clear();
 }
@@ -142,11 +143,13 @@ void ska::EntityManager::removeEntities(const std::unordered_set<EntityId>& exce
 }
 
 void ska::EntityManager::refreshEntity(const EntityId& entity) {
-	notifyObservers(EntityEventType::COMPONENT_ALTER, m_componentMask[entity], entity);
+	auto event = EntityEventType {EntityEventTypeEnum::COMPONENT_ALTER, m_componentMask[entity], entity};
+	notifyObservers(event);
 }
 
 void ska::EntityManager::refreshEntities() {
     for (const auto& entity : m_entities) {
-		notifyObservers(EntityEventType::COMPONENT_ALTER, m_componentMask[entity], entity);
+		auto event = EntityEventType {EntityEventTypeEnum::COMPONENT_ALTER, m_componentMask[entity], entity};
+		notifyObservers(event);
     }
 }

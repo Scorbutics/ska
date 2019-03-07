@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-
+#include <cstdint>
 namespace ska {
 	class DrawableContainer;
 
@@ -52,7 +52,7 @@ namespace std {
 	template <>
 	struct hash<ska::State> {
 		size_t operator()(const ska::State& s) const {
-			return std::hash<unsigned long>()(reinterpret_cast<unsigned long>(&s));
+			return std::hash<std::uintptr_t>()(reinterpret_cast<std::uintptr_t>(&s));
 		}
 	};
 

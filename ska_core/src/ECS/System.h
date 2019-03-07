@@ -32,7 +32,7 @@ namespace ska {
      */
     template <class ... RComponentType, class ... PComponentType>
     class System <RequiredComponent<RComponentType...>, PossibleComponent<PComponentType...>> :
-        public SubObserver<const EntityEventType, const EntityComponentsMask&, EntityId>,
+        public SubObserver<const EntityEventType>,
         virtual public ISystem,
         virtual protected Refreshable {
 
@@ -42,7 +42,7 @@ namespace ska {
 
     public :
         explicit System(EntityManager& entityManager) :
-			SubObserver(std::bind(&System::onComponentModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), entityManager),
+			SubObserver(std::bind(&System::onComponentModified, this, std::placeholders::_1), entityManager),
             m_entityManager(entityManager),
             m_componentAccessor(entityManager),
     		m_componentPossibleAccessor(entityManager) {
@@ -75,17 +75,17 @@ namespace ska {
 		std::unordered_set<EntityId> m_processed;
 		EntityComponentsMask m_systemComponentMask;
 
-        bool onComponentModified(const EntityEventType& e, const EntityComponentsMask& mask, EntityId entityId) {
+        bool onComponentModified(const EntityEventType& event) {
 
             /* An entity belongs to the system ONLY IF it has ALL the requiered components of the system */
-	        const auto resultMask = mask & m_systemComponentMask;
+	        const auto resultMask = event.mask & m_systemComponentMask;
 
-            switch (e) {
-            case EntityEventType::COMPONENT_ALTER:
+            switch (event.value) {
+            case EntityEventTypeEnum::COMPONENT_ALTER:
                 if(resultMask == m_systemComponentMask) {
-                    m_processed.insert(entityId);
+                    m_processed.insert(event.id);
                 } else {
-                    m_processed.erase(entityId);
+                    m_processed.erase(event.id);
                 }
                 break;
 

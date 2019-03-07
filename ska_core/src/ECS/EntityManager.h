@@ -17,15 +17,21 @@ namespace ska {
 	using EntityComponentsMask = std::bitset<SKA_ECS_MAX_COMPONENTS>;
 	using EntityData = std::pair<EntityComponentsMask*, EntityId>;
 
-	enum class EntityEventType {
+	enum class EntityEventTypeEnum {
 		COMPONENT_ALTER
+	};
+
+	struct EntityEventType {
+		EntityEventTypeEnum value;
+		const EntityComponentsMask& mask;
+		EntityId id;
 	};
 
 	/**
 	 * \brief Manages all the component changes to an entity
 	 */
 	class EntityManager :
-	    public Observable<const EntityEventType, const EntityComponentsMask&, EntityId> {
+	    public Observable<const EntityEventType> {
 	public:
 		explicit EntityManager(GameEventDispatcher& ged) : 
 			m_ged(ged) { }

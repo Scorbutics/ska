@@ -43,10 +43,10 @@ TEST_CASE("[EntityManager]") {
 
 	};
 
-	using ComponentObserverParentTest = ska::Observer<const ska::EntityEventType, const ska::EntityComponentsMask&, ska::EntityId>;
+	using ComponentObserverParentTest = ska::Observer<const ska::EntityEventType>;
 
 	struct ComponentAlterDataEvent {
-		ska::EntityEventType event;
+		ska::EntityEventTypeEnum event;
 		ska::EntityComponentsMask mask;
 		ska::EntityId entityId;
 	};
@@ -55,11 +55,11 @@ TEST_CASE("[EntityManager]") {
 		public ComponentObserverParentTest {
 	public:
 		ComponentObserverTest() : 
-			ComponentObserverParentTest(std::bind(&ComponentObserverTest::onComponentModified, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)) {
+			ComponentObserverParentTest(std::bind(&ComponentObserverTest::onComponentModified, this, std::placeholders::_1)) {
 		}
 
-		bool onComponentModified(const ska::EntityEventType& event, const ska::EntityComponentsMask& mask, ska::EntityId entityId) {
-			eventType.push_back(ComponentAlterDataEvent { event, mask, entityId });
+		bool onComponentModified(const ska::EntityEventType& event) {
+			eventType.push_back(ComponentAlterDataEvent { event.value, event.mask, event.id });
 			return true;
 		}
 
@@ -81,7 +81,7 @@ TEST_CASE("[EntityManager]") {
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 1);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
 		CHECK(component == 14);
@@ -94,9 +94,9 @@ TEST_CASE("[EntityManager]") {
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 2);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity1);
-		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[1].entityId == entity2);
 		
 		CHECK(entity1 != entity2);
@@ -133,7 +133,7 @@ TEST_CASE("[EntityManager]") {
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 1);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
 		em.removeEntity(entity);
@@ -142,7 +142,7 @@ TEST_CASE("[EntityManager]") {
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 2);
-		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[1].entityId == entity);
 
 		CHECK(!entityObserver.events.empty());
@@ -174,9 +174,9 @@ TEST_CASE("[EntityManager]") {
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 2);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
-		CHECK(componentObserver.eventType[1].event == ska::EntityEventType::COMPONENT_ALTER);
+		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[1].entityId == entityX);
 
 		CHECK(!entityObserver.events.empty());
