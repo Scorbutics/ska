@@ -71,8 +71,6 @@
 **/*.vcxproj*
 .sln
 **/*.sln
-.bat
-**/*.bat
 lib/
 **/Log.txt
 **/LogError.txt
