@@ -19,4 +19,4 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_ai_test ${SOURCES})
-target_link_libraries(ska_ai_test ska_ai ska_core)
+target_link_libraries(ska_ai_test ska_ai ska_core skalog)

@@ -1,6 +1,6 @@
 #pragma once
 #include "Point.h"
-#include "Graphic/DebugEntityCollisionResponse.h"
+#include "ECS/ECSDefines.h"
 
 namespace ska {
 	namespace RandomMovementType {
