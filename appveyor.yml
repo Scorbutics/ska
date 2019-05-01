@@ -73,7 +73,7 @@ build_script:
 
   # Build
   - |-
-    call make_all.bat makefiles "-DCMAKE_PREFIX_PATH=%PREFIX%"
+    cmake --build .
 
   # Add needed libs
   - |-
