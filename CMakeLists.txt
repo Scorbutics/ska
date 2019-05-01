@@ -37,7 +37,7 @@ include_directories(${SKALOG_DIR})
 
 add_subdirectory(external/skalog/src)
 #add_subdirectory(external/SDL2_gif)
-set(BUILD_DEMOS OFF)
+set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
 add_subdirectory(external/chipmunk)
 
 add_subdirectory(ska_ai)
