@@ -65,13 +65,12 @@
 *.cmake
 *.bin
 **/CMakeFiles
-*.a
 *.cscope_file_list
 .vcxproj*
 **/*.vcxproj*
 .sln
 **/*.sln
-lib/
+/lib/
 **/Log.txt
 **/LogError.txt
 Log.txt

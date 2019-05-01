@@ -208,6 +208,12 @@ LIB_INSTALL_DIR:STRING=lib
 SDL2_INCLUDE_DIR:PATH=SDL2_INCLUDE_DIR-NOTFOUND
 
 //Value Computed by CMake
+SDL2_gif_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/external/SDL2_gif
+
+//Value Computed by CMake
+SDL2_gif_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/external/SDL2_gif
+
+//Value Computed by CMake
 chipmunk_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/external/chipmunk
 
 //Value Computed by CMake
@@ -328,10 +334,10 @@ ska_world_test_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_world/test
 ska_world_test_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/ska_world/test
 
 //Value Computed by CMake
-skalog_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_core/skalog/src
+skalog_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/external/skalog/src
 
 //Value Computed by CMake
-skalog_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/ska_core/skalog/src
+skalog_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/external/skalog/src
 
 //Value Computed by CMake
 skalog_test_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_core/skalog/test
@@ -424,7 +430,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=32
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=33
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER
