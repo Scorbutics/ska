@@ -1,3 +1,0 @@
-C:/Documents/Perso/ska/external/SDL2_gif/CMakeFiles/SDL2_gif.dir
-C:/Documents/Perso/ska/external/SDL2_gif/CMakeFiles/edit_cache.dir
-C:/Documents/Perso/ska/external/SDL2_gif/CMakeFiles/rebuild_cache.dir

@@ -2,3 +2,6 @@
 	path = ska_core/skalog
 	url = https://github.com/Scorbutics/skalog.git
 	branch = master
+[submodule "external/skalog"]
+	path = external/skalog
+	url = https://github.com/Scorbutics/skalog.git
