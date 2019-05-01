@@ -1,0 +1,17 @@
+project(ska_physic_chipmunk)
+
+include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_GIF_INCLUDE_DIR})
+include_directories(${SKA_CORE_DIR})
+include_directories(${CHIPMUNK_DIR})
+include_directories(${GSL_DIR})
+
+file(GLOB_RECURSE SOURCES
+	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    src/*.h
+    src/*.cpp
+)
+
+string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
+
+add_library(ska_physic_chipmunk ${SOURCES})

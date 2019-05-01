@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 3.9)
+project(ska)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+set(SKA_CORE_DIR ska_core)
+set(SKA_DRAW_DIR ska_draw)
+set(SKA_GUI_DIR ska_gui)
+set(SKA_PHYSIC_CHIPMUNK_DIR ska_physic_chipmunk)
+set(SKA_WORLD_DIR ska_world)
+set(SKA_PARTICLE_DIR ska_particle)
+set(SKA_SCRIPT_DIR ska_script)
+
+set(LIB_DIR lib)
+set(GSL_DIR external/gsl)
+set(SDL2_INCLUDE_DIR external/SDL2)
+set(DOCTEST_DIR external/doctest)
+set(CHIPMUNK_DIR external/chipmunk/include/chipmunk)
+set(FAKEIT_DIR external/fakeit)
+set(EXTERNAL_LIB_DIR external/lib/${CMAKE_CXX_COMPILER_ID}/Debug)
+set(SDL2_GIF_INCLUDE_DIR external/SDL2_gif/src)
+
+add_subdirectory(ska_ai)
+add_subdirectory(ska_audio)
+add_subdirectory(ska_core)
+add_subdirectory(ska_draw)
+add_subdirectory(ska_particle)
+add_subdirectory(ska_physic_chipmunk)
+add_subdirectory(ska_physic_homemade)
+add_subdirectory(ska_script)
+add_subdirectory(ska_world)
+
+

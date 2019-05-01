@@ -67,3 +67,9 @@
 **/CMakeFiles
 *.a
 *.cscope_file_list
+.vcxproj*
+**/*.vcxproj*
+.sln
+**/*.sln
+.bat
+**/*.bat
