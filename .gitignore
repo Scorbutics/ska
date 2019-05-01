@@ -75,3 +75,5 @@
 **/LogError.txt
 Log.txt
 LogError.txt
+CMakeCache.txt
+**/CMakeCache.txt

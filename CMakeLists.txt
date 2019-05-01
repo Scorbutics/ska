@@ -36,7 +36,7 @@ set(EXTERNAL_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/${CMAKE_CXX_COMPIL
 include_directories(${SKALOG_DIR})
 
 add_subdirectory(external/skalog/src)
-add_subdirectory(external/SDL2_gif)
+#add_subdirectory(external/SDL2_gif)
 set(BUILD_DEMOS OFF)
 add_subdirectory(external/chipmunk)
 
