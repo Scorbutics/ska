@@ -14,6 +14,22 @@
 # EXTERNAL cache entries
 ########################
 
+//Install location of executables
+BIN_INSTALL_DIR:STRING=bin
+
+//Build the demo applications
+BUILD_DEMOS:BOOL=ON
+
+//Build and install the shared library
+BUILD_SHARED:BOOL=ON
+
+//Build as static library
+BUILD_STATIC:BOOL=ON
+
+//Choose the type of build, options are: None Debug Release RelWithDebInfo
+// MinSizeRel.
+CMAKE_BUILD_TYPE:STRING=Release
+
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
 // else will be ignored.
@@ -179,8 +195,23 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Install the demo applications
+INSTALL_DEMOS:BOOL=OFF
+
+//Install the static library
+INSTALL_STATIC:BOOL=ON
+
+//Install location of libraries
+LIB_INSTALL_DIR:STRING=lib
+
 //Path to a file.
 SDL2_INCLUDE_DIR:PATH=SDL2_INCLUDE_DIR-NOTFOUND
+
+//Value Computed by CMake
+chipmunk_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/external/chipmunk
+
+//Value Computed by CMake
+chipmunk_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/external/chipmunk
 
 //Value Computed by CMake
 ska_BINARY_DIR:STATIC=C:/DevFast/skalang/ska
@@ -223,6 +254,18 @@ ska_draw_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_draw/src
 
 //Value Computed by CMake
 ska_draw_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/ska_draw/src
+
+//Value Computed by CMake
+ska_gui_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_gui/src
+
+//Value Computed by CMake
+ska_gui_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/ska_gui/src
+
+//Value Computed by CMake
+ska_gui_test_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_gui/test
+
+//Value Computed by CMake
+ska_gui_test_SOURCE_DIR:STATIC=C:/DevFast/skalang/ska/ska_gui/test
 
 //Value Computed by CMake
 ska_particle_BINARY_DIR:STATIC=C:/DevFast/skalang/ska/ska_particle/src
@@ -381,7 +424,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=26
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=32
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER

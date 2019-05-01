@@ -35,7 +35,7 @@ namespace ska {
 		void graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables);
 		bool isBlockAuthorizedAtPos(const Point<int>& pos, const std::unordered_set<int>& authorizedBlocks) const;
 
-		unsigned int getBlockSize() const;
+		std::size_t getBlockSize() const;
 
 		ScriptPack getScripts(const Point<int>& oldCenterPos, const Point<int>& frontPos, ScriptTriggerType type, const Point<int>* lastBlockDirection) override;
 		ScriptGlobalPtrPack getScriptsAuto() override;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderable.h"
+#include "../Core/Priorized.h"
 
 namespace ska {
 	class Renderer;
@@ -7,7 +8,8 @@ namespace ska {
 	/**
 	 * \brief Forces classes to implement a way to be rendered in a certain order (by priority)
 	 */
-	class Drawable {
+	class Drawable : 
+		public Priorized {
 	public:
 		Drawable() = default;
 		virtual ~Drawable() = default;
@@ -20,31 +22,10 @@ namespace ska {
 			return p1 < p2;
 		}
 
-		/**
-		 * \brief Defines an inferior operator comparison
-		 * \param id The other Drawable to compare with
-		 * \return true if the current Drawable has less priority than the parameter, false otherwise
-		 */
-		bool operator< (const Drawable &id) const {
-			const auto p1 = getPriority();
-			const auto p2 = id.getPriority();
-			return p1 < p2;
-		}
 		
 		static bool staticOperatorSup(const Drawable* a, const Drawable* b) {
 			const auto p1 = a->getPriority();
 			const auto p2 = b->getPriority();
-			return p1 > p2;
-		}
-
-		/**
-		* \brief Defines an superior operator comparison
-		* \param id The other Drawable to compare with
-		* \return true if the current Drawable has more priority than the parameter, false otherwise
-		*/
-		bool operator> (const Drawable &id) const {
-			const auto p1 = getPriority();
-			const auto p2 = id.getPriority();
 			return p1 > p2;
 		}
 

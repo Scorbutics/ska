@@ -136,17 +136,17 @@ void ska::ScriptAutoSystem::refresh(unsigned int) {
 				EntityId scriptEntity = StringUtils::strToInt(entityScriptId);
 				const auto& scriptCPtr = m_componentPossibleAccessor.get<ScriptComponent>(scriptEntity);
 				if (scriptCPtr == nullptr) {
-					SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", sde.what(), " Script not found with id : ", entityScriptId);
+					SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->extendedName << "] (l." << nextScript->controller->getCurrentLine() << ") " << sde.what() << " Script not found with id : " << entityScriptId;
 				} else {
 					killAndSave(*scriptCPtr, m_saveGame);
 				}
 			} else {
-				SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", sde.what(), " This is not an integer id : ", entityScriptId);
+				SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->extendedName << "] (l." << nextScript->controller->getCurrentLine() << ") " << sde.what() << " This is not an integer id : " << entityScriptId;
 			}
 		}
 
 	} catch (ScriptException e) {
-		SKA_LOG_ERROR("ERREUR SCRIPT [", nextScript->extendedName, "] (l.", nextScript->controller->getCurrentLine(), ") ", e.what());
+		SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->extendedName << "] (l." << nextScript->controller->getCurrentLine() << ") " << e.what();
 	}
 
 }

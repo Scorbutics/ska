@@ -4,7 +4,7 @@
 #include "World/Layer.h"
 #include "World/CollisionProfile.h"
 #include "World/TileWorldPhysics.h"
-#include "Logging/Logger.h"
+#include "LoggerConfig.h"
 #include "TileUtils.h"
 
 TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
@@ -327,7 +327,7 @@ TEST_CASE("[TileWorldPhysics] GenerateContourTileMap") {
 
 		auto index = 0u;
 		for(const auto& p : contourMap) {
-            SKA_STATIC_LOG_DEBUG(ska::PointArea)("Rectangle {", p.x, "; ", p.y, "; ", p.w, "; ", p.h, "}");
+            SLOG_STATIC(ska::LogLevel::Debug, ska::PointArea) << "Rectangle {" << p.x << "; " << p.y << "; " << p.w << "; " << p.h << "}";
             CHECK(ska::Point<int>{p.x, p.y} == pointsExpected[index++]);
 		}
 	}

@@ -30,7 +30,7 @@ void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
 	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
     if(m_renderer == nullptr) {
-		SKA_LOG_ERROR("Erreur lors de la creation de la fenetre SDL (renderer) : ", SDLLibrary::get().getError());
+		SLOG(LogLevel::Error) << "Erreur lors de la creation de la fenetre SDL (renderer) : " << SDLLibrary::get().getError();
         ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
 }

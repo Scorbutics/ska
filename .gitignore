@@ -73,3 +73,8 @@
 **/*.sln
 .bat
 **/*.bat
+lib/
+**/Log.txt
+**/LogError.txt
+Log.txt
+LogError.txt

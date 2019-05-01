@@ -30,11 +30,11 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 
 	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
 	if (!SDLLibrary::get().setHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
-		SKA_LOG_MESSAGE("Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.");
+		SLOG(LogLevel::Warn) << "Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.";
 	}
 
 	if (!SDLLibrary::get().setHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
-		SKA_LOG_MESSAGE("Attention : Linear texture filtering impossible à activer.");
+		SLOG(LogLevel::Warn) << "Attention : Linear texture filtering impossible à activer.";
 	}
 
 	if (!(SDLImageLibrary::get().init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
@@ -42,7 +42,7 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 	}
 
 	if (SDLTTFLibrary::get().init() == -1) {
-		SKA_LOG_ERROR("Erreur d'initialisation de TTF_Init : ", SDLLibrary::get().getError());
+		SLOG(LogLevel::Error) << "Erreur d'initialisation de TTF_Init : " << SDLLibrary::get().getError();
 	}
 
 	m_mainWindow->load();

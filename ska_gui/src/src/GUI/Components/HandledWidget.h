@@ -147,7 +147,6 @@ namespace ska {
 		void buildMask() {
 			const unsigned int mask = WidgetMaskHelper::getMask<T>();
 			if (mask >= m_mask.size()) {
-				SKA_LOG_ERROR("Error");
 				throw std::runtime_error("Too many listeners are used. Unable to continue.");
 			}
 			m_mask[mask] = true;

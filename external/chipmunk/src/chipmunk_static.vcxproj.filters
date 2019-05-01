@@ -1,109 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\chipmunk.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\chipmunk.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpArbiter.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpArbiter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpArray.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpArray.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpBBTree.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpBBTree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpBody.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpBody.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpCollision.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpCollision.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpConstraint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpConstraint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpDampedRotarySpring.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpDampedRotarySpring.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpDampedSpring.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpDampedSpring.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpGearJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpGearJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpGrooveJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpGrooveJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpHashSet.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpHashSet.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpHastySpace.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpHastySpace.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpMarch.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpMarch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpPinJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpPinJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpPivotJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpPivotJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpPolyShape.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpPolyShape.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpPolyline.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpPolyline.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpRatchetJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpRatchetJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpRobust.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpRobust.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpRotaryLimitJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpRotaryLimitJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpShape.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpShape.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSimpleMotor.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSimpleMotor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSlideJoint.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSlideJoint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpace.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpace.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpaceComponent.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpaceComponent.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpaceDebug.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpaceDebug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpaceHash.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpaceHash.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpaceQuery.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpaceQuery.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpaceStep.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpaceStep.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSpatialIndex.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSpatialIndex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\cpSweep1D.c">
+    <ClCompile Include="C:\DevFast\skalang\ska\external\chipmunk\src\cpSweep1D.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="E:\Users\Brice\Source\Repos\ska\external\chipmunk\src\CMakeLists.txt" />
+    <CustomBuild Include="C:\DevFast\skalang\ska\external\chipmunk\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{AE250656-74DD-361A-AC14-6FE8F644A9CB}</UniqueIdentifier>
+      <UniqueIdentifier>{BBB9BB14-7454-3E6E-B6EF-87911363C51B}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

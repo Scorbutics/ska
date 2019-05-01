@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "LoggerConfig.h"
 #include "World/Inputs/KeyboardInputMapContext.h"
 #include "World/Inputs/KeyboardInputGUIContext.h"
 #include "Draw/VectorDrawableContainer.h"
@@ -49,7 +50,7 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 }
 
 void LogsConfiguration() {
-	ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
+	//ska::LoggerFactory::staticAccess<ska::WorldCollisionResponse>().configureLogLevel(ska::EnumLogLevel::SKA_DISABLED);
 }
 
 Game::Game(ska::EntityManager& em, GameConfPtr&& gc) :
@@ -63,7 +64,7 @@ Game::Game(ska::EntityManager& em, GameConfPtr&& gc) :
 }
 
 int Game::onTerminate(ska::TerminateProcessException& tpe) {
-	SKA_LOG_MESSAGE(tpe.what());
+	SLOG(ska::LogLevel::Info, tpe.what());
 	return 0;
 }
 

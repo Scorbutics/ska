@@ -38,7 +38,7 @@ void ska::cp::SpaceSystem::refresh(unsigned int ellapsedTime) {
 		//Handles "teleportation"
 		if (pc.x != static_cast<long>(position.x)
 			|| pc.y != static_cast<long>(position.y)) {
-			SKA_LOG_INFO("Teleporting entity ", entity, " to location ", pc.x, "; ", pc.y);
+			SLOG(ska::LogLevel::Info) << "Teleporting entity " << entity << " to location " << pc.x << "; " << pc.y;
 			body.setPosition({ pc.x, pc.y });
 		}
 	}

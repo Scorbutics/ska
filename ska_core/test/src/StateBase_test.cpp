@@ -5,7 +5,7 @@
 #include "MockState.h"
 #include "Task/Task.h"
 #include "Draw/VectorDrawableContainer.h"
-#include "../ska_gui_test/WindowsUtil.h"
+#include "WindowsUtil.h"
 
 
 TEST_CASE("[StateBase]") {

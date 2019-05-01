@@ -11,14 +11,14 @@ ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
 	m_currentPlayed(nullptr) {
 
 	if(SDLMixerLibrary::get().allocateChannels(10) != static_cast<int>(10)) {
-		SKA_LOG_ERROR("SoundManager error : ", ska::SDLLibrary::get().getError());
+		SLOG(LogLevel::Error) << "SoundManager error : " << ska::SDLLibrary::get().getError();
 	}
 }
 
 void ska::SoundRenderer::play(Mix_Music* m_instance) {
 	SDLMixerLibrary::get().pauseMusic();
 	if(SDLMixerLibrary::get().playMusic(m_instance, -1) == -1) {
-		SKA_LOG_ERROR("SoundManager error : ", ska::SDLLibrary::get().getError());
+		SLOG(LogLevel::Error) << "SoundManager error : " << ska::SDLLibrary::get().getError();
 		m_currentPlayed = nullptr;
 	} else {
 		m_currentPlayed = m_instance;

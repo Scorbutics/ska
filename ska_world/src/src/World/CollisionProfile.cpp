@@ -225,7 +225,7 @@ const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::s
 	return nullptr;
 }
 
-std::pair<unsigned, unsigned> ska::CollisionProfile::safeGetSizes() const {
+std::pair<std::size_t, std::size_t> ska::CollisionProfile::safeGetSizes() const {
 	std::optional<unsigned int> width;
 	std::optional<unsigned int> height;
 

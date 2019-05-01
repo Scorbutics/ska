@@ -77,14 +77,14 @@ namespace ska {
 					//Vertical
 					const auto collisionContact = ska::CollisionContact{ hitbox, hitboxBlock };
 					if (collisionContact.normal().y != 0) {
-						SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Normal Y, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
+						SLOG_STATIC(ska::LogLevel::Info, ska::WorldCollisionSystem) << "Normal Y, overlap " << collisionContact.overlap().x << " ; " << collisionContact.overlap().y << " ; " << collisionContact.overlap().w << " ; " << collisionContact.overlap().h;
 						outputY.push_back(hitboxBlock);
 						col = true;
 					}
 
 					//Horizontal
 					if (collisionContact.normal().x != 0) {
-						SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Normal X, overlap ", collisionContact.overlap().x, " ; ", collisionContact.overlap().y, " ; ", collisionContact.overlap().w, " ; ", collisionContact.overlap().h);
+						SLOG_STATIC(ska::LogLevel::Info, ska::WorldCollisionSystem) << "Normal X, overlap " << collisionContact.overlap().x << " ; " << collisionContact.overlap().y << " ; " << collisionContact.overlap().w, " ; ", collisionContact.overlap().h;
 						outputX.push_back(hitboxBlock);
 						col = true;
 					}
@@ -94,19 +94,19 @@ namespace ska {
 
 		FindAndEraseDoublons(outputX, outputY);
 
-		SKA_DEBUG_ONLY(
-			if (!outputX.empty()) {
-				SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("X blocks : ", outputX.size());
-			}
+		
+		if (!outputX.empty()) {
+			SLOG_STATIC(ska::LogLevel::Info, ska::WorldCollisionSystem) << "X blocks : " << outputX.size();
+		}
 
 		if (!outputY.empty()) {
-			SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Y blocks : ", outputY.size());
+			SLOG_STATIC(ska::LogLevel::Info, ska::WorldCollisionSystem) << "Y blocks : ", outputY.size();
 		}
 
 		if (col) {
-			SKA_STATIC_LOG_INFO(ska::WorldCollisionSystem)("Hitbox : (", hitbox.x, " ; ", hitbox.y, " ; ", hitbox.w, " ; ", hitbox.h, ")");
+			SLOG_STATIC(ska::LogLevel::Info, ska::WorldCollisionSystem) << "Hitbox : (" << hitbox.x << " ; " << hitbox.y << " ; " << hitbox.w << " ; " << hitbox.h << ")";
 		}
-		);
+		
 
 		return col;
 	}

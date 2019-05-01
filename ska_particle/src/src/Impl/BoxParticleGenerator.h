@@ -1,6 +1,6 @@
 #pragma once
 #include "../ParticleGenerator.h"
-#include "../../ska_core/Point.h"
+#include "Point.h"
 
 namespace ska {
 	class ParticleFactory;

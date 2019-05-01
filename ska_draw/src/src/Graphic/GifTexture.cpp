@@ -62,7 +62,7 @@ void ska::GifTexture::load(const std::string& spriteName) {
 	if(m_animation == NULL) {
 		ExceptionTrigger<ska::FileException>("unable to load gif file : " + spriteName);
 	}
-	SKA_LOG_INFO("Loaded GIF file ", spriteName, " (0x", m_animation, ")");
+	SLOG(LogLevel::Debug) << "Loaded GIF file " << spriteName << " (0x" << m_animation << ")";
 
 	m_actTexture = &SDLGifLibrary::get().getTexture(*m_animation);
 	if(m_actTexture == NULL) {
@@ -70,7 +70,7 @@ void ska::GifTexture::load(const std::string& spriteName) {
 		m_animation = NULL;
 		ExceptionTrigger<ska::FileException>("unable to create texture from gif file : " + spriteName);
 	}
-	SKA_LOG_INFO("Loaded Texture GIF file ", spriteName, " (0x", m_actTexture, ")");
+	SLOG(LogLevel::Debug) << "Loaded Texture GIF file " << spriteName << " (0x" << m_actTexture << ")";
 
 	int w, h;
 	if (!SDLLibrary::get().queryTexture(*m_actTexture, NULL, NULL, &w, &h)) {
@@ -103,11 +103,10 @@ void ska::GifTexture::nextFrame() const{
 }
 
 void ska::GifTexture::free() {
-	SKA_DEBUG_ONLY(
 	if (m_animation != nullptr) {
-		SKA_LOG_INFO("Freeing GIF file ", m_spriteName, " (0x", m_animation, ")");
+		SLOG(LogLevel::Debug) << "Freeing GIF file " << m_spriteName << " (0x" << m_animation << ")";
 		SDLGifLibrary::get().animFree(m_animation);
-	});
+	}
 	m_animation = NULL;
 }
 

@@ -23,5 +23,5 @@ string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_physic_simulation_chipmunk ${SOURCES})
 
-set(ALL_DEPS ska_world ska_physic_chipmunk ska_physic_homemade ska_gui ska_draw ska_core chipmunk)
+set(ALL_DEPS ska_world ska_physic_chipmunk ska_physic_homemade ska_gui ska_draw ska_core skalog chipmunk)
 target_link_libraries(ska_physic_simulation_chipmunk ${ALL_DEPS})

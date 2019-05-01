@@ -165,7 +165,7 @@ namespace ska {
 
 	template<>
     inline bool Point<float>::operator==(const Point<float>& p) const {
-        return NumberUtils::isLowValue(x - p.x, 0.01) && NumberUtils::isLowValue(y - p.y, 0.01);
+        return NumberUtils::isLowValue(x - static_cast<double>(p.x), 0.01) && NumberUtils::isLowValue(y - p.y, 0.01);
     }
 
 	template<>

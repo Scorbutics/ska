@@ -9,7 +9,7 @@ ska::CommandLog::CommandLog(EntityManager& entityManager) :
 }
 
 std::string ska::CommandLog::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
-	SKA_LOG_MESSAGE(ScriptUtils::replaceVariablesByNumerics(memory, script, args[0]));
+	//SKA_LOG_MESSAGE(ScriptUtils::replaceVariablesByNumerics(memory, script, args[0]));
 	return "";
 }
 

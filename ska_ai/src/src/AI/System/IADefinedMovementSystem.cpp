@@ -52,9 +52,9 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		} else {
 			collisioned = m_componentPossibleAccessor.get<WorldCollisionComponent>(entityId) != nullptr;
 			
-			SKA_DEBUG_ONLY(if (collisioned) {
-				SKA_LOG_DEBUG("World collision ", collisioned);
-			});
+			if (collisioned) {
+				SLOG(LogLevel::Debug) << "World collision " << collisioned;
+			};
 		}
 		auto finished = false;
 		if (TimeUtils::getTicks() - iamc.lastTimeStarted >= iamc.delay || directionChanged || collisioned) {
@@ -82,7 +82,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		}
 
 		if (!finished) {
-			SKA_LOG_DEBUG("IA Movement (", finalMovement.x, " : ", finalMovement.y, ")");
+			SLOG(LogLevel::Debug) << "IA Movement (" << finalMovement.x << " : " << finalMovement.y << ")";
 			fc.x = finalMovement.x;
 			fc.y = finalMovement.y;
 			//TODO dans un autre système ?

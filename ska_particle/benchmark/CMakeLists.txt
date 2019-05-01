@@ -20,5 +20,5 @@ string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_particle_benchmarker ${SOURCES})
 
-set(ALL_DEPS ska_particle ska_draw ska_core)
+set(ALL_DEPS ska_particle ska_draw ska_core skalog)
 target_link_libraries(ska_particle_benchmarker ${ALL_DEPS})

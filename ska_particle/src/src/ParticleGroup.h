@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "LoggerConfig.h"
 #include "Point.h"
 #include "Draw/Color.h"
 #include "Graphic/Texture.h"
@@ -62,7 +63,7 @@ namespace ska {
 			activeIndex += density;
 			if (activeIndex >= groupSize) {
 				activeIndex = groupSize;
-				SKA_LOG_INFO("Particle group full. Cannot add another particle");
+				SLOG(LogLevel::Error) << "Particle group full. Cannot add another particle";
 			}
 		}
 

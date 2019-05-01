@@ -53,7 +53,7 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 	amask = 0xff000000;
 #endif
 	if (rect.w == 0 || rect.h == 0) {
-		SKA_LOG_ERROR("Unable to load a texture from an empty rectangle");
+		SLOG(LogLevel::Error) << "Unable to load a texture from an empty rectangle";
 		assert(false);
 		return;
 	}
@@ -99,9 +99,9 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
 		return true;
 	}
 
-	SKA_DEBUG_ONLY(if (m_surface == nullptr) {
-		SKA_LOG_ERROR("Erreur lors du chargement de l'image \"", fileName, "\" : ", SDLLibrary::get().getError());
-	});
+	if (m_surface == nullptr) {
+		SLOG(LogLevel::Error) << "Erreur lors du chargement de l'image \"" << fileName << "\" : " << SDLLibrary::get().getError();
+	}
 
 	if (m_surface == nullptr) {
         if(!is32) {
@@ -111,9 +111,9 @@ bool ska::SDLSurface::checkSurfaceValidity(const std::string& fileName, const bo
         }
 	}
 
-	SKA_DEBUG_ONLY(if (m_surface == nullptr) {
-		SKA_LOG_ERROR("Erreur du chargement de l'image " + fileName + ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " + std::string(SDLLibrary::get().getError()));
-	});
+	if (m_surface == nullptr) {
+		SLOG(LogLevel::Error) << "Erreur du chargement de l'image " << fileName << ". Apres tentative de recuperation, impossible de charger l'image \"" NOSUCHFILE "\" : " << std::string(SDLLibrary::get().getError());
+	}
 
 	return m_surface != nullptr;
 }
@@ -153,7 +153,7 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 
 uint32_t ska::SDLSurface::getPixel32(int x, int y) const {
 	if (m_surface == nullptr || x < 0 || x > m_surface->w - 1 || y < 0 || y > m_surface->h - 1) {
-        SKA_LOG_ERROR("Tentative d'acces a une zone hors limites sur l'image de dimensions ", m_surface->w, " par ", m_surface->h, " au coordonnees : (", x, "; ", y, ")");
+		SLOG(LogLevel::Error) << "Tentative d'acces a une zone hors limites sur l'image de dimensions " << m_surface->w << " par " << m_surface->h << " au coordonnees : (" << x << "; " << y, ")";
 		return 0;
 	}
 	return static_cast<uint32_t*>(m_surface->pixels)[y * (m_surface->pitch / 4) + x];

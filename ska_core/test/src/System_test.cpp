@@ -26,7 +26,8 @@ TEST_CASE("[System]") {
 		mask[em.getMask<std::string>()] = true;
 		
 		//As the system masks requirements are matching (the one provided in parameter and the system internal one), the system will now register the entity with id "0"
-		componentAltererObservable.notifyObservers(ska::EntityEventTypeEnum::COMPONENT_ALTER, mask, 0);
+		auto event = ska::EntityEventType{ ska::EntityEventTypeEnum::COMPONENT_ALTER, mask, 0 };
+		componentAltererObservable.notifyObservers(event);
 		
 		system.update(0);
 		CHECK(system.read.entitiesRefreshed_.size() == 1);
@@ -35,7 +36,7 @@ TEST_CASE("[System]") {
 		mask[em.getMask<int>()] = false;
 
 		//As the system masks requirements are no longer matching (the one provided in parameter and the system internal one), the system will now unregister the entity with id "0"
-		componentAltererObservable.notifyObservers(ska::EntityEventTypeEnum::COMPONENT_ALTER, mask, 0);
+		componentAltererObservable.notifyObservers(event);
 		
 		system.update(0);
 		CHECK(system.read.entitiesRefreshed_.empty());
