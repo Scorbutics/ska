@@ -64,7 +64,7 @@ Game::Game(ska::EntityManager& em, GameConfPtr&& gc) :
 }
 
 int Game::onTerminate(ska::TerminateProcessException& tpe) {
-	SLOG(ska::LogLevel::Info, tpe.what());
+	SLOG(ska::LogLevel::Info) << tpe.what();
 	return 0;
 }
 
