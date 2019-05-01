@@ -73,7 +73,7 @@ build_script:
 
   # Build
   - |-
-    cmake -G"MinGW Makefiles" && cmake --build .
+    cmake -G"MinGW Makefiles" . && cmake --build .
 
   # Add needed libs
   - |-
