@@ -67,7 +67,7 @@ void ska::cp::Shape::loadFromSegment(cpBody& body, const Vect& a, const Vect& b,
 
 void ska::cp::Shape::loadFromBox(cpBody& body, const ska::Rectangle& relative, double radius) {
 	free();
-	const cpBB dBox{ relative.x, relative.y, relative.x + relative.w, relative.y + relative.h };
+	const cpBB dBox{ relative.x, relative.y, relative.x + static_cast<double>(relative.w), relative.y + static_cast<double>(relative.h) };
 	m_shape = cpBoxShapeNew2(&body, dBox, radius);
 }
 

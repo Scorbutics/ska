@@ -28,7 +28,7 @@ std::unique_ptr<ska::GameApp> ska::GameApp::get() {
 		heightBlocks = reader.get<int>("Window height_blocks");
 		title = reader.get<std::string>("Window title");
 	} catch (FileException& fe) {
-		std::cerr << "Error while loading game settings : " << fe.what() << std::endl;
+		SLOG_STATIC(ska::LogLevel::Error, ska::GameApp) << "Error while loading game settings : " << fe.what();
 	}
 
 	static constexpr auto tailleblocFenetre = 32;

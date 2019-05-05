@@ -155,7 +155,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	m_entityManager.addComponent(ballEntity, std::move(ic));
 
 	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, point, { static_cast<int>(point.x), static_cast<int>(point.y), 16, 16 }, 65.F, ballEntity);
-	ska::cp::AddTopDownConstraints(m_space, nullptr, m_space.getBody(bc.controlBodyIndex), 200.f, 500.f);
+	ska::cp::AddTopDownConstraints(m_space, &m_space.getBody(bc.controlBodyIndex), m_space.getBody(bc.bodyIndex), 200.f, 500.f);
 	m_entityManager.addComponent(ballEntity, std::move(bc));
 
 	m_balls.emplace_back(ballEntity);
