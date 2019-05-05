@@ -7,7 +7,22 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
+if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+  MESSAGE("++ 64 bit architecture") 
+  set(SKA_ARCHITECTURE "x64") 
+ else() 
+  MESSAGE("++ 32 bit architecture") 
+  set(SKA_ARCHITECTURE "x86") 
+endif()
+
+if("${CMAKE_BUILD_TYPE}" EQUAL "")
+  set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+MESSAGE("++ " ${CMAKE_BUILD_TYPE} " build type")
+
 #Internal
+set(SKA_DIR ${CMAKE_BINARY_DIR})
 set(SKA_AI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_ai/src/src)
 set(SKA_CORE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_core/src/src)
 set(SKA_DRAW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_draw/src/src)
@@ -30,8 +45,7 @@ set(SDL2_GIF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2_gif/src)
 
 #Linking
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-#TODO : replace Debug & x64 by real CMake variables
-set(EXTERNAL_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/${CMAKE_CXX_COMPILER_ID}/Debug/x64)
+set(EXTERNAL_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/${CMAKE_CXX_COMPILER_ID}/${CMAKE_BUILD_TYPE}/${SKA_ARCHITECTURE})
 
 include_directories(${SKALOG_DIR})
 
