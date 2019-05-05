@@ -3,6 +3,7 @@
 #include "SkaConstants.h"
 #include "CharCache.h"
 #include "FunctionUtils.h"
+#include "FileUtils.h"
 #include "ContainsTypeTuple.h"
 #include "../LoggerConfig.h"
 
@@ -54,7 +55,7 @@ namespace ska {
 			if(this->template hasLoaded<Name>()) {
 				return true;
 			}
-			this->template buildCache<Name>(m_instance);
+			this->template buildCache<Name>();
 			return this->template hasLoaded<Name>();
 		}
 
@@ -63,11 +64,10 @@ namespace ska {
 			m_libraryPath(std::move(libraryPath)),
 			m_instance(m_libraryPath) {
 			if(isLoaded()) {
-				int _[] = { 0, (buildCache<FunctionName>(m_instance) , 0)... };
+				int _[] = { 0, (buildCache<FunctionName>() , 0)... };
 				(void)_;
 			} else {
-				//TODO
-                //SLOG(LogLevel::Warn) << "Library " <<  m_libraryPath << " cannot be loaded.";
+                SLOG(LogLevel::Warn) << "Library " <<  m_libraryPath << " cannot be loaded : " << m_instance.errorMessage() << " (current directory is \"" << FileUtils::getCurrentDirectory() << "\")";
 			}
 		}
 
@@ -99,12 +99,11 @@ namespace ska {
 		}
 
 		template<class Func>
-		void buildCache(const DynamicLibraryInstance& impl) {
+		void buildCache() {
 			const auto& funcName = Func::name;
-			auto [function, error] = impl.getFunction(funcName.c_str());
+			auto [function, error] = m_instance.getFunction(funcName.c_str());
 			if (function == nullptr) {
-				//TODO
-                //SLOG(LogLevel::Warn) << "Unable to find the function " << funcName << " in the module " << m_libraryPath << ". Error logged : " << error;
+                SLOG(LogLevel::Warn) << "Unable to find the function " << funcName << " in the module " << m_libraryPath << " : " << error;
 			}
 			assert(function != nullptr);
 			m_cache.set(Func::id, std::move(function));
