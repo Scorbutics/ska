@@ -1,8 +1,8 @@
 #pragma once
 #include "CameraStrategy.h"
-#include "ECS/EntityManager.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Graphic/CameraFocusedComponent.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Graphic/CameraFocusedComponent.h"
 
 namespace ska {
 	class CameraFollowStrategy : 

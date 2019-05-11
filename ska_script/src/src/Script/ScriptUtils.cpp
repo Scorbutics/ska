@@ -2,12 +2,12 @@
 #include <sstream>
 #include <cstddef>
 #include "ScriptUtils.h"
-#include "Utils/FormalCalculation/FormalCalculator.h"
+#include "Core/Utils/FormalCalculation/FormalCalculator.h"
 #include "../Script/ScriptSymbolsConstants.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../Script/System/ScriptAutoSystem.h"
-#include "Exceptions/ScriptSyntaxError.h"
-#include "Exceptions/NumberFormatException.h"
+#include "Core/Exceptions/ScriptSyntaxError.h"
+#include "Core/Exceptions/NumberFormatException.h"
 
 ska::ScriptUtils::ScriptUtils() {}
 

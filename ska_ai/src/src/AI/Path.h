@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 #include <queue>
-#include "Utils/MovableNonCopyable.h"
-#include "Point.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Core/Point.h"
 #include "Node.h"
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
 
 namespace ska {
 

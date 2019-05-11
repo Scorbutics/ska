@@ -1,6 +1,6 @@
 
 #include "LabeledHorizontalSlider.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 
 ska::LabeledHorizontalSlider::LabeledHorizontalSlider(Widget& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth):
 	HorizontalSlider(parent, styleName, relativePos, pixelWidth),

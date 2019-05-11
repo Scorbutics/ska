@@ -3,20 +3,20 @@
 #include <sstream>
 #include <fstream>
 #include "ScriptAutoSystem.h"
-#include "Exceptions/ScriptDiedException.h"
-#include "Exceptions/ScriptUnknownCommandException.h"
-#include "Exceptions/IllegalArgumentException.h"
+#include "Core/Exceptions/ScriptDiedException.h"
+#include "Core/Exceptions/ScriptUnknownCommandException.h"
+#include "Core/Exceptions/IllegalArgumentException.h"
 #include "../ScriptUtils.h"
-#include "Exceptions/InvalidPathException.h"
-#include "Exceptions/NumberFormatException.h"
-#include "Exceptions/ScriptSyntaxError.h"
-#include "Utils/StringUtils.h"
-#include "Utils/FileUtils.h"
-#include "Utils/TimeUtils.h"
-#include "Utils/NumberUtils.h"
-#include "ECS/Basics/Script/ScriptTriggerType.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
+#include "Core/Exceptions/InvalidPathException.h"
+#include "Core/Exceptions/NumberFormatException.h"
+#include "Core/Exceptions/ScriptSyntaxError.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Base/IO/Files/FileUtils.h"
+#include "Core/Utils/TimeUtils.h"
+#include "Base/Values/Numbers/NumberUtils.h"
+#include "Core/ECS/Basics/Script/ScriptTriggerType.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
 
 //Par défaut, un script "permanent" se rafraîchit toutes les 1 ms
 #define SCRIPT_DEFAULT_PERIOD 1

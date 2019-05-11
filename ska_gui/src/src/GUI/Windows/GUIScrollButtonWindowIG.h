@@ -1,6 +1,6 @@
 #pragma once
-#include "Rectangle.h"
-#include "Point.h"
+#include "Core/Rectangle.h"
+#include "Core/Point.h"
 #include "TimeScrollableWindowIG.h"
 
 namespace ska {

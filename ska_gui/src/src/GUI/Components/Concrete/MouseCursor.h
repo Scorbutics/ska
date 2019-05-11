@@ -1,6 +1,6 @@
 #pragma once
-#include "Draw/DrawableFixedPriority.h"
-#include "Point.h"
+#include "Core/Draw/DrawableFixedPriority.h"
+#include "Core/Point.h"
 #include "Graphic/Texture.h"
 
 

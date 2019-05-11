@@ -1,7 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include "Graphic/SDLSurface.h"
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
 #include "TilesetCorrespondanceMapper.h"
 #include "LayerLoader.h"
 

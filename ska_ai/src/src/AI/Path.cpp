@@ -3,7 +3,7 @@
 
 #include "Path.h"
 #include "Node.h"
-#include "Task/Task.h"
+#include "Base/Task/Task.h"
 
 std::vector<ska::PathDirection> ska::Path::buildPath(const std::string& path) {
 	auto result = std::vector<ska::PathDirection> {};

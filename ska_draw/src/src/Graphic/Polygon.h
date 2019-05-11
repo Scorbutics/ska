@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "SDLRenderer.h"
-#include "Draw/DrawableFixedPriority.h"
+#include "Core/Draw/DrawableFixedPriority.h"
 
 namespace ska {
 	template <class T>

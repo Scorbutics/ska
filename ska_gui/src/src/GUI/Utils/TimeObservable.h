@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Observable.h"
+#include "Base/Patterns/Observable.h"
 #include "../Events/TimeEvent.h"
 
 namespace ska {

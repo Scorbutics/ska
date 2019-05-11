@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
-#include "Data/Events/ExtensibleGameEventDispatcher.h"
-#include "ECS/EntityManager.h"
+#include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
+#include "Core/ECS/EntityManager.h"
 #include "Core/State/StateBase.h"
-#include "Utils/SubObserver.h"
+#include "Base/Patterns/SubObserver.h"
 #include "Graphic/Polygon.h"
 #include "Physic/Space.h"
 #include "Graphic/PositionnedGraphicDrawable.h"

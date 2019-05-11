@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "MouseCursor.h"
-#include "Draw/Renderer.h"
-#include "SDLLibrary.h"
+#include "Core/Draw/Renderer.h"
+#include "Core/SDLLibrary.h"
 
 ska::MouseCursor::MouseCursor(const std::string& styleName) :
 	m_basicCursor(styleName + ".png"),

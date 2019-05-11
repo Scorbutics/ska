@@ -3,7 +3,7 @@
 #include <cassert>
 #include "World/LayerEventLoader.h"
 #include "World/LayerEvent.h"
-#include "Exceptions/IllegalArgumentException.h"
+#include "Core/Exceptions/IllegalArgumentException.h"
 
 ska::Vector2<ska::ScriptPack> BuildScriptPack(unsigned int width, unsigned int height) {
 	assert(width > 1 && height > 3 && "Bad dimensions (too low)");

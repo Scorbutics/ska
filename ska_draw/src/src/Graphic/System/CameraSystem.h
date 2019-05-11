@@ -1,12 +1,12 @@
 #pragma once
 #include <unordered_set>
-#include "Rectangle.h"
-#include "ECS/System.h"
-#include "Data/Events/WorldEvent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Graphic/CameraFocusedComponent.h"
+#include "Core/Rectangle.h"
+#include "Core/ECS/System.h"
+#include "Core/Data/Events/WorldEvent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Graphic/CameraFocusedComponent.h"
 #include "../GraphicComponent.h"
-#include "Utils/SubObserver.h"
+#include "Base/Patterns/SubObserver.h"
 #include "CameraStrategy.h"
 
 namespace ska {

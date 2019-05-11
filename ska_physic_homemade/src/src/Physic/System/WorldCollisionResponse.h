@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Data/Events/GameEventDispatcher.h"
-#include "Utils/SubObserver.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Base/Patterns/SubObserver.h"
 
 namespace ska {
 	class TileWorld;

@@ -1,6 +1,6 @@
 #pragma once
 #include "ExposeImmutable.h"
-#include "ECS/System.h"
+#include "Core/ECS/System.h"
 
 struct ImmutableSystemConcreteTracer {
 	bool refresh_ = false;

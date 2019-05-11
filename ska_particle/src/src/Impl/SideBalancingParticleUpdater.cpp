@@ -1,6 +1,6 @@
 #include "../ParticleGroup.h"
 #include "SideBalancingParticleUpdater.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 
 ska::SideBalancingParticleUpdater::SideBalancingParticleUpdater(Point<int> origin, float amplitude, float speed) :
 	m_amplitude(amplitude),

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/ManagedResource.h"
+#include "Core/Utils/ManagedResource.h"
 #include "SDLMusic.h"
 
 namespace ska {

@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "Utils/NumberUtils.h"
+#include "Base/Values/Numbers/NumberUtils.h"
 
 ska::Node::Node(int column, int line, bool walkable) :
 	column(column),

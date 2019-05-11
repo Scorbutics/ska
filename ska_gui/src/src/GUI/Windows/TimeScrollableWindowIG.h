@@ -3,7 +3,7 @@
 #include "../Utils/TimeObserver.h"
 #include "../Utils/TimeObservable.h"
 #include "../Events/TimeEventListener.h"
-#include "Task/WorkNode.h"
+#include "Base/Task/WorkNode.h"
 
 namespace ska {
 

@@ -1,7 +1,7 @@
 #include "Shape.h"
 #include "Vect.h"
 #include "Body.h"
-#include "Rectangle.h"
+#include "Core/Rectangle.h"
 
 ska::cp::Shape::Shape() :
 	m_shape(nullptr) {

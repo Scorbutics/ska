@@ -1,8 +1,8 @@
 #pragma once
 #include <optional>
-#include "Utils/MovableNonCopyable.h"
+#include "Base/Values/MovableNonCopyable.h"
 #include "Tile.h"
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
 #include "Graphic/Texture.h"
 #include "Graphic/Animation.h"
 #include "TileAnimation.h"

@@ -1,8 +1,8 @@
 #pragma once
 #include <unordered_set>
 #include <memory>
-#include "Rectangle.h"
-#include "ECS/ECSDefines.h"
+#include "Core/Rectangle.h"
+#include "Core/ECS/ECSDefines.h"
 
 namespace ska {
 	class CameraStrategy {

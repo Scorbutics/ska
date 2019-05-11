@@ -1,8 +1,8 @@
 #include "CommandIf.h"
 #include <string>
 #include <sstream>
-#include "Utils/StringUtils.h"
-#include "Exceptions/ScriptSyntaxError.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Exceptions/ScriptSyntaxError.h"
 #include "../System/ScriptAutoSystem.h"
 
 ska::CommandIf::CommandIf(EntityManager& e) : 

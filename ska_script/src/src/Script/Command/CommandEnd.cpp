@@ -1,8 +1,8 @@
 #include "CommandEnd.h"
 #include "../ScriptUtils.h"
-#include "Utils/StringUtils.h"
-#include "Data/MemoryScript.h"
-#include "Exceptions/ScriptDiedException.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Data/MemoryScript.h"
+#include "Core/Exceptions/ScriptDiedException.h"
 
 ska::CommandEnd::CommandEnd(EntityManager& e) : 
 	AbstractFunctionCommand(e) {

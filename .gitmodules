@@ -5,3 +5,7 @@
 [submodule "external/skalog"]
 	path = external/skalog
 	url = https://github.com/Scorbutics/skalog.git
+[submodule "external/skabase"]
+	path = external/skabase
+	url = https://github.com/Scorbutics/skabase.git
+	branch = master

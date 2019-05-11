@@ -1,7 +1,7 @@
 #include "MovementSystem.h"
-#include "Utils/NumberUtils.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "Ticked.h"
+#include "Base/Values/Numbers/NumberUtils.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Core/Ticked.h"
 
 ska::MovementSystem::MovementSystem(ska::EntityManager& entityManager) :
 	System(entityManager) {

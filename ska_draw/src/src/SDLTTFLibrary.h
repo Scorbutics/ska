@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/DynamicLibrary.h"
+#include "Base/DynamicLibrary/DynamicLibrary.h"
 #include <SDL_ttf.h>
 #include <gsl/pointers>
 

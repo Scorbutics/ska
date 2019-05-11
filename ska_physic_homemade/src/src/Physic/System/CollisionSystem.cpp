@@ -1,7 +1,7 @@
 #include "CollisionSystem.h"
 #include "World/CollisionProfile.h"
-#include "Utils/RectangleUtils.h"
-#include "ECS/Basics/Physic/CollisionComponent.h"
+#include "Core/Utils/RectangleUtils.h"
+#include "Core/ECS/Basics/Physic/CollisionComponent.h"
 
 ska::CollisionSystem::CollisionSystem(EntityManager& entityManager, GameEventDispatcher& ged) :
 	System(entityManager),

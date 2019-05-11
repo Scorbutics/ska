@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Point.h"
-#include "Draw/DrawableFixedPriority.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Point.h"
+#include "Core/Draw/DrawableFixedPriority.h"
+#include "Core/Utils/RectangleUtils.h"
 
 namespace ska {
 	class IWidgetEvent;

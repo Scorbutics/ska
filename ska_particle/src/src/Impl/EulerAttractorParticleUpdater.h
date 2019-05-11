@@ -1,6 +1,6 @@
 #pragma once
 #include "../ParticleUpdater.h"
-#include "Point.h"
+#include "Core/Point.h"
 
 namespace ska {
 	class EulerAttractorParticleUpdater :

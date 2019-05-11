@@ -1,17 +1,17 @@
 #include "Game.h"
-#include "LoggerConfig.h"
+#include "Base/Config/LoggerConfig.h"
 #include "World/Inputs/KeyboardInputMapContext.h"
 #include "World/Inputs/KeyboardInputGUIContext.h"
-#include "Draw/VectorDrawableContainer.h"
+#include "Core/Draw/VectorDrawableContainer.h"
 #include "Graphic/SDLFont.h"
 #include "StateSandbox.h"
-#include "Exceptions/FileException.h"
+#include "Core/Exceptions/FileException.h"
 #include "Graphic/SDLRenderer.h"
 #include "Graphic/SDLWindow.h"
-#include "Exceptions/IllegalStateException.h"
+#include "Core/Exceptions/IllegalStateException.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
-#include "Inputs/Readers/IniReader.h"
+#include "Base/IO/Readers/IniReader.h"
 
 namespace ska {
 	class FileException;

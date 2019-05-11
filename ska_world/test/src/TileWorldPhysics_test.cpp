@@ -4,7 +4,7 @@
 #include "World/Layer.h"
 #include "World/CollisionProfile.h"
 #include "World/TileWorldPhysics.h"
-#include "LoggerConfig.h"
+#include "Base/Config/LoggerConfig.h"
 #include "TileUtils.h"
 
 TEST_CASE("[TileWorldPhysics] GenerateTileMap") {

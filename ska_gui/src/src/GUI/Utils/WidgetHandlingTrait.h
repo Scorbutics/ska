@@ -1,6 +1,5 @@
 #pragma once
 #include "WidgetContainer.h"
-#include "Utils/VectorUtils.h"
 
 namespace ska {
 	template <class SubWidget, bool = std::is_base_of<IHandledWidget, SubWidget>::value>

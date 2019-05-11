@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "Draw/Color.h"
-#include "Rectangle.h"
+#include "Core/Draw/Color.h"
+#include "Core/Rectangle.h"
 
 namespace ska {
 

@@ -4,8 +4,8 @@
 #include <memory>
 #include <unordered_map>
 #include "ScriptState.h"
-#include "ECS/Basics/Script/ScriptTriggerType.h"
-#include "ECS/ECSDefines.h"
+#include "Core/ECS/Basics/Script/ScriptTriggerType.h"
+#include "Core/ECS/ECSDefines.h"
 #include "ScriptController.h"
 
 namespace ska {

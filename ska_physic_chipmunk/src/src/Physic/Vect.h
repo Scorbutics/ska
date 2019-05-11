@@ -1,6 +1,6 @@
 #pragma once
 #include <chipmunk.h>
-#include "Point.h"
+#include "Core/Point.h"
 
 namespace ska {
 	namespace cp {

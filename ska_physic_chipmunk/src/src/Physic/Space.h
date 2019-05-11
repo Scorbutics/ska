@@ -2,7 +2,7 @@
 #include <functional>
 #include <gsl/pointers>
 #include <vector>
-#include "Utils/MovableNonCopyable.h"
+#include "Base/Values/MovableNonCopyable.h"
 #include "Shape.h"
 #include "Body.h"
 #include "Constraint.h"

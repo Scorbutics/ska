@@ -6,8 +6,8 @@
 #include "Physic/System/CollisionSystem.h"
 #include "Graphic/System/AnimationSystem.h"
 #include "Graphic/System/WalkAnimationStateMachine.h"
-#include "Inputs/System/InputSystem.h"
-#include "ECS/Basics/Physic/GravityAffectedComponent.h"
+#include "Core/Inputs/System/InputSystem.h"
+#include "Core/ECS/Basics/Physic/GravityAffectedComponent.h"
 #include "Physic/System/GravitySystem.h"
 #include "Graphic/System/DeleterSystem.h"
 #include "Physic/System/WorldCollisionSystem.h"
@@ -18,7 +18,7 @@
 #include "World/TilesetCompleteLoader.h"
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
-#include "Utils/FileUtils.h"
+#include "Base/IO/Files/FileUtils.h"
 
 constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)

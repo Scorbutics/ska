@@ -1,10 +1,10 @@
 #include "Graphic/SDLSurface.h"
-#include "Point.h"
-#include "Exceptions/CorruptedFileException.h"
-#include "Exceptions/ExceptionTrigger.h"
-#include "Utils/StringUtils.h"
+#include "Core/Point.h"
+#include "Core/Exceptions/CorruptedFileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "TilesetCorrespondanceMapper.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 
 ska::TilesetCorrespondanceMapper::TilesetCorrespondanceMapper(const std::string& filenameCorr) {
 	SDLSurface surf;

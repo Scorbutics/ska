@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "StateBase.h"
-#include "../../Draw/IGraphicSystem.h"
-#include "../../Task/WorkNode.h"
+#include "../Draw/IGraphicSystem.h"
+#include "Base/Task/WorkNode.h"
 
 ska::StateBase::StateBase():
 	m_state(0), 

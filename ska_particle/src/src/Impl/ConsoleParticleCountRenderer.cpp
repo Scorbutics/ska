@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "ConsoleParticleCountRenderer.h"
-#include "Utils/TimeUtils.h"
+#include "Core/Utils/TimeUtils.h"
 #include "../ParticleGroup.h"
 
 

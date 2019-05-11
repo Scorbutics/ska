@@ -1,7 +1,7 @@
 #pragma once
 #include <chipmunk.h>
 #include <gsl/pointers>
-#include "Rectangle.h"
+#include "Core/Rectangle.h"
 
 namespace ska {
 	namespace cp {

@@ -1,5 +1,5 @@
 #pragma once
-#include "Draw/IGraphicSystem.h"
+#include "Core/Draw/IGraphicSystem.h"
 #include "../PositionnedGraphicDrawable.h"
 
 namespace ska {

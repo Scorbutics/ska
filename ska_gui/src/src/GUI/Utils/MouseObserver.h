@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Observer.h"
+#include "Base/Patterns/Observer.h"
 #include "../Events/ClickEvent.h"
 
 namespace ska {

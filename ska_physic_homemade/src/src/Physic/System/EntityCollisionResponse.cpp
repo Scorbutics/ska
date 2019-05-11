@@ -1,10 +1,10 @@
 #include "EntityCollisionResponse.h"
-#include "ECS/Basics/Physic/ForceComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/Basics/Physic/ForceComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Core/ECS/EntityManager.h"
 #include "CollisionSystem.h"
-#include "ECS/Basics/Physic/CollisionComponent.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/ECS/Basics/Physic/CollisionComponent.h"
+#include "Core/Utils/RectangleUtils.h"
 
 ska::EntityCollisionResponse::EntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
 	EntityCollisionObserver(std::bind(&EntityCollisionResponse::onEntityCollision, this, std::placeholders::_1), ged),

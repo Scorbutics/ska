@@ -1,6 +1,6 @@
 #pragma once
 #include "ScriptAutoSystem.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 
 namespace ska {
     class MemoryScript;

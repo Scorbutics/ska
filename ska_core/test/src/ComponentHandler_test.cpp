@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "ECS/ComponentHandler.h"
+#include "Core/ECS/ComponentHandler.h"
 
 TEST_CASE("[ComponentHandler]") {
 	constexpr auto mask = 1u;

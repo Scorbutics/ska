@@ -4,16 +4,16 @@
 #include <string>
 
 #include "GraphicModule.h"
-#include "Exceptions/IllegalStateException.h"
-#include "Exceptions/ExceptionTrigger.h"
+#include "Core/Exceptions/IllegalStateException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
 #include "Logging/Logger.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 #include "Core/State/StateHolder.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/DrawableContainer.h"
 #include "Core/Window.h"
 #include "SDLTTFLibrary.h"
 #include "SDLImageLibrary.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 
 ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window):
 	SubObserver<StateEvent>(std::bind(&GraphicModule::onStateEvent, this, std::placeholders::_1), ged),

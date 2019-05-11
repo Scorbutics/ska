@@ -1,7 +1,7 @@
 #pragma once
 #include "State.h"
-#include "../../Task/TaskQueue.h"
-#include "../../Data/Events/GameEventDispatcher.h"
+#include "Base/Task/TaskQueue.h"
+#include "../Data/Events/GameEventDispatcher.h"
 
 namespace ska {
 

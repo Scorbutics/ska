@@ -1,6 +1,6 @@
 #pragma once
-#include "Draw/DrawableContainer.h"
-#include "Draw/IGraphicSystem.h"
+#include "Core/Draw/DrawableContainer.h"
+#include "Core/Draw/IGraphicSystem.h"
 #include "ExposeImmutable.h"
 
 namespace ska {

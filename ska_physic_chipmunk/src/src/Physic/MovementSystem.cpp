@@ -1,6 +1,6 @@
 #include "MovementSystem.h"
 #include "Space.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
 
 ska::cp::MovementSystem::MovementSystem(ska::EntityManager& em, Space& space) :
 	System(em),

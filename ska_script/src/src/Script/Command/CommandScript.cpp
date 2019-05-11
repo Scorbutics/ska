@@ -1,10 +1,10 @@
 #include <string>
 #include "CommandScript.h"
-#include "Utils/StringUtils.h"
-#include "Exceptions/ScriptSyntaxError.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Exceptions/ScriptSyntaxError.h"
 #include "../System/ScriptAutoSystem.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/EntityManager.h"
 
 ska::CommandScript::CommandScript(EntityManager& entityManager) : 
 	AbstractFunctionCommand(entityManager) {

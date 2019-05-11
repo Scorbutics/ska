@@ -1,7 +1,7 @@
 #pragma once
-#include "ECS/Basics/Physic/HitboxComponent.h"
-#include "Point.h"
-#include "ECS/ECSDefines.h"
+#include "Core/ECS/Basics/Physic/HitboxComponent.h"
+#include "Core/Point.h"
+#include "Core/ECS/ECSDefines.h"
 
 struct cpBody;
 

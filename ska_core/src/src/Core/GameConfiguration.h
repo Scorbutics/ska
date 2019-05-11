@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include "../Utils/TupleUtils.h"
-#include "../Utils/ContainsTypeTuple.h"
-#include "../Utils/unsmartptr.h"
+#include "Base/Meta/TupleUtils.h"
+#include "Base/Meta/ContainsTypeTuple.h"
+#include "Base/Values/unsmartptr.h"
 #include <cassert>
 
 namespace ska {

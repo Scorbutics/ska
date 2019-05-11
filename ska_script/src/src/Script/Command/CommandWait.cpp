@@ -1,6 +1,6 @@
 #include "CommandWait.h"
-#include "Utils/StringUtils.h"
-#include "Data/MemoryScript.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Data/MemoryScript.h"
 #include "../../Script/ScriptComponent.h"
 
 ska::CommandWait::CommandWait(EntityManager& entityManager) : 

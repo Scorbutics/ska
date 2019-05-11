@@ -1,5 +1,5 @@
 #include "CameraSystem.h"
-#include "Rectangle.h"
+#include "Core/Rectangle.h"
 #include "../GraphicComponent.h"
 
 ska::CameraSystem::CameraSystem(EntityManager& entityManager, GameEventDispatcher& ged, CameraStrategyPtr strategy, const unsigned int screenW, const unsigned int screenH) :

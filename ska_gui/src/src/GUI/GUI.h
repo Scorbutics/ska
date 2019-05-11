@@ -1,14 +1,14 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Draw/DrawableFixedPriority.h"
+#include "Core/Draw/DrawableFixedPriority.h"
 #include "Utils/MouseObservable.h"
 #include "Windows/DynamicWindowIG.h"
 #include "Components/Concrete/MouseCursor.h"
 #include "Utils/TimeObservable.h"
 #include "Windows/TimeScrollableWindowIG.h"
-#include "Data/Events/GameEventDispatcher.h"
-#include "Exceptions/IllegalStateException.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Core/Exceptions/IllegalStateException.h"
 
 namespace ska {
 	class BaseWindow;

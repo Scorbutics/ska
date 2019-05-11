@@ -2,6 +2,7 @@ project(ska_ai)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
+include_directories(${SKA_BASE_DIR})
 include_directories(${SKA_PHYSIC_CHIPMUNK_DIR})
 include_directories(${GSL_DIR})
 include_directories(${CHIPMUNK_DIR})

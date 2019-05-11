@@ -1,6 +1,6 @@
 #pragma once
 #include <optional>
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
 #include "World/Tile.h"
 #include "World/CollisionProfile.h"
 

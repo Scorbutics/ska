@@ -1,11 +1,11 @@
 #include <fstream>
 #include <sstream>
 #include "LayerEventLoaderText.h"
-#include "Utils/FileUtils.h"
-#include "Exceptions/CorruptedFileException.h"
-#include "Exceptions/ExceptionTrigger.h"
-#include "Utils/StringUtils.h"
-#include "Exceptions/NumberFormatException.h"
+#include "Base/IO/Files/FileUtils.h"
+#include "Core/Exceptions/CorruptedFileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Exceptions/NumberFormatException.h"
 
 ska::LayerEventLoaderText::LayerEventLoaderText(std::string layerFileName) :
 	m_fileName(std::move(layerFileName)) {

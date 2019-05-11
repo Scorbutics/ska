@@ -1,6 +1,6 @@
 #include <limits>
 #include "ImageRectangle.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::ImageRectangle::ImageRectangle(Widget& parent, Rectangle box, Color c, const Color* outline) :
 	Widget(parent, ska::Point<int>{box.x, box.y}) {

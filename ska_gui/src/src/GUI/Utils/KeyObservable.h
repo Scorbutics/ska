@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Observable.h"
+#include "Base/Patterns/Observable.h"
 
 namespace ska {
 	using KeyObservable = Observable<KeyEvent>;

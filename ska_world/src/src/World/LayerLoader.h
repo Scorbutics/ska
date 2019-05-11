@@ -1,6 +1,6 @@
 #pragma once
-#include "Utils/MovableNonCopyable.h"
-#include "Utils/Vector2.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Base/Containers/Vector2.h"
 #include <optional>
 
 namespace ska {

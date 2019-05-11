@@ -2,7 +2,7 @@
 #include <mutex>
 #include "../Widget.h"
 #include "Graphic/Texture.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 namespace ska {
 	class TileSurface;

@@ -1,9 +1,9 @@
 #include "WalkAnimationStateMachine.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/EntityManager.h"
 #include "../GraphicComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "Utils/RectangleUtils.h"
-#include "ECS/Basics/Graphic/AnimationComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Core/Utils/RectangleUtils.h"
+#include "Core/ECS/Basics/Graphic/AnimationComponent.h"
 
 ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
     AnimationStateMachine(),

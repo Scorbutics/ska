@@ -1,13 +1,13 @@
 #include <SDL.h>
 #include "LayerLoaderImage.h"
-#include "Exceptions/FileException.h"
-#include "Exceptions/ExceptionTrigger.h"
-#include "Utils/Vector2.h"
-#include "Utils/StringUtils.h"
+#include "Core/Exceptions/FileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
+#include "Base/Containers/Vector2.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "Graphic/SDLSurface.h"
 #include "Tileset.h"
-#include "Exceptions/CorruptedFileException.h"
-#include "SDLLibrary.h"
+#include "Core/Exceptions/CorruptedFileException.h"
+#include "Core/SDLLibrary.h"
 
 ska::Vector2<ska::TileAnimation*> ska::LayerLoaderImage::loadAnimations(Tileset& chipset) const {
 	auto graphics = ska::Vector2<TileAnimation*>{};

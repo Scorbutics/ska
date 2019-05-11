@@ -1,10 +1,10 @@
 #include "StateSandbox.h"
 #include "Graphic/System/GraphicSystem.h"
 #include "Graphic/System/CameraSystem.h"
-#include "Inputs/System/InputSystem.h"
+#include "Core/Inputs/System/InputSystem.h"
 #include "Graphic/System/DeleterSystem.h"
 #include "Graphic/System/DebugCollisionDrawerSystem.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/DrawableContainer.h"
 #include "Physic/Space.h"
 #include "World/TileWorld.h"
 #include "Physic/MovementSystem.h"
@@ -17,7 +17,7 @@
 #include "World/TilesetCompleteLoader.h"
 #include "World/LayerEventLoaderText.h"
 #include "World/LayerLoaderImage.h"
-#include "Utils/FileUtils.h"
+#include "Base/IO/Files/FileUtils.h"
 #include "Graphic/System/CameraFixedStrategy.h"
 #include "Graphic/System/WalkAnimationStateMachine.h"
 #include "Graphic/System/AnimationSystem.h"
@@ -151,7 +151,7 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 	hc.width = 16;
 	hc.height = 16;
 
-	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, point, { static_cast<int>(0), static_cast<int>(0), static_cast<int>(hc.width), static_cast<int>(hc.height) }, 65.F, ballEntity);
+	auto bc = ska::cp::BuildControlledRectangleHitbox(m_space, point, { 0, 0, static_cast<int>(hc.width), static_cast<int>(hc.height) }, 65.F, ballEntity);
 	ska::cp::AddTopDownConstraints(m_space, bc, 200.f, 500.f);
 
 	m_entityManager.addComponent(ballEntity, std::move(hc));

@@ -1,6 +1,6 @@
 #include "Texture.h"
-#include "Draw/Color.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Color.h"
+#include "Core/Draw/Renderer.h"
 #include "TextureData.h"
 
 ska::Texture::Texture(const std::string& id, int r, int g, int b, int a) {

@@ -2,7 +2,7 @@
 #include "Button.h"
 #include "../Widget.h"
 #include "../../Events/ClickEventListener.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::Button::Button(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback) :
 Hoverable<ValueChangedEventListener<bool>, ClickEventListener>(parent),

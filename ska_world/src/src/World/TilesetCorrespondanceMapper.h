@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include "Point.h"
-#include "Draw/Color.h"
+#include "Core/Point.h"
+#include "Core/Draw/Color.h"
 #include "Graphic/SDLSurface.h"
-#include "Utils/MovableNonCopyable.h"
+#include "Base/Values/MovableNonCopyable.h"
 
 namespace ska {
 	class TilesetCorrespondanceMapper : public MovableNonCopyable {

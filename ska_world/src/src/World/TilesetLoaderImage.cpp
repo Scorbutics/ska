@@ -1,11 +1,11 @@
-#include "Exceptions/FileException.h"
-#include "Exceptions/ExceptionTrigger.h"
+#include "Core/Exceptions/FileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
 #include "TilesetLoaderImage.h"
-#include "Utils/AllEquals.h"
-#include "Utils/Vector2.h"
+#include "Base/Values/AllEquals.h"
+#include "Base/Containers/Vector2.h"
 #include "Graphic/Texture.h"
 #include "Graphic/Animation.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 
 ska::SDLSurface LoadTilesetImage(const std::string& tilesetName) {
 	ska::SDLSurface result;

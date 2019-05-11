@@ -1,6 +1,6 @@
 #pragma once
 #include "LayerEventLoader.h"
-#include "ECS/Basics/Script/BlockEvent.h"
+#include "Core/ECS/Basics/Script/BlockEvent.h"
 
 namespace ska {
 	class LayerEventLoaderText :

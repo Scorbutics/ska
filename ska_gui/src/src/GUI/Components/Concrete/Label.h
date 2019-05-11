@@ -1,7 +1,7 @@
 #pragma once
 #include "../Widget.h"
 #include "Graphic/Texture.h"
-#include "Draw/Color.h"
+#include "Core/Draw/Color.h"
 
 namespace ska {
 	class Label : public Widget {

@@ -1,11 +1,11 @@
 #include "SDLTexture.h"
 #include "SDLSurface.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 #include "TextureData.h"
 #include "Font.h"
-#include "Task/WorkNode.h"
-#include "Task/TaskQueue.h"
-#include "Draw/Renderer.h"
+#include "Base/Task/WorkNode.h"
+#include "Base/Task/TaskQueue.h"
+#include "Core/Draw/Renderer.h"
 #include "SDL_RectConverter.h"
 
 ska::SDLTexture::SDLTexture(TextureData& data) :

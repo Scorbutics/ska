@@ -1,7 +1,7 @@
 
 #include "CheckBox.h"
 #include "../../Events/ValueChangedEvent.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::CheckBox::CheckBox(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
 	Button(parent, relativePos, placeHolderStyleName, clip, [&](Widget*, ClickEvent& e) {

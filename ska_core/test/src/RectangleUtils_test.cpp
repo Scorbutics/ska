@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 
 TEST_CASE("[RectangleUtils] Position dans la box") {
 

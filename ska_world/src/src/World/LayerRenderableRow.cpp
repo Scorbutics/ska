@@ -1,7 +1,7 @@
 #include "LayerRenderableRow.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/DrawableContainer.h"
 #include "TileAnimation.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 void ska::LayerRenderableRow::load(std::size_t rowIndex, Vector2<TileAnimation*>& blocks, const Texture & tileset, unsigned int blockSize) {
 	m_tileset = &tileset;

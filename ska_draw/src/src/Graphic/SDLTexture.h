@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "SDLSurface.h"
-#include "Task/TaskQueue.h"
+#include "Base/Task/TaskQueue.h"
 
 namespace ska {
 	class Renderer;

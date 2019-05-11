@@ -2,7 +2,7 @@
 #include "GUI/Events/ClickEventListener.h"
 #include "GUI/GUI.h"
 #include "WindowsUtil.h"
-#include "Inputs/InputContextManager.h"
+#include "Core/Inputs/InputContextManager.h"
 #include "InputContextTest.h"
 #include "MoveableWindowTest.h"
 

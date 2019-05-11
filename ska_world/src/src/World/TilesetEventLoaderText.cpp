@@ -1,11 +1,11 @@
 #include <fstream>
 #include <optional>
 #include "TilesetEventLoaderText.h"
-#include "Exceptions/FileException.h"
-#include "Exceptions/CorruptedFileException.h"
-#include "Exceptions/ExceptionTrigger.h"
-#include "Utils/StringUtils.h"
-#include "Utils/FileUtils.h"
+#include "Core/Exceptions/FileException.h"
+#include "Core/Exceptions/CorruptedFileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Base/IO/Files/FileUtils.h"
 
 ska::TilesetEventLoaderText::TilesetEventLoaderText(std::string tilesetName) :
 	m_tilesetName(std::move(tilesetName)) {

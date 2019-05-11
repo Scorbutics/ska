@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "Point.h"
+#include "Core/Point.h"
 #include "WindowsUtil.h"
 #include "GUI/Events/ClickEventListener.h"
 #include "GUI/Windows/DynamicWindowIG.h"

@@ -1,5 +1,5 @@
 #pragma once
-#include "Point.h"
+#include "Core/Point.h"
 #include "ParticleBuilder.h"
 
 namespace ska {

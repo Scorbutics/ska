@@ -1,6 +1,6 @@
 #pragma once
 #include "WidgetEvent.h"
-#include "Point.h"
+#include "Core/Point.h"
 #include "HoverEventListener.h"
 #include "MouseEventType.h"
 

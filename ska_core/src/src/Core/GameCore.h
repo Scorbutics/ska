@@ -2,8 +2,8 @@
 #include <memory>
 
 #include "State/StateHolder.h"
-#include "../Utils/TimeUtils.h"
-#include "../GameApp.h"
+#include "Core/Utils/TimeUtils.h"
+#include "GameApp.h"
 
 namespace ska {
 	/**

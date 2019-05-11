@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Point.h"
+#include "Core/Point.h"
 #include "TileCollision.h"
 #include "TileProperties.h"
 

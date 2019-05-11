@@ -4,11 +4,11 @@
 #include <string>
 #include <unordered_map>
 #include "../Command/Command.h"
-#include "Data/MemoryScript.h"
+#include "Core/Data/MemoryScript.h"
 #include "../ScriptComponent.h"
-#include "ECS/System.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/EntityLocator.h"
+#include "Core/ECS/System.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/EntityLocator.h"
 
 namespace ska {
 	class TileWorld;

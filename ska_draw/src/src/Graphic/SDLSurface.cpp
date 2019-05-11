@@ -1,7 +1,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cassert>
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 #include "Font.h"
 #include "SDLSurface.h"
 #include "Logging/Logger.h"
@@ -9,6 +9,7 @@
 #include "../GraphicModule.h"
 #include "../SDLTTFLibrary.h"
 #include "../SDLImageLibrary.h"
+#include "Core/Utils/SkaConstants.h"
 
 SDL_Color ColorToNative(const ska::Color& c){
 	return SDL_Color{ c.r, c.g, c.b, c.a };

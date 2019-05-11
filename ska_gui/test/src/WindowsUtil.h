@@ -1,8 +1,8 @@
 #pragma once
-#include "Inputs/InputContextManager.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Core/Inputs/InputContextManager.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 #include "InputContextTest.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::GameEventDispatcher& GetGED();
 ska::RawInputListener& GetRawInputListener();

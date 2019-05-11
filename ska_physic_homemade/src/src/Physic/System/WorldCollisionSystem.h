@@ -1,13 +1,13 @@
 #pragma once
 #include <unordered_set>
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Physic/HitboxComponent.h"
-#include "ECS/Basics/Physic/CollidableComponent.h"
-#include "Data/Events/CollisionEvent.h"
-#include "Rectangle.h"
-#include "ECS/System.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Physic/HitboxComponent.h"
+#include "Core/ECS/Basics/Physic/CollidableComponent.h"
+#include "Core/Data/Events/CollisionEvent.h"
+#include "Core/Rectangle.h"
+#include "Core/ECS/System.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 
 
 namespace ska {

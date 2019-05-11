@@ -1,6 +1,6 @@
 #include "ScrollingMultiLineLabel.h"
 #include "Label.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 
 
 ska::ScrollingMultiLineLabel::ScrollingMultiLineLabel(Widget& parent, const std::string& text, int fontSize, float scrollSpeed, Point<int> relativePos) :

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Draw/DrawableFixedPriority.h"
-#include "Utils/Vector2.h"
+#include "Core/Draw/DrawableFixedPriority.h"
+#include "Base/Containers/Vector2.h"
 #include "Graphic/Texture.h"
 #include "LayerRenderable.h"
 

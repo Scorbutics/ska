@@ -1,8 +1,8 @@
 #include <sstream>
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "TilesetEvent.h"
-#include "Utils/StringUtils.h"
-#include "Point.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Point.h"
 
 ska::TilesetEvent::TilesetEvent(std::string tilesetName, const TilesetEventLoader& loader) : 
 	m_tilesetName(std::move(tilesetName)) {

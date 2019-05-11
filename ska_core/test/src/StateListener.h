@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include "Data/Events/StateEvent.h"
-#include "Data/Events/GameEventDispatcher.h"
-#include "Utils/SubObserver.h"
+#include "Core/Data/Events/StateEvent.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Base/Patterns/SubObserver.h"
 
 class StateListener :
 	public ska::SubObserver<ska::StateEvent> {

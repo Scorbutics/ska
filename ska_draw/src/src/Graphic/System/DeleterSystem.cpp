@@ -1,5 +1,5 @@
 #include "DeleterSystem.h"
-#include "Utils/TimeUtils.h"
+#include "Core/Utils/TimeUtils.h"
 
 ska::DeleterSystem::DeleterSystem(EntityManager& entityManager) : System(entityManager) {
 }

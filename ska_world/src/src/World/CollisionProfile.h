@@ -1,8 +1,8 @@
 #pragma once
 #include "Tile.h"
 #include "Layer.h"
-#include "Utils/MovableNonCopyable.h"
-#include "Utils/TupleUtils.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Base/Meta/TupleUtils.h"
 #include "MarchingSquare.h"
 
 namespace ska {

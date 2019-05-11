@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Draw/DrawableFixedPriority.h"
+#include "Core/Draw/DrawableFixedPriority.h"
 #include "Graphic/Texture.h"
 
 namespace ska {

@@ -1,10 +1,10 @@
 #pragma once
-#include "Utils/Observer.h"
-#include "Data/Events/WorldEvent.h"
-#include "Data/Events/SoundEvent.h"
-#include "Data/Events/EventDispatcher.h"
-#include "Data/Events/GameEventDispatcher.h"
-#include "Utils/SubObserver.h"
+#include "Base/Patterns/Observer.h"
+#include "Core/Data/Events/WorldEvent.h"
+#include "Core/Data/Events/SoundEvent.h"
+#include "Core/Data/Events/EventDispatcher.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Base/Patterns/SubObserver.h"
 
 extern "C" {
     struct _Mix_Music;

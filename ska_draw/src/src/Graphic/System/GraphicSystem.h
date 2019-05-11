@@ -1,12 +1,12 @@
 #pragma once
 #include <unordered_set>
 #include "../GraphicComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/System.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/System.h"
 #include "AbstractGraphicSystem.h"
-#include <Data/Events/EventDispatcher.h>
-#include <Data/Events/GameEventDispatcher.h>
-#include "ECS/Basics/Graphic/DialogComponent.h"
+#include <Core/Data/Events/EventDispatcher.h>
+#include <Core/Data/Events/GameEventDispatcher.h>
+#include "Core/ECS/Basics/Graphic/DialogComponent.h"
 
 namespace ska {
     class GraphicSystem : public AbstractGraphicSystem, 

@@ -1,10 +1,10 @@
 #include "JumpAnimationStateMachine.h"
-#include "ECS/EntityManager.h"
-#include "Utils/NumberUtils.h"
+#include "Core/ECS/EntityManager.h"
+#include "Base/Values/Numbers/NumberUtils.h"
 #include "../GraphicComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "Utils/RectangleUtils.h"
-#include "ECS/Basics/Graphic/AnimationComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Core/Utils/RectangleUtils.h"
+#include "Core/ECS/Basics/Graphic/AnimationComponent.h"
 
 ska::JumpAnimationStateMachine::JumpAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {

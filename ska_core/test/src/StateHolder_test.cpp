@@ -1,6 +1,6 @@
 #include <doctest.h>
 #include "Core/State/StateHolder.h"
-#include "Exceptions/StateDiedException.h"
+#include "Core/Exceptions/StateDiedException.h"
 #include "StateListener.h"
 #include "MockState.h"
 

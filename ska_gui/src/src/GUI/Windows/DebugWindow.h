@@ -2,10 +2,10 @@
 #include <functional>
 #include <unordered_map>
 
-#include "Utils/SubObserver.h"
-#include "Point.h"
-#include "Draw/DrawableContainer.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Base/Patterns/SubObserver.h"
+#include "Core/Point.h"
+#include "Core/Draw/DrawableContainer.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 #include "MoveableWindow.h"
 
 namespace ska {

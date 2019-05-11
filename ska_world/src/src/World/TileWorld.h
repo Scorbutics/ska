@@ -2,8 +2,8 @@
 
 #include <unordered_set>
 #include <vector>
-#include "ECS/Basics/Script/ScriptPositionedGetter.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Core/ECS/Basics/Script/ScriptPositionedGetter.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 #include "TilesetEvent.h"
 #include "Tileset.h"
 #include "CollisionProfile.h"

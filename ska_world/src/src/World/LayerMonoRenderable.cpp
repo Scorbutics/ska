@@ -1,7 +1,7 @@
 #include "TileWorld.h"
 #include "LayerMonoRenderable.h"
-#include "Draw/Renderer.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/Renderer.h"
+#include "Core/Draw/DrawableContainer.h"
 
 ska::LayerMonoRenderable::LayerMonoRenderable(Vector2<TileAnimation*> block, const Texture& tileset, const unsigned int blockSize) :
 	m_tileSize(blockSize),

@@ -3,8 +3,8 @@
 #include <SDL.h>
 #include "BenchmarkerCore.h"
 #include "Logging/Logger.h"
-#include "Utils/TimeUtils.h"
-#include "Exceptions/StateDiedException.h"
+#include "Core/Utils/TimeUtils.h"
+#include "Core/Exceptions/StateDiedException.h"
 #include "Impl/BoxParticleGenerator.h"
 #include "Impl/ColorParticleUpdater.h"
 #include "Impl/TimeParticleUpdater.h"
@@ -16,15 +16,15 @@
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "Impl/SpreadingColorParticleEffectFactory.h"
 #include "Impl/SpreadingParticleEffectFactory.h"
-#include "Data/Events/ExtensibleGameEventDispatcher.h"
+#include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
 #include "Impl/SpreadingTextureParticleEffectFactory.h"
-#include "Utils/FileUtils.h"
+#include "Base/IO/Files/FileUtils.h"
 #include "Impl/SideBalancingParticleUpdater.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
-#include "Data/Events/ExtensibleGameEventDispatcher.h"
-#include "ECS/EntityManager.h"
-#include "Draw/VectorDrawableContainer.h"
+#include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/Draw/VectorDrawableContainer.h"
 
 BenchmarkerCore::BenchmarkerCore(GameConf&& gc) :
 	m_window("ska Particle Benchmark", 1500, 900),

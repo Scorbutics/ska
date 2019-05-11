@@ -6,6 +6,7 @@ include_directories(${FAKEIT_DIR})
 include_directories(${GSL_DIR})
 include_directories(${SKA_AI_DIR})
 include_directories(${SKA_CORE_DIR})
+include_directories(${SKA_BASE_DIR})
 
 link_directories(${LIB_DIR})
 link_directories(${EXTERNAL_LIB_DIR})

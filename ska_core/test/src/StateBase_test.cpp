@@ -3,8 +3,8 @@
 #include "MockStateBase.h"
 #include "Core/State/StateHolder.h"
 #include "MockState.h"
-#include "Task/Task.h"
-#include "Draw/VectorDrawableContainer.h"
+#include "Base/Task/Task.h"
+#include "Core/Draw/VectorDrawableContainer.h"
 #include "WindowsUtil.h"
 
 

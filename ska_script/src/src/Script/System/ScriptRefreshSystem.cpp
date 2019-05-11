@@ -1,14 +1,14 @@
 #include <limits>
 #include "ScriptRefreshSystem.h"
 #include "Core/CodeDebug/CodeDebug.h"
-#include "ECS/EntityManager.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "ECS/Basics/Script/ScriptTriggerType.h"
-#include "ECS/Basics/Script/ScriptPositionedGetter.h"
-#include "Data/Events/InputKeyEvent.h"
-#include "Inputs/InputAction.h"
-#include "Inputs/InputContextManager.h"
-#include "Data/Events/ScriptEvent.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Core/ECS/Basics/Script/ScriptTriggerType.h"
+#include "Core/ECS/Basics/Script/ScriptPositionedGetter.h"
+#include "Core/Data/Events/InputKeyEvent.h"
+#include "Core/Inputs/InputAction.h"
+#include "Core/Inputs/InputContextManager.h"
+#include "Core/Data/Events/ScriptEvent.h"
 
 ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg) :
 	ScriptRefreshSystemBase(entityManager),

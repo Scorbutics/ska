@@ -7,7 +7,7 @@
 #include "Widget.h"
 #include "../Events/IWidgetEvent.h"
 #include "../Utils/WidgetMaskHelper.h"
-#include "Utils/TupleUtils.h"
+#include "Base/Meta/TupleUtils.h"
 #include "Logging/Logger.h"
 
 #define SKA_GUI_MAX_WIDGET_EVENT_LISTENER 16

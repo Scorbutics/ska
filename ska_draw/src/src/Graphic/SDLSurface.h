@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 #include <string>
-#include "Draw/Color.h"
-#include "Utils/MovableNonCopyable.h"
+#include "Core/Draw/Color.h"
+#include "Base/Values/MovableNonCopyable.h"
 #include "../../external/gsl/gsl/pointers"
 
 namespace ska {

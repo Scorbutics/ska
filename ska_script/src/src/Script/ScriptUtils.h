@@ -3,7 +3,7 @@
 #include <optional>
 #include <unordered_map>
 #include "../Script/ScriptComponent.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class MemoryScript;

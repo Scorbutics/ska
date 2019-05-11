@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/GameCore.h"
-#include "ECS/EntityManager.h"
-#include "Data/Events/ExtensibleGameEventDispatcher.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
 

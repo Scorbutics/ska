@@ -1,10 +1,10 @@
 #pragma once
 #include <unordered_set>
 #include "../GraphicComponent.h"
-#include "ECS/Basics/Graphic/AnimationComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/System.h"
+#include "Core/ECS/Basics/Graphic/AnimationComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/System.h"
 #include "AnimationStateMachine.h"
 
 namespace ska {

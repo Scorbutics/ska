@@ -1,11 +1,11 @@
 #include <cassert>
 #include <optional>
 
-#include "Exceptions/IllegalStateException.h"
-#include "Exceptions/ExceptionTrigger.h"
+#include "Core/Exceptions/IllegalStateException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
 #include "CollisionProfile.h"
-#include "Utils/StringUtils.h"
-#include "Utils/RectangleUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 
 void ska::CollisionProfile::calculate() {
 	std::tie(m_blocksX, m_blocksY) = safeGetSizes();

@@ -1,7 +1,7 @@
 #pragma once
 #include <list>
 #include <unordered_set>
-#include "Point.h"
+#include "Core/Point.h"
 #include "Tile.h"
 
 namespace ska {

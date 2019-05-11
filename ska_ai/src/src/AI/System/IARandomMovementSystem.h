@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_set>
 #include "../IARandomMovementComponent.h"
-#include "ECS/Basics/Physic/ForceComponent.h"
-#include "ECS/System.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Physic/ForceComponent.h"
+#include "Core/ECS/System.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
 
 
 namespace ska {

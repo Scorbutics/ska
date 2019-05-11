@@ -1,10 +1,10 @@
 #pragma once
 #include "Animation.h"
 #include "Texture.h"
-#include "Rectangle.h"
-#include "Point.h"
+#include "Core/Rectangle.h"
+#include "Core/Point.h"
 #include "GifTexture.h"
-#include "Draw/Renderable.h"
+#include "Core/Draw/Renderable.h"
 
 namespace ska {
 	struct Color;

@@ -1,6 +1,6 @@
 #pragma once
 #include <list>
-#include "Point.h"
+#include "Core/Point.h"
 #include "MarchingSquare.h"
 
 namespace ska {

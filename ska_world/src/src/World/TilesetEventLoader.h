@@ -1,6 +1,6 @@
 #pragma once
-#include "Utils/MovableNonCopyable.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class TilesetEventLoader : public MovableNonCopyable {

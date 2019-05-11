@@ -1,6 +1,6 @@
 #include "WindowsUtil.h"
-#include <Data/Events/GameEventDispatcher.h>
-#include "Inputs/InputContextManager.h"
+#include <Core/Data/Events/GameEventDispatcher.h>
+#include "Core/Inputs/InputContextManager.h"
 #include "InputContextTest.h"
 
 ska::GameEventDispatcher& GetGED() {

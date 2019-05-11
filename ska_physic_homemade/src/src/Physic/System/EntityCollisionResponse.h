@@ -1,8 +1,8 @@
 #pragma once
-#include "Data/Events/GameEventDispatcher.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
-#include "Utils/SubObserver.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
+#include "Base/Patterns/SubObserver.h"
 
 namespace ska {
 	class CollisionContact;

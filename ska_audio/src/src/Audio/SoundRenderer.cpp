@@ -2,7 +2,7 @@
 #include "Music.h"
 #include "SoundRenderer.h"
 #include "Logging/Logger.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 #include "SDLMixerLibrary.h"
 
 ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :

@@ -2,11 +2,11 @@
 #include <unordered_set>
 #include <cassert>
 #include "State.h"
-#include "../../Task/Runnable.h"
-#include "../../Task/TaskQueue.h"
-#include "../../ECS/ISystem.h"
-#include "../../Draw/IGraphicSystem.h"
-#include "../../Task/WorkNode.h"
+#include "Base/Task/Runnable.h"
+#include "Base/Task/TaskQueue.h"
+#include "../ECS/ISystem.h"
+#include "../Draw/IGraphicSystem.h"
+#include "Base/Task/WorkNode.h"
 
 namespace ska {
 

@@ -1,6 +1,6 @@
 #include <limits>
 #include "Image.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::Image::Image(Widget& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip) :
 	Widget(parent, relativePos),

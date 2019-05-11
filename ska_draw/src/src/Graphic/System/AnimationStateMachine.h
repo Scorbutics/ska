@@ -1,8 +1,8 @@
 #pragma once
 #include <functional>
-#include "Utils/TupleUtils.h"
-#include "ECS/Basics/Graphic/IAnimationStateMachine.h"
-#include "ECS/ECSDefines.h"
+#include "Base/Meta/TupleUtils.h"
+#include "Core/ECS/Basics/Graphic/IAnimationStateMachine.h"
+#include "Core/ECS/ECSDefines.h"
 
 namespace ska {
 	class AnimationComponent;

@@ -1,15 +1,15 @@
 #pragma once
-#include "GameApp.h"
+#include "Core/GameApp.h"
 #include "ParticleEffect.h"
-#include "Inputs/RawInputListener.h"
+#include "Core/Inputs/RawInputListener.h"
 #include "TicksCalculator.h"
 #include "Impl/EulerAttractorParticleUpdater.h"
 #include "ParticleSystem.h"
 #include "Graphic/SDLRenderer.h"
 #include "Graphic/SDLWindow.h"
-#include "Data/Events/ExtensibleGameEventDispatcher.h"
+#include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
 #include "GraphicModule.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/EntityManager.h"
 #include "CoreModule.h"
 
 class BenchmarkerCore : 

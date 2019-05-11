@@ -1,5 +1,5 @@
 #pragma once
-#include "ECS/ISystem.h"
+#include "Core/ECS/ISystem.h"
 #include "ExposeImmutable.h"
 
 struct ImmutableSystemTracer {

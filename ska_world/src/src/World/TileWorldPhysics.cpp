@@ -1,7 +1,7 @@
 #include <unordered_set>
 
 #include "TileAgglomerate.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 #include "TileWorldPhysics.h"
 #include "CollisionProfile.h"
 

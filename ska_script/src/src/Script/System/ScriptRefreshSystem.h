@@ -2,13 +2,13 @@
 #include <unordered_set>
 #include <vector>
 #include <optional>
-#include "ECS/Basics/Script/ScriptAwareComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/System.h"
+#include "Core/ECS/Basics/Script/ScriptAwareComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/System.h"
 #include "ScriptAutoSystem.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "Utils/SubObserver.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Base/Patterns/SubObserver.h"
 
 namespace ska {
 	struct InputKeyEvent;

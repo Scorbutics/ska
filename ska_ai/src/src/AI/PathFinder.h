@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
+#include "Core/Point.h"
 #include "Path.h"
 
 namespace ska {

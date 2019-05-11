@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "Task/CompoundTask.h"
+#include "Base/Task/CompoundTask.h"
 
 TEST_CASE("[CompoundTask]"){
 	using TaskPtr = std::unique_ptr<ska::Task>;

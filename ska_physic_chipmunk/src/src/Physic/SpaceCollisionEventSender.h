@@ -1,6 +1,6 @@
 #pragma once
 #include "Space.h"
-#include "Data/Events/GameEventDispatcher.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 
 namespace ska {
 	class EntityManager;

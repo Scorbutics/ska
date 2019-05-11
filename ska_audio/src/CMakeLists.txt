@@ -2,6 +2,7 @@ project(ska_audio)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
+include_directories(${SKA_BASE_DIR})
 include_directories(${GSL_DIR})
 
 file(GLOB_RECURSE SOURCES

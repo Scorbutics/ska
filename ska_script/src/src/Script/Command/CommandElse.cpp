@@ -1,8 +1,8 @@
 #include <string>
 #include "CommandElse.h"
 #include "CommandIf.h"
-#include "Utils/StringUtils.h"
-#include "Exceptions/ScriptSyntaxError.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/Exceptions/ScriptSyntaxError.h"
 #include "../ScriptComponent.h"
 #include "../System/ScriptAutoSystem.h"
 

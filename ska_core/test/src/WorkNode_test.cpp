@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "Task/WorkNode.h"
+#include "Base/Task/WorkNode.h"
 
 TEST_CASE("[WorkNode] wn "){
 	class Dummy {

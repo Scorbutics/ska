@@ -1,7 +1,7 @@
 #include <iostream>
-#include "ECS/EntityLocator.h"
+#include "Core/ECS/EntityLocator.h"
 #include "CommandGetEntityId.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../ScriptComponent.h"
 
 ska::CommandGetEntityId::CommandGetEntityId(EntityManager& entityManager, const EntityLocator& locator) :

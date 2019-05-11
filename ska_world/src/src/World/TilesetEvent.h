@@ -2,10 +2,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <gsl/pointers>
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/Basics/Script/ScriptTriggerType.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptTriggerType.h"
 #include "TilesetEventLoader.h"
-#include "Point.h"
+#include "Core/Point.h"
 
 namespace ska {
 

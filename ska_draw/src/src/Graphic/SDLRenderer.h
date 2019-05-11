@@ -1,7 +1,7 @@
 #pragma once
-#include "Draw/Renderer.h"
-#include "Point.h"
-#include "Draw/Color.h"
+#include "Core/Draw/Renderer.h"
+#include "Core/Point.h"
+#include "Core/Draw/Color.h"
 #include <SDL.h>
 
 namespace ska {

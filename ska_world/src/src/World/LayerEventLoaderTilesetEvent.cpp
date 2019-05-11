@@ -1,9 +1,9 @@
 #include "LayerEventLoaderTilesetEvent.h"
 #include "Layer.h"
 #include "CollisionProfile.h"
-#include "Exceptions/IllegalArgumentException.h"
-#include "Exceptions/ExceptionTrigger.h"
-#include "Utils/StringUtils.h"
+#include "Core/Exceptions/IllegalArgumentException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
+#include "Base/Values/Strings/StringUtils.h"
 
 ska::LayerEventLoaderTilesetEvent::LayerEventLoaderTilesetEvent(const CollisionProfile& collisionProfile, const std::size_t layer, const TilesetEvent& tilesetEvent) :
 	m_collisionProfile(collisionProfile),

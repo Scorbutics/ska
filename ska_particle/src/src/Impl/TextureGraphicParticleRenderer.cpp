@@ -1,6 +1,6 @@
 #include "TextureGraphicParticleRenderer.h"
 #include "../ParticleGroup.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::TextureGraphicParticleRenderer::TextureGraphicParticleRenderer(Renderer& nativeRenderer) : m_renderer(nativeRenderer) {
 }

@@ -1,9 +1,9 @@
 #include "ShadowSystem.h"
-#include "Utils/SpritePath.h"
+#include "Core/Utils/SpritePath.h"
 #include "CameraSystem.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/DrawableContainer.h"
 #include "../PositionnedGraphicDrawable.h"
-#include "Utils/SkaConstants.h"
+#include "Core/Utils/SkaConstants.h"
 
 ska::ShadowSystem::ShadowSystem(ska::EntityManager& entityManager, ska::CameraSystem& camera) :
     AbstractGraphicSystem(camera),

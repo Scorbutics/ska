@@ -1,5 +1,5 @@
 #include "HoverEvent.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 #include "../Utils/WidgetMaskHelper.h"
 #include "../Components/Widget.h"
 

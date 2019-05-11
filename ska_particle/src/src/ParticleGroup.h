@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
-#include "LoggerConfig.h"
-#include "Point.h"
-#include "Draw/Color.h"
+#include "Base/Config/LoggerConfig.h"
+#include "Core/Point.h"
+#include "Core/Draw/Color.h"
 #include "Graphic/Texture.h"
 #include "Logging/Logger.h"
 

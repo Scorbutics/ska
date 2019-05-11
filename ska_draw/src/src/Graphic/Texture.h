@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utils/ManagedResource.h"
-#include "Rectangle.h"
-#include "Draw/Renderable.h"
+#include "Core/Utils/ManagedResource.h"
+#include "Core/Rectangle.h"
+#include "Core/Draw/Renderable.h"
 #include "SDLTexture.h"
 #include "TextureData.h"
 

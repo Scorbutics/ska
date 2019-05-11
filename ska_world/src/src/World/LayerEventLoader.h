@@ -1,7 +1,7 @@
 #pragma once
-#include "Utils/Vector2.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "ECS/Basics/Script/ScriptGlobalData.h"
+#include "Base/Containers/Vector2.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptGlobalData.h"
 
 namespace ska {
 	class LayerEventLoader {

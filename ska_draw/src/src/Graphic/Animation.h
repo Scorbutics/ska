@@ -1,5 +1,5 @@
 #pragma once
-#include "Rectangle.h"
+#include "Core/Rectangle.h"
 
 namespace ska {
 	class Animation {

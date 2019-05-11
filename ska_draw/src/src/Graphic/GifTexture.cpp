@@ -2,11 +2,11 @@
 #include <CEV_gif.h>
 
 #include "GifTexture.h"
-#include "Exceptions/FileException.h"
-#include "Exceptions/ExceptionTrigger.h"
+#include "Core/Exceptions/FileException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
 #include "Logging/Logger.h"
 #include "Core/CodeDebug/CodeDebug.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 #include "../SDLGifLibrary.h"
 
 ska::GifTexture::GifTexture()

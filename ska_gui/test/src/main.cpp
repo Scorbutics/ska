@@ -1,6 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest.h>
-#include "GameApp.h"
+#include "Core/GameApp.h"
 #include <iostream>
 
 class AppTest : public ska::GameApp {

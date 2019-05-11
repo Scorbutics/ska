@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_set>
-#include "ECS/System.h"
-#include "ECS/Basics/Physic/GravityAffectedComponent.h"
-#include "ECS/Basics/Physic/ForceComponent.h"
-#include "ECS/Basics/Physic/MovementComponent.h"
+#include "Core/ECS/System.h"
+#include "Core/ECS/Basics/Physic/GravityAffectedComponent.h"
+#include "Core/ECS/Basics/Physic/ForceComponent.h"
+#include "Core/ECS/Basics/Physic/MovementComponent.h"
 
 namespace ska {
 	class GravitySystem : public System< RequiredComponent<ForceComponent, GravityAffectedComponent, MovementComponent>, PossibleComponent<>> {

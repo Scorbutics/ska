@@ -1,10 +1,10 @@
 #include <limits>
 #include "CameraSystem.h"
-#include "Draw/DrawableContainer.h"
+#include "Core/Draw/DrawableContainer.h"
 #include "GraphicSystem.h"
 #include "../PositionnedGraphicDrawable.h"
-#include "ECS/Basics/Graphic/DialogComponent.h"
-#include "Utils/NumberUtils.h"
+#include "Core/ECS/Basics/Graphic/DialogComponent.h"
+#include "Base/Values/Numbers/NumberUtils.h"
 
 ska::GraphicSystem::GraphicSystem(ska::EntityManager& entityManager, ska::GameEventDispatcher& ged, ska::CameraSystem& camera) :
 	AbstractGraphicSystem(camera),

@@ -1,5 +1,5 @@
 #include "Arbiter.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 
 ska::cp::Arbiter::Arbiter(cpArbiter& arb) :
 	m_instance(&arb) {

@@ -8,7 +8,7 @@
 #include "../Utils/WidgetHandlingTrait.h"
 #include "../Events/StopType.h"
 #include "../Events/IWidgetEvent.h"
-#include "Utils/VectorUtils.h"
+#include "Core/Utils/VectorUtils.h"
 
 namespace ska {
 

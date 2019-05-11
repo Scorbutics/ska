@@ -4,7 +4,7 @@
 #include "Button.h"
 #include "../../Events/KeyEvent.h"
 #include "../../Events/ValueChangedEvent.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../../GUI.h"
 
 ska::Input::Input(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) :

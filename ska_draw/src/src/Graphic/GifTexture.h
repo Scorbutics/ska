@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Rectangle.h"
+#include "Core/Rectangle.h"
 
 struct CEV_GifAnim;
 struct SDL_Texture;

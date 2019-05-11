@@ -2,8 +2,8 @@
 #include <string>
 #include <optional>
 #include "TilesetEventLoader.h"
-#include "ECS/Basics/Script/ScriptTriggerType.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptTriggerType.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class TilesetEventLoaderText : 

@@ -1,8 +1,8 @@
 #pragma once
-#include "Inputs/InputAction.h"
-#include "Inputs/MouseInput.h"
-#include "Inputs/KeyInput.h"
-#include "Inputs/InputContext.h"
+#include "Core/Inputs/InputAction.h"
+#include "Core/Inputs/MouseInput.h"
+#include "Core/Inputs/KeyInput.h"
+#include "Core/Inputs/InputContext.h"
 
 struct InputContextTest : public ska::InputContext {
 

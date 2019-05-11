@@ -1,6 +1,6 @@
 #include <sstream>
 #include "AbstractCommand.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../ScriptUtils.h"
 #include "../ScriptSymbolsConstants.h"
 #include "../System/ScriptAutoSystem.h"

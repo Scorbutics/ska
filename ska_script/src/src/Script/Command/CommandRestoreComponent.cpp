@@ -1,5 +1,5 @@
 #include "CommandRestoreComponent.h"
-#include "Utils/StringUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../System/ScriptAutoSystem.h"
 
 ska::CommandRestoreComponent::CommandRestoreComponent(EntityManager& entityManager) : 

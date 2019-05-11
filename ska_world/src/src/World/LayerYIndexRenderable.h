@@ -2,7 +2,7 @@
 #include "LayerRenderable.h"
 #include "Graphic/Texture.h"
 #include "TileAnimation.h"
-#include "Utils/Vector2.h"
+#include "Base/Containers/Vector2.h"
 #include "LayerRenderableRow.h"
 
 namespace ska {

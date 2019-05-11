@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "JumpAnimationStateMachine.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
 
 namespace ska {
     class EntityManager;

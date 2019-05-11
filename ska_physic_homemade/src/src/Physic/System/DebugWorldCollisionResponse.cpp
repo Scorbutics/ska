@@ -1,9 +1,9 @@
-#include "Data/Events/CollisionEvent.h"
+#include "Core/Data/Events/CollisionEvent.h"
 #include "DebugWorldCollisionResponse.h"
-#include "ECS/Basics/Graphic/DebugGraphicComponent.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/Basics/Graphic/DebugGraphicComponent.h"
+#include "Core/ECS/EntityManager.h"
 #include "CollisionSystem.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
 
 ska::DebugWorldCollisionResponse::DebugWorldCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
 WorldCollisionObserver(std::bind(&DebugWorldCollisionResponse::onWorldCollision, this, std::placeholders::_1), ged),

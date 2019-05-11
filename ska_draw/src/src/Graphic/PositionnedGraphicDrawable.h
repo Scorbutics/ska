@@ -1,7 +1,7 @@
 #pragma once
 #include <optional>
-#include "Draw/Drawable.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Drawable.h"
+#include "Core/Draw/Renderer.h"
 
 namespace ska {
 	class Renderable;

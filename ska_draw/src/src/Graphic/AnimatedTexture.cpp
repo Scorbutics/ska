@@ -1,6 +1,6 @@
 #include <cassert>
 #include "AnimatedTexture.h"
-#include "Draw/Renderer.h"
+#include "Core/Draw/Renderer.h"
 
 ska::AnimatedTexture::AnimatedTexture()
 	: m_gifMode(false) {

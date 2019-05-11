@@ -2,8 +2,8 @@
 #include <memory>
 #include <optional>
 #include "Tile.h"
-#include "Utils/Vector2.h"
-#include "Utils/MovableNonCopyable.h"
+#include "Base/Containers/Vector2.h"
+#include "Base/Values/MovableNonCopyable.h"
 
 namespace ska {
 	class Layer :

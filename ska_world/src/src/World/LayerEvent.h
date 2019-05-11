@@ -3,11 +3,11 @@
 #include <string>
 #include <memory>
 
-#include "Utils/Vector2.h"
-#include "Utils/MovableNonCopyable.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Base/Containers/Vector2.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Graphic/AnimatedTexture.h"
-#include "ECS/Basics/Script/ScriptGlobalData.h"
+#include "Core/ECS/Basics/Script/ScriptGlobalData.h"
 
 namespace ska {
     class LayerEventLoader;

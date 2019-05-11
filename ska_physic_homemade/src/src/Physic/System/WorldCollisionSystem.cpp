@@ -1,9 +1,9 @@
 #include "WorldCollisionSystem.h"
-#include "ECS/Basics/Physic/CollisionComponent.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "ECS/Basics/Physic/CollisionContact.h"
+#include "Core/ECS/Basics/Physic/CollisionComponent.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Core/ECS/Basics/Physic/CollisionContact.h"
 #include "Core/CodeDebug/CodeDebug.h"
-#include "Utils/RectangleUtils.h"
+#include "Core/Utils/RectangleUtils.h"
 #include "World/CollisionProfile.h"
 
 ska::WorldCollisionSystem::WorldCollisionSystem(EntityManager& entityManager, const CollisionProfile& cp, GameEventDispatcher& ged) :

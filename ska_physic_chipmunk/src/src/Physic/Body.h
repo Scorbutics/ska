@@ -2,8 +2,8 @@
 #include <vector>
 #include <chipmunk.h>
 #include <gsl/pointers>
-#include "Utils/MovableNonCopyable.h"
-#include "ECS/ECSDefines.h"
+#include "Base/Values/MovableNonCopyable.h"
+#include "Core/ECS/ECSDefines.h"
 
 namespace ska {
 	namespace cp {
