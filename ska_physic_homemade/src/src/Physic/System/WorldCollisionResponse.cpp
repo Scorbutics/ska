@@ -1,7 +1,7 @@
-#include "Data/Events/CollisionEvent.h"
+#include "Core/Data/Events/CollisionEvent.h"
 #include "WorldCollisionResponse.h"
-#include "ECS/Basics/Physic/WorldCollisionComponent.h"
-#include "ECS/EntityManager.h"
+#include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
+#include "Core/ECS/EntityManager.h"
 #include "EntityCollisionResponse.h"
 
 ska::WorldCollisionResponse::WorldCollisionResponse(ska::TileWorld& world, GameEventDispatcher& ged, EntityManager& em) :

@@ -1,11 +1,11 @@
 #include <SDL_image.h>
 
 #include "SDLWindow.h"
-#include "Exceptions/IllegalArgumentException.h"
-#include "Exceptions/IllegalStateException.h"
+#include "Core/Exceptions/IllegalArgumentException.h"
+#include "Core/Exceptions/IllegalStateException.h"
 #include "Logging/Logger.h"
 #include <cassert>
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 #include "../SDLImageLibrary.h"
 
 #define TAILLEBLOCFENETRE 32

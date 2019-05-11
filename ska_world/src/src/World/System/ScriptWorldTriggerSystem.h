@@ -1,7 +1,7 @@
 #pragma once
-#include "ECS/Basics/Script/ScriptAwareComponent.h"
-#include "ECS/System.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptAwareComponent.h"
+#include "Core/ECS/System.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 
 namespace ska {
 	class TileWorld;

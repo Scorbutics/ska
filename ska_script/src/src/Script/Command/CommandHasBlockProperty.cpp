@@ -1,8 +1,8 @@
 #include "CommandHasBlockProperty.h"
-#include "Data/MemoryScript.h"
-#include "Utils/StringUtils.h"
+#include "Core/Data/MemoryScript.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../ScriptUtils.h"
-#include "Utils/FormalCalculation/FormalCalculator.h"
+#include "Core/Utils/FormalCalculation/FormalCalculator.h"
 #include "World/TileWorld.h"
 
 ska::CommandHasBlockProperty::CommandHasBlockProperty(TileWorld& w, EntityManager& entityManager) :

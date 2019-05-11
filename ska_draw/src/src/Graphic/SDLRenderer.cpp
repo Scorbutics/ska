@@ -1,5 +1,5 @@
-#include "Exceptions/IllegalArgumentException.h"
-#include "Exceptions/ExceptionTrigger.h"
+#include "Core/Exceptions/IllegalArgumentException.h"
+#include "Core/Exceptions/ExceptionTrigger.h"
 #include "SDLRenderer.h"
 #include "Logging/Logger.h"
 #include "SDLWindow.h"
@@ -7,7 +7,7 @@
 #include "SDL_RectConverter.h"
 #include <cassert>
 #include "SDL_PointConverter.h"
-#include "SDLLibrary.h"
+#include "Core/SDLLibrary.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
     m_renderer(nullptr),

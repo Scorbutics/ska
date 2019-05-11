@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <doctest.h>
-#include "ECS/EntityManager.h"
+#include "Core/ECS/EntityManager.h"
 
 bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId& entity) {
 	if (event.ecsEventType == ska::ECSEventType::ENTITIES_REMOVED) {

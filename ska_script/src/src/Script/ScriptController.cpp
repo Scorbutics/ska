@@ -1,6 +1,6 @@
 #include <fstream>
 #include "ScriptController.h"
-#include "Exceptions/InvalidPathException.h"
+#include "Core/Exceptions/InvalidPathException.h"
 
 std::string ska::ScriptController::nextLine() {
 	std::string line = file[currentLine];

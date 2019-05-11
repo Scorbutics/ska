@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#include "Point.h"
+#include "Core/Point.h"
 
 template <class T>
 SDL_Point ToSDL_Point(const ska::Point<T>& p) {

@@ -1,11 +1,11 @@
 #include "Core/Window.h"
-#include "Inputs/InputContextManager.h"
+#include "Core/Inputs/InputContextManager.h"
 #include "GUI.h"
 #include "Windows/GUIScrollButtonWindowIG.h"
 #include "Events/FocusEvent.h"
-#include "Data/Events/GUIEvent.h"
+#include "Core/Data/Events/GUIEvent.h"
 #include "Windows/BalloonDialog.h"
-#include "Utils/SkaConstants.h"
+#include "Core/Utils/SkaConstants.h"
 
 #define SCROLL_BUTTON_SPEED 3
 static constexpr auto TAILLEECRANMINX = 32*15;

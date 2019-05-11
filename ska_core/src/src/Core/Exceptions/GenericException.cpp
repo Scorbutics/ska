@@ -1,5 +1,5 @@
 #include "GenericException.h"
-#include "../LoggerConfig.h"
+#include "Base/Config/LoggerConfig.h"
 
 ska::GenericException::GenericException(const char* message, const char* type) {
     m_message = std::string(message);

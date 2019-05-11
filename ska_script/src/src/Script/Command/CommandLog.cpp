@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Data/MemoryScript.h"
+#include "Core/Data/MemoryScript.h"
 #include "CommandLog.h"
 #include "Logging/Logger.h"
 #include "../ScriptUtils.h"

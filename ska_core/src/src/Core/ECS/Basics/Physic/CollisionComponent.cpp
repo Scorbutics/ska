@@ -1,4 +1,4 @@
-#include "../../../LoggerConfig.h"
+#include "Base/Config/LoggerConfig.h"
 #include "CollisionComponent.h"
 
 ska::CollisionComponent::CollisionComponent() {

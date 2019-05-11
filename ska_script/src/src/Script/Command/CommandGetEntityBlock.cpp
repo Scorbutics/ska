@@ -1,12 +1,12 @@
 #include <iostream>
-#include "Data/MemoryScript.h"
+#include "Core/Data/MemoryScript.h"
 #include "CommandGetEntityBlock.h"
 #include "Logging/Logger.h"
 #include "../ScriptUtils.h"
-#include "Utils/StringUtils.h"
-#include "ECS/EntityManager.h"
-#include "ECS/Basics/Physic/HitboxComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/ECS/Basics/Physic/HitboxComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
 #include "World/TileWorld.h"
 
 ska::CommandGetEntityBlock::CommandGetEntityBlock(TileWorld& w, EntityManager& entityManager) :

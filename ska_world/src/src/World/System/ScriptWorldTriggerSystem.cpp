@@ -1,5 +1,5 @@
 #include "ScriptWorldTriggerSystem.h"
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "../TileWorld.h"
 
 ska::ScriptWorldTriggerSystem::ScriptWorldTriggerSystem(EntityManager& em, GameEventDispatcher& ged, TileWorld& world) :

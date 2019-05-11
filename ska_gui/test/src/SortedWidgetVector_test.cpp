@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "Point.h"
+#include "Core/Point.h"
 #include "HandledWidgetTest.h"
 #include "GUI/Utils/SortedWidgetVector.h"
 

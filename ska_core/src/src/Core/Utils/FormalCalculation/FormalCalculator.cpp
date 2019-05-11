@@ -2,8 +2,8 @@
 #include "FormalCalculator.h"
 #include <iostream>
 #include "CalculOperators.h"
-#include "../../Utils/StringUtils.h"
-#include "../../Utils/NumberUtils.h"
+#include "Base/Values/Strings/StringUtils.h"
+#include "Base/Values/Numbers/NumberUtils.h"
 #include "../../Exceptions/ScriptSyntaxError.h"
 #include "../../Exceptions/ExceptionTrigger.h"
 

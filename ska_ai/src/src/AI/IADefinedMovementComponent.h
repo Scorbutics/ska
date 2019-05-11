@@ -1,7 +1,7 @@
 #pragma once
-#include "ECS/Basics/Script/ScriptSleepComponent.h"
-#include "Point.h"
-#include "Utils/TimeUtils.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
+#include "Core/Point.h"
+#include "Core/Utils/TimeUtils.h"
 
 namespace ska {
 	class IADefinedMovementComponent {

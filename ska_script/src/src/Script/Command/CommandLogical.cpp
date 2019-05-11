@@ -1,7 +1,7 @@
 #include <cassert>
 #include "CommandLogical.h"
-#include "Data/MemoryScript.h"
-#include "Utils/StringUtils.h"
+#include "Core/Data/MemoryScript.h"
+#include "Base/Values/Strings/StringUtils.h"
 #include "../ScriptUtils.h"
 
 ska::CommandLogical::CommandLogical(EntityManager& entityManager) :

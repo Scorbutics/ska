@@ -1,4 +1,4 @@
-#include "Data/MemoryScript.h"
+#include "Core/Data/MemoryScript.h"
 #include "ControlStatement.h"
 
 ska::ControlStatement::ControlStatement(EntityManager& e) : 

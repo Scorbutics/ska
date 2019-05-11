@@ -1,7 +1,7 @@
 #include "RandomColorGenerator.h"
 #include "../ParticleBuilder.h"
 #include "../ParticleFactory.h"
-#include "Utils/NumberUtils.h"
+#include "Base/Values/Numbers/NumberUtils.h"
 
 ska::RandomColorGenerator::RandomColorGenerator(Color min, Color max) :
     m_min(min),

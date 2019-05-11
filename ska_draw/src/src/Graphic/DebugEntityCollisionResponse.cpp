@@ -1,11 +1,11 @@
-#include "Data/Events/CollisionEvent.h"
+#include "Core/Data/Events/CollisionEvent.h"
 #include "DebugEntityCollisionResponse.h"
-#include "ECS/EntityManager.h"
-#include "Utils/SpritePath.h"
-#include "ECS/Basics/Graphic/DeleterComponent.h"
-#include "ECS/Basics/Physic/PositionComponent.h"
+#include "Core/ECS/EntityManager.h"
+#include "Core/Utils/SpritePath.h"
+#include "Core/ECS/Basics/Graphic/DeleterComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
 #include "GraphicComponent.h"
-#include "ECS/Basics/Physic/CollisionComponent.h"
+#include "Core/ECS/Basics/Physic/CollisionComponent.h"
 #include "Core/CodeDebug/CodeDebug.h"
 
 ska::DebugEntityCollisionResponse::DebugEntityCollisionResponse(GameEventDispatcher& ged, EntityManager& em) :
