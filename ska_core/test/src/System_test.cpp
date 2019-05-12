@@ -1,10 +1,11 @@
 #include <unordered_set>
 #include <doctest.h>
+#include "LoggerConfig.h"
 #include "MockSystemConcrete.h"
 
 TEST_CASE("[System]") {
 	auto ged = ska::GameEventDispatcher{};
-	auto em = ska::EntityManager { ged };
+	auto&& em = ska::EntityManager::Make<int, std::string, double> ( ged );
 
 	class ComponentAltererObservable :
 		public ska::Observable<const ska::EntityEventType> {

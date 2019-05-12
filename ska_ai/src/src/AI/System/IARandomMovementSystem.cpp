@@ -1,3 +1,4 @@
+#include "AI/__internalConfig/LoggerConfig.h"
 #include "IARandomMovementSystem.h"
 #include "Core/Utils/TimeUtils.h"
 #include "Core/Utils/PhysicUtils.h"

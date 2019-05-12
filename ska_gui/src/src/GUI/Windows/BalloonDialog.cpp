@@ -1,3 +1,4 @@
+#include "GUI/__internalConfig/LoggerConfig.h"
 #include "BalloonDialog.h"
 #include "../Components/Widget.h"
 #include "../Components/Concrete/ScrollingMultiLineLabel.h"

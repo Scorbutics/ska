@@ -63,9 +63,7 @@ namespace ska {
             }
         }
 
-        void scheduleDeferredRemove(EntityId e) {
-            m_toDelete.emplace(e);
-        }
+        void scheduleDeferredRemove(EntityId e) {  m_toDelete.emplace(e); }
 
 		virtual ~System() = default;
 
@@ -101,25 +99,12 @@ namespace ska {
         ComponentAccessor m_componentAccessor;
 		ComponentPossibleAccessor m_componentPossibleAccessor;
 
-        const std::unordered_set<EntityId>& getEntities() const {
-            return m_processed;
-        }
+        const std::unordered_set<EntityId>& getEntities() const { return m_processed; }
 
-		EntityId createEntity() const {
-			return m_entityManager.createEntity();
-		}
-
-		EntityId createEntityNoThrow() const {
-			return m_entityManager.createEntityNoThrow();
-		}
-
-		void removeEntity(const EntityId& entity) const {
-			m_entityManager.removeEntity(entity);
-        }
-
-		void refreshEntity(const EntityId& entity) const {
-			m_entityManager.refreshEntity(entity);
-        }
+		EntityId createEntity() const { return m_entityManager.createEntity(); }
+		EntityId createEntityNoThrow() const { return m_entityManager.createEntityNoThrow(); }
+		void removeEntity(const EntityId& entity) const { m_entityManager.removeEntity(entity); }
+		void refreshEntity(const EntityId& entity) const { m_entityManager.refreshEntity(entity); }
     };
 
 }

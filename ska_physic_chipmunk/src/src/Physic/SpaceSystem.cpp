@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "SpaceSystem.h"
 #include "Logging/Logger.h"
 

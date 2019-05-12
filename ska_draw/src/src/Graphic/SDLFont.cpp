@@ -1,9 +1,11 @@
 #include <SDL_ttf.h>
+
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLFont.h"
 #include "Core/SDLLibrary.h"
 #include "Core/Exceptions/FileException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
-#include "../SDLTTFLibrary.h"
+#include "Graphic/SDLTTFLibrary.h"
 
 std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts/FiraSans-Medium.ttf";
 

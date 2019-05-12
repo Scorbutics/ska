@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include "Core/Rectangle.h"
 #include "../GraphicComponent.h"

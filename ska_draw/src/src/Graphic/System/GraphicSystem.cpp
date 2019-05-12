@@ -1,4 +1,5 @@
 #include <limits>
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
 #include "GraphicSystem.h"

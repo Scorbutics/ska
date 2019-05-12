@@ -1,12 +1,12 @@
 #include <SDL_image.h>
-
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLWindow.h"
 #include "Core/Exceptions/IllegalArgumentException.h"
 #include "Core/Exceptions/IllegalStateException.h"
 #include "Logging/Logger.h"
 #include <cassert>
 #include "Core/SDLLibrary.h"
-#include "../SDLImageLibrary.h"
+#include "Graphic/SDLImageLibrary.h"
 
 #define TAILLEBLOCFENETRE 32
 #define TAILLEECRANMINX TAILLEBLOCFENETRE*15

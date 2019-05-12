@@ -1,6 +1,6 @@
 #include <SDL.h>
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "RawInputListener.h"
-#include "Base/Config/LoggerConfig.h"
 #include "../Exceptions/TerminateProcessException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "Base/Values/Strings/StringUtils.h"

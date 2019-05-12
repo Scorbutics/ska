@@ -1,13 +1,14 @@
 #include <iostream>
 #include <CEV_gif.h>
 
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "GifTexture.h"
 #include "Core/Exceptions/FileException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "Logging/Logger.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Core/SDLLibrary.h"
-#include "../SDLGifLibrary.h"
+#include "Graphic/SDLGifLibrary.h"
 
 ska::GifTexture::GifTexture()
 	: m_animation(NULL),

@@ -1,4 +1,5 @@
 #include <doctest.h>
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "Core/ECS/ComponentHandler.h"
 
 TEST_CASE("[ComponentHandler]") {

@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "SpaceCollisionEventSender.h"
 #include "Core/Utils/RectangleUtils.h"
 #include "Base/Values/Numbers/NumberUtils.h"

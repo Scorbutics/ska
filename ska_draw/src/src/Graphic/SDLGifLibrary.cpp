@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLGifLibrary.h"
 
 #define SKA_GIF_LIB_NAME_DEFINE(ENUM, NAME) \
@@ -10,3 +11,8 @@ SKA_GIF_LIB_NAME_DEFINE(GIF_LOOP_MODE, "CEV_gifLoopMode");
 SKA_GIF_LIB_NAME_DEFINE(GIF_LOOP_RESET, "CEV_gifLoopReset");
 SKA_GIF_LIB_NAME_DEFINE(GIF_ANIM_AUTO, "CEV_gifAnimAuto");
 SKA_GIF_LIB_NAME_DEFINE(GIF_ANIM_FREE, "CEV_gifAnimFree");
+
+const ska::SDLGifLibrary& ska::SDLGifLibrary::get() {
+	static SDLGifLibrary instance;
+	return instance;
+}

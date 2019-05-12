@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "ShadowSystem.h"
 #include "Core/Utils/SpritePath.h"
 #include "CameraSystem.h"

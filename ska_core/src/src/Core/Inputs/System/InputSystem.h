@@ -10,7 +10,7 @@
 namespace ska {
 	struct InputKeyEvent;
 
-	class InputSystem : 
+	class InputSystem :
 		public System<RequiredComponent<PositionComponent, InputComponent, ForceComponent>, PossibleComponent<>>,
 		public SubObserver<InputKeyEvent> {
 	public:

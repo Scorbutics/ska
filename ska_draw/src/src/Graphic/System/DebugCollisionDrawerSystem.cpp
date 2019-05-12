@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "DebugCollisionDrawerSystem.h"
 #include "Core/Utils/SpritePath.h"
 #include "Core/ECS/Basics/Physic/PositionComponent.h"

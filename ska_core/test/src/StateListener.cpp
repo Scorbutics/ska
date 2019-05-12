@@ -1,3 +1,4 @@
+#include "LoggerConfig.h"
 #include "StateListener.h"
 
 StateListener::StateListener(ska::GameEventDispatcher& ged) : 

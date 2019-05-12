@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLTexture.h"
 #include "SDLSurface.h"
 #include "Core/SDLLibrary.h"

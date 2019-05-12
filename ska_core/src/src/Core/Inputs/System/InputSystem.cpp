@@ -1,3 +1,4 @@
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "InputSystem.h"
 #include "../../Data/Events/InputKeyEvent.h"
 

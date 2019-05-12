@@ -1,4 +1,6 @@
 #include <SDL.h>
+#include "GUI/__internalConfig/LoggerConfig.h"
+#include "Core/SDLLibrary.h"
 #include "Input.h"
 #include "Label.h"
 #include "Button.h"
@@ -14,7 +16,7 @@ ska::Input::Input(Widget& parent, const std::string& text, int fontSize, Point<i
 	auto& button = addWidget<Button>(relativePos, ska::GUI::MENU_DEFAULT_THEME_PATH + "textfield", nullptr, [&](Widget* tthis, ClickEvent& e) {
 		if (!m_keyFocus && e.getState() == MOUSE_CLICK) {
 			m_keyFocus = true;
-			SDL_StartTextInput();
+			SDLLibrary::get().startTextInput();
 		}
 		e.setTarget(this);
 		auto b = reinterpret_cast<Button*>(tthis);

@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "MovementSystem.h"
 #include "Space.h"
 #include "Core/ECS/Basics/Physic/MovementComponent.h"

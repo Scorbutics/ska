@@ -3,6 +3,7 @@ project(ska_physic_chipmunk)
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2_GIF_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
+include_directories(${SKA_PHYSIC_CHIPMUNK_DIR})
 include_directories(${SKA_BASE_DIR})
 include_directories(${CHIPMUNK_DIR})
 include_directories(${GSL_DIR})
@@ -16,3 +17,4 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(ska_physic_chipmunk ${SOURCES})
+target_link_libraries(ska_physic_chipmunk ska_core chipmunk)

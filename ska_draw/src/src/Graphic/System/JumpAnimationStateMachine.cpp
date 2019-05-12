@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "JumpAnimationStateMachine.h"
 #include "Core/ECS/EntityManager.h"
 #include "Base/Values/Numbers/NumberUtils.h"

@@ -1,4 +1,5 @@
 #include <doctest.h>
+#include "LoggerConfig.h"
 #include "Core/State/StateHolder.h"
 #include "Core/Exceptions/StateDiedException.h"
 #include "StateListener.h"

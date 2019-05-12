@@ -1,3 +1,4 @@
+#include "GUI/__internalConfig/LoggerConfig.h"
 #include "GUIScrollButtonWindowIG.h"
 #include "../GUI.h"
 #include "../Components/Concrete/TileSurface.h"

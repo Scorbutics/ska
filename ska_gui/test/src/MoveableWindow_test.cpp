@@ -1,4 +1,5 @@
 #include <doctest.h>
+#include "LoggerConfig.h"
 #include "Core/Point.h"
 #include "WindowsUtil.h"
 #include "MoveableWindowTest.h"

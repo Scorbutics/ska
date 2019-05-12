@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "WalkAnimationStateMachine.h"
 #include "Core/ECS/EntityManager.h"
 #include "../GraphicComponent.h"

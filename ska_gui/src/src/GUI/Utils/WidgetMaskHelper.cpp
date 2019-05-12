@@ -1,3 +1,6 @@
 #include "WidgetMaskHelper.h"
 
-unsigned int ska::WidgetMaskHelper::WStaticCounterGlobal::m_typeCounter = 0;
+unsigned int ska::WStaticCounterGlobal::getCounterAndInc() {
+	static unsigned int m_typeCounter = 0;
+	return m_typeCounter++;
+}

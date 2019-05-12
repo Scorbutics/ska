@@ -1,14 +1,15 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cassert>
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "Core/SDLLibrary.h"
 #include "Font.h"
 #include "SDLSurface.h"
 #include "Logging/Logger.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "../GraphicModule.h"
-#include "../SDLTTFLibrary.h"
-#include "../SDLImageLibrary.h"
+#include "SDLTTFLibrary.h"
+#include "SDLImageLibrary.h"
 #include "Core/Utils/SkaConstants.h"
 
 SDL_Color ColorToNative(const ska::Color& c){

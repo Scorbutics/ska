@@ -59,10 +59,7 @@ namespace ska {
 			return call<TTFIdNamedFunction<TTF_RENDER_TEXT_BLENDED>>(&font, text.c_str(), std::move(color));
 		}
 		
-		static const SDLTTFLibrary& get() {
-			static const SDLTTFLibrary instance;
-			return instance;
-		}
+		static const SDLTTFLibrary& get();
 
 	private:
 		SDLTTFLibrary() : SDLTFFDynLib("SDL2_ttf") {}

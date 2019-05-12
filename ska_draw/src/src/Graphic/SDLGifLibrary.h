@@ -78,10 +78,8 @@ namespace ska {
 			callSDLGif(GIF_ANIM_FREE)(anim);
 		}
 		
-		static const SDLGifLibrary& get() {
-			static SDLGifLibrary instance;
-			return instance;
-		}
+		static const SDLGifLibrary& get();
+
 		#undef callSDLImage
 	private:
 		SDLGifLibrary() : SDLGifDynLib("SDL2_gif") {}

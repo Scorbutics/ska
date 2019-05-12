@@ -51,6 +51,8 @@ namespace ska {
 		SDL_SHOW_CURSOR,
 		SDL_SET_RENDER_TARGET,
 		SDL_CREATE_TEXTURE,
+		SDL_RW_FROM_FILE,
+		SDL_START_TEXT_INPUT,
 		SDL_SET_RENDER_DRAW_BLEND_MODE
 	};
 
@@ -97,6 +99,8 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SHOW_CURSOR, int(int toggle));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_TARGET, int(SDL_Renderer* renderer, SDL_Texture*  texture));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_TEXTURE, SDL_Texture*(SDL_Renderer* renderer, Uint32 format, int access, int w, int h) );
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RW_FROM_FILE, SDL_RWops*(const char* file, const char* mode));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_START_TEXT_INPUT, void(void));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_BLEND_MODE, int(SDL_Renderer* renderer, SDL_BlendMode blendMode));
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
@@ -142,6 +146,8 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SHOW_CURSOR),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_TARGET),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_CREATE_TEXTURE),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_RW_FROM_FILE),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_START_TEXT_INPUT),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_DRAW_BLEND_MODE)
 	>;
 
@@ -150,176 +156,181 @@ namespace ska {
         #define callSDL(enumIndex) call<SKA_SDL_DYN_LIB_NAME_ENTRY(enumIndex)>
 
 	public:
-		int init(Uint32 flags) const {
+		inline int init(Uint32 flags) const {
 			return callSDL(SDL_INIT)(std::move(flags));
 		}
 
-        int upperBlit(SDL_Surface& src, const SDL_Rect* srcRect, SDL_Surface& dst, SDL_Rect* dstRect) const {
+		inline int upperBlit(SDL_Surface& src, const SDL_Rect* srcRect, SDL_Surface& dst, SDL_Rect* dstRect) const {
 			return callSDL(SDL_UPPER_BLIT)(&src, std::move(srcRect), &dst, std::move(dstRect));
 		}
 
-        int pollEvent(SDL_Event& event) const {
+		inline int pollEvent(SDL_Event& event) const {
             return callSDL(SDL_POLL_EVENT)(&event);
         }
 
-        void renderPresent(SDL_Renderer& renderer) const {
+		inline void renderPresent(SDL_Renderer& renderer) const {
             callSDL(SDL_RENDER_PRESENT)(&renderer);
         }
 
-        int renderClear(SDL_Renderer& renderer) const {
+		inline int renderClear(SDL_Renderer& renderer) const {
             return callSDL(SDL_RENDER_CLEAR)(&renderer);
         }
 
-        int setTextureAlphaMod(SDL_Texture& texture, Uint8 alpha) const {
+		inline int setTextureAlphaMod(SDL_Texture& texture, Uint8 alpha) const {
             return callSDL(SDL_SET_TEXTURE_ALPHA_MOD)(&texture, std::move(alpha));
         }
 
-        int setSurfaceAlphaMod(SDL_Surface& surface, Uint8 alpha) const {
+		inline int setSurfaceAlphaMod(SDL_Surface& surface, Uint8 alpha) const {
             return callSDL(SDL_SET_SURFACE_ALPHA_MOD)(&surface, std::move(alpha));
         }
 
-        int setTextureColorMod(SDL_Texture& texture, Uint8 r, Uint8 g, Uint8 b) const {
+		inline int setTextureColorMod(SDL_Texture& texture, Uint8 r, Uint8 g, Uint8 b) const {
             return callSDL(SDL_SET_TEXTURE_COLOR_MOD)(&texture, std::move(r), std::move(g), std::move(b));
         }
 
-        int setTextureBlendMode(SDL_Texture& texture, SDL_BlendMode blendMode) const {
+		inline int setTextureBlendMode(SDL_Texture& texture, SDL_BlendMode blendMode) const {
             return callSDL(SDL_SET_TEXTURE_BLEND_MOD)(&texture, std::move(blendMode));
         }
 
-        int setColorKey(SDL_Surface& surface, int flag, Uint32 key) const {
+		inline int setColorKey(SDL_Surface& surface, int flag, Uint32 key) const {
             return callSDL(SDL_SET_COLOR_KEY)(&surface, std::move(flag), std::move(key));
         }
 
-        Uint32 mapRGBA(const SDL_PixelFormat& format, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const {
+		inline Uint32 mapRGBA(const SDL_PixelFormat& format, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const {
             return callSDL(SDL_MAP_RGBA)(&format, std::move(r), std::move(g), std::move(b), std::move(a));
         }
 
-        Uint32 getTicks() const {
+		inline Uint32 getTicks() const {
             return callSDL(SDL_GET_TICKS)();
         }
 
-        void getRGB(Uint32 pixel, const SDL_PixelFormat& format, Uint8* r, Uint8* g, Uint8* b) const {
+		inline void getRGB(Uint32 pixel, const SDL_PixelFormat& format, Uint8* r, Uint8* g, Uint8* b) const {
             callSDL(SDL_GET_RGB)(std::move(pixel), &format, std::move(r), std::move(g), std::move(b));
         }
 
-        const char* getError() const {
+		inline const char* getError() const {
             return callSDL(SDL_GET_ERROR)();
         }
 
-        void freeSurface(SDL_Surface* surface) const {
+		inline void freeSurface(SDL_Surface* surface) const {
             callSDL(SDL_FREE_SURFACE)(std::move(surface));
         }
 
-        int fillRect(SDL_Surface& dst, const SDL_Rect* rect, Uint32 color) const {
+		inline int fillRect(SDL_Surface& dst, const SDL_Rect* rect, Uint32 color) const {
             return callSDL(SDL_FILL_RECT)(&dst, std::move(rect), std::move(color));
         }
 
-        void destroyTexture(SDL_Texture* texture) const {
+		inline void destroyTexture(SDL_Texture* texture) const {
             callSDL(SDL_DESTROY_TEXTURE)(std::move(texture));
         }
 
-        void delay(Uint32 delay) const {
+		inline void delay(Uint32 delay) const {
             callSDL(SDL_DELAY)(std::move(delay));
         }
 
-        SDL_Surface* createRGBSurface(Uint32 flags, int width, int height, int depth, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask) const {
+		inline SDL_Surface* createRGBSurface(Uint32 flags, int width, int height, int depth, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask) const {
             return callSDL(SDL_CREATE_RGB_SURFACE)(
                 std::move(flags), std::move(width), std::move(height),
                 std::move(depth), std::move(Rmask), std::move(Gmask),
                 std::move(Bmask), std::move(Amask));
         }
 
-		void quit() const {
+		inline void quit() const {
 			callSDL(SDL_QUIT_F)();
 		}
 
-		int setHint(const char* str, const char* text) const {
+		inline int setHint(const char* str, const char* text) const {
 			return callSDL(SDL_SET_HINT)(std::move(str), std::move(text));
 		}
 
-		SDL_Renderer* createRenderer(SDL_Window& window, int index, Uint32 flags) const {
+		inline SDL_Renderer* createRenderer(SDL_Window& window, int index, Uint32 flags) const {
 			return callSDL(SDL_CREATE_RENDERER)(&window, std::move(index), std::move(flags));
 		}
 
-		SDL_Texture* createTextureFromSurface(SDL_Renderer& renderer, SDL_Surface& surface) const {
+		inline SDL_Texture* createTextureFromSurface(SDL_Renderer& renderer, SDL_Surface& surface) const {
 			return callSDL(SDL_CREATE_TEXTURE_FROM_SURFACE)(&renderer, &surface);
 		}
 		
-		int setRenderDrawColor(SDL_Renderer& renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const {			
+		inline int setRenderDrawColor(SDL_Renderer& renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const {
 			return callSDL(SDL_SET_RENDER_DRAW_COLOR)(&renderer, std::move(r), std::move(g), std::move(b), std::move(a));
 		}
-		int renderFillRect(SDL_Renderer& renderer, const SDL_Rect* rect) const {
+		inline int renderFillRect(SDL_Renderer& renderer, const SDL_Rect* rect) const {
 			return callSDL(SDL_RENDER_FILL_RECT)(&renderer, std::move(rect));
 		}
 
-		int renderCopy(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst) const {
+		inline int renderCopy(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst) const {
 			return callSDL(SDL_RENDER_COPY)(&renderer, &texture, src, dst);
 		}
 
-		int renderCopyEx(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst, double angle, const SDL_Point* center, const SDL_RendererFlip flip) const {
+		inline int renderCopyEx(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst, double angle, const SDL_Point* center, const SDL_RendererFlip flip) const {
 			return callSDL(SDL_RENDER_COPY_EX)(&renderer, &texture, src, dst, angle, center, flip);
 		}
 
-		void destroyRenderer(SDL_Renderer* renderer) const {
+		inline void destroyRenderer(SDL_Renderer* renderer) const {
 			return callSDL(SDL_DESTROY_RENDERER)(std::move(renderer));
 		}
 
-		SDL_Window* createWindow(const std::string& title, int x, int y, int w, int h, Uint32 flags) const {
+		inline SDL_Window* createWindow(const std::string& title, int x, int y, int w, int h, Uint32 flags) const {
 			return callSDL(SDL_CREATE_WINDOW)(title.c_str(), std::move(x), std::move(y), std::move(w), std::move(h), std::move(flags));
 		}
 
-		void setWindowIcon(SDL_Window& window, SDL_Surface* icon) const {
+		inline void setWindowIcon(SDL_Window& window, SDL_Surface* icon) const {
 			return callSDL(SDL_SET_WINDOW_ICON)(&window, std::move(icon));
 		}
 
-		void showWindow(SDL_Window& window) const {
+		inline void showWindow(SDL_Window& window) const {
 			return callSDL(SDL_SHOW_WINDOW)(&window);
 		}
 
-		void destroyWindow(SDL_Window* window) const {
+		inline void destroyWindow(SDL_Window* window) const {
 			return callSDL(SDL_DESTROY_WINDOW)(window);
 		}
 
-		void showSimpleMessageBox(Uint32 flags, const std::string& title, const std::string& message, SDL_Window* window) const {
+		inline void showSimpleMessageBox(Uint32 flags, const std::string& title, const std::string& message, SDL_Window* window) const {
 			callSDL(SDL_SHOW_SIMPLE_MESSAGE_BOX)(std::move(flags), title.c_str(), message.c_str(), window);
 		}
 
-		int queryTexture(SDL_Texture& actTexture, Uint32* format, int* access, int* w, int* h) const {
+		inline int queryTexture(SDL_Texture& actTexture, Uint32* format, int* access, int* w, int* h) const {
 			return callSDL(SDL_QUERY_TEXTURE)(&actTexture, format, access, w, h);
 		}
 
-		int renderDrawPoint(SDL_Renderer& renderer, int x, int y) const {
+		inline int renderDrawPoint(SDL_Renderer& renderer, int x, int y) const {
 			return callSDL(SDL_RENDER_DRAW_POINT)(&renderer, x, y);
 		}
 
-		int renderDrawLine(SDL_Renderer& renderer, int x1, int y1, int x2, int y2) const {
+		inline int renderDrawLine(SDL_Renderer& renderer, int x1, int y1, int x2, int y2) const {
 			return callSDL(SDL_RENDER_DRAW_LINE)(&renderer, x1, y1, x2, y2);
 		}
 
-		void setMainReady() const {
+		inline void setMainReady() const {
 			callSDL(SDL_SET_MAIN_READY)();
 		}
 
-		int showCursor(bool b) const {
+		inline int showCursor(bool b) const {
 			return callSDL(SDL_SHOW_CURSOR)(static_cast<int>(b));
 		}
 
-		SDL_Texture* createTexture(SDL_Renderer& renderer, Uint32 format, int access, int w, int h)  const {
+		inline SDL_Texture* createTexture(SDL_Renderer& renderer, Uint32 format, int access, int w, int h)  const {
 			return callSDL(SDL_CREATE_TEXTURE)(&renderer, format, access, w, h);
 		}
 
-		int setRenderTarget(SDL_Renderer& renderer, SDL_Texture* texture) const {
+		inline int setRenderTarget(SDL_Renderer& renderer, SDL_Texture* texture) const {
 			return callSDL(SDL_SET_RENDER_TARGET)(&renderer, texture);
 		}
 
-		int setRenderDrawBlendMode(SDL_Renderer& renderer, SDL_BlendMode blendMode) const {
+		inline int setRenderDrawBlendMode(SDL_Renderer& renderer, SDL_BlendMode blendMode) const {
 			return callSDL(SDL_SET_RENDER_DRAW_BLEND_MODE)(&renderer, blendMode);
 		}
 
-		static SDLLibrary& get() {
-			static SDLLibrary instance;
-			return instance;
+		inline SDL_RWops* rwFromFile(const std::string& file, const char* mode) const {
+			return callSDL(SDL_RW_FROM_FILE)(file.c_str(), mode);
 		}
+
+		inline void startTextInput() const {
+			callSDL(SDL_START_TEXT_INPUT)();
+		}
+
+		static SDLLibrary& get();
 
 	private:
 		SDLLibrary() : SDLDynLib("SDL2") {}

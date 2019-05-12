@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include "AbstractGraphicSystem.h"
 #include "Core/Draw/DrawableContainer.h"

@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "ZGravityForceSystem.h"
 #include "Space.h"
 

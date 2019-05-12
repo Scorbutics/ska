@@ -1,6 +1,5 @@
 #pragma once
 #include "../../../Utils/RectangleUtils.h"
-#include "Base/Config/LoggerConfig.h"
 
 namespace ska {
 	class CollisionContact {

@@ -55,5 +55,5 @@ std::pair<unsigned int, ska::Rectangle> ska::cp::Arbiter::calculateOverlap() con
 
 	const auto penetrationX = (cpSet.normal.x * finalOverlap.w);
 	const auto penetrationY = (cpSet.normal.y * finalOverlap.h);
-	return std::make_pair(penetrationX * penetrationX + penetrationY * penetrationY, finalOverlap);
+	return std::make_pair(static_cast<unsigned int>(penetrationX * penetrationX + penetrationY * penetrationY), finalOverlap);
 }

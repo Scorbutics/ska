@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "Core/Data/Events/CollisionEvent.h"
 #include "DebugEntityCollisionResponse.h"
 #include "Core/ECS/EntityManager.h"
@@ -25,7 +26,7 @@ bool ska::DebugEntityCollisionResponse::onEntityCollision(CollisionEvent& e) con
 		DeleterComponent dc;
 		dc.delay = 2000;
 		m_entityManager.addComponent<DeleterComponent>(entity, std::move(dc));
-		PositionComponent pc(ska::Point<float>(col.contact.overlap().x, col.contact.overlap().y));
+		PositionComponent pc(ska::Point<float>(static_cast<float>(col.contact.overlap().x), static_cast<float>(col.contact.overlap().y)));
 		m_entityManager.addComponent<PositionComponent>(entity, std::move(pc));
 
 		/*SKA_DBG_ONLY(

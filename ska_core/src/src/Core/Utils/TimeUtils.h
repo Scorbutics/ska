@@ -3,11 +3,11 @@
 namespace ska {
 	class TimeUtils {
 	private:
-		TimeUtils();
+		TimeUtils() = default;
 
 	public:
 		static unsigned int getTicks();
 		static void wait(unsigned int ms);
-		~TimeUtils();
+		~TimeUtils() = default;
 	};
 }

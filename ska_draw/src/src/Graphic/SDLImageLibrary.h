@@ -45,10 +45,7 @@ namespace ska {
 			callSDLImage(IMG_QUIT)();
 		}
 
-		static const SDLImageLibrary& get() {
-			static SDLImageLibrary instance;
-			return instance;
-		}
+		static const SDLImageLibrary& get();
 		#undef callSDLImage
 	private:
 		SDLImageLibrary() : SDLImageDynLib("SDL2_image") {}

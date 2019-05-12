@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "DeleterSystem.h"
 #include "Core/Utils/TimeUtils.h"
 

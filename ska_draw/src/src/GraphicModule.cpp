@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include <string>
 
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "GraphicModule.h"
 #include "Core/Exceptions/IllegalStateException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
@@ -11,8 +12,8 @@
 #include "Core/State/StateHolder.h"
 #include "Core/Draw/DrawableContainer.h"
 #include "Core/Window.h"
-#include "SDLTTFLibrary.h"
-#include "SDLImageLibrary.h"
+#include "Graphic/SDLTTFLibrary.h"
+#include "Graphic/SDLImageLibrary.h"
 #include "Core/SDLLibrary.h"
 
 ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispatcher& ged, DrawableContainerPtr dc, RendererPtr renderer, WindowPtr window):

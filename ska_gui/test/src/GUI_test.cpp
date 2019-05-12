@@ -1,10 +1,13 @@
 #include <doctest.h>
+#include "LoggerConfig.h"
 #include "GUI/Events/ClickEventListener.h"
 #include "GUI/GUI.h"
 #include "WindowsUtil.h"
 #include "Core/Inputs/InputContextManager.h"
 #include "InputContextTest.h"
 #include "MoveableWindowTest.h"
+
+std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "./Menu/default_theme/";
 
 template <class T>
 void printVector(std::vector<T>& v) {

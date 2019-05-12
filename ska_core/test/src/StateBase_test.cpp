@@ -1,5 +1,6 @@
 #include <doctest.h>
 #include <fakeit.hpp>
+#include "LoggerConfig.h"
 #include "MockStateBase.h"
 #include "Core/State/StateHolder.h"
 #include "MockState.h"

@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraFollowStrategy.h"
 
 ska::CameraFollowStrategy::CameraFollowStrategy(ska::EntityManager & em) :

@@ -1,3 +1,4 @@
+#include "Audio/__internalConfig/LoggerConfig.h"
 #include "SDLMixerLibrary.h"
 #include "SDLMusic.h"
 

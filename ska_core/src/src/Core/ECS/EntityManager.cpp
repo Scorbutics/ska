@@ -1,11 +1,14 @@
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "EntityManager.h"
-#include "Base/Config/LoggerConfig.h"
 #include "../Exceptions/IllegalStateException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "../Data/Events/ECSEvent.h"
 
-unsigned int ska::EntityManager::m_componentMaskCounter = 0;
+std::size_t& ska::EntityManager::GetComponentMaskCounter() {
+	static unsigned int componentMaskCounter = 0;
+	return componentMaskCounter;
+}
 
 void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentPool& components) {
     const auto removedComponentMask = components.remove(entity);

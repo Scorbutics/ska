@@ -8,7 +8,9 @@
 #include "ECSDefines.h"
 #include "ComponentHandler.h"
 #include "Base/Patterns/Observable.h"
+#include "Base/Values/MovableNonCopyable.h"
 #include "Base/Values/Strings/StringUtils.h"
+#include "Base/Meta/ContainsTypeTuple.h"
 #include "../Data/Events/ECSEvent.h"
 #include "../Data/Events/GameEventDispatcher.h"
 
@@ -31,10 +33,11 @@ namespace ska {
 	 * \brief Manages all the component changes to an entity
 	 */
 	class EntityManager :
-	    public Observable<const EntityEventType> {
+		public Observable<const EntityEventType>,
+		public MovableNonCopyable {
 	public:
-		explicit EntityManager(GameEventDispatcher& ged) : 
-			m_ged(ged) { }
+		EntityManager(EntityManager&&) = default;
+		EntityManager& operator=(EntityManager&&) = default;
 
 		EntityId createEntity(const std::string& name = "");
 
@@ -42,7 +45,7 @@ namespace ska {
 		void removeEntities(const std::unordered_set<EntityId>& exceptions = std::unordered_set<ska::EntityId>{});
 		void refreshEntity(const EntityId& entity);
 		void refreshEntities();
-        void refresh();
+		void refresh();
 
 		std::string serializeComponent(const EntityId& entityId, const std::string& component, const std::string& field) const;
 		void deserializeComponent(const EntityId& entityId, const std::string& component, const std::string& field, const std::string& value);
@@ -81,32 +84,49 @@ namespace ska {
 			return components.getMask();
 		}
 
+		template <class ... ComponentType>
+		static EntityManager Make(GameEventDispatcher& ged) {
+			auto em = EntityManager{ ged };
+
+			int _[] = { 0, (em.getComponents<ComponentType>() , 0)... };
+			static_cast<void>(_);
+
+			em.m_init = true;
+			return em;
+		}
+
 		virtual ~EntityManager() = default;
 
 	private:
+		explicit EntityManager(GameEventDispatcher& ged) :
+			m_ged(ged) { }
+
 		EntityId createEntityNoThrow(const std::string& name = "");
 		bool checkEntitiesNumber() const;
 
+		static std::size_t& GetComponentMaskCounter();
+
 		GameEventDispatcher& m_ged;
-		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
 		std::unordered_set<EntityId> m_entities;
 		std::unordered_set<EntityId> m_alteredEntities;
 		EntityIdContainer m_deletedEntities;
-		static unsigned int m_componentMaskCounter;
+		bool m_init = false;
 
-		std::unordered_map<std::string, ComponentPool*> m_componentsNameMap;
+		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
+		std::unordered_map<std::string, ComponentPool*> m_componentsNameMap {};
 
 		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
+		void commonRemoveComponent(const EntityId& entity, ComponentPool& components);
+		void commonAddComponent(const EntityId& entity, const unsigned int componentMask);
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			static ComponentHandler<T> components(m_componentMaskCounter++, m_componentsNameMap);
+			const auto lastMaskCounter = GetComponentMaskCounter();
+			static ComponentHandler<T> components(GetComponentMaskCounter()++, m_componentsNameMap);
+			assert((!m_init || lastMaskCounter == GetComponentMaskCounter()) && "This component doesn't belong to the declared EntityManager (when the \"Make\" factory function was called)");
 			return components;
 		}
 
-		void commonRemoveComponent(const EntityId& entity, ComponentPool& components);
-		void commonAddComponent(const EntityId& entity, const unsigned int componentMask);
-        
 	};
 
 }

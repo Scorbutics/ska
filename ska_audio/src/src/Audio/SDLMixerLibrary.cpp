@@ -1,3 +1,4 @@
+#include "Audio/__internalConfig/LoggerConfig.h"
 #include "SDLMixerLibrary.h"
 
 #define SKA_MIXER_LIB_NAME_DEFINE(ENUM, NAME) \
@@ -13,3 +14,10 @@ SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_PLAY_MUSIC, "Mix_PlayMusic");
 SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_PAUSE_MUSIC, "Mix_PauseMusic");
 SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_VOLUME_MUSIC, "Mix_VolumeMusic");
 SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_FREE_MUSIC, "Mix_FreeMusic");
+SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_FREE_CHUNK, "Mix_FreeChunk");
+SKA_MIXER_LIB_NAME_DEFINE(SDL_MIXER_WAV_RW, "Mix_LoadWAV_RW");
+
+const ska::SDLMixerLibrary& ska::SDLMixerLibrary::get() {
+	static const SDLMixerLibrary instance;
+	return instance;	
+}

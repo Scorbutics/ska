@@ -1,3 +1,4 @@
+#include "Audio/__internalConfig/LoggerConfig.h"
 #include <iostream>
 #include "Music.h"
 #include "SoundRenderer.h"

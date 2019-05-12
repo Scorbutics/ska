@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include "GUI/__internalConfig/LoggerConfig.h"
 #include "MouseCursor.h"
 #include "Core/Draw/Renderer.h"
 #include "Core/SDLLibrary.h"

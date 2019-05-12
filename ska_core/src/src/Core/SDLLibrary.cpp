@@ -1,5 +1,5 @@
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "SDLLibrary.h"
-#include "Base/Config/LoggerConfig.h"
 
 #define SKA_SDL_LIB_NAME_DEFINE(ENUM, NAME) \
 	SKA_LIB_NAME_DEFINE(ska::SDLIdNamedFunction, static_cast<int>(ska::SDLCalls::ENUM), NAME)
@@ -44,4 +44,11 @@ SKA_SDL_LIB_NAME_DEFINE(SDL_SHOW_SIMPLE_MESSAGE_BOX, "SDL_ShowSimpleMessageBox")
 SKA_SDL_LIB_NAME_DEFINE(SDL_QUERY_TEXTURE, "SDL_QueryTexture");
 SKA_SDL_LIB_NAME_DEFINE(SDL_SET_MAIN_READY, "SDL_SetMainReady");
 SKA_SDL_LIB_NAME_DEFINE(SDL_SHOW_CURSOR, "SDL_ShowCursor");
+SKA_SDL_LIB_NAME_DEFINE(SDL_RW_FROM_FILE, "SDL_RWFromFile");
+SKA_SDL_LIB_NAME_DEFINE(SDL_START_TEXT_INPUT, "SDL_StartTextInput");
 SKA_SDL_LIB_NAME_DEFINE(SDL_SET_RENDER_DRAW_BLEND_MODE, "SDL_SetRenderDrawBlendMode");
+
+ska::SDLLibrary& ska::SDLLibrary::get() {
+	static SDLLibrary instance;
+	return instance;
+}

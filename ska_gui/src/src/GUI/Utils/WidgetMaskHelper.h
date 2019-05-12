@@ -1,6 +1,11 @@
 #pragma once
 
 namespace ska {
+	class WStaticCounterGlobal {
+	protected:
+		static unsigned int getCounterAndInc();
+	};
+
 	class WidgetMaskHelper {
 	private:
 		WidgetMaskHelper() = default;
@@ -12,15 +17,6 @@ namespace ska {
 		}
 
 	private:
-		class WStaticCounterGlobal {
-		protected:
-			static unsigned int getCounterAndInc() {
-				return m_typeCounter++;
-			}
-
-			static unsigned int m_typeCounter;
-		};
-
 		template <class T>
 		class WStaticCounterSpecialized : public WStaticCounterGlobal {
 		public:

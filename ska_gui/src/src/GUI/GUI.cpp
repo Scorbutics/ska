@@ -1,3 +1,4 @@
+#include "GUI/__internalConfig/LoggerConfig.h"
 #include "Core/Window.h"
 #include "Core/Inputs/InputContextManager.h"
 #include "GUI.h"

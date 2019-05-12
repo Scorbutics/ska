@@ -1,3 +1,4 @@
+#include "Graphic/__internalConfig/LoggerConfig.h"
 #include "Core/Exceptions/IllegalArgumentException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "SDLRenderer.h"

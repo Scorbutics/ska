@@ -77,3 +77,6 @@ Log.txt
 LogError.txt
 CMakeCache.txt
 **/CMakeCache.txt
+*.dir
+.vscode
+*.log.txt
