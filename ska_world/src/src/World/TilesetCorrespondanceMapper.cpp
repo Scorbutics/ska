@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "Graphic/SDLSurface.h"
 #include "Core/Point.h"
 #include "Core/Exceptions/CorruptedFileException.h"

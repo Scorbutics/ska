@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "PhysicParticleUpdater.h"
 #include "../ParticleGroup.h"
 #include <iostream>

@@ -1,4 +1,5 @@
 #include <unordered_set>
+#include "World/__internalConfig/LoggerConfig.h"
 #include "MarchingSquare.h"
 #include "CollisionProfile.h"
 

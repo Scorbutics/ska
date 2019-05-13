@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "TimeParticleUpdater.h"
 #include "../ParticleGroup.h"
 

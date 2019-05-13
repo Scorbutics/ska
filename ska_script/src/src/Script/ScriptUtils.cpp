@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstddef>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "ScriptUtils.h"
 #include "Core/Utils/FormalCalculation/FormalCalculator.h"
 #include "../Script/ScriptSymbolsConstants.h"

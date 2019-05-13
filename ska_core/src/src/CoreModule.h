@@ -4,11 +4,11 @@
 #include "Core/Inputs/InputContextManager.h"
 
 namespace ska {
-    template <class EntityManagerT>
+    template <class EntityManagerType>
 	class CoreModule {
 	public:
-		CoreModule(const std::string& moduleName, GameEventDispatcher& ged):
-    		m_entityManager(ged),
+		CoreModule(const std::string& moduleName, EntityManagerType&& em, GameEventDispatcher& ged):
+    		m_entityManager(std::forward<EntityManagerType>(em)),
             m_playerICM(m_rawInputListener, ged),
             m_name(moduleName) {
 		}
@@ -36,13 +36,11 @@ namespace ska {
 
 		~CoreModule() = default;
 
-		EntityManagerT& getEntityManager() {
-            return m_entityManager;
-		}
+		EntityManagerType& getEntityManager() { return m_entityManager; }
 
     private:
         RawInputListener m_rawInputListener;
-		EntityManagerT m_entityManager;
+		EntityManagerType m_entityManager;
         InputContextManager m_playerICM;
 		std::string m_name;
 	};

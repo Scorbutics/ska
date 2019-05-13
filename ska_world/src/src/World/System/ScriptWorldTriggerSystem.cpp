@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "ScriptWorldTriggerSystem.h"
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "../TileWorld.h"

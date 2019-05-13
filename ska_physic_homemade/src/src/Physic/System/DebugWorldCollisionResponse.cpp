@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "Core/Data/Events/CollisionEvent.h"
 #include "DebugWorldCollisionResponse.h"
 #include "Core/ECS/Basics/Graphic/DebugGraphicComponent.h"

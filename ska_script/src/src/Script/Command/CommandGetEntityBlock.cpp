@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "Core/Data/MemoryScript.h"
 #include "CommandGetEntityBlock.h"
 #include "Logging/Logger.h"

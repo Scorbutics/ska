@@ -1,7 +1,8 @@
 #include <doctest.h>
-#include "ParticleGroup.h"
-#include "ParticleFactory.h"
-#include "ParticleBuilder.h"
+#include "LoggerConfig.h"
+#include "Particle/ParticleGroup.h"
+#include "Particle/ParticleFactory.h"
+#include "Particle/ParticleBuilder.h"
 
 TEST_CASE("[ParticleFactory]") {
     ska::ParticleGroup group(10);

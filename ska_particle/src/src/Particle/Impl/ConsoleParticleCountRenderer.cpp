@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "ConsoleParticleCountRenderer.h"
 #include "Core/Utils/TimeUtils.h"
 #include "../ParticleGroup.h"

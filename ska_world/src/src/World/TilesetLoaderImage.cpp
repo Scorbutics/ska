@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "Core/Exceptions/FileException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "TilesetLoaderImage.h"

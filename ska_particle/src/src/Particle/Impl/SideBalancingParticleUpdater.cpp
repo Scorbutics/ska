@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "../ParticleGroup.h"
 #include "SideBalancingParticleUpdater.h"
 #include "Core/Utils/RectangleUtils.h"

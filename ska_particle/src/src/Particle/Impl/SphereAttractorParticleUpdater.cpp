@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "../ParticleGroup.h"
 #include "SphereAttractorParticleUpdater.h"
 

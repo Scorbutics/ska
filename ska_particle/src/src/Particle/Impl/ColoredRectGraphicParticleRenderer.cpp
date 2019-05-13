@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "ColoredRectGraphicParticleRenderer.h"
 #include "../ParticleGroup.h"
 #include "Graphic/SDLRenderer.h"

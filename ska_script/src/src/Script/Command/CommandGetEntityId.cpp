@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "Core/ECS/EntityLocator.h"
 #include "CommandGetEntityId.h"
 #include "Base/Values/Strings/StringUtils.h"

@@ -1,4 +1,5 @@
 #include <string>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandScript.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "Core/Exceptions/ScriptSyntaxError.h"

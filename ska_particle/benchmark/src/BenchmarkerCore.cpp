@@ -1,25 +1,26 @@
 #undef main
 #include <iostream>
 #include <SDL.h>
+#include "LoggerConfig.h"
 #include "BenchmarkerCore.h"
 #include "Logging/Logger.h"
 #include "Core/Utils/TimeUtils.h"
 #include "Core/Exceptions/StateDiedException.h"
-#include "Impl/BoxParticleGenerator.h"
-#include "Impl/ColorParticleUpdater.h"
-#include "Impl/TimeParticleUpdater.h"
-#include "Impl/PhysicParticleUpdater.h"
-#include "Impl/ColoredRectGraphicParticleRenderer.h"
-#include "Impl/BasicVelocityGenerator.h"
-#include "Impl/BasicColorGenerator.h"
-#include "Impl/ConsoleParticleCountRenderer.h"
-#include "Impl/EulerAttractorParticleUpdater.h"
-#include "Impl/SpreadingColorParticleEffectFactory.h"
-#include "Impl/SpreadingParticleEffectFactory.h"
+#include "Particle/Impl/BoxParticleGenerator.h"
+#include "Particle/Impl/ColorParticleUpdater.h"
+#include "Particle/Impl/TimeParticleUpdater.h"
+#include "Particle/Impl/PhysicParticleUpdater.h"
+#include "Particle/Impl/ColoredRectGraphicParticleRenderer.h"
+#include "Particle/Impl/BasicVelocityGenerator.h"
+#include "Particle/Impl/BasicColorGenerator.h"
+#include "Particle/Impl/ConsoleParticleCountRenderer.h"
+#include "Particle/Impl/EulerAttractorParticleUpdater.h"
+#include "Particle/Impl/SpreadingColorParticleEffectFactory.h"
+#include "Particle/Impl/SpreadingParticleEffectFactory.h"
 #include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
-#include "Impl/SpreadingTextureParticleEffectFactory.h"
+#include "Particle/Impl/SpreadingTextureParticleEffectFactory.h"
 #include "Base/IO/Files/FileUtils.h"
-#include "Impl/SideBalancingParticleUpdater.h"
+#include "Particle/Impl/SideBalancingParticleUpdater.h"
 #include "CoreModule.h"
 #include "GraphicModule.h"
 #include "Core/Data/Events/ExtensibleGameEventDispatcher.h"
@@ -174,18 +175,20 @@ float BenchmarkerCore::ticksWanted() const{
 	return TICKS;
 }
 
-
-std::unique_ptr<ska::GameApp> ska::GameApp::get() {
+#undef main
+int main(int argc, char* argv[]) {
 	using GameConf = ska::GameConfiguration<
 		ska::ExtensibleGameEventDispatcher<>, 
-		CoreModule<ska::EntityManager>, 
-		GraphicModule>;
+		ska::CoreModule<ska::EntityManager>, 
+		ska::GraphicModule>;
 	GameConf gc;
-	auto& core = gc.requireModule<CoreModule<ska::EntityManager>>("Core", gc.getEventDispatcher());
+	auto& core = gc.requireModule<ska::CoreModule<ska::EntityManager>>("Core", ska::EntityManager::Make<>(gc.getEventDispatcher()), gc.getEventDispatcher());
 	auto window = std::make_unique<ska::SDLWindow>("Particle benchmark", 1500, 900);
 	auto renderer = std::make_unique<ska::SDLRenderer>(*window, 0, SDL_RENDERER_ACCELERATED);
 	auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);
 
-	gc.requireModule<GraphicModule>("Graphics", gc.getEventDispatcher(), std::move(dc), std::move(renderer), std::move(window));
-	return std::make_unique<BenchmarkerCore>(std::move(gc));
+	gc.requireModule<ska::GraphicModule>("Graphics", gc.getEventDispatcher(), std::move(dc), std::move(renderer), std::move(window));
+	auto app = std::make_unique<BenchmarkerCore>(std::move(gc));
+	app->run();
+	return 0;
 }

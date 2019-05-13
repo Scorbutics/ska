@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "GravitySystem.h"
 
 static constexpr auto EARTH_GRAVITY = 9.81F;

@@ -1,3 +1,4 @@
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "ScriptBasicCommandsSystem.h"
 
 #include "../Command/CommandEnd.h"

@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "MovementSystem.h"
 #include "Base/Values/Numbers/NumberUtils.h"
 #include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"

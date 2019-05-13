@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "SpreadingTextureParticleEffectFactory.h"
 #include "SpreadingParticleEffectFactory.h"
 #include "TextureGraphicParticleRenderer.h"

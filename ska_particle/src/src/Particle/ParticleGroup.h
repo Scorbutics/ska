@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "Base/Config/LoggerConfig.h"
 #include "Core/Point.h"
 #include "Core/Draw/Color.h"
 #include "Graphic/Texture.h"

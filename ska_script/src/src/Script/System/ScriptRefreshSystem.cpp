@@ -1,4 +1,5 @@
 #include <limits>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "ScriptRefreshSystem.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Core/ECS/EntityManager.h"

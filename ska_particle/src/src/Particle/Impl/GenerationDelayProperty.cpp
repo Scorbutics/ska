@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "GenerationDelayProperty.h"
 #include "../ParticleGroup.h"
 

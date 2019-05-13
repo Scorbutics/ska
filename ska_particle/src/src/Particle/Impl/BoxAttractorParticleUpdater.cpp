@@ -1,6 +1,7 @@
+#include <iostream>
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "BoxAttractorParticleUpdater.h"
 #include "../ParticleGroup.h"
-#include <iostream>
 
 ska::BoxAttractorParticleUpdater::BoxAttractorParticleUpdater(Point<int>& origin, PolarPoint<float>& forceVector) :
 	m_origin(origin) {

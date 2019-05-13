@@ -1,3 +1,4 @@
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandRestoreComponent.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "../System/ScriptAutoSystem.h"

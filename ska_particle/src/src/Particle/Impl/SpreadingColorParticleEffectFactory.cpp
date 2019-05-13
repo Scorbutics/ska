@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "SpreadingColorParticleEffectFactory.h"
 #include "ColoredRectGraphicParticleRenderer.h"
 #include "SpreadingParticleEffectFactory.h"

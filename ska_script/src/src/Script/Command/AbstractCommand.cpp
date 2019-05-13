@@ -1,4 +1,5 @@
 #include <sstream>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "AbstractCommand.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "../ScriptUtils.h"

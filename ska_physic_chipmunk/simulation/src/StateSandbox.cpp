@@ -1,3 +1,4 @@
+#include "LoggerConfig.h"
 #include "StateSandbox.h"
 #include "Graphic/System/GraphicSystem.h"
 #include "Graphic/System/CameraSystem.h"

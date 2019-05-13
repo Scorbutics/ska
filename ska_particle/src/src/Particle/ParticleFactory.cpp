@@ -1,4 +1,5 @@
 #include <cassert>
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "ParticleFactory.h"
 #include "ParticleGroup.h"
 #include "ParticleBuilder.h"

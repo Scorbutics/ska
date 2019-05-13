@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "TextureGraphicParticleRenderer.h"
 #include "../ParticleGroup.h"
 #include "Core/Draw/Renderer.h"

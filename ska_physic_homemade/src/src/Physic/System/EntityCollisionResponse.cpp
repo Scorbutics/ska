@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "EntityCollisionResponse.h"
 #include "Core/ECS/Basics/Physic/ForceComponent.h"
 #include "Core/ECS/Basics/Physic/MovementComponent.h"

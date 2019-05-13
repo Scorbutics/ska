@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "ParticleEffect.h"
 #include "ParticleUpdater.h"
 #include "ParticleRenderer.h"

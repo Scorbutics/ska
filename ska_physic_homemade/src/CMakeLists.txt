@@ -3,6 +3,7 @@ project(ska_physic_homemade)
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_BASE_DIR})
+include_directories(${SKA_PHYSIC_HOME_DIR})
 include_directories(${SKA_DRAW_DIR})
 include_directories(${SKA_WORLD_DIR})
 include_directories(${GSL_DIR})
@@ -16,3 +17,4 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(ska_physic_homemade ${SOURCES})
+target_link_libraries(ska_physic_homemade ska_core ska_world)

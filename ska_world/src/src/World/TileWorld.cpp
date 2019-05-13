@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "Core/Utils/RectangleUtils.h"

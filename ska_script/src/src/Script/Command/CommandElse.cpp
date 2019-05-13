@@ -1,4 +1,5 @@
 #include <string>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandElse.h"
 #include "CommandIf.h"
 #include "Base/Values/Strings/StringUtils.h"

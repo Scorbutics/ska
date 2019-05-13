@@ -1,3 +1,4 @@
+#include "Particle/__internalConfig/LoggerConfig.h"
 #include "ColorParticleUpdater.h"
 #include "../ParticleGroup.h"
 

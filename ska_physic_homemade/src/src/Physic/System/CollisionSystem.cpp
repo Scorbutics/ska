@@ -1,3 +1,4 @@
+#include "Physic/__internalConfig/LoggerConfig.h"
 #include "CollisionSystem.h"
 #include "World/CollisionProfile.h"
 #include "Core/Utils/RectangleUtils.h"

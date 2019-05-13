@@ -1,6 +1,7 @@
-#include "CommandIf.h"
 #include <string>
 #include <sstream>
+#include "Script/__internalConfig/LoggerConfig.h"
+#include "CommandIf.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "Core/Exceptions/ScriptSyntaxError.h"
 #include "../System/ScriptAutoSystem.h"

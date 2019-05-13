@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "ScriptAutoSystem.h"
 #include "Core/Exceptions/ScriptDiedException.h"
 #include "Core/Exceptions/ScriptUnknownCommandException.h"
