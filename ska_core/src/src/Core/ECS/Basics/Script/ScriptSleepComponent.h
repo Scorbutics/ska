@@ -3,6 +3,7 @@
 #include <string>
 #include "ScriptTriggerType.h"
 #include "../../../Point.h"
+#include "Core/ECS/ComponentTag.h"
 
 namespace ska {
 	class ScriptSleepComponent {
@@ -21,4 +22,7 @@ namespace ska {
 	};
 
 	using ScriptPack = std::vector<ScriptSleepComponent>;
+#ifndef SKA_CORE_IN
+	extern template class SKA_CORE_API ComponentTag<ScriptSleepComponent>;
+#endif
 }

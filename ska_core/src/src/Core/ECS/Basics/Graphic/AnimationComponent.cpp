@@ -1,3 +1,5 @@
+#define SKA_COMPONENT_DLL_EXPORT
+#define SKA_CORE_IN
 #include "AnimationComponent.h"
 #include "IAnimationStateMachine.h"
 #include "../../SerializeComponent.h"
@@ -19,3 +21,6 @@ void ska::AnimationComponent::setASM(IAnimationStateMachine& afsm, const EntityI
 ska::IAnimationStateMachine* ska::AnimationComponent::getASM() const{
 	return animationFiniteStateMachine;
 }
+
+template class SKA_CORE_API ska::ComponentTag<ska::AnimationComponent>;
+std::size_t ska::ComponentTag<ska::AnimationComponent>::m_id = static_cast<std::size_t>(-1);

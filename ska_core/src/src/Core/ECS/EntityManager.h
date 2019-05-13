@@ -6,6 +6,7 @@
 #include <array>
 #include <unordered_map>
 #include "ECSDefines.h"
+#include "ComponentTag.h"
 #include "ComponentHandler.h"
 #include "Base/Patterns/Observable.h"
 #include "Base/Values/MovableNonCopyable.h"
@@ -113,6 +114,7 @@ namespace ska {
 		bool m_init = false;
 
 		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
+		std::vector<std::unique_ptr<ComponentPool>> m_componentHolders;
 		std::unordered_map<std::string, ComponentPool*> m_componentsNameMap {};
 
 		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
@@ -121,10 +123,12 @@ namespace ska {
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			const auto lastMaskCounter = GetComponentMaskCounter();
-			static ComponentHandler<T> components(GetComponentMaskCounter()++, m_componentsNameMap);
-			assert((!m_init || lastMaskCounter == GetComponentMaskCounter()) && "This component doesn't belong to the declared EntityManager (when the \"Make\" factory function was called)");
-			return components;
+			if (ComponentTag<T>::id() == -1) {
+				ComponentTag<T>::setId(m_componentHolders.size());
+				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(ComponentTag<T>::id(), m_componentsNameMap));
+			}
+			//assert((!m_init || lastMaskCounter == GetComponentMaskCounter()) && "This component doesn't belong to the declared EntityManager (when the \"Make\" factory function was called)");
+			return static_cast<ComponentHandler<T>&>(*m_componentHolders[ComponentTag<T>::id()].get());
 		}
 
 	};

@@ -2,7 +2,7 @@
 #include <queue>
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
-
+#include "Core/ECS/ComponentTag.h"
 namespace ska {
 	enum DebugGraphicType {
 		COLLISION = (1u << 0),
@@ -18,4 +18,8 @@ namespace ska {
 		std::vector<Rectangle> blockColPosX;
 		std::vector<Rectangle> blockColPosY;
 	};
+
+#ifndef SKA_CORE_IN
+	extern template class SKA_CORE_API ComponentTag<DebugGraphicComponent>;
+#endif
 }

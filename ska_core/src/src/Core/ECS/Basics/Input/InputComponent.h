@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Base/Values/Strings/StringUtils.h"
-
+#include "Core/ECS/ComponentTag.h"
 namespace ska {
 	class InputComponent {
 	public:
@@ -30,4 +30,8 @@ namespace ska {
 			component.jumpPower = StringUtils::fromString<float>(value);
 		}
 	};
+
+#ifndef SKA_CORE_IN
+	extern template class SKA_CORE_API ComponentTag<InputComponent>;
+#endif
 }

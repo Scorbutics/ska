@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-
+#include "Core/ECS/ComponentTag.h"
 namespace ska {
 	struct HitboxComponent {
 	    HitboxComponent();
@@ -17,5 +17,12 @@ namespace ska {
 			std::size_t controlBodyIndex{};
 			std::size_t shapeIndex{};
 		};
+#ifndef SKA_CORE_IN
+		extern template class SKA_CORE_API ComponentTag<HitboxComponent>;
+#endif
 	}
+
+#ifndef SKA_CORE_IN
+	extern template class SKA_CORE_API ComponentTag<HitboxComponent>;
+#endif
 }
