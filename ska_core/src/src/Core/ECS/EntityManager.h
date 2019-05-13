@@ -123,12 +123,12 @@ namespace ska {
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			if (ComponentTag<T>::id() == -1) {
-				ComponentTag<T>::setId(m_componentHolders.size());
-				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(ComponentTag<T>::id(), m_componentsNameMap));
+			if (ComponentTag<T>::m_id == -1) {
+				ComponentTag<T>::m_id = m_componentHolders.size();
+				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(ComponentTag<T>::m_id, m_componentsNameMap));
 			}
 			//assert((!m_init || lastMaskCounter == GetComponentMaskCounter()) && "This component doesn't belong to the declared EntityManager (when the \"Make\" factory function was called)");
-			return static_cast<ComponentHandler<T>&>(*m_componentHolders[ComponentTag<T>::id()].get());
+			return static_cast<ComponentHandler<T>&>(*m_componentHolders[ComponentTag<T>::m_id].get());
 		}
 
 	};

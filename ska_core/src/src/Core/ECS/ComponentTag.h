@@ -10,9 +10,6 @@ namespace ska {
 	template <typename T>
 	class ComponentTag {
 	public:
-		static std::size_t id() { return m_id; }
-		static void setId(std::size_t id) { m_id = id; }
-	private:
 		static size_t m_id;
 	};
 }
