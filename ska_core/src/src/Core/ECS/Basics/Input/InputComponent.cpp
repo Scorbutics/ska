@@ -14,5 +14,4 @@ ska::InputComponent::InputComponent(): movePower(1.F), jumpPower(1.F){
 	}
 }
 
-template class SKA_CORE_API ska::ComponentTag<ska::InputComponent>;
 std::size_t ska::ComponentTag<ska::InputComponent>::m_id = static_cast<std::size_t>(-1);

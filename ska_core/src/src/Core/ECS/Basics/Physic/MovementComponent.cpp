@@ -11,5 +11,4 @@ ska::MovementComponent::MovementComponent() {
     vy = 0;
     vz = 0;
 }
-template class SKA_CORE_API ska::ComponentTag<ska::MovementComponent>;
 std::size_t ska::ComponentTag<ska::MovementComponent>::m_id = static_cast<std::size_t>(-1);

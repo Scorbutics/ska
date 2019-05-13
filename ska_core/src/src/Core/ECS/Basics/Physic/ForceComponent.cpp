@@ -11,5 +11,4 @@ ska::ForceComponent::ForceComponent() :
     weight = 1;
 }
 
-template class SKA_CORE_API ska::ComponentTag<ska::ForceComponent>;
 std::size_t ska::ComponentTag<ska::ForceComponent>::m_id = static_cast<std::size_t>(-1);

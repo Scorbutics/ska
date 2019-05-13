@@ -9,7 +9,5 @@ ska::HitboxComponent::HitboxComponent():
 	height(1) {
 }
 
-template class SKA_CORE_API ska::ComponentTag<ska::HitboxComponent>;
-template class SKA_CORE_API ska::ComponentTag<ska::cp::HitboxComponent>;
 std::size_t ska::ComponentTag<ska::HitboxComponent>::m_id = static_cast<std::size_t>(-1);
 std::size_t ska::ComponentTag<ska::cp::HitboxComponent>::m_id = static_cast<std::size_t>(-1);

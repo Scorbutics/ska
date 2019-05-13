@@ -9,5 +9,4 @@ ska::ScriptSleepComponent::ScriptSleepComponent():
 	period = 0;
 }
 
-template class SKA_CORE_API ska::ComponentTag<ska::ScriptSleepComponent>;
 std::size_t ska::ComponentTag<ska::ScriptSleepComponent>::m_id = static_cast<std::size_t>(-1);
