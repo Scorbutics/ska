@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "TileWorldLoaderAggregate.h"
 #include "Layer.h"
 #include "LayerLoader.h"

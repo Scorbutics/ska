@@ -1,3 +1,4 @@
+#include "GUI/__internalConfig/LoggerConfig.h"
 #include "WindowsUtil.h"
 #include <Core/Data/Events/GameEventDispatcher.h>
 #include "Core/Inputs/InputContextManager.h"

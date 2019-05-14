@@ -1,3 +1,4 @@
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "InputContextManager.h"
 #include "../Data/Events/GameEventDispatcher.h"
 
