@@ -1,4 +1,5 @@
 #include <doctest.h>
+#include "LoggerConfig.h"
 #include "GUI/Components/WidgetPanel.h"
 #include "GUI/Events/ClickEventListener.h"
 #include "GUI/Events/HoverEventListener.h"
@@ -121,7 +122,7 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements avec blocage") {
 		CHECK(wp.notify(ce));
 		CHECK(widgetNotified);
 
-		//notifié
+		//notifiï¿½
 		CHECK(hwt2Notified);
 
 		//notification du conteneur
@@ -144,10 +145,10 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements avec blocage") {
 		CHECK(wp.notify(ce));
 		CHECK(hwt2Notified);
 
-		//stoppé
+		//stoppï¿½
 		CHECK(!widgetNotified);
 
-		//le conteneur est quand même notifié
+		//le conteneur est quand mï¿½me notifiï¿½
 		CHECK(widgetPanelNotified);
 	}
 }
@@ -252,7 +253,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 		auto renderer = MockRenderer();
 
-		//Trié par ordre de priorité décroissant
+		//Triï¿½ par ordre de prioritï¿½ dï¿½croissant
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt2);
@@ -288,9 +289,9 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 			order.push_back(4);
 		});
 
-		//On vérifie que l'ordre de notification reste correct (par ordre de priorité inversé par rapport à l'affichage !)
-		//en effet, l'ordre de déclenchement des évènements doit être de la fenêtre au premier plan
-		//(donc la dernière affichée) vers la fenêtre au dernier plan
+		//On vï¿½rifie que l'ordre de notification reste correct (par ordre de prioritï¿½ inversï¿½ par rapport ï¿½ l'affichage !)
+		//en effet, l'ordre de dï¿½clenchement des ï¿½vï¿½nements doit ï¿½tre de la fenï¿½tre au premier plan
+		//(donc la derniï¿½re affichï¿½e) vers la fenï¿½tre au dernier plan
 		wp.notify(he);
 
 		CHECK(order == expectedEventOrder);
@@ -301,7 +302,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 		auto renderer = MockRenderer();
 
-		//Trié par ordre d'ajout
+		//Triï¿½ par ordre d'ajout
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt2);
 		expectedOrder.push_back(&hwt);

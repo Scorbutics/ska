@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "Layer.h"
 #include "TileWorld.h"
 #include <cassert>

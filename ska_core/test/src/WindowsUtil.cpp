@@ -1,5 +1,6 @@
+#include "Core/__internalConfig/LoggerConfig.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
 #include "WindowsUtil.h"
-#include <Core/Data/Events/GameEventDispatcher.h>
 #include "Core/Inputs/InputContextManager.h"
 
 ska::GameEventDispatcher& GetGED() {

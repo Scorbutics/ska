@@ -1,3 +1,4 @@
+#include "World/__internalConfig/LoggerConfig.h"
 #include "TileWorld.h"
 #include "LayerMonoRenderable.h"
 #include "Core/Draw/Renderer.h"

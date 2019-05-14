@@ -1,3 +1,4 @@
+#include "Core/__internalConfig/LoggerConfig.h"
 #include "StateHolder.h"
 #include "../Exceptions/StateDiedException.h"
 

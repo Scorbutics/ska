@@ -6,7 +6,7 @@
 #include "../Data/Events/ECSEvent.h"
 
 std::size_t& ska::EntityManager::GetComponentMaskCounter() {
-	static unsigned int componentMaskCounter = 0;
+	static std::size_t componentMaskCounter = 0;
 	return componentMaskCounter;
 }
 
