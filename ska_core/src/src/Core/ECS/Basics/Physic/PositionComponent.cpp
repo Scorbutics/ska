@@ -1,5 +1,3 @@
-#define SKA_COMPONENT_DLL_EXPORT
-#define SKA_CORE_IN
 #include "PositionComponent.h"
 #include "../../SerializeComponent.h"
 
@@ -33,4 +31,4 @@ ska::PositionComponent& ska::PositionComponent::operator=(const Point<float>& p)
 	return *this;
 }
 
-std::size_t ska::ComponentTag<ska::PositionComponent>::m_id = static_cast<std::size_t>(-1);
+SKA_DECLARE_COMPONENT(ska::PositionComponent);

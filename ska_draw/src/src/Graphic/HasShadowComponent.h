@@ -1,13 +1,10 @@
 #pragma once
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
-	class HasShadowComponent {
+	class HasShadowComponent : public Component<HasShadowComponent> {
 	public:
 	    HasShadowComponent();
 	    ~HasShadowComponent() = default;
 	};
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<HasShadowComponent>;
-#endif
 }

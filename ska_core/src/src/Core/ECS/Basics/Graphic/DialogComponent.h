@@ -1,10 +1,11 @@
 #pragma once
 #include "../../../Data/Events/GUIEvent.h"
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
+
 namespace ska {
 	class BalloonDialog;
 
-    class DialogComponent {
+    class DialogComponent : public Component<DialogComponent> {
     public:
         DialogComponent();
         virtual ~DialogComponent() = default;

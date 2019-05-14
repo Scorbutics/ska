@@ -1,7 +1,7 @@
 #pragma once
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 namespace ska {
-	class ForceComponent {
+	class ForceComponent : public Component<ForceComponent> {
 	public:
 		ForceComponent();
 		~ForceComponent() = default;
@@ -14,7 +14,4 @@ namespace ska {
 		float bounciness;
 		float maxSpeed;
 	};
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<ForceComponent>;
-#endif
 }

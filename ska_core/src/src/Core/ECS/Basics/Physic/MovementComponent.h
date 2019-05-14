@@ -1,7 +1,7 @@
 #pragma once
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 namespace ska {
-	struct MovementComponent {
+	struct MovementComponent : public Component<MovementComponent> {
 		MovementComponent();
         ~MovementComponent() = default;
 
@@ -13,7 +13,4 @@ namespace ska {
 		float vy;
 		float vz;
 	};
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<MovementComponent>;
-#endif
 }

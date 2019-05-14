@@ -1,15 +1,12 @@
 #pragma once
 #include "../Physic/PositionComponent.h"
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 namespace ska {
-	class ScriptAwareComponent {
+	class ScriptAwareComponent : public Component<ScriptAwareComponent> {
 	public:
 	    ScriptAwareComponent();
 	    ~ScriptAwareComponent() = default;
 
 		PositionComponent lastBlockPos;
 	};
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<ScriptAwareComponent>;
-#endif
 }

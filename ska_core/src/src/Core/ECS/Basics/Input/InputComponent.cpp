@@ -1,5 +1,3 @@
-#define SKA_COMPONENT_DLL_EXPORT
-#define SKA_CORE_IN
 #include "InputComponent.h"
 #include "../../SerializeComponent.h"
 
@@ -14,4 +12,4 @@ ska::InputComponent::InputComponent(): movePower(1.F), jumpPower(1.F){
 	}
 }
 
-std::size_t ska::ComponentTag<ska::InputComponent>::m_id = static_cast<std::size_t>(-1);
+SKA_DECLARE_COMPONENT(ska::InputComponent);

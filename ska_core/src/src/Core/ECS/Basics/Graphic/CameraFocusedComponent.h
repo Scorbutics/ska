@@ -1,15 +1,10 @@
 #pragma once
-
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
-	class CameraFocusedComponent {
+	class CameraFocusedComponent : public Component<CameraFocusedComponent> {
     public:
         CameraFocusedComponent();
         ~CameraFocusedComponent() = default;
 	};
-
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<CameraFocusedComponent>;
-#endif
 }

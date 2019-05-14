@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_set>
 
-#include "Core/ECS/ComponentTag.h"
+#include "Core/ECS/Component.h"
 namespace ska {
-	class CollidableComponent {
+	class CollidableComponent : public Component<CollidableComponent> {
 	public:
 		CollidableComponent();
 		~CollidableComponent() = default;
@@ -11,8 +11,4 @@ namespace ska {
 		std::unordered_set<int> authorizedBlockIds;
 		bool ghost;
 	};
-
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<CollidableComponent>;
-#endif
 }

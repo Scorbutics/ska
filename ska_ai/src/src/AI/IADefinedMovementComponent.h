@@ -2,9 +2,9 @@
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/Point.h"
 #include "Core/Utils/TimeUtils.h"
-
+#include "Core/ECS/Component.h"
 namespace ska {
-	class IADefinedMovementComponent {
+	class IADefinedMovementComponent : public Component<IADefinedMovementComponent> {
 	public:
 		IADefinedMovementComponent(): 
 			speed(12.F) {

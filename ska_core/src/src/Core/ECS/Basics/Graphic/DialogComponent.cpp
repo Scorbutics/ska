@@ -4,4 +4,4 @@
 
 ska::DialogComponent::DialogComponent() : handle(nullptr) { }
 
-std::size_t ska::ComponentTag<ska::DialogComponent>::m_id = static_cast<std::size_t>(-1);
+SKA_DECLARE_COMPONENT(ska::DialogComponent);

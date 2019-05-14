@@ -1,12 +1,12 @@
 #pragma once
-#include "Core/ECS/ComponentTag.h"
 #include "Base/Values/Strings/StringUtils.h"
+#include "Core/ECS/Component.h"
 #include "../../ECSDefines.h"
 
 namespace ska {
 
 	class IAnimationStateMachine;
-	class AnimationComponent {
+	class AnimationComponent : public Component<AnimationComponent>  {
 	public:
 		AnimationComponent();
 		~AnimationComponent();
@@ -32,8 +32,4 @@ namespace ska {
 		}
 		
 	};
-
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<AnimationComponent>;
-#endif
 }

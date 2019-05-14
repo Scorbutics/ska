@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Point.h"
 #include "Core/ECS/ECSDefines.h"
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	namespace RandomMovementType {
 		enum Enum {
@@ -10,7 +10,7 @@ namespace ska {
 		};
 	}
 
-	class IARandomMovementComponent {
+	class IARandomMovementComponent : public Component<IARandomMovementComponent> {
 	public:
 		IARandomMovementComponent() {
 			lastTimeStarted = 0;
