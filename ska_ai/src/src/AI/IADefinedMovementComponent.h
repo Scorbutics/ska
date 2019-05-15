@@ -4,7 +4,7 @@
 #include "Core/Utils/TimeUtils.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	class IADefinedMovementComponent : public Component<IADefinedMovementComponent> {
+	class IADefinedMovementComponent {
 	public:
 		IADefinedMovementComponent(): 
 			speed(12.F) {
@@ -27,3 +27,5 @@ namespace ska {
 		float speed;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::IADefinedMovementComponent);

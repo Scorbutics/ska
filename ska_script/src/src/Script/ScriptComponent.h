@@ -6,6 +6,7 @@
 #include "ScriptState.h"
 #include "Core/ECS/Basics/Script/ScriptTriggerType.h"
 #include "Core/ECS/ECSDefines.h"
+#include "Core/ECS/Component.h"
 #include "ScriptController.h"
 
 namespace ska {
@@ -14,7 +15,7 @@ namespace ska {
 		friend class ScriptAutoSystem;
 		friend class ScriptController;
 
-		//TODO éviter shared_ptr en modifiant le cache des scripts (voir ScriptAutoSystem)
+		//TODO ï¿½viter shared_ptr en modifiant le cache des scripts (voir ScriptAutoSystem)
         using ScriptControllerPtr = std::shared_ptr<ScriptController>;
 
 	public:
@@ -66,3 +67,5 @@ namespace ska {
 		EntityId target;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::ScriptComponent);

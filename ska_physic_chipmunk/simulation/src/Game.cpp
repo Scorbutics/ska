@@ -13,14 +13,6 @@
 #include "GraphicModule.h"
 #include "Base/IO/Readers/IniReader.h"
 
-#include "Core/ECS/Basics/Graphic/AnimationComponent.h"
-#include "Graphic/GraphicComponent.h"
-#include "Core/ECS/Basics/Graphic/CameraFocusedComponent.h"
-#include "Core/ECS/Basics/Graphic/DebugGraphicComponent.h"
-#include "Core/ECS/Basics/Graphic/DeleterComponent.h"
-#include "Core/ECS/Basics/Input/InputComponent.h"
-#include "Core/ECS/Basics/Physic/ForceComponent.h"
-
 std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts/FiraSans-Medium.ttf";
 
 namespace ska {
@@ -49,18 +41,7 @@ namespace ska {
 
 		using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>, CoreModule<ska::EntityManager>, GraphicModule>;
 		auto gc = std::make_unique<GameConf>();
-		auto em = ska::EntityManager::Make<
-			ska::PositionComponent,
-			ska::CameraFocusedComponent,
-			ska::HitboxComponent,
-			ska::GraphicComponent,
-			ska::DebugGraphicComponent,
-			ska::DeleterComponent,
-			ska::InputComponent,
-			ska::ForceComponent,
-			ska::MovementComponent,
-			ska::AnimationComponent
-		>(gc->getEventDispatcher());
+		auto em = ska::EntityManager{gc->getEventDispatcher()};
 		auto& core = gc->requireModule<CoreModule<ska::EntityManager>>("Core", std::move(em), gc->getEventDispatcher());
 
 		/* Configure inputs types */

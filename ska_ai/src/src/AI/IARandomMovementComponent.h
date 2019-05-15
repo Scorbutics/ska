@@ -10,7 +10,7 @@ namespace ska {
 		};
 	}
 
-	class IARandomMovementComponent : public Component<IARandomMovementComponent> {
+	class IARandomMovementComponent {
 	public:
 		IARandomMovementComponent() {
 			lastTimeStarted = 0;
@@ -26,3 +26,5 @@ namespace ska {
 		unsigned int lastTimeStarted;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::IARandomMovementComponent);

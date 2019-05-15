@@ -3,9 +3,13 @@
 #include "LoggerConfig.h"
 #include "MockSystemConcrete.h"
 
+SKA_DEFINE_COMPONENT(int);
+SKA_DEFINE_COMPONENT(std::string);
+SKA_DEFINE_COMPONENT(double);
+
 TEST_CASE("[System]") {
 	auto ged = ska::GameEventDispatcher{};
-	auto&& em = ska::EntityManager::Make<int, std::string, double> ( ged );
+	auto&& em = ska::EntityManager{ged};
 
 	class ComponentAltererObservable :
 		public ska::Observable<const ska::EntityEventType> {

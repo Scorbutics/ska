@@ -37,6 +37,9 @@ namespace ska {
 		public Observable<const EntityEventType>,
 		public MovableNonCopyable {
 	public:
+		explicit EntityManager(GameEventDispatcher& ged) :
+			m_ged(ged) { }
+			
 		EntityManager(EntityManager&&) = default;
 		EntityManager& operator=(EntityManager&&) = default;
 
@@ -85,23 +88,9 @@ namespace ska {
 			return components.getMask();
 		}
 
-		template <class ... ComponentType>
-		static EntityManager Make(GameEventDispatcher& ged) {
-			auto em = EntityManager{ ged };
-
-			int _[] = { 0, (em.getComponents<ComponentType>() , 0)... };
-			static_cast<void>(_);
-
-			em.m_init = true;
-			return em;
-		}
-
 		virtual ~EntityManager() = default;
 
 	private:
-		explicit EntityManager(GameEventDispatcher& ged) :
-			m_ged(ged) { }
-
 		EntityId createEntityNoThrow(const std::string& name = "");
 		bool checkEntitiesNumber() const;
 
@@ -111,7 +100,6 @@ namespace ska {
 		std::unordered_set<EntityId> m_entities;
 		std::unordered_set<EntityId> m_alteredEntities;
 		EntityIdContainer m_deletedEntities;
-		bool m_init = false;
 
 		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
 		std::vector<std::unique_ptr<ComponentPool>> m_componentHolders;
@@ -126,11 +114,6 @@ namespace ska {
 			if (Component<T>::TYPE_ID() == -1) {
 				Component<T>::TYPE_ID() = m_componentHolders.size();
 				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap));
-				if(m_init) {
-					//TODO handle ?
-					SLOG(LogLevel::Error) << "The component " << Component<T>::TYPE_NAME() << " is bad defined";
-					//assert(!"This component is badly defined");
-				}
 			}
 			return static_cast<ComponentHandler<T>&>(*m_componentHolders[Component<T>::TYPE_ID()].get());
 		}

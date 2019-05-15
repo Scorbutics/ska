@@ -3,10 +3,12 @@
 #include "LoggerConfig.h"
 #include "Core/ECS/EntityManager.h"
 
-class ComponentTest1 : public ska::Component<ComponentTest1> {
+struct ComponentTest1 {
+	int t;
 };
 
-class ComponentTest2 : public ska::Component<ComponentTest2> {
+struct ComponentTest2 {
+	char* t;
 };
 
 SKA_DEFINE_COMPONENT(ComponentTest1);
@@ -25,7 +27,7 @@ bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId&
 
 TEST_CASE("[EntityManager]") {
 	auto ged = ska::GameEventDispatcher {};
-	auto&& em = ska::EntityManager::Make<ComponentTest1, ComponentTest2>(ged);
+	auto&& em = ska::EntityManager{ged};
 	
 	using EntityManagerObserver = ska::Observer<ska::ECSEvent>;
 	class EntityManagerObserverTest :
@@ -83,7 +85,7 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
-		CHECK(component == 14);
+		CHECK(component.t == 14);
 	}
 
 	SUBCASE("createEntity (differents)") {
