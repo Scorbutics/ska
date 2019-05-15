@@ -1,3 +1,4 @@
+
 #include "GraphicComponent.h"
 
 ska::GraphicComponent::GraphicComponent() {
@@ -11,3 +12,4 @@ ska::GraphicComponent& ska::GraphicComponent::operator=(const GraphicComponent& 
 	return *this;
 }
 
+SKA_DEFINE_COMPONENT(ska::GraphicComponent);

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	class ForceComponent {
 	public:
@@ -15,3 +15,4 @@ namespace ska {
 		float maxSpeed;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::ForceComponent);

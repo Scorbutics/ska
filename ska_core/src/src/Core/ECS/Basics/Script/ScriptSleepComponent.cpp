@@ -1,3 +1,4 @@
+
 #include "ScriptSleepComponent.h"
 
 ska::ScriptSleepComponent::ScriptSleepComponent():
@@ -6,3 +7,5 @@ ska::ScriptSleepComponent::ScriptSleepComponent():
 	deleteEntityWhenFinished = false;
 	period = 0;
 }
+
+SKA_DEFINE_COMPONENT(ska::ScriptSleepComponent);

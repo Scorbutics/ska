@@ -3,6 +3,17 @@
 #include "LoggerConfig.h"
 #include "Core/ECS/EntityManager.h"
 
+struct ComponentTest1 {
+	int t;
+};
+
+struct ComponentTest2 {
+	char* t;
+};
+
+SKA_DEFINE_COMPONENT(ComponentTest1);
+SKA_DEFINE_COMPONENT(ComponentTest2);
+
 bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId& entity) {
 	if (event.ecsEventType == ska::ECSEventType::ENTITIES_REMOVED) {
 		auto& entitiesRemoved = event.entities;
@@ -16,7 +27,7 @@ bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId&
 
 TEST_CASE("[EntityManager]") {
 	auto ged = ska::GameEventDispatcher {};
-	auto&& em = ska::EntityManager::Make<int, char*>(ged);
+	auto&& em = ska::EntityManager{ged};
 	
 	using EntityManagerObserver = ska::Observer<ska::ECSEvent>;
 	class EntityManagerObserverTest :
@@ -64,7 +75,7 @@ TEST_CASE("[EntityManager]") {
 	SUBCASE("AddComponent + GetComponent + refresh") {
 		ska::EntityId entity = 0;
 		em.addComponent(entity, 14);
-		auto component = em.getComponent<int>(entity);
+		auto component = em.getComponent<ComponentTest1>(entity);
 
 		CHECK(componentObserver.eventType.empty());
 
@@ -74,7 +85,7 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
-		CHECK(component == 14);
+		CHECK(component.t == 14);
 	}
 
 	SUBCASE("createEntity (differents)") {
@@ -93,31 +104,31 @@ TEST_CASE("[EntityManager]") {
 	}
 
 	SUBCASE("getMask (differents)") {
-		auto maskNotInitialized = em.getMask<int>();
-		auto mask2 = em.getMask<char*>();
+		auto maskNotInitialized = em.getMask<ComponentTest1>();
+		auto mask2 = em.getMask<ComponentTest2>();
 		CHECK(mask2 != maskNotInitialized);
 	}
 
 	SUBCASE("hasComponent") {
 		ska::EntityId entity = 0;
-		CHECK(!em.hasComponent<int>(entity));
-		em.addComponent<int>(entity, 21);
-		CHECK(em.hasComponent<int>(entity));
+		CHECK(!em.hasComponent<ComponentTest1>(entity));
+		em.addComponent<ComponentTest1>(entity, ComponentTest1());
+		CHECK(em.hasComponent<ComponentTest1>(entity));
 	}
 
 	SUBCASE("hasComponent") {
 		ska::EntityId entity = 0;
-		em.addComponent<int>(entity, 21);
-		em.removeComponent<int>(entity);
-		CHECK(!em.hasComponent<int>(entity));
-		em.addComponent<int>(entity, 22);
-		CHECK(em.hasComponent<int>(entity));
+		em.addComponent<ComponentTest1>(entity, ComponentTest1());
+		em.removeComponent<ComponentTest1>(entity);
+		CHECK(!em.hasComponent<ComponentTest1>(entity));
+		em.addComponent<ComponentTest1>(entity, ComponentTest1());
+		CHECK(em.hasComponent<ComponentTest1>(entity));
 	}
 
 	SUBCASE("removeEntity") {
 		ska::EntityId entity = em.createEntity();
 		CHECK(entityObserver.events.empty());
-		em.addComponent<int>(entity, 22);
+		em.addComponent<ComponentTest1>(entity, ComponentTest1());
 		
 		em.refresh();
 
@@ -126,7 +137,7 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[0].entityId == entity);
 
 		em.removeEntity(entity);
-		CHECK(!em.hasComponent<int>(entity));
+		CHECK(!em.hasComponent<ComponentTest1>(entity));
 		
 		em.refresh();
 
@@ -140,7 +151,7 @@ TEST_CASE("[EntityManager]") {
 		ska::EntityId entity2 = em.createEntity();
 		//Reused deleted entity
 		CHECK(entity == entity2);
-		CHECK(!em.hasComponent<int>(entity2));
+		CHECK(!em.hasComponent<ComponentTest1>(entity2));
 	}
 
 	SUBCASE("removeEntities") {

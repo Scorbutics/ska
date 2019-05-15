@@ -5,6 +5,7 @@
 #include "HitboxComponent.h"
 #include "../Graphic/AnimationComponent.h"
 #include "Base/Values/Numbers/NumberUtils.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	class PositionComponent {
@@ -35,10 +36,6 @@ namespace ska {
 			const auto fDir = PhysicUtils::getMovement(dac.state, NumberUtils::maximum(static_cast<float>(absoluteHitbox.w), static_cast<float>(absoluteHitbox.h)));
 			const auto pos = Point<float>::cartesian(fDir.power, fDir.angle);
 			return result + pos;
-		}
-
-		static std::string getClassName() {
-			return "PositionComponent";
 		}
 
 	private:
@@ -85,4 +82,4 @@ namespace ska {
 		std::size_t layer{};
 	};
 }
-
+SKA_DECLARE_COMPONENT(ska::PositionComponent);

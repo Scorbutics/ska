@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	struct MovementComponent {
 		MovementComponent();
@@ -14,3 +14,4 @@ namespace ska {
 		float vz;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::MovementComponent);

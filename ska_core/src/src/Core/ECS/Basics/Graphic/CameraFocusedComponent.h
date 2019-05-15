@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	class CameraFocusedComponent {
@@ -7,3 +8,4 @@ namespace ska {
         ~CameraFocusedComponent() = default;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::CameraFocusedComponent);

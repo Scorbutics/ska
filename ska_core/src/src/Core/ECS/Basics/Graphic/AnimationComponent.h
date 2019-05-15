@@ -1,8 +1,8 @@
 #pragma once
-
 #include "Base/Values/Strings/StringUtils.h"
 #include "../../ECSDefines.h"
 
+#include "Core/ECS/Component.h"
 namespace ska {
 
 	class IAnimationStateMachine;
@@ -15,10 +15,6 @@ namespace ska {
 		IAnimationStateMachine* getASM() const;
 
 		long state;
-
-		static std::string getClassName() {
-			return "AnimationComponent";
-		}
 
 	private:
 		IAnimationStateMachine* animationFiniteStateMachine;
@@ -33,3 +29,5 @@ namespace ska {
 		
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::AnimationComponent)

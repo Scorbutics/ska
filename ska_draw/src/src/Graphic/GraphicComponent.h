@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "AnimatedTexture.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	class GraphicComponent {
@@ -13,3 +14,5 @@ namespace ska {
 		std::vector<Texture> sprites;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::GraphicComponent);

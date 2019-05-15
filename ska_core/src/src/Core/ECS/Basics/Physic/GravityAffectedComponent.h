@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	class GravityAffectedComponent {
 	public:
@@ -9,3 +9,5 @@ namespace ska {
 		float rotationFriction;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::GravityAffectedComponent);

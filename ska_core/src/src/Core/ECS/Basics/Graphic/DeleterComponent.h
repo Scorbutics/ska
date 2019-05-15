@@ -1,4 +1,6 @@
 #pragma once
+#include "Core/ECS/Component.h"
+
 namespace ska {
 	class DeleterComponent {
 	public:
@@ -8,3 +10,4 @@ namespace ska {
 		unsigned int startTime;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::DeleterComponent);

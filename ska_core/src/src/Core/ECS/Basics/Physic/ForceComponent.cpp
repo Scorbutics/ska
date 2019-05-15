@@ -1,3 +1,4 @@
+
 #include "ForceComponent.h"
 
 ska::ForceComponent::ForceComponent() : 
@@ -8,3 +9,5 @@ ska::ForceComponent::ForceComponent() :
     z = 0;
     weight = 1;
 }
+
+SKA_DEFINE_COMPONENT(ska::ForceComponent);

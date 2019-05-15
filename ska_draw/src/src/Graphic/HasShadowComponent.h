@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	class HasShadowComponent {
@@ -7,3 +8,4 @@ namespace ska {
 	    ~HasShadowComponent() = default;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::HasShadowComponent);

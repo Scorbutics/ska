@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Point.h"
 #include "Core/ECS/ECSDefines.h"
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	namespace RandomMovementType {
 		enum Enum {
@@ -26,3 +26,5 @@ namespace ska {
 		unsigned int lastTimeStarted;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::IARandomMovementComponent);

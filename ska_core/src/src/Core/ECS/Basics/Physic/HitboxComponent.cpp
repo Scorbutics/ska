@@ -1,3 +1,4 @@
+
 #include "HitboxComponent.h"
 
 ska::HitboxComponent::HitboxComponent(): 
@@ -5,5 +6,7 @@ ska::HitboxComponent::HitboxComponent():
 	yOffset(0), 
 	width(1), 
 	height(1) {
-	
 }
+
+SKA_DEFINE_COMPONENT(ska::HitboxComponent);
+SKA_DEFINE_COMPONENT(ska::cp::HitboxComponent);

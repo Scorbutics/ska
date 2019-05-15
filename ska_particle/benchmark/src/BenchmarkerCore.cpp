@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
 		ska::CoreModule<ska::EntityManager>, 
 		ska::GraphicModule>;
 	GameConf gc;
-	auto& core = gc.requireModule<ska::CoreModule<ska::EntityManager>>("Core", ska::EntityManager::Make<>(gc.getEventDispatcher()), gc.getEventDispatcher());
+	auto& core = gc.requireModule<ska::CoreModule<ska::EntityManager>>("Core", ska::EntityManager{gc.getEventDispatcher()}, gc.getEventDispatcher());
 	auto window = std::make_unique<ska::SDLWindow>("Particle benchmark", 1500, 900);
 	auto renderer = std::make_unique<ska::SDLRenderer>(*window, 0, SDL_RENDERER_ACCELERATED);
 	auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);

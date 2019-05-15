@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Data/Events/GUIEvent.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	class BalloonDialog;
@@ -12,4 +13,7 @@ namespace ska {
 	    BalloonDialog* handle;
 		std::string name;
     };
+
 }
+
+SKA_DECLARE_COMPONENT(ska::DialogComponent);

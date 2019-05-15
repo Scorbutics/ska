@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	struct HitboxComponent {
 	    HitboxComponent();
@@ -19,3 +19,6 @@ namespace ska {
 		};
 	}
 }
+
+SKA_DECLARE_COMPONENT(ska::HitboxComponent);
+SKA_DECLARE_COMPONENT(ska::cp::HitboxComponent);

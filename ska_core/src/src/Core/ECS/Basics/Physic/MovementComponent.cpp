@@ -1,3 +1,4 @@
+
 #include "MovementComponent.h"
 
 ska::MovementComponent::MovementComponent() {
@@ -9,3 +10,5 @@ ska::MovementComponent::MovementComponent() {
     vy = 0;
     vz = 0;
 }
+
+SKA_DEFINE_COMPONENT(ska::MovementComponent);

@@ -2,6 +2,7 @@
 #include <queue>
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
+#include "Core/ECS/Component.h"
 
 namespace ska {
 	enum DebugGraphicType {
@@ -19,3 +20,4 @@ namespace ska {
 		std::vector<Rectangle> blockColPosY;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::DebugGraphicComponent);

@@ -2,7 +2,7 @@
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/Point.h"
 #include "Core/Utils/TimeUtils.h"
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	class IADefinedMovementComponent {
 	public:
@@ -27,3 +27,5 @@ namespace ska {
 		float speed;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::IADefinedMovementComponent);

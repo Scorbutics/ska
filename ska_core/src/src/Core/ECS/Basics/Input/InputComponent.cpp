@@ -1,3 +1,4 @@
+
 #include "InputComponent.h"
 #include "../../SerializeComponent.h"
 
@@ -11,3 +12,5 @@ ska::InputComponent::InputComponent(): movePower(1.F), jumpPower(1.F){
 		SerializeComponent<std::remove_reference<decltype(*this)>::type>::addFieldDeserializer(deserializeMovePower, "movePower");
 	}
 }
+
+SKA_DEFINE_COMPONENT(ska::InputComponent);

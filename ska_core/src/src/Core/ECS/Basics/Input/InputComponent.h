@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Base/Values/Strings/StringUtils.h"
-
+#include "Core/ECS/Component.h"
 namespace ska {
 	class InputComponent {
 	public:
@@ -9,10 +9,6 @@ namespace ska {
 	    ~InputComponent() = default;
 		float movePower;
 		float jumpPower;
-
-		static std::string getClassName() {
-			return "InputComponent";
-		}
 
 		static std::string serializeMovePower(const InputComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(component.movePower));
@@ -31,3 +27,4 @@ namespace ska {
 		}
 	};
 }
+SKA_DECLARE_COMPONENT(ska::InputComponent);
