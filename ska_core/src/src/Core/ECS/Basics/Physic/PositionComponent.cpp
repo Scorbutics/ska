@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "PositionComponent.h"
 #include "../../SerializeComponent.h"
 
@@ -31,4 +32,4 @@ ska::PositionComponent& ska::PositionComponent::operator=(const Point<float>& p)
 	return *this;
 }
 
-SKA_DECLARE_COMPONENT(ska::PositionComponent);
+SKA_DEFINE_COMPONENT(ska::PositionComponent);

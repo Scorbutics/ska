@@ -1,7 +1,8 @@
 #pragma once
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	class ForceComponent : public Component<ForceComponent> {
+	class ForceComponent {
 	public:
 		ForceComponent();
 		~ForceComponent() = default;
@@ -15,3 +16,4 @@ namespace ska {
 		float maxSpeed;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::ForceComponent);

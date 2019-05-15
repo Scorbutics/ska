@@ -1,5 +1,6 @@
+#define SKA_IN_COMPONENT
 #include "ScriptAwareComponent.h"
 
 ska::ScriptAwareComponent::ScriptAwareComponent() {}
 
-SKA_DECLARE_COMPONENT(ska::ScriptAwareComponent);
+SKA_DEFINE_COMPONENT(ska::ScriptAwareComponent);

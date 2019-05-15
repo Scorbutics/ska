@@ -1,7 +1,8 @@
 #pragma once
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	struct MovementComponent : public Component<MovementComponent> {
+	struct MovementComponent {
 		MovementComponent();
         ~MovementComponent() = default;
 
@@ -14,3 +15,4 @@ namespace ska {
 		float vz;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::MovementComponent);

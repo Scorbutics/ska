@@ -6,6 +6,7 @@
 #include "ECSDefines.h"
 #include "SerializeComponent.h"
 #include "ComponentPool.h"
+#include "Component.h"
 
 namespace ska {
 	/**
@@ -19,7 +20,7 @@ namespace ska {
 	public:
 		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentPool*>& mapComponentNames):
 			m_mask(mask) {
-            SLOG(LogLevel::Debug) << "Initializing component with mask " <<  m_mask;
+            SLOG(LogLevel::Debug) << "Initializing component " << Component<T>::TYPE_NAME  << " with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
 			
 			if constexpr(has_getClassName<T>::value) {

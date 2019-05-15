@@ -1,9 +1,10 @@
 #pragma once
 #include <unordered_set>
 
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	class CollidableComponent : public Component<CollidableComponent> {
+	class CollidableComponent {
 	public:
 		CollidableComponent();
 		~CollidableComponent() = default;
@@ -12,3 +13,5 @@ namespace ska {
 		bool ghost;
 	};
 }
+
+SKA_DECLARE_COMPONENT(ska::CollidableComponent);

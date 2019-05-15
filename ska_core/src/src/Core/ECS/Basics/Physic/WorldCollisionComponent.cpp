@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "WorldCollisionComponent.h"
 
-SKA_DECLARE_COMPONENT(ska::WorldCollisionComponent);
+SKA_DEFINE_COMPONENT(ska::WorldCollisionComponent);

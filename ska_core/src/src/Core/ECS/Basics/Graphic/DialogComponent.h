@@ -1,11 +1,12 @@
 #pragma once
 #include "../../../Data/Events/GUIEvent.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
 	class BalloonDialog;
 
-    class DialogComponent : public Component<DialogComponent> {
+    class DialogComponent {
     public:
         DialogComponent();
         virtual ~DialogComponent() = default;
@@ -14,7 +15,6 @@ namespace ska {
 		std::string name;
     };
 
-#ifndef SKA_CORE_IN
-	extern template class SKA_CORE_API ComponentTag<DialogComponent>;
-#endif
 }
+
+SKA_DECLARE_COMPONENT(ska::DialogComponent);

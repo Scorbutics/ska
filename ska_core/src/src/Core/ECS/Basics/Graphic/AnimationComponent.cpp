@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "AnimationComponent.h"
 #include "IAnimationStateMachine.h"
 #include "../../SerializeComponent.h"
@@ -20,4 +21,4 @@ ska::IAnimationStateMachine* ska::AnimationComponent::getASM() const{
 	return animationFiniteStateMachine;
 }
 
-SKA_DECLARE_COMPONENT(ska::AnimationComponent);
+SKA_DEFINE_COMPONENT(ska::AnimationComponent);

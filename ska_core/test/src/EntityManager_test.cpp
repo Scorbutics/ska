@@ -9,8 +9,8 @@ class ComponentTest1 : public ska::Component<ComponentTest1> {
 class ComponentTest2 : public ska::Component<ComponentTest2> {
 };
 
-SKA_DECLARE_COMPONENT(ComponentTest1);
-SKA_DECLARE_COMPONENT(ComponentTest2);
+SKA_DEFINE_COMPONENT(ComponentTest1);
+SKA_DEFINE_COMPONENT(ComponentTest2);
 
 bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId& entity) {
 	if (event.ecsEventType == ska::ECSEventType::ENTITIES_REMOVED) {

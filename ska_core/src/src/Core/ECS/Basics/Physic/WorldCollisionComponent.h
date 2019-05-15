@@ -1,9 +1,10 @@
 #pragma once
 #include "../../../Point.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
-	class WorldCollisionComponent : public Component<WorldCollisionComponent> {
+	class WorldCollisionComponent {
 	public:
         WorldCollisionComponent() = default;
 		~WorldCollisionComponent() = default;
@@ -13,3 +14,4 @@ namespace ska {
 		Point<float> normal;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::WorldCollisionComponent);

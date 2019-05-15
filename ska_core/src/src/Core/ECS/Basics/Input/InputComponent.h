@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include "Base/Values/Strings/StringUtils.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	class InputComponent : public Component<InputComponent> {
+	class InputComponent {
 	public:
 	    InputComponent();
 	    ~InputComponent() = default;
@@ -31,3 +32,4 @@ namespace ska {
 		}
 	};
 }
+SKA_DECLARE_COMPONENT(ska::InputComponent);

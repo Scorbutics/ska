@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "Core/__internalConfig/LoggerConfig.h"
 #include "CollisionComponent.h"
 
@@ -8,4 +9,4 @@ ska::CollisionComponent::CollisionComponent() {
 	target = 0;
 }
 
-SKA_DECLARE_COMPONENT(ska::CollisionComponent);
+SKA_DEFINE_COMPONENT(ska::CollisionComponent);

@@ -1,5 +1,6 @@
+#define SKA_IN_COMPONENT
 #include "CollidableComponent.h"
 
 ska::CollidableComponent::CollidableComponent(): ghost(false){}
 
-SKA_DECLARE_COMPONENT(ska::CollidableComponent);
+SKA_DEFINE_COMPONENT(ska::CollidableComponent);

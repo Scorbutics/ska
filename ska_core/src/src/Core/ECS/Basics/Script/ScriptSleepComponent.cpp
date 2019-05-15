@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "ScriptSleepComponent.h"
 
 ska::ScriptSleepComponent::ScriptSleepComponent():
@@ -7,4 +8,4 @@ ska::ScriptSleepComponent::ScriptSleepComponent():
 	period = 0;
 }
 
-SKA_DECLARE_COMPONENT(ska::ScriptSleepComponent);
+SKA_DEFINE_COMPONENT(ska::ScriptSleepComponent);

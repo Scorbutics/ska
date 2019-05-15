@@ -32,7 +32,7 @@ namespace ska {
 			if (mask >= systemComponentMask.size()) {
 				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.");
 			}
-			SLOG(LogLevel::Debug) << "\t - mask " << mask;
+			SLOG(LogLevel::Debug) << "\t" << Component<T>::TYPE_NAME << " - mask " << mask;
 
 			systemComponentMask[mask] = true;
 		}

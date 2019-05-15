@@ -5,10 +5,11 @@
 #include "HitboxComponent.h"
 #include "../Graphic/AnimationComponent.h"
 #include "Base/Values/Numbers/NumberUtils.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
-	class PositionComponent : public Component<PositionComponent> {
+	class PositionComponent {
 	public:
 		PositionComponent();
 		PositionComponent(const Point<float>& p);
@@ -86,4 +87,4 @@ namespace ska {
 		std::size_t layer{};
 	};
 }
-
+SKA_DECLARE_COMPONENT(ska::PositionComponent);

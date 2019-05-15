@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "HitboxComponent.h"
 
 ska::HitboxComponent::HitboxComponent(): 
@@ -7,5 +8,5 @@ ska::HitboxComponent::HitboxComponent():
 	height(1) {
 }
 
-SKA_DECLARE_COMPONENT(ska::HitboxComponent);
-SKA_DECLARE_COMPONENT(ska::cp::HitboxComponent);
+SKA_DEFINE_COMPONENT(ska::HitboxComponent);
+SKA_DEFINE_COMPONENT(ska::cp::HitboxComponent);

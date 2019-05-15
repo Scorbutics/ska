@@ -1,7 +1,8 @@
+#define SKA_IN_COMPONENT
 #include "DebugGraphicComponent.h"
 
 ska::DebugGraphicComponent::DebugGraphicComponent() {
     typeMask = 0;
 }
 
-SKA_DECLARE_COMPONENT(ska::DebugGraphicComponent);
+SKA_DEFINE_COMPONENT(ska::DebugGraphicComponent);

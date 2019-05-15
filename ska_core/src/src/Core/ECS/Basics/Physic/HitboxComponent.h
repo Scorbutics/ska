@@ -1,8 +1,9 @@
 #pragma once
 #include <cstddef>
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	struct HitboxComponent : public Component<HitboxComponent> {
+	struct HitboxComponent {
 	    HitboxComponent();
 	    ~HitboxComponent() = default;
 		int xOffset;
@@ -12,10 +13,13 @@ namespace ska {
 	};
 
 	namespace cp {
-		struct HitboxComponent : public Component<HitboxComponent> {
+		struct HitboxComponent {
 			std::size_t bodyIndex{};
 			std::size_t controlBodyIndex{};
 			std::size_t shapeIndex{};
 		};
 	}
 }
+
+SKA_DECLARE_COMPONENT(ska::HitboxComponent);
+SKA_DECLARE_COMPONENT(ska::cp::HitboxComponent);

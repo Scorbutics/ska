@@ -1,3 +1,4 @@
+#define SKA_IN_COMPONENT
 #include "InputComponent.h"
 #include "../../SerializeComponent.h"
 
@@ -12,4 +13,4 @@ ska::InputComponent::InputComponent(): movePower(1.F), jumpPower(1.F){
 	}
 }
 
-SKA_DECLARE_COMPONENT(ska::InputComponent);
+SKA_DEFINE_COMPONENT(ska::InputComponent);

@@ -1,8 +1,9 @@
 #pragma once
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
-	class DeleterComponent : public Component<DeleterComponent> {
+	class DeleterComponent {
 	public:
 		DeleterComponent();
 
@@ -10,3 +11,4 @@ namespace ska {
 		unsigned int startTime;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::DeleterComponent);

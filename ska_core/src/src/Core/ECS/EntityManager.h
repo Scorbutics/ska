@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <array>
 #include <unordered_map>
+#include "Core/ApiDef.h"
+#include "Component.h"
 #include "ECSDefines.h"
 #include "ComponentHandler.h"
 #include "Base/Patterns/Observable.h"
@@ -122,16 +124,16 @@ namespace ska {
 
 		template <class T>
 		ComponentHandler<T>& getComponents() {
-			if (T::TYPE_ID == -1) {
-				T::TYPE_ID = m_componentHolders.size();
-				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(T::TYPE_ID, m_componentsNameMap));
-				if(!m_init) {
+			if (Component<T>::TYPE_ID == -1) {
+				Component<T>::TYPE_ID = m_componentHolders.size();
+				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID, m_componentsNameMap));
+				if(m_init) {
 					//TODO handle ?
-					SLOG(LogLevel::Error) << "The component " << T::TYPE_NAME << " is bad defined";
-					assert(!"This component is bad defined");
+					SLOG(LogLevel::Error) << "The component " << Component<T>::TYPE_NAME << " is bad defined";
+					assert(!"This component is badly defined");
 				}
 			}
-			return static_cast<ComponentHandler<T>&>(*m_componentHolders[T::TYPE_ID].get());
+			return static_cast<ComponentHandler<T>&>(*m_componentHolders[Component<T>::TYPE_ID].get());
 		}
 
 	};

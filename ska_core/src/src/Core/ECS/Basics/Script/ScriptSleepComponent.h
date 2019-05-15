@@ -3,10 +3,11 @@
 #include <string>
 #include "ScriptTriggerType.h"
 #include "../../../Point.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
-	class ScriptSleepComponent : public Component<ScriptSleepComponent> {
+	class ScriptSleepComponent {
 	public:
 		Point<int> id;
 		std::string name;
@@ -23,3 +24,4 @@ namespace ska {
 
 	using ScriptPack = std::vector<ScriptSleepComponent>;
 }
+SKA_DECLARE_COMPONENT(ska::ScriptSleepComponent);

@@ -1,7 +1,6 @@
-#define SKA_COMPONENT_DLL_EXPORT
-#define SKA_CORE_IN
+#define SKA_IN_COMPONENT
 #include "DialogComponent.h"
 
 ska::DialogComponent::DialogComponent() : handle(nullptr) { }
 
-SKA_DECLARE_COMPONENT(ska::DialogComponent);
+SKA_DEFINE_COMPONENT(ska::DialogComponent);

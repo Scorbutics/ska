@@ -2,6 +2,7 @@
 #include <queue>
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
@@ -9,7 +10,7 @@ namespace ska {
 		COLLISION = (1u << 0),
 		WALK = (1u << 1)
 	};
-	class DebugGraphicComponent : public Component<DebugGraphicComponent> {
+	class DebugGraphicComponent {
 	public:
 		DebugGraphicComponent();
 		virtual ~DebugGraphicComponent() = default;
@@ -20,3 +21,4 @@ namespace ska {
 		std::vector<Rectangle> blockColPosY;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::DebugGraphicComponent);

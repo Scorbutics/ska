@@ -1,8 +1,9 @@
 #pragma once
 #include "../Physic/PositionComponent.h"
+#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
-	class ScriptAwareComponent : public Component<ScriptAwareComponent> {
+	class ScriptAwareComponent {
 	public:
 	    ScriptAwareComponent();
 	    ~ScriptAwareComponent() = default;
@@ -10,3 +11,4 @@ namespace ska {
 		PositionComponent lastBlockPos;
 	};
 }
+SKA_DECLARE_COMPONENT(ska::ScriptAwareComponent);

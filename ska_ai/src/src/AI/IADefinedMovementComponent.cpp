@@ -1,3 +1,3 @@
 #include "IADefinedMovementComponent.h"
 
-SKA_DECLARE_COMPONENT(ska::IADefinedMovementComponent);
+SKA_DEFINE_COMPONENT(ska::IADefinedMovementComponent);

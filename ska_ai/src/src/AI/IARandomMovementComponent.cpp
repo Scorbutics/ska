@@ -1,3 +1,3 @@
 #include "IARandomMovementComponent.h"
 
-SKA_DECLARE_COMPONENT(ska::IARandomMovementComponent);
+SKA_DEFINE_COMPONENT(ska::IARandomMovementComponent);
