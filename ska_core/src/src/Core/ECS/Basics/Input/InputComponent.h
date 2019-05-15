@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "Base/Values/Strings/StringUtils.h"
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
 	class InputComponent {

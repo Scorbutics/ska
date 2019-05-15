@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "AnimatedTexture.h"
-#include "Graphic/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {

@@ -1,5 +1,4 @@
 #pragma once
-#include "Graphic/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {

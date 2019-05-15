@@ -1,6 +1,5 @@
 #pragma once
 #include "../../../Point.h"
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {

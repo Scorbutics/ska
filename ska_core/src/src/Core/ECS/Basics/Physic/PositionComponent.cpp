@@ -1,4 +1,4 @@
-#define SKA_IN_COMPONENT
+
 #include "PositionComponent.h"
 #include "../../SerializeComponent.h"
 

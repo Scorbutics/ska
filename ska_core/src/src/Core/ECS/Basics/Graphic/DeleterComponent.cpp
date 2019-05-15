@@ -1,4 +1,4 @@
-#define SKA_IN_COMPONENT
+
 #include "DeleterComponent.h"
 #include "../../../Utils/TimeUtils.h"
 

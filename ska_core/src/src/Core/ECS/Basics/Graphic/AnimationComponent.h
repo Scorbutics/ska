@@ -2,7 +2,6 @@
 #include "Base/Values/Strings/StringUtils.h"
 #include "../../ECSDefines.h"
 
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
 

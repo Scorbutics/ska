@@ -1,4 +1,4 @@
-#define SKA_IN_COMPONENT
+
 #include "AnimationComponent.h"
 #include "IAnimationStateMachine.h"
 #include "../../SerializeComponent.h"

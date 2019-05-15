@@ -2,7 +2,6 @@
 #include <queue>
 #include "../../ECSDefines.h"
 #include "../Physic/WorldCollisionComponent.h"
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {

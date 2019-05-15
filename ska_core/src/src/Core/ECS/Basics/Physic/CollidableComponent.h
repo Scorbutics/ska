@@ -1,7 +1,6 @@
 #pragma once
 #include <unordered_set>
 
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 namespace ska {
 	class CollidableComponent {

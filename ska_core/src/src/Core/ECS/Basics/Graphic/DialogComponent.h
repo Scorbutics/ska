@@ -1,6 +1,5 @@
 #pragma once
 #include "../../../Data/Events/GUIEvent.h"
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {

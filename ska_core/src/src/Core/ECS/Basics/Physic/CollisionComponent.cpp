@@ -1,4 +1,4 @@
-#define SKA_IN_COMPONENT
+
 #include "Core/__internalConfig/LoggerConfig.h"
 #include "CollisionComponent.h"
 

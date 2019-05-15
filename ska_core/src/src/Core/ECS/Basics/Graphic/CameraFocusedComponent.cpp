@@ -1,4 +1,4 @@
-#define SKA_IN_COMPONENT
+
 #include "CameraFocusedComponent.h"
 
 ska::CameraFocusedComponent::CameraFocusedComponent() { }

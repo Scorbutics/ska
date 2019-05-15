@@ -5,7 +5,6 @@
 #include "HitboxComponent.h"
 #include "../Graphic/AnimationComponent.h"
 #include "Base/Values/Numbers/NumberUtils.h"
-#include "Core/ApiDef.h"
 #include "Core/ECS/Component.h"
 
 namespace ska {
