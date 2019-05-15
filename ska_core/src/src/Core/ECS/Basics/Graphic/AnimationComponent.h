@@ -16,10 +16,6 @@ namespace ska {
 
 		long state;
 
-		static std::string getClassName() {
-			return "AnimationComponent";
-		}
-
 	private:
 		IAnimationStateMachine* animationFiniteStateMachine;
 

@@ -10,10 +10,6 @@ namespace ska {
 		float movePower;
 		float jumpPower;
 
-		static std::string getClassName() {
-			return "InputComponent";
-		}
-
 		static std::string serializeMovePower(const InputComponent& component) {
 			return StringUtils::intToStr(static_cast<int>(component.movePower));
 		}

@@ -5,11 +5,6 @@
 #include "Base/Values/Strings/StringUtils.h"
 #include "../Data/Events/ECSEvent.h"
 
-std::size_t& ska::EntityManager::GetComponentMaskCounter() {
-	static std::size_t componentMaskCounter = 0;
-	return componentMaskCounter;
-}
-
 void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentPool& components) {
     const auto removedComponentMask = components.remove(entity);
     m_componentMask[entity][removedComponentMask] = false;

@@ -39,7 +39,8 @@ namespace ska {
 	public:
 		explicit EntityManager(GameEventDispatcher& ged) :
 			m_ged(ged) { }
-			
+		virtual ~EntityManager() = default;
+
 		EntityManager(EntityManager&&) = default;
 		EntityManager& operator=(EntityManager&&) = default;
 
@@ -88,13 +89,9 @@ namespace ska {
 			return components.getMask();
 		}
 
-		virtual ~EntityManager() = default;
-
 	private:
 		EntityId createEntityNoThrow(const std::string& name = "");
 		bool checkEntitiesNumber() const;
-
-		static std::size_t& GetComponentMaskCounter();
 
 		GameEventDispatcher& m_ged;
 		std::unordered_set<EntityId> m_entities;

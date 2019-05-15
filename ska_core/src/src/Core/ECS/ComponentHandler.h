@@ -23,11 +23,7 @@ namespace ska {
             SLOG(LogLevel::Debug) << "Initializing component " << Component<T>::TYPE_NAME() << " with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
 			
-			if constexpr(has_getClassName<T>::value) {
-				mapComponentNames.emplace(T::getClassName(), this);
-			} else {
-				mapComponentNames.emplace("", this);
-			}
+			mapComponentNames.emplace(Component<T>::TYPE_NAME(), this);
 		}
 
 		unsigned int addEmpty(const EntityId&) override {
@@ -66,20 +62,11 @@ namespace ska {
 		}
 
 		std::string serialize(const EntityId& entityId, const std::string& field) override {
-			if constexpr(has_getClassName<T>::value) {
-				return ska::SerializeComponent<T>::serialize(getComponent(entityId), field);
-			}
-
-			assert(has_getClassName<T>::value && ("This component should be serializable in order to be serialized (field required : " + field + ")").c_str());
-			return "";	
+			return ska::SerializeComponent<T>::serialize(getComponent(entityId), field);
 		}
 
 		void deserialize(const EntityId& entityId, const std::string& field, const std::string& value) override {
-			if constexpr(has_getClassName<T>::value) {
-				ska::SerializeComponent<T>::deserialize(getComponent(entityId), field, value);
-			} else {
-				assert(has_getClassName<T>::value && ("This component should be serializable in order to be deserialized (field required : " + field + ")").c_str());
-			}
+			ska::SerializeComponent<T>::deserialize(getComponent(entityId), field, value);
 		}
 
 		virtual ~ComponentHandler() = default;

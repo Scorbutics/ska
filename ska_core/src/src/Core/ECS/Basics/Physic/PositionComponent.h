@@ -38,10 +38,6 @@ namespace ska {
 			return result + pos;
 		}
 
-		static std::string getClassName() {
-			return "PositionComponent";
-		}
-
 	private:
 		static std::string serializeLayer(const PositionComponent& component) {
 			return StringUtils::toString(static_cast<std::size_t>(component.layer));
