@@ -114,7 +114,9 @@ namespace ska {
 			if (Component<T>::TYPE_ID() == -1) {
 				Component<T>::TYPE_ID() = m_componentHolders.size();
 				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap));
-			}
+			} 
+			assert(m_componentHolders.size() > Component<T>::TYPE_ID());
+			
 			return static_cast<ComponentHandler<T>&>(*m_componentHolders[Component<T>::TYPE_ID()].get());
 		}
 
