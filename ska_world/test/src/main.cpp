@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-	doctest::Context context;
+	doctest::Context context = doctest::Context{argc, argv};
 	auto resultCode = 0;
 
 	// sort the test cases by their name
