@@ -74,7 +74,8 @@ TEST_CASE("[EntityManager]") {
 
 	SUBCASE("AddComponent + GetComponent + refresh") {
 		ska::EntityId entity = 0;
-		em.addComponent(entity, 14);
+		em.addComponent(entity, ComponentTest1{14});
+		
 		auto component = em.getComponent<ComponentTest1>(entity);
 
 		CHECK(componentObserver.eventType.empty());
@@ -96,9 +97,9 @@ TEST_CASE("[EntityManager]") {
 
 		CHECK(componentObserver.eventType.size() == 2);
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[0].entityId == entity1);
+		CHECK(componentObserver.eventType[0].entityId == entity2);
 		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[1].entityId == entity2);
+		CHECK(componentObserver.eventType[1].entityId == entity1);
 		
 		CHECK(entity1 != entity2);
 	}
@@ -184,4 +185,10 @@ TEST_CASE("[EntityManager]") {
 		CHECK(entityX == entity3);
 	}
 
+	SUBCASE("Second EntityManager instance : testing the behaviour of component handlers instantiations") {
+		ska::EntityId entity = 0;
+		auto em2 = ska::EntityManager{ged};
+		em2.addComponent<ComponentTest1>(entity, ComponentTest1());
+		em2.addComponent<ComponentTest2>(entity, ComponentTest2());
+	}
 }
