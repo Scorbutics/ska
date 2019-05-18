@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 
 	// sort the test cases by their name
 	context.setOption("order-by", "name");
-	context.setOption("success", "true");
+	//context.setOption("success", "true");
 	std::cout << "Running..." << std::endl;
 	resultCode = context.run();
 

@@ -51,7 +51,9 @@ namespace ska {
 		}
 
 		T& getComponent(const EntityId& id) {
-			if(id >= m_entitiesWithComponent.size() || !m_entitiesWithComponent[id].has_value()) { throw std::runtime_error("This entity has no component with this id"); }
+			if(id >= m_entitiesWithComponent.size() || !m_entitiesWithComponent[id].has_value()) { 
+				throw std::runtime_error("This entity has no component with this id");
+			}
 			auto& componentIdForEntity = m_entitiesWithComponent[id].value();
 			assert(componentIdForEntity < m_components.size() && "Invalid component for this entity");
 			return m_components[componentIdForEntity];

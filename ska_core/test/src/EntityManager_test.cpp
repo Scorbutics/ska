@@ -97,9 +97,9 @@ TEST_CASE("[EntityManager]") {
 
 		CHECK(componentObserver.eventType.size() == 2);
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[0].entityId == entity2);
+		CHECK(componentObserver.eventType[0].entityId == entity1);
 		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[1].entityId == entity1);
+		CHECK(componentObserver.eventType[1].entityId == entity2);
 		
 		CHECK(entity1 != entity2);
 	}
