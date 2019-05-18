@@ -112,7 +112,7 @@ namespace ska {
 				Component<T>::TYPE_ID() = m_componentHolders.size();
 				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap));
 			} else if (m_componentHolders.size() <= Component<T>::TYPE_ID()) {
-				m_componentHolders.resize(Component<T>::TYPE_ID() * 1.5 + 1);
+				m_componentHolders.resize(static_cast<const std::size_t>(Component<T>::TYPE_ID() * 1.5 + 1));
 				m_componentHolders[Component<T>::TYPE_ID()] = std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap);
 			}
 			

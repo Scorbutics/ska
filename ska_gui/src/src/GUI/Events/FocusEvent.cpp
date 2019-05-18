@@ -18,7 +18,7 @@ ska::MouseEventType ska::FocusEvent::getState() const {
 }
 
 unsigned int ska::FocusEvent::getMask() const {
-	return WidgetMaskHelper::getMask<FocusEventListener>();
+	return WidgetMaskEvent<FocusEventListener>::MASK_ID();
 }
 
 bool ska::FocusEvent::affects(const Widget& w) const {
@@ -32,3 +32,4 @@ bool ska::FocusEvent::affects(const Widget& w) const {
 	return true;
 }
 
+SKA_DEFINE_GUI_EVENT(ska::FocusEventListener);

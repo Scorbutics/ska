@@ -1,5 +1,4 @@
 #include "KeyEvent.h"
-#include "../Utils/WidgetMaskHelper.h"
 
 ska::KeyEvent::KeyEvent(const KeyEventType& state, const std::wstring& text, const int scanCode) :
 	m_state(state),
@@ -25,5 +24,7 @@ bool ska::KeyEvent::affects(const Widget&) const {
 }
 
 unsigned int ska::KeyEvent::getMask() const {
-	return WidgetMaskHelper::template getMask<KeyEventListener>();
+	return WidgetMaskEvent<KeyEventListener>::MASK_ID();
 }
+
+SKA_DEFINE_GUI_EVENT(ska::KeyEventListener);

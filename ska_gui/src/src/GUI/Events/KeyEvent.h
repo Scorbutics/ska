@@ -2,6 +2,7 @@
 #include <string>
 #include "WidgetEvent.h"
 #include "KeyEventListener.h"
+#include "GUI/Utils/WidgetMaskHelper.h"
 
 namespace ska {
 	enum KeyEventType {
@@ -34,3 +35,5 @@ namespace ska {
 
 	};
 }
+
+SKA_DECLARE_GUI_EVENT(ska::KeyEventListener);

@@ -1,6 +1,6 @@
 #pragma once
 #include "WidgetEvent.h"
-
+#include "GUI/Utils/WidgetMaskHelper.h"
 
 namespace ska {
 	class TimeEventListener;
@@ -20,3 +20,5 @@ namespace ska {
 		const unsigned int m_ellapsedTime;
 	};
 }
+
+SKA_DECLARE_GUI_EVENT(ska::TimeEventListener);

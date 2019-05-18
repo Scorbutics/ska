@@ -1,6 +1,7 @@
 #pragma once
 #include "WidgetEvent.h"
 #include "MouseEventType.h"
+#include "GUI/Utils/WidgetMaskHelper.h"
 
 namespace ska {
 	class Widget;
@@ -22,3 +23,5 @@ namespace ska {
 		Widget* m_clickedTarget;
 	};
 }
+
+SKA_DECLARE_GUI_EVENT(ska::FocusEventListener);

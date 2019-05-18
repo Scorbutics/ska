@@ -1,7 +1,7 @@
 #include "HoverEvent.h"
 #include "Core/Utils/RectangleUtils.h"
 #include "../Utils/WidgetMaskHelper.h"
-#include "../Components/Widget.h"
+#include "GUI/Components/Widget.h"
 
 ska::HoverEvent::HoverEvent(const MouseEventType& state, const Point<int>& pos, const Point<int>& mousePos, const Point<int>& relativeMousePos) :
 	m_state(state), m_pos(pos), m_mousePos(mousePos), m_relativeMousePos(relativeMousePos) {
@@ -41,5 +41,7 @@ bool ska::HoverEvent::affects(const Widget& w) const {
 }
 
 unsigned int ska::HoverEvent::getMask() const {
-	return WidgetMaskHelper::getMask<HoverEventListener>();
+	return WidgetMaskEvent<ska::HoverEventListener>::MASK_ID();
 }
+
+SKA_DEFINE_GUI_EVENT(ska::HoverEventListener);

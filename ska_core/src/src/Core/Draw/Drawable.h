@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderable.h"
-#include "../Priorized.h"
+#include "Core/Priorized.h"
 
 namespace ska {
 	class Renderer;

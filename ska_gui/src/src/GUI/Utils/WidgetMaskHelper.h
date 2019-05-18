@@ -1,41 +1,28 @@
 #pragma once
+#include <cstddef>
 
 namespace ska {
 	class WStaticCounterGlobal {
-	protected:
+	public:
 		static unsigned int getCounterAndInc();
 	};
 
-	class WidgetMaskHelper {
-	private:
-		WidgetMaskHelper() = default;
-
+	template <class Widget>
+	class WidgetMaskEvent {
 	public:
-		template <class T>
-		static unsigned int getMask() {
-			return (WidgetMaskHelper::template getWidgetMaskCounter<T>());
-		}
-
-	private:
-		template <class T>
-		class WStaticCounterSpecialized : public WStaticCounterGlobal {
-		public:
-			WStaticCounterSpecialized() {
-				m_mask = getCounterAndInc();
-			}
-
-			unsigned int getMask() const{
-				return m_mask;
-			}
-
-		private:
-			unsigned int m_mask;
-		};
-
-		template <class T>
-		static unsigned int getWidgetMaskCounter() {
-			static WStaticCounterSpecialized<T> wc;
-			return wc.getMask();
-		}
+		static std::size_t MASK_ID();
 	};
+
+}
+
+#define SKA_DECLARE_GUI_EVENT(GuiEvent) template <> std::size_t ska::WidgetMaskEvent<GuiEvent>::MASK_ID();
+#define SKA_DECLARE_TEMPLATED_GUI_EVENT(GuiEvent) template <class T>\
+class ska::WidgetMaskEvent<GuiEvent<T>> {\
+public:\
+	static std::size_t MASK_ID();\
+};
+
+#define SKA_DEFINE_GUI_EVENT(GuiEvent) template <> std::size_t ska::WidgetMaskEvent<GuiEvent>::MASK_ID() { \
+static std::size_t id = WStaticCounterGlobal::getCounterAndInc(); \
+return id; \
 }

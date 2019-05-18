@@ -12,4 +12,8 @@ namespace ska {
 
 		virtual unsigned int getMask() const override;
 	};
+	
+	class ClickEventListener;
 }
+
+SKA_DECLARE_GUI_EVENT(ska::ClickEventListener);

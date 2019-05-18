@@ -3,6 +3,7 @@
 #include "Core/Point.h"
 #include "HoverEventListener.h"
 #include "MouseEventType.h"
+#include "GUI/Utils/WidgetMaskHelper.h"
 
 namespace ska {
 
@@ -30,4 +31,7 @@ namespace ska {
 		Point<int> m_relativeMousePos;
 
 	};
+
 }
+
+SKA_DECLARE_GUI_EVENT(ska::HoverEventListener);

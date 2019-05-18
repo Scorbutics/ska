@@ -137,7 +137,7 @@ namespace ska {
 
 		template<class T>
 		T instantiateHandler() {
-			const MaskUnit& mu = WidgetMaskHelper::getMask<T>();
+			const MaskUnit& mu = WidgetMaskEvent<T>::MASK_ID();
 			m_maskHandlerIndexes[mu] = m_currentMaskIndex;
 			m_currentMaskIndex--;
 			return T();
@@ -145,7 +145,7 @@ namespace ska {
 
 		template <class T>
 		void buildMask() {
-			const unsigned int mask = WidgetMaskHelper::getMask<T>();
+			const unsigned int mask = WidgetMaskEvent<T>::MASK_ID();
 			if (mask >= m_mask.size()) {
 				throw std::runtime_error("Too many listeners are used. Unable to continue.");
 			}

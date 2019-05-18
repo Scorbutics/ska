@@ -2,7 +2,9 @@
 
 #include "ValueChangedEventListener.h"
 #include "WidgetEvent.h"
-#include "../Utils/WidgetMaskHelper.h"
+#include "GUI/Utils/WidgetMaskHelper.h"
+
+SKA_DECLARE_TEMPLATED_GUI_EVENT(ska::ValueChangedEventListener);
 
 namespace ska {
 	
@@ -24,7 +26,7 @@ namespace ska {
 		}
 		
 		virtual unsigned int getMask() const override {
-			return WidgetMaskHelper::getMask<ValueChangedEventListener<T>>();
+			return WidgetMaskEvent<ValueChangedEventListener<T>>::MASK_ID();
 		}
 
 		virtual bool affects(const Widget&) const override {
@@ -40,4 +42,6 @@ namespace ska {
 		const T m_oldValue;
 		const T m_value;
 	};
+
 }
+
