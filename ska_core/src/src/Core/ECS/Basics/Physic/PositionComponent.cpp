@@ -26,8 +26,8 @@ ska::PositionComponent::PositionComponent(const Point<int>& p) {
 }
 
 ska::PositionComponent& ska::PositionComponent::operator=(const Point<float>& p) {
-    x = p.x;
-    y = p.y;
+    x = static_cast<decltype(x)>(p.x);
+    y = static_cast<decltype(y)>(p.y);
     z = 0;
 	return *this;
 }

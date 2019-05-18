@@ -23,7 +23,7 @@ void ska::cp::SpaceSystem::refresh(unsigned int ellapsedTime) {
 		auto& fc = m_componentAccessor.get<ska::ForceComponent>(entity);
 
 		//linear Z variation handled manually (fake 3D)
-		pc.z += mc.vz;
+		pc.z += static_cast<long>(mc.vz);
 		mc.vz += fc.z;
 
 		if (pc.z < 0) {

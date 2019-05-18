@@ -106,8 +106,8 @@ std::vector<ska::ScriptSleepComponent> ska::TileWorld::getScripts(const Point<in
 	const auto effectiveBlockPosition = type == ScriptTriggerType::MOVE_OUT ? oldCenterPos / m_blockSize : frontPos / m_blockSize;
 
 	for (auto& layerScriptsPtr : m_events) {
-		if (effectiveBlockPosition.x >= m_blocksX ||
-			effectiveBlockPosition.y >= m_blocksX) {
+		if (effectiveBlockPosition.x >= static_cast<int>(m_blocksX) ||
+			effectiveBlockPosition.y >= static_cast<int>(m_blocksX)) {
 			continue;
 		}
 		auto& blockScript = layerScriptsPtr->getScripts(effectiveBlockPosition);

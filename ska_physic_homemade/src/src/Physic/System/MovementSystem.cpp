@@ -19,9 +19,9 @@ void ska::MovementSystem::refresh(unsigned int) {
 
 		//Position vector is the current position of the object (i.e. the last position + the last velocity with a delta time taken)
 		//(x(t) - x(t-1))/(t - (t-1)) = dx/dt (t) = vx(t)
-		posComponent.x += moveComponent.vx;
-		posComponent.y += moveComponent.vy;
-		posComponent.z += moveComponent.vz;
+		posComponent.x += static_cast<long>(moveComponent.vx);
+		posComponent.y += static_cast<long>(moveComponent.vy);
+		posComponent.z += static_cast<long>(moveComponent.vz);
 
 		//Acceleration vector ALWAYS means the next acceleration, and not the current one
 		/* sum(F) = m*a */

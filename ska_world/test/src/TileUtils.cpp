@@ -7,11 +7,11 @@ ska::Vector2<std::optional<ska::Tile>> TileWorldPhysics::BuildTiles(const ska::V
 	auto tiles = ska::Vector2<std::optional<ska::Tile>>{};
 	tiles.resize(width, height);
 
-	for (auto x = 0; x < width; x++) {
-		for (auto y = 0; y < height; y++) {
+	for (std::size_t x = 0; x < width; x++) {
+		for (std::size_t y = 0; y < height; y++) {
 			auto tileProperties = ska::TileProperties{};
 			tileProperties.bitMask = !properties.has(x, y) ? 0 : properties[x][y];
-			tiles[x][y] = ska::Tile{ { x, y }, tileProperties,
+			tiles[x][y] = ska::Tile{ { static_cast<int>(x), static_cast<int>(y) }, tileProperties,
 				collisions[x][y] == 0 ? ska::TileCollision::No :
 				(collisions[x][y] == '-' ? ska::TileCollision::Void : ska::TileCollision::Yes)
 			};

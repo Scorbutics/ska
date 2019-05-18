@@ -18,12 +18,10 @@ public:
 	void render(ska::Renderer& renderer) const override{
 		const auto width = layerRenderableBlocks.lineSize();
 		const auto height = width == 0 ? 0 : layerRenderableBlocks.size() / width;
-		for (auto x = 0; x < width; x++) {
-			for (auto y = 0; y < height; y++) {
+		for (std::size_t x = 0; x < width; x++) {
+			for (std::size_t y = 0; y < height; y++) {
 				const auto& b = layerRenderableBlocks[x][y];
-				
-				chipset->getTexture().render(renderer, x * 48, y * 48, &b, 0, nullptr);
-				
+				chipset->getTexture().render(renderer, x * 48, y * 48, &b, 0, nullptr);				
 			}
 		}
 	}

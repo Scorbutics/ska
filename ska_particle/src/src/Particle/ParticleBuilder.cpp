@@ -31,7 +31,7 @@ const ska::ParticleBuilder& ska::ParticleBuilder::setVelocity(PolarPoint<float> 
 	assert(m_group != nullptr);
 	if (slices == 0) {
 		for (auto i = m_indexStart; i < m_indexEnd; i++) {
-			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), velocity.angle + ska::NumberUtils::random(-spreading, spreading));
+			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), ska::NumberUtils::random(-spreading, spreading) + velocity.angle);
 		}
 	} else {
 		static const auto factor = 10000.F;
@@ -39,7 +39,7 @@ const ska::ParticleBuilder& ska::ParticleBuilder::setVelocity(PolarPoint<float> 
 			const auto factoredSpreading = 2 * spreading * factor;
 			const auto currentSlice = slices == 1 ? 1 : ska::NumberUtils::random(1, slices);
 			const auto spreadingAngle = ((factoredSpreading / slices) * currentSlice) / factor;
-			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), velocity.angle + spreadingAngle);
+			m_group->physics[i].velocity = ska::Point<float>::cartesian(velocity.radius * ska::NumberUtils::random(randomMultipler, 1.F), spreadingAngle + velocity.angle);
 		}
 	}
 	
@@ -58,8 +58,9 @@ const ska::ParticleBuilder& ska::ParticleBuilder::setRandomPosition(Point<float>
 	assert(m_group != nullptr);
 	for (auto i = m_indexStart; i < m_indexEnd; i++) {
 		m_group->pos[i] = position + Point<float>(
-			NumberUtils::random(- maxDistance.x, maxDistance.x),
-			NumberUtils::random(- maxDistance.y, maxDistance.y));
+			static_cast<float>(NumberUtils::random(- maxDistance.x, maxDistance.x)),
+			static_cast<float>(NumberUtils::random(- maxDistance.y, maxDistance.y))
+			);
 	}
 	return *this;
 }

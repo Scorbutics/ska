@@ -10,9 +10,9 @@ ska::EulerAttractorParticleUpdater::EulerAttractorParticleUpdater(Point<int>& or
 void ska::EulerAttractorParticleUpdater::update(unsigned int, ParticleGroup & group) {
 	const auto& maxSize = group.getLength();
 	for (std::size_t i = 0; i < maxSize; i++) {
-		const Point<int> diff(m_origin.x - group.pos[i].x, m_origin.y - group.pos[i].y);
-		m_force.angle = static_cast<float>(NumberUtils::arctan(diff.x, diff.y));
-		group.physics[i].acceleration += ska::Point<float>::cartesian(m_force.radius / ska::NumberUtils::squareroot(diff.x * diff.x + diff.y * diff.y), m_force.angle);
+		const auto diff = Point<long>{ static_cast<long>(m_origin.x - group.pos[i].x), static_cast<long>(m_origin.y - group.pos[i].y) };
+		m_force.angle = static_cast<float>(NumberUtils::arctan(static_cast<float>(diff.x), static_cast<float>(diff.y)));
+		group.physics[i].acceleration += ska::Point<float>::cartesian(m_force.radius / static_cast<float>(ska::NumberUtils::squareroot(static_cast<double>(diff.x) * diff.x + diff.y * diff.y)), m_force.angle);
 	}
 }
 

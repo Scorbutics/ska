@@ -52,7 +52,7 @@ namespace ska {
 		auto maxPriorityLogicalOperatorIndex = -1;
 
 		const auto& maxRange = node.rangeMax == -1 ? expressionParts.size() - 1 : node.rangeMax;
-		for (auto index = node.rangeMin; index <= maxRange; index++) {
+		for (auto index = static_cast<std::size_t>(node.rangeMin); index <= maxRange; index++) {
 			const auto& part = expressionParts[index];
 			if (operators.find(part) != operators.end()) {
 				if (operators.at(part).priority > maxPriorityLogicalOperatorValue) {
@@ -63,7 +63,7 @@ namespace ska {
 			}
 		}
 		
-		if (maxPriorityLogicalOperatorIndex >= 0 && maxPriorityLogicalOperatorIndex < expressionParts.size()) {
+		if (maxPriorityLogicalOperatorIndex >= 0 && static_cast<std::size_t>(maxPriorityLogicalOperatorIndex) < expressionParts.size()) {
 			node.type = OperatorType::Logical;
 			node.operator_ = maxPriorityLogicalOperator;
 			node.childLeft = std::make_unique<ASTNode>();

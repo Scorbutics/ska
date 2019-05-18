@@ -132,8 +132,8 @@ void StateSandbox::createBall(const ska::Point<float>& point) {
 
 	auto pc = ska::PositionComponent{};
 	pc.layer = 1;
-	pc.x = point.x;
-	pc.y = point.y;
+	pc.x = static_cast<long>(point.x);
+	pc.y = static_cast<long>(point.y);
 	m_entityManager.addComponent(ballEntity, std::move(pc));
 
 	m_entityManager.addComponent(ballEntity, ska::MovementComponent{});

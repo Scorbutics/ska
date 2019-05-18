@@ -33,7 +33,7 @@ void ska::IARandomMovementSystem::refresh(unsigned int) {
 						const auto& pcEmitterPtr = m_componentPossibleAccessor.get<PositionComponent>(iamc.emitter);
                         if (pcEmitterPtr != nullptr) {
                             auto& pcEmitter = *pcEmitterPtr;
-                            auto diffPoint = Point<float>(pcEmitter.x, pcEmitter.y) - Point<float>(pc.x, pc.y);
+                            auto diffPoint = Point<float>(static_cast<float>(pcEmitter.x), static_cast<float>(pcEmitter.y)) - Point<float>(static_cast<float>(pc.x), static_cast<float>(pc.y));
                             auto horizontalDir = NumberUtils::maximum(NumberUtils::absolute(diffPoint.x), NumberUtils::absolute(diffPoint.y)) == NumberUtils::absolute(diffPoint.x);
                             iamc.direction = horizontalDir ? (sens ? 1 : 3) : (sens ? 0 : 2);
 

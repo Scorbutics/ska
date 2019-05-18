@@ -24,10 +24,10 @@ void ska::EntityCollisionResponse::correctPosition(ska::PositionComponent& origi
 	const auto constCorrection = ska::NumberUtils::maximum(penetration - slope, 0.0f) / (invMassOrigin + invMassTarget) * percent;
 	
 	auto correction = ska::Point<float>{ constCorrection * n.x , constCorrection * n.y };
-	target.x -= invMassTarget * correction.x;
-	target.y -= invMassTarget * correction.y;
-	origin.x += invMassOrigin * correction.x;
-	origin.y += invMassOrigin * correction.y;
+	target.x -= static_cast<long>(invMassTarget * correction.x);
+	target.y -= static_cast<long>(invMassTarget * correction.y);
+	origin.x += static_cast<long>(invMassOrigin * correction.x);
+	origin.y += static_cast<long>(invMassOrigin * correction.y);
 }
 
 bool ska::EntityCollisionResponse::handleInfiniteMasses(const CollisionComponent& col, float invMassOrigin, float invMassTarget, MovementComponent& mtarget, MovementComponent& morigin) {
@@ -57,8 +57,8 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 	auto bounciness = std::min(forigin.bounciness, ftarget.bounciness);
 	bounciness = bounciness < 0.F ? -bounciness : bounciness;
 
-	const auto invMassOrigin = forigin.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / forigin.weight;
-	const auto invMassTarget = ftarget.weight == std::numeric_limits<double>::max() ? 0 : 1.0 / ftarget.weight;
+	const auto invMassOrigin = forigin.weight == std::numeric_limits<double>::max() ? 0 : 1.0F / forigin.weight;
+	const auto invMassTarget = ftarget.weight == std::numeric_limits<double>::max() ? 0 : 1.0F / ftarget.weight;
 
 	if(handleInfiniteMasses(col, invMassOrigin, invMassTarget, mtarget, morigin)) {
 		return true;
@@ -66,17 +66,10 @@ bool ska::EntityCollisionResponse::onEntityCollision(CollisionEvent& e) {
 
 	const Point<float> velocityDiffVector(mtarget.vx - morigin.vx, mtarget.vy - morigin.vy);
 	const auto diffVelocityOnNormal = RectangleUtils::projection(velocityDiffVector, col.contact.normal());
-	const auto j = (-(1.0 + bounciness) * (diffVelocityOnNormal)) / (invMassOrigin + invMassTarget) ;
-
-	/*SKA_DBG_ONLY(
-		//if (ska::NumberUtils::absolute(j) > 0.0001) {
-			auto roundedVelocityTarget = ska::Point<float>(mtarget.vx, mtarget.vy);
-			SKA_LOG_INFO("velocity = ", roundedVelocityTarget.x, ";", roundedVelocityTarget.y, "\tJ coeff = ", j);
-		//}
-	);*/
+	const auto j = (-(1.F + bounciness) * (diffVelocityOnNormal)) / (invMassOrigin + invMassTarget) ;
 
 	//calcul vectoriel : impulse = j . normal
-	const auto impulse = Point<double>{ j * col.contact.normal().x, j * col.contact.normal().y };
+	const auto impulse = Point<float>{ j * col.contact.normal().x, j * col.contact.normal().y };
 
 	mtarget.vx += impulse.x * invMassTarget;
 	mtarget.vy += impulse.y * invMassTarget;

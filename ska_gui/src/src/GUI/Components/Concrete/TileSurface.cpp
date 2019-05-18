@@ -17,8 +17,8 @@ void ska::TileSurface::renderTileSurfaceCache(const Rectangle& box, ska::Rendere
 		step.y = 1;
 	}
 	
-	for (auto i = 0; i < box.w; i += step.x) {
-		for (auto j = 0; j < box.h; j += step.y) {
+	for (auto i = 0; i < box.w; i += static_cast<int>(step.x)) {
+		for (auto j = 0; j < box.h; j += static_cast<int>(step.y)) {
 			const auto atLeastSecondClippingX = (i / step.x >= 1);
 			const auto lastClippingX = ((i + step.x >= box.w) && (i / (box.w - step.x) >= 1));
 
@@ -26,8 +26,8 @@ void ska::TileSurface::renderTileSurfaceCache(const Rectangle& box, ska::Rendere
 			const auto lastClippingY = ((j + step.y >= box.h) && (j / (box.h - step.y) >= 1));
 
 			auto backgroundTileClip = Rectangle{ 0, 0, static_cast<int>(step.x), static_cast<int>(step.y) };
-			backgroundTileClip.x = atLeastSecondClippingX * (2 * TileSurface::TILE_SIZE - step.x) + lastClippingX * TileSurface::TILE_SIZE;
-			backgroundTileClip.y = atLeastSecondClippingY * (2 * TileSurface::TILE_SIZE - step.y) + lastClippingY * TileSurface::TILE_SIZE;
+			backgroundTileClip.x = static_cast<int>(atLeastSecondClippingX * (2 * TileSurface::TILE_SIZE - step.x) + lastClippingX * TileSurface::TILE_SIZE);
+			backgroundTileClip.y = static_cast<int>(atLeastSecondClippingY * (2 * TileSurface::TILE_SIZE - step.y) + lastClippingY * TileSurface::TILE_SIZE);
 
 			const auto renderPos = ska::Point<int>{
 				lastClippingX ? (i - static_cast<int>((i + step.x) - box.w)) : i,

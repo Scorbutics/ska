@@ -24,7 +24,7 @@ std::pair<ska::Point<int>, std::list<ska::Point<int>>> ska::MarchingSquare(const
 	auto point = startPoint;
 	auto lastDirection = ska::StepDirection::None;
 	do {
-		if(point.x <= width && point.y <= height && point.x >= 0 && point.y >= 0) {
+		if(point.x >= 0 && point.y >= 0 && static_cast<std::size_t>(point.x) <= width && static_cast<std::size_t>(point.y) <= height) {
 			doneBlocks.insert(point);
 			path.push_back(point * world.getBlockSize());
 		}

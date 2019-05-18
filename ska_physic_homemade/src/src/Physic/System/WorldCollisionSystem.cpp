@@ -175,8 +175,8 @@ ska::Rectangle ska::WorldCollisionSystem::createHitBox(EntityId entityId, bool ,
 	auto& hitboxComponent = m_componentAccessor.get<HitboxComponent>(entityId);
 
 	Rectangle hitBox;
-	hitBox.x = NumberUtils::round(positionComponent.x + hitboxComponent.xOffset);
-	hitBox.y = NumberUtils::round(positionComponent.y + hitboxComponent.yOffset);
+	hitBox.x = static_cast<int>(NumberUtils::round(positionComponent.x + hitboxComponent.xOffset));
+	hitBox.y = static_cast<int>(NumberUtils::round(positionComponent.y + hitboxComponent.yOffset));
 	hitBox.w = hitboxComponent.width;
 	hitBox.h = hitboxComponent.height;
 	return hitBox;

@@ -59,9 +59,9 @@ namespace ska {
 		}
 
     private:
-		bool reduceAccumulatorAndEventUpdate(float& accumulator, const float ti) {
+		bool reduceAccumulatorAndEventUpdate(float& accumulator, float ti) {
 			while (accumulator >= ti) {
-				if(eventUpdate(ti) || m_accumulatorReset) { m_accumulatorReset = false; return true; }
+				if(eventUpdate(static_cast<unsigned int>(ti)) || m_accumulatorReset) { m_accumulatorReset = false; return true; }
 				accumulator -= ti;
 			}
 			return false;

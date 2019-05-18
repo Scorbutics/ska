@@ -14,8 +14,8 @@ void ska::SideBalancingParticleUpdater::update(unsigned int ellapsedTime, Partic
 	for (std::size_t i = 0; i < maxSize; i++) {
 		const auto& currentAngleDirection = PolarPoint<float>::polar(group.pos[i].x - m_origin.x, group.pos[i].y - m_origin.y);
 
-		const auto& forceAmplitude = m_amplitude * NumberUtils::cosinus((group.lifetime[i] / (ellapsedTime * 2 * M_PI ))  * m_speed);
-		const float& forceAngle = currentAngleDirection.angle + (M_PI / 2);
+		const auto& forceAmplitude = m_amplitude * static_cast<float>(NumberUtils::cosinus((group.lifetime[i] / (static_cast<double>(ellapsedTime) * 2 * M_PI ))  * m_speed));
+		const auto& forceAngle = currentAngleDirection.angle + static_cast<float>(M_PI / 2);
 
 		const auto& force = Point<float>::cartesian(forceAmplitude, forceAngle);
 

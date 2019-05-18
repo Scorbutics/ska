@@ -112,13 +112,13 @@ std::vector<ska::Point<int>> ska::RectangleUtils::createIntermediatePoints(const
 	const auto yAxis = pointA.x == pointB.x;
 	const auto xAxis = pointA.y == pointB.y;
 	auto result = std::vector<ska::Point<int>>{};
-	if (xAxis && ska::NumberUtils::absolute(pointA.x - pointB.x) >= 2 * step) {
+	if (xAxis && ska::NumberUtils::absolute(pointA.x - pointB.x) >= 2u * step) {
 		const auto xMin = ska::NumberUtils::minimum(pointA.x, pointB.x);
 		const auto xMax = ska::NumberUtils::maximum(pointA.x, pointB.x);
 		for (auto x = xMin + step; x < xMax; x += step) {
 			result.emplace_back(ska::Point<int> { x, pointB.y });
 		}
-	} else if (yAxis && ska::NumberUtils::absolute(pointA.y - pointB.y) >= 2 * step) {
+	} else if (yAxis && ska::NumberUtils::absolute(pointA.y - pointB.y) >= 2u * step) {
 		const auto yMin = ska::NumberUtils::minimum(pointA.y, pointB.y);
 		const auto yMax = ska::NumberUtils::maximum(pointA.y, pointB.y);
 		for (auto y = yMin + step; y < yMax; y += step) {

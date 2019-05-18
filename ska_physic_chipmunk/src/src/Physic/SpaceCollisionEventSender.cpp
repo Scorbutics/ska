@@ -48,7 +48,7 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 	const auto cpSet = arb.getContactPoints();
 	ska::Point<int> normal;
 	ska::Point<int> lastBlockDirection;
-	for(auto i = 0u; i < cpSet.count; i++) {
+	for(std::size_t i = 0; i < static_cast<std::size_t>(cpSet.count); i++) {
 		const auto [bodyBlockPos, bodyEntityPos, bodyNormal] = ExtractBlockAndEntityFromContact(m_space, cpSet, bodyA, i);
 
 		if (i == 0) {

@@ -11,7 +11,7 @@ void ska::TextureAlphaParticleUpdater::update(unsigned int, ParticleGroup& group
 	if (maxSize > 0) {
 		const auto percentsLifetime = static_cast<float>(group.lifetime[0]) / m_maxLifetimeParticle;
 		const auto remainingPercentsLifetime = (1 - percentsLifetime);
-		group.appearance.setAlpha(remainingPercentsLifetime * 255);
+		group.appearance.setAlpha(static_cast<Uint8>(remainingPercentsLifetime * 255));
 	}
 
 }

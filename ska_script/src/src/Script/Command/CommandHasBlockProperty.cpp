@@ -24,7 +24,7 @@ std::string ska::CommandHasBlockProperty::execute(ScriptComponent& script, Memor
 	const auto& block = m_world.getCollisionProfile().getBlock(layer, xBlock, yBlock);
 	if (block != nullptr) {
 		const auto properties = block->properties.bitMask;
-		const auto hasBlockProperty = (properties & property == property);
+		const auto hasBlockProperty = ((properties & property) == property);
 		return StringUtils::toString(hasBlockProperty);
 	}
 	return "";

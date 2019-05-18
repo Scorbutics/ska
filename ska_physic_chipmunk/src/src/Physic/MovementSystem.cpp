@@ -28,8 +28,8 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 			adjustVelocity(entity, controlBody, fc);
 		}
 
-		mc.vx = controlBody.getVelocity().x / 50;
-		mc.vy = controlBody.getVelocity().y / 50;
+		mc.vx = static_cast<float>(controlBody.getVelocity().x) / 50;
+		mc.vy = static_cast<float>(controlBody.getVelocity().y) / 50;
 		fc.y = fc.x = 0;
 		
 		const auto& body = m_space.getBody(bc.bodyIndex);
@@ -38,13 +38,13 @@ void ska::cp::MovementSystem::refresh(unsigned int ellapsedTime) {
 		const auto position = body.getPosition();
 		const auto& shape = m_space.getShape(bc.shapeIndex);
 		const auto& entityDimensions = shape.getDimensions();
-		pc.x = position.x;
-		pc.y = position.y;
+		pc.x = static_cast<long>(position.x);
+		pc.y = static_cast<long>(position.y);
 
 		//Rotation : body
 		const auto rotation = body.getRotation();
-		pc.rotationX = rotation.x;
-		pc.rotationY = rotation.y;
+		pc.rotationX = static_cast<float>(rotation.x);
+		pc.rotationY = static_cast<float>(rotation.y);
 
 		//Update control body to keep it always near the real body
 		controlBody.setPosition(position);

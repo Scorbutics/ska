@@ -40,7 +40,7 @@ BenchmarkerCore::BenchmarkerCore(GameConf&& gc) :
 		ska::Color cStart(120, 220, 150, 255);
 		m_particles.addGenerator<ska::BasicColorGenerator>(cStart, cEnd);
 		ska::PolarPoint<float> initialVelocity(00.F, 1.57F);
-		m_particles.addGenerator<ska::BasicVelocityGenerator>(initialVelocity, 0, 1);
+		m_particles.addGenerator<ska::BasicVelocityGenerator>(initialVelocity, 0.F, 1);
 
 		ska::PolarPoint<float> force;
 		force.radius = 200.F;
@@ -86,7 +86,7 @@ void BenchmarkerCore::buildFireworks() {
 	effectData.cEnd = cEnd;
 	effectData.initialVelocity.radius = 7.5F;
 	effectData.initialVelocity.angle = 0.27F;
-	effectData.spreading = M_PI;
+	effectData.spreading = static_cast<float>(M_PI);
 	effectData.spreadingSlices = 10;
 	effectData.density = 5;
 	effectData.maxParticles = 50;
