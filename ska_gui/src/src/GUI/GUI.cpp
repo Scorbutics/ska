@@ -12,7 +12,7 @@
 static constexpr auto TAILLEECRANMINX = 32*15;
 static constexpr auto TAILLEECRANMINY = 32*13;
 
-std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "./Menu/default_theme/";
+std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "resources/Menu/default_theme/";
 
 ska::GUI::GUI(GameEventDispatcher& ged) :
 	ska::Observer<GUIEvent>(std::bind(&GUI::onGUIEvent, this, std::placeholders::_1)),

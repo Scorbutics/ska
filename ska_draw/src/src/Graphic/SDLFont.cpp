@@ -7,7 +7,7 @@
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "Graphic/SDLTTFLibrary.h"
 
-std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts/FiraSans-Medium.ttf";
+std::string ska::SDLFont::DEFAULT_FONT_FILE = "resources/Fonts/FiraSans-Medium.ttf";
 
 ska::SDLFont::SDLFont() {
 	m_fontC = nullptr;

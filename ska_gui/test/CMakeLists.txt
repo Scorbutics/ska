@@ -22,5 +22,6 @@ string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_gui_test ${SOURCES})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${SKA_DIR}")
 set(ALL_DEPS ska_gui ska_draw ska_core skalog)
 target_link_libraries(ska_gui_test ${ALL_DEPS})
