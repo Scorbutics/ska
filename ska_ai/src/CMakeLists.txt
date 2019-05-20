@@ -17,4 +17,5 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(ska_ai ${SOURCES})
-target_link_libraries(ska_ai ska_core ska_physic_chipmunk)
+find_package(Threads REQUIRED)
+target_link_libraries(ska_ai ska_core ska_physic_chipmunk Threads::Threads)
