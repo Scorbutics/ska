@@ -12,5 +12,9 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(ska_core ${SOURCES})
-target_link_libraries(ska_core skalog skabase)
+set(TARGET_LIBS skalog skabase)
+if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(TARGET_LIBS ${TARGET_LIBS} dl)
+endif()
+target_link_libraries(ska_core ${TARGET_LIBS})
 target_include_directories(ska_core PUBLIC ../../external/skabase/src/src PUBLIC ../../external/skalog/src/src)
