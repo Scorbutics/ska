@@ -43,3 +43,5 @@ CMakeCache.txt
 .vscode
 *.log.txt
 *.cmake
+**/.vs
+/external/chipmunk/src/Debug
