@@ -39,6 +39,10 @@ namespace ska {
 			m_guiObservable->HoverObservable::addObserver(*this);
 			m_guiObservable->ClickObservable::addObserver(*this);
 			m_keyObservable->addObserver(*this);
+
+			this->move(box);
+			this->setWidth(box.w);
+			this->setHeight(box.h);
 		}
 
 		DynamicWindowIG<HL...>& operator=(const DynamicWindowIG<HL...>&) = delete;
