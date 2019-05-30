@@ -11,7 +11,7 @@ before_build:
     set ARCH=i686-w64-mingw32
     set PROJECT_PATH=C:\projects\ska
 
-  - git submodule update --init --recursive
+  - git submodule update --init --recursive --remote
 
   # depends are only fetched where there's no cache
   - if exist %PREFIX% set DEPENDS=rem
@@ -73,7 +73,6 @@ build_script:
 
   # Build
   - |-
-    git submodule update --remote
     cmake -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=TRUE .
     cmake --build .
 
