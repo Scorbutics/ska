@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "Data/Events/GameEventDispatcher.h"
-#include "SDLLibrary.h"
+#include "Core/Data/Events/GameEventDispatcher.h"
+#include "Core/SDLLibrary.h"
 #include "Audio/SDLMixerLibrary.h"
 
 namespace ska {
@@ -14,7 +14,7 @@ namespace ska {
 		explicit SoundModule(const std::string& moduleName, SM&& ged) :
             m_soundManager(std::forward<SM>(ged)) {
             if (SDLMixerLibrary::get().openAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
-                SKA_LOG_ERROR("Impossible d'initialiser SDL_mixer : ", ska::SDLLibrary::get().getError());
+                SLOG(ska::LogLevel::Error) << "Impossible d'initialiser SDL_mixer : " << ska::SDLLibrary::get().getError();
             }
         }
 

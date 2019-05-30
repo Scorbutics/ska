@@ -44,7 +44,7 @@ set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/gsl)
 set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2)
 set(SDL2GIF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2_gif/src)
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/doctest)
-set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/chipmunk/include/chipmunk)
+set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/chipmunk/include)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/fakeit)
 set(SDL2_GIF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2_gif/src)
 

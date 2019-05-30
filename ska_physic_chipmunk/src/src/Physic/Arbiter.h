@@ -1,5 +1,5 @@
 #pragma once
-#include <chipmunk.h>
+#include <chipmunk/chipmunk.h>
 #include <gsl/pointers>
 #include "Core/Rectangle.h"
 

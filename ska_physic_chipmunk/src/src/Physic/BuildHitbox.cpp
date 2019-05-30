@@ -1,4 +1,4 @@
-#include <chipmunk.h>
+#include <chipmunk/chipmunk.h>
 #include "BuildHitbox.h"
 #include "Constraint.h"
 #include "Shape.h"

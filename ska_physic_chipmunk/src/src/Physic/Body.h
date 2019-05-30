@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <chipmunk.h>
+#include <chipmunk/chipmunk.h>
 #include <gsl/pointers>
 #include "Base/Values/MovableNonCopyable.h"
 #include "Core/ECS/ECSDefines.h"

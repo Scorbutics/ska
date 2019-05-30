@@ -1,6 +1,6 @@
 #include <array>
 #include <unordered_set>
-#include <chipmunk.h>
+#include <chipmunk/chipmunk.h>
 #include "Space.h"
 #include "Vect.h"
 #include "Shape.h"
