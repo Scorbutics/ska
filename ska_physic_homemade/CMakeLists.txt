@@ -1,4 +1,8 @@
 project(ska_physic_homemade)
 
 add_subdirectory(src)
-add_subdirectory(simulation)
+
+if(${SKA_BUILD_NO_TEST})
+else()
+	add_subdirectory(simulation)
+endif()
