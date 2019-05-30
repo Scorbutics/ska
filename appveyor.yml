@@ -73,7 +73,9 @@ build_script:
 
   # Build
   - |-
-    cmake -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=TRUE . && cmake --build .
+    git submodule update --remote
+    cmake -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=TRUE .
+    cmake --build .
 
   # Add needed libs
   - |-
