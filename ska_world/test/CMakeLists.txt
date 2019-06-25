@@ -22,4 +22,5 @@ file(GLOB_RECURSE SOURCES
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_world_test ${SOURCES})
-target_link_libraries(ska_world_test ska_world ska_draw ska_core skalog)
+find_package(Threads REQUIRED)
+target_link_libraries(ska_world_test ska_world ska_draw ska_core skalog Threads::Threads)

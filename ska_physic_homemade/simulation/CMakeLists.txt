@@ -23,5 +23,6 @@ string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_executable(ska_physic_simulation ${SOURCES})
 
-set(ALL_DEPS ska_world ska_physic_homemade ska_gui ska_draw ska_core skalog)
+find_package(Threads REQUIRED)
+set(ALL_DEPS ska_world ska_physic_homemade ska_gui ska_draw ska_core skalog Threads::Threads)
 target_link_libraries(ska_physic_simulation ${ALL_DEPS})
