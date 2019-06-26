@@ -4,9 +4,11 @@
 #include "../Exceptions/ExceptionTrigger.h"
 
 namespace ska {
+    class SystemMaskGeneratorTag;
+
     template <class ... ComponentType>
     class SystemMaskGenerator {
-    public:
+    public:        
 	    explicit SystemMaskGenerator(EntityManager& entityManager) : 
     		m_entityManager(entityManager) {
         }
@@ -19,10 +21,10 @@ namespace ska {
          * \param ecm Entity component mask
          */
         void generate(EntityComponentsMask& ecm) {
-            SLOG(LogLevel::Debug) << "Initializing system with components :";
+            SLOG_STATIC(LogLevel::Debug, SystemMaskGeneratorTag) << "Initializing system with components :";
         	int _[] = { 0, (buildSystemMask<ComponentType>(ecm) , 0)... };
             (void)_;
-            SLOG(LogLevel::Debug) << "End system initialization\n\n";
+            SLOG_STATIC(LogLevel::Debug, SystemMaskGeneratorTag) << "End system initialization\n\n";
         }
 
     private:
@@ -32,7 +34,7 @@ namespace ska {
 			if (mask >= systemComponentMask.size()) {
 				ExceptionTrigger<IllegalStateException>("Too many components are used in the game. Unable to continue.");
 			}
-			SLOG(LogLevel::Debug) << "\t" << Component<T>::TYPE_NAME() << " - mask " << mask;
+			SLOG_STATIC(LogLevel::Debug, SystemMaskGeneratorTag) << "\t" << Component<T>::TYPE_NAME() << " - mask " << mask;
 
 			systemComponentMask[mask] = true;
 		}
@@ -40,3 +42,5 @@ namespace ska {
 		EntityManager& m_entityManager;
     };
 }
+
+SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::SystemMaskGeneratorTag)

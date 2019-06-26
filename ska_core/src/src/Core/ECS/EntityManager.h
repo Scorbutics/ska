@@ -117,3 +117,5 @@ namespace ska {
 	};
 
 }
+
+SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::EntityManager)

@@ -8,6 +8,7 @@
 #include "Component.h"
 
 namespace ska {
+	class ComponentHandlerTag;
 	/**
 	 * \brief Holds an array of a specific component type and his associated mask.
 	 * \tparam T The component type held
@@ -19,7 +20,7 @@ namespace ska {
 	public:
 		ComponentHandler(unsigned int mask):
 			m_mask(mask) {
-            SLOG(LogLevel::Debug) << "Initializing component " << Component<T>::TYPE_NAME() << " with mask " <<  m_mask;
+			SLOG_STATIC(LogLevel::Debug, ComponentHandlerTag) << "Initializing component " << Component<T>::TYPE_NAME() << " with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
 		}
 
@@ -70,3 +71,5 @@ namespace ska {
 
 
 }
+
+SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::ComponentHandlerTag)

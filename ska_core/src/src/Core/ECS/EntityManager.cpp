@@ -5,8 +5,6 @@
 #include "Base/Values/Strings/StringUtils.h"
 #include "../Data/Events/ECSEvent.h"
 
-SKA_LOGC_CONFIG(ska::LogLevel::Debug, ska::EntityManager)
-
 void ska::EntityManager::commonRemoveComponent(const EntityId& entity, ComponentPool& components) {
     const auto removedComponentMask = components.remove(entity);
     m_componentMask[entity][removedComponentMask] = false;
