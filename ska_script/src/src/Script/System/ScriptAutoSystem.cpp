@@ -19,7 +19,7 @@
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/ECS/Basics/Physic/PositionComponent.h"
 
-//Par défaut, un script "permanent" se rafraîchit toutes les 1 ms
+//Par dï¿½faut, un script "permanent" se rafraï¿½chit toutes les 1 ms
 #define SCRIPT_DEFAULT_PERIOD 1
 #define MAX_CONSECUTIVE_COMMANDS_PLAYED 5
 
@@ -36,15 +36,7 @@ std::string ska::ScriptAutoSystem::map(const std::string& key, const EntityId id
 		throw ScriptSyntaxError(("Error during recuperation of the global variable " + key).c_str());
 	}
 
-	return m_componentAccessor.serialize(id, keys[0], keys[1]);
-}
-
-void ska::ScriptAutoSystem::removeComponent(const std::string& componentName, const EntityId id) const {
-	m_componentAccessor.remove(id, componentName);
-}
-
-void ska::ScriptAutoSystem::restoreComponent(const std::string& componentName, const EntityId id) const {
-	m_componentAccessor.add(id, componentName);	
+	return "";//m_componentAccessor.serialize(id, keys[0], keys[1]);
 }
 
 void ska::ScriptAutoSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId origin, const std::optional<EntityId> target) {

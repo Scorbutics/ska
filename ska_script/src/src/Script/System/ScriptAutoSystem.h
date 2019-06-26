@@ -23,8 +23,6 @@ namespace ska {
 		//void setupScriptArgs(ScriptComponent* parent, ScriptComponent& script, const std::vector<std::string>& args);
 		//void kill(const std::string& keyScript);
 		virtual std::string map(const std::string& key, EntityId id) const;
-		void removeComponent(const std::string& componentName, EntityId id) const;
-		void restoreComponent(const std::string& componentName, EntityId id) const;
 
 		/* ScriptComponent methods */
 		float getPriority(ScriptComponent& script, unsigned int currentTimeMillis);

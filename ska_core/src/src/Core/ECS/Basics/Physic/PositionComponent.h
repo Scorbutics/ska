@@ -38,39 +38,6 @@ namespace ska {
 			return result + pos;
 		}
 
-	private:
-		static std::string serializeLayer(const PositionComponent& component) {
-			return StringUtils::toString(static_cast<std::size_t>(component.layer));
-		}
-
-		static std::string serializeX(const PositionComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(component.x));
-		}
-
-		static std::string serializeY(const PositionComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(component.y));
-		}
-
-		static std::string serializeZ(const PositionComponent& component) {
-			return StringUtils::intToStr(static_cast<int>(component.z));
-		}
-
-		static void deserializeLayer(PositionComponent& component, const std::string& value) {
-			component.layer = StringUtils::fromString<std::size_t>(value);
-		}
-
-		static void deserializeX(PositionComponent& component, const std::string& value) {
-			component.x = StringUtils::fromString<long>(value);
-		}
-
-		static void deserializeY(PositionComponent& component, const std::string& value) {
-			component.y = StringUtils::fromString<long>(value);
-		}
-
-		static void deserializeZ(PositionComponent& component, const std::string& value) {
-			component.z = StringUtils::fromString<long>(value);
-		}
-
 	public:
 		long x{};
 		long y{};

@@ -4,8 +4,7 @@
 
 TEST_CASE("[ComponentHandler]") {
 	constexpr auto mask = 1u;
-	auto mapComponentName = std::unordered_map<std::string, ska::ComponentPool*> {};
-	auto componentHandlerTest = ska::ComponentHandler<int> { mask, mapComponentName };
+	auto componentHandlerTest = ska::ComponentHandler<int> { mask };
 	
 	SUBCASE("Add") {
 		auto entityId = ska::EntityId{1};

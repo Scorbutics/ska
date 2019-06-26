@@ -16,7 +16,7 @@ std::string ska::CommandRestoreComponent::execute(ScriptComponent& script, Memor
 	const auto& entity = ska::StringUtils::fromString<ska::EntityId>(args[1]);
 
 	//TODO event ?
-	script.parent->restoreComponent(componentName, entity);
+	//script.parent->restoreComponent(componentName, entity);
 
 	return "";
 }

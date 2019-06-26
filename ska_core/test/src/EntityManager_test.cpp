@@ -18,7 +18,7 @@ bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId&
 	if (event.ecsEventType == ska::ECSEventType::ENTITIES_REMOVED) {
 		auto& entitiesRemoved = event.entities;
 		auto foundEntity = std::find_if(entitiesRemoved.begin(), entitiesRemoved.end(), [&](const auto& t) {
-			return t.first == entity;
+			return t == entity;
 		});
 		return foundEntity != entitiesRemoved.end();
 	}
@@ -27,7 +27,7 @@ bool EntityManagerTestIsEntityRemoved(ska::ECSEvent& event, const ska::EntityId&
 
 TEST_CASE("[EntityManager]") {
 	auto ged = ska::GameEventDispatcher {};
-	auto&& em = ska::EntityManager{ged};
+	auto em = ska::EntityManager{ged};
 	
 	using EntityManagerObserver = ska::Observer<ska::ECSEvent>;
 	class EntityManagerObserverTest :
@@ -89,18 +89,23 @@ TEST_CASE("[EntityManager]") {
 		CHECK(component.t == 14);
 	}
 
-	SUBCASE("createEntity (differents)") {
+	SUBCASE("createEntity triggers COMPONENT_ALTER (differents)") {
 		ska::EntityId entity1 = em.createEntity();
 		ska::EntityId entity2 = em.createEntity();
 		
 		em.refresh();
 
 		CHECK(componentObserver.eventType.size() == 2);
-		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[0].entityId == entity1);
-		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[1].entityId == entity2);
-		
+		const auto entity1Found = std::find_if(componentObserver.eventType.begin(), componentObserver.eventType.end(), [&](const auto& e) {
+			return e.entityId == entity1 && e.event == ska::EntityEventTypeEnum::COMPONENT_ALTER;
+		}) != componentObserver.eventType.end();
+		CHECK(entity1Found);
+
+		const auto entity2Found = std::find_if(componentObserver.eventType.begin(), componentObserver.eventType.end(), [&](const auto& e) {
+			return e.entityId == entity2 && e.event == ska::EntityEventTypeEnum::COMPONENT_ALTER;
+		}) != componentObserver.eventType.end();
+
+		CHECK(entity2Found);		
 		CHECK(entity1 != entity2);
 	}
 
@@ -127,8 +132,9 @@ TEST_CASE("[EntityManager]") {
 	}
 
 	SUBCASE("removeEntity") {
-		ska::EntityId entity = em.createEntity();
 		CHECK(entityObserver.events.empty());
+		ska::EntityId entity = em.createEntity();
+		CHECK(entityObserver.events.size() == 1);
 		em.addComponent<ComponentTest1>(entity, ComponentTest1());
 		
 		em.refresh();
@@ -146,8 +152,8 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[1].entityId == entity);
 
-		CHECK(entityObserver.events.size() == 1);
-		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
+		CHECK(entityObserver.events.size() == 2);
+		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[1], entity));
 
 		ska::EntityId entity2 = em.createEntity();
 		//Reused deleted entity
@@ -158,9 +164,9 @@ TEST_CASE("[EntityManager]") {
 	SUBCASE("removeEntities") {
 		auto entity = em.createEntity();
 		auto entity2 = em.createEntity();
-		auto entityX = em.createEntity();
+		auto entity3 = em.createEntity();
 		
-		CHECK(entityObserver.events.size() == 0);
+		CHECK(entityObserver.events.size() == 3);
 
 		em.refresh();
 		componentObserver.eventType.clear();
@@ -175,14 +181,16 @@ TEST_CASE("[EntityManager]") {
 		CHECK(componentObserver.eventType[0].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
 		CHECK(componentObserver.eventType[0].entityId == entity);
 		CHECK(componentObserver.eventType[1].event == ska::EntityEventTypeEnum::COMPONENT_ALTER);
-		CHECK(componentObserver.eventType[1].entityId == entityX);
+		CHECK(componentObserver.eventType[1].entityId == entity3);
 
-		CHECK(entityObserver.events.size() == 1);
-		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[0], entity));
+		CHECK(entityObserver.events.size() == 4);
+		CHECK(EntityManagerTestIsEntityRemoved(entityObserver.events[3], entity));
 		
-		auto entity3 = em.createEntity();
+		auto entityX = em.createEntity();
 
-		CHECK(entityX == entity3);
+		//Depends of internal storage of std::unordered_set (based on hash) : 
+		//we cannot know whether it is entity3 or entity, but we are sure that it's one of those
+		CHECK((entityX == entity3 || entityX == entity));
 	}
 
 	SUBCASE("Second EntityManager instance : testing the behaviour of component handlers instantiations") {

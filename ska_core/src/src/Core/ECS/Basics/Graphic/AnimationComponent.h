@@ -17,16 +17,7 @@ namespace ska {
 		long state;
 
 	private:
-		IAnimationStateMachine* animationFiniteStateMachine;
-
-		static std::string serializeState(const AnimationComponent& component) {
-			return StringUtils::toString(component.state);
-		}
-
-		static void deserializeState(AnimationComponent& component, const std::string& value) {
-			component.state = StringUtils::fromString<long>(value);
-		}
-		
+		IAnimationStateMachine* animationFiniteStateMachine;		
 	};
 }
 

@@ -17,6 +17,6 @@ namespace ska {
 		}
 
 		const ECSEventType ecsEventType;
-		std::unordered_map<ska::EntityId, std::string> entities;
+		std::vector<EntityId> entities;
 	};
 }

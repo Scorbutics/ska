@@ -4,7 +4,6 @@
 #include <optional>
 #include <cassert>
 #include "ECSDefines.h"
-#include "SerializeComponent.h"
 #include "ComponentPool.h"
 #include "Component.h"
 
@@ -18,12 +17,10 @@ namespace ska {
         public ComponentPool {
 
 	public:
-		ComponentHandler(unsigned int mask, std::unordered_map<std::string, ComponentPool*>& mapComponentNames):
+		ComponentHandler(unsigned int mask):
 			m_mask(mask) {
             SLOG(LogLevel::Debug) << "Initializing component " << Component<T>::TYPE_NAME() << " with mask " <<  m_mask;
 			m_entitiesWithComponent.resize(SKA_ECS_MAX_ENTITIES);
-			
-			mapComponentNames.emplace(Component<T>::TYPE_NAME(), this);
 		}
 
 		unsigned int addEmpty(const EntityId&) override {
@@ -61,14 +58,6 @@ namespace ska {
 
 		unsigned int getMask() const {
 			return m_mask;
-		}
-
-		std::string serialize(const EntityId& entityId, const std::string& field) override {
-			return ska::SerializeComponent<T>::serialize(getComponent(entityId), field);
-		}
-
-		void deserialize(const EntityId& entityId, const std::string& field, const std::string& value) override {
-			ska::SerializeComponent<T>::deserialize(getComponent(entityId), field, value);
 		}
 
 		virtual ~ComponentHandler() = default;

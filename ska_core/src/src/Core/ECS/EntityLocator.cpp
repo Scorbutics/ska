@@ -13,6 +13,7 @@ const ska::EntityId* ska::EntityLocator::getEntityId(const std::string& name) co
 }
 
 bool ska::EntityLocator::onECSEvent(ECSEvent& ecsEvent) {
+	/*
 	if (ecsEvent.ecsEventType == ECSEventType::ENTITIES_REMOVED) {
 		for (const auto& entityEntry : ecsEvent.entities) {
 			m_entitiesReverseNameMap[entityEntry.first] = "";
@@ -24,5 +25,6 @@ bool ska::EntityLocator::onECSEvent(ECSEvent& ecsEvent) {
 			m_entitiesNameMap[entityEntry.second] = entityEntry.first;
 		}
 	}
+	*/
 	return true;
 }

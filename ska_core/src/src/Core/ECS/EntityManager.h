@@ -44,7 +44,7 @@ namespace ska {
 		EntityManager(EntityManager&&) = default;
 		EntityManager& operator=(EntityManager&&) = default;
 
-		EntityId createEntity(const std::string& name = "");
+		EntityId createEntity();
 
 		void removeEntity(const EntityId& entity);
 		void removeEntities(const std::unordered_set<EntityId>& exceptions = std::unordered_set<ska::EntityId>{});
@@ -52,15 +52,10 @@ namespace ska {
 		void refreshEntities();
 		void refresh();
 
-		std::string serializeComponent(const EntityId& entityId, const std::string& component, const std::string& field) const;
-		void deserializeComponent(const EntityId& entityId, const std::string& component, const std::string& field, const std::string& value);
-
-		void removeComponent(const EntityId& entity, const std::string& component);
-		void addComponent(const EntityId& entity, const std::string& component);
-
 		template <class T>
 		void addComponent(EntityId entity, T&& component) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
+			SLOG(LogLevel::Info) << "Adding component \"" << Component<T>::TYPE_NAME() << "\" for entity id \"" << entity << "\"";
 			commonAddComponent(entity, components.add(entity, std::forward<T>(component)));
 		}
 
@@ -80,6 +75,7 @@ namespace ska {
 		template <class T>
 		void removeComponent(EntityId entity) {
 			ComponentHandler<T>& components = this->template getComponents<T>();
+			SLOG(LogLevel::Info) << "Removing component \"" << Component<T>::TYPE_NAME() << "\" for entity id \"" << entity << "\"";
 			commonRemoveComponent(entity, components);
 		}
 
@@ -90,7 +86,7 @@ namespace ska {
 		}
 
 	private:
-		EntityId createEntityNoThrow(const std::string& name = "");
+		EntityId createEntityNoThrow();
 		bool checkEntitiesNumber() const;
 
 		GameEventDispatcher& m_ged;
@@ -100,7 +96,6 @@ namespace ska {
 
 		std::array<EntityComponentsMask, SKA_ECS_MAX_ENTITIES> m_componentMask;
 		std::vector<std::unique_ptr<ComponentPool>> m_componentHolders;
-		std::unordered_map<std::string, ComponentPool*> m_componentsNameMap {};
 
 		void innerRemoveEntity(const EntityId& entity, ECSEvent& ecsEvent);
 		void commonRemoveComponent(const EntityId& entity, ComponentPool& components);
@@ -110,10 +105,10 @@ namespace ska {
 		ComponentHandler<T>& getComponents() {
 			if (Component<T>::TYPE_ID() == -1) {
 				Component<T>::TYPE_ID() = m_componentHolders.size();
-				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap));
+				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID()));
 			} else if (m_componentHolders.size() <= Component<T>::TYPE_ID()) {
 				m_componentHolders.resize(static_cast<const std::size_t>(Component<T>::TYPE_ID() * 1.5 + 1));
-				m_componentHolders[Component<T>::TYPE_ID()] = std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID(), m_componentsNameMap);
+				m_componentHolders[Component<T>::TYPE_ID()] = std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID());
 			}
 			
 			return static_cast<ComponentHandler<T>&>(*m_componentHolders[Component<T>::TYPE_ID()].get());

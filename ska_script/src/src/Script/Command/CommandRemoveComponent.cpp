@@ -16,7 +16,7 @@ std::string ska::CommandRemoveComponent::execute(ScriptComponent& script, Memory
 	const auto& entity = ska::StringUtils::fromString<ska::EntityId>(args[1]);
 
 	//TODO event ?
-	script.parent->removeComponent(componentName, entity);
+	//script.parent->removeComponent(componentName, entity);
 
 	return "";
 }
