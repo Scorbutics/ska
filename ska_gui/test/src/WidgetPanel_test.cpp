@@ -9,9 +9,6 @@
 #include "WidgetTest.h"
 #include "WindowsUtil.h"
 
-unsigned int DisplayCounter::displayCounter = 0;
-std::vector<const DisplayCounter*> DisplayCounter::instances;
-
 TEST_CASE("[WidgetPanel]Ajout de widgets") {
 	ska::WidgetPanel<ska::ClickEventListener> wp;
 	CHECK(wp.backWidget() == nullptr);
@@ -44,13 +41,13 @@ TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
 	DisplayCounter::reset();
 
 	wp.render(renderer);
-	CHECK(DisplayCounter::getDisplayCounter() == 2);
+	CHECK(DisplayCounter::getDisplayedInstances().size() == 2);
 
 	DisplayCounter::reset();
 	wp.showWidgets(false);
 
 	wp.render(renderer);
-	CHECK(DisplayCounter::getDisplayCounter() == 0);
+	CHECK(DisplayCounter::getDisplayedInstances().size() == 0);
 }
 
 TEST_CASE("[WidgetPanel]Propagation d'evenements dans les widgets contenus") {
@@ -253,13 +250,10 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 		auto renderer = MockRenderer();
 
-		//Tri� par ordre de priorit� d�croissant
+		//Trié par ordre de priorité décroissant (hwt3 non présent car invisible)
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt2);
-
-		//A la fin car invisible
-		expectedOrder.push_back(&hwt3);
 
 		wp.resort();
 
@@ -302,7 +296,10 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 
 		auto renderer = MockRenderer();
 
-		//Tri� par ordre d'ajout
+		//On s'assure qu'il soit bien visible
+		hwt3.show(true);
+
+		//Trié par ordre d'ajout
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt2);
 		expectedOrder.push_back(&hwt);

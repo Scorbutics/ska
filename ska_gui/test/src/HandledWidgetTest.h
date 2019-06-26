@@ -8,35 +8,33 @@ public:
 		reset();
 	}
 
-	static void reset() {
-		displayCounter = 0;
-		instances.clear();
-	}
-
-	static unsigned int getDisplayCounter() {
-		return displayCounter;
-	}
-
-	static auto& getInstances(){
+	static auto& getInstances() {
+		static std::vector<const DisplayCounter*> instances;
 		return instances;
 	}
 
-	virtual ~DisplayCounter() {
+	static auto& getDisplayedInstances() {
+		static std::vector<const DisplayCounter*> displayedInstances;
+		return displayedInstances;
 	}
+
+	static void reset() {
+		getDisplayedInstances().clear();
+		getInstances().clear();
+	}
+
+	virtual ~DisplayCounter() {  }
 
 protected:
-	void increment() const {
-		displayCounter++;
-		pushOnly();
+	void pushVisible() const {
+		getDisplayedInstances().push_back(this);
+		pushInvisible();
 	}
 
-	void pushOnly() const{
-		instances.push_back(this);
+	void pushInvisible() const{
+		getInstances().push_back(this);
 	}
 
-private:
-	static unsigned int displayCounter;
-	static std::vector<const DisplayCounter*> instances;
 };
 
 template <class ... EL>
@@ -52,9 +50,9 @@ struct HandledWidgetTest : public ska::HandledWidget<EL...>, public DisplayCount
 
 	void render(ska::Renderer& ) const override {
 		if (ska::HandledWidget<EL...>::isVisible()) {
-			DisplayCounter::increment();
+			DisplayCounter::pushVisible();
 		} else {
-			DisplayCounter::pushOnly();
+			DisplayCounter::pushInvisible();
 		}
 	}
 

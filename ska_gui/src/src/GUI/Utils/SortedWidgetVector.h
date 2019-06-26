@@ -19,25 +19,12 @@ namespace ska {
 			}
 		}
 
-		std::size_t size() const {
-			return m_data.size();
-		}
-
-		typename std::vector<T>::iterator begin() {
-			return m_data.begin();
-		}
-
-		typename std::vector<T>::iterator end() {
-			return m_data.end();
-		}
-
-		typename std::vector<T>::const_iterator cbegin() const {
-			return m_data.cbegin();
-		}
-
-		typename std::vector<T>::const_iterator cend() const {
-			return m_data.cend();
-		}
+		std::size_t size() const { return m_data.size(); }
+		
+		auto begin() { return m_data.begin(); }
+		auto begin() const { return m_data.begin(); }
+		auto end() { return m_data.end(); }
+		auto end() const { return m_data.end(); }
 
 		bool organize(T& w, std::size_t cursor) {
 			if (!w->isVisible()) {

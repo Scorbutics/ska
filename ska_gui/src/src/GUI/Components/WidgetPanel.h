@@ -87,7 +87,7 @@ namespace ska {
 		}
 
 		void showWidgets(bool b) {
-			for(auto w : m_globalList) {
+			for(auto& w : m_globalList) {
 				w->show(b);
 			}
 		}
@@ -97,9 +97,12 @@ namespace ska {
 		}
 
 		void render(Renderer& renderer) const override {
-			for (auto w = m_globalList.cbegin(); w != m_globalList.cend(); ++w) {
-				if ((*w)->isVisible()) {
-					(*w)->render(renderer);
+			for (auto& w : m_globalList) {
+				if (w->isVisible()) {
+					w->render(renderer);
+				} else {
+					//First invisible widget found : we stop
+					break;
 				}
 			}
 		}
@@ -152,7 +155,7 @@ namespace ska {
 				return v1 < v2;
 			};
 
-            static const auto comparatorDescRaw = [](const Widget* w1, const Widget* w2) {
+			static const auto comparatorDescRaw = [](const Widget* w1, const Widget* w2) {
 				auto v1 = w1->isVisible() ? 0 : 1;
 				auto v2 = w2->isVisible() ? 0 : 1;
 
