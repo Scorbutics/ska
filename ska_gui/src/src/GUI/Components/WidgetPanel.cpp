@@ -1,3 +1,5 @@
+#include "../Events/StopType.h"
+#include "../Events/IWidgetEvent.h"
 #include "WidgetPanel.h"
 
 void ska::WidgetPanel::render(Renderer& renderer) const {

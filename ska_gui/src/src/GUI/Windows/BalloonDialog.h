@@ -1,5 +1,5 @@
 #pragma once
-#include "../Components/WidgetPanel.h"
+#include "../Components/WidgetPanelInteractive.h"
 #include "../Events/TimeEventListener.h"
 
 namespace ska {

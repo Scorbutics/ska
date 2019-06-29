@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Events/ValueChangedEvent.h"
 #include "../../Events/ClickEventListener.h"
-#include "../WidgetPanel.h"
+#include "../WidgetPanelInteractive.h"
 
 
 namespace ska {

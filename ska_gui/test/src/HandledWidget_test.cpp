@@ -4,7 +4,7 @@
 #include "./GUI/Events/ClickEventListener.h"
 #include "./GUI/Events/ClickEvent.h"
 #include "HandledWidgetTest.h"
-#include "GUI/Components/WidgetPanel.h"
+#include "GUI/Components/WidgetPanelInteractive.h"
 
 TEST_CASE("[HandledWidget]Position par defaut") {
     HandledWidgetTest<ska::ClickEventListener> t;

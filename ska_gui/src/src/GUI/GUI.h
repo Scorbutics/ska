@@ -74,19 +74,6 @@ namespace ska {
 			return m_windowAnnuary[name];
 		}
 
-	protected:
-		WidgetPanel* removeWindow(const std::string& name) {
-			const auto wPtr = m_windowAnnuary[name];
-			if (wPtr == nullptr) {
-				throw ska::IllegalStateException(("The window name '" + name + "' doesn't exists in annuary").c_str());
-			}
-
-			if (!m_wFocusable->removeWidget(static_cast<WidgetPanel*>(wPtr))) {
-				m_wMaster.removeWidget(static_cast<WidgetPanel*>(wPtr));
-			}
-			m_windowAnnuary.erase(name);
-			return static_cast<WidgetPanel*>(wPtr);
-		}
     private:
 		bool onGameEvent(ska::GameEvent & ge);
 	    Widget* frontWindow();
@@ -114,10 +101,19 @@ namespace ska {
         TimeScrollableWindowIG<KeyEventListener> m_wMaster;
         TimeScrollableWindowIG<KeyEventListener>* m_wFocusable;
 
-
-
-
 	protected:
+		WidgetPanel* removeWindow(const std::string& name) {
+			const auto wPtr = m_windowAnnuary[name];
+			if (wPtr == nullptr) {
+				throw ska::IllegalStateException(("The window name '" + name + "' doesn't exists in annuary").c_str());
+			}
+
+			if (!m_wFocusable->removeWidget(static_cast<WidgetPanel*>(wPtr))) {
+				m_wMaster.removeWidget(static_cast<WidgetPanel*>(wPtr));
+			}
+			m_windowAnnuary.erase(name);
+			return static_cast<WidgetPanel*>(wPtr);
+		}
 		virtual bool onScreenResized(unsigned int width, unsigned int height);
 
 		unsigned int getMaxHeight() const;

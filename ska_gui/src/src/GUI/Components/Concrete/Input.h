@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../WidgetPanel.h"
+#include "../WidgetPanelInteractive.h"
 #include "../../Events/KeyEventListener.h"
 #include "../../Events/FocusEventListener.h"
 #include "../../Events/ValueChangedEventListener.h"

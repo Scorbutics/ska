@@ -5,7 +5,7 @@
 #include "../Utils/KeyObservable.h"
 #include "../Utils/MouseObservable.h"
 #include "../Events/ClickEventListener.h"
-#include "../Components/WidgetPanel.h"
+#include "../Components/WidgetPanelInteractive.h"
 
 namespace ska {
 

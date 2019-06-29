@@ -1,6 +1,6 @@
 #include <doctest.h>
 #include "LoggerConfig.h"
-#include "GUI/Components/WidgetPanel.h"
+#include "GUI/Components/WidgetPanelInteractive.h"
 #include "GUI/Events/ClickEventListener.h"
 #include "GUI/Events/HoverEventListener.h"
 #include "GUI/Events/KeyEventListener.h"

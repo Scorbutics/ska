@@ -1,5 +1,5 @@
 #pragma once
-#include "../WidgetPanel.h"
+#include "../WidgetPanelInteractive.h"
 #include "../../Events/TimeEventListener.h"
 
 
