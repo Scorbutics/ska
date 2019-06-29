@@ -2,7 +2,7 @@
 #include "LabeledHorizontalSlider.h"
 #include "Base/Values/Strings/StringUtils.h"
 
-ska::LabeledHorizontalSlider::LabeledHorizontalSlider(Widget& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth):
+ska::LabeledHorizontalSlider::LabeledHorizontalSlider(WidgetPanel& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth):
 	HorizontalSlider(parent, styleName, relativePos, pixelWidth),
 	m_oldIntValue(0),
 	m_label(addWidget<Label>("0%", 14, Point<int>(pixelWidth + 20, 0))) {

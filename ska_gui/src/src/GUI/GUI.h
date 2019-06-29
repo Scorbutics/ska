@@ -52,7 +52,6 @@ namespace ska {
 			t.template addHeadHandler<ClickEventListener>([&](Widget* tthis, ClickEvent& e) {
 				windowSorter(tthis, e);
 			});
-			//m_wFocusable->resort();
 			return result;
 		}
 
@@ -61,10 +60,6 @@ namespace ska {
 			auto& result = m_wMaster.addWidget<Win>(std::forward<WinArgs>(args)...);
 			m_windowAnnuary[name] = &reinterpret_cast<Win&>(result);
 			return result;
-		}
-
-		void resort() {
-			//m_wMaster.resort();
 		}
 
 		void pushWindowToFront(Widget* w);

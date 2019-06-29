@@ -11,7 +11,7 @@ namespace ska {
 	class Button :
 		public Hoverable<ValueChangedEventListener<bool>, ClickEventListener> {
 	public:
-		Button(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback);
+		Button(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback);
 		virtual void render(Renderer& renderer) const override;
 		virtual ~Button();
 
@@ -20,7 +20,7 @@ namespace ska {
 
 	protected:
 		Button();
-		explicit Button(Widget& parent);
+		explicit Button(WidgetPanel& parent);
 		virtual void switchTextureAndMemorize() override;
 		virtual void resetTexture() override;
 

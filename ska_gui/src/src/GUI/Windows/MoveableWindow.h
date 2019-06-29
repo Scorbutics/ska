@@ -19,7 +19,7 @@ namespace ska {
 			this->setOffsetTop(BAR_HEIGHT);
 		}
 
-		MoveableWindow(Widget& parent, const Rectangle& box, const std::string& title = "") :
+		MoveableWindow(WidgetPanel& parent, const Rectangle& box, const std::string& title = "") :
 			DynamicWindowIG<HL...>(parent, box),
 			m_moving(false) {
 			initHandlers(title);

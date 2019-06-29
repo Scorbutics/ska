@@ -135,9 +135,8 @@ namespace ska {
 	protected:
 		HandledWidgetTrait() : m_target(*static_cast<W*>(this)) {
 			static_assert(std::is_base_of<Widget, W>::value, "Must be derived from Widget");
-			//static_assert(std::is_base_of<Widget, std::decay_t<decltype(*this)>>::value, "Must be derived from Widget");
 		}
-		bool notify(IWidgetEvent&) { return false; }
+		bool tryTriggerHandlers(IWidgetEvent&) { return false; }
 		virtual	bool isMaskEmpty() const override { return true; }
 		bool accept(IWidgetEvent&) const{ return !m_target.isVisible(); }
 		~HandledWidgetTrait() override = default;

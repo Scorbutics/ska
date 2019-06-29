@@ -3,7 +3,7 @@
 namespace ska {
 	class CheckBox : public Button {
 	public:
-		CheckBox(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip);
+		CheckBox(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip);
 		virtual ~CheckBox() = default;
 		
 		bool getValue() const;

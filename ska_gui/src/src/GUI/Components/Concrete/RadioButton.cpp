@@ -1,7 +1,7 @@
 #include "RadioButton.h"
 #include "RadioButtonGroup.h"
 
-ska::RadioButton::RadioButton(Widget& parent, std::shared_ptr<RadioButtonGroup>& group, Point<int> relativePos, const std::string& placeHolderStyleName) :
+ska::RadioButton::RadioButton(WidgetPanel& parent, std::shared_ptr<RadioButtonGroup>& group, Point<int> relativePos, const std::string& placeHolderStyleName) :
 	CheckBox(parent, relativePos, placeHolderStyleName, nullptr),
 	m_group(group) {
 	m_indexInGroup = m_group->addRadioButton(*this);

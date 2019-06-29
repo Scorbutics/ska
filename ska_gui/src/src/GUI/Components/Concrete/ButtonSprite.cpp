@@ -5,7 +5,7 @@
 #include "Core/Draw/Renderer.h"
 #include "Core/Utils/SkaConstants.h"
 
-ska::ButtonSprite::ButtonSprite(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, unsigned int id, ClickEventHandler const& callback) :
+ska::ButtonSprite::ButtonSprite(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, unsigned int id, ClickEventHandler const& callback) :
 Button(parent, relativePos, placeHolderStyleName, nullptr, callback),
 m_img(SpritePath::getInstance().getPath(SPRITEBANK_ICONS, id)) {
 	m_clip = Rectangle{0, 0, 0, 0};
@@ -14,7 +14,7 @@ m_img(SpritePath::getInstance().getPath(SPRITEBANK_ICONS, id)) {
 	m_clip.h = std::numeric_limits<int>().max();
 }
 
-ska::ButtonSprite::ButtonSprite(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const std::string& imagePath, const Rectangle& clip, ClickEventHandler const& callback) :
+ska::ButtonSprite::ButtonSprite(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const std::string& imagePath, const Rectangle& clip, ClickEventHandler const& callback) :
 Button(parent, relativePos, placeHolderStyleName, nullptr, callback),
 m_img(imagePath),
 m_clip(clip) {

@@ -10,7 +10,7 @@ namespace ska {
             m_priority(0) {
         }
 
-        virtual void setPriority(const int p) {
+        virtual void setPriority(int p) {
 			m_priority = p;
 		}
 

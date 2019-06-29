@@ -21,7 +21,7 @@ namespace ska {
 		public KeyObserver {
 		using Parent = WidgetPanelInteractive<ClickEventListener, HoverEventListener, HL...>;
 	public:
-		DynamicWindowIG(Widget& parent, const Rectangle& box) :
+		DynamicWindowIG(WidgetPanel& parent, const Rectangle& box) :
 			Parent(parent),
 			MouseObserver(std::bind(&DynamicWindowIG<HL...>::hoverEvent, this, std::placeholders::_1), std::bind(&DynamicWindowIG<HL...>::clickEvent, this, std::placeholders::_1)),
 			KeyObserver(std::bind(&DynamicWindowIG<HL...>::keyEvent, this, std::placeholders::_1)) {

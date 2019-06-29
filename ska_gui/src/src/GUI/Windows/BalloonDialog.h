@@ -9,7 +9,7 @@ namespace ska {
 		public WidgetPanelInteractive<TimeEventListener> {
 
 	public:
-		BalloonDialog(Widget& parent, const ska::Rectangle& box, const std::string& message, unsigned int delay, unsigned int fontSize);
+		BalloonDialog(WidgetPanel& parent, const ska::Rectangle& box, const std::string& message, unsigned int delay, unsigned int fontSize);
 		~BalloonDialog() = default;
 		bool isExpired() const;
 

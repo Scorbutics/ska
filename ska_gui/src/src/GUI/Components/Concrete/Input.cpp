@@ -9,7 +9,7 @@
 #include "Base/Values/Strings/StringUtils.h"
 #include "../../GUI.h"
 
-ska::Input::Input(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) :
+ska::Input::Input(WidgetPanel& parent, const std::string& text, int fontSize, Point<int> relativePos) :
 	WidgetPanelInteractive<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener>(parent, relativePos),
 	m_keyFocus(false) {
 

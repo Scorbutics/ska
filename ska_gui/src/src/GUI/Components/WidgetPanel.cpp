@@ -1,17 +1,13 @@
 #include "WidgetPanel.h"
 
-void ska::WidgetPanel::showWidgets(bool b) {
-	for (auto& w : m_globalList) {
-		w->show(b);
-	}
-}
-
 void ska::WidgetPanel::render(Renderer& renderer) const {
+	if (!isVisible()) {
+		return;
+	}
 	for (auto& w : m_globalList) {
 		if (w->isVisible()) {
 			w->render(renderer);
-		}
-		else {
+		} else {
 			//First invisible widget found : we stop
 			break;
 		}
@@ -65,7 +61,7 @@ bool ska::WidgetPanel::notifyChildren(IWidgetEvent& e) {
 
 void ska::WidgetPanel::resort() {
 	organizeHandledWidgets();
-	this->sortZIndexWidgets();
+	sortZIndexWidgets();
 }
 
 void ska::WidgetPanel::organizeHandledWidgets() {

@@ -20,7 +20,7 @@ void printVector(std::vector<T>& v) {
 template<class ... T>
 class StaticWindowTest : public ska::WidgetPanelInteractive<T...> {
 public:
-	StaticWindowTest(ska::Widget& parent, const ska::Rectangle& box) : ska::WidgetPanelInteractive<T...>(parent, box) {
+	StaticWindowTest(ska::WidgetPanel& parent, const ska::Rectangle& box) : ska::WidgetPanelInteractive<T...>(parent, box) {
 	}
 
 	StaticWindowTest(const ska::Rectangle& box) : ska::WidgetPanelInteractive<T...>(box) {

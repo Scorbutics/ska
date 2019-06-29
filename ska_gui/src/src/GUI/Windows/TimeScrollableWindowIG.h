@@ -14,7 +14,7 @@ namespace ska {
 		using ParentTrait = HandledWidgetTrait;
 	public:
 
-		TimeScrollableWindowIG(Widget& parent, const Rectangle& box) :
+		TimeScrollableWindowIG(WidgetPanel& parent, const Rectangle& box) :
 			DynamicWindowIG<TimeEventListener, HL...>(parent, box),
 			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), 
 			m_moving(false),

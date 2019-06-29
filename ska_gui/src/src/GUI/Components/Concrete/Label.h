@@ -6,7 +6,7 @@
 namespace ska {
 	class Label : public Widget {
 	public:
-		Label(Widget& parent, const std::string& text, int fontSize = 11, Point<int> relativePos = Point<int>{});
+		Label(WidgetPanel& parent, const std::string& text, int fontSize = 11, Point<int> relativePos = Point<int>{});
 		virtual ~Label() = default;
 
 		void setFontColor(int r, int g, int b, int a);
@@ -14,6 +14,7 @@ namespace ska {
 		void setClip(Rectangle* r);
 		void render(ska::Renderer& renderer) const override;
 		void clear();
+		bool notify(IWidgetEvent& e) override { return false; }
 
 	private:
 		std::string m_text;

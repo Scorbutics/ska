@@ -17,7 +17,7 @@ namespace ska {
 
 	public:
 		using Widget::Widget;
-		WidgetPanel(Widget& parent) : Widget(parent) {}
+		WidgetPanel(WidgetPanel& parent) : Widget(parent) {}
 		~WidgetPanel() override = default;
 
 		template <class SubWidget, class ... Args>
@@ -39,11 +39,12 @@ namespace ska {
 			return removed;
 		}
 
-		void showWidgets(bool b);
 		void render(Renderer& renderer) const override;
 		Widget* backAddedWidget();
 		Widget* backWidget();
 		void clear();
+
+		void resort();
 
 	protected:
 		Widget* getWidget(std::size_t index);
@@ -51,8 +52,7 @@ namespace ska {
 
 	private:
 		static constexpr auto GuiDefaultDisplayPriority = 65535;
-
-		void resort();
+		
 		void organizeHandledWidgets();
 		void sortZIndexWidgets();
 
@@ -71,11 +71,11 @@ namespace ska {
 	public:
 		WidgetPanelInteractive() = default;
 
-		explicit WidgetPanelInteractive(Widget& parent) :
+		explicit WidgetPanelInteractive(WidgetPanel& parent) :
 			WidgetPanel(parent) {
 		}
 
-		WidgetPanelInteractive(Widget& parent, const Point<int>& position) :
+		WidgetPanelInteractive(WidgetPanel& parent, const Point<int>& position) :
 			WidgetPanel(parent, position) {
 		}
 
@@ -87,7 +87,7 @@ namespace ska {
 			}
 
 			 auto result = WidgetPanel::notifyChildren(e);
-			 result |= directNotify(e);
+			 result |= ParentTrait::tryTriggerHandlers(e);
 
 			 if (result) {
 				 /* Handled by Widget */

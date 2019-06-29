@@ -7,7 +7,7 @@
 namespace ska {
 	class HorizontalSlider : public WidgetPanelInteractive<ValueChangedEventListener<float>, HoverEventListener, ClickEventListener> {
 	public:
-		HorizontalSlider(Widget& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth);
+		HorizontalSlider(WidgetPanel& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth);
 		
 		float getValue() const;
 		virtual void forceValue(float v);

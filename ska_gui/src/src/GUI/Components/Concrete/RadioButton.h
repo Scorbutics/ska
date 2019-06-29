@@ -7,7 +7,7 @@ namespace ska {
 
 	class RadioButton : public CheckBox {
 	public:
-		RadioButton(Widget& parent, std::shared_ptr<RadioButtonGroup>& group, Point<int> relativePos, const std::string& placeHolderStyleName);
+		RadioButton(WidgetPanel& parent, std::shared_ptr<RadioButtonGroup>& group, Point<int> relativePos, const std::string& placeHolderStyleName);
 		virtual ~RadioButton();
 	private:
 		std::shared_ptr<RadioButtonGroup> m_group;

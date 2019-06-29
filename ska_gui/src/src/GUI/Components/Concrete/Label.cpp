@@ -1,7 +1,7 @@
 #include "Label.h"
 #include "Core/Draw/Renderer.h"
 
-ska::Label::Label(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) : 
+ska::Label::Label(WidgetPanel& parent, const std::string& text, int fontSize, Point<int> relativePos) :
 	Widget(parent, relativePos), 
 	m_text(text),
 	m_fontSize(fontSize),

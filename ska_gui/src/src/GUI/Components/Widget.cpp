@@ -1,35 +1,14 @@
 #include "Widget.h"
+#include "WidgetPanel.h"
 
-ska::Widget::Widget() :
-	m_parent(nullptr),
-	m_visible(true),
-	m_focused(false) {
-	m_box.x = 0;
-	m_box.y = 0;
-	m_box.w = 1;
-	m_box.h = 1;
-
+ska::Widget::Widget(WidgetPanel& parent) :
+	m_parent(&parent) {
 }
 
-ska::Widget::Widget(Widget& parent) :
-	m_parent(&parent),
-	m_visible(true),
-	m_focused(false) {
-	m_box.x = 0;
-	m_box.y = 0;
-	m_box.w = 1;
-	m_box.h = 1;
-}
-
-ska::Widget::Widget(Widget& parent, const Point<int>& position) :
-	m_parent(&parent),
-	m_visible(true),
-	m_focused(false) {
+ska::Widget::Widget(WidgetPanel& parent, const Point<int>& position) :
+	m_parent(&parent) {
 	m_box.x = position.x;
 	m_box.y = position.y;
-	m_box.w = 1;
-	m_box.h = 1;
-
 }
 
 bool ska::Widget::isVisible() const {
@@ -44,8 +23,12 @@ void ska::Widget::setHeight(unsigned int h) {
 	m_box.h = h;
 }
 
-void ska::Widget::show(bool sh) {
+void ska::Widget::show(bool sh) {	
+	const auto willResort = m_parent != nullptr && (m_visible ^ sh);
 	m_visible = sh;
+	if (willResort) {
+		m_parent->resort();
+	}
 }
 
 void ska::Widget::move(const Point<int>& pos) {
@@ -53,35 +36,21 @@ void ska::Widget::move(const Point<int>& pos) {
 	m_box.y = pos.y;
 }
 
-ska::Widget* ska::Widget::getParent() const {
+ska::WidgetPanel* ska::Widget::getParent() const {
 	return m_parent;
 }
 
 bool ska::Widget::isAParent(const Widget& w) const {
-	if (this == &w) {
+	if (static_cast<const void*>(this) == static_cast<const void*>(&w)) {
 		return true;
 	}
 
 	return w.getParent() == nullptr ? false : isAParent(*w.getParent());
 }
 
-/* DEBUG ONLY */
-void ska::Widget::setName(const std::string& s) {
-	m_name = s;
-}
-
-const std::string& ska::Widget::getName() const {
-	return m_name;
-}
-/* END DEBUG ONLY */
 
 const ska::Rectangle& ska::Widget::getBox() const {
 	return m_box;
-}
-
-bool ska::Widget::notify(IWidgetEvent&) {
-	/* A non-handled widget cannot be notified */
-	return false;
 }
 
 ska::Point<int> ska::Widget::getAbsolutePosition() const {
@@ -104,3 +73,9 @@ bool ska::Widget::isFocused() const {
 	return m_focused;
 }
 
+void ska::Widget::setPriority(int priority) {
+	DrawableFixedPriority::setPriority(priority);
+	if (m_parent != nullptr) {
+		m_parent->resort();
+	}
+}

@@ -7,7 +7,7 @@ namespace ska {
 
 	class GUIScrollButtonWindowIG : public TimeScrollableWindowIG<> {
 	public:
-		GUIScrollButtonWindowIG(Widget& parent, const Rectangle& box);
+		GUIScrollButtonWindowIG(WidgetPanel& parent, const Rectangle& box);
 		virtual WorkNode<TimeScrollableWindowIG<>>& scrollTo(const Point<int>& targetPos, unsigned int speed) override;
 		WorkNode<TimeScrollableWindowIG<>>& scrollRewind();
 		virtual ~GUIScrollButtonWindowIG();

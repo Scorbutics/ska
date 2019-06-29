@@ -4,7 +4,7 @@
 template<class ... T>
 class MoveableWindowTest : public ska::MoveableWindow<T...> {
 public:
-	MoveableWindowTest(ska::Widget& parent, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(parent, box) {
+	MoveableWindowTest(ska::WidgetPanel& parent, const ska::Rectangle& box, const std::string& styleName) : ska::MoveableWindow<T...>(parent, box) {
 	}
 
 	MoveableWindowTest(ska::MouseObservable& mo, ska::KeyObservable& ko, const ska::Rectangle& box) : ska::MoveableWindow<T...>(mo, ko, box) {

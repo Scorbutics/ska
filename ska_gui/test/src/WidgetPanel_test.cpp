@@ -44,7 +44,7 @@ TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
 	CHECK(DisplayCounter::getDisplayedInstances().size() == 2);
 
 	DisplayCounter::reset();
-	wp.showWidgets(false);
+	wp.show(false);
 
 	wp.render(renderer);
 	CHECK(DisplayCounter::getDisplayedInstances().size() == 0);
@@ -245,7 +245,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 	hwt2.setPriority(14);
 
 
-	SUBCASE("Avec un resort avant") {
+	SUBCASE("Visibilités non modifiées") {
 		DisplayCounter::reset();
 
 		auto renderer = MockRenderer();
@@ -254,8 +254,6 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt2);
-
-		//wp.resort();
 
 		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
@@ -291,7 +289,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		CHECK(order == expectedEventOrder);
 	}
 
-	SUBCASE("Sans resort"){
+	SUBCASE("Avec une modif de visibilité => changement d'ordre"){
 		DisplayCounter::reset();
 
 		auto renderer = MockRenderer();
@@ -299,16 +297,38 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		//On s'assure qu'il soit bien visible
 		hwt3.show(true);
 
-		//Trié par ordre d'ajout
+		//Par contre on désactive hwt
+		hwt.show(false);
+
+		//Trié par ordre d'ajout et sans hwt
 		expectedOrder.push_back(&hwt4);
-		expectedOrder.push_back(&hwt2);
-		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt3);
+		expectedOrder.push_back(&hwt2);
 
 		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
 	}
 
+	SUBCASE("Avec une modif de priorité => changement d'ordre") {
+		DisplayCounter::reset();
+
+		auto renderer = MockRenderer();
+
+		//On s'assure qu'il soit bien visible
+		hwt3.show(true);
+
+		//Par contre on déplace hwt
+		hwt.setPriority(17);
+
+		//Trié par nouvel ordre de priorités
+		expectedOrder.push_back(&hwt4);
+		expectedOrder.push_back(&hwt3);
+		expectedOrder.push_back(&hwt);
+		expectedOrder.push_back(&hwt2);
+
+		wp.render(renderer);
+		CHECK(DisplayCounter::getInstances() == expectedOrder);
+	}
 }
 
 TEST_CASE("[WidgetPanel]Evenements par priorite") {

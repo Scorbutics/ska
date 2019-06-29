@@ -9,8 +9,8 @@ namespace ska {
 		public Button {
 
 	public:
-		ButtonSprite(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, unsigned int id, ClickEventHandler const& callback);
-		ButtonSprite(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const std::string& imagePath, const Rectangle& clip, ClickEventHandler const& callback);
+		ButtonSprite(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, unsigned int id, ClickEventHandler const& callback);
+		ButtonSprite(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const std::string& imagePath, const Rectangle& clip, ClickEventHandler const& callback);
 		virtual ~ButtonSprite() = default;
 
 		void replaceWith(const std::string& path, const Rectangle& clip);

@@ -7,12 +7,13 @@
 namespace ska {
 	class Image : public Widget {
 	public:
-		Image(Widget& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip);
+		Image(WidgetPanel& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip);
 		virtual ~Image() = default;
 		void replaceWith(Texture img, Rectangle* clip);
 		virtual void setWidth(unsigned int w) override;
 		virtual void setHeight(unsigned int h) override;
 		void render(Renderer& renderer) const override;
+		bool notify(IWidgetEvent& e) override { return false; }
 
 	private:
 		Texture m_img;

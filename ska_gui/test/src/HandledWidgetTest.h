@@ -46,13 +46,15 @@ struct HandledWidgetTest :
 
 	HandledWidgetTest() = default;
 
-	HandledWidgetTest(ska::Widget& parent) : 
+	HandledWidgetTest(ska::WidgetPanel& parent) : 
 		ska::Widget(parent) {
 	}
 
-	HandledWidgetTest(ska::Widget& parent, ska::Point<int>& p) : 
+	HandledWidgetTest(ska::WidgetPanel& parent, ska::Point<int>& p) :
 		ska::Widget(parent, p) {
 	}
+	
+	bool notify(ska::IWidgetEvent& e) override { return ska::HandledWidgetTrait<HandledWidgetTest<EL...>, EL...>::tryTriggerHandlers(e); }
 
 	void render(ska::Renderer& ) const override {
 		if (ska::Widget::isVisible()) {

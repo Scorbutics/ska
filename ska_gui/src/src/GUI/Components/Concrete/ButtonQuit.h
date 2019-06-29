@@ -9,7 +9,7 @@ namespace ska {
 		public Button {
 
 	public:
-		ButtonQuit(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName);
+		ButtonQuit(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName);
 		virtual ~ButtonQuit() = default;
 	};
 }

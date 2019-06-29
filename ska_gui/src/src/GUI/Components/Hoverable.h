@@ -79,13 +79,21 @@ namespace ska {
 		public HoverStateController<Hoverable<HL...>> {
 		friend class HoverStateController<Hoverable<HL...>>;
 	public:
-		Hoverable(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
+		Hoverable(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
 			Widget(parent){
 			this->move(this->getRelativePosition() + relativePos);
 		}
 
-		explicit Hoverable(Widget& parent) :
+		explicit Hoverable(WidgetPanel& parent) :
 			Widget(parent) {
+		}
+		
+		bool notify(IWidgetEvent& e) override { 
+			return HandledWidgetTrait::tryTriggerHandlers(e);
+		}
+
+		bool directNotify(IWidgetEvent& e) override {
+			return HandledWidgetTrait::tryTriggerHandlers(e);
 		}
 
 		~Hoverable() override = default;

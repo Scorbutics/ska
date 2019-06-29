@@ -4,7 +4,7 @@
 #include "./GUI/Events/ClickEventListener.h"
 #include "./GUI/Events/ClickEvent.h"
 #include "HandledWidgetTest.h"
-
+#include "GUI/Components/WidgetPanel.h"
 
 TEST_CASE("[HandledWidget]Position par defaut") {
     HandledWidgetTest<ska::ClickEventListener> t;
@@ -108,6 +108,8 @@ TEST_CASE("[HandledWidget]Priorite d'affichage par defaut") {
     CHECK(t.getPriority2D() == 0);
 }
 
+/*
+TODO move to WidgetPanel_test
 TEST_CASE("[HandledWidget]Parentes (isAParent)") {
     HandledWidgetTest<ska::ClickEventListener> child;
     HandledWidgetTest<ska::ClickEventListener> parent(child);
@@ -121,7 +123,7 @@ TEST_CASE("[HandledWidget]Parentes (isAParent)") {
     CHECK(!child.isAParent(otherWidget));
     CHECK(!parent.isAParent(otherWidget));
 }
-
+*/
 
 TEST_CASE("[HandledWidget]Propagation d'evenements avec liens de parente") {
 	//Ici il faut montrer que le lien de parenté n'est PAS un lien d'appartenance,
@@ -129,7 +131,7 @@ TEST_CASE("[HandledWidget]Propagation d'evenements avec liens de parente") {
 	//pour les positions relatives et la durée de vie d'un widget
 	//Il est donc normal que seulement le widget parent (car c'est sur celui-ci qu'on envoi l'évènement) qui soit notifié.
 
-	HandledWidgetTest<ska::ClickEventListener> parent;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> parent;
 	ska::Point<int> pParent(0, 0);
 	parent.move(pParent);
 	parent.setWidth(1000);
