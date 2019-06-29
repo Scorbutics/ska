@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Core/Utils/VectorUtils.h"
+#include "GUI/Components/HandledWidget.h"
 #include "WidgetContainer.h"
 
 namespace ska {
