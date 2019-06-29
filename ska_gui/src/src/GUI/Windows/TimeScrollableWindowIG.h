@@ -11,7 +11,8 @@ namespace ska {
 	class TimeScrollableWindowIG :
 		public DynamicWindowIG<TimeEventListener, HL...>,
 		public TimeObserver {
-		using ParentTrait = HandledWidgetTrait;
+		using ParentPanel = WidgetPanelInteractive<ClickEventListener, HoverEventListener, TimeEventListener, HL...>;
+		using ParentTrait = HandledWidgetTrait<ParentPanel, ClickEventListener, HoverEventListener, TimeEventListener, HL...>;
 	public:
 
 		TimeScrollableWindowIG(WidgetPanel& parent, const Rectangle& box) :

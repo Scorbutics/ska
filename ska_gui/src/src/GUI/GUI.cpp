@@ -91,20 +91,6 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 		HoverEvent hove(MOUSE_OVER, lastMousePos, mousePos, mousePos - lastMousePos);
 		HoverObservable::notifyObservers(hove);
 		
-		/*
-		auto hover = hove.getTarget() != nullptr ? hove.getTarget() : m_hovered;
-		if (hover != nullptr) {
-			const auto widgetAbsolutePos = hover->getAbsolutePosition();
-			auto widgetAbsoluteBox = hover->getBox();
-			widgetAbsoluteBox.x = widgetAbsolutePos.x;
-			widgetAbsoluteBox.y = widgetAbsolutePos.y;
-			if (!ska::RectangleUtils::isPositionInBox(mousePos, widgetAbsoluteBox)) {
-				HoverEvent heOut(MOUSE_OUT, hover->getAbsolutePosition(), mousePos, mousePos - lastMousePos);
-				hover->directNotify(heOut);
-			}
-		}
-		*/
-
 		if (m_hovered != nullptr) {
 			for (auto it = m_hovered; it != hove.getTarget() && it != nullptr; it = it->getParent()) {
 				if (hove.getTarget() == nullptr || !it->isAParent(*hove.getTarget())) {
