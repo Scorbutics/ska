@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "Core/Utils/VectorUtils.h"
 #include "WidgetContainer.h"
 
