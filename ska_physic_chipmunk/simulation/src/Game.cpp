@@ -1,3 +1,4 @@
+#include <iostream>
 #include "LoggerConfig.h"
 #include "Game.h"
 #include "World/Inputs/KeyboardInputMapContext.h"
@@ -29,8 +30,7 @@ namespace ska {
 			widthBlocks = reader.get<int>("Window width_blocks");
 			heightBlocks = reader.get<int>("Window height_blocks");
 			title = reader.get<std::string>("Window title");
-		}
-		catch (std::exception& fe) {
+		} catch (std::exception& fe) {
 			SLOG_STATIC(ska::LogLevel::Error, ska::GameApp) << "Error while loading game settings : " << fe.what();
 		}
 

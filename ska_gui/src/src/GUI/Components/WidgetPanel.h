@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../Utils/WidgetContainer.h"
+#include "../Utils/WidgetHandlingTrait.h"
 #include "Widget.h"
 
 namespace ska {

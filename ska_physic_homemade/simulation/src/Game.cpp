@@ -1,3 +1,4 @@
+#include <iostream>
 #include "LoggerConfig.h"
 #include "Game.h"
 #include "World/Inputs/KeyboardInputMapContext.h"
