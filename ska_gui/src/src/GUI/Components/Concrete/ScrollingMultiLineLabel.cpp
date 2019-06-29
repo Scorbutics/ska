@@ -4,7 +4,7 @@
 
 
 ska::ScrollingMultiLineLabel::ScrollingMultiLineLabel(Widget& parent, const std::string& text, int fontSize, float scrollSpeed, Point<int> relativePos) :
-	WidgetPanel(parent, relativePos), m_displayingArea({ 0, 0, 0, 0 }), m_currentLine(0),
+	WidgetPanelInteractive(parent, relativePos), m_displayingArea({ 0, 0, 0, 0 }), m_currentLine(0),
 	m_fontSize(fontSize),
 	m_scrollSpeed(scrollSpeed < 1.F ? 1.F : scrollSpeed), m_stopped(false) {
 

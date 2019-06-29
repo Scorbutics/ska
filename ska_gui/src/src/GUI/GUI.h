@@ -80,17 +80,17 @@ namespace ska {
 		}
 
 	protected:
-		WidgetPanelSorter* removeWindow(const std::string& name) {
+		WidgetPanel* removeWindow(const std::string& name) {
 			const auto wPtr = m_windowAnnuary[name];
 			if (wPtr == nullptr) {
 				throw ska::IllegalStateException(("The window name '" + name + "' doesn't exists in annuary").c_str());
 			}
 
-			if (!m_wFocusable->removeWidget(static_cast<WidgetPanelSorter*>(wPtr))) {
-				m_wMaster.removeWidget(static_cast<WidgetPanelSorter*>(wPtr));
+			if (!m_wFocusable->removeWidget(static_cast<WidgetPanel*>(wPtr))) {
+				m_wMaster.removeWidget(static_cast<WidgetPanel*>(wPtr));
 			}
 			m_windowAnnuary.erase(name);
-			return static_cast<WidgetPanelSorter*>(wPtr);
+			return static_cast<WidgetPanel*>(wPtr);
 		}
     private:
 		bool onGameEvent(ska::GameEvent & ge);

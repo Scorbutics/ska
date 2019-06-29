@@ -4,7 +4,7 @@
 
 
 namespace ska {
-	class ScrollingMultiLineLabel : public WidgetPanel<TimeEventListener> {
+	class ScrollingMultiLineLabel : public WidgetPanelInteractive<TimeEventListener> {
 	public:
 		void buildTextLines(const std::string& cs);
 		ScrollingMultiLineLabel(Widget& parent, const std::string& text, int fontSize, float scrollSpeed, Point<int> relativePos);

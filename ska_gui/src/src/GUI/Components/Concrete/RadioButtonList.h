@@ -12,7 +12,7 @@ namespace ska {
 	class RadioButtonList : public WidgetPanel<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener> {
 	public:
 		RadioButtonList(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName) :
-			WidgetPanel<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener>(parent, relativePos),
+			WidgetPanelInteractive<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener>(parent, relativePos),
 			m_group(std::make_shared<RadioButtonGroup>()),
 			m_value(nullptr),
 			m_styleName(placeHolderStyleName),

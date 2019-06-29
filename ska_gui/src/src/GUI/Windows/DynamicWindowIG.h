@@ -15,11 +15,11 @@ namespace ska {
 
 	template <class ...HL>
 	class DynamicWindowIG :
-		public WidgetPanel<ClickEventListener, HoverEventListener, HL...>,
+		public WidgetPanelInteractive<ClickEventListener, HoverEventListener, HL...>,
 		public HoverStateController<DynamicWindowIG<HL...>>,
 		public MouseObserver,
 		public KeyObserver {
-		using Parent = WidgetPanel<ClickEventListener, HoverEventListener, HL...>;
+		using Parent = WidgetPanelInteractive<ClickEventListener, HoverEventListener, HL...>;
 	public:
 		DynamicWindowIG(Widget& parent, const Rectangle& box) :
 			Parent(parent),

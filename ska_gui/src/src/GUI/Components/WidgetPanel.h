@@ -12,12 +12,13 @@
 
 namespace ska {
 
-	class WidgetPanelSorter :
+	class WidgetPanel :
 		public Widget {
 
 	public:
 		using Widget::Widget;
-		WidgetPanelSorter(Widget& parent) : Widget(parent) {}
+		WidgetPanel(Widget& parent) : Widget(parent) {}
+		~WidgetPanel() override = default;
 
 		template <class SubWidget, class ... Args>
 		SubWidget& addWidget(Args&& ... args) {
@@ -38,112 +39,22 @@ namespace ska {
 			return removed;
 		}
 
-		void showWidgets(bool b) {
-			for (auto& w : m_globalList) {
-				w->show(b);
-			}
-		}
-
-		void render(Renderer& renderer) const override {
-			for (auto& w : m_globalList) {
-				if (w->isVisible()) {
-					w->render(renderer);
-				}
-				else {
-					//First invisible widget found : we stop
-					break;
-				}
-			}
-		}
-
-		Widget* backAddedWidget() {
-			return m_addedSortedWidgets.empty() ? nullptr : m_addedSortedWidgets.back();
-		}
-
-		Widget* backWidget() {
-			return m_globalList.empty() ? nullptr : m_globalList.back();
-		}
-
-		void clear() {
-			m_widgets.clear();
-			m_handledWidgets.clear();
-			m_globalList.clear();
-			m_addedSortedWidgets.clear();
-		}
+		void showWidgets(bool b);
+		void render(Renderer& renderer) const override;
+		Widget* backAddedWidget();
+		Widget* backWidget();
+		void clear();
 
 	protected:
-		Widget* getWidget(std::size_t index) {
-			return m_addedSortedWidgets[index];
-		}
-
-		bool notifyChildren(IWidgetEvent& e) {
-			organizeHandledWidgets();
-
-			auto result = false;
-			auto stopped = false;
-			std::size_t cursor = 0;
-			for (auto& w : m_handledWidgets) {
-				if (!w->isVisible() && !m_handledWidgets.isVisibleAtIndex(cursor)) {
-					break;
-				}
-
-				const auto nextNotify = w->notify(e);
-				result |= nextNotify;
-				if (e.stopped() == STOP_WIDGET) {
-					stopped = true;
-					break;
-				}
-				cursor++;
-			}
-
-			if (stopped) {
-				e.stopPropagation(NOT_STOPPED);
-			}
-			return result || stopped;
-		}
+		Widget* getWidget(std::size_t index);
+		bool notifyChildren(IWidgetEvent& e);
 
 	private:
 		static constexpr auto GuiDefaultDisplayPriority = 65535;
 
-		void resort() {
-			organizeHandledWidgets();
-			this->sortZIndexWidgets();
-		}
-
-		void organizeHandledWidgets() {
-			std::size_t cursor = 0;
-			for (auto& w : m_handledWidgets) {
-				m_handledWidgets.organize(w, cursor);
-				cursor++;
-			}
-		}
-
-		void sortZIndexWidgets() {
-			static const auto comparatorAsc = [](const std::unique_ptr<Widget>& w1, const std::unique_ptr<Widget>& w2) {
-				auto v1 = w1->isVisible() ? 0 : 1;
-				auto v2 = w2->isVisible() ? 0 : 1;
-
-				if (v1 == v2) {
-					return (w1->getPriority() < w2->getPriority());
-				}
-
-				return v1 < v2;
-			};
-
-			static const auto comparatorDescRaw = [](const Widget* w1, const Widget* w2) {
-				auto v1 = w1->isVisible() ? 0 : 1;
-				auto v2 = w2->isVisible() ? 0 : 1;
-
-				if (v1 == v2) {
-					return (w1->getPriority() > w2->getPriority());
-				}
-
-				return v1 < v2;
-			};
-
-			std::sort(m_globalList.begin(), m_globalList.end(), comparatorDescRaw);
-			std::sort(m_handledWidgets.begin(), m_handledWidgets.end(), comparatorAsc);
-		}
+		void resort();
+		void organizeHandledWidgets();
+		void sortZIndexWidgets();
 
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		WidgetContainer<std::unique_ptr<Widget>> m_handledWidgets;
@@ -153,19 +64,19 @@ namespace ska {
 
 
 	template <class ... HL>
-	class WidgetPanel : 
-		public HandledWidgetTrait<WidgetPanel<HL...>, HL...>,
-		public WidgetPanelSorter {
-		using ParentTrait = HandledWidgetTrait<WidgetPanel<HL...>, HL...>;
+	class WidgetPanelInteractive : 
+		public HandledWidgetTrait<WidgetPanelInteractive<HL...>, HL...>,
+		public WidgetPanel {
+		using ParentTrait = HandledWidgetTrait<WidgetPanelInteractive<HL...>, HL...>;
 	public:
-		WidgetPanel() = default;
+		WidgetPanelInteractive() = default;
 
-		explicit WidgetPanel(Widget& parent) :
-			WidgetPanelSorter(parent) {
+		explicit WidgetPanelInteractive(Widget& parent) :
+			WidgetPanel(parent) {
 		}
 
-		WidgetPanel(Widget& parent, const Point<int>& position) :
-			WidgetPanelSorter(parent, position) {
+		WidgetPanelInteractive(Widget& parent, const Point<int>& position) :
+			WidgetPanel(parent, position) {
 		}
 
 		/* Called from GUI */
@@ -175,7 +86,7 @@ namespace ska {
 				return false;
 			}
 
-			 auto result = WidgetPanelSorter::notifyChildren(e);
+			 auto result = WidgetPanel::notifyChildren(e);
 			 result |= directNotify(e);
 
 			 if (result) {
@@ -189,7 +100,7 @@ namespace ska {
 			return ParentTrait::tryTriggerHandlers(e);
 		}
 
-		virtual ~WidgetPanel() = default;
+		virtual ~WidgetPanelInteractive() = default;
 
 	};
 }
