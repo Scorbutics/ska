@@ -1,3 +1,4 @@
+#include <iostream>
 #include <doctest.h>
 #include "LoggerConfig.h"
 #include "GUI/Events/ClickEventListener.h"
