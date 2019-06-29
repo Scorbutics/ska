@@ -12,26 +12,17 @@
 
 namespace ska {
 
-	template <class ... HL>
-	class WidgetPanel : public HandledWidget<HL...> {
-	private:
-		static constexpr auto guiDefaultDisplayPriority = 65535;
+	class WidgetPanelSorter :
+		public Widget {
 
 	public:
-		WidgetPanel() = default;
-
-		explicit WidgetPanel(Widget& parent) :
-			HandledWidget<HL...>(parent) {
-		}
-
-		WidgetPanel(Widget& parent, const Point<int>& position) :
-			HandledWidget<HL...>(parent, position) {
-		}
+		using Widget::Widget;
+		WidgetPanelSorter(Widget& parent) : Widget(parent) {}
 
 		template <class SubWidget, class ... Args>
-		SubWidget& addWidget(Args&&... args) {
+		SubWidget& addWidget(Args&& ... args) {
 			auto w = std::make_unique<SubWidget>(*this, std::forward<Args>(args)...);
-			w->setPriority(guiDefaultDisplayPriority - 1 - static_cast<int>(m_globalList.size()));
+			w->setPriority(GuiDefaultDisplayPriority - 1 - static_cast<int>(m_globalList.size()));
 			auto& result = static_cast<SubWidget&>(*w.get());
 			WidgetHandlingTrait<SubWidget>::manageHandledAdd(std::move(w), m_handledWidgets, m_widgets, m_globalList);
 			m_addedSortedWidgets.push_back(&result);
@@ -39,7 +30,7 @@ namespace ska {
 			return result;
 		}
 
-        template <class SubWidget>
+		template <class SubWidget>
 		bool removeWidget(SubWidget* w) {
 			auto removed = false;
 			removed |= WidgetHandlingTrait<SubWidget>::manageHandledRemove(w, m_handledWidgets, m_widgets, m_globalList);
@@ -47,13 +38,45 @@ namespace ska {
 			return removed;
 		}
 
-		/* Called from GUI */
-		virtual bool notify(IWidgetEvent& e) override {
-			/* If the current WidgetPanel doesn't accept the event, neither of his children do. */
-			if (!HandledWidget<HL...>::accept(e)) {
-				return false;
+		void showWidgets(bool b) {
+			for (auto& w : m_globalList) {
+				w->show(b);
 			}
+		}
 
+		void render(Renderer& renderer) const override {
+			for (auto& w : m_globalList) {
+				if (w->isVisible()) {
+					w->render(renderer);
+				}
+				else {
+					//First invisible widget found : we stop
+					break;
+				}
+			}
+		}
+
+		Widget* backAddedWidget() {
+			return m_addedSortedWidgets.empty() ? nullptr : m_addedSortedWidgets.back();
+		}
+
+		Widget* backWidget() {
+			return m_globalList.empty() ? nullptr : m_globalList.back();
+		}
+
+		void clear() {
+			m_widgets.clear();
+			m_handledWidgets.clear();
+			m_globalList.clear();
+			m_addedSortedWidgets.clear();
+		}
+
+	protected:
+		Widget* getWidget(std::size_t index) {
+			return m_addedSortedWidgets[index];
+		}
+
+		bool notifyChildren(IWidgetEvent& e) {
 			organizeHandledWidgets();
 
 			auto result = false;
@@ -69,72 +92,24 @@ namespace ska {
 				if (e.stopped() == STOP_WIDGET) {
 					stopped = true;
 					break;
-	 			}
+				}
 				cursor++;
 			}
 
 			if (stopped) {
 				e.stopPropagation(NOT_STOPPED);
 			}
-
-			result |= directNotify(e);
-
-			if (result || stopped) {
-				/* Handled by Widget */
-				e.stopPropagation(STOP_WIDGET);
-			}
-			return result;
+			return result || stopped;
 		}
 
-		void showWidgets(bool b) {
-			for(auto& w : m_globalList) {
-				w->show(b);
-			}
-		}
-
-		virtual bool directNotify(IWidgetEvent& e) override {
-			return HandledWidget<HL...>::notify(e);
-		}
-
-		void render(Renderer& renderer) const override {
-			for (auto& w : m_globalList) {
-				if (w->isVisible()) {
-					w->render(renderer);
-				} else {
-					//First invisible widget found : we stop
-					break;
-				}
-			}
-		}
-
-		Widget* backAddedWidget() {
-			return m_addedSortedWidgets.empty() ? nullptr : m_addedSortedWidgets.back();
-		}
-
-		Widget* backWidget() {
-			return m_globalList.empty() ? nullptr : m_globalList.back();
-		}
-
-		virtual ~WidgetPanel() = default;
+	private:
+		static constexpr auto GuiDefaultDisplayPriority = 65535;
 
 		void resort() {
 			organizeHandledWidgets();
 			this->sortZIndexWidgets();
 		}
 
-		void clear() {
-			m_widgets.clear();
-			m_handledWidgets.clear();
-			m_globalList.clear();
-			m_addedSortedWidgets.clear();
-		}
-
-	protected:
-		Widget* getWidget(std::size_t index) {
-			return m_addedSortedWidgets[index];
-		}
-
-	private:
 		void organizeHandledWidgets() {
 			std::size_t cursor = 0;
 			for (auto& w : m_handledWidgets) {
@@ -174,6 +149,47 @@ namespace ska {
 		WidgetContainer<std::unique_ptr<Widget>> m_handledWidgets;
 		std::vector<Widget*> m_addedSortedWidgets;
 		WidgetContainer<Widget*> m_globalList;
+	};
+
+
+	template <class ... HL>
+	class WidgetPanel : 
+		public HandledWidgetTrait<WidgetPanel<HL...>, HL...>,
+		public WidgetPanelSorter {
+		using ParentTrait = HandledWidgetTrait<WidgetPanel<HL...>, HL...>;
+	public:
+		WidgetPanel() = default;
+
+		explicit WidgetPanel(Widget& parent) :
+			WidgetPanelSorter(parent) {
+		}
+
+		WidgetPanel(Widget& parent, const Point<int>& position) :
+			WidgetPanelSorter(parent, position) {
+		}
+
+		/* Called from GUI */
+		virtual bool notify(IWidgetEvent& e) override {
+			/* If the current WidgetPanel doesn't accept the event, neither of his children do. */
+			if (!ParentTrait::accept(e)) {
+				return false;
+			}
+
+			 auto result = WidgetPanelSorter::notifyChildren(e);
+			 result |= directNotify(e);
+
+			 if (result) {
+				 /* Handled by Widget */
+				 e.stopPropagation(STOP_WIDGET);
+			 }
+			 return result;
+		}
+
+		virtual bool directNotify(IWidgetEvent& e) override {
+			return ParentTrait::tryTriggerHandlers(e);
+		}
+
+		virtual ~WidgetPanel() = default;
 
 	};
 }

@@ -247,7 +247,7 @@ void ska::GUI::pushWindowToFront(Widget* w) {
 		w->setPriority(firstPriority);
 		w->focus(true);
 		firstWidget->focus(false);
-		m_wFocusable->resort();
+		//m_wFocusable->resort();
 	}
 }
 

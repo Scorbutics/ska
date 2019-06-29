@@ -3,10 +3,10 @@
 #include "WidgetContainer.h"
 
 namespace ska {
-	template <class SubWidget, bool = std::is_base_of<IHandledWidget, SubWidget>::value>
+	template <class SubWidget, bool = std::is_base_of<HandledWidgetMask, SubWidget>::value>
 	struct WidgetHandlingTrait {
 		static void manageHandledAdd(std::unique_ptr<SubWidget>&& w, WidgetContainer<std::unique_ptr<Widget>>& handledWidgets, std::vector<std::unique_ptr<Widget>>& widgets, WidgetContainer<Widget*>& globalList) {
-			auto widget = static_cast<IHandledWidget*>(w.get());
+			auto widget = static_cast<HandledWidgetMask*>(w.get());
 			auto activeWidget = !widget->isMaskEmpty();
 			if (activeWidget) {
 				ska::Widget* rawW = w.get();
@@ -18,7 +18,7 @@ namespace ska {
 		}
 
         static bool manageHandledRemove(SubWidget* w, WidgetContainer<std::unique_ptr<Widget>>& handledWidgets, std::vector<std::unique_ptr<Widget>>& widgets, WidgetContainer<Widget*>& globalList) {
-			auto widget = static_cast<IHandledWidget*>(w);
+			auto widget = static_cast<HandledWidgetMask*>(w);
 			auto activeWidget = !widget->isMaskEmpty();
 			if (activeWidget) {
 				auto itToRemove = std::remove_if(handledWidgets.begin(), handledWidgets.end(),

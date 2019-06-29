@@ -255,7 +255,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt2);
 
-		wp.resort();
+		//wp.resort();
 
 		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);

@@ -74,28 +74,24 @@ namespace ska {
 
 	template <class ...HL>
 	class Hoverable :
-		public HandledWidget<HoverEventListener, HL...>,
+		public Widget,
+		public HandledWidgetTrait<Hoverable<HL...>, HoverEventListener, HL...>,
 		public HoverStateController<Hoverable<HL...>> {
 		friend class HoverStateController<Hoverable<HL...>>;
 	public:
 		Hoverable(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
-			HandledWidget<HoverEventListener, HL...>(parent) {
+			Widget(parent){
 			this->move(this->getRelativePosition() + relativePos);
 		}
 
 		explicit Hoverable(Widget& parent) :
-			HandledWidget<HoverEventListener, HL...>(parent) {
-			}
-
-		virtual void render(Renderer&) const override {
+			Widget(parent) {
 		}
 
-		virtual ~Hoverable() = default;
+		~Hoverable() override = default;
 
 	protected:
-		Hoverable() {
-
-		}
+		Hoverable() = default;
 
 	};
 }

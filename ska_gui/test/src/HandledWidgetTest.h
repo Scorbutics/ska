@@ -38,18 +38,24 @@ protected:
 };
 
 template <class ... EL>
-struct HandledWidgetTest : public ska::HandledWidget<EL...>, public DisplayCounter {
-	HandledWidgetTest() {
+struct HandledWidgetTest : 
+	public ska::Widget, 
+	public ska::HandledWidgetTrait<HandledWidgetTest<EL...>, EL...>,
+	public DisplayCounter {
+
+
+	HandledWidgetTest() = default;
+
+	HandledWidgetTest(ska::Widget& parent) : 
+		ska::Widget(parent) {
 	}
 
-	HandledWidgetTest(ska::Widget& parent) : ska::HandledWidget<EL...>(parent) {
-	}
-
-	HandledWidgetTest(ska::Widget& parent, ska::Point<int>& p) : ska::HandledWidget<EL...>(parent, p) {
+	HandledWidgetTest(ska::Widget& parent, ska::Point<int>& p) : 
+		ska::Widget(parent, p) {
 	}
 
 	void render(ska::Renderer& ) const override {
-		if (ska::HandledWidget<EL...>::isVisible()) {
+		if (ska::Widget::isVisible()) {
 			DisplayCounter::pushVisible();
 		} else {
 			DisplayCounter::pushInvisible();

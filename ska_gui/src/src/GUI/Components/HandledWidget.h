@@ -1,8 +1,7 @@
 #pragma once
-#include <iostream>
-#include <unordered_map>
 #include <bitset>
 #include <tuple>
+#include <array>
 
 #include "Widget.h"
 #include "../Events/IWidgetEvent.h"
@@ -10,95 +9,93 @@
 #include "Base/Meta/TupleUtils.h"
 #include "Logging/Logger.h"
 
-#define SKA_GUI_MAX_WIDGET_EVENT_LISTENER 16
+static constexpr const auto SKA_GUI_MAX_WIDGET_EVENT_LISTENER = 16u;
 
 namespace ska {
 
 	using ListenerMask = std::bitset<SKA_GUI_MAX_WIDGET_EVENT_LISTENER>;
 	using MaskUnit = unsigned int;
 
-	/* Indicator class (for compile time class comparisons) */
-	class IHandledWidget {
+	//TODO do we really need this below ?
+	class HandledWidgetMask {
 	public:
-		virtual ~IHandledWidget(){}
+		HandledWidgetMask() = default;
+		virtual ~HandledWidgetMask() = default;
 
 		virtual	bool isMaskEmpty() const = 0;
 	};
 
-	class BaseHandledWidget : public Widget, public IHandledWidget {
-    public:
-        BaseHandledWidget() : Widget() {
-        }
+	//TODO move to another file
+	class HandlerNotifier {
+	public:
+		HandlerNotifier(Widget& target, IWidgetEvent& e) : m_event(e), m_target(target), m_result(false) {}
 
-		explicit BaseHandledWidget(Widget& parent) : Widget(parent) {
-        }
+		void operator=(const HandlerNotifier&) = delete;
 
-        BaseHandledWidget(Widget& parent, const Point<int>& position) : 
-			Widget(parent, position) {
-        }
+		template<class T>
+		void operator() (T&& t) {
+			m_result |= t.notifyGeneric(m_target, m_event);
+		}
 
-        virtual ~BaseHandledWidget() = default;
+		bool hasBeenNotified() const {
+			return m_result;
+		}
+
+	private:
+		IWidgetEvent& m_event;
+		Widget& m_target;
+		bool m_result;
 	};
 
-	template <class ...HL>
-	class HandledWidget : public BaseHandledWidget {
+
+	//TODO a "mask event listener" & "event listener" factory
+	template <class W, class ...HL>
+	class HandledWidgetTrait : 
+		public HandledWidgetMask {
+	private:
+		static constexpr auto DefaultMaskIndex = sizeof ...(HL) - 1;
 	public:
-		HandledWidget() :
-			m_currentMaskIndex(sizeof ...(HL)-1),
-			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {
-			/* Bracket initializer trick */
-			int _[] = { 0, (buildMask<HL>(), 0)... };
-			(void)_;
-		}
-
-		explicit HandledWidget(Widget& parent)  :
-			BaseHandledWidget(parent),
-			m_currentMaskIndex(sizeof ...(HL)-1),
-			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {
-			/* Bracket initializer trick */
-			int _[] = { 0, (buildMask<HL>(), 0)... };
-			(void)_;
-		}
-
-		HandledWidget(Widget& parent, const Point<int>& position) :
-		    BaseHandledWidget(parent, position),
-			m_currentMaskIndex(sizeof ...(HL)-1),
-			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {
-			/* Bracket initializer trick */
-			int _[] = { 0, (buildMask<HL>(), 0)... };
-			(void)_;
-		}
-
-		bool notify(IWidgetEvent& e) override {
-			if (!accept(e)) {
-				return false;
-			}
-
-			auto maskIndex = static_cast<std::size_t>(m_maskHandlerIndexes[e.getMask()]);
-			HandlerNotifier hn(*this, e);
-			meta::visit_element_at_index(m_handlers, maskIndex, hn);
-			return hn.hasBeenNotified();
-		}
 
 		template<class L, class EH>
 		void addHandler(const EH& eh) {
 			meta::get<L>(m_handlers).addHandler(eh);
 		}
 
-		virtual	bool isMaskEmpty() const override {
-			return m_mask.none();
-		}
-
-		virtual ~HandledWidget() = default;
-
 		template<class L, class EH>
 		void addHeadHandler(const EH& eh) {
 			meta::get<L>(m_handlers).addHeadHandler(eh);
 		}
 
+		bool isMaskEmpty() const override {
+			return m_mask.none();
+		}
+
+		~HandledWidgetTrait() override = default;
+		
 	protected:
+		HandledWidgetTrait() :
+			m_target(*static_cast<W*>(this)),
+			m_currentMaskIndex(DefaultMaskIndex),
+			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {
+			static_assert(std::is_base_of<Widget, W>::value, "Must be derived from Widget");
+			/* Bracket initializer trick */
+			int _[] = { 0, (buildMask<HL>(), 0)... };
+			(void)_;
+		}
+
+		bool tryTriggerHandlers(IWidgetEvent& e) {
+			if (!accept(e)) {
+				return false;
+			}
+
+			auto maskIndex = static_cast<std::size_t>(m_maskHandlerIndexes[e.getMask()]);
+			auto hn = HandlerNotifier{ m_target, e };
+			meta::visit_element_at_index(m_handlers, maskIndex, hn);
+			return hn.hasBeenNotified();
+		}
+
 		bool accept(IWidgetEvent& e) {
-			if (!isVisible()) {
+			if (!m_target.isVisible()) {
 				return false;
 			}
 
@@ -106,34 +103,11 @@ namespace ska {
 		}
 
 	private:
-		class HandlerNotifier {
-		public:
-			HandlerNotifier(HandledWidget<HL...>& tthis, IWidgetEvent& e) : m_event(e), m_this(tthis), m_result(false) {
-			}
-
-			void operator=(const HandlerNotifier&) = delete;
-
-			template<class T>
-			void operator() (T&& t) {
-				m_result |= t.notifyGeneric(m_this, m_event);
-			}
-
-			bool hasBeenNotified() const {
-				return m_result;
-			}
-
-		private:
-			IWidgetEvent& m_event;
-			HandledWidget<HL...>& m_this;
-			bool m_result;
-
-		};
-
-		int m_currentMaskIndex;
-		std::unordered_map<MaskUnit, int> m_maskHandlerIndexes;
+		int m_currentMaskIndex {};
+		std::array<std::size_t, SKA_GUI_MAX_WIDGET_EVENT_LISTENER> m_maskHandlerIndexes {};
 		ListenerMask m_mask;
 		std::tuple<HL...> m_handlers;
-
+		W& m_target;
 
 		template<class T>
 		T instantiateHandler() {
@@ -153,25 +127,21 @@ namespace ska {
 		}
 	};
 
-	template <>
-	class HandledWidget<> : public Widget, public IHandledWidget {
-	public:
-        HandledWidget() : Widget() {
-        }
-
-        explicit HandledWidget(Widget& parent) : Widget(parent) {
-        }
-
-		bool notify(IWidgetEvent&) override {
-			return false;
+	//Default no event listener implementation
+	template <class W>
+	class HandledWidgetTrait<W> :
+		public HandledWidgetMask {
+		
+	protected:
+		HandledWidgetTrait() : m_target(*static_cast<W*>(this)) {
+			static_assert(std::is_base_of<Widget, W>::value, "Must be derived from Widget");
+			//static_assert(std::is_base_of<Widget, std::decay_t<decltype(*this)>>::value, "Must be derived from Widget");
 		}
-
-		virtual	bool isMaskEmpty() const override {
-			return true;
-		}
-
-		bool accept(IWidgetEvent&) const{
-			return !isVisible();
-		}
+		bool notify(IWidgetEvent&) { return false; }
+		virtual	bool isMaskEmpty() const override { return true; }
+		bool accept(IWidgetEvent&) const{ return !m_target.isVisible(); }
+		~HandledWidgetTrait() override = default;
+	private:
+		Widget& m_target;
 	};
 }
