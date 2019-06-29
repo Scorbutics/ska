@@ -4,8 +4,8 @@
 #include "HorizontalSlider.h"
 #include "../../Events/ValueChangedEvent.h"
 
-ska::HorizontalSlider::HorizontalSlider(Widget& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth) :
-WidgetPanel<ValueChangedEventListener<float>, HoverEventListener, ClickEventListener>(parent, relativePos),
+ska::HorizontalSlider::HorizontalSlider(WidgetPanel& parent, const std::string& styleName, Point<int> relativePos, const unsigned int pixelWidth) :
+	WidgetPanelInteractive<ValueChangedEventListener<float>, HoverEventListener, ClickEventListener>(parent, relativePos),
 	m_percents(0),
 	m_sliding(false) {
 

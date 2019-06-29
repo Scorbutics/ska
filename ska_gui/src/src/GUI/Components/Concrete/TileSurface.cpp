@@ -67,7 +67,7 @@ const ska::Texture& ska::TileSurfaceCache::getTexture(Renderer& renderer) const 
 	
 }
 
-ska::TileSurface::TileSurface(Widget& parent, const Rectangle& box, const std::string& styleName) :
+ska::TileSurface::TileSurface(WidgetPanel& parent, const Rectangle& box, const std::string& styleName) :
 	Widget(parent, { box.x, box.y }),
 	m_menuTiles(styleName),
 	m_cache(*this) {

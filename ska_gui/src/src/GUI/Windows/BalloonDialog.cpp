@@ -5,8 +5,8 @@
 #include "../GUI.h"
 #include "Core/Utils/TimeUtils.h"
 
-ska::BalloonDialog::BalloonDialog(ska::Widget& parent, const ska::Rectangle& box, const std::string& message, unsigned int delay, unsigned int fontSize) :
-	WidgetPanel<ska::TimeEventListener>(parent, ska::Point<int>{ box.x, box.y }),
+ska::BalloonDialog::BalloonDialog(ska::WidgetPanel& parent, const ska::Rectangle& box, const std::string& message, unsigned int delay, unsigned int fontSize) :
+	WidgetPanelInteractive<ska::TimeEventListener>(parent, ska::Point<int>{ box.x, box.y }),
 	m_delay(delay) {
 	setWidth(box.w);
 	setHeight(box.h);

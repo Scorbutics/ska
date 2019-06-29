@@ -10,7 +10,7 @@
 #include "WindowsUtil.h"
 
 TEST_CASE("[WidgetPanel]Ajout de widgets") {
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 	CHECK(wp.backWidget() == nullptr);
 	CHECK(wp.backAddedWidget() == nullptr);
 
@@ -21,7 +21,7 @@ TEST_CASE("[WidgetPanel]Ajout de widgets") {
 
 
 TEST_CASE("[WidgetPanel]Vidage de widgets") {
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 
 	wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
 	wp.addWidget<WidgetTest>();
@@ -33,7 +33,7 @@ TEST_CASE("[WidgetPanel]Vidage de widgets") {
 
 TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
 	auto renderer = MockRenderer();
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 
 	wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
 	wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
@@ -44,14 +44,14 @@ TEST_CASE("[WidgetPanel]Visibilite des Widgets") {
 	CHECK(DisplayCounter::getDisplayedInstances().size() == 2);
 
 	DisplayCounter::reset();
-	wp.showWidgets(false);
+	wp.show(false);
 
 	wp.render(renderer);
 	CHECK(DisplayCounter::getDisplayedInstances().size() == 0);
 }
 
 TEST_CASE("[WidgetPanel]Propagation d'evenements dans les widgets contenus") {
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 
 	auto& hwt = wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
 	auto& wt = wp.addWidget<WidgetTest>();
@@ -90,7 +90,7 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements dans les widgets contenus") {
 }
 
 TEST_CASE("[WidgetPanel]Propagation d'evenements avec blocage") {
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 
 	auto& hwt = wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
 	auto& hwt2 = wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
@@ -151,7 +151,7 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements avec blocage") {
 }
 
 TEST_CASE("[WidgetPanel]Propagation d'evenements avec types de handlers differents") {
-	ska::WidgetPanel<ska::ClickEventListener> wp;
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
 
 	auto& hwt = wp.addWidget<HandledWidgetTest<ska::KeyEventListener>>();
 	auto& hwt2 = wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
@@ -184,7 +184,7 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements avec types de handlers differen
 }
 
 TEST_CASE("[WidgetPanel]Propagation d'evenements avec visibilites differentes") {
-	ska::WidgetPanel<ska::HoverEventListener> wp;
+	ska::WidgetPanelInteractive<ska::HoverEventListener> wp;
 
 	auto& hwt = wp.addWidget<HandledWidgetTest<ska::KeyEventListener>>();
 	auto& hwt2 = wp.addWidget<HandledWidgetTest<ska::HoverEventListener>>();
@@ -224,7 +224,7 @@ TEST_CASE("[WidgetPanel]Propagation d'evenements avec visibilites differentes") 
 }
 
 TEST_CASE("[WidgetPanel]Affichage par priorite") {
-	ska::WidgetPanel<ska::HoverEventListener> wp;
+	ska::WidgetPanelInteractive<ska::HoverEventListener> wp;
 
 	auto& hwt4 = wp.addWidget<HandledWidgetTest<ska::HoverEventListener>>();
 	auto& hwt2 = wp.addWidget<HandledWidgetTest<ska::HoverEventListener>>();
@@ -245,7 +245,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 	hwt2.setPriority(14);
 
 
-	SUBCASE("Avec un resort avant") {
+	SUBCASE("Visibilités non modifiées") {
 		DisplayCounter::reset();
 
 		auto renderer = MockRenderer();
@@ -254,8 +254,6 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		expectedOrder.push_back(&hwt4);
 		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt2);
-
-		wp.resort();
 
 		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
@@ -291,7 +289,7 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		CHECK(order == expectedEventOrder);
 	}
 
-	SUBCASE("Sans resort"){
+	SUBCASE("Avec une modif de visibilité => changement d'ordre"){
 		DisplayCounter::reset();
 
 		auto renderer = MockRenderer();
@@ -299,20 +297,42 @@ TEST_CASE("[WidgetPanel]Affichage par priorite") {
 		//On s'assure qu'il soit bien visible
 		hwt3.show(true);
 
-		//Trié par ordre d'ajout
+		//Par contre on désactive hwt
+		hwt.show(false);
+
+		//Trié par ordre d'ajout et sans hwt
 		expectedOrder.push_back(&hwt4);
-		expectedOrder.push_back(&hwt2);
-		expectedOrder.push_back(&hwt);
 		expectedOrder.push_back(&hwt3);
+		expectedOrder.push_back(&hwt2);
 
 		wp.render(renderer);
 		CHECK(DisplayCounter::getInstances() == expectedOrder);
 	}
 
+	SUBCASE("Avec une modif de priorité => changement d'ordre") {
+		DisplayCounter::reset();
+
+		auto renderer = MockRenderer();
+
+		//On s'assure qu'il soit bien visible
+		hwt3.show(true);
+
+		//Par contre on déplace hwt
+		hwt.setPriority(17);
+
+		//Trié par nouvel ordre de priorités
+		expectedOrder.push_back(&hwt4);
+		expectedOrder.push_back(&hwt3);
+		expectedOrder.push_back(&hwt);
+		expectedOrder.push_back(&hwt2);
+
+		wp.render(renderer);
+		CHECK(DisplayCounter::getInstances() == expectedOrder);
+	}
 }
 
 TEST_CASE("[WidgetPanel]Evenements par priorite") {
-	ska::WidgetPanel<ska::HoverEventListener> wp;
+	ska::WidgetPanelInteractive<ska::HoverEventListener> wp;
 
 	auto& hwt = wp.addWidget<HandledWidgetTest<ska::HoverEventListener>>();
 	auto& hwt2 = wp.addWidget<HandledWidgetTest<ska::HoverEventListener>>();

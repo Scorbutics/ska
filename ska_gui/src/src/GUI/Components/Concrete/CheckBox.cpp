@@ -3,7 +3,7 @@
 #include "../../Events/ValueChangedEvent.h"
 #include "Core/Draw/Renderer.h"
 
-ska::CheckBox::CheckBox(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
+ska::CheckBox::CheckBox(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
 	Button(parent, relativePos, placeHolderStyleName, clip, [&](Widget*, ClickEvent& e) {
 		if (e.getState() == MOUSE_RELEASE) {
 			m_value = !m_value;

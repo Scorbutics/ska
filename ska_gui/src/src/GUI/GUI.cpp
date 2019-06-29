@@ -78,7 +78,7 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 	const auto& mousePos = playerIcm.getRanges()[MousePos];
 	const auto& lastMousePos = playerIcm.getRanges()[LastMousePos];
 
-    if (m_lastLastMousePos != lastMousePos || lastMousePos != mousePos) {
+	if (m_lastLastMousePos != lastMousePos || lastMousePos != mousePos) {
 		m_mouseCursor.move(mousePos);
 
 		/* Toujours utiliser lastMousePos et non pas mousePos pour les hover :
@@ -90,6 +90,20 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 
 		HoverEvent hove(MOUSE_OVER, lastMousePos, mousePos, mousePos - lastMousePos);
 		HoverObservable::notifyObservers(hove);
+		
+		/*
+		auto hover = hove.getTarget() != nullptr ? hove.getTarget() : m_hovered;
+		if (hover != nullptr) {
+			const auto widgetAbsolutePos = hover->getAbsolutePosition();
+			auto widgetAbsoluteBox = hover->getBox();
+			widgetAbsoluteBox.x = widgetAbsolutePos.x;
+			widgetAbsoluteBox.y = widgetAbsolutePos.y;
+			if (!ska::RectangleUtils::isPositionInBox(mousePos, widgetAbsoluteBox)) {
+				HoverEvent heOut(MOUSE_OUT, hover->getAbsolutePosition(), mousePos, mousePos - lastMousePos);
+				hover->directNotify(heOut);
+			}
+		}
+		*/
 
 		if (m_hovered != nullptr) {
 			for (auto it = m_hovered; it != hove.getTarget() && it != nullptr; it = it->getParent()) {
@@ -98,7 +112,6 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 					it->directNotify(heOut);
 				}
 			}
-
 		}
 		m_hovered = hove.getTarget();
 
@@ -108,9 +121,11 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 	const auto click = in[LClic];
 	if (click) {
 		Point<int> pMp (mousePos);
-		ClickEvent ce(MOUSE_CLICK, pMp);
-		ClickObservable::notifyObservers(ce);
-		m_clicked = ce.getTarget();
+		if (m_clicked == nullptr) {
+			ClickEvent ce(MOUSE_CLICK, pMp);
+			ClickObservable::notifyObservers(ce);
+			m_clicked = ce.getTarget();
+		}
 
 		auto lastFocused = m_lastFocused;
 		if (m_clicked != nullptr) {
@@ -247,7 +262,6 @@ void ska::GUI::pushWindowToFront(Widget* w) {
 		w->setPriority(firstPriority);
 		w->focus(true);
 		firstWidget->focus(false);
-		m_wFocusable->resort();
 	}
 }
 

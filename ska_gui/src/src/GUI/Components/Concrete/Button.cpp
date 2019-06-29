@@ -4,7 +4,7 @@
 #include "../../Events/ClickEventListener.h"
 #include "Core/Draw/Renderer.h"
 
-ska::Button::Button(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback) :
+ska::Button::Button(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip, ClickEventHandler const& callback) :
 Hoverable<ValueChangedEventListener<bool>, ClickEventListener>(parent),
 m_placeHolder(placeHolderStyleName + ".png"),
 m_placeHolderHover(placeHolderStyleName + "_hover.png"),
@@ -49,7 +49,7 @@ m_drawStyle(false) {
 	initHandlers();
 }
 
-ska::Button::Button(Widget& parent) :
+ska::Button::Button(WidgetPanel& parent) :
 Hoverable<ValueChangedEventListener<bool>, ClickEventListener>(parent),
 m_drawStyle(false) {
 	m_textureSelector = &m_placeHolder;

@@ -3,9 +3,10 @@
 #include "Graphic/Texture.h"
 
 namespace ska {
-	class ImageRectangle : public Widget {
+	class ImageRectangle : 
+		public Widget {
 	public:
-		ImageRectangle(Widget& parent, Rectangle box, Color c, const Color* outline = nullptr);
+		ImageRectangle(WidgetPanel& parent, Rectangle box, Color c, const Color* outline = nullptr);
 		virtual ~ImageRectangle() = default;
 		virtual void setWidth(unsigned int w) override;
 		virtual void setHeight(unsigned int h) override;

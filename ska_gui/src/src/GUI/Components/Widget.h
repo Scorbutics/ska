@@ -3,11 +3,12 @@
 #include "Core/Point.h"
 #include "Core/Draw/DrawableFixedPriority.h"
 #include "Core/Utils/RectangleUtils.h"
+#include "Base/Values/MovableNonCopyable.h"
 
 namespace ska {
 	class IWidgetEvent;
+	class WidgetPanel;
 
-	
 	enum class ButtonState {
 		NONE,
 		PRESSED,
@@ -16,59 +17,41 @@ namespace ska {
 		DISABLED
 	};
 	
-
 	class Widget :
-		public DrawableFixedPriority {
+		public DrawableFixedPriority,
+		public MovableNonCopyable {
 
 	public:
-		Widget();
-		explicit Widget(Widget& parent);
+		Widget() = default;
+		explicit Widget(WidgetPanel& parent);
+		Widget(WidgetPanel& parent, const Point<int>& position);
+		virtual ~Widget() = default;
 
-		Widget(Widget& parent, const Point<int>& position);
-
+		bool isFocused() const;
 		bool isVisible() const;
+		bool isAParent(const Widget& w) const;
+		void focus(bool f);
+		void show(bool sh);
+		WidgetPanel* getParent() const;
+		const Rectangle& getBox() const;
+		Point<int> getAbsolutePosition() const;
+		Point<int> getRelativePosition() const;
 
 		virtual void setWidth(unsigned int w);
-
 		virtual void setHeight(unsigned int h);
-
-		void show(bool sh);
-
 		virtual void move(const Point<int>& pos);
-
-		Widget* getParent() const;
-
-		bool isAParent(const Widget& w) const;
-
-		/* DEBUG ONLY */
-		void setName(const std::string& s);
-
-		const std::string& getName() const;
-		/* END DEBUG ONLY */
-
-		const Rectangle& getBox() const;
-
-		virtual bool notify(IWidgetEvent& e);
+		virtual bool notify(IWidgetEvent& e) = 0;
 		virtual bool directNotify(IWidgetEvent& e) {
 			return notify(e);
 		}
 
-		Point<int> getAbsolutePosition() const;
+		void setPriority(int p) override;
 
-		Point<int> getRelativePosition() const;
-
-		virtual ~Widget() = default;
-
-		void focus(bool f);
-
-		bool isFocused() const;
 	private:
-		std::string m_name;
-		Widget* m_parent;
-		Rectangle m_box;
-		bool m_visible;
-
-		bool m_focused;
+		WidgetPanel* m_parent = nullptr;;
+		Rectangle m_box = { 0, 0, 1, 1 };
+		bool m_visible = true;
+		bool m_focused = false;
 	};
 
 }

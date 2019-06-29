@@ -52,7 +52,6 @@ namespace ska {
 			t.template addHeadHandler<ClickEventListener>([&](Widget* tthis, ClickEvent& e) {
 				windowSorter(tthis, e);
 			});
-			m_wFocusable->resort();
 			return result;
 		}
 
@@ -61,10 +60,6 @@ namespace ska {
 			auto& result = m_wMaster.addWidget<Win>(std::forward<WinArgs>(args)...);
 			m_windowAnnuary[name] = &reinterpret_cast<Win&>(result);
 			return result;
-		}
-
-		void resort() {
-			m_wMaster.resort();
 		}
 
 		void pushWindowToFront(Widget* w);
@@ -80,17 +75,17 @@ namespace ska {
 		}
 
 	protected:
-		BaseHandledWidget* removeWindow(const std::string& name) {
+		WidgetPanel* removeWindow(const std::string& name) {
 			const auto wPtr = m_windowAnnuary[name];
 			if (wPtr == nullptr) {
 				throw ska::IllegalStateException(("The window name '" + name + "' doesn't exists in annuary").c_str());
 			}
 
-			if (!m_wFocusable->removeWidget(static_cast<BaseHandledWidget*>(wPtr))) {
-				m_wMaster.removeWidget(static_cast<BaseHandledWidget*>(wPtr));
+			if (!m_wFocusable->removeWidget(static_cast<WidgetPanel*>(wPtr))) {
+				m_wMaster.removeWidget(static_cast<WidgetPanel*>(wPtr));
 			}
 			m_windowAnnuary.erase(name);
-			return static_cast<BaseHandledWidget*>(wPtr);
+			return static_cast<WidgetPanel*>(wPtr);
 		}
     private:
 		bool onGameEvent(ska::GameEvent & ge);

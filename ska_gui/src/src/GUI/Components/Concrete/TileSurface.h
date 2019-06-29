@@ -29,14 +29,14 @@ namespace ska {
 		static constexpr auto TILE_SIZE = 32;
 		friend struct TileSurfaceCache;
 	public:
-		TileSurface(Widget& parent, const Rectangle& box, const std::string& styleName);
+		TileSurface(WidgetPanel& parent, const Rectangle& box, const std::string& styleName);
 		virtual ~TileSurface() = default;
 		
 		void setWidth(unsigned int width) override;
 		void setHeight(unsigned int height) override;
 		void setOpacity(uint8_t opacity);
 		void render(Renderer& renderer) const override;
-	
+		bool notify(IWidgetEvent& e) override { return false; }
 	private:
 		void renderTileSurfaceCache(const Rectangle& box, Renderer& renderer) const;
 		Texture m_menuTiles;

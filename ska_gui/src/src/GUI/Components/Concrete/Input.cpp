@@ -9,8 +9,8 @@
 #include "Base/Values/Strings/StringUtils.h"
 #include "../../GUI.h"
 
-ska::Input::Input(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos) :
-	WidgetPanel<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener>(parent, relativePos),
+ska::Input::Input(WidgetPanel& parent, const std::string& text, int fontSize, Point<int> relativePos) :
+	WidgetPanelInteractive<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener>(parent, relativePos),
 	m_keyFocus(false) {
 
 	auto& button = addWidget<Button>(relativePos, ska::GUI::MENU_DEFAULT_THEME_PATH + "textfield", nullptr, [&](Widget* tthis, ClickEvent& e) {

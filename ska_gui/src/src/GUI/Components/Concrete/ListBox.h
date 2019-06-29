@@ -14,7 +14,7 @@ namespace ska {
 	class FocusEventListener;
 
 	template <class T>
-	class ListBox : public WidgetPanel<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener> {
+	class ListBox : public WidgetPanelInteractive<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener> {
 	public:
 		ListBox(Widget& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const std::string& buttonStyleName, const Rectangle* clip) : 
 			WidgetPanel<ValueChangedEventListener<T*>, HoverEventListener, ClickEventListener>(parent, relativePos),

@@ -3,7 +3,7 @@
 #include "../GUI.h"
 #include "../Components/Concrete/TileSurface.h"
 
-ska::GUIScrollButtonWindowIG::GUIScrollButtonWindowIG(Widget& parent, const Rectangle& box) :
+ska::GUIScrollButtonWindowIG::GUIScrollButtonWindowIG(WidgetPanel& parent, const Rectangle& box) :
 	TimeScrollableWindowIG<>(parent, box),
 	m_realPos(0, 0) {
 

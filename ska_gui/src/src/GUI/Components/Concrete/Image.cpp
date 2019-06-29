@@ -2,7 +2,7 @@
 #include "Image.h"
 #include "Core/Draw/Renderer.h"
 
-ska::Image::Image(Widget& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip) :
+ska::Image::Image(WidgetPanel& parent, const std::string& imagePath, Point<int> relativePos, bool alpha, Rectangle* clip) :
 	Widget(parent, relativePos),
 	m_img(imagePath, Texture::DEFAULT_T_RED, Texture::DEFAULT_T_GREEN, Texture::DEFAULT_T_BLUE, alpha ? 128 : -1) {
 	replaceWith(std::move(m_img), clip);

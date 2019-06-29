@@ -11,15 +11,16 @@ namespace ska {
 	class TimeScrollableWindowIG :
 		public DynamicWindowIG<TimeEventListener, HL...>,
 		public TimeObserver {
+		using ParentTrait = HandledWidgetTrait;
 	public:
 
-		TimeScrollableWindowIG(Widget& parent, const Rectangle& box) :
+		TimeScrollableWindowIG(WidgetPanel& parent, const Rectangle& box) :
 			DynamicWindowIG<TimeEventListener, HL...>(parent, box),
 			Observer<TimeEvent>(std::bind(&TimeScrollableWindowIG::timeEvent, this, std::placeholders::_1)), 
 			m_moving(false),
 			m_timeObservable(nullptr) {
 
-			HandledWidget<ClickEventListener, HoverEventListener, TimeEventListener, HL...>::template addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
+			ParentTrait::template addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
 				refreshInternal();
 			});
 		}
@@ -34,7 +35,7 @@ namespace ska {
 				m_timeObservable->addObserver(*this);
 			}
 
-			HandledWidget<ClickEventListener, HoverEventListener, TimeEventListener, HL...>::template addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
+			ParentTrait::template addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
 				refreshInternal();
 			});
 		}

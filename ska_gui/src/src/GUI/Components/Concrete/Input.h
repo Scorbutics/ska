@@ -9,9 +9,9 @@
 namespace ska {
     class Label;
 
-	class Input : public WidgetPanel<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener> {
+	class Input : public WidgetPanelInteractive<ValueChangedEventListener<std::wstring>, ClickEventListener, KeyEventListener, FocusEventListener> {
 	public:
-		Input(Widget& parent, const std::string& text, int fontSize, Point<int> relativePos);
+		Input(WidgetPanel& parent, const std::string& text, int fontSize, Point<int> relativePos);
 		virtual ~Input() = default;
 
 	private:
