@@ -78,6 +78,8 @@ namespace ska {
 		public HandledWidgetTrait<Hoverable<HL...>, HoverEventListener, HL...>,
 		public HoverStateController<Hoverable<HL...>> {
 		friend class HoverStateController<Hoverable<HL...>>;
+
+		using ParentTrait = HandledWidgetTrait<Hoverable<HL...>, HoverEventListener, HL...>;
 	public:
 		Hoverable(WidgetPanel& parent, Point<int> relativePos, const std::string& placeHolderStyleName, const Rectangle* clip) :
 			Widget(parent){
@@ -89,11 +91,11 @@ namespace ska {
 		}
 		
 		bool notify(IWidgetEvent& e) override { 
-			return HandledWidgetTrait::tryTriggerHandlers(e);
+			return ParentTrait::tryTriggerHandlers(e);
 		}
 
 		bool directNotify(IWidgetEvent& e) override {
-			return HandledWidgetTrait::tryTriggerHandlers(e);
+			return ParentTrait::tryTriggerHandlers(e);
 		}
 
 		~Hoverable() override = default;
