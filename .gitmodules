@@ -9,3 +9,6 @@
 	path = external/skabase
 	url = https://github.com/Scorbutics/skabase.git
 	branch = master
+[submodule "external/skalang"]
+	path = external/skalang
+	url = https://github.com/Scorbutics/skalang.git
