@@ -39,6 +39,7 @@ set(SKA_SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_script/src/src)
 
 #External
 set(SKALANG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skalang/src/src)
+set(SKALANG_STD_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skalang/std/src)
 set(SKA_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skabase/src/src)
 set(SKALOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skalog/src/src)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/gsl)
@@ -55,10 +56,12 @@ set(EXTERNAL_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external_lib/${CMAKE_CXX_COMPIL
 
 include_directories(${SKALOG_DIR})
 include_directories(${SKA_BASE_DIR})
+include_directories(${SKALANG_DIR})
 
 add_subdirectory(external/skalog/src)
 add_subdirectory(external/skabase/src)
 add_subdirectory(external/skalang/src)
+add_subdirectory(external/skalang/std)
 #add_subdirectory(external/SDL2_gif)
 set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
 add_subdirectory(external/chipmunk)

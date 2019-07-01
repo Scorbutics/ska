@@ -1,3 +1,4 @@
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandRandom.h"
 #include "../ScriptUtils.h"
 #include "Base/Values/Strings/StringUtils.h"

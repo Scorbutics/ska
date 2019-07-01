@@ -2,6 +2,7 @@ project(ska_script)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SKALANG_DIR})
+include_directories(${SKALANG_STD_LIB_DIR})
 include_directories(${SKA_WORLD_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_SCRIPT_DIR})

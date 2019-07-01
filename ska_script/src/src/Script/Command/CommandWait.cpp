@@ -1,3 +1,4 @@
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandWait.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "Core/Data/MemoryScript.h"

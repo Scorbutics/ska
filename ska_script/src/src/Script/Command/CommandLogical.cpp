@@ -1,4 +1,5 @@
 #include <cassert>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "CommandLogical.h"
 #include "Core/Data/MemoryScript.h"
 #include "Base/Values/Strings/StringUtils.h"
@@ -6,9 +7,10 @@
 
 ska::CommandLogical::CommandLogical(EntityManager& entityManager) :
 	AbstractFunctionCommand(entityManager) {
-	//TODO gestion des parenthèses
+	//TODO gestion des parenthï¿½ses
 	static const constexpr char* Operators[] = { "&&", "||", "!=", "==", "<=", "<", ">", ">=" };
-
+	
+	/*
 	m_operators.emplace(Operators[0], LogicalOperator { [](auto op1, auto op2) {
 		return op1 && op2;
 	}, 100 });
@@ -40,11 +42,14 @@ ska::CommandLogical::CommandLogical(EntityManager& entityManager) :
 	m_operators.emplace(Operators[7], LogicalOperator{ [](auto op1, auto op2) {
 		return op1 >= op2;
 	}, 1000 });
+
+	*/
 }
 
 int ska::CommandLogical::argumentsNumber() {
 	return -1;
 }
+/*
 namespace ska {
 	void BuildAST(ASTNode& node, const std::vector<std::string>& expressionParts, const std::unordered_map<std::string, LogicalOperator>& operators) {
 		auto maxPriorityLogicalOperator = std::string{};
@@ -100,12 +105,15 @@ namespace ska {
 		return StringUtils::fromString<int>(ScriptUtils::replaceVariablesByNumerics(memory, script, ast.value));
 	}
 }
-
+*/
 std::string ska::CommandLogical::execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) {
+	/*
 	const auto& expression = args[0];
 	const auto expressionParts = StringUtils::split(expression, ' ');
 	auto ast = CreateAST(expressionParts, m_operators);
 	auto result = InterpretAST(ast, script, memory, m_operators);
 
 	return ska::StringUtils::intToStr(result);
+	*/
+	return "";
 }

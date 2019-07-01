@@ -1,3 +1,4 @@
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "AbstractFunctionCommand.h"
 #include "Base/Values/Strings/StringUtils.h"
 #include "Core/Exceptions/ScriptSyntaxError.h"

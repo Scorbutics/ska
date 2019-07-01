@@ -7,16 +7,14 @@
 #include "Core/ECS/Basics/Script/ScriptTriggerType.h"
 #include "Core/ECS/ECSDefines.h"
 #include "Core/ECS/Component.h"
-#include "ScriptController.h"
+
+//skalang
+#include "Interpreter/Value/Script.h"
 
 namespace ska {
     class ScriptAutoSystem;
 	class ScriptComponent {
 		friend class ScriptAutoSystem;
-		friend class ScriptController;
-
-		//TODO �viter shared_ptr en modifiant le cache des scripts (voir ScriptAutoSystem)
-        using ScriptControllerPtr = std::shared_ptr<ScriptController>;
 
 	public:
 		ScriptComponent():
@@ -41,7 +39,7 @@ namespace ska {
 		std::vector<std::string> extraArgs;
 		ScriptTriggerType triggeringType;
 		ScriptAutoSystem* parent;
-		ScriptControllerPtr controller;
+		std::unique_ptr<Script> controller;
 		int active;
 		std::unordered_map<std::string, std::string> varMap;
 		std::string fullPath;

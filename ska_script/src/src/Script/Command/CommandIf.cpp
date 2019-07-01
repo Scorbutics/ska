@@ -26,7 +26,8 @@ std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstre
 	num1 = StringUtils::strToInt(varNumber);
 	num2 = StringUtils::strToInt(valeur);
 
-	//TODO le control flow devrait se faire depuis un controlleur intégré directement dans le script component (à allouer sur le tas pour éviter la lourdeur du composant)
+	//TODO le control flow devrait se faire depuis un controlleur intï¿½grï¿½ directement dans le script component (ï¿½ allouer sur le tas pour ï¿½viter la lourdeur du composant)
+	/*
 	if (!((op == "==" && num1 == num2) || (op == "!=" && num1 != num2) || (op == "<" && num1 < num2) || (op == ">" && num1 > num2) || (op == "<=" && num1 <= num2) || (op == ">=" && num1 >= num2))) {
 		while (ifEnd > 0 && !script.controller->eof()) {
 			line = script.controller->nextLine();
@@ -47,7 +48,7 @@ std::string ska::CommandIf::analyzeLine(ScriptComponent& script, std::stringstre
 			throw ScriptSyntaxError(("Un " + getCommandEndIf() + " est manquant").c_str());
 		}
 
-	}
+	}*/
 
 	return "";
 }

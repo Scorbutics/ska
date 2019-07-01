@@ -3,12 +3,30 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+
 #include "../Command/Command.h"
-#include "Core/Data/MemoryScript.h"
 #include "../ScriptComponent.h"
+
+#include "Core/Data/MemoryScript.h"
 #include "Core/ECS/System.h"
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/ECS/EntityLocator.h"
+
+//skalang
+#include "Service/ReservedKeywordsPool.h"
+#include "Service/Tokenizer.h"
+#include "Interpreter/Value/Script.h"
+#include "Service/StatementParser.h"
+#include "Service/SemanticTypeChecker.h"
+#include "Service/SymbolTableTypeUpdater.h"
+#include "Service/TypeBuilder/TypeBuildUnit.h"
+#include "Service/TypeBuilder/TypeBuilder.h"
+#include "Interpreter/Interpreter.h"
+#include "Service/TypeCrosser/TypeCrossExpression.h"
+
+//skalang std lib
+#include "std/module.h"
+#include "std/module/function/parameter.h"
 
 namespace ska {
 	class TileWorld;
@@ -39,6 +57,16 @@ namespace ska {
 		virtual ~ScriptAutoSystem() = default;
 
 	private:
+	  const ReservedKeywordsPool reservedKeywords;
+		ScriptCache scriptCache;
+		TypeCrosser typeCrosser;
+		StatementParser parser;
+		TypeBuilder typeBuilder;
+		SymbolTableTypeUpdater symbolsTypeUpdater;
+		SemanticTypeChecker typeChecker;
+		Interpreter interpreter;
+		lang::ModuleConfiguration moduleConfiguration;
+
 		EntityManager& m_entityManager;
 		MemoryScript& m_saveGame;
 		ScriptComponent* getHighestPriorityScript();

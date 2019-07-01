@@ -4,6 +4,7 @@
 #include "AbstractFunctionCommand.h"
 
 namespace ska {
+	/*
 	enum class OperatorType {
 		Numeric,
 		Logical,
@@ -26,7 +27,7 @@ namespace ska {
 		ComparisonPredicate check;
 		int priority;
 	};
-
+*/
 	class CommandLogical :
 		public AbstractFunctionCommand {
 		
@@ -38,6 +39,6 @@ namespace ska {
 		virtual std::string execute(ScriptComponent& script, MemoryScript& memory, const std::vector<std::string>& args) override;
 		virtual int argumentsNumber() override;
 	private:
-		std::unordered_map<std::string, LogicalOperator> m_operators;
+		//std::unordered_map<std::string, LogicalOperator> m_operators;
 	};
 }

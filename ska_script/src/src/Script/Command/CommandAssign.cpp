@@ -1,4 +1,5 @@
 #include <string>
+#include "Script/__internalConfig/LoggerConfig.h"
 #include "Core/Data/MemoryScript.h"
 #include "CommandAssign.h"
 #include "../ScriptUtils.h"
