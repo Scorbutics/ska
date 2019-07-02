@@ -1,0 +1,5 @@
+var Parameters = import "std:std.function.parameters";
+
+var run = function (parameters: Parameters::Fcty()) {
+
+};

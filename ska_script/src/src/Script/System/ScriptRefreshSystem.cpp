@@ -11,7 +11,7 @@
 #include "Core/Inputs/InputContextManager.h"
 #include "Core/Data/Events/ScriptEvent.h"
 
-ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg) :
+ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptRunnerSystem& scriptAutoSystem, ScriptPositionedGetter& spg) :
 	ScriptRefreshSystemBase(entityManager),
 	SubObserver<InputKeyEvent>(std::bind(&ScriptRefreshSystem::onKeyEvent, this, std::placeholders::_1), ged),
 	SubObserver<CollisionEvent>(std::bind(&ScriptRefreshSystem::onCollisionEvent, this, std::placeholders::_1), ged),

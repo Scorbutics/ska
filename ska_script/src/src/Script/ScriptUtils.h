@@ -7,7 +7,7 @@
 
 namespace ska {
 	class MemoryScript;
-	class ScriptAutoSystem;
+	class ScriptRunnerSystem;
 	
 	class ScriptUtils {
 	private:
@@ -19,7 +19,7 @@ namespace ska {
 		static std::string getValueFromVarOrSwitchNumber(const MemoryScript& saveGame, const ScriptComponent& script, std::string varNumber);
 		static std::string replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line);
 		static std::string replaceVariablesByNumerics(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& line, char varStartSymbol, char varEndSymbol, const std::string& oldLine = "");
-		static std::string getFirstExpressionFromLine(ScriptAutoSystem& system, const std::string& line, ScriptComponent& script, size_t* outputCommandSize);
+		static std::string getFirstExpressionFromLine(ScriptRunnerSystem& system, const std::string& line, ScriptComponent& script, size_t* outputCommandSize);
 		static std::string getCommandCall(const std::string& s);
 		static void setValueFromVarOrSwitchNumber(MemoryScript& saveGame, const std::string& scriptExtendedName, std::string varNumber, std::string value, std::unordered_map<std::string, std::string>& varMap);
 

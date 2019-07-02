@@ -6,7 +6,7 @@
 #include "Core/Utils/FormalCalculation/FormalCalculator.h"
 #include "../Script/ScriptSymbolsConstants.h"
 #include "Base/Values/Strings/StringUtils.h"
-#include "../Script/System/ScriptAutoSystem.h"
+#include "../Script/System/ScriptRunnerSystem.h"
 #include "Core/Exceptions/ScriptSyntaxError.h"
 #include "Core/Exceptions/NumberFormatException.h"
 
@@ -87,11 +87,11 @@ std::string ska::ScriptUtils::replaceVariablesByNumerics(const MemoryScript& sav
 }
 
 /*
-Retourne la première expression sur "line" après calculs et formattage
-Ex : si line = " [|bidule|] %random 100% [|chance|] %truc 200% " , la fonction va calculer "random 100" et renvoyer le résultat de ce calcul.
-Ex : si line = " [|bidule|] %random %truc 200%% [|chance|]" , la fonction va calculer "random %truc 200%", lui-même va rappeler cette fonction et renvoyer le résultat de ce calcul total.
+Retourne la premiï¿½re expression sur "line" aprï¿½s calculs et formattage
+Ex : si line = " [|bidule|] %random 100% [|chance|] %truc 200% " , la fonction va calculer "random 100" et renvoyer le rï¿½sultat de ce calcul.
+Ex : si line = " [|bidule|] %random %truc 200%% [|chance|]" , la fonction va calculer "random %truc 200%", lui-mï¿½me va rappeler cette fonction et renvoyer le rï¿½sultat de ce calcul total.
 */
-std::string ska::ScriptUtils::getFirstExpressionFromLine(ScriptAutoSystem& system, const std::string& line, ScriptComponent& script, std::size_t* outputCommandSize) {
+std::string ska::ScriptUtils::getFirstExpressionFromLine(ScriptRunnerSystem& system, const std::string& line, ScriptComponent& script, std::size_t* outputCommandSize) {
 	std::size_t indexFirstChar;
 	for (indexFirstChar = 0; line[indexFirstChar] != ScriptSymbolsConstants::METHOD && line[indexFirstChar] != '\n' && indexFirstChar < line.size(); indexFirstChar++);
 
@@ -116,7 +116,7 @@ std::string ska::ScriptUtils::getFirstExpressionFromLine(ScriptAutoSystem& syste
 	}
 
 	if (!commandCall.empty()) {
-		std::string result = system.interpret(script, system.getSavegame(), commandCall);
+		std::string result = "";//system.interpret(script, commandCall);
 		if (!result.empty()) {
 			valeur = result;
 		} else {
@@ -191,13 +191,13 @@ void ska::ScriptUtils::setValueFromVarOrSwitchNumber(MemoryScript& saveGame, con
 
 }
 
-/* Récupère la valeur d'une variable en utilisant potentiellement des sous-variables locales en paramètres */
+/* Rï¿½cupï¿½re la valeur d'une variable en utilisant potentiellement des sous-variables locales en paramï¿½tres */
 std::string ska::ScriptUtils::interpretVarName(const MemoryScript& saveGame, const ScriptComponent& script, const std::string& v) {
 	/*
-	$variable$   : variable globale à tout le jeu
-	#variable# : numéro d'argument de script en cours entre symboles dièse : #arg0# #arg1# #arg2# etc...
-	|variable| : variable locale (créée en script et utilisée en script, morte à la fin du script)
-	<variable param> : composant à sérialiser / désérializer, le paramètre est souvent l'id de l'entité propriétaire
+	$variable$   : variable globale ï¿½ tout le jeu
+	#variable# : numï¿½ro d'argument de script en cours entre symboles diï¿½se : #arg0# #arg1# #arg2# etc...
+	|variable| : variable locale (crï¿½ï¿½e en script et utilisï¿½e en script, morte ï¿½ la fin du script)
+	<variable param> : composant ï¿½ sï¿½rialiser / dï¿½sï¿½rializer, le paramï¿½tre est souvent l'id de l'entitï¿½ propriï¿½taire
 	*/
 
 	return getValueFromVarOrSwitchNumber(saveGame, script, v);

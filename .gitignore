@@ -32,7 +32,8 @@ Makefile
 .sln
 **/*.sln
 /lib/
-/bin/
+/bin/*
+!/bin/scripts/
 **/Log.txt
 **/LogError.txt
 Log.txt

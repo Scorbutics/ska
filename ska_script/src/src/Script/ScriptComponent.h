@@ -12,9 +12,9 @@
 #include "Interpreter/Value/Script.h"
 
 namespace ska {
-    class ScriptAutoSystem;
+    class ScriptRunnerSystem;
 	class ScriptComponent {
-		friend class ScriptAutoSystem;
+		friend class ScriptRunnerSystem;
 
 	public:
 		ScriptComponent():
@@ -38,7 +38,7 @@ namespace ska {
 		std::string extendedName;
 		std::vector<std::string> extraArgs;
 		ScriptTriggerType triggeringType;
-		ScriptAutoSystem* parent;
+		ScriptRunnerSystem* parent;
 		std::unique_ptr<Script> controller;
 		int active;
 		std::unordered_map<std::string, std::string> varMap;

@@ -28,5 +28,5 @@ add_executable(ska_script_test ${SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${SKA_DIR}")
 find_package(Threads REQUIRED)
-set(ALL_DEPS ska_world ska_script Threads::Threads)
+set(ALL_DEPS ska_world ska_script skalang_std Threads::Threads)
 target_link_libraries(ska_script_test ${ALL_DEPS})

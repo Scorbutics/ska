@@ -18,5 +18,6 @@ file(GLOB_RECURSE SOURCES
 
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
+add_definitions(-DSKALANG_DIR="${SKALANG_STD_LIB_DIR}/../..")
 add_library(ska_script ${SOURCES})
 target_link_libraries(ska_script ska_world skalang)

@@ -6,7 +6,7 @@
 #include "Core/ECS/Basics/Physic/PositionComponent.h"
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/ECS/System.h"
-#include "ScriptAutoSystem.h"
+#include "ScriptRunnerSystem.h"
 #include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "Base/Patterns/SubObserver.h"
 
@@ -38,7 +38,7 @@ namespace ska {
 		public SubObserver<ScriptEvent> {
 
 	public:
-		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg);
+		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptRunnerSystem& scriptAutoSystem, ScriptPositionedGetter& spg);
 		~ScriptRefreshSystem() override = default;
 		void update(unsigned int ellapsedTime) override;
 
@@ -56,7 +56,7 @@ namespace ska {
 
 		ScriptPositionSystem m_scriptPositionSystem;
 		ScriptPositionedGetter& m_scriptPositionedGetter;
-		ScriptAutoSystem& m_scriptAutoSystem;
+		ScriptRunnerSystem& m_scriptAutoSystem;
 		bool m_action;
 		ska::EntityManager& m_entityManager;
 	};
