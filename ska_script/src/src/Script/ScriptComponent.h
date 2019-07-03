@@ -17,33 +17,15 @@ namespace ska {
 		friend class ScriptRunnerSystem;
 
 	public:
-		ScriptComponent():
-			deleteEntityWhenFinished(false),
-			scriptPeriod(0),
-			triggeringType(ScriptTriggerType::NONE),
-			origin(0),
-			target(0) {
-			state = EnumScriptState::STOPPED;
-			lastTimeStarted = 0;
-			commandsPlayed = 0;
-			lastTimeDelayed = 0;
-			delay = 0;
-			active = 0;
-			parent = nullptr;
-		}
+		ScriptComponent() = default;
 
-		bool deleteEntityWhenFinished;
-		long scriptPeriod;
-		std::string context;
-		std::string extendedName;
+		bool deleteEntityWhenFinished = false;
+		long scriptPeriod = 0;
+		std::string name;
 		std::vector<std::string> extraArgs;
-		ScriptTriggerType triggeringType;
-		ScriptRunnerSystem* parent;
+		ScriptTriggerType triggeringType = ScriptTriggerType::NONE;
 		std::unique_ptr<Script> controller;
-		int active;
-		std::unordered_map<std::string, std::string> varMap;
-		std::string fullPath;
-		std::string key;
+		int active = 0;
 
 		EntityId getOrigin() const {
 			return origin;
@@ -55,14 +37,12 @@ namespace ska {
 
 	private:
 		/* Manage states in order to dispatch all different scripts */
-		ScriptState state;
-		unsigned int lastTimeStarted;
-		unsigned int commandsPlayed;
-		std::string lastResult;
-		unsigned int lastTimeDelayed;
-		unsigned int delay;
-		EntityId origin;
-		EntityId target;
+		ScriptState state = ScriptState::STOPPED;
+		unsigned int lastTimeStarted = 0;
+		unsigned int lastTimeDelayed = 0;
+		unsigned int delay = 0;
+		EntityId origin = 0;
+		EntityId target = 0;
 	};
 }
 
