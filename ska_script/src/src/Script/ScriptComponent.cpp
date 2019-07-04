@@ -1,4 +1,5 @@
 #include "Script/__internalConfig/LoggerConfig.h"
+#include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "ScriptComponent.h"
 #include "Core/Utils/TimeUtils.h"
 #include "Base/Values/Numbers/NumberUtils.h"
@@ -7,16 +8,27 @@
 
 SKA_DEFINE_COMPONENT(ska::ScriptComponent);
 
+ska::ScriptComponent::ScriptComponent(const ScriptSleepComponent& scriptData, EntityId triggerer, EntityId target, std::unique_ptr<Script> instance) :
+  m_controller(std::move(instance)) {
+	m_name = scriptData.name;
+	m_origin = triggerer;
+	m_target = target;
+	m_scriptPeriod = scriptData.period == 0 ? 1 : scriptData.period;
+	m_extraArgs = scriptData.args;
+	m_triggeringType = ScriptTriggerType::AUTO;
+	m_deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
+}
+
 float ska::ScriptComponent::getPriority(const unsigned int currentTimeMillis) const {
   /* If the script cannot be played, we have a negative priority */
-  if (!canBePlayed() || scriptPeriod == 0) {
+  if (!canBePlayed() || m_scriptPeriod == 0) {
     return -1;
   }
 
   /* In other ways this coeff variable make the priority calculation */
-  const auto priorityFromElapsedTime = (static_cast<float>(currentTimeMillis) - lastTimeStarted) / scriptPeriod;
+  const auto priorityFromElapsedTime = (static_cast<float>(currentTimeMillis) - m_lastTimeStarted) / m_scriptPeriod;
 
-  if (state != ScriptState::PAUSED) {
+  if (m_state != ScriptState::PAUSED) {
     return priorityFromElapsedTime;
   } 
 
@@ -26,30 +38,30 @@ float ska::ScriptComponent::getPriority(const unsigned int currentTimeMillis) co
 }
 
 bool ska::ScriptComponent::canBePlayed() const {
-  switch(state) {
+  switch(m_state) {
     case ScriptState::RUNNING:
     case ScriptState::DEAD:
       return false;
     
     case ScriptState::STOPPED:
-      return triggeringType == ScriptTriggerType::AUTO;
+      return m_triggeringType == ScriptTriggerType::AUTO;
 
     default:
-      return (TimeUtils::getTicks() - lastTimeDelayed) <= delay;
+      return (TimeUtils::getTicks() - m_lastTimeDelayed) <= m_delay;
   }
 }
 
 ska::ScriptState ska::ScriptComponent::updateFromCurrentTime() {
 	/* If the script has been paused (m_active > 1), update the script status to PAUSED.
 	If state is PAUSED and delay is past or if state is STOPPED, runs the script */
-	if (state == ScriptState::PAUSED 
-		&& TimeUtils::getTicks() - lastTimeDelayed  > delay) {
-		state = ScriptState::RUNNING;
-		delay = 0;
+	if (m_state == ScriptState::PAUSED 
+		&& TimeUtils::getTicks() - m_lastTimeDelayed  > m_delay) {
+		m_state = ScriptState::RUNNING;
+		m_delay = 0;
 	} else {
-		state = ScriptState::RUNNING;
+		m_state = ScriptState::RUNNING;
 	}
-	return state;
+	return m_state;
 }
 
 bool ska::ScriptComponent::play(Interpreter& interpreter) {
@@ -59,9 +71,9 @@ bool ska::ScriptComponent::play(Interpreter& interpreter) {
 		return false;
 	}
 
-	lastTimeStarted = TimeUtils::getTicks();
+	m_lastTimeStarted = TimeUtils::getTicks();
 	try {	
-		interpreter.script(*controller);
+		interpreter.script(*m_controller);
 	} catch(std::exception& e) {
     kill();
 		throw ScriptDiedException(e.what());
@@ -69,12 +81,12 @@ bool ska::ScriptComponent::play(Interpreter& interpreter) {
 
 
 	if ( /* script.controller->eof() */ true) {
-		state = ScriptState::STOPPED;
+		m_state = ScriptState::STOPPED;
 		/* If the script is terminated and triggering is not automatic, then we don't reload the script */
-		if (triggeringType == ScriptTriggerType::AUTO) {
+		if (m_triggeringType == ScriptTriggerType::AUTO) {
 			//TODO is this below "auto reload" ?
-			state = ScriptState::PAUSED;
-			lastTimeDelayed = TimeUtils::getTicks();
+			m_state = ScriptState::PAUSED;
+			m_lastTimeDelayed = TimeUtils::getTicks();
 		}
 	}
   return true;

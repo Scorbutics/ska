@@ -46,20 +46,8 @@ void ska::ScriptRunnerSystem::registerScript(const ScriptSleepComponent& scriptD
 
 	executor->parse(parser);
 	
-	ScriptComponent sc;
-	sc.name = scriptData.name;
-	sc.origin = triggerer;
-	sc.target = target.value_or(triggerer);
-	sc.controller = std::move(executor);
+	auto sc = ScriptComponent{ scriptData, triggerer, target.value_or(triggerer), std::move(executor) };
 
-	sc.scriptPeriod = scriptData.period == 0 ? 1 : scriptData.period;
-	
-	//TODO : fill m_parameters
-	sc.extraArgs = scriptData.args;
-	
-	//sc.context = scriptData.context;
-	sc.triggeringType = ScriptTriggerType::AUTO;
-	sc.deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
 
 	m_scriptsToAddQueue.push_back(std::move(sc));
 }
@@ -81,7 +69,7 @@ void ska::ScriptRunnerSystem::refresh(unsigned int) {
 	} catch (ScriptDiedException& sde) {
 		//Died. Nothing to do
 	} catch (ScriptException e) {
-		SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->name << "] " << e.what();
+		SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->name() << "] " << e.what();
 	}
 
 }

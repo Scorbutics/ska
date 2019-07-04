@@ -12,36 +12,36 @@
 #include "Interpreter/Value/Script.h"
 
 namespace ska {
-  class ScriptRunnerSystem;
 	class Interpreter;
+	class ScriptSleepComponent;
+
 	class ScriptComponent {
-		friend class ScriptRunnerSystem;
 
 	public:
 		ScriptComponent() = default;
+		ScriptComponent(const ScriptSleepComponent& scriptData, EntityId triggerer, EntityId target, std::unique_ptr<Script> instance);
 
-		bool canBePlayed() const;
 		float getPriority(const unsigned int currentTimeMillis) const;
-		EntityId getOrigin() const { return origin;	}
-		EntityId getTarget() const { return target; }
-		void kill() { state = ScriptState::DEAD; }
+		const std::string& name() const { return m_name; }
 		bool play(ska::Interpreter& interpreter);
 
 	private:
 		ScriptState updateFromCurrentTime();
+		bool canBePlayed() const;
+		void kill() { m_state = ScriptState::DEAD; }
 
-		bool deleteEntityWhenFinished = false;
-		long scriptPeriod = std::numeric_limits<long>::max();
-		std::string name;
-		std::vector<std::string> extraArgs;
-		ScriptTriggerType triggeringType = ScriptTriggerType::NONE;
-		std::unique_ptr<Script> controller;
-		ScriptState state = ScriptState::STOPPED;
-		unsigned int lastTimeStarted = 0;
-		unsigned int lastTimeDelayed = 0;
-		unsigned int delay = 0;
-		EntityId origin = 0;
-		EntityId target = 0;
+		bool m_deleteEntityWhenFinished = false;
+		long m_scriptPeriod = std::numeric_limits<long>::max();
+		std::string m_name;
+		std::vector<std::string> m_extraArgs;
+		ScriptTriggerType m_triggeringType = ScriptTriggerType::NONE;
+		std::unique_ptr<Script> m_controller;
+		ScriptState m_state = ScriptState::STOPPED;
+		unsigned int m_lastTimeStarted = 0;
+		unsigned int m_lastTimeDelayed = 0;
+		unsigned int m_delay = 0;
+		EntityId m_origin = 0;
+		EntityId m_target = 0;
 	};
 }
 
