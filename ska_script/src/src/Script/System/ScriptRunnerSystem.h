@@ -42,15 +42,7 @@ namespace ska {
 		virtual ~ScriptRunnerSystem() = default;
 
 	private:
-		bool forcePlay(ScriptComponent& script);
-		void stop(ScriptComponent& script);
-		void kill(ScriptComponent& script) const;
-
 		virtual void refresh(unsigned int ellapsedTime) override;
-		float getPriority(ScriptComponent& script, unsigned int currentTimeMillis);
-		bool canBePlayed(ScriptComponent& script);
-		bool transferActiveToDelay(ScriptComponent& script);
-		ScriptState manageCurrentState(ScriptComponent& script);
 
 	  const ReservedKeywordsPool reservedKeywords;
 		ScriptCache scriptCache;
@@ -65,7 +57,7 @@ namespace ska {
 		EntityManager& m_entityManager;
 		ScriptComponent* getHighestPriorityScript();
 
-		std::vector<ScriptComponent> m_componentToAddQueue;
+		std::vector<ScriptComponent> m_scriptsToAddQueue;
 		std::vector<ska::NodeValue> m_parameters;
 		std::vector<std::unique_ptr<lang::Module>> m_modules;
 	};

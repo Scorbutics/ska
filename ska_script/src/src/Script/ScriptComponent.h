@@ -12,31 +12,30 @@
 #include "Interpreter/Value/Script.h"
 
 namespace ska {
-    class ScriptRunnerSystem;
+  class ScriptRunnerSystem;
+	class Interpreter;
 	class ScriptComponent {
 		friend class ScriptRunnerSystem;
 
 	public:
 		ScriptComponent() = default;
 
+		bool canBePlayed() const;
+		float getPriority(const unsigned int currentTimeMillis) const;
+		EntityId getOrigin() const { return origin;	}
+		EntityId getTarget() const { return target; }
+		void kill() { state = ScriptState::DEAD; }
+		bool play(ska::Interpreter& interpreter);
+
+	private:
+		ScriptState updateFromCurrentTime();
+
 		bool deleteEntityWhenFinished = false;
-		long scriptPeriod = 0;
+		long scriptPeriod = std::numeric_limits<long>::max();
 		std::string name;
 		std::vector<std::string> extraArgs;
 		ScriptTriggerType triggeringType = ScriptTriggerType::NONE;
 		std::unique_ptr<Script> controller;
-		int active = 0;
-
-		EntityId getOrigin() const {
-			return origin;
-		}
-
-		EntityId getTarget() const {
-			return target;
-		}
-
-	private:
-		/* Manage states in order to dispatch all different scripts */
 		ScriptState state = ScriptState::STOPPED;
 		unsigned int lastTimeStarted = 0;
 		unsigned int lastTimeDelayed = 0;
