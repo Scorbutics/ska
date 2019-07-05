@@ -32,24 +32,26 @@ ska::ScriptRunnerSystem::ScriptRunnerSystem(EntityManager& entityManager, GameEv
 	ska::ScriptNameStandardLibraryPath() = "" SKALANG_DIR "/std/src/std/scripts/";
 
 	//TODO : fill m_parameters
+	//TODO : one parameters vector by script
 	m_modules.push_back(std::make_unique<lang::ParameterModule>(moduleConfiguration, m_parameters));
 }
 
 void ska::ScriptRunnerSystem::registerScript(const ScriptSleepComponent& scriptData, const EntityId triggerer, const std::optional<EntityId> target) {	
-	auto executor = std::make_unique<ska::Script>( moduleConfiguration.scriptCache, "main", 
+	//TODO "parse the script and add to queue" in a thread
+	auto executor = std::make_unique<ska::Script>( moduleConfiguration.scriptCache, "executor_" + scriptData.name, 
 		ska::Tokenizer{ moduleConfiguration.reservedKeywords,
-		"var Script = import \"scripts/" + scriptData.name + "\";"
-		"var ParametersGenerator = import \"bind:std.native.parameter\";"
-		"Script.run(ParametersGenerator.Gen(\"" + scriptData.name + "\"));"
+			"var Script = import \"scripts/" + scriptData.name + "\";"
+			"var ParametersGenerator = import \"bind:std.native.parameter\";"
+			"Script.run(ParametersGenerator.Gen(\"" + scriptData.name + "\"));"
 		}.tokenize());
 
-
-	executor->parse(parser);
-	
-	auto sc = ScriptComponent{ scriptData, triggerer, target.value_or(triggerer), std::move(executor) };
-
-
-	m_scriptsToAddQueue.push_back(std::move(sc));
+	try {
+		executor->parse(parser);
+		auto sc = ScriptComponent{ scriptData, triggerer, target.value_or(triggerer), std::move(executor) };
+		m_scriptsToAddQueue.push_back(std::move(sc));
+	} catch(std::exception& e) {
+		SLOG(LogLevel::Error) << "Error while compiling [" << scriptData.name << "] " << e.what();
+	}
 }
 
 void ska::ScriptRunnerSystem::refresh(unsigned int) {
@@ -69,7 +71,7 @@ void ska::ScriptRunnerSystem::refresh(unsigned int) {
 	} catch (ScriptDiedException& sde) {
 		//Died. Nothing to do
 	} catch (ScriptException e) {
-		SLOG(LogLevel::Error) << "ERREUR SCRIPT [" << nextScript->name() << "] " << e.what();
+		SLOG(LogLevel::Error) << "Error while interpreting [" << nextScript->name() << "] " << e.what();
 	}
 
 }
