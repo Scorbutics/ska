@@ -102,7 +102,6 @@ namespace ska {
         const std::unordered_set<EntityId>& getEntities() const { return m_processed; }
 
 		EntityId createEntity() const { return m_entityManager.createEntity(); }
-		EntityId createEntityNoThrow() const { return m_entityManager.createEntityNoThrow(); }
 		void removeEntity(const EntityId& entity) const { m_entityManager.removeEntity(entity); }
 		void refreshEntity(const EntityId& entity) const { m_entityManager.refreshEntity(entity); }
     };

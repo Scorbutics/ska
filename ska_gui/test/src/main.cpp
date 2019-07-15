@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 	context.setOption("order-by", "name");
 	context.setOption("success", "true");
 	
-	initLibraries();
+	//initLibraries();
 
 	resultCode = context.run();
 
