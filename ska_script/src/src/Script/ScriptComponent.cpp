@@ -15,7 +15,7 @@ ska::ScriptComponent::ScriptComponent(const ScriptSleepComponent& scriptData, En
 	m_target = target;
 	m_scriptPeriod = scriptData.period == 0 ? 1 : scriptData.period;
 	m_extraArgs = scriptData.args;
-	m_triggeringType = ScriptTriggerType::AUTO;
+	m_triggeringType = scriptData.triggeringType;
 	m_deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
 }
 
@@ -75,7 +75,7 @@ bool ska::ScriptComponent::play(Interpreter& interpreter) {
 	try {	
 		interpreter.script(*m_controller);
 	} catch(std::exception& e) {
-    kill();
+        kill();
 		throw ScriptDiedException(e.what());
 	}
 
@@ -91,3 +91,4 @@ bool ska::ScriptComponent::play(Interpreter& interpreter) {
 	}
   return true;
 }
+
