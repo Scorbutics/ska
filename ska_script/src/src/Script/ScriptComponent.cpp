@@ -17,6 +17,8 @@ ska::ScriptComponent::ScriptComponent(const ScriptSleepComponent& scriptData, En
 	m_extraArgs = scriptData.args;
 	m_triggeringType = scriptData.triggeringType;
 	m_deleteEntityWhenFinished = scriptData.deleteEntityWhenFinished;
+    m_lastTimeDelayed = TimeUtils::getTicks();
+    updateState();
 }
 
 float ska::ScriptComponent::getPriority(const unsigned int currentTimeMillis) const {
@@ -51,44 +53,45 @@ bool ska::ScriptComponent::canBePlayed() const {
   }
 }
 
-ska::ScriptState ska::ScriptComponent::updateFromCurrentTime() {
-	/* If the script has been paused (m_active > 1), update the script status to PAUSED.
-	If state is PAUSED and delay is past or if state is STOPPED, runs the script */
-	if (m_state == ScriptState::PAUSED 
-		&& TimeUtils::getTicks() - m_lastTimeDelayed  > m_delay) {
-		m_state = ScriptState::RUNNING;
-		m_delay = 0;
-	} else {
-		m_state = ScriptState::RUNNING;
-	}
+ska::ScriptState ska::ScriptComponent::updateState() {
+    switch(m_state) {
+    case ScriptState::PAUSED:
+        if(TimeUtils::getTicks() - m_lastTimeDelayed  > m_delay) {
+            m_state = ScriptState::RUNNING;
+            m_delay = 0;
+        }
+        break;
+
+    case ScriptState::STOPPED:
+        if (m_triggeringType == ScriptTriggerType::AUTO) {
+            //auto reload
+            m_state = ScriptState::PAUSED;
+            m_lastTimeDelayed = TimeUtils::getTicks();
+        } 
+        break;
+
+    default:
+        m_state = ScriptState::RUNNING;
+        break;
+    }
+
 	return m_state;
 }
 
 bool ska::ScriptComponent::play(Interpreter& interpreter) {
+    /* Update status once */
+    if (updateState() == ScriptState::PAUSED) {
+        return false;
+    }
 
-	/* Update status once */
-	if (updateFromCurrentTime() == ScriptState::PAUSED) {
-		return false;
-	}
-
-	m_lastTimeStarted = TimeUtils::getTicks();
-	try {	
-		interpreter.script(*m_controller);
-	} catch(std::exception& e) {
+    m_lastTimeStarted = TimeUtils::getTicks();
+    try {	
+        interpreter.script(*m_controller);
+        m_state = ScriptState::STOPPED;
+    } catch(std::exception& e) {
         kill();
-		throw ScriptDiedException(e.what());
-	}
-
-
-	if ( /* script.controller->eof() */ true) {
-		m_state = ScriptState::STOPPED;
-		/* If the script is terminated and triggering is not automatic, then we don't reload the script */
-		if (m_triggeringType == ScriptTriggerType::AUTO) {
-			//TODO is this below "auto reload" ?
-			m_state = ScriptState::PAUSED;
-			m_lastTimeDelayed = TimeUtils::getTicks();
-		}
-	}
+        throw ScriptDiedException(e.what());
+    }
   return true;
 }
 

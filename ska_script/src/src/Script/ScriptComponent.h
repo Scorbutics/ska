@@ -26,7 +26,7 @@ namespace ska {
 		bool play(ska::Interpreter& interpreter);
 
 	private:
-		ScriptState updateFromCurrentTime();
+		ScriptState updateState();
 		bool canBePlayed() const;
 		void kill() { m_state = ScriptState::DEAD; }
 
