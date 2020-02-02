@@ -25,3 +25,5 @@ https://github.com/Scorbutics/SkaPong
 # Tutorials
 
 https://github.com/Scorbutics/ska/wiki/Basic-game-example
+
+License noonegivesafuck @2020
