@@ -95,6 +95,7 @@ namespace ska {
 		void overrideInEnv(ScriptVariableRef index, NodeValue value);
 		void captureInEnv(ScriptVariableRef index, NodeValue value);
 		const NodeValue* resolveFromEnv(ScriptVariableRef index) const;
+		NodeValue* resolveFromEnv(ScriptVariableRef index);
 		void stealEnv(NodeValue& value);
 		void stealEnv(NodeValue&& value);
 

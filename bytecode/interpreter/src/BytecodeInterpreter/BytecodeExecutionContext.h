@@ -44,6 +44,7 @@ namespace ska {
 			void pop(NodeValueArrayRaw& dest, long count) { m_out.pop(dest, count); }
 
 			void pushInEnv(const ScriptVariableRef& dest, NodeValue value) { m_out.pushInEnv(dest, std::move(value)); }
+			void aliasEnvInCell(const ScriptVariableRef& dest, NodeValue& objectCell) { m_out.aliasEnvInCell(dest, objectCell); }
 
 			void jumpAbsolute(NodeValue& value);
 			void jumpRelative(long value) { m_current->jumpRelative(value); }

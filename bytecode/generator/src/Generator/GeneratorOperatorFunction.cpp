@@ -68,7 +68,7 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	auto returnValueOperand = valueGroup.operand();
 	valueGroup.push(std::move(cleanUpInstructions));
 	// TODO rename?
-	valueGroup.push(context.close());
+	valueGroup.push(context.close(isVoidReturningFunction ? Operand{} : returnValueOperand));
 	valueGroup.push(Instruction{ Command::RET, isVoidReturningFunction ? Operand{} : returnValueOperand });
 
 	auto fullFunction = AddRelativeJumpInstruction(context, std::move(valueGroup));

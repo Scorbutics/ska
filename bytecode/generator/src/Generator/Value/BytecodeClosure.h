@@ -17,7 +17,7 @@ namespace ska {
 			Closure(const ASTNode& scopeNode, Closure* parent = nullptr);
 
 			InstructionOutput checkAndCapture(GenerationContext& context, const ScopedSymbolTable* variable, Operand variableOperand);
-			InstructionOutput generate(const GenerationContext& context) const;
+			InstructionOutput generate(const GenerationContext& context, const Operand& returnedObject = Operand{}) const;
 
 		private:
 			const ASTNode* m_scopeNode = nullptr;

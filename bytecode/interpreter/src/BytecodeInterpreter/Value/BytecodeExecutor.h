@@ -33,6 +33,18 @@ namespace ska {
 				callstack.back().captureInEnv(dest, std::move(value));
 			}
 
+			// Makes "objectCell" a reference to the captured env variable "dest" of the current call,
+			// so that the object field and the captured variable share the same storage.
+			// The cell also holds the env, which keeps the referenced env entry alive.
+			void aliasEnvInCell(const ScriptVariableRef& dest, NodeValue& objectCell) {
+				auto& frame = callstack.back();
+				auto* envValue = frame.resolveFromEnv(dest);
+				if (envValue == nullptr) {
+					throw std::runtime_error("unable to alias an object field to an uncaptured env variable");
+				}
+				objectCell = NodeValue { frame, envValue };
+			}
+
 			template <class ... Items>
 			void push(Items&& ... items) {
 				(pushIfNotEmpty(std::forward<decltype(items)>(items)), ...);

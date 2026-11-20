@@ -90,6 +90,10 @@ const ska::NodeValue* ska::NodeValue::resolveFromEnv(ScriptVariableRef variable)
 	return captureEnvironment == nullptr || captureEnvironment->find(variable) == captureEnvironment->end() ? nullptr : &captureEnvironment->at(variable);
 }
 
+ska::NodeValue* ska::NodeValue::resolveFromEnv(ScriptVariableRef variable) {
+	return captureEnvironment == nullptr || captureEnvironment->find(variable) == captureEnvironment->end() ? nullptr : &captureEnvironment->at(variable);
+}
+
 std::string ska::NodeValue::printEnv() const {
 	auto ss = std::stringstream {};
 	if (captureEnvironment) {

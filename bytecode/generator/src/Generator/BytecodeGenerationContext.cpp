@@ -32,11 +32,11 @@ ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old, cons
 	m_scopeClosure(m_nodeClosure.get()) {
 }
 
-ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::close() {
+ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::close(const Operand& returnedObject) {
 	if (m_scopeClosure == nullptr) {
 		return {};
 	}
-	return m_scopeClosure->generate(*this);
+	return m_scopeClosure->generate(*this, returnedObject);
 }
 
 void ska::bytecode::GenerationContext::generate(InstructionOutput instructions) {

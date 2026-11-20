@@ -51,7 +51,7 @@ namespace ska {
 			auto scriptName() const { return m_script.name(); }
 			const std::string scriptName(std::size_t index) const;
 
-			InstructionOutput close();
+			InstructionOutput close(const Operand& returnedObject = Operand{});
 
 		private:
 			ScriptGenerationHelper& helper();

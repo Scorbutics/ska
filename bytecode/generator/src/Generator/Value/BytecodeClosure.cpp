@@ -27,7 +27,7 @@ ska::bytecode::InstructionOutput ska::bytecode::Closure::checkAndCapture(Generat
 	return {};
 }
 
-ska::bytecode::InstructionOutput ska::bytecode::Closure::generate(const GenerationContext& context) const {
+ska::bytecode::InstructionOutput ska::bytecode::Closure::generate(const GenerationContext& context, const Operand& returnedObject) const {
 	if (m_environment.empty()) {
 		return {};
 	}
@@ -41,7 +41,21 @@ ska::bytecode::InstructionOutput ska::bytecode::Closure::generate(const Generati
 	for (const auto& node: m_environment) {
 	//if (m_environment.find(context.pointer().symbolTable()) != m_environment.end()) {
 		auto operand = context.getSymbol(*node->symbol());
-		output.push(Instruction { Command::ADD_ENV, operand.value() });
+
+		// If the captured variable is also a field of the object returned by this factory function,
+		// the field and the captured variable must share the same storage : add the object and the field index.
+		// The returned object symbol table is the child of the factory function table named after it.
+		const auto& ownerTable = node->parent();
+		const auto* scopeTable = m_scopeNode->symbolTable();
+		const auto isReturnedObjectField = returnedObject != Operand{} && scopeTable != nullptr &&
+			&ownerTable.parent() == scopeTable && !ownerTable.name().empty() && ownerTable.name() == scopeTable->name();
+		const auto fieldIndex = isReturnedObjectField ? ownerTable.id(*node->symbol()) : std::optional<std::size_t>{};
+
+		if (fieldIndex.has_value()) {
+			output.push(Instruction { Command::ADD_ENV, operand.value(), returnedObject, Operand { static_cast<long>(fieldIndex.value()), OperandType::PURE } });
+		} else {
+			output.push(Instruction { Command::ADD_ENV, operand.value() });
+		}
 	}
 	return output;
 }

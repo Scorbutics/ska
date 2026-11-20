@@ -23,6 +23,8 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(ARR_ACCESS)(ExecutionContext& conte
 	// TODO make env "copy" (it's not a copy as it's a shared_ptr) automatic when NodeValue is a recursive container (NodeValueArray, NodeValueMap, NodeValue*)
 	// directly inside NodeValue class
 	result = NodeValue { context.getCell(left), result };
-	// TODO it was "return &result;"
-  return result;
+	// Return a reference to the cell (not a copy) so that a field can be used as an lvalue :
+	// "obj.field = value" generates ARR_ACCESS then MOV on the resulting register, which must write through into the object.
+	// The env is also attached to the reference itself, because env users (e.g. jumpAbsolute's snapshot) read it without dereferencing.
+	return NodeValue { result, &result };
 }
