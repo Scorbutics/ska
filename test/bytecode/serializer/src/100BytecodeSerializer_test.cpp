@@ -8,6 +8,7 @@
 #include "BytecodeInterpreter/BytecodeScript.h"
 #include "BytecodeInterpreter/BytecodeInterpreter.h"
 #include "BytecodeSerializerTest.h"
+#include "BytecodeScriptCompare.h"
 #include "std/module/io/log.h"
 #include "Base/Serialization/SerializerValidator.h"
 
@@ -134,13 +135,21 @@ TEST_CASE("[BytecodeSerializer] binded external script use") {
 	CHECK(original.empty());
 
 	CHECK(destinationCache.size() == 2);
-	/*
-	TODO : test faux car le script id est invers� : main dans le destinationCache est � l'index 0 alors que dans l'initial il est � 1
 
-	const auto equalityForMain = destinationCache.at(0) == data.storage->at(1);
-	const auto equality = equalityForMain && destinationCache.at(1).size() == 0;
-	CHECK(equality);
-	*/
+	// Scripts are compared by name : their ids differ between both caches (the bound script is declared first in the original one)
+	const auto* originalMain = data.storage->atOrNull("main");
+	const auto* deserializedMain = destinationCache.atOrNull("main");
+	REQUIRE(originalMain != nullptr);
+	REQUIRE(deserializedMain != nullptr);
+	auto difference = std::string{};
+	CHECK_MESSAGE(SameScriptAcrossCaches(*data.storage, *originalMain, destinationCache, *deserializedMain, &difference), difference);
+
+	// The bound (native) script is only declared : no instruction is serialized for it
+	for (const auto& deserializedScript : destinationCache) {
+		if (deserializedScript != nullptr && deserializedScript->name() != "main") {
+			CHECK(deserializedScript->size() == 0);
+		}
+	}
 }
 
 TEST_CASE("[BytecodeSerializer] external script use other stack triggers rebuild") {
