@@ -42,6 +42,24 @@ double ska::NodeValue::convertNumeric() const {
 	return numeric;
 }
 
+ska::NodeValue ska::NodeValue::resolved() && {
+	if (!isReference(m_variant)) {
+		return std::move(*this);
+	}
+	return static_cast<const NodeValue&>(*this).resolved();
+}
+
+ska::NodeValue ska::NodeValue::resolved() const & {
+	if (!isReference(m_variant)) {
+		return *this;
+	}
+	auto copy = NodeValue { dereference(m_variant) };
+	if (!copy.hasEnv()) {
+		copy.captureEnvironment = captureEnvironment;
+	}
+	return copy;
+}
+
 void ska::NodeValue::release() {
 	m_dirty = true;
 }

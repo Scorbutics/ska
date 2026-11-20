@@ -99,6 +99,11 @@ namespace ska {
 		void stealEnv(NodeValue& value);
 		void stealEnv(NodeValue&& value);
 		bool hasEnv() const { return captureEnvironment != nullptr; }
+		// Refered value if this is a reference (keeping an env), otherwise this value.
+		// Shallow : strings, arrays and objects are shared handles, only their reference count changes.
+		NodeValue resolved() const &;
+		// Same, but moves this value when it is not a reference (no copy at all in the common case)
+		NodeValue resolved() &&;
 
 		NodeValue(const NodeValue&) = default;
 		~NodeValue() = default;

@@ -270,3 +270,27 @@ TEST_CASE("[BytecodeInterpreter] can modify stored values in direct access and c
 	auto firstCellValue = res.nodeval<ska::StringShared>();
 	CHECK(*firstCellValue == "titi");
 }
+
+TEST_CASE("[BytecodeInterpreter] object field named like a factory local is a distinct field, and reading a field copies its value") {
+	constexpr auto progStr = R"script(
+		Fcty = function(): var do
+			test = 3
+			return {
+				test = test
+				tata = "44"
+			}
+		end
+
+		titi = Fcty()
+		before = titi.test
+		titi.test = 5
+		out = "" + before + "/" + titi.test + "/" + titi.tata
+	)script";
+
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto res = data.interpreter->interpret(gen.id(), *data.storage)->variable(0);
+	auto firstCellValue = res.nodeval<ska::StringShared>();
+	// "before" keeps the value read before the field modification, and "tata" is still accessible at its own index
+	CHECK(*firstCellValue == "3/5/44");
+}
