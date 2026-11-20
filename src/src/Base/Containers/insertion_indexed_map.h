@@ -123,6 +123,18 @@ namespace ska {
 			return true;
 		}
 
+		// Changes the key of an existing element, keeping its index. Returns false if "oldKey" does not exist or "newKey" already exists.
+		bool rekey(const Key& oldKey, Key newKey) {
+			const auto it = m_keys.find(oldKey);
+			if (it == m_keys.end() || m_keys.find(newKey) != m_keys.end()) {
+				return false;
+			}
+			const auto index = it->second;
+			m_keys.erase(it);
+			m_keys.emplace(std::move(newKey), index);
+			return true;
+		}
+
 		void set(std::size_t index, Value element) {
 			if (index >= m_values.size()) {
 				throw std::runtime_error("unable to add a new element by using the index setter : use \"emplace\" first.");
