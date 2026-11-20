@@ -18,7 +18,11 @@ bool ska::Type::isAssignableFrom(const Type& type) const {
 	}
 	const auto* currentRefClass = m_type == ExpressionType::FUNCTION ? this : getParentClass();
 	const auto* typeRefClass = type == ExpressionType::FUNCTION ? &type : type.getParentClass();
-	return typeRefClass == nullptr && currentRefClass == nullptr || *typeRefClass == *currentRefClass;
+	if (typeRefClass == nullptr || currentRefClass == nullptr) {
+		// Only assignable if both have no parent class (dereferencing the null one crashed when only one had a parent class)
+		return typeRefClass == currentRefClass;
+	}
+	return *typeRefClass == *currentRefClass;
 }
 
 ska::Type::Type(const ScopedSymbolTable* symbolTable, ExpressionType t) :
