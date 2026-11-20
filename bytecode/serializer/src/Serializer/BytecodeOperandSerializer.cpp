@@ -1,3 +1,4 @@
+#include <cstring>
 #include "BytecodeOperandSerializer.h"
 #include "BytecodeCommonSerializer.h"
 
@@ -53,7 +54,13 @@ void ska::bytecode::OperandSerializer::write(const ScriptCache& cache, Serialize
 				} else {
 					script = static_cast<Chunk>(3);
 				}
-				variable = static_cast<Chunk>(operand);
+				if constexpr (std::is_same_v<double, TypeT>) {
+					// Keep the exact bit pattern of the floating point value (a numeric conversion would truncate it)
+					static_assert(sizeof(Chunk) == sizeof(double));
+					std::memcpy(&variable, &operand, sizeof(double));
+				} else {
+					variable = static_cast<Chunk>(operand);
+				}
 				
 				output.write(type);
 				output.write(script);
@@ -83,9 +90,11 @@ ska::bytecode::Operand ska::bytecode::OperandSerializer::read(const ScriptCache&
 		case 1:
 			content = static_cast<long>(variable);
 			break;
-		case 2:
-			content = static_cast<double>(variable);
-			break;
+		case 2: {
+			auto floatingValue = 0.0;
+			std::memcpy(&floatingValue, &variable, sizeof(double));
+			content = floatingValue;
+		} break;
 		case 3:
 			content = static_cast<bool>(variable);
 			break;
