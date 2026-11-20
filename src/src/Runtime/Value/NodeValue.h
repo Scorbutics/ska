@@ -98,6 +98,7 @@ namespace ska {
 		NodeValue* resolveFromEnv(ScriptVariableRef index);
 		void stealEnv(NodeValue& value);
 		void stealEnv(NodeValue&& value);
+		bool hasEnv() const { return captureEnvironment != nullptr; }
 
 		NodeValue(const NodeValue&) = default;
 		~NodeValue() = default;

@@ -16,7 +16,7 @@ ska::bytecode::InstructionOutput ska::bytecode::Closure::checkAndCapture(Generat
 
 	const auto& scope = *m_scopeNode;
 	const auto closureVariableMatch = &variable->parent() != scope.symbolTable() && variable != scope.symbolTable();
-	if (closureVariableMatch && m_parent->m_environment.find(variable) == m_environment.end()) {
+	if (closureVariableMatch && m_parent->m_environment.find(variable) == m_parent->m_environment.end()) {
 		// TODO find the real closure place.
 		// We need to create a closure at the targetted symbol table, not the current one!!
 		// That's why it's currently not working...

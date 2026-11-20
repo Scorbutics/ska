@@ -68,6 +68,11 @@ ska::NodeValue ska::bytecode::ExecutionContext::jumpReturn(NodeValue& returnedVa
 	m_current = context.m_current;
 	m_current->jumpAbsolute(whereToGo.variable);
 
+	// A returned value that already owns an env (ex : an existing instance returned by a method) must keep it.
+	// Only values without env (ex : an object freshly created by a factory) inherit the env of the returning call.
+	if (returnedValue.hasEnv()) {
+		return returnedValue;
+	}
 	return NodeValue {returnedCallStackValue, returnedValue};
 }
 
