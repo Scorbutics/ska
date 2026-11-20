@@ -78,7 +78,9 @@ ska::ScopedSymbolTable& ska::bytecode::SymbolTableDeserializerHelper::buildSymbo
 		symbolInfo.childIndex = 0;
 	}
 
-	symbolInfo.exported = scopeIndex == 0;
+	// Script exports are its root level declarations (as registered by the SCRIPT_OBJECT generator) :
+	// other root level symbols (ex : the symbol of a linked or imported script) are not exported.
+	symbolInfo.exported = scopeIndex == 0 && exported;
 
 	LOG_INFO << "%12cRegistering symbol info " << symbolInfo << " for symbol " << *symbolTable << (symbolInfo.exported ? "(exported symbol)" : " (this symbol is not exported)");
 
