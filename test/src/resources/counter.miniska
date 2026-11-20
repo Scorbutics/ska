@@ -1,0 +1,4 @@
+count = 0
+increment = function() do
+	count = count + 1
+end

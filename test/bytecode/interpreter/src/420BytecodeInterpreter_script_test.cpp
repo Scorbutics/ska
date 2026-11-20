@@ -97,3 +97,18 @@ TEST_CASE("[BytecodeInterpreter] Complex use of factory instances inside itself"
 	auto cellValue = *res.nodeval<ska::StringShared>();
 	CHECK(cellValue == "tititoto");
 }
+
+TEST_CASE("[BytecodeInterpreter] Outside script variable modified inside its own function is still exported") {
+	// "count" is modified in "increment" body : it must still be an exported field of the script.
+	// Note : exports are a snapshot of the script variables taken when the script is first run,
+	// so calling "Counter.increment()" here would not be visible through "Counter.count" (known limitation).
+	constexpr auto progStr =
+		"Counter = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
+		"t = Counter.count\n";
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
+	auto res = interpreted->variable(gen.id());
+	auto cellValue = res.nodeval<long>();
+	CHECK(cellValue == 0);
+}

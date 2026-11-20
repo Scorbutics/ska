@@ -15,6 +15,13 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		auto childCellGroup = generateNext(context.next(*child, 1));
 		if(child->isSymbolicLeaf() && childCellGroup.operand().type() == OperandType::VAR) {
 			auto* oldSymbolInfo = context.getSymbolInfo(*child);
+			if (oldSymbolInfo != nullptr && oldSymbolInfo->exported) {
+				// Already registered as an exported field (ex : a script variable modified inside a block or a function) :
+				// overwriting it would remove it from the exports.
+				group.push(std::move(childCellGroup));
+				childIndex++;
+				continue;
+			}
 			auto symbolInfo = SymbolInfo { context.scope() + 1, child->name(), context.scriptIndex() };
 			if (oldSymbolInfo != nullptr) {
 				symbolInfo.binding = oldSymbolInfo->binding;
