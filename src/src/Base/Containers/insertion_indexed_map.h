@@ -117,9 +117,9 @@ namespace ska {
 				return false;
 			} else if (force || !exist(emplacedItem.first->second)) {
 				pushCache(emplacedItem.first->second, std::forward<ValueLocal>(element));
-			} else {
-				m_keys.erase(key);
 			}
+			// Key already present and not forced : keep the existing element untouched.
+			// (Do not erase the key here : it would orphan the existing element, and "key" may have been moved-from anyway)
 			return true;
 		}
 
