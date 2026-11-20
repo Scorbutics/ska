@@ -9,41 +9,41 @@ ska::bytecode::TreeMapSymbolTableBuilder::TreeMapSymbolTableBuilder(SymbolTable&
 	m_rootRead(&table.root()) {
 }
 
-ska::ScopedSymbolTable& ska::bytecode::TreeMapSymbolTableBuilder::walkScope(const std::vector<std::string>& parts, std::string leafName) {
+ska::ScopedSymbolTable& ska::bytecode::TreeMapSymbolTableBuilder::walkScope(const std::vector<std::string>& parts, std::string leafName, bool exported) {
 	auto* currentSymbolTable = m_rootRead;
 
 	ska::ScopedSymbolTable* parent = currentSymbolTable;
 	// First part is script name native index. Last part is leaf child index.
 	// avoid using both
+	// Each part is the position of a child symbol table among all children of its parent (see TreeSymbolTableMapBuilder::store).
 	for (std::size_t i = 1u; i < parts.size() - 1; i++) {
-		auto scopeNumericValue = std::atoi(parts[i].c_str()) ;
+		const auto position = static_cast<std::size_t>(std::atoi(parts[i].c_str()));
 
-		if (scopeNumericValue < parent->size()) {
-			// Attached to a symbol (named scope)
-			// TODO check if this is still working
-			/*if (scopeNumericValue >= parent->scopes()) {
-				// Unexisting symbol named scope : create one
-				auto* symbol = (*parent)[scopeNumericValue];
-				parent = &parent->createNested(symbol);
-			} else {*/
-				parent = (*parent)[scopeNumericValue];
-			//}
-		} else {
-			// Create an unnamed scope
-			scopeNumericValue -= (parent->size());
-			while (scopeNumericValue >= 0) {
-				parent->createNested();
-			}
-			parent = (*parent)[scopeNumericValue];
+		// Scopes without any symbol (blocks) are not serialized : rebuild them as unnamed scopes
+		while (parent->size() <= position) {
+			parent->createNested();
 		}
+		parent = (*parent)[position];
 	}
 
 	auto* symbolLeaf = (*parent)(leafName);
-	// TODO check if this is still working
-	return (symbolLeaf != nullptr) ? *symbolLeaf : parent->createNested(std::move(leafName));
+	if (symbolLeaf != nullptr) {
+		return *symbolLeaf;
+	}
+
+	// Keep positions aligned with the serialized tree, by recreating skipped unnamed scopes before the leaf
+	const auto leafPosition = static_cast<std::size_t>(std::atoi(parts.back().c_str()));
+	if (leafPosition < parent->size() && (*parent)[leafPosition] != nullptr && (*parent)[leafPosition]->symbol() == nullptr) {
+		// A placeholder was created at this position by a previous (forward) reference to a deeper key : name it
+		return parent->nameNested(leafPosition, std::move(leafName), exported);
+	}
+	while (parent->size() < leafPosition) {
+		parent->createNested();
+	}
+	return parent->createNested(std::move(leafName), nullptr, exported);
 }
 
-ska::ScopedSymbolTable* ska::bytecode::TreeMapSymbolTableBuilder::value(const std::string& key, std::optional<std::string> name) {
+ska::ScopedSymbolTable* ska::bytecode::TreeMapSymbolTableBuilder::value(const std::string& key, std::optional<std::string> name, bool exported) {
 	auto symbolSeekIt = m_symbolsReversedRead.find(key);
 
 	if (symbolSeekIt == m_symbolsReversedRead.end()) {
@@ -54,7 +54,7 @@ ska::ScopedSymbolTable* ska::bytecode::TreeMapSymbolTableBuilder::value(const st
 			return nullptr;
 		}
 
-		return &walkScope(std::move(parts), name.value());
+		return &walkScope(std::move(parts), name.value(), exported);
 	}
 
 	return symbolSeekIt->second;

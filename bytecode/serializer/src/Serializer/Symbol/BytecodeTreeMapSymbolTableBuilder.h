@@ -27,10 +27,11 @@ namespace ska {
 			~TreeMapSymbolTableBuilder() = default;
 
 
-			ScopedSymbolTable* value(const std::string& key, std::optional<std::string> name);
+			ScopedSymbolTable* value(const std::string& key, std::optional<std::string> name, bool exported = false);
+			ScopedSymbolTable& root() { return *m_rootRead; }
 
 		private:
-			ScopedSymbolTable& walkScope(const std::vector<std::string>& parts, std::string leafName);
+			ScopedSymbolTable& walkScope(const std::vector<std::string>& parts, std::string leafName, bool exported);
 
 			ReverseIndexSymbolMapRead m_symbolsReversedRead;
 			ScopedSymbolTable* m_rootRead;

@@ -25,7 +25,7 @@ void ska::SerializerTypeTraits<ska::ScopedSymbolTable*>::Read(SerializerSafeZone
 	} else {
 		LOG_INFO << "%13c\twith master : ";
 		auto& master = ReadSymbolRefBody(zone.acquireMemory<BytesSymbolRefRequired>("Master symbol ref"), helper);
-		master.implement(*symbol);
+		helper.deferImplement(master, *symbol);
 	}
 }
 
@@ -34,7 +34,8 @@ ska::ScopedSymbolTable& ska::SerializerTypeTraits<ska::ScopedSymbolTable*>::Read
 	auto symbolName = zone.read<std::string>();
 	LOG_INFO << "%13c" << symbolName << " with key : " << absoluteScriptKey;
 	auto operand = helper.readOperand(zone.acquireMemory<sizeof(uint8_t) + sizeof(bytecode::Chunk) * 2>("symbol operand"));
-	return helper.buildSymbol(zone, absoluteScriptKey, symbolName, operand);
+	const auto exported = zone.read<uint8_t>() != 0;
+	return helper.buildSymbol(zone, absoluteScriptKey, symbolName, operand, exported);
 }
 
 void ska::SerializerTypeTraits<ska::ScopedSymbolTable*>::Write(SerializerSafeZone<BytesRequired>& zone, const ScopedSymbolTable& symbolTable, bytecode::SymbolTableSerializerHelper& helper) {
@@ -61,5 +62,7 @@ void ska::SerializerTypeTraits<ska::ScopedSymbolTable*>::WriteSymbolRefBody(Seri
 	zone.write(std::move(absoluteScriptKey));
 	zone.write(symbolTable.name());
 	helper.writeOperand(zone.acquireMemory<sizeof(uint8_t) + sizeof(bytecode::Chunk) * 2>("symbol operand"), operand);
+	// "exported" symbols are the ones indexed as fields of their parent (declarations, not parameters) : see ScopedSymbolTable::id
+	zone.write(static_cast<uint8_t>(symbolTable.symbol() != nullptr && symbolTable.symbol()->exported()));
 }
 

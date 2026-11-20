@@ -30,7 +30,7 @@ ska::bytecode::TreeMapSymbolTableBuilder& ska::bytecode::SymbolTableDeserializer
 	return *m_symbolTableBuilder[scriptName];
 }
 
-ska::ScopedSymbolTable& ska::bytecode::SymbolTableDeserializerHelper::buildSymbol(detail::SerializerSafeZone& zone, const std::string& absoluteScriptKey, std::string symbolName, const Operand& operand) {
+ska::ScopedSymbolTable& ska::bytecode::SymbolTableDeserializerHelper::buildSymbol(detail::SerializerSafeZone& zone, const std::string& absoluteScriptKey, std::string symbolName, const Operand& operand, bool exported) {
 	ScopedSymbolTable* symbolTable = nullptr;
 	std::size_t scriptId;
 
@@ -43,7 +43,7 @@ ska::ScopedSymbolTable& ska::bytecode::SymbolTableDeserializerHelper::buildSymbo
 			scriptNativeStrId = std::atoi(absoluteScriptKey.c_str());
 		}
 		const auto& scriptName = zone.ref(scriptNativeStrId);
-		symbolTable = getSymbolTableBuilder(scriptName).value(absoluteScriptKey, symbolName);
+		symbolTable = getSymbolTableBuilder(scriptName).value(absoluteScriptKey, symbolName, exported);
 		scriptId = m_cache->id(scriptName);
 	} else {
 		LOG_ERROR << "Empty symbol script key provided";
@@ -91,3 +91,21 @@ ska::bytecode::Operand ska::bytecode::SymbolTableDeserializerHelper::readOperand
 	return OperandSerializer::read(*m_cache, std::move(safeZone));
 }
 
+
+void ska::bytecode::SymbolTableDeserializerHelper::deferImplement(ScopedSymbolTable& classTable, ScopedSymbolTable& instanceTable) {
+	m_deferredImplements.emplace_back(&classTable, &instanceTable);
+}
+
+void ska::bytecode::SymbolTableDeserializerHelper::applyDeferredImplements() {
+	for (auto& [classTable, instanceTable] : m_deferredImplements) {
+		classTable->implement(*instanceTable);
+	}
+	m_deferredImplements.clear();
+
+	// Symbols may have been created out of order (forward references) : restore the exported fields order by position
+	for (auto& [scriptName, builder] : m_symbolTableBuilder) {
+		if (builder != nullptr) {
+			builder->root().rebuildExportsOrder();
+		}
+	}
+}

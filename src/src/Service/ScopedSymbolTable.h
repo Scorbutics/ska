@@ -35,6 +35,10 @@ namespace ska {
 
 		ScopedSymbolTable& createNested(std::optional<Symbol> symbol);
 		ScopedSymbolTable& createNested(std::string name = "", const ScriptAST* script = nullptr, bool exported = false);
+		// Gives a name (symbol) to an existing unnamed nested symbol table, keeping its position and its children
+		ScopedSymbolTable& nameNested(std::size_t position, std::string name, bool exported = false);
+		// Recursively re-registers exported children in their position order (used after an out of order rebuild)
+		void rebuildExportsOrder();
 
 		const ScopedSymbolTable* owner() const {
 			return &m_parent == this || directOwner() != nullptr ? directOwner() : m_parent.owner();

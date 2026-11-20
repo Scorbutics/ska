@@ -30,17 +30,30 @@ ska::bytecode::TreeSymbolTableMapBuilder& ska::bytecode::SymbolTableSerializerHe
 std::size_t ska::bytecode::SymbolTableSerializerHelper::scriptOfSymbol(const ScopedSymbolTable& symbolTable) {
 	assert(symbolTable.symbol() != nullptr);
 
-	std::size_t scriptId;
-	auto* info = m_cache->getSymbolInfo(*symbolTable.symbol());
-	if (info == nullptr) {
-		auto scriptIt = m_cache->find(symbolTable.name());
-		if (scriptIt == m_cache->end()) {
-			throw std::runtime_error("unknown ast Symbol \"" + symbolTable.name() + "\" detected during script bytecode serialization");
+	// A symbol table without bytecode info (ex : the returned object table of a factory, named after it)
+	// belongs to the same script as its closest ancestor having one. The root symbol table is named after its script.
+	const auto* current = &symbolTable;
+	while (true) {
+		const auto* info = current->symbol() != nullptr ? m_cache->getSymbolInfo(*current->symbol()) : nullptr;
+		if (info != nullptr) {
+			LOG_DEBUG << "Symbol \"" << symbolTable.name() << "\" is in script \"" << info->script << "\"";
+			return info->script;
 		}
-		scriptId = (*scriptIt)->id();
-	} else {
-		scriptId = info->script;
+
+		const auto& parent = current->parent();
+		if (&parent == current) {
+			// Root symbol table
+			break;
+		}
+		current = &parent;
 	}
+
+	std::size_t scriptId;
+	auto scriptIt = m_cache->find(current->name());
+	if (scriptIt == m_cache->end()) {
+		throw std::runtime_error("unknown ast Symbol \"" + symbolTable.name() + "\" detected during script bytecode serialization");
+	}
+	scriptId = (*scriptIt)->id();
 	LOG_DEBUG << "Symbol \"" << symbolTable.name() << "\" is in script \"" << scriptId << "\"";
 
 	return scriptId;

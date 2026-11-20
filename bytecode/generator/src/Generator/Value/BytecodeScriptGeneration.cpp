@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Config/LoggerConfigLang.h"
 #include "BytecodeScriptGeneration.h"
 #include "Generator/BytecodeGenerator.h"
@@ -62,7 +63,11 @@ void ska::bytecode::ScriptGeneration::generate(ScriptCache& cache, InstructionOu
 
 
 bool ska::bytecode::operator==(const ScriptGeneration& left, const ScriptGeneration& right) {
-	return left.m_exports == right.m_exports && left.m_generated == right.m_generated;
+	// Exports are compared by value, in order : their keys are symbol addresses, which differ between
+	// a generated script and the same script rebuilt from its serialized form.
+	const auto exportsEqual = left.m_exports.size() == right.m_exports.size() &&
+		std::equal(left.m_exports.begin(), left.m_exports.end(), right.m_exports.begin());
+	return exportsEqual && left.m_generated == right.m_generated;
 }
 
 bool ska::bytecode::operator!=(const ScriptGeneration& left, const ScriptGeneration& right) {

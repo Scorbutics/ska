@@ -19,6 +19,7 @@ namespace ska {
 		const SymbolTable& symbols() const { return m_symbols; }
 		SymbolTable& symbols() { return m_symbols; }
 
+		bool hasRootNode() const { return m_ast != nullptr; }
 		ASTNode& rootNode() { assert(m_ast != nullptr); return *m_ast; }
 		const ASTNode& rootNode() const { assert(m_ast != nullptr); return *m_ast; }
 

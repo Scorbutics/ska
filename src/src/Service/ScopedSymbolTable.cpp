@@ -74,6 +74,35 @@ ska::ScopedSymbolTable& ska::ScopedSymbolTable::createNested(std::optional<Symbo
 	return result;
 }
 
+ska::ScopedSymbolTable& ska::ScopedSymbolTable::nameNested(std::size_t position, std::string name, bool exported) {
+	if (position >= m_children.size() || !m_children.exist(position)) {
+		throw std::runtime_error("no nested symbol table at position " + std::to_string(position) + " to name \"" + name + "\"");
+	}
+	auto& child = m_children.at(position);
+	if (child.m_symbol.has_value()) {
+		throw std::runtime_error("nested symbol table at position " + std::to_string(position) + " is already named \"" + child.name() + "\"");
+	}
+	// Unnamed nested symbol tables are keyed by their creation position (see createNested)
+	if (!m_children.rekey(std::to_string(position), name)) {
+		throw std::runtime_error("unable to name nested symbol table at position " + std::to_string(position) + " as \"" + name + "\"");
+	}
+	child.m_symbol = make(position, std::move(name), *this, exported);
+	return child;
+}
+
+void ska::ScopedSymbolTable::rebuildExportsOrder() {
+	m_exported.clear();
+	for (auto& child : m_children) {
+		if (child == nullptr) {
+			continue;
+		}
+		if (child->m_symbol.has_value() && child->m_symbol.value().exported()) {
+			m_exported.emplace(child->name(), child.get());
+		}
+		child->rebuildExportsOrder();
+	}
+}
+
 bool ska::ScopedSymbolTable::changeTypeIfRequired(const Type& value) {
 	ensureNotLocked();
 	if (!m_symbol.has_value()) {

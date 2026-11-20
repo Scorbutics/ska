@@ -13,34 +13,41 @@ void ska::bytecode::TreeSymbolTableMapBuilder::store(const SymbolTable& table, c
 }
 
 void ska::bytecode::TreeSymbolTableMapBuilder::store(const ScopedSymbolTable& table, const std::string& depth) {
-	auto index = std::size_t {0};
+	// Each child symbol table (named = symbol, or unnamed = block scope) is keyed by its position among all children of its parent.
+	// This is the layout expected by TreeMapSymbolTableBuilder when rebuilding the tree (see walkScope).
+	auto position = std::size_t {0};
 	for (const auto& childTable : table) {
 		if (childTable == nullptr) {
-			throw std::runtime_error("invalid child symbol table (index " + std::to_string(index) + ") of parent \"" + table.name() + "\"");
+			throw std::runtime_error("invalid child symbol table (index " + std::to_string(position) + ") of parent \"" + table.name() + "\"");
 		}
-
-		// TODO check if this still works
 
 		if (childTable->symbol() != nullptr) {
 			// Store child table direct data (symbol)
-			store(*childTable, depth, index++);
+			store(*childTable, depth, position);
 		}
 
-		// Store child table children data
-		const auto* ownerTable = childTable->directOwner();
-		if (ownerTable == nullptr) {
-			// Either a non owned symbol table => we enqueue it after all children indexes
-			auto nextDepth = buildKey(depth, index);
-			store(*childTable, nextDepth);
-		} else {
-			// Or a symbol related symbol table, therefore here we query the depth of the already existing symbol
-			auto seekOwnerIt = m_symbols.find(ownerTable);
-			if (seekOwnerIt == m_symbols.end()) {
-				throw std::runtime_error("invalid symbol table : a child scoped symbol table has an owner in its script that is not currently known.");
-			}
-			store(*childTable, seekOwnerIt->second);
-		}
+		// Store child table children data, nested under the child table key
+		store(*childTable, buildKey(depth, position));
+		position++;
 	}
+}
+
+bool ska::bytecode::SymbolKeyCompare::operator()(const std::string& lhs, const std::string& rhs) const {
+	auto lhsIt = std::size_t{ 0 };
+	auto rhsIt = std::size_t{ 0 };
+	while (lhsIt < lhs.size() && rhsIt < rhs.size()) {
+		const auto lhsEnd = std::min(lhs.find('.', lhsIt), lhs.size());
+		const auto rhsEnd = std::min(rhs.find('.', rhsIt), rhs.size());
+		const auto lhsPart = std::stoull(lhs.substr(lhsIt, lhsEnd - lhsIt));
+		const auto rhsPart = std::stoull(rhs.substr(rhsIt, rhsEnd - rhsIt));
+		if (lhsPart != rhsPart) {
+			return lhsPart < rhsPart;
+		}
+		lhsIt = lhsEnd + 1;
+		rhsIt = rhsEnd + 1;
+	}
+	// A prefix (parent) comes before its children
+	return lhsIt < rhsIt ? false : (lhsIt >= lhs.size() && rhsIt < rhs.size());
 }
 
 void ska::bytecode::TreeSymbolTableMapBuilder::store(const ScopedSymbolTable& symbol, const std::string& depth, std::size_t childIndex) {

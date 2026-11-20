@@ -25,6 +25,7 @@ void ska::bytecode::SymbolTableDeserializer::readFull(SerializerOutput output) {
 		readPart(output);
 	}
 
+	m_helper.applyDeferredImplements();
 	output.validateOrThrow();
 }
 

@@ -13,10 +13,16 @@ namespace ska {
 	namespace bytecode {
 		class SymbolTableSerializer;
 
+		// Orders symbol keys ("0", "0.1", "2", "10"...) numerically part by part, so that a parent scope
+		// and all its previous siblings are always written (and so rebuilt) before its children.
+		struct SymbolKeyCompare {
+			bool operator()(const std::string& lhs, const std::string& rhs) const;
+		};
+
 		class TreeSymbolTableMapBuilder {
 			using IndexSymbolMap = std::unordered_map<const ScopedSymbolTable*, std::string>;
 		public:
-			using ReverseIndexSymbolMapWrite = std::map<std::string, const ScopedSymbolTable*>;
+			using ReverseIndexSymbolMapWrite = std::map<std::string, const ScopedSymbolTable*, SymbolKeyCompare>;
 
 			TreeSymbolTableMapBuilder(const SymbolTable& table);
 

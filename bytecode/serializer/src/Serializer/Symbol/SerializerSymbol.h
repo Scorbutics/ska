@@ -17,7 +17,8 @@ namespace ska {
 
 	template <>
 	struct SerializerTypeTraits<ScopedSymbolTable*> {
-		static constexpr std::size_t BytesSymbolRefRequired = 4 * sizeof(bytecode::Chunk) + sizeof(uint8_t);
+		// key + name + operand (1 byte + 2 chunks) + exported flag (1 byte)
+		static constexpr std::size_t BytesSymbolRefRequired = 4 * sizeof(bytecode::Chunk) + 2 * sizeof(uint8_t);
 		static constexpr std::size_t BytesRequired = 2 * BytesValue<BytesSymbolRefRequired>::value + sizeof(uint8_t);
 
 		static constexpr const char* Name = "Symbol";

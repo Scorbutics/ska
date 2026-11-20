@@ -10,7 +10,8 @@
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::ScriptAST)
 
 std::ostream& ska::operator<<(std::ostream& stream, const ScriptAST& ast) {
-	if (ast.m_handle == nullptr) {
+	if (ast.m_handle == nullptr || !ast.m_handle->hasRootNode()) {
+		// ex : a script rebuilt from its serialized bytecode has no AST
 		stream << "(empty AST)";
 	} else {
 		auto& rootNode = ast.m_handle->rootNode();
