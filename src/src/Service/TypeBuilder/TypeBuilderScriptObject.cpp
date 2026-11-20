@@ -14,7 +14,8 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::SCRIPT_OBJECT>::build
 
 	for (auto& fieldNode : node) {
 		LOG_INFO << fieldNode->name();
-		if (fieldNode->symbol() != nullptr) {
+		// Only declarations are fields of the script object (keep in sync with the bytecode generator)
+		if (fieldNode->op() == Operator::DECLARATION && fieldNode->symbol() != nullptr) {
 			scriptType.add(fieldNode->symbol()->type());
 		}
 	}

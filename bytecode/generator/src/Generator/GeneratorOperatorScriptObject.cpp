@@ -17,6 +17,15 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	for(auto& field: node) {
 		auto valueGroup = generateNext(context.next(*field, 1));
 
+		// Only declarations are fields of the script object.
+		// Other top-level statements (expressions, function calls, affectations, if, for, filter...) are only executed,
+		// even if they carry a symbol (ex : a function call node refers to the called function symbol).
+		// Keep this in sync with TypeBuilderOperator<SCRIPT_OBJECT>.
+		if (field->op() != Operator::DECLARATION || field->symbol() == nullptr) {
+			objectResult.push(std::move(valueGroup));
+			continue;
+		}
+
 		auto* oldSymbolInfo = context.getSymbolInfo(*field);
 		auto symbolInfo = SymbolInfo { context.scope() + 1, field->name(), context.scriptIndex() };
 		if (oldSymbolInfo != nullptr) {
