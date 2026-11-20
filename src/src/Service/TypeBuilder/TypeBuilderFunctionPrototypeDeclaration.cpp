@@ -49,8 +49,11 @@ namespace ska {
 				ss << "bad function type encountered \"" << symbolType.value() << "\": could not deduce its return value because it's empty";
 				throw std::runtime_error(ss.str());
 			}
+			// Link to the returned object type's own (class) symbol table, NOT to the symbol table of the node (which is
+			// the factory *function* table) : otherwise the current function would implement the factory function table,
+			// and inside its body, looking up the factory name would resolve to the factory object child table ("var X").
 			const auto& finalType = symbolType.value().back();
-			return { finalType, &node };
+			return TypeHierarchy{ finalType };
 		}
 
 		if (type == ExpressionType::FUNCTION) {

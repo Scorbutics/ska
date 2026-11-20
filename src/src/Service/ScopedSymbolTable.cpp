@@ -96,7 +96,13 @@ static Table* HierarchicalLookup(Table* classTable, const Table& current, Childr
 
 	// Then look into direct children symbols
 	auto valueIt = children.find(key);
-	if (valueIt == children.end()) {
+
+	// A child symbol table named after its owner is the returned object table of a factory function
+	// (see SymbolTable::matchReturn). When resolving that name in a scope, it must refer to the factory function itself
+	// (found higher in the hierarchy), not to the object being built : skip it.
+	const auto isFactoryObjectTable = valueIt != children.end() && !key.empty() && key == current.name();
+
+	if (valueIt == children.end() || isFactoryObjectTable) {
 		// If still not found, look into parent table
 		return &parent == &current ? nullptr : parent[key];
 	}
