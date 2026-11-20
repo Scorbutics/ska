@@ -12,7 +12,7 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	auto collectionLengthVariable = context.queryNextRegister();
 	initGroup.push(Instruction{ Command::ARR_LENGTH, collectionLengthVariable, collectionContainer });
 
-	auto iteratorRegister = node.GetCollectionIteratorIndex().logicalEmpty() ? context.queryNextRegister() : context.querySymbolOrOperand(node.GetCollectionIteratorIndex(), false);
+	auto iteratorRegister = node.GetCollectionIteratorIndex().logicalEmpty() ? context.queryNextRegister() : context.querySymbolOrOperand(node.GetCollectionIteratorIndex());
 	auto iteratorRegisterOperand = iteratorRegister.operand();
 	initGroup.push(std::move(iteratorRegister));
 	initGroup.push(Instruction{ Command::MOV, iteratorRegisterOperand, OperandUse{ 0l, OperandType::PURE} });
@@ -20,7 +20,7 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	auto conditionGroup = InstructionOutput{ Instruction{ Command::SUB_I, context.queryNextRegister(), iteratorRegisterOperand, collectionLengthVariable} };
 	conditionGroup.push(Instruction { Command::TEST_L, conditionGroup.operand(), conditionGroup.operand() });
 
-	auto collectionElement = context.querySymbolOrOperand(node.GetCollectionIterator(), false);
+	auto collectionElement = context.querySymbolOrOperand(node.GetCollectionIterator());
 	auto collectionElementOperand = collectionElement.operand();
 	auto bodyGroup = std::move(collectionElement);
 	bodyGroup.push(Instruction{ Command::ARR_ACCESS, collectionElementOperand, collectionContainer, iteratorRegisterOperand});

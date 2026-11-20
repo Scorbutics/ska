@@ -6,7 +6,7 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::InterpreterCommand<ska::
 #define LOG_INFO SLOG_STATIC(ska::LogLevel::Info, ska::bytecode::InterpreterCommand<ska::bytecode::Command::ARR_LENGTH>)
 
 SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(ARR_LENGTH)(ExecutionContext& context, const Operand& left, const Operand& right) {
-    assert(left.type() == OperandType::VAR || left.type() == OperandType::REG);
+    assert(IsMemoryOperand(left.type()));
     assert(right.type() == OperandType::EMPTY);
 
     LOG_DEBUG << "Computing array length of object \"" << context.getCell(left).convertString() << "\" of type " << left.type();

@@ -22,7 +22,8 @@ namespace ska {
 			ARR_ACCESS,
 			ARR_MEMBER_ACCESS,
 			ARR_LENGTH,
-			CLEAR_RANGE,
+			// ARR_SET object index value : stores a value in an array cell / object field (writes into the field cell if it is a captured variable)
+			ARR_SET,
 			JUMP_REL,
 			JUMP_ABS,
 			JUMP_MEMBER,
@@ -56,8 +57,10 @@ namespace ska {
 			TEST_GE,
 			TEST_L,
 			TEST_LE,
-			ADD_ENV,
-			USE_ENV,
+			// CELL local : makes a local variable slot a cell (the variable is captured by a closure)
+			CELL,
+			// PUSH_CELL local|upval : pushes the cell of a captured variable (to build a closure, or an object field aliasing it)
+			PUSH_CELL,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -80,7 +83,7 @@ namespace ska {
 			"ARR_ACCESS",
 			"ARR_MEMBER_ACCESS",
 			"ARR_LENGTH",
-			"CLEAR_RANGE",
+			"ARR_SET",
 			"JUMP_REL",
 			"JUMP_ABS",
 			"JUMP_MEMBER",
@@ -114,8 +117,8 @@ namespace ska {
 			"TEST_GE",
 			"TEST_L",
 			"TEST_LE",
-			"ADD_ENV",
-			"USE_ENV",
+			"CELL",
+			"PUSH_CELL",
 			"NOP",
 			""
 		};

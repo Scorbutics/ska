@@ -1,0 +1,123 @@
+#include <doctest.h>
+#include <tuple>
+#include "Config/LoggerConfigLang.h"
+#include "BytecodeInterpreterTest.h"
+
+// Each function call has its own call frame (locals and registers), and closures capture cells.
+
+namespace {
+	ska::NodeValue Run(const std::string& progStr) {
+		auto [script, data] = Interpret(progStr);
+		auto& gen = data.generator->generate(*data.storage, std::move(script));
+		return data.interpreter->interpret(gen.id(), *data.storage)->variable(gen.id());
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] call frame : recursion keeps the locals of each call") {
+	const auto result = Run(R"script(
+		fact = function(n: int): int do
+			before = n
+			r = 1
+			if n > 1
+				r = fact(n - 1)
+			end
+			return before * r
+		end
+		out = fact(10)
+	)script");
+	CHECK(result.nodeval<long>() == 3628800);
+}
+
+TEST_CASE("[BytecodeInterpreter] call frame : registers of an expression survive a recursive call") {
+	const auto result = Run(R"script(
+		fib = function(n: int): int do
+			r = n
+			if n > 1
+				r = fib(n - 1) + fib(n - 2)
+			end
+			return r
+		end
+		out = fib(15)
+	)script");
+	CHECK(result.nodeval<long>() == 610);
+}
+
+TEST_CASE("[BytecodeInterpreter] call frame : recursion inside a filter") {
+	// The filter iterator, its index and the array length live in the registers of each call :
+	// the nested calls (made while iterating) must not alter them
+	const auto result = Run(R"script(
+		total = function(values: int[], depth: int): int do
+			sum = 0
+			values | (value, index) do
+				sum = sum + value * index
+				if depth > 0
+					sum = sum + total(values, depth - 1)
+				end
+			end
+			return sum
+		end
+		out = total([1, 2, 3], 2)
+	)script");
+	// total(0) = 1*0 + 2*1 + 3*2 = 8, total(d) = 8 + 3 * total(d - 1)
+	CHECK(result.nodeval<long>() == 104);
+}
+
+TEST_CASE("[BytecodeInterpreter] closure : each factory call has its own captured variables") {
+	const auto result = Run(R"script(
+		Counter = function(start: int): var do
+			value = start
+			return {
+				Increment = function() do
+					value = value + 1
+				end
+				Get = function(): int do
+					return value
+				end
+			}
+		end
+		a = Counter(10)
+		b = Counter(100)
+		a.Increment()
+		a.Increment()
+		b.Increment()
+		out = "" + a.Get() + "/" + b.Get()
+	)script");
+	CHECK(*result.nodeval<ska::StringShared>() == "12/101");
+}
+
+TEST_CASE("[BytecodeInterpreter] closure : variable captured through an intermediate function") {
+	const auto result = Run(R"script(
+		Outer = function(x: int): var do
+			Inner = function(y: int): int do
+				Deepest = function(z: int): int do
+					return x + y + z
+				end
+				return Deepest(100)
+			end
+			return {
+				Compute = function(): int do
+					return Inner(10)
+				end
+			}
+		end
+		out = Outer(1).Compute()
+	)script");
+	CHECK(result.nodeval<long>() == 111);
+}
+
+TEST_CASE("[BytecodeInterpreter] closure : local recursive function capturing itself") {
+	const auto result = Run(R"script(
+		Outer = function(n: int): int do
+			Loop = function(i: int): int do
+				r = 0
+				if i > 0
+					r = i + Loop(i - 1)
+				end
+				return r
+			end
+			return Loop(n)
+		end
+		out = Outer(4)
+	)script");
+	CHECK(result.nodeval<long>() == 10);
+}

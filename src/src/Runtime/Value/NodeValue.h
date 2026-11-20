@@ -20,8 +20,7 @@ namespace ska {
 		TokenVariant,
 		NodeValueFunctionMember,
 		NodeValueArray,
-		NodeValueMap,
-		NodeValue*
+		NodeValueMap
 	>;
 
 	namespace detail {
@@ -33,99 +32,82 @@ namespace ska {
 			: public std::disjunction<std::is_same<T, ALL_T>...> {};
 	}
 
+	// A runtime value.
+	// It can also be a "cell reference" : a value whose storage is a shared cell (a variable captured by a closure,
+	// or an object field aliasing such a variable). Reading a cell reference reads the cell, assigning it writes into the cell.
+	// A function value (closure) also carries the cells it captured ("upvalues").
 	class NodeValue {
 	public:
+		using Cell = std::shared_ptr<NodeValue>;
+		using Upvalues = std::vector<Cell>;
+
 		NodeValue():
 			m_emptyVariant(true) {
-		}
-
-		template <class Arg, std::enable_if_t<std::is_same_v<NodeValue, std::remove_const_t<std::remove_reference_t<Arg>>>, std::nullptr_t> = nullptr>
-		NodeValue(Arg&& arg) {
-			*this = std::forward<Arg>(arg);
 		}
 
 		template <class Arg, std::enable_if_t<
 			std::is_same_v<NodeValueVariant_, std::remove_const_t<std::remove_reference_t<Arg>>> ||
 			detail::isVariantMember<std::remove_const_t<std::remove_reference_t<Arg>>, NodeValueVariant_>::value ||
 			detail::isVariantMember<std::remove_const_t<std::remove_reference_t<Arg>>, TokenVariant>::value, std::nullptr_t> = nullptr>
-		NodeValue(Arg&& arg) {
-			transferValueToOwned(std::forward<Arg>(arg));
+		NodeValue(Arg&& arg) :
+			m_variant(std::forward<Arg>(arg)),
+			m_emptyVariant(false) {
 		}
 
 		NodeValue(float f):
 			NodeValue(static_cast<double>(f)) {
 		}
 
-		template <class Arg>
-		NodeValue(const NodeValue& origin, Arg&& arg):
-			NodeValue(std::forward<Arg>(arg)) {
-				captureEnvironment = origin.captureEnvironment;
-			}
-
 		NodeValue(NodeValueArray arg) :
-			m_variant(arg),
+			m_variant(std::move(arg)),
 			m_emptyVariant(false) {
 		}
 
 		NodeValue(NodeValueMap arg) :
-			m_variant(arg),
+			m_variant(std::move(arg)),
 			m_emptyVariant(false) {
 		}
 
+		NodeValue(const NodeValue&) = default;
 		NodeValue(NodeValue&&) noexcept = default;
+		~NodeValue() = default;
 
-		NodeValue& operator=(NodeValue&& arg) noexcept {
-			transferValueToOwned(std::move(arg.m_variant));
-			m_emptyVariant = arg.m_emptyVariant;
-			captureEnvironment = std::move(arg.captureEnvironment);
-			return *this;
-		}
+		// Assigning a cell reference writes the (resolved) value into the cell.
+		// Otherwise, the value is replaced (including by a cell reference, which then aliases the cell).
+		NodeValue& operator=(const NodeValue& arg);
+		NodeValue& operator=(NodeValue&& arg) noexcept;
 
-		NodeValue& operator=(const NodeValue& arg) {
-			transferValueToOwned(arg.m_variant);
-			m_emptyVariant = arg.m_emptyVariant;
-			captureEnvironment = arg.captureEnvironment;
-			return *this;
-		}
+		static NodeValue CellReference(Cell cell);
+		bool isCellReference() const { return m_cell != nullptr; }
+		const Cell& cell() const { return m_cell; }
 
-		void release();
+		void setUpvalues(std::shared_ptr<const Upvalues> upvalues) { m_upvalues = std::move(upvalues); }
+		const Upvalues* upvalues() const;
 
-		std::string printEnv() const;
-
-		void overrideInEnv(ScriptVariableRef index, NodeValue value);
-		void captureInEnv(ScriptVariableRef index, NodeValue value);
-		const NodeValue* resolveFromEnv(ScriptVariableRef index) const;
-		NodeValue* resolveFromEnv(ScriptVariableRef index);
-		void stealEnv(NodeValue& value);
-		void stealEnv(NodeValue&& value);
-		bool hasEnv() const { return captureEnvironment != nullptr; }
-		// Refered value if this is a reference (keeping an env), otherwise this value.
+		// Refered value if this is a cell reference, otherwise this value.
 		// Shallow : strings, arrays and objects are shared handles, only their reference count changes.
 		NodeValue resolved() const &;
-		// Same, but moves this value when it is not a reference (no copy at all in the common case)
+		// Same, but moves this value when it is not a cell reference (no copy at all in the common case)
 		NodeValue resolved() &&;
-
-		NodeValue(const NodeValue&) = default;
-		~NodeValue() = default;
 
 		template<class T>
 		T& as() {
-			if(std::holds_alternative<NodeValue*>(m_variant)) {
-				return std::get<NodeValue*>(m_variant)->as <T>();
+			if (m_cell != nullptr) {
+				return m_cell->as<T>();
 			}
 			return std::get<T>(m_variant);
 		}
 
 		template<class T>
 		const T& as() const {
-			if(std::holds_alternative<NodeValue*>(m_variant)) {
-				return std::get<NodeValue*>(m_variant)->as <T>();
+			if (m_cell != nullptr) {
+				return static_cast<const NodeValue&>(*m_cell).as<T>();
 			}
 			return std::get<T>(m_variant);
 		}
 
 		double convertNumeric() const;
-		bool empty() const { return m_emptyVariant;	}
+		bool empty() const { return m_cell != nullptr ? m_cell->empty() : m_emptyVariant; }
 		std::string convertString() const;
 
 		template <class Converted>
@@ -140,8 +122,8 @@ namespace ska {
 
 		template <class Converted>
 		const Converted& nodeval() const {
-			if(std::holds_alternative<NodeValue*>(m_variant)) {
-				return std::get<NodeValue*>(m_variant)->nodeval <Converted>();
+			if (m_cell != nullptr) {
+				return static_cast<const NodeValue&>(*m_cell).nodeval<Converted>();
 			}
 			if constexpr(detail::isVariantMember<Converted, TokenVariant>::value) {
 				return std::get<Converted>(std::get<TokenVariant>(m_variant));
@@ -154,14 +136,12 @@ namespace ska {
 		friend std::ostream& operator<<(std::ostream& stream, const NodeValue&);
 
 	private:
-		void transferValueToOwned(NodeValueVariant_ arg);
-		static NodeValue& dereference(const NodeValueVariant_& arg);
-		static bool isReference(const NodeValueVariant_& arg);
-
 		NodeValueVariant_ m_variant;
-		std::shared_ptr<std::unordered_map<ScriptVariableRef, NodeValue>> captureEnvironment = nullptr;
 		bool m_emptyVariant = false;
-		bool m_dirty = false;
+		// Non null when this value is a cell reference
+		Cell m_cell;
+		// Cells captured by a function value (closure)
+		std::shared_ptr<const Upvalues> m_upvalues;
 	};
 
 	bool operator==(const NodeValue& lhs, const NodeValue& rhs);

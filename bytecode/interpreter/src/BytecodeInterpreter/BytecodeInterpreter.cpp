@@ -49,9 +49,9 @@
 #include "Units/InterpreterCommandJumpNif.h"
 #include "Units/InterpreterCommandArrMemberAccess.h"
 #include "Units/InterpreterCommandJumpMember.h"
-#include "Units/InterpreterCommandClearRange.h"
-#include "Units/InterpreterCommandAddEnv.h"
-#include "Units/InterpreterCommandUseEnv.h"
+#include "Units/InterpreterCommandArrSet.h"
+#include "Units/InterpreterCommandCell.h"
+#include "Units/InterpreterCommandPushCell.h"
 #include "InterpreterDeclarer.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Debug, ska::bytecode::Interpreter);
@@ -103,7 +103,6 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::END>(*this, result, generator);
 	InterpreterCommandDeclare<Command::PUSH>(*this, result, generator);
 	InterpreterCommandDeclare<Command::POP>(*this, result, generator);
-	InterpreterCommandDeclare<Command::CLEAR_RANGE>(*this, result, generator);
 	InterpreterCommandDeclare<Command::POP_IN_ARR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::POP_IN_VAR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::JUMP_ABS>(*this, result, generator);
@@ -117,8 +116,9 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::ARR_LENGTH>(*this, result, generator);
 	InterpreterCommandDeclare<Command::SCRIPT>(*this, result, generator);
 
-	InterpreterCommandDeclare<Command::ADD_ENV>(*this, result, generator);
-	InterpreterCommandDeclare<Command::USE_ENV>(*this, result, generator);
+	InterpreterCommandDeclare<Command::ARR_SET>(*this, result, generator);
+	InterpreterCommandDeclare<Command::CELL>(*this, result, generator);
+	InterpreterCommandDeclare<Command::PUSH_CELL>(*this, result, generator);
 
 	return result;
 }
@@ -135,6 +135,13 @@ void ska::bytecode::Interpreter::interpret(ExecutionContext& node) {
 		node.generate(m_parser, m_generator);
 	}
 
+	// The script top level code runs in its own call frame (registers), left even if an error is thrown
+	struct ScriptLevelFrame {
+		ExecutionContext& context;
+		explicit ScriptLevelFrame(ExecutionContext& context) : context(context) { context.enterScriptLevel(); }
+		~ScriptLevelFrame() { context.leaveScriptLevel(); }
+	} scriptLevelFrame { node };
+
 	for(auto continueExecution = !node.idle(); continueExecution; continueExecution = node.incInstruction()) {
 		auto& instruction = node.currentInstruction();
 		LOG_INFO << "[Script " << node.currentScriptId() << "] Interpreting " << instruction;
@@ -143,11 +150,6 @@ void ska::bytecode::Interpreter::interpret(ExecutionContext& node) {
 		auto nodeValue = builder->interpret(node);
 		if (!nodeValue.empty()) {
 			LOG_DEBUG << "Setting " << nodeValue.convertString() << " for " << instruction.dest();
-			const auto& env = nodeValue.printEnv();
-			if (!env.empty()) {
-				LOG_DEBUG << "  - with env " << env;
-			}
-
 			node.set(instruction.dest(), std::move(nodeValue));
 		}
 	}

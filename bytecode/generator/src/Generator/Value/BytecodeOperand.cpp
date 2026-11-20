@@ -66,6 +66,14 @@ std::string ska::bytecode::Operand::toString() const {
 		output = "R" + output + ":" + script;
 		break;
 
+	case OperandType::LOCAL:
+		output = "L" + output + ":" + script;
+		break;
+
+	case OperandType::UPVAL:
+		output = "U" + output + ":" + script;
+		break;
+
 	default:
 		break;
 	}

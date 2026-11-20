@@ -89,8 +89,9 @@ namespace ska {
 
 			auto index() const { return scriptIndex; }
 
-			NodeValue snapshot(const NodeValue& origin) const {
-				return { origin, ScriptVariableRef{ executionPointer, scriptIndex } };
+			// Address of the current instruction
+			ScriptVariableRef currentAddress() const {
+				return ScriptVariableRef{ executionPointer, scriptIndex };
 			}
 
 			NodeValue lastVariable() const;
@@ -98,11 +99,6 @@ namespace ska {
 			const NodeValueArray& exports() const { return m_exportsSection; }
 			void setExportsSection(NodeValueArray exportsSection) { m_exportsSection = std::move(exportsSection); }
 
-			void release(const Operand& dest) {
-				auto* memory = selectMemory(dest);
-				if (memory == nullptr) { throw std::runtime_error("invalid bytecode destination cell"); }
-				memory->release(dest.as<ScriptVariableRef>().variable);
-			}
 
 		private:
 			PlainMemoryTable* selectMemory(const Operand& dest);
@@ -114,10 +110,12 @@ namespace ska {
 				case OperandType::PURE:
 				default:
 					return nullptr;
-				case OperandType::REG:
-					return &self.registers;
 				case OperandType::VAR:
 					return &self.variables;
+				case OperandType::LOCAL:
+				case OperandType::REG:
+				case OperandType::UPVAL:
+					throw std::runtime_error("invalid memory : call frame operands are not stored in the script");
 				case OperandType::EMPTY:
 					throw std::runtime_error("cannot select empty variable relative memory");
 				}
@@ -128,7 +126,7 @@ namespace ska {
 			std::size_t executionPointer = 0;
 
 			NodeValueArray m_exportsSection;
-			PlainMemoryTable registers;
+			// Script level variables (VAR operands). Function locals and registers live in call frames.
 			PlainMemoryTable variables;
 
 		};

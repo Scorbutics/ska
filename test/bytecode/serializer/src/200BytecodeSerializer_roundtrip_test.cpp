@@ -247,3 +247,30 @@ TEST_CASE("[BytecodeSerializer round trip] imported external script") {
 		"out = player.name + \"/\" + player.age + \"/\" + enemy.name + \"/\" + Character.default.age\n",
 		"Player/10/Default/99");
 }
+
+TEST_CASE("[BytecodeSerializer round trip] call frames : recursion and nested closures") {
+	CheckRoundTrip(R"script(
+		fib = function(n: int): int do
+			r = n
+			if n > 1
+				r = fib(n - 1) + fib(n - 2)
+			end
+			return r
+		end
+		Outer = function(x: int): var do
+			Loop = function(i: int): int do
+				r = 0
+				if i > 0
+					r = i + x + Loop(i - 1)
+				end
+				return r
+			end
+			return {
+				Compute = function(): int do
+					return Loop(3)
+				end
+			}
+		end
+		out = "" + fib(10) + "/" + Outer(100).Compute()
+	)script", "55/306");
+}

@@ -6,43 +6,37 @@
 namespace ska {
 	namespace bytecode {
 		class ScriptGeneration;
+
+		// Activation record of a function call, or of the top level code of a script.
+		struct CallFrame {
+			// Local variables (LOCAL operands) of the function call
+			PlainMemoryTable locals;
+			// Temporaries (REG operands) of the function call (or of the script top level code)
+			PlainMemoryTable registers;
+			// Called function value : its captured cells are the UPVAL operands
+			NodeValue function;
+			// Where to go back when the function returns
+			ScriptVariableRef returnAddress;
+			bool scriptLevel = false;
+		};
+
+		// Runtime state of an interpretation : scripts (with their script level variables), the call frames and the value stack.
 		class Executor {
 		public:
 			using ScriptExecutionContainer = std::vector<std::unique_ptr<ScriptExecution>>;
 
 			void pop(NodeValue& dest) {
+				assert(!stack.empty());
 				dest = std::move(stack.back());
-				/*if (!callstack.empty()) {
-					dest.stealEnv(callstack.back());
-				}*/
 				stack.pop_back();
 			}
 
 			void pop(NodeValueArrayRaw& dest, long count) {
-				assert(stack.size() >= count);
+				assert(stack.size() >= static_cast<std::size_t>(count));
 				for (auto i = 0; i < count && stack.size() > 0; i++) {
 					dest.push_front(std::move(stack.back()));
-					/*if (!callstack.empty()) {
-						dest.front().stealEnv(callstack.back());
-					}*/
 					stack.pop_back();
 				}
-			}
-
-			void pushInEnv(const ScriptVariableRef& dest, NodeValue value) {
-				callstack.back().captureInEnv(dest, std::move(value));
-			}
-
-			// Makes "objectCell" a reference to the captured env variable "dest" of the current call,
-			// so that the object field and the captured variable share the same storage.
-			// The cell also holds the env, which keeps the referenced env entry alive.
-			void aliasEnvInCell(const ScriptVariableRef& dest, NodeValue& objectCell) {
-				auto& frame = callstack.back();
-				auto* envValue = frame.resolveFromEnv(dest);
-				if (envValue == nullptr) {
-					throw std::runtime_error("unable to alias an object field to an uncaptured env variable");
-				}
-				objectCell = NodeValue { frame, envValue };
 			}
 
 			template <class ... Items>
@@ -50,30 +44,62 @@ namespace ska {
 				(pushIfNotEmpty(std::forward<decltype(items)>(items)), ...);
 			}
 
+			// Pushes a cell reference, even if the cell is still empty (ex : a local function capturing itself)
+			void pushCell(NodeValue cellReference) {
+				assert(cellReference.isCellReference());
+				stack.push_back(std::move(cellReference));
+			}
+
 			NodeValue variable(std::size_t scriptIndex) const {
 				return scripts[scriptIndex]->lastVariable();
 			}
 
-			void callStack(NodeValue value);
-			NodeValue returnCallStack();
-			void release(const Operand& dest, ScriptExecution& current);
+			// Frame of the top level code of a script (registers only)
+			void enterScriptLevel();
+			void leaveScriptLevel();
 
-			NodeValue resolveValue(const Operand& variable, const ScriptExecution& current);
+			// Frame of a function call
+			void call(NodeValue function, ScriptVariableRef returnAddress);
+			ScriptVariableRef returnFromCall();
+
+			// Value of an operand (a cell reference is resolved to the value of the cell)
+			NodeValue resolveValue(const Operand& operand, const ScriptExecution& current);
+
+			// Makes a local variable a cell (the variable is captured by a closure)
+			void makeCell(const Operand& local);
+			// Cell reference of a captured variable : a local variable made a cell, or an upvalue of the current closure
+			NodeValue cellReference(const Operand& operand) const;
 
 			template<class T>
 			void set(const Operand& dest, ScriptExecution& current, T&& src) {
-				scriptFromOperand(dest, current).set(dest, src);
-
-				if (callstack.empty() || dest.type() != OperandType::VAR) {
-					return;
+				switch (dest.type()) {
+				case OperandType::LOCAL:
+					frame().locals.push(index(dest), std::forward<T>(src));
+					break;
+				case OperandType::REG:
+					frame().registers.push(index(dest), std::forward<T>(src));
+					break;
+				case OperandType::UPVAL:
+					*upvalue(index(dest)) = std::forward<T>(src);
+					break;
+				default:
+					scriptFromOperand(dest, current).set(dest, std::forward<T>(src));
+					break;
 				}
-				callstack.back().overrideInEnv(dest.as<ScriptVariableRef>(), std::forward<T>(src));
 			}
 
 			template <class T>
-			const T& get(const Operand& variable, const ScriptExecution& current) {
-				const auto* value = variable.type() == OperandType::VAR ? useFromCurrentEnv(variable.as<ScriptVariableRef>()) : nullptr;
-				return value == nullptr || value->empty() ? scriptFromOperand(variable, current).get<T>(variable) : value->nodeval<T>();
+			const T& get(const Operand& operand, const ScriptExecution& current) {
+				switch (operand.type()) {
+				case OperandType::LOCAL:
+					return frame().locals[index(operand)].template nodeval<T>();
+				case OperandType::REG:
+					return frame().registers[index(operand)].template nodeval<T>();
+				case OperandType::UPVAL:
+					return static_cast<const NodeValue&>(*upvalue(index(operand))).template nodeval<T>();
+				default:
+					return scriptFromOperand(operand, current).get<T>(operand);
+				}
 			}
 
 			ScriptExecution& scriptOrNew(const GenerationOutput& instructions, std::size_t scriptIndex) {
@@ -93,19 +119,17 @@ namespace ska {
 				}
 				return *scripts[scriptIndex];
 			}
+
 		private:
+			static std::size_t index(const Operand& operand) { return operand.as<ScriptVariableRef>().variable; }
+			CallFrame& frame();
+			const CallFrame& frame() const;
+			const NodeValue::Cell& upvalue(std::size_t upvalueIndex) const;
+
 			ScriptExecution& scriptFromOperand(const Operand& v, ScriptExecution& current);
 			const ScriptExecution& scriptFromOperand(const Operand& v, const ScriptExecution& current);
-			const NodeValue* useFromCurrentEnv(const ScriptVariableRef& dest) const;
 
-			const ScriptExecution* script(std::size_t scriptIndex) const {
-				if (scriptIndex >= scripts.size()) {
-					return nullptr;
-				}
-				return scripts[scriptIndex].get();
-			}
-
-			std::vector<NodeValue> callstack;
+			std::vector<CallFrame> frames;
 			ScriptExecutionContainer scripts;
 			std::vector<NodeValue> stack;
 

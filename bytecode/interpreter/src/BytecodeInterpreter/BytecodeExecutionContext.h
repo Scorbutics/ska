@@ -43,12 +43,18 @@ namespace ska {
 			void pop(NodeValue& dest) { m_out.pop(dest); }
 			void pop(NodeValueArrayRaw& dest, long count) { m_out.pop(dest, count); }
 
-			void pushInEnv(const ScriptVariableRef& dest, NodeValue value) { m_out.pushInEnv(dest, std::move(value)); }
-			void aliasEnvInCell(const ScriptVariableRef& dest, NodeValue& objectCell) { m_out.aliasEnvInCell(dest, objectCell); }
+			void pushCell(NodeValue cellReference) { m_out.pushCell(std::move(cellReference)); }
+			void makeCell(const Operand& local) { m_out.makeCell(local); }
+			NodeValue cellReference(const Operand& operand) const { return m_out.cellReference(operand); }
 
-			void jumpAbsolute(NodeValue& value);
+			// Calls a function (new call frame) / returns from the current function call
+			void jumpAbsolute(const NodeValue& function);
 			void jumpRelative(long value) { m_current->jumpRelative(value); }
-			NodeValue jumpReturn(NodeValue& returnedValue);
+			void jumpReturn();
+
+			// Call frame of the script top level code
+			void enterScriptLevel() { m_out.enterScriptLevel(); }
+			void leaveScriptLevel() { m_out.leaveScriptLevel(); }
 
 			ScriptVariableRef getRelativeInstruction(long relativeValue) const {
 				return m_current->getRelativeInstruction(relativeValue);
@@ -69,7 +75,6 @@ namespace ska {
 				m_out.set(dest, *m_current, std::forward<T>(src));
 			}
 
-			void release(const Operand& dest);
 
 			ScriptExecutionOutput generateExportedVariables(std::size_t scriptIndex);
 

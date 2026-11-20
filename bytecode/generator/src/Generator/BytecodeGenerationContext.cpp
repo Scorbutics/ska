@@ -12,8 +12,8 @@ ska::bytecode::GenerationContext::GenerationContext(GenerationOutput& output, Sc
 	m_generated(output),
 	m_script(m_generated.emplaceNamed( ScriptGeneration{ std::move(script) } )),
 	m_pointer(&m_script.rootASTNode()),
-	m_nodeClosure(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<Closure>(*m_pointer) : nullptr),
-	m_scopeClosure(m_nodeClosure.get()) {
+	m_ownedFunctionScope(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<FunctionScope>(*m_pointer, nullptr, m_script.id()) : nullptr),
+	m_functionScope(m_ownedFunctionScope.get()) {
 }
 
 ska::bytecode::GenerationContext ska::bytecode::GenerationContext::next(const ASTNode &node, std::size_t scopeLevelOffset) {
@@ -28,19 +28,12 @@ ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old, cons
 	m_generated(old.m_generated),
 	m_script(m_generated.emplaceNamed(ScriptGeneration { ScriptGenerationHelper{m_generated, scriptAst}})),
 	m_pointer(&m_script.rootASTNode()),
-	m_nodeClosure(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<Closure>(*m_pointer, old.m_scopeClosure) : nullptr),
-	m_scopeClosure(m_nodeClosure.get()) {
+	m_ownedFunctionScope(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<FunctionScope>(*m_pointer, nullptr, m_script.id()) : nullptr),
+	m_functionScope(m_ownedFunctionScope.get()) {
 }
 
-ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::close(const Operand& returnedObject) {
-	if (m_scopeClosure == nullptr) {
-		return {};
-	}
-	return m_scopeClosure->generate(*this, returnedObject);
-}
 
 void ska::bytecode::GenerationContext::generate(InstructionOutput instructions) {
-	auto closedInstruction = close();
 	m_script.generate(m_generated, std::move(instructions));
 }
 
@@ -52,16 +45,16 @@ ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old, Scri
 	m_generated(old.m_generated),
 	m_script(m_generated.emplaceNamed(ScriptGeneration { std::move(script) })),
 	m_pointer(&m_script.rootASTNode()),
-	m_nodeClosure(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<Closure>(*m_pointer, old.m_scopeClosure) : nullptr),
-	m_scopeClosure(m_nodeClosure.get() != nullptr ? m_nodeClosure.get() : old.m_scopeClosure) {
+	m_ownedFunctionScope(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<FunctionScope>(*m_pointer, nullptr, m_script.id()) : nullptr),
+	m_functionScope(m_ownedFunctionScope.get()) {
 }
 
 ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old) :
 	m_generated(old.m_generated),
 	m_script(old.m_script),
 	m_pointer(&m_script.rootASTNode()),
-	m_nodeClosure(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<Closure>(*m_pointer, old.m_scopeClosure) : nullptr),
-	m_scopeClosure(m_nodeClosure.get() != nullptr ? m_nodeClosure.get() : old.m_scopeClosure) {
+	m_ownedFunctionScope(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<FunctionScope>(*m_pointer, old.m_functionScope, m_script.id()) : nullptr),
+	m_functionScope(m_ownedFunctionScope != nullptr ? m_ownedFunctionScope.get() : old.m_functionScope) {
 }
 
 ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old, const ASTNode& node, std::size_t scopeLevelOffset) :
@@ -69,8 +62,8 @@ ska::bytecode::GenerationContext::GenerationContext(GenerationContext& old, cons
 	m_script(old.m_script),
 	m_pointer(&node),
 	m_scopeLevel(old.m_scopeLevel + scopeLevelOffset),
-	m_nodeClosure(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<Closure>(*m_pointer, old.m_scopeClosure) : nullptr),
-	m_scopeClosure(m_nodeClosure.get() != nullptr ? m_nodeClosure.get() : old.m_scopeClosure) {
+	m_ownedFunctionScope(m_pointer->op() == Operator::FUNCTION_DECLARATION ? std::make_unique<FunctionScope>(*m_pointer, old.m_functionScope, m_script.id()) : nullptr),
+	m_functionScope(m_ownedFunctionScope != nullptr ? m_ownedFunctionScope.get() : old.m_functionScope) {
 }
 
 ska::bytecode::ScriptGenerationHelper& ska::bytecode::GenerationContext::helper() {
@@ -82,7 +75,8 @@ const ska::bytecode::ScriptGenerationHelper& ska::bytecode::GenerationContext::h
 }
 
 ska::bytecode::Register ska::bytecode::GenerationContext::queryNextRegister() {
-	return m_script.helper().queryNextRegister();
+	// Registers are temporaries of the current function call frame (or of the script, at script level)
+	return m_functionScope != nullptr ? m_functionScope->nextRegister() : m_script.helper().queryNextRegister();
 }
 
 std::pair<std::size_t, ska::bytecode::ScriptGeneration*> ska::bytecode::GenerationContext::script(const std::string& fullScriptName) {
@@ -106,27 +100,34 @@ std::size_t ska::bytecode::GenerationContext::exportId(const Symbol& symbol) con
 	return exports.id(&symbol);
 }
 
-ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::querySymbolOrOperand(const ASTNode& node, bool capture) {
-	auto operand = OperandUse {};
-
-	if (node.symbol() == nullptr) {
-		operand = helper().querySymbolOrOperand(node);
-	} else {
-		operand = scriptOfSymbol(*node.symbol()).querySymbolOrOperand(node);
-	}
-
-	if (capture && m_scopeClosure != nullptr) {
-		auto result = m_scopeClosure->checkAndCapture(*this, node.symbolTable(), operand);
-		if (result.operand() == Operand {}) {
-			result.push(operand);
-		} else if (result.operand() != operand) {
-			throw std::runtime_error("unable to generate valid bytecode for node symbol \"" + node.name() + "\" because closure environment didn't match operand");
-		}
-		return result;
-	}
-
-	return operand;
+ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::querySymbolOrOperand(const ASTNode& node) {
+	return querySymbolOrOperand(node, m_functionScope);
 }
+
+ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::querySymbolOrOperandFromEnclosingFunction(const ASTNode& node) {
+	return querySymbolOrOperand(node, m_functionScope == nullptr ? nullptr : m_functionScope->parent());
+}
+
+ska::bytecode::InstructionOutput ska::bytecode::GenerationContext::querySymbolOrOperand(const ASTNode& node, FunctionScope* scope) {
+	if (node.symbol() == nullptr) {
+		// Literal
+		return { helper().querySymbolOrOperand(node) };
+	}
+
+	// A variable declared in a function (the current one or an enclosing one) lives in a call frame
+	const auto* symbolInfo = m_generated.getSymbolInfo(*node.symbol());
+	const auto isFromAnotherScript = symbolInfo != nullptr && symbolInfo->script != m_script.id();
+	if (scope != nullptr && !isFromAnotherScript && node.symbolTable() != nullptr) {
+		const auto* declaringScope = scope->declaringScope(*node.symbolTable());
+		if (declaringScope != nullptr) {
+			return { scope->variable(*node.symbol(), *declaringScope, node.positionInScript()) };
+		}
+	}
+
+	// Script level variable
+	return { scriptOfSymbol(*node.symbol()).querySymbolOrOperand(node) };
+}
+
 /*
 ska::bytecode::OperandUse ska::bytecode::GenerationContext::querySymbol(const Symbol& symbol) {
 	return scriptOfSymbol(symbol).querySymbol(symbol);

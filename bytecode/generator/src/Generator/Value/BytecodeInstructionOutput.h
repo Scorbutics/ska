@@ -29,15 +29,11 @@ namespace ska {
 			InstructionOutput(Instruction instruction) :
 				m_pack(InstructionPack { std::move(instruction) }) {
 				m_operand = packAsOperand();
-				registerOperandIfFirstUsed(m_pack.back().dest());
-				registerOperandIfFirstUsed(m_pack.back().left());
-				registerOperandIfFirstUsed(m_pack.back().right());
 			}
 
 			InstructionOutput() = default;
 
 			InstructionOutput(OperandUse operand) {
-				registerOperandIfFirstUsed(operand);
 				m_operand = std::move(operand);
 			}
 
@@ -61,8 +57,6 @@ namespace ska {
 
 			const Instruction* back() const { return m_pack.empty() ? nullptr : &m_pack.back(); }
 
-			const auto& generatedRegisters() const { return m_generatedRegisters; }
-			const auto& generatedVariables() const { return m_generatedVariables; }
 
 			Operand operand() const {	return m_operand.empty() ? packAsOperand() : m_operand;	}
 
@@ -70,15 +64,6 @@ namespace ska {
 			Instruction& operator[](std::size_t index) { assert(index < m_pack.size()); return m_pack[index]; }
 
 		private:
-			void registerOperandIfFirstUsed(const OperandUse& operand) {
-				if (operand.isFirstTimeUsed) {
-					if (operand.type() == OperandType::VAR) {
-						m_generatedVariables.push_back(operand);
-					} else if (operand.type() == OperandType::REG) {
-						m_generatedRegisters.push_back(operand);
-					}
-				}
-			}
 			friend std::ostream& operator<<(std::ostream& stream, const InstructionOutput&);
 			friend bool operator==(const InstructionOutput& lhs, const InstructionOutput& rhs);
 			friend bool operator!=(const InstructionOutput& lhs, const InstructionOutput& rhs);
@@ -87,8 +72,6 @@ namespace ska {
 
 			InstructionPack m_pack;
 			Operand m_operand;
-			std::vector<Operand> m_generatedVariables;
-			std::vector<Operand> m_generatedRegisters;
 		};
 
     std::ostream& operator<<(std::ostream& stream, const InstructionOutput&);

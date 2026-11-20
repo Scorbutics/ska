@@ -42,38 +42,24 @@ ska::bytecode::ExecutionContext ska::bytecode::ExecutionContext::buildContextFor
 	return ExecutionContext{ *this, value.script };
 }
 
-void ska::bytecode::ExecutionContext::jumpAbsolute(NodeValue& value) {
-	const auto& variable = value.nodeval<ScriptVariableRef>();
-	auto context = buildContextForScript(variable);
-	m_out.callStack(m_current->snapshot(value));
+void ska::bytecode::ExecutionContext::jumpAbsolute(const NodeValue& function) {
+	const auto address = function.nodeval<ScriptVariableRef>();
+	auto context = buildContextForScript(address);
+	m_out.call(function, m_current->currentAddress());
 	m_current = context.m_current;
-	m_current->jumpAbsolute(variable.variable - 1);
+	m_current->jumpAbsolute(address.variable - 1);
 }
 
 ska::NodeValue ska::bytecode::ExecutionContext::getCell(const Operand &variable) const {
 	return m_out.resolveValue(variable, *m_current);
 }
 
-void ska::bytecode::ExecutionContext::release(const Operand& dest) {
-	m_out.release(dest, *m_current);
-}
-
-ska::NodeValue ska::bytecode::ExecutionContext::jumpReturn(NodeValue& returnedValue) {
-	auto returnedCallStackValue = m_out.returnCallStack();
-	auto whereToGo = returnedCallStackValue.nodeval<ScriptVariableRef>();
-
-
+void ska::bytecode::ExecutionContext::jumpReturn() {
+	const auto whereToGo = m_out.returnFromCall();
 	LOG_DEBUG << "Returning to instruction index " << whereToGo.variable << " in script " << whereToGo.script;
 	auto context = buildContextForScript(whereToGo);
 	m_current = context.m_current;
 	m_current->jumpAbsolute(whereToGo.variable);
-
-	// A returned value that already owns an env (ex : an existing instance returned by a method) must keep it.
-	// Only values without env (ex : an object freshly created by a factory) inherit the env of the returning call.
-	if (returnedValue.hasEnv()) {
-		return returnedValue;
-	}
-	return NodeValue {returnedCallStackValue, returnedValue};
 }
 
 const ska::NativeFunction& ska::bytecode::ExecutionContext::getBinding(const ScriptVariableRef& bindingRef) const {

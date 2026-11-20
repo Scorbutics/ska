@@ -7,7 +7,7 @@
 #include "Value/BytecodeScriptGenerationHelper.h"
 #include "Value/BytecodeGenerationOutput.h"
 #include "Runtime/Value/NativeFunction.h"
-#include "Value/BytecodeClosure.h"
+#include "Value/BytecodeFunctionScope.h"
 
 namespace ska {
 	class ASTNode;
@@ -42,7 +42,12 @@ namespace ska {
 			const NativeFunction& getBinding(const ScriptVariableRef& bindingRef) const;
 			Operand storeBinding(NativeFunctionPtr binding, const ScriptVariableRef& bindingRef);
 			void generate(InstructionOutput instructions);
-			InstructionOutput querySymbolOrOperand(const ASTNode& node, bool capture = true);
+			// Operand of a symbol node (variable : script level VAR, function LOCAL or UPVAL), or of a literal node
+			InstructionOutput querySymbolOrOperand(const ASTNode& node);
+			// Same, but as seen from the function enclosing the current one (ex : the variable storing a function being declared)
+			InstructionOutput querySymbolOrOperandFromEnclosingFunction(const ASTNode& node);
+			// The function currently generated, or nullptr at script level
+			FunctionScope* functionScope() { return m_functionScope; }
 			//OperandUse querySymbol(const Symbol& symbol);
 			std::optional<Operand> getSymbol(const Symbol& symbol) const;
 			std::size_t exportId(const Symbol& symbol) const;
@@ -51,7 +56,6 @@ namespace ska {
 			auto scriptName() const { return m_script.name(); }
 			const std::string scriptName(std::size_t index) const;
 
-			InstructionOutput close(const Operand& returnedObject = Operand{});
 
 		private:
 			ScriptGenerationHelper& helper();
@@ -63,8 +67,10 @@ namespace ska {
 			ScriptGeneration& m_script;
 			const ASTNode* const m_pointer {};
 
-			std::unique_ptr<Closure> m_nodeClosure;
-			Closure* m_scopeClosure = nullptr;
+			InstructionOutput querySymbolOrOperand(const ASTNode& node, FunctionScope* scope);
+
+			std::unique_ptr<FunctionScope> m_ownedFunctionScope;
+			FunctionScope* m_functionScope = nullptr;
 
 			std::size_t m_scopeLevel = 0;
 		};

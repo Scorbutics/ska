@@ -107,6 +107,8 @@ ska::bytecode::Operand ska::bytecode::OperandSerializer::read(const ScriptCache&
 	case OperandType::BIND_NATIVE:
 	case OperandType::REG:
 	case OperandType::VAR:
+	case OperandType::LOCAL:
+	case OperandType::UPVAL:
 		content = ScriptVariableRef{ static_cast<std::size_t>(variable), scriptId(cache, input.ref(script)) };
 		break;
 

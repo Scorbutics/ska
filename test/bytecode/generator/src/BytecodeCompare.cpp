@@ -4,7 +4,7 @@
 #include "Generator/Value/BytecodeScriptGeneration.h"
 
 static std::string HandleScriptSuffix(std::size_t scriptId, std::string str) {
-    if (str.empty() || str[0] != 'V' && str[0] != 'R') {
+    if (str.empty() || (str[0] != 'V' && str[0] != 'R' && str[0] != 'L' && str[0] != 'U')) {
         return str;
     }
     const auto dotPos = str.find_last_of(':');
@@ -16,7 +16,7 @@ static std::string HandleScriptSuffix(std::size_t scriptId, std::string str) {
 
 static std::string StripScriptSuffix(std::size_t scriptId, std::string str) {
     const auto suffix = ":" + std::to_string(scriptId);
-    if (!str.empty() && (str[0] == 'V' || str[0] == 'R') && str.size() > suffix.size() && str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0) {
+    if (!str.empty() && (str[0] == 'V' || str[0] == 'R' || str[0] == 'L' || str[0] == 'U') && str.size() > suffix.size() && str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0) {
         return str.substr(0, str.size() - suffix.size());
     }
     return str;

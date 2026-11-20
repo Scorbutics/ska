@@ -38,11 +38,10 @@ TEST_CASE("[BytecodeGenerator] Use 2x same script and modifying a value in first
 		{ Command::SCRIPT, "R1", "1" },
 		{ Command::MOV, "V1", "R1" },
 		{ Command::ARR_ACCESS, "R2", "V0", "2" },
-		{ Command::ARR_ACCESS, "R3", "R2", "0" },
-		{ Command::MOV, "R3", "123" },
-		{ Command::ARR_ACCESS, "R4", "V1", "2" },
-		{ Command::ARR_ACCESS, "R5", "R4", "0" },
-		{ Command::MOV, "V2", "R5" },
+		{ Command::ARR_SET, "R2", "0", "123" },
+		{ Command::ARR_ACCESS, "R3", "V1", "2" },
+		{ Command::ARR_ACCESS, "R4", "R3", "0" },
+		{ Command::MOV, "V2", "R4" },
 	});
 }
 
@@ -55,33 +54,30 @@ TEST_CASE("[BytecodeGenerator] Outside script from file (import) - edit - and us
 	auto [script, data] = ASTFromInputBytecodeGenerator(progStr);
 	auto& gen = data.generator->generate(*data.storage, std::move(script));
 	BytecodeCompare(data.storage->at(1), {
-		{ Command::JUMP_REL, "10" },
-		{ Command::POP, "V0" },
-		{ Command::MOV, "V1", "10" },
-		{ Command::MOV, "V2", "V1" },
-		{ Command::PUSH, "V2" },
-		{ Command::MOV, "V3", "V0" },
-		{ Command::PUSH, "V3" },
+		{ Command::JUMP_REL, "8" },
+		{ Command::POP, "L0" },
+		{ Command::MOV, "L1", "10" },
+		{ Command::MOV, "L2", "L1" },
+		{ Command::PUSH, "L2" },
+		{ Command::MOV, "L3", "L0" },
+		{ Command::PUSH, "L3" },
 		{ Command::POP_IN_VAR, "R0", "2" },
-		{ Command::CLEAR_RANGE, "R0", "R0" },
-		{ Command::CLEAR_RANGE, "V0", "V3" },
 		{ Command::RET, "R0" },
-		{ Command::END, "V4", "-11" },
-		{ Command::MOV, "V5", "Default" },
-		{ Command::PUSH, "V5" },
-		{ Command::JUMP_ABS, "V4" },
-		{ Command::POP, "R1" },
-		{ Command::MOV, "V6", "R1" },
+		{ Command::END, "V0", "-9" },
+		{ Command::MOV, "V1", "Default" },
+		{ Command::PUSH, "V1" },
+		{ Command::JUMP_ABS, "V0" },
+		{ Command::POP, "R0" },
+		{ Command::MOV, "V2", "R0" },
 	});
 	BytecodeCompare(gen, {
 		{ Command::SCRIPT, "R0", "1" },
 		{ Command::MOV, "V0", "R0" },
 		{ Command::ARR_ACCESS, "R1", "V0", "2" },
 		{ Command::MOV, "V1", "R1" },
+		{ Command::ARR_SET, "V1", "0", "99" },
 		{ Command::ARR_ACCESS, "R2", "V1", "0" },
-		{ Command::MOV, "R2", "99" },
-		{ Command::ARR_ACCESS, "R3", "V1", "0" },
-		{ Command::MOV, "V2", "R3" },
+		{ Command::MOV, "V2", "R2" },
 	});
 }
 

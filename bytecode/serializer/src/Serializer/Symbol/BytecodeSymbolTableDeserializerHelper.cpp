@@ -57,8 +57,11 @@ ska::ScopedSymbolTable& ska::bytecode::SymbolTableDeserializerHelper::buildSymbo
 
 	LOG_DEBUG << "Got symbol \"" << symbolTable->name() << "\" from absolute script key \"" << absoluteScriptKey << "\"";
 
-	m_cache->at(scriptId).helper().declareSymbol(*symbolTable->symbol(), operand);
-	LOG_INFO << "Declared symbol as VAR \"" << symbolTable->name() << "\" with operand \"" << operand << "\"";
+	// Only script level variables are script memory : function variables live in call frames
+	if (operand.type() == OperandType::VAR) {
+		m_cache->at(scriptId).helper().declareSymbol(*symbolTable->symbol(), operand);
+		LOG_INFO << "Declared symbol as VAR \"" << symbolTable->name() << "\" with operand \"" << operand << "\"";
+	}
 
 	const auto* oldSymbolInfo = m_cache->getSymbolInfo(*symbolTable->symbol());
 	auto scopeIndex = std::count(absoluteScriptKey.begin(), absoluteScriptKey.end(), '.');

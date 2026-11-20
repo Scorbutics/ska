@@ -22,10 +22,20 @@ namespace ska {
 			return nullptr;
 		}
 
-		void release(std::size_t index) {
-			if (index < m_data.size()) {
-				m_data[index].release();
+		// Stores "src" at "index" without any write-through : the previous value (even a cell reference) is replaced
+		template <class T>
+		void replace(std::size_t index, T&& src) {
+			if (index >= m_data.size()) {
+				m_data.resize(index + 1);
 			}
+			m_data[index].~NodeValue();
+			new (&m_data[index]) NodeValue(std::forward<T>(src));
+		}
+
+		// Raw access, without resolving cell references
+		const NodeValue& raw(std::size_t index) const {
+			assert(m_data.size() > index);
+			return m_data[index];
 		}
 
 		template <class T>

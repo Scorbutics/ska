@@ -31,6 +31,22 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		throw std::runtime_error(ss.str());
 	}
 
+	const auto index = FieldAccessIndex(node, context);
+	auto objectValue = generateNext(context.next(node.GetObjectNameNode()));
+
+	LOG_DEBUG << "This field has index " << index << " in the object";
+
+	objectValue.push({ Instruction { Command::ARR_ACCESS, context.queryNextRegister(), objectValue.operand(), index }});
+	return objectValue;
+}
+
+ska::bytecode::Operand ska::bytecode::FieldAccessIndex(OperationType<Operator::FIELD_ACCESS> node, const GenerationContext& context) {
+	const auto& fieldName = node.GetFieldNameNode().name();
+	const auto* objectTypeSymbolTable = node.GetObjectNameNode().symbolTable();
+	if (objectTypeSymbolTable == nullptr) {
+		throw std::runtime_error("unable to retrieve object type");
+	}
+
 	// Handling custom types
 	const auto* symbolField = (*objectTypeSymbolTable)(fieldName);
 	if (symbolField == nullptr) {
@@ -48,10 +64,5 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	}
 
 	const auto index = objectTypeSymbolTable->id(*symbolField->symbol()).value();
-	auto objectValue = generateNext(context.next(node.GetObjectNameNode()));
-
-	LOG_DEBUG << "This field has index " << index << " in the object";
-
-	objectValue.push({ Instruction { Command::ARR_ACCESS, context.queryNextRegister(), objectValue.operand(), Operand {static_cast<long>(index), OperandType::PURE } }});
-	return objectValue;
+	return Operand { static_cast<long>(index), OperandType::PURE };
 }

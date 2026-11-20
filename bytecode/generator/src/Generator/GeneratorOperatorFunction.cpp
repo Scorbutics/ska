@@ -19,22 +19,8 @@ namespace ska {
 			result.push(retOperand);
 			return result;
 		}
-
-		static Instruction ClearRange(const std::vector<Operand>& range, const Operand& exception) {
-			if (range.empty()) {
-				return {};
-			}
-
-			if (range.size() == 1) {
-				return Instruction{ Command::CLEAR_RANGE, range[0], range[0] };
-			}
-
-			return Instruction{ Command::CLEAR_RANGE, range[0], range.back() };
-		}
-
 	}
 }
-
 
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FUNCTION_DECLARATION>::generate(OperateOn node, GenerationContext& context) {
 	LOG_DEBUG << "Generating prototype of \"" << node.GetFunctionName() << "\"...";
@@ -49,36 +35,34 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 
 	LOG_DEBUG << "\nGenerated " << valueGroup << " with value " << valueGroup.operand();
 
-	auto cleanUpInstructions = InstructionOutput{};
-	// Function variables Clean-up part
-	auto registerRange = ClearRange(valueGroup.generatedRegisters(), valueGroup.operand());
-	if (registerRange.command() != Command::NOP) {
-		cleanUpInstructions.push(std::move(registerRange));
-	}
-
-	auto variableRange = ClearRange(valueGroup.generatedVariables(), valueGroup.operand());
-	if (variableRange.command() != Command::NOP) {
-		cleanUpInstructions.push(std::move(variableRange));
-	}
-
 	const auto returningFunctionType = node.GetFunctionPrototype().type().value().back();
-
 	const auto isVoidReturningFunction = returningFunctionType == ExpressionType::VOID;
-
-	auto returnValueOperand = valueGroup.operand();
-	valueGroup.push(std::move(cleanUpInstructions));
-	// TODO rename?
-	valueGroup.push(context.close(isVoidReturningFunction ? Operand{} : returnValueOperand));
+	const auto returnValueOperand = valueGroup.operand();
 	valueGroup.push(Instruction{ Command::RET, isVoidReturningFunction ? Operand{} : returnValueOperand });
 
-	auto fullFunction = AddRelativeJumpInstruction(context, std::move(valueGroup));
-	auto symbolFunction = context.querySymbolOrOperand(node.GetFunction(), false);
+	// Locals and registers live in the call frame of each call : no clean-up required.
+	// The prologue makes a cell of each local variable captured by a nested function (known once the body is generated).
+	auto* scope = context.functionScope();
+	assert(scope != nullptr);
+	auto body = scope->prologue();
+	body.push(std::move(valueGroup));
+	auto fullFunction = AddRelativeJumpInstruction(context, std::move(body));
+
+	// Closure creation, executed in the enclosing function frame when the declaration is reached :
+	// the cells captured by the function are pushed, then END builds the function value with them.
+	const auto& upvalueSources = scope->upvalueSources();
+	for (const auto& source : upvalueSources) {
+		fullFunction.push(Instruction{ Command::PUSH_CELL, source });
+	}
+
+	auto symbolFunction = context.querySymbolOrOperandFromEnclosingFunction(node.GetFunction());
 	auto functionOperand = symbolFunction.operand();
 	fullFunction.push(std::move(symbolFunction));
 	fullFunction.push(Instruction{
 		Command::END,
 		functionOperand,
-		Operand { -static_cast<long>(fullFunction.size()), OperandType::PURE }});
+		Operand { -static_cast<long>(fullFunction.size()), OperandType::PURE },
+		upvalueSources.empty() ? Operand{} : Operand { static_cast<long>(upvalueSources.size()), OperandType::PURE } });
 
 	return fullFunction;
 }
