@@ -34,13 +34,12 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		}
 		symbolInfo.childIndex = childIndex;
 		symbolInfo.exported = true;
-		LOG_INFO << "%12cRegistering symbol info " << symbolInfo << " for field node " << *field << " (this symbol is not exported)";
+		LOG_INFO << "%12cRegistering symbol info " << symbolInfo << " for field node " << *field << " (this symbol is exported)";
 
+		// No value is pushed on the stack for script fields : unlike a user defined object (built with PUSH + POP_IN_VAR),
+		// a script exports its fields through their symbol info (see ScriptCache::getExportedSymbols).
 		context.setSymbolInfo(*field, std::move(symbolInfo));
 
-		if (valueGroup.operand().type() == OperandType::VAR) {
-			valueGroup.push(Instruction { Command::PUSH, valueGroup.operand() });
-		}
 		objectResult.push(std::move(valueGroup));
 		childIndex++;
 	}

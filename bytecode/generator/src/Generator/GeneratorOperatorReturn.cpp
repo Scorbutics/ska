@@ -18,7 +18,8 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	if(node.GetValue().op() == Operator::USER_DEFINED_OBJECT)  {
 		const auto numberOfItemsReturned = static_cast<long>(node.GetValue().size());
 		objectResult.push(Instruction { Command::POP_IN_VAR, registerV, Operand { numberOfItemsReturned, OperandType::PURE} });
-	} else if (objectResult.size() == 0) {
+	} else if (objectResult.size() == 0 && node.GetValue().op() != Operator::SCRIPT_OBJECT) {
+		// A script object has no value to move : its fields are exported through their symbol infos
 		objectResult.push(Instruction{ Command::MOV, registerV, objectResult.operand() });
 	}
 
