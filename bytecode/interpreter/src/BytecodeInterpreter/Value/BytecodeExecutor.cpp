@@ -37,7 +37,8 @@ ska::NodeValue ska::bytecode::Executor::resolveValue(const Operand& variable, co
 
 
 ska::bytecode::ScriptExecution& ska::bytecode::Executor::scriptFromOperand(const Operand& v, ScriptExecution& current) {
-	if (std::holds_alternative<ScriptVariableRef>(v.content())) {
+	// An empty operand also holds a (default) ScriptVariableRef : it must not be routed to the script 0
+	if (!v.empty() && std::holds_alternative<ScriptVariableRef>(v.content())) {
 		const auto scriptIndex = v.as<ScriptVariableRef>().script;
 		return scriptOrThrow(scriptIndex);
 	}
@@ -45,7 +46,8 @@ ska::bytecode::ScriptExecution& ska::bytecode::Executor::scriptFromOperand(const
 }
 
 const ska::bytecode::ScriptExecution& ska::bytecode::Executor::scriptFromOperand(const Operand& v, const ScriptExecution& current) {
-	if (std::holds_alternative<ScriptVariableRef>(v.content())) {
+	// An empty operand also holds a (default) ScriptVariableRef : it must not be routed to the script 0
+	if (!v.empty() && std::holds_alternative<ScriptVariableRef>(v.content())) {
 		const auto scriptIndex = v.as<ScriptVariableRef>().script;
 		return scriptOrThrow(scriptIndex);
 	}

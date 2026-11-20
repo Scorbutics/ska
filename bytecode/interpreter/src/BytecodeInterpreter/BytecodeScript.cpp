@@ -37,7 +37,8 @@ const ska::ScopedSymbolTable* ska::bytecode::Script::findFieldSymbol(const Scope
 	}
 
 	if (constructor != nullptr) {
-		return field.symbolTable;
+		// field.symbolTable belongs to the template script : the bound one must be retrieved by name from the bound constructor
+		return (*constructor)(field.symbolTable->name());
 	}
 
 	return &findSymbolFromString(field.symbolTable->name());
