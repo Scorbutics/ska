@@ -8,7 +8,10 @@
 
 //#include <sys/param.h >
 #ifndef _WIN32
+#ifdef __APPLE__
+// sysctlbyname is only used on Apple platforms (<sys/sysctl.h> was removed from recent glibc versions)
 #include <sys/sysctl.h>
+#endif
 #include <pthread.h>
 #else
 #ifndef WIN32_LEAN_AND_MEAN
