@@ -73,6 +73,8 @@ namespace ska {
 		mutable SDL_Texture* m_screenTarget = nullptr;
 		mutable int m_screenTargetWidth = 0;
 		mutable int m_screenTargetHeight = 0;
+		// The frame being drawn goes in the texture (the shader is used from the next frame)
+		mutable bool m_frameInTarget = false;
 		void prepareScreenTarget() const;
 
 	};

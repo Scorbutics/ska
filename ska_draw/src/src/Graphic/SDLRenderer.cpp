@@ -92,15 +92,8 @@ void ska::SDLRenderer::free() {
 }
 
 void ska::SDLRenderer::setScreenShader(const Shader* shader) {
+	// From the next frame (it can be changed while a frame is drawn)
 	m_screenShader = shader;
-	if (m_renderer == nullptr) {
-		return;
-	}
-	if (shader != nullptr) {
-		prepareScreenTarget();
-	} else {
-		SDLLibrary::get().setRenderTarget(*m_renderer, nullptr);
-	}
 }
 
 void ska::SDLRenderer::prepareScreenTarget() const {
@@ -122,23 +115,22 @@ void ska::SDLRenderer::prepareScreenTarget() const {
 void ska::SDLRenderer::update() const {
 	assert(m_renderer != nullptr && "Renderer is not loaded");
 	const auto& sdl = SDLLibrary::get();
-	auto* state = m_screenShader != nullptr && m_screenTarget != nullptr ? m_screenShader->use(*m_renderer) : nullptr;
-	if (state == nullptr) {
-		if (m_screenTarget != nullptr) {
-			// The shader cannot be used : the frame drawn in the texture is shown as it is
-			sdl.setRenderTarget(*m_renderer, nullptr);
-			sdl.renderCopy(*m_renderer, *m_screenTarget, nullptr, nullptr);
-		}
-	} else {
-		// The frame, drawn in the texture, goes on the screen through the shader
+	if (m_frameInTarget) {
+		// The frame, drawn in the texture, goes on the screen through the shader (as it is when it cannot be used)
+		auto* state = m_screenShader != nullptr ? m_screenShader->use(*m_renderer) : nullptr;
 		sdl.setRenderTarget(*m_renderer, nullptr);
 		renderClear();
-		sdl.setGPURenderState(*m_renderer, state);
+		if (state != nullptr) {
+			sdl.setGPURenderState(*m_renderer, state);
+		}
 		sdl.renderCopy(*m_renderer, *m_screenTarget, nullptr, nullptr);
-		sdl.setGPURenderState(*m_renderer, nullptr);
+		if (state != nullptr) {
+			sdl.setGPURenderState(*m_renderer, nullptr);
+		}
 	}
 	renderPresent();
-	if (m_screenShader != nullptr) {
+	m_frameInTarget = m_screenShader != nullptr;
+	if (m_frameInTarget) {
 		prepareScreenTarget();
 	} else if (m_screenTarget != nullptr) {
 		sdl.destroyTexture(m_screenTarget);
@@ -178,7 +170,7 @@ void ska::SDLRenderer::setRenderTarget(Texture* t) {
 		t->getInstance()->asTarget(*m_renderer);
 	} else {
 		// Back to the frame : the screen, or the texture of the post-processing
-		ska::SDLLibrary::get().setRenderTarget(*m_renderer, m_screenShader != nullptr ? m_screenTarget : nullptr);
+		ska::SDLLibrary::get().setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
 	}
 }
 
