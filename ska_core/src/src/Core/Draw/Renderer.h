@@ -10,6 +10,7 @@ extern "C" {
 }
 
 namespace ska {
+	class Shader;
 	class AnimatedTexture;
 	class SDLTexture;
 	class SDLSurface;
@@ -34,9 +35,12 @@ namespace ska {
 		// Moves the drawing (pixels), ex : a sprite lunging forward
 		int offsetX = 0;
 		int offsetY = 0;
+		// A fragment shader for this drawing (Graphic/Shader.h), nullptr : none. Its uniforms are the same for all its
+		// drawings of a frame (the color of the drawing, above, can vary between them : the shader receives it)
+		const Shader* shader = nullptr;
 
 		bool active() const {
-			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0;
+			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || shader != nullptr;
 		}
 	};
 
@@ -62,6 +66,9 @@ namespace ska {
 		virtual void drawColorRect(const Color& c, const Rectangle& r) const = 0;
 		virtual void drawColorLine(const Color& c, const Point<int>& p1, const Point<int>& p2) const = 0;
 		
+		// A fragment shader run on the whole screen (post-processing) at each frame, nullptr : none
+		virtual void setScreenShader(const Shader*) {}
+
 		// The effect applied to the next renderings, until it is reset (nullptr)
 		void setEffect(const RenderEffect* effect) const {
 			m_effect = effect != nullptr && effect->active() ? effect : nullptr;

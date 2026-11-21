@@ -15,7 +15,8 @@ Rerun `cmake -S . -B build` after adding a source file (the sources are globbed)
 
 ## Modules
 
-- `ska_core`: ECS (entities, components, systems), events, the `ScriptRunner` interface (`Core/ECS/Basics/Script`).
+- `ska_core`: ECS (entities, components, systems), events, the `ScriptRunner` interface (`Core/ECS/Basics/Script`), the SDL3 calls (`SDLLibrary`, loaded at run time).
+- Drawing: `ska_draw` (`SDLRenderer` on the SDL3 `gpu` driver when possible). Shaders: `Graphic/Shader.h`, GLSL compiled by `ska_compile_shaders` (`cmake/SkaShaders.cmake`), used by `RenderEffect::shader` and `Renderer::setScreenShader` (README "Shaders").
 - `ska_draw`, `ska_gui`, `ska_audio`, `ska_particle`, `ska_ai`, `ska_physic_chipmunk`, `ska_world` (tile maps, chipsets): engine features.
 - `ska_script`: `ScriptRefreshSystem`, the script triggers (map events, tiles) giving the scripts to the runner of their file extension.
 - `ska_scripting`: the skalang runner (`ScriptVM`) and the engine functions given to the scripts (`EngineModule`, template `src/scripts/ska.engine.miniska`).

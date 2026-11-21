@@ -57,6 +57,7 @@ namespace ska {
 		void update() const override;
 
 		void load() override;
+		void setScreenShader(const Shader* shader) override;
 
 	private:
 		void load(SDL_Window* window);
@@ -67,6 +68,12 @@ namespace ska {
 		SDL_Renderer* m_renderer;
 		Color m_currentRenderColor;
 		SDLWindow& m_window;
+		// Post-processing : the frame is drawn in this texture, then on the screen with the shader
+		const Shader* m_screenShader = nullptr;
+		mutable SDL_Texture* m_screenTarget = nullptr;
+		mutable int m_screenTargetWidth = 0;
+		mutable int m_screenTargetHeight = 0;
+		void prepareScreenTarget() const;
 
 	};
 }

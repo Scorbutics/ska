@@ -54,6 +54,7 @@ namespace ska {
 		SDL_HIDE_CURSOR,
 		SDL_SET_RENDER_TARGET,
 		SDL_GET_RENDER_TARGET,
+		SDL_RENDER_READ_PIXELS,
 		SDL_CREATE_TEXTURE,
 		SDL_IO_FROM_FILE,
 		SDL_START_TEXT_INPUT,
@@ -119,6 +120,7 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_HIDE_CURSOR, bool());
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_TARGET, bool(SDL_Renderer*, SDL_Texture*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_RENDER_TARGET, SDL_Texture*(SDL_Renderer*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_RENDER_READ_PIXELS, SDL_Surface*(SDL_Renderer*, const SDL_Rect*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_CREATE_TEXTURE, SDL_Texture*(SDL_Renderer*, SDL_PixelFormat, SDL_TextureAccess, int, int));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_IO_FROM_FILE, SDL_IOStream*(const char*, const char*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_START_TEXT_INPUT, bool(SDL_Window*));
@@ -183,6 +185,7 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_HIDE_CURSOR),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_TARGET),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_RENDER_TARGET),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_RENDER_READ_PIXELS),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_CREATE_TEXTURE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_IO_FROM_FILE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_START_TEXT_INPUT),
@@ -264,6 +267,8 @@ namespace ska {
 		inline SDL_Texture* createTexture(SDL_Renderer& renderer, SDL_PixelFormat format, SDL_TextureAccess access, int w, int h) const { return callSDL(SDL_CREATE_TEXTURE)(&renderer, format, access, w, h); }
 		inline int setRenderTarget(SDL_Renderer& renderer, SDL_Texture* texture) const { return Result(callSDL(SDL_SET_RENDER_TARGET)(&renderer, texture)); }
 		inline SDL_Texture* getRenderTarget(SDL_Renderer& renderer) const { return callSDL(SDL_GET_RENDER_TARGET)(&renderer); }
+		// The pixels of the current target (a new surface, freed by the caller)
+		inline SDL_Surface* readPixels(SDL_Renderer& renderer, const SDL_Rect* rect) const { return callSDL(SDL_RENDER_READ_PIXELS)(&renderer, rect); }
 		inline int setRenderDrawBlendMode(SDL_Renderer& renderer, SDL_BlendMode blendMode) const { return Result(callSDL(SDL_SET_RENDER_DRAW_BLEND_MODE)(&renderer, blendMode)); }
 		inline int setRenderDrawColor(SDL_Renderer& renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const { return Result(callSDL(SDL_SET_RENDER_DRAW_COLOR)(&renderer, r, g, b, a)); }
 		inline int renderClear(SDL_Renderer& renderer) const { return Result(callSDL(SDL_RENDER_CLEAR)(&renderer)); }

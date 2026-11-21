@@ -66,6 +66,9 @@ add_custom_target(skalang_std_scripts ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${SKALANG_STD_SCRIPTS_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/scripts ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
 	COMMENT "Deploying the skalang standard library scripts")
+# Shaders : ska_compile_shaders() (GLSL to SPIR-V), for the engine tests and the games
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SkaShaders.cmake)
+
 # SDL3_mixer (loaded at run time by ska_audio) is not packaged everywhere : when it is not installed, it is built here
 # (with its built-in decoders : mp3, ogg vorbis, wav, flac), next to the engine libraries
 find_library(SKA_SDL3_MIXER_LIBRARY NAMES SDL3_mixer)

@@ -9,6 +9,13 @@ The renderer uses the `gpu` render driver of SDL3 when it can (Vulkan, Metal, Di
 
 For the physics, ska uses **Chipmunk2D** under the _MIT_ license.
 
+# Shaders
+Fragment shaders run on the drawings (`RenderEffect::shader`, ex: a sprite of an entity with `GraphicComponent::effect`) or on the whole screen (`Renderer::setScreenShader`, post-processing). They need the `gpu` render driver of SDL3 : with another one, the drawings are done without them (a warning is logged).
+
+* Written in GLSL (`#version 450`), compiled to SPIR-V during the build : `ska_compile_shaders(<target> OUTPUT_DIRECTORY <dir> SOURCES <file.frag>...)` (`cmake/SkaShaders.cmake`, needs `glslangValidator`). Metal and Direct3D 12 builds need the shaders compiled with SDL_shadercross (`.frag.msl`, `.frag.dxil`).
+* A shader receives the color of the drawing (`layout(location = 0) in vec4`), its texture coordinates (`location = 1`, `vec2`), the texture (`layout(set = 2, binding = 0) uniform sampler2D`) and its uniforms (`layout(set = 3, binding = 0) uniform`, given with `Shader::setUniforms`, the same for all the drawings of a frame).
+* `ska::Shader shader{ "Shaders/name", true }` loads `Shaders/name.frag.spv` (true : it has uniforms) the first time it is drawn.
+
 # Scripting
 Games are scripted with [skalang](https://github.com/Scorbutics/skalang) (`.miniska` scripts), built with the engine (`external/skalang`).
 

@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include "SDL_PointConverter.h"
 #include "Core/SDLLibrary.h"
+#include "Shader.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window) :
     m_renderer(nullptr),
@@ -82,13 +83,67 @@ void ska::SDLRenderer::drawColorLine(const Color& c, const Point<int>& p1, const
 }
 
 void ska::SDLRenderer::free() {
+	if (m_screenTarget != nullptr) {
+		SDLLibrary::get().destroyTexture(m_screenTarget);
+		m_screenTarget = nullptr;
+	}
 	SDLLibrary::get().destroyRenderer(m_renderer);
 	m_renderer = nullptr;
 }
 
+void ska::SDLRenderer::setScreenShader(const Shader* shader) {
+	m_screenShader = shader;
+	if (m_renderer == nullptr) {
+		return;
+	}
+	if (shader != nullptr) {
+		prepareScreenTarget();
+	} else {
+		SDLLibrary::get().setRenderTarget(*m_renderer, nullptr);
+	}
+}
+
+void ska::SDLRenderer::prepareScreenTarget() const {
+	// The frame is drawn in a texture of the size of the window
+	const auto& sdl = SDLLibrary::get();
+	const auto width = static_cast<int>(m_window.getWidth());
+	const auto height = static_cast<int>(m_window.getHeight());
+	if (m_screenTarget == nullptr || width != m_screenTargetWidth || height != m_screenTargetHeight) {
+		if (m_screenTarget != nullptr) {
+			sdl.destroyTexture(m_screenTarget);
+		}
+		m_screenTarget = createTextureTarget(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+		m_screenTargetWidth = width;
+		m_screenTargetHeight = height;
+	}
+	sdl.setRenderTarget(*m_renderer, m_screenTarget);
+}
+
 void ska::SDLRenderer::update() const {
 	assert(m_renderer != nullptr && "Renderer is not loaded");
+	const auto& sdl = SDLLibrary::get();
+	auto* state = m_screenShader != nullptr && m_screenTarget != nullptr ? m_screenShader->use(*m_renderer) : nullptr;
+	if (state == nullptr) {
+		if (m_screenTarget != nullptr) {
+			// The shader cannot be used : the frame drawn in the texture is shown as it is
+			sdl.setRenderTarget(*m_renderer, nullptr);
+			sdl.renderCopy(*m_renderer, *m_screenTarget, nullptr, nullptr);
+		}
+	} else {
+		// The frame, drawn in the texture, goes on the screen through the shader
+		sdl.setRenderTarget(*m_renderer, nullptr);
+		renderClear();
+		sdl.setGPURenderState(*m_renderer, state);
+		sdl.renderCopy(*m_renderer, *m_screenTarget, nullptr, nullptr);
+		sdl.setGPURenderState(*m_renderer, nullptr);
+	}
 	renderPresent();
+	if (m_screenShader != nullptr) {
+		prepareScreenTarget();
+	} else if (m_screenTarget != nullptr) {
+		sdl.destroyTexture(m_screenTarget);
+		m_screenTarget = nullptr;
+	}
 	renderClear();
 }
 
@@ -122,7 +177,8 @@ void ska::SDLRenderer::setRenderTarget(Texture* t) {
 	if (t != nullptr && t->getInstance() != nullptr) {
 		t->getInstance()->asTarget(*m_renderer);
 	} else {
-		ska::SDLLibrary::get().setRenderTarget(*m_renderer, nullptr);
+		// Back to the frame : the screen, or the texture of the post-processing
+		ska::SDLLibrary::get().setRenderTarget(*m_renderer, m_screenShader != nullptr ? m_screenTarget : nullptr);
 	}
 }
 
@@ -172,7 +228,14 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (blendMode == SDL_BLENDMODE_NONE) {
 			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
 		}
+		auto* shaderState = effect.shader != nullptr ? effect.shader->use(*m_renderer) : nullptr;
+		if (shaderState != nullptr) {
+			sdl.setGPURenderState(*m_renderer, shaderState);
+		}
 		sdl.renderCopyEx(*m_renderer, *texture, clipPointer, &destBuf, angle, centerPointer, SDL_FLIP_NONE);
+		if (shaderState != nullptr) {
+			sdl.setGPURenderState(*m_renderer, nullptr);
+		}
 		if (effect.flash > 0) {
 			// Added twice over the drawing : its colors go to white
 			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_ADD);
