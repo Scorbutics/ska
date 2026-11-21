@@ -71,3 +71,7 @@ bool ska::DebugWindow::onDebugGUIEvent(DebugGUIEvent& debugGuiEvent) {
 	return false;
 }
 
+
+void ska::DebugWindow::show(bool visible) {
+	m_dbgWindow->show(visible);
+}

@@ -29,6 +29,8 @@ namespace ska {
 	public:
 		DebugWindow(GUI& gui, GameEventDispatcher& ged);
 		void refresh(unsigned int ellapsedTime);
+		// Shows or hides the window (ex : hidden during a battle, the interface of the battle uses the screen)
+		void show(bool visible);
 		virtual ~DebugWindow() = default;
 
 	private:
