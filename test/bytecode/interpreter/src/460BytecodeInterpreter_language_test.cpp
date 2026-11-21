@@ -144,3 +144,22 @@ TEST_CASE("[BytecodeInterpreter] comments are ignored") {
 	)script");
 	CHECK(result.nodeval<long>() == 42);
 }
+
+TEST_CASE("[BytecodeInterpreter] a function parameter hides a script variable with the same name (it does not assign it)") {
+	const auto result = Run(R"script(
+		counter = 5
+		entity = function(name: string): int do
+			return 7
+		end
+		setCounter = function(counter: int) do
+			counter = counter + 1
+		end
+		use = function(entity: int): int do
+			return entity * 2
+		end
+		setCounter(100)
+		used = use(entity("a"))
+		out = counter * 100 + used + entity("b")
+	)script");
+	CHECK(result.nodeval<long>() == 5 * 100 + 14 + 7);
+}

@@ -243,7 +243,10 @@ bool ska::SymbolTable::match(VarTokenEvent& token) {
 			// a declaration is always a new field of the object : it must not reuse a variable of an outer scope with the same name.
 			const auto isObjectLiteralScope = &m_currentTable->parent() != m_currentTable &&
 				!m_currentTable->name().empty() && m_currentTable->name() == m_currentTable->parent().name();
-			auto symbolTable = isObjectLiteralScope ? (*m_currentTable)(variableName) : (*m_currentTable)[variableName];
+			// A function parameter is always a new variable of the function too (it hides an outer variable with the same name,
+			// it does not assign it).
+			const auto isParameter = token.type() == VarTokenEventType::PARAMETER_DECLARATION;
+			auto symbolTable = (isObjectLiteralScope || isParameter) ? (*m_currentTable)(variableName) : (*m_currentTable)[variableName];
 			if (symbolTable == nullptr) {
 				SLOG(ska::LogLevel::Info) << " that was a new variable, added to current symbol table";
 				//TODO add && in return context
