@@ -37,7 +37,8 @@ namespace ska {
 
 		ska::cp::HitboxComponent BuildRectangleHitbox(Space& space, const ska::Point<float>& pos, const ska::Rectangle& box, double mass, EntityId entityId) {
 			const auto ballBodyIndex = space.addBody(Body::fromMoment(mass / 65.F, INFINITY));
-			const auto ballShapeIndex = space.addShape(&space.getBody(ballBodyIndex), Shape::fromBox(space.getBody(ballBodyIndex).body(), {0, 0, box.w, box.h}));
+			// The box is relative to the body (its position is the PositionComponent of the entity)
+			const auto ballShapeIndex = space.addShape(&space.getBody(ballBodyIndex), Shape::fromBox(space.getBody(ballBodyIndex).body(), {box.x, box.y, box.w, box.h}));
 
 			{
 				auto& ballBody = space.getBody(ballBodyIndex);
