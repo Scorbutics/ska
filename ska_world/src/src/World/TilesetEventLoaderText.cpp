@@ -42,10 +42,17 @@ void ska::TilesetEventLoaderText::addScriptIfExists(std::vector<ska::ScriptSleep
 
 
 std::optional<ska::ScriptSleepComponent> ska::TilesetEventLoaderText::fillScript(const std::string& chipsetFolder, const std::string& id, const ScriptTriggerType& type) {
-	std::ifstream currentScript;
-	const auto fullName = chipsetFolder + "/Scripts/" + id + "_" + static_cast<char>(static_cast<char>(type) + '0') + ".txt";
-	currentScript.open(fullName, std::ios_base::in);
-	if (currentScript.fail()) {
+	// "<tile id>_<trigger type>.miniska" (skalang script) or ".txt" (legacy script)
+	const auto baseName = chipsetFolder + "/Scripts/" + id + "_" + static_cast<char>(static_cast<char>(type) + '0');
+	auto fullName = std::string{};
+	for (const auto* extension : { ".miniska", ".txt" }) {
+		std::ifstream currentScript { baseName + extension, std::ios_base::in };
+		if (!currentScript.fail()) {
+			fullName = baseName + extension;
+			break;
+		}
+	}
+	if (fullName.empty()) {
 		return std::optional<ScriptSleepComponent>();
 	}
 
