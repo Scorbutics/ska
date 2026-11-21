@@ -3,6 +3,7 @@
 #include "Core/Point.h"
 #include "Core/Draw/Color.h"
 #include <SDL3/SDL.h>
+#include <cstdint>
 
 namespace ska {
 	class SDLWindow;

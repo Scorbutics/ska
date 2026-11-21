@@ -35,9 +35,12 @@ namespace ska {
 		// Moves the drawing (pixels), ex : a sprite lunging forward
 		int offsetX = 0;
 		int offsetY = 0;
-		// A fragment shader for this drawing (Graphic/Shader.h), nullptr : none. Its uniforms are the same for all its
-		// drawings of a frame (the color of the drawing, above, can vary between them : the shader receives it)
+		// A fragment shader for this drawing (Graphic/Shader.h), nullptr : none. "shaderParameters" : its uniforms for this
+		// drawing only (two vec4 at most, "shaderParameterCount" floats), else the uniforms given to the shader are used.
+		// Changing the uniforms between drawings costs a flush of the drawings of the shader
 		const Shader* shader = nullptr;
+		float shaderParameters[8] = {};
+		unsigned int shaderParameterCount = 0;
 
 		bool active() const {
 			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || shader != nullptr;

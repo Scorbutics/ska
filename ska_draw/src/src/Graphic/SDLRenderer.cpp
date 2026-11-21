@@ -8,6 +8,7 @@
 #include "SDL_RectConverter.h"
 #include <cassert>
 #include <cstdlib>
+#include <algorithm>
 #include "SDL_PointConverter.h"
 #include "Core/SDLLibrary.h"
 #include "Shader.h"
@@ -220,7 +221,9 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (blendMode == SDL_BLENDMODE_NONE) {
 			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
 		}
-		auto* shaderState = effect.shader != nullptr ? effect.shader->use(*m_renderer) : nullptr;
+		auto* shaderState = effect.shader == nullptr ? nullptr : (effect.shaderParameterCount > 0 ?
+			effect.shader->use(*m_renderer, effect.shaderParameters, std::min(8u, effect.shaderParameterCount) * sizeof(float)) :
+			effect.shader->use(*m_renderer));
 		if (shaderState != nullptr) {
 			sdl.setGPURenderState(*m_renderer, shaderState);
 		}

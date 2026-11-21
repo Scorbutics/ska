@@ -20,7 +20,8 @@ namespace ska {
 	 * without it (a warning is logged once).
 	 *
 	 * The GLSL shader receives the color of the drawing (location 0) and its texture coordinates (location 1), the texture
-	 * drawn (set 2, binding 0), and the uniforms given here (set 3, binding 0) when it has some.
+	 * drawn (set 2, binding 0), and the uniforms given here (set 3, binding 0) when it has some. The uniforms can change
+	 * between two drawings (SDL draws the drawings already given with the previous ones first).
 	 */
 	class Shader {
 	public:
@@ -41,6 +42,8 @@ namespace ska {
 
 		// The renderer : the state to draw with (created at the first use), nullptr when the shader cannot be used
 		SDL_GPURenderState* use(SDL_Renderer& renderer) const;
+		// The same, with uniforms for one drawing (RenderEffect::shaderParameters)
+		SDL_GPURenderState* use(SDL_Renderer& renderer, const void* uniforms, std::size_t size) const;
 
 	private:
 		bool load(SDL_Renderer& renderer) const;

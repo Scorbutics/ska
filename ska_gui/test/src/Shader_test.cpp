@@ -77,6 +77,36 @@ TEST_CASE("[Shader] a fragment shader runs on a drawing") {
 		CHECK(color.b == 0);
 	}
 
+	SUBCASE("Each drawing has its own uniforms, in the same frame") {
+		auto uniformColor = ska::Shader{ SKA_TEST_SHADERS_DIR "/uniform_color", true };
+		auto target = ska::Texture{};
+		target.loadAsTarget(renderer, 64, 32);
+		auto square = ska::Texture{};
+		square.loadFromColoredRect(16, 16, ska::Color{ 255, 255, 255, 255 });
+		auto red = ska::RenderEffect{};
+		red.shader = &uniformColor;
+		red.shaderParameters[0] = 1.F;
+		red.shaderParameters[3] = 1.F;
+		red.shaderParameterCount = 4;
+		auto green = red;
+		green.shaderParameters[0] = 0.F;
+		green.shaderParameters[1] = 1.F;
+
+		renderer.setRenderTarget(&target);
+		renderer.setEffect(&red);
+		renderer.render(square, 8, 8, nullptr, 0., nullptr);
+		renderer.setEffect(&green);
+		renderer.render(square, 40, 8, nullptr, 0., nullptr);
+		renderer.setEffect(nullptr);
+		const auto left = ReadPixel(renderer, 16, 16);
+		const auto right = ReadPixel(renderer, 48, 16);
+		renderer.setRenderTarget(nullptr);
+		CHECK(left.r == 255);
+		CHECK(left.g == 0);
+		CHECK(right.r == 0);
+		CHECK(right.g == 255);
+	}
+
 	SUBCASE("A shader that cannot be read : the drawing is done without it") {
 		auto missing = ska::Shader{ SKA_TEST_SHADERS_DIR "/missing" };
 		auto effect = ska::RenderEffect{};

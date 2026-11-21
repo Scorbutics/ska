@@ -13,11 +13,16 @@ ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
 }
 
 void ska::SoundRenderer::play(MIX_Audio* m_instance) {
+	// Already played (ex : the next map has the same music) : it goes on
+	if (m_instance != nullptr && m_instance == m_currentPlayed) {
+		return;
+	}
 	SDLMixerLibrary::get().stopMusic();
 	if(SDLMixerLibrary::get().playMusic(m_instance, -1) != 0) {
 		SLOG(LogLevel::Error) << "SoundManager error : " << ska::SDLLibrary::get().getError();
 		m_currentPlayed = nullptr;
 	} else {
+		SLOG(LogLevel::Info) << "Music played";
 		m_currentPlayed = m_instance;
 	}
 }

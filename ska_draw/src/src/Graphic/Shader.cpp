@@ -110,3 +110,14 @@ SDL_GPURenderState* ska::Shader::use(SDL_Renderer& renderer) const {
 	}
 	return m_state;
 }
+
+SDL_GPURenderState* ska::Shader::use(SDL_Renderer& renderer, const void* uniforms, std::size_t size) const {
+	auto* state = use(renderer);
+	if (state != nullptr) {
+		// SDL draws the drawings already given with the previous uniforms first
+		SDLLibrary::get().setGPURenderStateFragmentUniforms(*state, 0, uniforms, static_cast<Uint32>(size));
+		// The uniforms of the shader are given again to its next drawing without its own ones
+		m_uniformsChanged = true;
+	}
+	return state;
+}
