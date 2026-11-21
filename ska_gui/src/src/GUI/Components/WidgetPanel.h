@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -27,11 +28,17 @@ namespace ska {
 			return result;
 		}
 
+		// Removes (and destroys) a widget of this panel.
+		// The widget is looked for among the handled (interactive) widgets and the other ones, whatever the static type
+		// used to remove it (ex : a window removed as a WidgetPanel, although it was added as an interactive window).
 		template <class SubWidget>
 		bool removeWidget(SubWidget* w) {
-			auto removed = false;
-			removed |= WidgetHandlingTrait<SubWidget>::manageHandledRemove(w, m_handledWidgets, m_widgets, m_globalList);
-			removed |= ska::VectorUtils::removeValue<std::vector<Widget*>, Widget*>(m_addedSortedWidgets, w);
+			Widget* widget = w;
+			// The raw pointers are removed first : the widget is destroyed with its owner
+			auto removed = ska::VectorUtils::removeValue<std::vector<Widget*>, Widget*>(m_addedSortedWidgets, widget);
+			removed |= ska::VectorUtils::removeValue<WidgetContainer<Widget*>, Widget*>(m_globalList, widget);
+			removed |= RemoveOwned(m_handledWidgets, widget);
+			removed |= RemoveOwned(m_widgets, widget);
 			return removed;
 		}
 
@@ -48,6 +55,18 @@ namespace ska {
 
 	private:
 		static constexpr auto GuiDefaultDisplayPriority = 65535;
+
+		template <class Container>
+		static bool RemoveOwned(Container& container, Widget* widget) {
+			auto owner = std::find_if(container.begin(), container.end(), [widget](const std::unique_ptr<Widget>& w) {
+				return w.get() == widget;
+			});
+			if (owner == container.end()) {
+				return false;
+			}
+			container.erase(owner);
+			return true;
+		}
 		
 		void organizeHandledWidgets();
 		void sortZIndexWidgets();

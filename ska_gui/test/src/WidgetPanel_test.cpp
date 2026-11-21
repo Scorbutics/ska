@@ -372,3 +372,25 @@ TEST_CASE("[WidgetPanel]Evenements par priorite") {
 	CHECK(order == expectedOrder);
 
 }
+
+TEST_CASE("[WidgetPanel]Suppression de widgets (quel que soit le type statique utilise)") {
+	auto renderer = MockRenderer();
+	ska::WidgetPanelInteractive<ska::ClickEventListener> wp;
+
+	auto& handled = wp.addWidget<HandledWidgetTest<ska::ClickEventListener>>();
+	handled.addHandler<ska::ClickEventListener>([](ska::Widget*, ska::ClickEvent&) {});
+	auto& plain = wp.addWidget<WidgetTest>();
+
+	// Removed as base widgets (as the GUI removes its windows)
+	ska::Widget* handledAsWidget = &handled;
+	ska::Widget* plainAsWidget = &plain;
+	CHECK(wp.removeWidget(handledAsWidget));
+	CHECK(wp.removeWidget(plainAsWidget));
+	CHECK(!wp.removeWidget(handledAsWidget));
+
+	CHECK(wp.backWidget() == nullptr);
+	CHECK(wp.backAddedWidget() == nullptr);
+	DisplayCounter::reset();
+	wp.render(renderer);
+	CHECK(DisplayCounter::getDisplayedInstances().size() == 0);
+}

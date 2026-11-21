@@ -19,23 +19,6 @@ namespace ska {
 			}
 		}
 
-        static bool manageHandledRemove(SubWidget* w, WidgetContainer<std::unique_ptr<Widget>>& handledWidgets, std::vector<std::unique_ptr<Widget>>& widgets, WidgetContainer<Widget*>& globalList) {
-			auto widget = static_cast<HandledWidgetMask*>(w);
-			auto activeWidget = !widget->isMaskEmpty();
-			if (activeWidget) {
-				auto itToRemove = std::remove_if(handledWidgets.begin(), handledWidgets.end(),
-					[w](std::unique_ptr<Widget>& it) {
-					return it.get() == w;
-				});
-				auto itRemoved = itToRemove != handledWidgets.end() ? handledWidgets.erase(itToRemove) : handledWidgets.end();
-
-				auto removed = itRemoved != handledWidgets.end();
-				 removed |= ska::VectorUtils::removeValue<WidgetContainer<Widget*>, Widget*>(globalList, w);
-				 return removed;
-			}
-
-	        return WidgetHandlingTrait<SubWidget, false>::manageHandledRemove(w, handledWidgets, widgets, globalList);
-        }
 	};
 
 	template <class SubWidget>
@@ -46,15 +29,5 @@ namespace ska {
 			globalList.push_back(std::move(rawW));
 		}
 
-        static bool manageHandledRemove(SubWidget* w, WidgetContainer<std::unique_ptr<Widget>>&, std::vector<std::unique_ptr<Widget>>& widgets, WidgetContainer<Widget*>& globalList) {
-			auto itRemoved = widgets.erase(std::remove_if(widgets.begin(), widgets.end(),
-                             [w](std::unique_ptr<Widget>& it){
-                                return it.get() == w;
-			}),
-				widgets.end());
-			auto removed = itRemoved != widgets.end();
-			removed |= ska::VectorUtils::removeValue(globalList, w);
-			return removed;
-		}
 	};
 }
