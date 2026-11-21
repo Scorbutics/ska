@@ -26,9 +26,37 @@ std::unordered_set<std::string> ska::Tokenizer::BuildAllowedMultipleCharTokenSym
 	return result;
 }
 
+// Comments : from a '#' (outside of a string) to the end of the line.
+// They are replaced by spaces, so that the positions of the following tokens (line, column) stay the same.
+static std::string BlankComments(std::string input) {
+	auto inString = false;
+	auto inComment = false;
+	for (auto index = std::size_t{ 0 }; index < input.size(); index++) {
+		auto& c = input[index];
+		if (inComment) {
+			if (c == '\n') {
+				inComment = false;
+			} else if (c != '\r') {
+				c = ' ';
+			}
+		} else if (inString) {
+			// (no escape sequence in strings : a string ends at the next quote)
+			if (c == '"') {
+				inString = false;
+			}
+		} else if (c == '"') {
+			inString = true;
+		} else if (c == '#') {
+			inComment = true;
+			c = ' ';
+		}
+	}
+	return input;
+}
+
 ska::Tokenizer::Tokenizer(const ReservedKeywordsPool& reserved, std::string input) :
 	m_reserved(reserved),
-	m_input(std::move(input)) {
+	m_input(BlankComments(std::move(input))) {
 }
 
 std::pair<ska::Token, ska::Token> ska::Tokenizer::stackToken(TokenType currentType, Token token, std::vector<Token>& stackSymbol) const {

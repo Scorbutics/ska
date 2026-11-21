@@ -131,3 +131,16 @@ TEST_CASE("[BytecodeInterpreter] return : without value, in a function with a re
 	)script";
 	CHECK_THROWS(Interpret(progStr));
 }
+
+TEST_CASE("[BytecodeInterpreter] comments are ignored") {
+	const auto result = Run(R"script(
+		# Doubles a value
+		double = function(v: int): int do # the parameter is an int
+			# a comment in a function
+			return v * 2 # returned
+		end
+		#
+		out = double(21) # 42
+	)script");
+	CHECK(result.nodeval<long>() == 42);
+}

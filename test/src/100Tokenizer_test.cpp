@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <doctest.h>
 #include "Config/LoggerConfigLang.h"
 #include "Service/Tokenizer.h"
@@ -363,3 +364,16 @@ TEST_CASE("Symbol by symbol") {
 	}
 }
 
+
+TEST_CASE("Comments : from a '#' to the end of the line, ignored") {
+	const auto keywords = ska::ReservedKeywordsPool{};
+	const auto withComments = ska::Tokenizer {keywords, "# a whole line comment\na = 1 # a trailing comment\n#\nb = \"# not a comment\" # but this is\n"}.tokenize();
+	const auto withoutComments = ska::Tokenizer {keywords, "\na = 1\n\nb = \"# not a comment\"\n"}.tokenize();
+	REQUIRE(withComments.size() == withoutComments.size());
+	for (auto index = 0u; index < withComments.size(); index++) {
+		CHECK(withComments[index] == withoutComments[index]);
+	}
+	auto stringToken = std::find_if(withComments.begin(), withComments.end(), [](const ska::Token& token) { return token.type() == ska::TokenType::STRING; });
+	REQUIRE(stringToken != withComments.end());
+	CHECK(*stringToken == ska::Token { "# not a comment", ska::TokenType::STRING, {} });
+}
