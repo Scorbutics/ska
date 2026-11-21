@@ -1,3 +1,4 @@
 wait = function(duration: int) do end
 choice = function(question: string) : int do return 0 end
 event = function(name: string) do end
+describe = function(name: string, count: int, enabled: bool) : string do return "" end

@@ -11,8 +11,9 @@ static void SetupStackParametersAndReturnValue(ska::bytecode::ExecutionContext& 
 	if (!passThrough) {	
 		context.push(std::move(result));
 	} else {
-		for (auto& param : parameters) {
-			context.push(std::move(param));
+		// Pushed back as they were (the first parameter on the top of the stack)
+		for (auto param = parameters.rbegin(); param != parameters.rend(); ++param) {
+			context.push(std::move(*param));
 		}
 	}
 }
@@ -27,8 +28,10 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(BIND)(ExecutionContext& context, co
 	/* Querying parameters */
 	auto parameterValues = std::make_shared<NodeValueArrayRaw>();
 	context.pop(*parameterValues, parametersNumber);
+	// The first parameter is on the top of the stack : popped values are from the last parameter to the first one.
+	// The native function receives them in the declaration order.
 	auto parametersAsVector = std::vector<ska::NodeValue>{};
-	std::copy(parameterValues->begin(), parameterValues->end(), std::back_inserter(parametersAsVector));
+	std::copy(parameterValues->rbegin(), parameterValues->rend(), std::back_inserter(parametersAsVector));
 
 	/* Calling function */
 	const auto& nativeFunction = context.getBinding(bindingIndex);

@@ -35,6 +35,9 @@ namespace {
 				events.push_back(params[0].convertString());
 				return ska::NodeValue{};
 			});
+			m_builder.bindField("describe", [](std::vector<ska::NodeValue> params) {
+				return ska::NodeValue{ std::make_shared<std::string>(params[0].convertString() + " " + params[1].convertString() + " " + params[2].convertString()) };
+			});
 			m_builder.generate();
 		}
 	private:
@@ -255,4 +258,15 @@ TEST_CASE("[BytecodeInterpreter] Script top level code runs once, even when impo
 	CHECK(coroutine.finished());
 	CHECK(coroutine.result().nodeval<long>() == 12);
 	CHECK(Joined(test.events) == "a top level");
+}
+
+TEST_CASE("[BytecodeInterpreter] Native function : receives its parameters in the declaration order") {
+	auto test = CoroutineTest {
+		"Binding = import \"bind:test.coroutine\"\n"
+		"describe = function() : string do\n"
+		"	return Binding.describe(\"apple\", 3, true)\n"
+		"end\n"
+	};
+	auto coroutine = test.start("describe");
+	CHECK(*coroutine.result().nodeval<ska::StringShared>() == "apple 3 true");
 }
