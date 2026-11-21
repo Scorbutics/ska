@@ -3,5 +3,5 @@ Engine = import "bind:ska.engine"
 run = function(args: string[]) do
 	Engine.setVariable("arguments", args.size())
 	Engine.setVariable("origin", Engine.origin())
-	Engine.log("basic script with " + args.size() + " arguments")
+	Engine.log("basic script with " + (args.size(): string) + " arguments")
 end
