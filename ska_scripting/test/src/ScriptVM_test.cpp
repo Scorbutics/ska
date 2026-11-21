@@ -119,6 +119,8 @@ TEST_CASE("[ScriptVM] a script starts another script, after its own step") {
 TEST_CASE("[ScriptVM] errors : a broken script is not started, a failing script is stopped") {
 	auto test = ScriptingTest{};
 	CHECK(!test.vm.start(Script("broken")));
+	// Still not started (and no crash) the next times
+	CHECK(!test.vm.start(Script("broken")));
 	CHECK(!test.vm.start(Script("does_not_exist")));
 
 	CHECK(test.vm.start(Script("failing"), { "a" }));
