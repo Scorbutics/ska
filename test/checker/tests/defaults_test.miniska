@@ -1,0 +1,9 @@
+# The template of the binding runs its default bodies
+Test = import "bind:std.native.test"
+Template = import "bind:test.template"
+Helper = import "wd:sub/helper"
+run = function(args: string[]) do
+	Test.equal((Template.twice(21): string), "0", "the default body of the template returns 0")
+	Test.equal((Helper.double(21): string), "42", "a wd: module runs")
+	Test.check(Template.name() == "", "the default name is empty")
+end

@@ -1,0 +1,3 @@
+# A fake of the binding test.template : it overrides the template in the tests
+twice = function(value: int): int do return value * 2 end
+name = function(): string do return "fake" end

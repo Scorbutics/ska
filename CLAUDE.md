@@ -18,7 +18,7 @@ Read [doc/LANGUAGE.md](doc/LANGUAGE.md) before writing or reviewing a script: th
 ```sh
 cmake -S . -B build && cmake --build build -j8
 cd build/bin && ./skalang_test && ./skalang_bytecode_generator_test && ./skalang_bytecode_serializer_test && ./skalang_bytecode_interpreter_test
-cd build && ctest   # skalang_check tests (test/checker)
+cd build && ctest   # skalang_check tests and headless script tests (test/checker)
 ```
 
 - Rerun `cmake -S . -B build` after adding a source file: the sources are globbed.

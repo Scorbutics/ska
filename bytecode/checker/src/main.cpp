@@ -1,9 +1,12 @@
 // skalang_check : compiles scripts (parsing, type checking, bytecode generation) without running them.
-// Usage : skalang_check [--bind <name>=<template file>]... [--wd <directory>] [--module] <file> [[--module] <file>]...
+// Usage : skalang_check [--run] [--bind <name>=<template file>]... [--wd <directory>] [--module] <file> [[--module] <file>]...
 //  - "bind:<name>" imports read the template file declaring the native functions (the host program binds them at run time)
 //  - "wd:" imports are relative to the --wd directory (default : the current directory)
 //  - a file is a script : it must declare "run = function(args: string[]) do ... end",
 //    unless it follows --module (a script only imported by other scripts)
+//  - --run : the scripts (not the modules) are run after being compiled : their "run" function is called with no argument.
+//    The "bind:" imports read from template files run the default bodies of the templates (fakes). Test scripts use the
+//    assertions of "bind:std.native.test" : a failed assertion (or any error) fails the script.
 // The exit code is the number of files that failed (capped at 255).
 #include <iostream>
 #include <fstream>
@@ -33,6 +36,7 @@
 #include "std/module/io/path.h"
 #include "std/module/math.h"
 #include "std/module/function/parameter.h"
+#include "std/module/test.h"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -48,7 +52,7 @@ namespace {
 		bool module = false;
 	};
 
-	void check(const FileToCheck& file) {
+	void check(const FileToCheck& file, bool run) {
 		const auto reservedKeywords = ska::ReservedKeywordsPool{};
 		auto typeCrosser = ska::TypeCrosser{};
 		auto parser = ska::StatementParser{ reservedKeywords };
@@ -68,6 +72,7 @@ namespace {
 		auto mathModule = ska::lang::MathModule(moduleConfiguration);
 		auto parameterValues = std::make_shared<ska::NodeValueArrayRaw>();
 		auto parameterModule = ska::lang::ParameterModule(moduleConfiguration, parameterValues);
+		auto testModule = ska::lang::TestModule(moduleConfiguration);
 
 		// The script is imported (and its "run" function called with the right type) by a generated script that is never run
 		auto starter = "CheckedScript = import \"" + ska::FileUtils::getCanonicalPath(file.path) + "\"\n";
@@ -75,13 +80,17 @@ namespace {
 			starter += "CheckedArguments = []: string\nCheckedScript.run(CheckedArguments)\n";
 		}
 		auto script = ska::bytecode::ScriptGenerationHelper{ mainCache, parser, "main", ska::Tokenizer{ reservedKeywords, starter }.tokenize() };
-		generator.generate(mainCache, std::move(script));
+		auto& generated = generator.generate(mainCache, std::move(script));
+		if (run && !file.module) {
+			auto executor = interpreter.interpret(generated.id(), mainCache);
+		}
 	}
 }
 
 int main(int argc, char* argv[]) {
 	auto files = std::vector<FileToCheck>{};
 	auto nextIsModule = false;
+	auto run = false;
 	for (auto i = 1; i < argc; i++) {
 		const auto argument = std::string{ argv[i] };
 		if ((argument == "--bind" || argument == "--wd") && i + 1 < argc) {
@@ -99,11 +108,13 @@ int main(int argc, char* argv[]) {
 				return 255;
 			}
 			ska::ScriptNameBindingAliases()[value.substr(0, separator)] = ska::FileUtils::getCanonicalPath(value.substr(separator + 1));
+		} else if (argument == "--run") {
+			run = true;
 		} else if (argument == "--module") {
 			nextIsModule = true;
 		} else if (!argument.empty() && argument[0] == '-') {
 			std::cerr << "Unknown option \"" << argument << "\"" << std::endl
-				<< "Usage : skalang_check [--bind <name>=<template file>]... [--wd <directory>] [--module] <file>..." << std::endl;
+				<< "Usage : skalang_check [--run] [--bind <name>=<template file>]... [--wd <directory>] [--module] <file>..." << std::endl;
 			return 255;
 		} else {
 			files.push_back({ ska::FileUtils::getCanonicalPath(argument), nextIsModule });
@@ -112,7 +123,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (files.empty()) {
-		std::cerr << "Usage : skalang_check [--bind <name>=<template file>]... [--wd <directory>] [--module] <file>..." << std::endl;
+		std::cerr << "Usage : skalang_check [--run] [--bind <name>=<template file>]... [--wd <directory>] [--module] <file>..." << std::endl;
 		return 255;
 	}
 
@@ -124,7 +135,10 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 		try {
-			check(file);
+			check(file, run);
+			if (run && !file.module) {
+				std::cout << "ok : " << file.path << std::endl;
+			}
 		} catch (std::exception& e) {
 			const auto message = std::string{ e.what() };
 			std::cerr << file.path << " : " << message << std::endl;
@@ -138,7 +152,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	if (failed > 0) {
-		std::cerr << failed << " / " << files.size() << " script(s) failed to compile" << std::endl;
+		std::cerr << failed << " / " << files.size() << " script(s) failed to " << (run ? "compile or run" : "compile") << std::endl;
 	}
 	return failed > 255 ? 255 : failed;
 }

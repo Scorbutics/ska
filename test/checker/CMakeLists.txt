@@ -61,3 +61,17 @@ skalang_check_scripts(skalang_checker_test_scripts
 	MODULES ${CHECKER_TEST_DIR}/sub/helper.miniska
 	BIND_DIRECTORIES ${CHECKER_TEST_DIR}/bind
 	WORKING_DIRECTORY ${CHECKER_TEST_DIR})
+
+# Headless test scripts (skalang_test_scripts) : templates as fakes, assertions
+skalang_test_scripts(skalang_script_defaults
+	TESTS ${CHECKER_TEST_DIR}/tests/defaults_test.miniska ${CHECKER_TEST_DIR}/tests/failing_test.miniska
+	BIND_DIRECTORIES ${CHECKER_TEST_DIR}/bind
+	WORKING_DIRECTORY ${CHECKER_TEST_DIR})
+set_tests_properties(skalang_script_defaults_failing_test PROPERTIES WILL_FAIL TRUE)
+skalang_test_scripts(skalang_script_fakes
+	TESTS ${CHECKER_TEST_DIR}/tests/fake_test.miniska
+	BIND_DIRECTORIES ${CHECKER_TEST_DIR}/bind ${CHECKER_TEST_DIR}/fakes_dir)
+add_test(NAME skalang_check_run_failure_message
+	COMMAND skalang_check --run ${CHECKER_TEST_DIR}/tests/failing_test.miniska)
+set_tests_properties(skalang_check_run_failure_message PROPERTIES
+	PASS_REGULAR_EXPRESSION "equal failed : a failing assertion ..1. instead of .2...*1 / 1 script.s. failed to compile or run")

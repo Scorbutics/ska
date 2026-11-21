@@ -192,7 +192,7 @@ end
 ```
 
 - The top level code of a script runs once. Every script importing it shares its variables.
-- Standard library : `std.native.io.log` (`print(string)`), `std.native.math` (`abs`, `min`, `max`, `clamp`, `sqrt`, `pow`, `floor`, `ceil`, `round`, and `absFloat`, `minFloat`, `maxFloat` on floats).
+- Standard library : `std.native.io.log` (`print(string)`), `std.native.test` (assertions of test scripts : `check`, `equal`, `fail`), `std.native.math` (`abs`, `min`, `max`, `clamp`, `sqrt`, `pow`, `floor`, `ceil`, `round`, and `absFloat`, `minFloat`, `maxFloat` on floats).
 - A host program declares its native functions in a template script (`bind:<name>` → `<name>.miniska`) : read it to know the functions available and their types.
 - A template can declare a function type taken by a native function (`Hook = function(entity: int) do end`, `on = function(event: string, handler: Hook) : int do ... end`) : pass it a function with the same parameters and return type, named or anonymous. The host calls it later. The type itself (`Module.Hook`) cannot be called.
 

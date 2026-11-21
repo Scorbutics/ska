@@ -219,6 +219,20 @@ To run an example script (it must declare a `run` function, receiving the comman
  * `--bind <name>=<file>` : the `bind:<name>` imports read this template file (declaring the functions that the host program binds at run time)
  * `--wd <directory>` : directory of the `wd:` imports
  * `--module <file>` : a script only imported by other scripts (the other files must declare `run = function(args: string[]) do ... end`)
+ * `--run` : the scripts are also run (their `run` function, without argument). The `bind:` imports read from template files run the default bodies of the templates : the scripts run without the host program (headless tests).
+
+### Testing scripts (headless)
+A test script runs with `skalang_check --run`, its assertions come from `Test = import "bind:std.native.test"` (`check(condition, message)`, `equal(actual, expected, message)`, `fail(message)`). A failed assertion or an error fails the test.
+The bindings of the host program are replaced by their templates (default bodies), or by fakes written for the tests (a script with the functions of the template, ex : a fake engine keeping its variables in a map).
+In CMake, `skalang_test_scripts` registers a ctest test per test script :
+```cmake
+enable_testing()
+skalang_test_scripts(game_scripts
+	TESTS ${CMAKE_SOURCE_DIR}/tests/battle_rules_test.miniska
+	BIND_DIRECTORIES ${CMAKE_SOURCE_DIR}/src/scripts ${CMAKE_SOURCE_DIR}/tests/fakes
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+```
+A template of a later directory overrides one of an earlier directory (the fakes after the templates).
 
 In a CMake project embedding skalang, `skalang_check_scripts` (see `cmake/SkalangCheck.cmake`) runs this check during the build :
 ```cmake

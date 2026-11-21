@@ -1,0 +1,4 @@
+Test = import "bind:std.native.test"
+run = function(args: string[]) do
+	Test.equal("1", "2", "a failing assertion")
+end
