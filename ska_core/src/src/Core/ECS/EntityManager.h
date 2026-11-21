@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <bitset>
 #include <bitset>
 #include <unordered_set>
