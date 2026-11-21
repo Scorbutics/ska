@@ -8,6 +8,16 @@ ska also uses **SDL2_giflib_sa**, an unofficial extension based on SDL in order 
 
 For the physics, ska uses **Chipmunk2D** under the _MIT_ license.
 
+# Scripting
+Games are scripted with [skalang](https://github.com/Scorbutics/skalang) (`.miniska` scripts), built with the engine (`external/skalang`).
+
+* A script declares a `run` function, called with the script arguments : `run = function(args: string[]) do ... end`
+* Scripts are started by the script triggers of the engine (map events, tiles, characters : `ScriptRefreshSystem`), through the `ScriptRunner` interface. The `ska_scripting` module provides the runner : the script VM (`ScriptVM`).
+* A script waits without blocking the game : a native function suspends it (ex : `Engine.wait(500)`, a movement, a message) and the VM resumes it when the action is over. All the scripts share their modules (a module is run once).
+* Engine functions : `Engine = import "bind:ska.engine"` (`ska_scripting/src/scripts/ska.engine.miniska`). A game adds its own functions (modules based on `lang::Module`, with a script template deployed in the `std` directory next to the executables).
+
+Module boundaries, checked at each build (`cmake/CheckBoundaries.cmake`) : the engine modules know nothing about the scripting (they only use `ScriptRunner`), and `ska_scripting` only depends on `ska_core`.
+
 # Made with ska engine (by me, for now...)
 Pokémon Smash & Dash - long term fan game of a Pokémon with real time battles
 ![Smash and Dash](http://www.coldragon.fr/scorbutics/data/upload/spore_ville_smash_and_dash.png)
