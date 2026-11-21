@@ -19,6 +19,16 @@ ska::Type ska::TypeCrossExpression<ska::ExpressionType::ARRAY>::cross(const std:
 		}
 	}
 	
+	// Arrays of functions are compatible when their functions are (same rule as for a function : structural equality,
+	// the names of the functions do not matter). Ex : an array of callbacks given to a parameter typed as "Default[]".
+	const auto functionArraysCompatible = type1 == ExpressionType::ARRAY && type2 == ExpressionType::ARRAY &&
+		type1.size() > 0 && type2.size() > 0 &&
+		type1[0] == ExpressionType::FUNCTION && type2[0] == ExpressionType::FUNCTION &&
+		type1[0].structuralEquality(type2[0]);
+	if (functionArraysCompatible) {
+		return type1;
+	}
+
 	const auto checkArraySubTypeCoherence = (type1 == type2) || (type2.size() > 0 ? type2[0] == type1 : (type1.size() > 0 && type1[0] == type2));
 	if (!checkArraySubTypeCoherence) {
 		auto ss = std::stringstream{};
