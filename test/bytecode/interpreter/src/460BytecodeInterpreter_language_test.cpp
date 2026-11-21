@@ -164,6 +164,39 @@ TEST_CASE("[BytecodeInterpreter] a function parameter hides a script variable wi
 	CHECK(result.nodeval<long>() == 5 * 100 + 14 + 7);
 }
 
+TEST_CASE("[BytecodeInterpreter] negative numbers and negation") {
+	SUBCASE("literals") {
+		const auto result = Run(R"script(
+			a = -1
+			b = 10 - -3
+			c = -2 * 3
+			d = -2.5 + 1
+			out = a + b * 100 + c * 10000 + ((d * 2): int) * 1000000
+		)script");
+		CHECK(result.nodeval<long>() == -1 + 13 * 100 - 6 * 10000 - 3 * 1000000);
+	}
+	SUBCASE("negation of an expression, binding tighter than the other operators") {
+		const auto result = Run(R"script(
+			x = 6
+			f = function(): int do return 4 end
+			a = -x
+			b = 12 / -x
+			c = -x * 2 + -f()
+			d = -(x - 10)
+			out = a * 1000000 + b * 10000 + c * 100 + d
+		)script");
+		CHECK(result.nodeval<long>() == -6 * 1000000 - 2 * 10000 - 16 * 100 + 4);
+	}
+	SUBCASE("subtraction is still a subtraction") {
+		const auto result = Run(R"script(
+			x = 6
+			y = 24 / 4 / 2
+			out = (x - 1 - 2) * 100 + y
+		)script");
+		CHECK(result.nodeval<long>() == 3 * 100 + 3);
+	}
+}
+
 TEST_CASE("[BytecodeInterpreter] booleans comparison") {
 	const auto result = Run(R"script(
 		yes = true

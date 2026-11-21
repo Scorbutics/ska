@@ -377,3 +377,14 @@ TEST_CASE("Comments : from a '#' to the end of the line, ignored") {
 	REQUIRE(stringToken != withComments.end());
 	CHECK(*stringToken == ska::Token { "# not a comment", ska::TokenType::STRING, {} });
 }
+
+TEST_CASE("Symbols : two symbols separated by a blank are two tokens") {
+	const auto keywords = ska::ReservedKeywordsPool{};
+	const auto separated = ska::Tokenizer {keywords, "a - -3"}.tokenize();
+	REQUIRE(separated.size() == 4);
+	CHECK(separated[1] == ska::Token{"-", ska::TokenType::SYMBOL, {}});
+	CHECK(separated[2] == ska::Token{"-", ska::TokenType::SYMBOL, {}});
+	const auto joined = ska::Tokenizer {keywords, "a -= 3"}.tokenize();
+	REQUIRE(joined.size() == 3);
+	CHECK(joined[1] == ska::Token{"-=", ska::TokenType::SYMBOL, {}});
+}

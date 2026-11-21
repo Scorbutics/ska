@@ -126,6 +126,9 @@ std::vector<ska::Token> ska::Tokenizer::tokenize() const {
 			auto group = stackToken(currentTokenToRead.current, std::move(token), stackSymbol);
 			push(std::move(group.first), result);
 			push(std::move(group.second), result);			
+		} else if (!stackSymbol.empty()) {
+			// A blank ends a symbol : "- -3" is a subtraction of -3, not "--"
+			push(group(stackSymbol), result);
 		}
 	
 	} while (currentTokenToRead.current != ska::TokenType::EMPTY);

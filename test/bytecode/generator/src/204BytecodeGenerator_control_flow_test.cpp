@@ -35,8 +35,8 @@ TEST_CASE("[BytecodeGenerator] if else with body") {
 		{ Command::ADD_I, "R1", "1", "3" },
 		{ Command::MOV, "V0", "R1" },
 		{ Command::JUMP_REL, "4" },
-		{ Command::ADD_I, "R2", "2", "1" },
-		{ Command::ADD_I, "R3", "4", "R2" },
+		{ Command::ADD_I, "R2", "4", "2" },
+		{ Command::ADD_I, "R3", "R2", "1" },
 		{ Command::MOV, "V1", "R3" },
 		{ Command::MOV, "V2", "V1" },
 		{ Command::MOV, "V3", "444" }

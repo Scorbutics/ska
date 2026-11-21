@@ -149,6 +149,21 @@ bool ska::ExpressionParser::matchSymbol(ScriptAST& input, ExpressionStack& expre
 		return false;
 	}
 
+	if (value == "-" && expressions.expectsOperand()) {
+		const auto minus = input.reader().match(TokenType::SYMBOL);
+		if (input.reader().expect(TokenType::DIGIT)) {
+			// Negative number
+			const auto number = input.reader().match(TokenType::DIGIT);
+			expressions.push(ASTFactory::MakeLogicalNode(Token{ "-" + std::get<std::string>(number.content()), TokenType::DIGIT, minus.position() }));
+			return false;
+		}
+		// Negation of an operand : "0 - operand", the subtraction binding tighter than the other operators
+		SLOG(ska::LogLevel::Info) << "\t\tPushing negation";
+		expressions.push(ASTFactory::MakeLogicalNode(Token{ "0", TokenType::DIGIT, minus.position() }));
+		expressions.push(Token{ ExpressionStack::NegationOperator, TokenType::SYMBOL, minus.position() });
+		return true;
+	}
+
 	SLOG(ska::LogLevel::Info) << "\t\tPushing operator symbol " << value;
 
 	const auto shouldPopOperatorsStack = expressions.checkLessPriorityOperator(value);
@@ -169,7 +184,8 @@ bool ska::ExpressionParser::matchSymbol(ScriptAST& input, ExpressionStack& expre
 }
 
 int ska::ExpressionParser::matchParenthesis(ScriptAST& input, ExpressionStack& expressions, bool isDoingOperation) {
-	auto functionNameOperand = expressions.popOperandIfNoOperator(isDoingOperation);
+	// A parenthesis where an operand is expected is a grouping one, not a function call on the previous operand (ex : "((a))")
+	auto functionNameOperand = expressions.expectsOperand() ? nullptr : expressions.popOperandIfNoOperator(isDoingOperation);
 	if (functionNameOperand != nullptr) {
 		auto event = ExpressionTokenEvent{ *functionNameOperand, input };
 		m_parser.observable_priority_queue<ExpressionTokenEvent>::notifyObservers(event);

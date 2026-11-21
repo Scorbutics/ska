@@ -33,8 +33,8 @@ TEST_CASE("[BytecodeGenerator] Basic Maths linear") {
 	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
 
 	BytecodeCompare(res, {
-		{ska::bytecode::Command::SUB_I, "R0", "4", "1"},
-		{ska::bytecode::Command::ADD_I, "R1", "3", "R0"},
+		{ska::bytecode::Command::ADD_I, "R0", "3", "4"},
+		{ska::bytecode::Command::SUB_I, "R1", "R0", "1"},
 	});
 }
 
@@ -76,13 +76,13 @@ TEST_CASE("[BytecodeGenerator] Basic Maths with var") {
 	BytecodeCompare(res, {
 		{ska::bytecode::Command::MOV, "V0", "4"},
 		{ska::bytecode::Command::MUL_I, "R0", "V0", "5"},
-		{ska::bytecode::Command::DIV_I, "R1", "1", "4"},
-		{ska::bytecode::Command::SUB_I, "R2", "4", "R1"},
-		{ska::bytecode::Command::ADD_I, "R3", "3", "R2"},
+		{ska::bytecode::Command::ADD_I, "R1", "3", "4"},
+		{ska::bytecode::Command::DIV_I, "R2", "1", "4"},
+		{ska::bytecode::Command::SUB_I, "R3", "R1", "R2"},
 		{ska::bytecode::Command::MUL_I, "R4", "2", "R3"},
-		{ska::bytecode::Command::ADD_I, "R5", "1", "9"},
-		{ska::bytecode::Command::ADD_I, "R6", "R4", "R5"},
-		{ska::bytecode::Command::ADD_I, "R7", "R0", "R6"}
+		{ska::bytecode::Command::ADD_I, "R5", "R0", "R4"},
+		{ska::bytecode::Command::ADD_I, "R6", "R5", "1"},
+		{ska::bytecode::Command::ADD_I, "R7", "R6", "9"}
 	});
 }
 

@@ -1,7 +1,9 @@
 #pragma once
 #include <unordered_map>
 #include <functional>
+#include <type_traits>
 #include "iterable_stack.h"
+#include "NodeValue/Token.h"
 
 namespace ska {
 	namespace Group {
@@ -34,11 +36,20 @@ namespace ska {
 		static std::unordered_map<std::string, int> BuildPriorityMap();
 		static std::unordered_map<std::string, int> PRIORITY_MAP;
 	public:
+		// Operator of a negation ("-x") : a subtraction "0 - x" binding tighter than the other operators
+		static constexpr const char* NegationOperator = "u-";
+
 		void push(Operator&& op) {
 			operators.push(std::forward<Operator>(op));
+			m_expectsOperand = true;
 		}
 		
+		// The next token of the expression is an operand (beginning of the expression, after an operator or a parenthesis) :
+		// a "-" there is a negation, not a subtraction
+		bool expectsOperand() const { return m_expectsOperand; }
+
 		void push(Operand&& op) {
+			m_expectsOperand = false;
 			operands.push(std::forward<Operand>(op));
 		}
 		
@@ -87,8 +98,9 @@ namespace ska {
 				throw std::runtime_error(ss.str());
 			}
 
+			// Left associativity : "a - b - c" is "(a - b) - c" (an operator with the same priority is grouped first)
 			return PRIORITY_MAP.find(topOperatorContent) != PRIORITY_MAP.end() &&
-				PRIORITY_MAP.at(tokenOperator) < PRIORITY_MAP.at(topOperatorContent);
+				PRIORITY_MAP.at(tokenOperator) <= PRIORITY_MAP.at(topOperatorContent);
 		}
 
 	private:
@@ -144,6 +156,12 @@ namespace ska {
 			assert(!operators.empty());
 			auto result = std::move(operators.top());
 			operators.pop();
+			if constexpr (std::is_constructible_v<Operator, std::string, TokenType, Cursor>) {
+				// The negation is a subtraction in the AST
+				if (result.name() == NegationOperator) {
+					return Operator{ "-", TokenType::SYMBOL, result.position() };
+				}
+			}
 			return result;
 		}
 
@@ -156,6 +174,7 @@ namespace ska {
 
 		iterable_stack<Operator> operators {};
 		iterable_stack<Operand> operands{};
+		bool m_expectsOperand = true;
 	};
 
 	template<class Operator, class Operand>
@@ -178,6 +197,7 @@ namespace ska {
 		result.emplace("-", 100);
 		result.emplace("*", 200);
 		result.emplace("/", 200);
+		result.emplace(NegationOperator, 250);
 		result.emplace(":", 300);
 
 		return result;
