@@ -11,8 +11,7 @@ namespace ska {
     	DECLARATION_STATEMENT,
 		FACTORY_PROTOTYPE,
 		FACTORY_DECLARATION_STATEMENT,
-		CALL,
-		MEMBER_CALL
+		CALL
 	};
 
 	class FunctionTokenEvent {

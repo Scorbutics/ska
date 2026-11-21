@@ -49,7 +49,6 @@ ska::TypeBuildersContainer ska::BuildTypeBuildersContainer(const TypeCrosser& ty
 	TypeBuilderMakeBuilder<Operator::FUNCTION_PROTOTYPE_DECLARATION>(result);
 	TypeBuilderMakeBuilder<Operator::FUNCTION_DECLARATION>(result);
 	TypeBuilderMakeBuilder<Operator::FACTORY_PROTOTYPE_DECLARATION>(result);
-	TypeBuilderMakeBuilder<Operator::FUNCTION_MEMBER_CALL>(result);
 	TypeBuilderMakeBuilder<Operator::FIELD_ACCESS>(result);
 	TypeBuilderMakeBuilder<Operator::FOR_LOOP>(result);
 	TypeBuilderMakeBuilder<Operator::IMPORT>(result);

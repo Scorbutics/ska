@@ -10,7 +10,6 @@
 #include "TokenVariant.h"
 #include "NodeValueArray.h"
 #include "NodeValueMap.h"
-#include "NodeValueFunctionMember.h"
 
 namespace ska {
 	class NodeValue;
@@ -18,7 +17,6 @@ namespace ska {
 
 	using NodeValueVariant_ = std::variant<
 		TokenVariant,
-		NodeValueFunctionMember,
 		NodeValueArray,
 		NodeValueMap
 	>;

@@ -10,7 +10,6 @@
 
 #include "Operation/OperationTypeFunctionDeclaration.h"
 #include "Operation/OperationTypeFunctionCall.h"
-#include "Operation/OperationTypeFunctionMemberCall.h"
 #include "Operation/OperationTypeIfElse.h"
 #include "Operation/OperationTypeArrayDeclaration.h"
 #include "Operation/OperationTypeReturn.h"
@@ -193,11 +192,6 @@ void ska::SemanticTypeChecker::matchFunctionCall(const FunctionTokenEvent& token
 	CommonMatchFunctionCall(m_typeCrosser, functionCallOperation, 1);
 }
 
-void ska::SemanticTypeChecker::matchFunctionMemberCall(const FunctionTokenEvent& token) {
-	auto functionCallOperation = OperationType<Operator::FUNCTION_MEMBER_CALL>{ token.rootNode() };
-	CommonMatchFunctionCall(m_typeCrosser, functionCallOperation, 2);
-}
-
 bool ska::SemanticTypeChecker::matchFunction(const FunctionTokenEvent& token) {
 	switch(token.type()) {
 
@@ -205,9 +199,6 @@ bool ska::SemanticTypeChecker::matchFunction(const FunctionTokenEvent& token) {
 		matchFunctionCall(token);
 	} break;
 
-	case FunctionTokenEventType::MEMBER_CALL: {
-		matchFunctionMemberCall(token);
-	} break;
 
 	case FunctionTokenEventType::DECLARATION_STATEMENT: {
 		auto operation = OperationType<Operator::FUNCTION_DECLARATION>{ token.rootNode() };

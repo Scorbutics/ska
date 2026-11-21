@@ -47,8 +47,6 @@
 #include "Units/InterpreterCommandArrLength.h"
 #include "Units/InterpreterCommandScript.h"
 #include "Units/InterpreterCommandJumpNif.h"
-#include "Units/InterpreterCommandArrMemberAccess.h"
-#include "Units/InterpreterCommandJumpMember.h"
 #include "Units/InterpreterCommandArrSet.h"
 #include "Units/InterpreterCommandCell.h"
 #include "Units/InterpreterCommandPushCell.h"
@@ -106,13 +104,11 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::POP_IN_ARR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::POP_IN_VAR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::JUMP_ABS>(*this, result, generator);
-	InterpreterCommandDeclare<Command::JUMP_MEMBER>(*this, result, generator);
 	InterpreterCommandDeclare<Command::BIND>(*this, result, generator);
 	InterpreterCommandDeclare<Command::JUMP_REL>(*this, result, generator);
 	InterpreterCommandDeclare<Command::JUMP_NIF>(*this, result, generator);
 
 	InterpreterCommandDeclare<Command::ARR_ACCESS>(*this, result, generator);
-	InterpreterCommandDeclare<Command::ARR_MEMBER_ACCESS>(*this, result, generator);
 	InterpreterCommandDeclare<Command::ARR_LENGTH>(*this, result, generator);
 	InterpreterCommandDeclare<Command::SCRIPT>(*this, result, generator);
 

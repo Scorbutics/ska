@@ -89,37 +89,6 @@ static bool IsInstructionCommandClosed(const ska::bytecode::InstructionOutput& p
 	}
 }
 
-ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FUNCTION_MEMBER_CALL>::generate(OperateOn node, GenerationContext& context) {
-	auto preCallValue = generateNext(context.next(node.GetFunctionNameNode()));
-	LOG_DEBUG << "Function member call : "<< node.GetFunctionNameNode().name() << " of type " << node.GetFunctionType();
-
-	const auto* functionTypeSymbol = node.GetFunctionNameNode().symbol();
-	// Handle custom type functions
-	const auto* functionSymbolInfo = functionTypeSymbol == nullptr ? nullptr : context.getSymbolInfo(*functionTypeSymbol);
-	LOG_DEBUG << "Function Member Call symbol info : " << (functionSymbolInfo == nullptr || functionSymbolInfo->binding == std::numeric_limits<std::size_t>::max() ? "none" : "with binding");
-
-	auto callInstruction = InstructionOutput{};
-	if (functionSymbolInfo != nullptr && functionSymbolInfo->binding != std::numeric_limits<std::size_t>::max()) {
-		callInstruction.push(Instruction{ Command::BIND, Operand { ScriptVariableRef{ functionSymbolInfo->binding, functionSymbolInfo->script}, OperandType::BIND_NATIVE}, Operand {static_cast<long>(node.GetFunctionParameterSize()), OperandType::PURE} });
-		if (functionSymbolInfo->bindingPassThrough) {
-			callInstruction.push(Instruction { Command::JUMP_MEMBER, std::move(preCallValue.operand()) });
-		}
-	} else {
-		callInstruction.push(Instruction{ Command::JUMP_MEMBER, std::move(preCallValue.operand()) });
-	}
-	auto result = std::move(preCallValue);
-	applyGenerator(ApplyNOperations<Command::PUSH, decltype(node.rbegin())>, result, context, node.rbegin(), node.rend());
-	LOG_DEBUG << " PUSH result : " << result;
-
-	result.push(std::move(callInstruction));
-	if (node.GetFunctionType().back() != ExpressionType::VOID) {
-		result.push(Instruction{ Command::POP, context.queryNextRegister()});
-	}
-
-	LOG_DEBUG << "Output : " << result;
-	return result;
-}
-
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FUNCTION_CALL>::generate(OperateOn node, GenerationContext& context) {
 	auto preCallValue = generateNext(context.next(node.GetFunctionNameNode()));
 	LOG_DEBUG << "Function call : "<< node.GetFunctionNameNode().name() << " of type " << node.GetFunctionType();

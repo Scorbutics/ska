@@ -36,7 +36,6 @@ namespace ska {
 		bool matchConverter(const ConverterTokenEvent& token);
 
 		void matchFunctionCall(const FunctionTokenEvent& token);
-		void matchFunctionMemberCall(const FunctionTokenEvent& token);
 
 		const TypeCrosser& m_typeCrosser;
 	};
