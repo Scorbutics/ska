@@ -164,6 +164,9 @@ next = isOdd
  * Declaring a variable with the name of a variable of an enclosing function (or of the script) assigns this variable. Inside an object literal, a declaration always creates a new field.
  * Inside the body of a function, the name of the function is the function itself (recursion) : it cannot be assigned there.
  * `return` leaves the function right away. In a function without returned value, `return` alone leaves it.
+ * Operators are left associative (`6 - 1 - 2` is `3`). `-` before an operand is a negation (`-1`, `10 - -3`, `12 / -x`, `-f()`) : it binds tighter than the other operators.
+ * A function parameter is always a new variable of the function : it hides an outer variable with the same name.
+ * Booleans can be compared (`==`, `!=`).
  * The top level code of a script runs once : the following imports of the script only give its exports.
 
 ## Host API (C++) : calling script functions, coroutines
