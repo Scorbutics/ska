@@ -115,6 +115,7 @@ namespace ska {
 				case OperandType::LOCAL:
 				case OperandType::REG:
 				case OperandType::UPVAL:
+				case OperandType::SELF:
 					throw std::runtime_error("invalid memory : call frame operands are not stored in the script");
 				case OperandType::EMPTY:
 					throw std::runtime_error("cannot select empty variable relative memory");

@@ -82,6 +82,8 @@ namespace ska {
 				case OperandType::UPVAL:
 					*upvalue(index(dest)) = std::forward<T>(src);
 					break;
+				case OperandType::SELF:
+					throw std::runtime_error("invalid bytecode : the running function cannot be assigned");
 				default:
 					scriptFromOperand(dest, current).set(dest, std::forward<T>(src));
 					break;
@@ -97,6 +99,8 @@ namespace ska {
 					return frame().registers[index(operand)].template nodeval<T>();
 				case OperandType::UPVAL:
 					return static_cast<const NodeValue&>(*upvalue(index(operand))).template nodeval<T>();
+				case OperandType::SELF:
+					return frame().function.template nodeval<T>();
 				default:
 					return scriptFromOperand(operand, current).get<T>(operand);
 				}

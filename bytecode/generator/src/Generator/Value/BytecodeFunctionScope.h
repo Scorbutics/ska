@@ -18,6 +18,8 @@ namespace ska {
 		// - A variable of an enclosing function is reached through the cells captured by the closure (UPVAL operands),
 		//   resolved the same way as Lua upvalues : each intermediate function also captures it.
 		// - A local variable captured by a nested function lives in a cell, created by the function prologue (CELL instruction).
+		// - The function name, used inside its own body (recursion), is the function currently running (SELF operand) :
+		//   capturing the cell of its own variable would create a reference cycle (cell -> closure -> cell), leaked by reference counting.
 		class FunctionScope {
 		public:
 			FunctionScope(const ASTNode& functionNode, FunctionScope* parent, std::size_t scriptIndex);
@@ -51,6 +53,8 @@ namespace ska {
 			OperandUse local(const Symbol& symbol, Cursor position = {});
 			Operand capturedLocal(const Symbol& symbol);
 			const ScopedSymbolTable* symbolTable() const;
+			// Symbol of the variable storing this function (the function name)
+			const Symbol* selfSymbol() const;
 
 			const ASTNode* m_node = nullptr;
 			FunctionScope* m_parent = nullptr;

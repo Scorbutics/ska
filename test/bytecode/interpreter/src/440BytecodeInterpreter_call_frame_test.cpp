@@ -170,3 +170,43 @@ TEST_CASE("[BytecodeInterpreter] typing : a method uses a method of another inst
 	)script");
 	CHECK(result.nodeval<long>() == 15);
 }
+
+TEST_CASE("[BytecodeInterpreter] closure : self recursive local function used after its enclosing function returned") {
+	// The function name inside its own body is the running function (no captured cell, so no reference cycle)
+	const auto result = Run(R"script(
+		Make = function(): var do
+			Loop = function(i: int): int do
+				r = 0
+				if i > 0
+					r = i + Loop(i - 1)
+				end
+				return r
+			end
+			return {
+				run = Loop
+			}
+		end
+		out = Make().run(4)
+	)script");
+	CHECK(result.nodeval<long>() == 10);
+}
+
+TEST_CASE("[BytecodeInterpreter] closure : nested function calling the enclosing recursive function by its name") {
+	const auto result = Run(R"script(
+		Outer = function(n: int): int do
+			Countdown = function(i: int): int do
+				Step = function(): int do
+					return Countdown(i - 1)
+				end
+				r = 0
+				if i > 0
+					r = 1 + Step()
+				end
+				return r
+			end
+			return Countdown(n)
+		end
+		out = Outer(5)
+	)script");
+	CHECK(result.nodeval<long>() == 5);
+}

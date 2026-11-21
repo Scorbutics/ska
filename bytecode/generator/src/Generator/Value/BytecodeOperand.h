@@ -27,7 +27,9 @@ namespace ska {
 			// Local variable of the current function call frame
 			LOCAL,
 			// Variable of an enclosing function, captured by the current closure (index in its captured cells)
-			UPVAL
+			UPVAL,
+			// The function currently running (a function using its own name inside its body)
+			SELF
 		};
 
 		static constexpr const char* OperandTypeSTR[] = {
@@ -39,12 +41,13 @@ namespace ska {
 			"BIND_SCRIPT",
 			"MAGIC",
 			"LOCAL",
-			"UPVAL"
+			"UPVAL",
+			"SELF"
 		};
 
 		// Operand types refering to a value stored in memory (and not directly in the operand)
 		static constexpr bool IsMemoryOperand(OperandType type) {
-			return type == OperandType::VAR || type == OperandType::REG || type == OperandType::LOCAL || type == OperandType::UPVAL;
+			return type == OperandType::VAR || type == OperandType::REG || type == OperandType::LOCAL || type == OperandType::UPVAL || type == OperandType::SELF;
 		}
 
 		static inline std::ostream& operator<<(std::ostream& stream, const OperandType& val) {

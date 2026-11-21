@@ -37,6 +37,9 @@ namespace ska {
 			// Variable
 			auto variable = dest.isSymbolicLeaf() ? context.querySymbolOrOperand(dest) : generator.generateNext(context.next(dest));
 			auto variableDestination = variable.operand();
+			if (variableDestination.type() == OperandType::SELF) {
+				throw std::runtime_error("the function \"" + dest.name() + "\" cannot be assigned inside its own body");
+			}
 			variable.push(Instruction { Command::MOV, variableDestination, value });
 			return variable;
 		}

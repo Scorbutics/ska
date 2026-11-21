@@ -74,6 +74,10 @@ std::string ska::bytecode::Operand::toString() const {
 		output = "U" + output + ":" + script;
 		break;
 
+	case OperandType::SELF:
+		output = "SELF";
+		break;
+
 	default:
 		break;
 	}

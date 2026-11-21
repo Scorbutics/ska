@@ -73,6 +73,8 @@ ska::NodeValue ska::bytecode::Executor::resolveValue(const Operand& operand, con
 	}
 	case OperandType::UPVAL:
 		return static_cast<const NodeValue&>(*upvalue(index(operand)));
+	case OperandType::SELF:
+		return frame().function;
 	default:
 		return scriptFromOperand(operand, current).getCell(operand).resolved();
 	}
@@ -96,6 +98,10 @@ ska::NodeValue ska::bytecode::Executor::cellReference(const Operand& operand) co
 	}
 	case OperandType::UPVAL:
 		return NodeValue::CellReference(upvalue(index(operand)));
+	case OperandType::SELF:
+		// A nested function using the name of the running function : it captures a cell holding the running function value
+		// (the running function itself does not capture anything, so there is no reference cycle)
+		return NodeValue::CellReference(std::make_shared<NodeValue>(frame().function));
 	default:
 		throw std::runtime_error("invalid bytecode : only a local variable or an upvalue can be captured");
 	}

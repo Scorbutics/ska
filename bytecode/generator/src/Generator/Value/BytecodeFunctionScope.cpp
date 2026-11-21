@@ -14,6 +14,10 @@ const ska::ScopedSymbolTable* ska::bytecode::FunctionScope::symbolTable() const 
 	return m_node->symbolTable();
 }
 
+const ska::Symbol* ska::bytecode::FunctionScope::selfSymbol() const {
+	return symbolTable()->symbol();
+}
+
 const ska::bytecode::FunctionScope* ska::bytecode::FunctionScope::declaringScope(const ScopedSymbolTable& variableTable) const {
 	// The scope where the variable is declared : its parent symbol table (a function, a block, an object literal...)
 	const auto* table = &variableTable.parent();
@@ -53,6 +57,11 @@ ska::bytecode::Operand ska::bytecode::FunctionScope::capturedLocal(const Symbol&
 ska::bytecode::OperandUse ska::bytecode::FunctionScope::variable(const Symbol& symbol, const FunctionScope& declaring, Cursor position) {
 	if (&declaring == this) {
 		return local(symbol, std::move(position));
+	}
+
+	// The function name inside its own body : the function currently running
+	if (&symbol == selfSymbol()) {
+		return OperandUse{ ScriptVariableRef{ 0, m_script }, OperandType::SELF, std::move(position) };
 	}
 
 	assert(m_parent != nullptr && "a variable of an enclosing function requires an enclosing function");
