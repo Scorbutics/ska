@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Config/LoggerConfigLang.h"
 #include <array>
 #include "Runtime/Value/PlainMemoryTable.h"
@@ -93,6 +94,7 @@ namespace ska {
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::FLOAT, ExpressionType::FLOAT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_STR, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::STRING, ExpressionType::STRING);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_ARR, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::ARRAY, ExpressionType::ARRAY);
+			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_BOOL, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::BOOLEAN, ExpressionType::BOOLEAN);
 
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_D_I>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::FLOAT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_I_D>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::INT, ExpressionType::FLOAT);
@@ -105,6 +107,7 @@ namespace ska {
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::FLOAT, ExpressionType::FLOAT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_STR, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::STRING, ExpressionType::STRING);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_ARR, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::ARRAY, ExpressionType::ARRAY);
+			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CMP_BOOL, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::BOOLEAN, ExpressionType::BOOLEAN);
 
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_I, Command::TEST_G>::enqueue(result, LogicalOperator::GREATER, ExpressionType::INT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_G>::enqueue(result, LogicalOperator::GREATER, ExpressionType::FLOAT, ExpressionType::FLOAT);
@@ -189,9 +192,10 @@ ska::bytecode::InstructionOutput ska::bytecode::TypeConversionBinary(LogicalOper
 
 	auto result = TypeConversion(logicalOperator, selectedNode.type, unselectedNode.type, reverseOrder);
 	if(result.container.empty()) {
-		LOG_ERROR << "No command found for nodes " << node1.operand.toString() << " and " << node2.operand.toString() << " with types " << node1.type  << " and " << node2.type;
-		assert(false);
-		return { };
+		auto ss = std::stringstream{};
+		ss << "unsupported operation between the types \"" << node1.type << "\" and \"" << node2.type << "\"";
+		LOG_ERROR << ss.str();
+		throw std::runtime_error(ss.str());
 	}
 
 	assert(result.container.size() == 2 || result.container.size() == 1);

@@ -59,6 +59,8 @@ namespace ska {
 			CELL,
 			// PUSH_CELL local|upval : pushes the cell of a captured variable (to build a closure, or an object field aliasing it)
 			PUSH_CELL,
+			// CMP_BOOL dest left right : 0 if both booleans are equal, 1 otherwise (followed by TEST_EQ / TEST_NEQ)
+			CMP_BOOL,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -115,6 +117,7 @@ namespace ska {
 			"TEST_LE",
 			"CELL",
 			"PUSH_CELL",
+			"CMP_BOOL",
 			"NOP",
 			""
 		};

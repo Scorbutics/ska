@@ -163,3 +163,25 @@ TEST_CASE("[BytecodeInterpreter] a function parameter hides a script variable wi
 	)script");
 	CHECK(result.nodeval<long>() == 5 * 100 + 14 + 7);
 }
+
+TEST_CASE("[BytecodeInterpreter] booleans comparison") {
+	const auto result = Run(R"script(
+		yes = true
+		no = 1 > 2
+		count = 0
+		if yes == true
+			count = count + 1
+		end
+		if no == false
+			count = count + 10
+		end
+		if yes != no
+			count = count + 100
+		end
+		if yes == no
+			count = count + 1000
+		end
+		out = count
+	)script");
+	CHECK(result.nodeval<long>() == 111);
+}
