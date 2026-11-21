@@ -135,6 +135,8 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		destBuf.y += effect.anchorBottom ? destBuf.h - height : (destBuf.h - height) / 2;
 		destBuf.w = width;
 		destBuf.h = height;
+		destBuf.x += effect.offsetX;
+		destBuf.y += effect.offsetY;
 
 		const auto& sdl = SDLLibrary::get();
 		auto clipPointer = clip != nullptr ? &rClip : nullptr;

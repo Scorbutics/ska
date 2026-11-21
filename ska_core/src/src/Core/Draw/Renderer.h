@@ -31,9 +31,12 @@ namespace ska {
 		float scaleX = 1.F;
 		float scaleY = 1.F;
 		bool anchorBottom = true;
+		// Moves the drawing (pixels), ex : a sprite lunging forward
+		int offsetX = 0;
+		int offsetY = 0;
 
 		bool active() const {
-			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F;
+			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0;
 		}
 	};
 
