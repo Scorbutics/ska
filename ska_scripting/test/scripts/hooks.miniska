@@ -1,0 +1,13 @@
+# Registers a hook : it counts the events, waits, then records the count
+Engine = import "bind:ska.engine"
+
+count = 0
+run = function(args: string[]) do
+	hook = Engine.on("test.event", function(entity: int) do
+		count = count + 1
+		Engine.setVariable("entity", entity)
+		Engine.wait(10)
+		Engine.setVariable("count", count)
+	end)
+	Engine.setVariable("hook", hook)
+end

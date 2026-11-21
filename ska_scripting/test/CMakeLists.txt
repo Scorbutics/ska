@@ -24,4 +24,6 @@ set(SCRIPTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
 skalang_check_scripts(ska_scripting_test_scripts_check
 	SCRIPTS ${SCRIPTS_DIR}/basic.miniska ${SCRIPTS_DIR}/components.miniska ${SCRIPTS_DIR}/failing.miniska
 		${SCRIPTS_DIR}/math.miniska ${SCRIPTS_DIR}/starter.miniska ${SCRIPTS_DIR}/wait.miniska
-	BIND_DIRECTORIES ${SKA_SCRIPT_TEMPLATES_DIR})
+		${SCRIPTS_DIR}/calls.miniska ${SCRIPTS_DIR}/hooks.miniska ${SCRIPTS_DIR}/unhook.miniska
+		${SCRIPTS_DIR}/unknown_event.miniska ${SCRIPTS_DIR}/handles.miniska ${SCRIPTS_DIR}/emitter.miniska
+	BIND_DIRECTORIES ${SKA_SCRIPT_TEMPLATES_DIR} ${SCRIPTS_DIR})

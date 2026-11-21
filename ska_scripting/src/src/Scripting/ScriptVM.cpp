@@ -1,5 +1,6 @@
 #include "__internalConfig/LoggerConfig.h"
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include "ScriptVM.h"
 #include "Base/IO/Files/FileUtils.h"
@@ -93,20 +94,26 @@ bool ska::scripting::ScriptVM::start(const std::string& scriptFile, std::vector<
 
 bool ska::scripting::ScriptVM::startNow(PendingStart script) {
 	try {
-		const auto scriptIndex = compile(script.scriptFile);
-		if (!scriptIndex.has_value()) {
-			return false;
-		}
-		auto run = m_interpreter.exported(m_executor, *scriptIndex, m_scriptCache, "run");
+		auto function = std::move(script.function);
+		auto values = std::move(script.values);
+		if (function.empty()) {
+			// A script file : its "run" function, with the string arguments
+			const auto scriptIndex = compile(script.scriptFile);
+			if (!scriptIndex.has_value()) {
+				return false;
+			}
+			function = m_interpreter.exported(m_executor, *scriptIndex, m_scriptCache, "run");
 
-		auto arguments = std::make_shared<NodeValueArrayRaw>();
-		for (const auto& argument : script.arguments) {
-			arguments->push_back(NodeValue{ std::make_shared<std::string>(argument) });
+			auto arguments = std::make_shared<NodeValueArrayRaw>();
+			for (const auto& argument : script.arguments) {
+				arguments->push_back(NodeValue{ std::make_shared<std::string>(argument) });
+			}
+			values = { NodeValue{ std::move(arguments) } };
 		}
 
 		LOG_INFO << "Starting script \"" << script.context.name << "\"";
 		auto coroutine = runStep(script.context, [&]() {
-			return m_interpreter.start(m_executor, m_scriptCache, run, { NodeValue{ std::move(arguments) } });
+			return m_interpreter.start(m_executor, m_scriptCache, function, std::move(values));
 		});
 		auto running = std::make_unique<RunningScript>(RunningScript{ std::move(coroutine), std::move(script.context), Key(script.scriptFile, script.arguments), {}, {} });
 		if (afterStep(*running)) {
@@ -220,4 +227,141 @@ void ska::scripting::ScriptVM::start(const ScriptSleepComponent& script, EntityI
 	context.name = script.name;
 	context.origin = origin;
 	start(script.name, script.args, std::move(context));
+}
+
+/* Synchronous calls */
+
+namespace {
+	ska::ExpressionType ValueType(const ska::NodeValue& value) {
+		if (value.is<long>()) { return ska::ExpressionType::INT; }
+		if (value.is<double>()) { return ska::ExpressionType::FLOAT; }
+		if (value.is<bool>()) { return ska::ExpressionType::BOOLEAN; }
+		if (value.is<ska::StringShared>()) { return ska::ExpressionType::STRING; }
+		if (value.is<ska::NodeValueArray>()) { return ska::ExpressionType::ARRAY; }
+		if (value.is<ska::ScriptVariableRef>()) { return ska::ExpressionType::FUNCTION; }
+		return ska::ExpressionType::OBJECT;
+	}
+}
+
+const ska::Symbol* ska::scripting::ScriptVM::exportedSymbol(std::size_t scriptIndex, const std::string& name) {
+	for (const auto& exported : m_scriptCache.getExportedSymbols(scriptIndex)) {
+		if (exported.has_value() && exported->symbol != nullptr && exported->symbol->name() == name) {
+			return exported->symbol;
+		}
+	}
+	return nullptr;
+}
+
+ska::NodeValue ska::scripting::ScriptVM::callFunction(const std::string& scriptFile, const std::string& function, std::vector<NodeValue> arguments, ExpressionType returned) {
+	const auto name = scriptFile + " : " + function;
+	if (m_scriptRunning) {
+		throw std::runtime_error("cannot call \"" + name + "\" while a script is running (the engine calls the scripts between their steps)");
+	}
+	const auto scriptIndex = compile(scriptFile);
+	if (!scriptIndex.has_value()) {
+		throw std::runtime_error("cannot call \"" + name + "\" : the script could not be compiled");
+	}
+
+	// The function type : its parameters, then its returned type
+	const auto* symbol = exportedSymbol(*scriptIndex, function);
+	if (symbol == nullptr || symbol->type() != ExpressionType::FUNCTION) {
+		throw std::runtime_error("cannot call \"" + name + "\" : the script has no function named \"" + function + "\"");
+	}
+	const auto& type = symbol->type();
+	auto signature = std::stringstream{};
+	signature << type;
+	if (type.size() != arguments.size() + 1) {
+		throw std::runtime_error("cannot call \"" + name + "\" (" + signature.str() + ") with " + std::to_string(arguments.size()) + " argument(s)");
+	}
+	for (auto index = std::size_t{ 0 }; index < arguments.size(); index++) {
+		if (ValueType(arguments[index]) != type[index].type()) {
+			throw std::runtime_error("cannot call \"" + name + "\" (" + signature.str() + ") : the argument " + std::to_string(index + 1) +
+				" is not a " + ExpressionTypeSTR[static_cast<std::size_t>(type[index].type())]);
+		}
+	}
+	if (type.back().type() != returned) {
+		throw std::runtime_error("cannot call \"" + name + "\" (" + signature.str() + ") : the engine expects a " +
+			ExpressionTypeSTR[static_cast<std::size_t>(returned)] + " returned value");
+	}
+
+	auto context = ScriptContext{};
+	context.name = name;
+	auto value = runStep(context, [&]() {
+		auto functionValue = m_interpreter.exported(m_executor, *scriptIndex, m_scriptCache, function);
+		auto coroutine = m_interpreter.start(m_executor, m_scriptCache, functionValue, std::move(arguments));
+		const auto waited = m_wait.has_value() || coroutine.suspended();
+		m_wait.reset();
+		if (waited) {
+			throw std::runtime_error("the function \"" + name + "\" cannot wait : it is called by the engine, that needs its value right away");
+		}
+		return coroutine.result();
+	});
+	// Scripts started by the function (Engine.script)
+	startPendingScripts();
+	return value;
+}
+
+/* Hooks */
+
+void ska::scripting::ScriptVM::declareEvent(std::string event) {
+	m_events.insert(std::move(event));
+}
+
+bool ska::scripting::ScriptVM::eventDeclared(const std::string& event) const {
+	return m_events.find(event) != m_events.end();
+}
+
+std::size_t ska::scripting::ScriptVM::addHook(const std::string& event, NodeValue function) {
+	if (!eventDeclared(event)) {
+		auto events = std::vector<std::string>{ m_events.begin(), m_events.end() };
+		std::sort(events.begin(), events.end());
+		auto list = std::string{};
+		for (const auto& known : events) {
+			list += (list.empty() ? "" : ", ") + known;
+		}
+		throw std::runtime_error("unknown event \"" + event + "\" (events : " + (list.empty() ? "none" : list) + ")");
+	}
+	if (!function.is<ScriptVariableRef>()) {
+		throw std::runtime_error("a hook is a script function");
+	}
+	const auto id = m_nextHook++;
+	m_hooks.push_back(Hook{ id, event, std::move(function) });
+	return id;
+}
+
+bool ska::scripting::ScriptVM::removeHook(std::size_t hook) {
+	const auto size = m_hooks.size();
+	m_hooks.erase(std::remove_if(m_hooks.begin(), m_hooks.end(), [hook](const Hook& h) { return h.id == hook; }), m_hooks.end());
+	return m_hooks.size() != size;
+}
+
+void ska::scripting::ScriptVM::clearHooks() {
+	m_hooks.clear();
+}
+
+std::size_t ska::scripting::ScriptVM::hooks(const std::string& event) const {
+	return static_cast<std::size_t>(std::count_if(m_hooks.begin(), m_hooks.end(), [&event](const Hook& h) { return h.event == event; }));
+}
+
+std::size_t ska::scripting::ScriptVM::emit(const std::string& event, std::vector<NodeValue> arguments, ScriptContext context) {
+	if (!eventDeclared(event)) {
+		throw std::runtime_error("unknown event \"" + event + "\" emitted (not declared)");
+	}
+	if (context.name.empty()) {
+		context.name = "hook \"" + event + "\"";
+	}
+	// The hooks list can change while the hooks run (a hook removing itself)
+	auto started = std::vector<PendingStart>{};
+	for (const auto& hook : m_hooks) {
+		if (hook.event == event) {
+			started.push_back(PendingStart{ "", {}, context, hook.function, arguments });
+		}
+	}
+	for (auto& hook : started) {
+		m_pendingStarts.push_back(std::move(hook));
+	}
+	if (!m_scriptRunning) {
+		startPendingScripts();
+	}
+	return started.size();
 }

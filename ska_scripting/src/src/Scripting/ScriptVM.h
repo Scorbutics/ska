@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <type_traits>
 #include <memory>
 #include <optional>
 #include <string>
@@ -23,6 +24,8 @@
 #include "std/module/io/log.h"
 #include "std/module/math.h"
 
+#include "NodeValue/ExpressionType.h"
+#include "NodeValue/Symbol.h"
 #include "Core/ECS/ECSDefines.h"
 #include "Core/ECS/Basics/Script/ScriptRunner.h"
 
@@ -75,6 +78,39 @@ namespace ska {
 			// Number of suspended scripts
 			std::size_t suspendedScripts() const { return m_suspended.size(); }
 
+			/* Synchronous calls : the engine asks a script for a value (ex : a formula, a decision) */
+
+			// Calls an exported function of a script file and returns its value, right away.
+			// The arguments and the returned type are checked against the declared function type.
+			// Throws when the script does not compile, when the function is missing or has another type, when it fails,
+			// when it tries to wait (a synchronously called function cannot be suspended), or when a script is running
+			// (the engine calls the scripts between their steps).
+			template <class Returned>
+			Returned call(const std::string& scriptFile, const std::string& function, std::vector<NodeValue> arguments = {}) {
+				auto value = callFunction(scriptFile, function, std::move(arguments), ReturnedType<Returned>::type);
+				if constexpr (std::is_same_v<Returned, void>) {
+					return;
+				} else if constexpr (std::is_same_v<Returned, std::string>) {
+					return *value.template nodeval<StringShared>();
+				} else {
+					return value.template nodeval<Returned>();
+				}
+			}
+
+			/* Hooks : the scripts react to engine events */
+
+			// Makes an event available to the hooks (an unknown event is an error, to find the mistyped names)
+			void declareEvent(std::string event);
+			bool eventDeclared(const std::string& event) const;
+			// Calls "function" (a script function value) each time the event is emitted. Returns the hook id.
+			std::size_t addHook(const std::string& event, NodeValue function);
+			bool removeHook(std::size_t hook);
+			void clearHooks();
+			std::size_t hooks(const std::string& event) const;
+			// Starts the functions hooked on the event, as scripts (they can wait), with the arguments.
+			// During a script step, they start after it. Returns the number of hooks started.
+			std::size_t emit(const std::string& event, std::vector<NodeValue> arguments = {}, ScriptContext context = {});
+
 			// Time elapsed (sum of the "update" elapsed times), in milliseconds
 			unsigned long time() const { return m_time; }
 
@@ -90,6 +126,11 @@ namespace ska {
 			void wait(unsigned int milliseconds);
 
 		private:
+			template <class T> struct ReturnedType;
+
+			NodeValue callFunction(const std::string& scriptFile, const std::string& function, std::vector<NodeValue> arguments, ExpressionType returned);
+			const Symbol* exportedSymbol(std::size_t scriptIndex, const std::string& name);
+
 			static std::string Key(const std::string& scriptFile, const std::vector<std::string>& arguments);
 
 			struct RunningScript {
@@ -99,10 +140,18 @@ namespace ska {
 				std::function<bool()> ready;
 				std::function<NodeValue()> value;
 			};
+			// A script file to run (its "run" function with string arguments), or a function value (hook) with its arguments
 			struct PendingStart {
 				std::string scriptFile;
 				std::vector<std::string> arguments;
 				ScriptContext context;
+				NodeValue function;
+				std::vector<NodeValue> values;
+			};
+			struct Hook {
+				std::size_t id;
+				std::string event;
+				NodeValue function;
 			};
 			struct Wait {
 				std::function<bool()> ready;
@@ -149,6 +198,15 @@ namespace ska {
 			ScriptContext m_runningContext;
 			std::optional<Wait> m_wait;
 			unsigned long m_time = 0;
+			std::vector<Hook> m_hooks;
+			std::unordered_set<std::string> m_events;
+			std::size_t m_nextHook = 1;
 		};
+
+		template <> struct ScriptVM::ReturnedType<void> { static constexpr auto type = ExpressionType::VOID; };
+		template <> struct ScriptVM::ReturnedType<long> { static constexpr auto type = ExpressionType::INT; };
+		template <> struct ScriptVM::ReturnedType<double> { static constexpr auto type = ExpressionType::FLOAT; };
+		template <> struct ScriptVM::ReturnedType<bool> { static constexpr auto type = ExpressionType::BOOLEAN; };
+		template <> struct ScriptVM::ReturnedType<std::string> { static constexpr auto type = ExpressionType::STRING; };
 	}
 }

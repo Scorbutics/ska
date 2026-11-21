@@ -1,0 +1,5 @@
+Engine = import "bind:ska.engine"
+run = function(args: string[]) do
+	Engine.on("test.unknown", function(entity: int) do end)
+	Engine.setVariable("registered", 1)
+end

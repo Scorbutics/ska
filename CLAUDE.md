@@ -29,3 +29,5 @@ Rerun `cmake -S . -B build` after adding a source file (the sources are globbed)
 - Scripts are skalang scripts: read `external/skalang/doc/LANGUAGE.md` before writing one. Keep skalang's rules: strong static typing, no implicit conversion, no null value.
 - A native module is a `lang::Module` with a template script declaring its functions (`bind:<name>` → `<name>.miniska`). Update the template with the C++ binding: the static check (`skalang_check_scripts`, using `SKA_SCRIPT_TEMPLATES_DIR`) compiles the game scripts against the templates.
 - A function that waits (ex: `Engine.wait`) suspends the script (`interpreter.suspend()`), and the VM resumes it when the action is over.
+- Entities cross the boundary as handles (`EntityHandles`): never give a raw `EntityId` to a script, never use an `int` from a script as an `EntityId` without `handles.entity(...)`.
+- Engine → scripts: `ScriptVM::call<T>` for a value needed right away (no wait allowed), hooks (`declareEvent`, `EngineModule::emit`) for events. Neither can run while a script step runs: calls throw, emits are deferred.

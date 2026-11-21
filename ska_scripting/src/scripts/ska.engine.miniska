@@ -6,10 +6,13 @@ log = function(message: string) do end
 # Random number between 0 and max - 1
 random = function(max: int) : int do return 0 end
 
+# Entities are "int" handles. A handle of a removed entity is not valid anymore : using it is an error.
 # Entity that triggered the script (-1 if none)
 origin = function() : int do return 0 end
 # Entity with the given name (ex : "trainer"), -1 if not found
 entity = function(name: string) : int do return 0 end
+# True when the entity was not removed (false for -1)
+exists = function(entity: int) : bool do return false end
 
 # Removes a component of an entity (ex : "InputComponent" : it stops reacting to the player inputs),
 # until "enableComponent" puts it back as it was
@@ -22,3 +25,10 @@ setVariable = function(name: string, value: int) do end
 
 # Starts another script (it runs on its own : this script does not wait for it)
 script = function(file: string, arguments: string[]) do end
+
+# Hooks : a function called each time an engine event happens (it runs as a script : it can wait).
+# The events are declared by the game (an unknown event is an error).
+EntityHook = function(entity: int) do end
+# Calls "handler" with the entity concerned by the event, until "removeHook" : returns the hook id
+on = function(event: string, handler: EntityHook) : int do return 0 end
+removeHook = function(hook: int) do end

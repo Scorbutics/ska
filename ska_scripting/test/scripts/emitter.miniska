@@ -1,0 +1,7 @@
+# Emits an event during its step : the hooks start after the step
+Engine = import "bind:ska.engine"
+Emitter = import "bind:test.emitter"
+run = function(args: string[]) do
+	Emitter.emit("test.event")
+	Engine.setVariable("emitted", Engine.variable("count") + 100)
+end

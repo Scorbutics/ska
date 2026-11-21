@@ -1,0 +1,4 @@
+Engine = import "bind:ska.engine"
+run = function(args: string[]) do
+	Engine.removeHook(Engine.variable("hook"))
+end

@@ -11,6 +11,7 @@
 #include "Runtime/Service/BridgeBuilder.h"
 #include "BytecodeInterpreter/BytecodeInterpreter.h"
 #include "Core/ECS/EntityManager.h"
+#include "EntityHandles.h"
 
 namespace ska {
 	class EntityLocator;
@@ -22,9 +23,12 @@ namespace ska {
 		// Engine functions for the scripts : Engine = import "bind:ska.engine" (see the "ska.engine" script template)
 		class EngineModule : public lang::Module<bytecode::Interpreter> {
 		public:
-			// "savegame" : storage of the game variables (optional)
-			EngineModule(ScriptVM& vm, EntityManager& entityManager, const EntityLocator& locator, MemoryScript* savegame = nullptr);
+			// "handles" : the entities given to the scripts. "savegame" : storage of the game variables (optional)
+			EngineModule(ScriptVM& vm, EntityManager& entityManager, const EntityLocator& locator, const EntityHandles& handles, MemoryScript* savegame = nullptr);
 			~EngineModule() override = default;
+
+			// Starts the hooks of an event (declared with ScriptVM::declareEvent) about an entity (hook : function(entity: int))
+			std::size_t emit(const std::string& event, const std::optional<EntityId>& entity);
 
 			// Makes a component type removable by the scripts (disableComponent / enableComponent), under a name
 			template <class Component>
@@ -57,6 +61,7 @@ namespace ska {
 
 			ScriptVM& m_vm;
 			EntityManager& m_entityManager;
+			const EntityHandles& m_handles;
 			std::unordered_map<std::string, ComponentAccess> m_components;
 			std::mt19937 m_random;
 			BridgeBuilder<bytecode::Interpreter> m_builder;

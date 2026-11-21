@@ -14,27 +14,16 @@ SKA_LOGC_CONFIG(ska::LogLevel::Info, ska::scripting::EngineModuleLog);
 #define LOG_INFO SLOG_STATIC(ska::LogLevel::Info, ska::scripting::EngineModuleLog)
 
 namespace {
-	long EntityValue(const std::optional<ska::EntityId>& entity) {
-		return entity.has_value() ? static_cast<long>(*entity) : -1L;
-	}
-
-	ska::EntityId EntityParameter(const ska::NodeValue& value) {
-		const auto entity = value.nodeval<long>();
-		if (entity < 0) {
-			throw std::runtime_error("invalid entity : " + std::to_string(entity));
-		}
-		return static_cast<ska::EntityId>(entity);
-	}
-
 	const std::string& StringParameter(const ska::NodeValue& value) {
 		return *value.nodeval<ska::StringShared>();
 	}
 }
 
-ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityManager, const EntityLocator& locator, MemoryScript* savegame) :
+ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityManager, const EntityLocator& locator, const EntityHandles& handles, MemoryScript* savegame) :
 	lang::Module<bytecode::Interpreter> { vm.modules(), "ska.engine", "std:ska.engine" },
 	m_vm(vm),
 	m_entityManager(entityManager),
+	m_handles(handles),
 	m_random(std::random_device{}()),
 	m_builder(BridgeBuilder<bytecode::Interpreter> { m_bridge }) {
 
@@ -60,21 +49,37 @@ ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityMa
 	});
 
 	m_builder.bindField("origin", [this](std::vector<NodeValue>) {
-		return NodeValue{ EntityValue(m_vm.context().origin) };
+		return NodeValue{ m_handles.handle(m_vm.context().origin) };
 	});
 
-	m_builder.bindField("entity", [&locator](std::vector<NodeValue> params) {
+	m_builder.bindField("entity", [this, &locator](std::vector<NodeValue> params) {
 		const auto* entity = locator.getEntityId(StringParameter(params[0]));
-		return NodeValue{ entity == nullptr ? -1L : static_cast<long>(*entity) };
+		return NodeValue{ entity == nullptr ? -1L : m_handles.handle(*entity) };
+	});
+
+	m_builder.bindField("exists", [this](std::vector<NodeValue> params) {
+		return NodeValue{ m_handles.find(params[0].nodeval<long>()).has_value() };
+	});
+
+	m_builder.bindField("on", [this](std::vector<NodeValue> params) {
+		return NodeValue{ static_cast<long>(m_vm.addHook(StringParameter(params[0]), params[1])) };
+	});
+
+	m_builder.bindField("removeHook", [this](std::vector<NodeValue> params) {
+		const auto hook = params[0].nodeval<long>();
+		if (hook > 0) {
+			m_vm.removeHook(static_cast<std::size_t>(hook));
+		}
+		return NodeValue{};
 	});
 
 	m_builder.bindField("disableComponent", [this](std::vector<NodeValue> params) {
-		component(StringParameter(params[1])).disable(EntityParameter(params[0]));
+		component(StringParameter(params[1])).disable(m_handles.entity(params[0].nodeval<long>()));
 		return NodeValue{};
 	});
 
 	m_builder.bindField("enableComponent", [this](std::vector<NodeValue> params) {
-		component(StringParameter(params[1])).enable(EntityParameter(params[0]));
+		component(StringParameter(params[1])).enable(m_handles.entity(params[0].nodeval<long>()));
 		return NodeValue{};
 	});
 
@@ -104,6 +109,12 @@ ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityMa
 	});
 
 	m_builder.generate();
+}
+
+std::size_t ska::scripting::EngineModule::emit(const std::string& event, const std::optional<EntityId>& entity) {
+	auto context = ScriptContext{};
+	context.origin = entity;
+	return m_vm.emit(event, { NodeValue{ m_handles.handle(entity) } }, std::move(context));
 }
 
 const ska::scripting::EngineModule::ComponentAccess& ska::scripting::EngineModule::component(const std::string& name) const {

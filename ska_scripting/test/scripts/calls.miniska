@@ -1,0 +1,36 @@
+# Functions called synchronously by the engine (ScriptVM::call)
+Engine = import "bind:ska.engine"
+
+damage = function(power: int, defense: int) : int do
+	result = power * 2 - defense
+	if result < 1
+		result = 1
+	end
+	return result
+end
+ratio = function(a: float, b: float) : float do
+	return a / b
+end
+describe = function(name: string, level: int) : string do
+	return name + " " + (level: string)
+end
+lucky = function(roll: int) : bool do
+	return roll % 2 == 0
+end
+notify = function(name: string) do
+	Engine.setVariable(name, 1)
+end
+divide = function(value: int, by: int) : int do
+	return value / by
+end
+waits = function() : int do
+	Engine.wait(10)
+	return 1
+end
+startsScript = function(file: string) : int do
+	Engine.script(file, [""])
+	return 1
+end
+
+run = function(args: string[]) do
+end

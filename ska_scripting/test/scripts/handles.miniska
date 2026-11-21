@@ -1,0 +1,14 @@
+# Keeps an entity handle across a wait : the entity can be removed meanwhile
+Engine = import "bind:ska.engine"
+run = function(args: string[]) do
+	hero = Engine.entity("hero")
+	Engine.setVariable("handle", hero)
+	Engine.wait(10)
+	exists = 0
+	if Engine.exists(hero)
+		exists = 1
+	end
+	Engine.setVariable("exists", exists)
+	Engine.disableComponent(hero, "InputComponent")
+	Engine.setVariable("used", 1)
+end

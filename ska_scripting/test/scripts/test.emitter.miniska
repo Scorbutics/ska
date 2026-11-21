@@ -1,0 +1,2 @@
+# Test native module : emits an engine event
+emit = function(event: string) do end
