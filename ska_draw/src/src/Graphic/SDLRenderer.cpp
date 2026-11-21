@@ -121,7 +121,46 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
 		SDL_Point pRotationCenter;
 		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }
-		assert(SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE) == 0);
+		if (m_effect == nullptr) {
+			assert(SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE) == 0);
+			return;
+		}
+
+		// An effect on this drawing only : the texture is shared, its modes are restored after
+		const auto& effect = *m_effect;
+		auto* texture = instance->m_texture;
+		const auto width = static_cast<int>(destBuf.w * effect.scaleX + 0.5F);
+		const auto height = static_cast<int>(destBuf.h * effect.scaleY + 0.5F);
+		destBuf.x += (destBuf.w - width) / 2;
+		destBuf.y += effect.anchorBottom ? destBuf.h - height : (destBuf.h - height) / 2;
+		destBuf.w = width;
+		destBuf.h = height;
+
+		const auto& sdl = SDLLibrary::get();
+		auto clipPointer = clip != nullptr ? &rClip : nullptr;
+		auto centerPointer = rotationCenter != nullptr ? &pRotationCenter : nullptr;
+		Uint8 red = 255, green = 255, blue = 255, alpha = 255;
+		auto blendMode = SDL_BLENDMODE_BLEND;
+		sdl.getTextureColorMod(*texture, &red, &green, &blue);
+		sdl.getTextureAlphaMod(*texture, &alpha);
+		sdl.getTextureBlendMode(*texture, &blendMode);
+		sdl.setTextureColorMod(*texture, static_cast<Uint8>(red * effect.red / 255), static_cast<Uint8>(green * effect.green / 255), static_cast<Uint8>(blue * effect.blue / 255));
+		sdl.setTextureAlphaMod(*texture, static_cast<Uint8>(alpha * effect.alpha / 255));
+		if (blendMode == SDL_BLENDMODE_NONE) {
+			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
+		}
+		sdl.renderCopyEx(*m_renderer, *texture, clipPointer, &destBuf, angle, centerPointer, SDL_FLIP_NONE);
+		if (effect.flash > 0) {
+			// Added twice over the drawing : its colors go to white
+			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_ADD);
+			sdl.setTextureColorMod(*texture, 255, 255, 255);
+			sdl.setTextureAlphaMod(*texture, static_cast<Uint8>(effect.flash * effect.alpha / 255));
+			sdl.renderCopyEx(*m_renderer, *texture, clipPointer, &destBuf, angle, centerPointer, SDL_FLIP_NONE);
+			sdl.renderCopyEx(*m_renderer, *texture, clipPointer, &destBuf, angle, centerPointer, SDL_FLIP_NONE);
+		}
+		sdl.setTextureColorMod(*texture, red, green, blue);
+		sdl.setTextureAlphaMod(*texture, alpha);
+		sdl.setTextureBlendMode(*texture, blendMode);
 	}
 }
 

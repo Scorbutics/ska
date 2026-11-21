@@ -44,6 +44,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
 			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(absPos.y + camera.h * pos.z);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
+			m_pgd.back().setEffect(gc.effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
 			}
@@ -56,6 +57,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(absPos.y + camera.h * pos.z);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
+			m_pgd.back().setEffect(gc.effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
 			}

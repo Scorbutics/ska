@@ -10,6 +10,7 @@ ska::GraphicComponent& ska::GraphicComponent::operator=(const GraphicComponent& 
 	sprites = gc.sprites;
     desiredPriority = gc.desiredPriority;
 	m_drawn = gc.m_drawn;
+	effect = gc.effect;
 	return *this;
 }
 

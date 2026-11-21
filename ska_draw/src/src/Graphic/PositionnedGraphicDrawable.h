@@ -20,7 +20,13 @@ namespace ska {
 		void operator=(const PositionnedGraphicDrawable&) = delete;
 
 		void render(Renderer& renderer) const override {
+			renderer.setEffect(&m_effect);
 			m_graphic.render(renderer, m_position.x, m_position.y, nullptr, m_angle, m_rotationCenter.has_value() ? &m_rotationCenter.value() : nullptr);
+			renderer.setEffect(nullptr);
+		}
+
+		void setEffect(const RenderEffect& effect) {
+			m_effect = effect;
 		}
 
 		int getPriority() const override {
@@ -55,5 +61,6 @@ namespace ska {
 		ska::Point<int> m_position;
 		std::optional<Point<int>> m_rotationCenter;
 		double m_angle;
+		RenderEffect m_effect;
 	};
 }

@@ -53,7 +53,10 @@ namespace ska {
 		SDL_CREATE_TEXTURE,
 		SDL_RW_FROM_FILE,
 		SDL_START_TEXT_INPUT,
-		SDL_SET_RENDER_DRAW_BLEND_MODE
+		SDL_SET_RENDER_DRAW_BLEND_MODE,
+		SDL_GET_TEXTURE_COLOR_MOD,
+		SDL_GET_TEXTURE_ALPHA_MOD,
+		SDL_GET_TEXTURE_BLEND_MODE
 	};
 
 #define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -102,6 +105,9 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_RW_FROM_FILE, SDL_RWops*(const char* file, const char* mode));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_START_TEXT_INPUT, void(void));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_BLEND_MODE, int(SDL_Renderer* renderer, SDL_BlendMode blendMode));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TEXTURE_COLOR_MOD, int(SDL_Texture*, Uint8*, Uint8*, Uint8*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TEXTURE_ALPHA_MOD, int(SDL_Texture*, Uint8*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TEXTURE_BLEND_MODE, int(SDL_Texture*, SDL_BlendMode*));
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
 
@@ -148,7 +154,10 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_CREATE_TEXTURE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_RW_FROM_FILE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_START_TEXT_INPUT),
-		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_DRAW_BLEND_MODE)
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_DRAW_BLEND_MODE),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_TEXTURE_COLOR_MOD),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_TEXTURE_ALPHA_MOD),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_TEXTURE_BLEND_MODE)
 	>;
 
 
@@ -187,6 +196,18 @@ namespace ska {
 		inline int setTextureColorMod(SDL_Texture& texture, Uint8 r, Uint8 g, Uint8 b) const {
             return callSDL(SDL_SET_TEXTURE_COLOR_MOD)(&texture, std::move(r), std::move(g), std::move(b));
         }
+
+		inline int getTextureColorMod(SDL_Texture& texture, Uint8* r, Uint8* g, Uint8* b) const {
+			return callSDL(SDL_GET_TEXTURE_COLOR_MOD)(&texture, std::move(r), std::move(g), std::move(b));
+		}
+
+		inline int getTextureAlphaMod(SDL_Texture& texture, Uint8* alpha) const {
+			return callSDL(SDL_GET_TEXTURE_ALPHA_MOD)(&texture, std::move(alpha));
+		}
+
+		inline int getTextureBlendMode(SDL_Texture& texture, SDL_BlendMode* blendMode) const {
+			return callSDL(SDL_GET_TEXTURE_BLEND_MODE)(&texture, std::move(blendMode));
+		}
 
 		inline int setTextureBlendMode(SDL_Texture& texture, SDL_BlendMode blendMode) const {
             return callSDL(SDL_SET_TEXTURE_BLEND_MOD)(&texture, std::move(blendMode));
