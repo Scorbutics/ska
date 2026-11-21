@@ -1,4 +1,5 @@
 #include <fstream>
+#include <unordered_set>
 #include "Config/LoggerConfigLang.h"
 #include "Runtime/Value/PlainMemoryTable.h"
 #include "ScriptBinding.h"
@@ -42,6 +43,38 @@ void ska::ScriptBindingAST::queryAST() {
 
 void ska::ScriptBindingAST::fillConstructorWithBindings(BridgeFunction& constructor) {
 	assert(!m_bindings.empty() && "Bridge is empty");
+
+	// A function type declared by the template and used by a bound function (ex : "Hook = function(entity: int) do end",
+	// "on = function(event: string, hook: Hook) do end") is declared by the binding first : the bound functions refer to it.
+	// It is only a type : calling it is an error.
+	auto boundNames = std::unordered_set<std::string>{};
+	for (const auto& binding : m_bindings) {
+		boundNames.insert(binding.name());
+	}
+	auto types = std::vector<BridgeField>{};
+	for (const auto& binding : m_bindings) {
+		const auto& functionType = binding.symbolTable->symbol()->type();
+		for (std::size_t index = 0; index < functionType.size(); index++) {
+			const auto& type = functionType[index];
+			const auto* table = type.symbolTable();
+			if (type != ExpressionType::FUNCTION || table == nullptr || table->symbol() == nullptr) {
+				continue;
+			}
+			const auto typeName = table->symbol()->name();
+			if (typeName.empty() || !boundNames.insert(typeName).second) {
+				continue;
+			}
+			auto field = BridgeField{ *table };
+			field.callback = [typeName](std::vector<NodeValue>) -> NodeValue {
+				throw std::runtime_error("\"" + typeName + "\" is a function type of a native module : it cannot be called");
+			};
+			types.push_back(std::move(field));
+		}
+	}
+	for (auto& type : types) {
+		constructor.bindField(std::move(type));
+	}
+
 	for (auto& binding : m_bindings) {
 		constructor.bindField(std::move(binding));
 	}

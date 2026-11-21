@@ -16,7 +16,7 @@ namespace {
 	// Native functions suspending the running coroutine, as a game "wait" or "choice" command would do
 	class CoroutineTestModule : public ska::lang::Module<ska::bytecode::Interpreter> {
 	public:
-		CoroutineTestModule(ska::lang::ModuleConfiguration<ska::bytecode::Interpreter>& config, std::vector<std::string>& events) :
+		CoroutineTestModule(ska::lang::ModuleConfiguration<ska::bytecode::Interpreter>& config, std::vector<std::string>& events, std::vector<ska::NodeValue>& handlers) :
 			ska::lang::Module<ska::bytecode::Interpreter> { config, "test.coroutine", SKALANG_TEST_DIR "/src/resources/coroutine_binding" },
 			m_builder(ska::BridgeBuilder<ska::bytecode::Interpreter> { m_bridge }) {
 			auto& interpreter = config.interpreter;
@@ -35,6 +35,11 @@ namespace {
 				events.push_back(params[0].convertString());
 				return ska::NodeValue{};
 			});
+			m_builder.bindField("register", [&events, &handlers](std::vector<ska::NodeValue> params) {
+				events.push_back("register " + params[0].convertString());
+				handlers.push_back(params[1]);
+				return ska::NodeValue{};
+			});
 			m_builder.bindField("describe", [](std::vector<ska::NodeValue> params) {
 				return ska::NodeValue{ std::make_shared<std::string>(params[0].convertString() + " " + params[1].convertString() + " " + params[2].convertString()) };
 			});
@@ -48,6 +53,7 @@ namespace {
 		BytecodeInterpreterDataTestContainer data;
 		ska::lang::ModuleConfiguration<ska::bytecode::Interpreter> moduleConfiguration;
 		std::vector<std::string> events;
+		std::vector<ska::NodeValue> handlers;
 		CoroutineTestModule module;
 		ska::bytecode::Executor executor;
 		std::size_t scriptIndex = 0;
@@ -55,7 +61,7 @@ namespace {
 		explicit CoroutineTest(const std::string& program) :
 			data(Prepare(program)),
 			moduleConfiguration { data.storage->astCache, *data.typeBuilder, *data.typeChecker, reservedKeywords, *data.parser, *data.storage, *data.interpreter },
-			module(moduleConfiguration, events) {
+			module(moduleConfiguration, events, handlers) {
 			readerI->parse(*data.parser);
 			auto& generated = data.generator->generate(*data.storage, ska::bytecode::ScriptGenerationHelper{ *data.storage, *readerI });
 			scriptIndex = generated.id();
@@ -269,4 +275,49 @@ TEST_CASE("[BytecodeInterpreter] Native function : receives its parameters in th
 	};
 	auto coroutine = test.start("describe");
 	CHECK(*coroutine.result().nodeval<ska::StringShared>() == "apple 3 true");
+}
+
+TEST_CASE("[BytecodeInterpreter] Native function : receives a script function (callback), called later by the host") {
+	auto test = CoroutineTest {
+		"Binding = import \"bind:test.coroutine\"\n"
+		"named = function(value: int) do\n"
+		"	Binding.event(\"named \" + (value: string))\n"
+		"end\n"
+		"setup = function() do\n"
+		"	Binding.register(\"first\", named)\n"
+		"	Binding.register(\"second\", function(value: int) do\n"
+		"		Binding.wait(value)\n"
+		"		Binding.event(\"anonymous \" + (value: string))\n"
+		"	end)\n"
+		"end\n"
+	};
+	auto setup = test.start("setup");
+	CHECK(setup.finished());
+	REQUIRE(test.handlers.size() == 2);
+
+	// The host starts the callbacks as coroutines : they can be suspended
+	auto first = test.data.interpreter->start(test.executor, *test.data.storage, test.handlers[0], { ska::NodeValue{ 1L } });
+	CHECK(first.finished());
+	auto second = test.data.interpreter->start(test.executor, *test.data.storage, test.handlers[1], { ska::NodeValue{ 2L } });
+	CHECK(second.suspended());
+	test.resume(second);
+	CHECK(second.finished());
+	CHECK(Joined(test.events) == "register first, register second, named 1, wait 2, anonymous 2");
+}
+
+TEST_CASE("[BytecodeInterpreter] Native function : the type of a callback is checked, the function type of the module is not callable") {
+	CHECK_THROWS_WITH(CoroutineTest {
+		"Binding = import \"bind:test.coroutine\"\n"
+		"setup = function() do\n"
+		"	Binding.register(\"wrong\", function(value: string) do end)\n"
+		"end\n"
+	}, doctest::Contains("is required"));
+
+	auto test = CoroutineTest {
+		"Binding = import \"bind:test.coroutine\"\n"
+		"call = function() do\n"
+		"	Binding.Handler(1)\n"
+		"end\n"
+	};
+	CHECK_THROWS_WITH(test.start("call"), doctest::Contains("\"Handler\" is a function type of a native module"));
 }

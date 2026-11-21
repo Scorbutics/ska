@@ -115,6 +115,8 @@ namespace ska {
 		const Type& operator[](std::size_t index) const;
 
 		std::string name() const;
+		// Symbol table of a named type (a function or object type declared by a script), nullptr otherwise
+		const ScopedSymbolTable* symbolTable() const { return m_symbolTable; }
 
 		bool tryChangeSymbol(const Type& type);
 
