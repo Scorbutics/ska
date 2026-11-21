@@ -66,8 +66,8 @@ namespace ska {
 			// Resumes the suspended scripts that are ready to continue
 			void update(unsigned int elapsedTime) override;
 
-			// Starts a script triggered by the engine (ScriptRunner) : not started when the same script, with the same arguments,
-			// is still running (ex : the action key kept pressed, a block walked on again during the script)
+			// Starts a script triggered by the engine (ScriptRunner) : not started when the same script file is still running
+			// (ex : the action key kept pressed, a block walked on again during the script)
 			void start(const ScriptSleepComponent& script, EntityId origin) override;
 			bool running(const std::string& scriptFile, const std::vector<std::string>& arguments) const;
 

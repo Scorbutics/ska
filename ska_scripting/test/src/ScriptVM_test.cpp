@@ -136,7 +136,7 @@ TEST_CASE("[ScriptVM] errors : a broken script is not started, a failing script 
 	CHECK(test.variable("step") == 3);
 }
 
-TEST_CASE("[ScriptVM] started by the engine triggers : not started again while still running with the same arguments") {
+TEST_CASE("[ScriptVM] started by the engine triggers : not started again while still running") {
 	auto test = ScriptingTest{};
 	auto script = ska::ScriptSleepComponent{};
 	script.name = Script("wait");
@@ -146,9 +146,10 @@ TEST_CASE("[ScriptVM] started by the engine triggers : not started again while s
 	runner.start(script, 3);
 	CHECK(test.vm.suspendedScripts() == 1);
 
+	// Other arguments (ex : the player walked on the block from another position) : still the same running script
 	script.args.push_back("other");
 	runner.start(script, 3);
-	CHECK(test.vm.suspendedScripts() == 2);
+	CHECK(test.vm.suspendedScripts() == 1);
 
 	runner.update(100);
 	runner.update(50);

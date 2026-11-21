@@ -205,7 +205,14 @@ bool ska::scripting::ScriptVM::running(const std::string& scriptFile, const std:
 }
 
 void ska::scripting::ScriptVM::start(const ScriptSleepComponent& script, EntityId origin) {
-	if (running(script.name, script.args)) {
+	// One running instance of a script file started by the triggers (as the legacy scripts) : the arguments of a trigger
+	// can change while the script runs (ex : the position of the player walking on a block)
+	const auto name = FileUtils::getCanonicalPath(script.name);
+	const auto alreadyRunning = std::any_of(m_suspended.begin(), m_suspended.end(), [&name](const auto& running) {
+		return running->coroutine.suspended() && running->key.compare(0, name.size(), name) == 0 &&
+			(running->key.size() == name.size() || running->key[name.size()] == '\0');
+	});
+	if (alreadyRunning) {
 		return;
 	}
 	auto context = ScriptContext{};
