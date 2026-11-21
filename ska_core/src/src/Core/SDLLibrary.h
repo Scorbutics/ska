@@ -317,6 +317,9 @@ namespace ska {
 
 		static SDLLibrary& get();
 
+		// SDL quits when the program ends, after every module (the sound module closes its device after the graphics)
+		~SDLLibrary() { quit(); }
+
 	private:
 		SDLLibrary() : SDLDynLib("SDL3") {}
 

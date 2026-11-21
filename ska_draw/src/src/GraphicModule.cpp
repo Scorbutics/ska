@@ -60,6 +60,6 @@ void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& s
 }
 
 ska::GraphicModule::~GraphicModule() {
+	// SDL quits at the end of the program (SDLLibrary) : the other modules (ex : the sound) are destroyed after this one
 	SDLTTFLibrary::get().quit();
-	SDLLibrary::get().quit();
 }
