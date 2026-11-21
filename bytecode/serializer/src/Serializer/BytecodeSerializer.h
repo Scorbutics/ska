@@ -24,7 +24,8 @@ namespace ska {
 			// 3 : "return" leaves the function where it is (RET generated for each return statement of a function).
 			// 4 : CMP_BOOL command (the commands after it are renumbered).
 			// 5 : MOD_I command (the commands after it are renumbered).
-			static constexpr std::size_t Version = 5;
+			// 6 : "while" keyword (the grammar tokens after it are renumbered), STR_LENGTH and STR_ACCESS commands.
+			static constexpr std::size_t Version = 6;
 
 			Serializer() = default;
 			// Reads and writes the given format version (tests of version mismatches)

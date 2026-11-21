@@ -88,6 +88,7 @@ static bool IsInstructionCommandClosed(const ska::bytecode::InstructionOutput& p
 
 	switch (pack.back()->command()) {
 	case ska::bytecode::Command::ARR_LENGTH:
+	case ska::bytecode::Command::STR_LENGTH:
 		return true;
 	default:
 		return false;

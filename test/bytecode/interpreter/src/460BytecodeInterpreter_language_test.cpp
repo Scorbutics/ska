@@ -262,3 +262,62 @@ TEST_CASE("[BytecodeInterpreter] logical operators : !, && and || (short-circuit
 	)script");
 	CHECK(result.nodeval<long>() == 11111 + 2 * 100000);
 }
+
+TEST_CASE("[BytecodeInterpreter] else if") {
+	const auto result = Run(R"script(
+		grade = function(score: int): string do
+			if score >= 90
+				return "A"
+			else if score >= 50
+				return "B"
+			else if score >= 20 do
+				return "C"
+			else
+				return "D"
+			end
+		end
+		out = grade(95) + grade(60) + grade(25) + grade(3)
+	)script");
+	CHECK(*result.nodeval<ska::StringShared>() == "ABCD");
+}
+
+TEST_CASE("[BytecodeInterpreter] while") {
+	const auto result = Run(R"script(
+		i = 0
+		total = 0
+		while i < 5 do
+			i = i + 1
+			total = total + i
+		end
+		none = 0
+		while false do
+			none = 1
+		end
+		out = total * 10 + none
+	)script");
+	CHECK(result.nodeval<long>() == 150);
+}
+
+TEST_CASE("[BytecodeInterpreter] strings : size and characters") {
+	SUBCASE("size and characters") {
+		const auto result = Run(R"script(
+			s = "hello"
+			reversed = ""
+			i = s.size() - 1
+			while i >= 0 do
+				reversed = reversed + s[i]
+				i = i - 1
+			end
+			out = reversed + (s.size(): string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "olleh5");
+	}
+	SUBCASE("out of range") {
+		CHECK_THROWS(Run("s = \"ab\"\nout = s[2]\n"));
+	}
+	SUBCASE("a string cannot be modified, an index is an int") {
+		CHECK_THROWS(Interpret("s = \"ab\"\ns[0] = \"c\"\n"));
+		CHECK_THROWS(Interpret("s = \"ab\"\nout = s[\"0\"]\n"));
+		CHECK_THROWS(Interpret("a = [1, 2]\nout = a[true]\n"));
+	}
+}

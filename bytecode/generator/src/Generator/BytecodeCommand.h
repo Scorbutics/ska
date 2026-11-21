@@ -63,6 +63,10 @@ namespace ska {
 			CMP_BOOL,
 			// MOD_I dest left right : remainder of the integer division
 			MOD_I,
+			// STR_LENGTH dest string : number of characters of a string
+			STR_LENGTH,
+			// STR_ACCESS dest string index : character of a string (a string)
+			STR_ACCESS,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -121,6 +125,8 @@ namespace ska {
 			"PUSH_CELL",
 			"CMP_BOOL",
 			"MOD_I",
+			"STR_LENGTH",
+			"STR_ACCESS",
 			"NOP",
 			""
 		};

@@ -20,7 +20,8 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	auto arrayAccessed = arrayAccessedComputing.operand();
 	result.push(std::move(arrayIndexComputing));
 	result.push(std::move(arrayAccessedComputing));
-	result.push(Instruction{ Command::ARR_ACCESS, context.queryNextRegister(), std::move(arrayAccessed), std::move(arrayIndex) });
+	const auto command = node.GetArray().type() == ExpressionType::STRING ? Command::STR_ACCESS : Command::ARR_ACCESS;
+	result.push(Instruction{ command, context.queryNextRegister(), std::move(arrayAccessed), std::move(arrayIndex) });
 
 	return result;
 }

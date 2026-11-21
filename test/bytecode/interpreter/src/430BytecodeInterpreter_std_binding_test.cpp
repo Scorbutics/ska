@@ -91,3 +91,25 @@ TEST_CASE("[BytecodeInterpreter] Binding std log into a function") {
 	auto& gen = data.generator->generate(*data.storage, std::move(script));
 	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
 }
+
+#include "std/module/math.h"
+
+TEST_CASE("[BytecodeInterpreter] Binding std : math") {
+	constexpr auto progStr =
+	"Math = import \"bind:std.native.math\"\n"
+	"a = Math.abs(-3) * 100 + Math.min(4, 7) * 10 + Math.max(4, 7)\n"
+	"b = Math.clamp(15, 0, 10) + Math.floor(2.7) * 100 + Math.ceil(2.1) * 1000 + Math.round(2.5) * 10000\n"
+	"c = Math.sqrt(16.0) + Math.pow(2.0, 3.0) + Math.absFloat(-0.5) + Math.minFloat(1.0, 2.0) + Math.maxFloat(1.0, 2.0)\n"
+	"out = (a: string) + \"/\" + (b: string) + \"/\" + (c: string)\n";
+
+	auto data = BytecodeInterpreterDataTestContainer{};
+	ASTFromInputBytecodeInterpreterNoParse(progStr, data);
+	auto moduleConfiguration = BuildModuleConfFromData(data);
+	auto mathModule = ska::lang::MathModule(moduleConfiguration);
+
+	auto script = Interpret(data, progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
+	auto res = interpreted->variable(gen.id());
+	CHECK(*res.nodeval<ska::StringShared>() == "347/33210/15.5");
+}

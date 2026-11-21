@@ -12,6 +12,25 @@
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::MatcherIfElse)
 
 ska::ASTNodePtr ska::MatcherIfElse::match(ScriptAST& input) {
+    return matchIf(input, true);
+}
+
+// "else if" : the else block only contains the next "if", which shares the "end" of the first one
+ska::ASTNodePtr ska::MatcherIfElse::matchElseIf(ScriptAST& input) {
+    auto blockNode = ASTFactory::MakeNode<Operator::BLOCK>();
+    auto startEvent = BlockTokenEvent{ *blockNode, BlockTokenEventType::START };
+    m_parser.observable_priority_queue<BlockTokenEvent>::notifyObservers(startEvent);
+
+    auto statements = std::vector<ASTNodePtr>{};
+    statements.push_back(matchIf(input, false));
+    blockNode = ASTFactory::MakeNode<Operator::BLOCK>(std::move(statements));
+
+    auto endEvent = BlockTokenEvent{ *blockNode, BlockTokenEventType::END };
+    m_parser.observable_priority_queue<BlockTokenEvent>::notifyObservers(endEvent);
+    return blockNode;
+}
+
+ska::ASTNodePtr ska::MatcherIfElse::matchIf(ScriptAST& input, bool matchEnd) {
     auto ifNode = ASTNodePtr{};
 
     SLOG(ska::LogLevel::Debug) << "Matching if";
@@ -35,12 +54,16 @@ ska::ASTNodePtr ska::MatcherIfElse::match(ScriptAST& input) {
         if (input.reader().expect(elseToken)) {
             SLOG(ska::LogLevel::Debug) << "Matching if - else statement done";
             input.reader().match(elseToken);
-            auto elseBlockStatement = m_matcherBlock.matchNoBoundaries(input, { TokenGrammar::BLOCK_END });
+            auto elseBlockStatement = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::IF>()) ?
+                matchElseIf(input) :
+                m_matcherBlock.matchNoBoundaries(input, { TokenGrammar::BLOCK_END });
             ifNode = ASTFactory::MakeNode<Operator::IF_ELSE>(std::move(conditionExpression), std::move(conditionStatement), std::move(elseBlockStatement));
         } else {
             ifNode = ASTFactory::MakeNode<Operator::IF>(std::move(conditionExpression), std::move(conditionStatement));
         }
-        input.reader().match(endToken);
+        if (matchEnd) {
+            input.reader().match(endToken);
+        }
     }
     SLOG(ska::LogLevel::Debug) << "if matching done";
     auto event = IfElseTokenEvent {*ifNode};

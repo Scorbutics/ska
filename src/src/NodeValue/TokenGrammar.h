@@ -15,6 +15,7 @@ namespace ska {
 		FLOAT,
 		STRING,
 		VOID,
+		WHILE,
 		//Reserved symbols
 		FIELD_ACCESS_OPERATOR,
 		AFFECTATION,
@@ -52,6 +53,7 @@ namespace ska {
 		"float",
 		"string",
 		"void",
+		"while",
 		".",
 		"=",
 		"do",

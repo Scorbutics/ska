@@ -13,7 +13,7 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::FIELD_ACCESS>::build(
 	const auto& fieldName = node.GetFieldNameNode().name();
 
 	// Handling built-in direct fields
-	if (typeObject == ExpressionType::ARRAY) {
+	if (typeObject == ExpressionType::ARRAY || typeObject == ExpressionType::STRING) {
 		if (fieldName == "size") {
 			auto type = Type::MakeCustom<ExpressionType::FUNCTION>(nullptr);
 			type.add(Type::MakeBuiltIn<ExpressionType::INT>());

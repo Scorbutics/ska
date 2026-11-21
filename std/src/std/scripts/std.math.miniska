@@ -1,0 +1,20 @@
+# Mathematics : Math = import "bind:std.native.math"
+# (no overloading : the functions on floats have their own names)
+
+abs = function(value: int) : int do return 0 end
+min = function(a: int, b: int) : int do return 0 end
+max = function(a: int, b: int) : int do return 0 end
+# value, limited to [low, high]
+clamp = function(value: int, low: int, high: int) : int do return 0 end
+
+absFloat = function(value: float) : float do return 0.0 end
+minFloat = function(a: float, b: float) : float do return 0.0 end
+maxFloat = function(a: float, b: float) : float do return 0.0 end
+# Square root of a positive number (a negative number is an error)
+sqrt = function(value: float) : float do return 0.0 end
+pow = function(value: float, exponent: float) : float do return 0.0 end
+
+# Integer from a float : rounded down, rounded up, rounded to the nearest
+floor = function(value: float) : int do return 0 end
+ceil = function(value: float) : int do return 0 end
+round = function(value: float) : int do return 0 end

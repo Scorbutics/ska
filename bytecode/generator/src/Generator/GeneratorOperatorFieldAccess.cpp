@@ -20,10 +20,11 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 
 	// Handling built-in direct fields
 	const auto typeObject = node.GetObjectType();
-	if (typeObject == ExpressionType::ARRAY) {
+	if (typeObject == ExpressionType::ARRAY || typeObject == ExpressionType::STRING) {
 		if (fieldName == "size") {
 			auto objectValue = generateNext(context.next(node.GetObjectNameNode()));
-			objectValue.push({ Instruction{ Command::ARR_LENGTH, context.queryNextRegister(), objectValue.operand() } });
+			const auto command = typeObject == ExpressionType::STRING ? Command::STR_LENGTH : Command::ARR_LENGTH;
+			objectValue.push({ Instruction{ command, context.queryNextRegister(), objectValue.operand() } });
 			return objectValue;
 		}
 		auto ss = std::stringstream{};

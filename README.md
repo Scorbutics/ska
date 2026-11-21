@@ -168,6 +168,11 @@ next = isOdd
  * Booleans can be compared (`==`, `!=`). Logical operators : `&&`, `||` (the second operand is only evaluated when needed), `!`.
  * `%` is the remainder of an integer division. A division (or a remainder) by zero is an error.
  * A number converted to a string is its shortest text (`(1.5: string)` is `"1.5"`, `(3.0: string)` is `"3"`).
+ * Loops : `for(i = 0
+ i < 10
+ i = i + 1) do ... end`, `while condition do ... end`, and the filter `|` on arrays. Conditions : `if ... else if ... else ... end`.
+ * A string has a size (`s.size()`) and characters (`s[0]` is a string). A string cannot be modified : a new one is built (`s + "!"`). An index is an `int`.
+ * Mathematics : `Math = import "bind:std.native.math"` (`abs`, `min`, `max`, `clamp`, `sqrt`, `pow`, `floor`, `ceil`, `round`... the functions on floats have their own names : `absFloat`, `minFloat`, `maxFloat`).
  * The top level code of a script runs once : the following imports of the script only give its exports.
 
 ## Host API (C++) : calling script functions, coroutines

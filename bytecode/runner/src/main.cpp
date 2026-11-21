@@ -22,6 +22,7 @@
 
 #include "std/module/io/log.h"
 #include "std/module/io/path.h"
+#include "std/module/math.h"
 #include "std/module/function/parameter.h"
 
 
@@ -82,6 +83,7 @@ int main(int argc, char* argv[]) {
 		auto serializer = ska::bytecode::Serializer{};
 		auto logmodule = ska::lang::IOLogModule(moduleConfiguration);
 		auto pathmodule = ska::lang::IOPathModule(moduleConfiguration);
+		auto mathmodule = ska::lang::MathModule(moduleConfiguration);
 		auto parameterValues = std::make_shared<ska::NodeValueArrayRaw>();
 		auto parameterModule = BasicParameterModuleBuilder(moduleConfiguration, parameterValues, argc, argv);
 

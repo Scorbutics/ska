@@ -143,15 +143,22 @@ bool ska::SemanticTypeChecker::matchArray(const ArrayTokenEvent& token) {
 	} break;
 
 	case ArrayTokenEventType::EXPRESSION: {
-		if(token.rootNode().type() != ExpressionType::ARRAY) {
+		// An array, or a string (its characters)
+		if(token.rootNode().type() != ExpressionType::ARRAY && token.rootNode().type() != ExpressionType::STRING) {
 			auto ss = std::stringstream {};
 			ss << "expression is not an array (it's a \"" << token.rootNode().type().value_or(Type {}) << "\")";
 			throw std::runtime_error(ss.str());
 		}
 	} break;
 
-	case ArrayTokenEventType::USE:
-		break;
+	case ArrayTokenEventType::USE: {
+		const auto& index = token.rootNode()[1];
+		if (index.type() != ExpressionType::INT) {
+			auto ss = std::stringstream {};
+			ss << "an index is an \"int\" (not a \"" << index.type().value_or(Type {}) << "\")";
+			throw std::runtime_error(ss.str());
+		}
+	} break;
 
 	default:
 		assert(!"Unhandled event type");
@@ -248,6 +255,10 @@ bool ska::SemanticTypeChecker::matchVariable(const VarTokenEvent& variable) {
 			auto ss = std::stringstream{};
 			ss << "The symbol \"" << name << "\" is not an lvalue, therefore cannot be assigned";
 			throw std::runtime_error(ss.str());
+		}
+
+		if (variable.var().op() == Operator::ARRAY_USE && variable.var().size() > 0 && variable.var()[0].type() == ExpressionType::STRING) {
+			throw std::runtime_error("a string cannot be modified (its characters cannot be assigned)");
 		}
 
 		if (variable.var().symbol() == nullptr) {

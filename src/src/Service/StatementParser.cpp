@@ -105,6 +105,9 @@ ska::StatementParser::ASTNodePtr ska::StatementParser::matchReservedKeyword(Scri
 	case static_cast<std::size_t>(TokenGrammar::FOR):
 		return m_matcherFor.match(input);
 
+	case static_cast<std::size_t>(TokenGrammar::WHILE):
+		return m_matcherFor.matchWhile(input);
+
 	case static_cast<std::size_t>(TokenGrammar::IF):
 		return m_matcherIfElse.match(input);
 

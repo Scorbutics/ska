@@ -18,6 +18,10 @@ namespace ska {
 			m_reservedKeywordsPool(pool), m_parser(parser), m_matcherBlock(matcherBlock) {}
 	
 		ASTNodePtr match(ScriptAST& input);
+	private:
+		ASTNodePtr matchIf(ScriptAST& input, bool matchEnd);
+		ASTNodePtr matchElseIf(ScriptAST& input);
+	public:
 	
 	private:
 		const ReservedKeywordsPool& m_reservedKeywordsPool;
