@@ -43,5 +43,7 @@ CMakeCache.txt
 .vscode
 *.log.txt
 *.cmake
+# (except the build scripts of the repository)
+!/cmake/*.cmake
 **/.vs
 /external/chipmunk/src/Debug

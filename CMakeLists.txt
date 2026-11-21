@@ -82,4 +82,18 @@ add_subdirectory(ska_physic_homemade)
 add_subdirectory(ska_script)
 add_subdirectory(ska_scripting)
 
+# Module boundaries (see cmake/CheckBoundaries.cmake), checked at each build
+add_custom_target(check_boundaries ALL
+	COMMAND ${CMAKE_COMMAND} -DSKA_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckBoundaries.cmake
+	COMMENT "Checking the module boundaries")
+# Only ska_scripting links skalang
+foreach(ENGINE_MODULE ska_ai ska_audio ska_core ska_draw ska_gui ska_main ska_particle ska_physic_chipmunk ska_physic_homemade ska_script ska_world)
+	get_target_property(ENGINE_MODULE_LIBRARIES ${ENGINE_MODULE} LINK_LIBRARIES)
+	foreach(LIBRARY ${ENGINE_MODULE_LIBRARIES})
+		if(LIBRARY MATCHES "^skalang|^ska_scripting$")
+			message(FATAL_ERROR "Module boundaries violated : ${ENGINE_MODULE} links ${LIBRARY} (the engine modules do not depend on the scripting)")
+		endif()
+	endforeach()
+endforeach()
+
 
