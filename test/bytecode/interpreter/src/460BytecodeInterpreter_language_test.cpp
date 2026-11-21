@@ -49,3 +49,10 @@ TEST_CASE("[BytecodeInterpreter] function compatibility : an array of incompatib
 	)script";
 	CHECK_THROWS_WITH(Run(progStr), doctest::Contains("Unable to use operator \"=\""));
 }
+
+TEST_CASE("[BytecodeInterpreter] syntax : an imported script does not need a final line break") {
+	const auto result = Run(
+		"Imported = import \"" SKALANG_TEST_DIR "/src/resources/no_final_line_break\"\n"
+		"out = Imported.value\n");
+	CHECK(result.nodeval<long>() == 42);
+}

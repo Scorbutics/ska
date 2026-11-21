@@ -154,6 +154,10 @@ ska::ScriptASTPtr ska::StatementParser::subParse(ScriptCacheAST& scriptCache, co
 		return std::make_unique<ScriptAST>(scriptCache.at(name));
 	}
 
+	// The last statement of a script file ends with the end of the file, even without a final line break
+	if (!content.empty() && content.back() != '\n') {
+		content.push_back('\n');
+	}
 	auto tokenizer = Tokenizer{ m_reservedKeywordsPool, std::move(content) };
 	auto tokens = tokenizer.tokenize();
 	auto script = ScriptASTPtr{std::make_unique<ScriptAST>( scriptCache, name, tokens )};
