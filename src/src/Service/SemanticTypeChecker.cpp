@@ -74,6 +74,16 @@ bool ska::SemanticTypeChecker::matchReturn(const ReturnTokenEvent& token) {
 		if (owner == nullptr || owner->name().empty()) {
 			throw std::runtime_error("return must be place in a function block or a nested one");
 		}
+		if (returnedValue.logicalEmpty()) {
+			// "return" without value : only in a function without returned value
+			const auto& functionType = owner->symbol() == nullptr ? Type{} : owner->symbol()->type();
+			if (!functionType.empty() && functionType.back() != ExpressionType::VOID) {
+				auto ss = std::stringstream{};
+				ss << "bad return : a value of type \"" << functionType.back() << "\" must be returned";
+				throw std::runtime_error(ss.str());
+			}
+			break;
+		}
 		if (!returnedValue.type().has_value()) {
 			throw std::runtime_error("\"" + owner->name() + "\" is not a function");
 		}

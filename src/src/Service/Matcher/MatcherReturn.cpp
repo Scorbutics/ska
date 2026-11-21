@@ -65,7 +65,11 @@ ska::ASTNodePtr ska::MatcherReturn::matchCustomObject(ScriptAST& input) {
 }
 
 ska::ASTNodePtr ska::MatcherReturn::matchBuiltIn(ScriptAST& input) {
-    auto node = ASTFactory::MakeNode<Operator::RETURN>(input.expr(m_parser));
+    // "return" alone (end of the statement) : leaves a function without returned value
+    const auto noValue = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::STATEMENT_END>()) ||
+        input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::BLOCK_END>());
+    auto value = noValue ? ASTFactory::MakeEmptyNode() : input.expr(m_parser);
+    auto node = ASTFactory::MakeNode<Operator::RETURN>(std::move(value));
 
 	auto returnEndEvent = ReturnTokenEvent::template Make<ReturnTokenEventType::BUILTIN>(*node, input);
 	m_parser.observable_priority_queue<ReturnTokenEvent>::notifyObservers(returnEndEvent);

@@ -73,3 +73,61 @@ TEST_CASE("[BytecodeInterpreter] syntax : optional \"do\" after an if condition"
 	)script");
 	CHECK(result.nodeval<long>() == 1101);
 }
+
+TEST_CASE("[BytecodeInterpreter] return : leaves the function right away, from any statement") {
+	const auto result = Run(R"script(
+		early = function(answer: int): string do
+			if answer == 1
+				return "right"
+			end
+			return "left " + answer
+		end
+		branches = function(answer: int): string do
+			if answer == 1
+				return "one"
+			else
+				return "other"
+			end
+		end
+		inLoop = function(values: int[]): int do
+			found = 0 - 1
+			values | (value, index) do
+				if value > 10
+					return index
+				end
+			end
+			return found
+		end
+		out = early(1) + " " + early(0) + " " + branches(1) + " " + branches(2) + " " + inLoop([1, 5, 12, 30]) + " " + inLoop([1])
+	)script");
+	CHECK(*result.nodeval<ska::StringShared>() == "right left 0 one other 2 -1");
+}
+
+TEST_CASE("[BytecodeInterpreter] return : without value, in a function without returned value") {
+	const auto result = Run(R"script(
+		count = 0
+		increment = function(skip: bool) do
+			if skip
+				return
+			end
+			count = count + 1
+		end
+		increment(false)
+		increment(true)
+		increment(false)
+		out = count
+	)script");
+	CHECK(result.nodeval<long>() == 2);
+}
+
+TEST_CASE("[BytecodeInterpreter] return : without value, in a function with a returned value, is rejected") {
+	constexpr auto progStr = R"script(
+		f = function(skip: bool): int do
+			if skip
+				return
+			end
+			return 1
+		end
+	)script";
+	CHECK_THROWS(Interpret(progStr));
+}

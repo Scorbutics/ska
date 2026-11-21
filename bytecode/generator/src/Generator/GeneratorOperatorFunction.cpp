@@ -38,7 +38,12 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 	const auto returningFunctionType = node.GetFunctionPrototype().type().value().back();
 	const auto isVoidReturningFunction = returningFunctionType == ExpressionType::VOID;
 	const auto returnValueOperand = valueGroup.operand();
-	valueGroup.push(Instruction{ Command::RET, isVoidReturningFunction ? Operand{} : returnValueOperand });
+	// A body ending with a "return" statement already returned (its RET is the last instruction executed)
+	const auto& functionBody = node.GetFunctionBody();
+	const auto bodyEndsWithReturn = functionBody.size() > 0 && functionBody[functionBody.size() - 1].op() == Operator::RETURN;
+	if (!bodyEndsWithReturn) {
+		valueGroup.push(Instruction{ Command::RET, isVoidReturningFunction ? Operand{} : returnValueOperand });
+	}
 
 	// Locals and registers live in the call frame of each call : no clean-up required.
 	// The prologue makes a cell of each local variable captured by a nested function (known once the body is generated).

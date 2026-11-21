@@ -21,7 +21,8 @@ namespace ska {
 			// (it is reported as a failed script, to be rebuilt from its source).
 			// 2 : call frames (LOCAL, UPVAL, SELF operands, CELL, PUSH_CELL, ARR_SET commands), serialized "exported" symbol flags,
 			//     symbol tables keyed by child position, exact floating point values.
-			static constexpr std::size_t Version = 2;
+			// 3 : "return" leaves the function where it is (RET generated for each return statement of a function).
+			static constexpr std::size_t Version = 3;
 
 			Serializer() = default;
 			// Reads and writes the given format version (tests of version mismatches)
