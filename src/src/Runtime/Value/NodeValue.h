@@ -145,6 +145,8 @@ namespace ska {
 		}
 
 		double convertNumeric() const;
+		// Text of a floating number : the shortest one that reads back the same number
+		static std::string FormatNumber(double value);
 		bool empty() const { return m_cell != nullptr ? m_cell->empty() : m_emptyVariant; }
 		std::string convertString() const;
 

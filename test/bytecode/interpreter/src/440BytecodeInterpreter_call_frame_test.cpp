@@ -80,7 +80,7 @@ TEST_CASE("[BytecodeInterpreter] closure : each factory call has its own capture
 		a.Increment()
 		a.Increment()
 		b.Increment()
-		out = "" + a.Get() + "/" + b.Get()
+		out = (a.Get(): string) + "/" + (b.Get(): string)
 	)script");
 	CHECK(*result.nodeval<ska::StringShared>() == "12/101");
 }

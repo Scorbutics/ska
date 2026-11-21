@@ -90,7 +90,7 @@ namespace {
 TEST_CASE("[BytecodeInterpreter] Coroutine : function called by the host, with arguments, without suspension") {
 	auto test = CoroutineTest {
 		"describe = function(name: string, count: int) : string do\n"
-		"	return name + \" x\" + count\n"
+		"	return name + \" x\" + (count: string)\n"
 		"end\n"
 	};
 	auto coroutine = test.start("describe", { ska::NodeValue{ std::make_shared<std::string>("apple") }, ska::NodeValue{ 3L } });
@@ -104,7 +104,7 @@ TEST_CASE("[BytecodeInterpreter] Coroutine : suspended by a native function, the
 		"run = function(count: int) : int do\n"
 		"	total = 0\n"
 		"	for(i = 0\n i < count\n i = i + 1) do\n"
-		"		Binding.event(\"step \" + i)\n"
+		"		Binding.event(\"step \" + (i: string))\n"
 		"		Binding.wait(i * 10)\n"
 		"		total = total + i\n"
 		"	end\n"
@@ -136,7 +136,7 @@ TEST_CASE("[BytecodeInterpreter] Coroutine : the value returned by a suspending 
 		"	if answer == 1\n"
 		"		return \"right\"\n"
 		"	end\n"
-		"	return \"left \" + answer\n"
+		"	return \"left \" + (answer: string)\n"
 		"end\n"
 	};
 	auto right = test.start("ask");
@@ -186,7 +186,7 @@ TEST_CASE("[BytecodeInterpreter] Coroutine : interleaved coroutines share the sc
 		"count = function(name: string, times: int) : int do\n"
 		"	for(i = 0\n i < times\n i = i + 1) do\n"
 		"		counter = counter + 1\n"
-		"		Binding.event(name + \" \" + counter)\n"
+		"		Binding.event(name + \" \" + (counter: string))\n"
 		"		Binding.wait(0)\n"
 		"	end\n"
 		"	return counter\n"

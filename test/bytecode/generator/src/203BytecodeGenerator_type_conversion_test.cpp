@@ -63,40 +63,25 @@ TEST_CASE("[BytecodeGenerator] type conversion (explicit) string => int") {
 	});
 }
 
-TEST_CASE("[BytecodeGenerator] type conversion + int => string") {
-	auto [astPtr, data] = ASTFromInputBytecodeGenerator(" result = 7 + \"3\"\n");
+TEST_CASE("[BytecodeGenerator] explicit conversion int => string") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator(" result = (7: string) + \"3\"\n");
 	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
 
 	BytecodeCompare(res, {
 		{ska::bytecode::Command::CONV_I_STR, "R0", "7"},
-		{ska::bytecode::Command::ADD_STR, "R0", "R0", "3"},
-		{ska::bytecode::Command::MOV, "V0", "R0"}
+		{ska::bytecode::Command::ADD_STR, "R1", "R0", "3"},
+		{ska::bytecode::Command::MOV, "V0", "R1"}
 	});
 }
 
-/*
-// TODO: Unsupported atm (Unable to use operator "+" on types "float" and "string")
-
-TEST_CASE("[BytecodeGenerator] type conversion + float => string") {
-	auto [astPtr, data] = ASTFromInputBytecodeGenerator(" result = 7.0 + \"3\"\n");
-	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
-
-	BytecodeCompare(res, {
-		{ska::bytecode::Command::CONV_D_STR, "R1", "7.0"},
-		{ska::bytecode::Command::ADD_STR, "R0", "R1", "3"},
-		{ska::bytecode::Command::MOV, "V0", "R0"}
-	});
-}
-*/
-
-TEST_CASE("[BytecodeGenerator] type conversion + int => float") {
-	auto [astPtr, data] = ASTFromInputBytecodeGenerator(" result = 7.0 + 3\n");
+TEST_CASE("[BytecodeGenerator] explicit conversion int => float") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator(" result = 7.0 + (3: float)\n");
 	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
 
 	BytecodeCompare(res, {
 		{ska::bytecode::Command::CONV_I_D, "R0", "3"},
-		{ska::bytecode::Command::ADD_D, "R0", "7.000000", "R0"},
-		{ska::bytecode::Command::MOV, "V0", "R0"}
+		{ska::bytecode::Command::ADD_D, "R1", "7.000000", "R0"},
+		{ska::bytecode::Command::MOV, "V0", "R1"}
 	});
 }
 

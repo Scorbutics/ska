@@ -23,6 +23,8 @@ std::unordered_set<std::string> ska::Tokenizer::BuildAllowedMultipleCharTokenSym
 	result.insert("--");
 	result.insert("&=");
 	result.insert("|=");
+	result.insert("&&");
+	result.insert("||");
 	return result;
 }
 
@@ -206,14 +208,14 @@ int ska::Tokenizer::stopSymbolCharAggregation(char symbol) {
 		case '+':
 		case '-':
 		case '=':
+		case '&':
+		case '|':
 			return 1;
 		case '/':
 		case '*':
 		case '!':
 		case '<':
 		case '>':
-		case '&':
-		case '|':
 			return 0;
 		default:
 			return -1;

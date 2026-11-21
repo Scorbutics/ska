@@ -107,7 +107,7 @@ TEST_CASE("[BytecodeGenerator] Custom object creation") {
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end\n"
 			"}\n"
@@ -126,11 +126,11 @@ TEST_CASE("[BytecodeGenerator] Custom object creation") {
 		{ska::bytecode::Command::JUMP_REL, "7"},
 		{ska::bytecode::Command::POP, "L0"},
 		{ska::bytecode::Command::CONV_I_STR, "R0", "U0"},
-		{ska::bytecode::Command::ADD_STR, "R0", "lol", "R0"},
-		{ska::bytecode::Command::ADD_STR, "R1", "R0", "L0"},
-		{ska::bytecode::Command::MOV, "L1", "R1"},
-		{ska::bytecode::Command::MOV, "R2", "L1"},
-		{ska::bytecode::Command::RET, "R2"},
+		{ska::bytecode::Command::ADD_STR, "R1", "lol", "R0"},
+		{ska::bytecode::Command::ADD_STR, "R2", "R1", "L0"},
+		{ska::bytecode::Command::MOV, "L1", "R2"},
+		{ska::bytecode::Command::MOV, "R3", "L1"},
+		{ska::bytecode::Command::RET, "R3"},
 		{ska::bytecode::Command::PUSH_CELL, "L0"},
 		{ska::bytecode::Command::END, "L2", "-9", "1"},
 		{ska::bytecode::Command::PUSH, "L2"},
@@ -139,7 +139,7 @@ TEST_CASE("[BytecodeGenerator] Custom object creation") {
 		{ska::bytecode::Command::END, "V0", "-18"},
 		{ska::bytecode::Command::JUMP_ABS, "V0"},
 		{ska::bytecode::Command::POP, "R0"},
-		{ska::bytecode::Command::MOV, "V1", "R0"},
+		{ska::bytecode::Command::MOV, "V1", "R0"}
 	});
 }
 
@@ -178,7 +178,7 @@ TEST_CASE("[BytecodeGenerator] Custom object creation2") {
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end"
 			"}\n"
@@ -198,11 +198,11 @@ TEST_CASE("[BytecodeGenerator] Custom object creation2") {
 		{ska::bytecode::Command::JUMP_REL, "7"},
 		{ska::bytecode::Command::POP, "L0"},
 		{ska::bytecode::Command::CONV_I_STR, "R0", "U0"},
-		{ska::bytecode::Command::ADD_STR, "R0", "lol", "R0"},
-		{ska::bytecode::Command::ADD_STR, "R1", "R0", "L0"},
-		{ska::bytecode::Command::MOV, "L1", "R1"},
-		{ska::bytecode::Command::MOV, "R2", "L1"},
-		{ska::bytecode::Command::RET, "R2"},
+		{ska::bytecode::Command::ADD_STR, "R1", "lol", "R0"},
+		{ska::bytecode::Command::ADD_STR, "R2", "R1", "L0"},
+		{ska::bytecode::Command::MOV, "L1", "R2"},
+		{ska::bytecode::Command::MOV, "R3", "L1"},
+		{ska::bytecode::Command::RET, "R3"},
 		{ska::bytecode::Command::PUSH_CELL, "L0"},
 		{ska::bytecode::Command::END, "L2", "-9", "1"},
 		{ska::bytecode::Command::PUSH, "L2"},
@@ -215,7 +215,7 @@ TEST_CASE("[BytecodeGenerator] Custom object creation2") {
 		{ska::bytecode::Command::ARR_ACCESS, "R1", "V1", "1"},
 		{ska::bytecode::Command::PUSH, "titi"},
 		{ska::bytecode::Command::JUMP_ABS, "R1"},
-		{ska::bytecode::Command::POP, "R2"},
+		{ska::bytecode::Command::POP, "R2"}
 	});
 }
 
@@ -228,7 +228,7 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation 3 (double field function
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end\n"
 			"}\n"
@@ -249,11 +249,11 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation 3 (double field function
 		{ska::bytecode::Command::JUMP_REL, "7"},
 		{ska::bytecode::Command::POP, "L0"},
 		{ska::bytecode::Command::CONV_I_STR, "R0", "U0"},
-		{ska::bytecode::Command::ADD_STR, "R0", "lol", "R0"},
-		{ska::bytecode::Command::ADD_STR, "R1", "R0", "L0"},
-		{ska::bytecode::Command::MOV, "L1", "R1"},
-		{ska::bytecode::Command::MOV, "R2", "L1"},
-		{ska::bytecode::Command::RET, "R2"},
+		{ska::bytecode::Command::ADD_STR, "R1", "lol", "R0"},
+		{ska::bytecode::Command::ADD_STR, "R2", "R1", "L0"},
+		{ska::bytecode::Command::MOV, "L1", "R2"},
+		{ska::bytecode::Command::MOV, "R3", "L1"},
+		{ska::bytecode::Command::RET, "R3"},
 		{ska::bytecode::Command::PUSH_CELL, "L0"},
 		{ska::bytecode::Command::END, "L2", "-9", "1"},
 		{ska::bytecode::Command::PUSH, "L2"},
@@ -270,7 +270,7 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation 3 (double field function
 		{ska::bytecode::Command::ARR_ACCESS, "R3", "V1", "1"},
 		{ska::bytecode::Command::PUSH, "titi4"},
 		{ska::bytecode::Command::JUMP_ABS, "R3"},
-		{ska::bytecode::Command::POP, "R4"},
+		{ska::bytecode::Command::POP, "R4"}
 	});
 }
 
@@ -281,7 +281,7 @@ TEST_CASE("[BytecodeGenerator] Field access affectation") {
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end"
 			"}\n"

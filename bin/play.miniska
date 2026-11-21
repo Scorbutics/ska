@@ -7,7 +7,7 @@ end
 
 run = function(parameters: string[]) do
 	origin = Character.Fcty(007)
-	Log.print("Origin id : " + origin.id)
+	Log.print("Origin id : " + (origin.id: string))
 
 	tutu = Character.Fcty(999)
 	Log.print("Tutu id : " + tutu.id: string)

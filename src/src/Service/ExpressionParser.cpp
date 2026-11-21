@@ -164,6 +164,14 @@ bool ska::ExpressionParser::matchSymbol(ScriptAST& input, ExpressionStack& expre
 		return true;
 	}
 
+	if (value == "!" && expressions.expectsOperand()) {
+		// Logical not : "false == operand", the comparison binding tighter than the other operators
+		const auto notSymbol = input.reader().match(TokenType::SYMBOL);
+		expressions.push(ASTFactory::MakeLogicalNode(Token{ "false", TokenType::BOOLEAN, notSymbol.position() }));
+		expressions.push(Token{ ExpressionStack::NotOperator, TokenType::SYMBOL, notSymbol.position() });
+		return true;
+	}
+
 	SLOG(ska::LogLevel::Info) << "\t\tPushing operator symbol " << value;
 
 	const auto shouldPopOperatorsStack = expressions.checkLessPriorityOperator(value);

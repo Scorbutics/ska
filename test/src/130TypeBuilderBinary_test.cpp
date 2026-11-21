@@ -21,7 +21,7 @@ TEST_CASE("[TypeBuilderBinary]") {
 
 	auto typeBuilder = ska::TypeBuilderOperator<ska::Operator::BINARY>{ typeCrosser };
 
-	auto value1Node = ska::ASTFactory::MakeLogicalNode(ska::Token{"1", ska::TokenType::DIGIT, {}});
+	auto value1Node = ska::ASTFactory::MakeLogicalNode(ska::Token{"1", ska::TokenType::STRING, {}});
 	auto value2Node = ska::ASTFactory::MakeLogicalNode(ska::Token{"1", ska::TokenType::STRING, {}});
 	auto node = ska::ASTFactory::MakeLogicalNode(ska::Token{"+", ska::TokenType::SYMBOL, {}}, std::move(value1Node), std::move(value2Node));
 
@@ -37,4 +37,13 @@ TEST_CASE("[TypeBuilderBinary]") {
 	//This one makes a "crossType"
 	auto type = typeBuilder.build(script, *node).type;
 	CHECK(type == ska::ExpressionType::STRING);
+
+	// No implicit conversion : int + string is not a type
+	auto intNode = ska::ASTFactory::MakeLogicalNode(ska::Token{"1", ska::TokenType::DIGIT, {}});
+	auto stringNode = ska::ASTFactory::MakeLogicalNode(ska::Token{"1", ska::TokenType::STRING, {}});
+	auto mixedNode = ska::ASTFactory::MakeLogicalNode(ska::Token{"+", ska::TokenType::SYMBOL, {}}, std::move(intNode), std::move(stringNode));
+	for(auto& child : *mixedNode) {
+		child->updateType(result[static_cast<std::size_t>(child->op())]->build(script, *child).type);
+	}
+	CHECK_THROWS(typeBuilder.build(script, *mixedNode));
 }

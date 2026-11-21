@@ -33,7 +33,7 @@ TEST_CASE("[SymbolTableUpdater] update node symbol") {
 	DataTestContainer data;
 	auto scriptCache = ska::ScriptCacheAST{};
 
-	auto astPtr = ASTFromInputSemanticTC(scriptCache, "i = 0\n titi = \"llllll\"\n do toto = 2\n i = titi\n end", data);
+	auto astPtr = ASTFromInputSemanticTC(scriptCache, "i = \"0\"\n titi = \"llllll\"\n do toto = 2\n i = titi\n end", data);
 
 	auto& table = astPtr.symbols();
 
@@ -209,17 +209,13 @@ TEST_CASE("[SemanticTypeChecker]") {
 			}
 
 			SUBCASE("int x float") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 2\n toto = 5.2\n titi * toto\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 3);
-				CHECK(ast[2].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 2\n toto = 5.2\n titi * toto\n", data));
 			}
 
 			SUBCASE("float x int") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 2.0\n toto = 5\n titi * toto\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 3);
-				CHECK(ast[2].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 2.0\n toto = 5\n titi * toto\n", data));
 			}
 
 			SUBCASE("string x int") {
@@ -230,24 +226,18 @@ TEST_CASE("[SemanticTypeChecker]") {
 			}
 
 			SUBCASE("string = int") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = \"strrrr\"\n titi = 3\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::STRING);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = \"strrrr\"\n titi = 3\n", data));
 			}
 
 			SUBCASE("float = string") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n titi = \"toto\"\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n titi = \"toto\"\n", data));
 			}
 
 			SUBCASE("float = string (variable)") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n toto = \"toto\"\n titi = toto\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 3);
-				CHECK(ast[2].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n toto = \"toto\"\n titi = toto\n", data));
 			}
 
 			SUBCASE("float = float") {
@@ -258,31 +248,23 @@ TEST_CASE("[SemanticTypeChecker]") {
 			}
 
 			SUBCASE("float = int") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n titi = 2\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 0.1\n titi = 2\n", data));
 			}
 
 			SUBCASE("int = float") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 1\n titi = 0.2\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::INT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 1\n titi = 0.2\n", data));
 			}
 
 			SUBCASE("int = string") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 7\n titi = \"123\"\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::INT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 7\n titi = \"123\"\n", data));
 			}
 
 			SUBCASE("float = string") {
-				auto astPtr = ASTFromInputSemanticTC(scriptCache, "titi = 7.8\n titi = \"123\"\n", data);
-				auto& ast = astPtr.rootNode()[0];
-				CHECK(ast.size() == 2);
-				CHECK(ast[1].type() == ska::ExpressionType::FLOAT);
+				// No implicit conversion : a variable keeps its type
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi = 7.8\n titi = \"123\"\n", data));
 			}
 
 			SUBCASE("not an lvalue") {
@@ -305,8 +287,9 @@ TEST_CASE("[SemanticTypeChecker]") {
 			}
 
 
-			SUBCASE("Calling a function with a type convertible argument") {
-				ASTFromInputSemanticTC(scriptCache, "titi129 = function(test:string) do end\n titi129(23)\n", data);
+			SUBCASE("Calling a function with an argument of another type") {
+				// No implicit conversion
+				CHECK_THROWS(ASTFromInputSemanticTC(scriptCache, "titi129 = function(test:string) do end\n titi129(23)\n", data));
 			}
 
 			SUBCASE("constructor with 1 parameter") {

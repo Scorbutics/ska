@@ -25,8 +25,8 @@ run = function(params : string[]) do
 	scor.attack(coldragon)
 
 	Log = import "bind:std.native.io.log"
-	Log.print(coldragon.data)
+	Log.print((coldragon.data: string))
 	
 	scor.attack(coldragon)
-	Log.print(coldragon.data)
+	Log.print((coldragon.data: string))
 end

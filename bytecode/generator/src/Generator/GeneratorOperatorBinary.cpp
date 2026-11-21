@@ -35,6 +35,27 @@ namespace ska {
 }
 
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::BINARY>::generate(OperateOn node, GenerationContext& context) {
+	const auto& logicalOperator = node.GetOperator();
+	if (logicalOperator == "&&" || logicalOperator == "||") {
+		// Short-circuit : the second operand is only evaluated when the first one does not decide the result
+		auto result = GenerateInstructionValue(*this, context, node.asNode(), node.GetFirstNode());
+		const auto resultRegister = context.queryNextRegister();
+		result.push(Instruction{ Command::MOV, resultRegister, result.operand() });
+		auto second = GenerateInstructionValue(*this, context, node.asNode(), node.GetSecondNode());
+		second.push(Instruction{ Command::MOV, resultRegister, second.operand() });
+		if (logicalOperator == "&&") {
+			// false : the result is false, the second operand is skipped
+			result.push(Instruction{ Command::JUMP_NIF, Operand { static_cast<long>(second.size()), OperandType::PURE }, resultRegister });
+		} else {
+			// true : the result is true, the second operand is skipped
+			result.push(Instruction{ Command::JUMP_NIF, Operand { 1L, OperandType::PURE }, resultRegister });
+			result.push(Instruction{ Command::JUMP_REL, Operand { static_cast<long>(second.size()), OperandType::PURE } });
+		}
+		result.push(std::move(second));
+		result.push(resultRegister);
+		return result;
+	}
+
 	auto children = std::vector<const ASTNode*> { &node.GetFirstNode(), &node.GetSecondNode() };
 	auto groups = std::vector<InstructionOutput>{};
 

@@ -14,8 +14,7 @@ I have no argument against the use of TypeScript, despite the lack of well-known
 I wanted a simple but coherent language.
 
 ## Features
- * Static typing only
- * Currently, it is weakly typed (you can affect an integer to a string variable, it will be converted), but it will probably becomes strongly typed soon
+ * Static and strong typing : no implicit conversion. A conversion is explicit, with the converter `:` (`"size : " + (count: string)`, `(3: float)`). A variable keeps its type.
  * Has a compilation phase (to bytecode), that includes type and semantic checks
  * Huge use of type inference
  * Variable-based syntax : functions are variables, import are variables, variables... are variables ;)
@@ -59,10 +58,10 @@ run = function (parameters: string[]) do
 		end
 
 		all | (element) do
-			IOLog.print(element)
+			IOLog.print((element: string))
 		end
 
-		IOLog.print("size : " + all.size())
+		IOLog.print("size : " + (all.size(): string))
 
 	else
 		IOLog.print("No argument provided")
@@ -166,7 +165,9 @@ next = isOdd
  * `return` leaves the function right away. In a function without returned value, `return` alone leaves it.
  * Operators are left associative (`6 - 1 - 2` is `3`). `-` before an operand is a negation (`-1`, `10 - -3`, `12 / -x`, `-f()`) : it binds tighter than the other operators.
  * A function parameter is always a new variable of the function : it hides an outer variable with the same name.
- * Booleans can be compared (`==`, `!=`).
+ * Booleans can be compared (`==`, `!=`). Logical operators : `&&`, `||` (the second operand is only evaluated when needed), `!`.
+ * `%` is the remainder of an integer division. A division (or a remainder) by zero is an error.
+ * A number converted to a string is its shortest text (`(1.5: string)` is `"1.5"`, `(3.0: string)` is `"3"`).
  * The top level code of a script runs once : the following imports of the script only give its exports.
 
 ## Host API (C++) : calling script functions, coroutines

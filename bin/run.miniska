@@ -14,10 +14,10 @@ run = function (parameters: string[]) do
 		end
 
 		all | (element) do
-			Log.print(element)
+			Log.print((element: string))
 		end
 
-		Log.print("size : " + all.size())
+		Log.print("size : " + (all.size(): string))
 
 	else
 		Log.print("No argument provided")

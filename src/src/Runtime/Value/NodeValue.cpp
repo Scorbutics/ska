@@ -1,3 +1,5 @@
+#include <charconv>
+#include <iterator>
 #include "Config/LoggerConfigLang.h"
 #include <cassert>
 #include "Runtime/Value/PlainMemoryTable.h"
@@ -102,6 +104,16 @@ ska::NodeValue ska::NodeValue::resolved() const & {
 	return static_cast<const NodeValue&>(*m_cell);
 }
 
+std::string ska::NodeValue::FormatNumber(double value) {
+	// Shortest text that reads back the same number (1.5, 0.1, 3)
+	char buffer[64];
+	const auto [end, error] = std::to_chars(std::begin(buffer), std::end(buffer), value);
+	if (error != std::errc{}) {
+		return std::to_string(value);
+	}
+	return std::string(buffer, end);
+}
+
 std::string ska::NodeValue::convertString() const {
 	auto result = std::string{};
 	if(empty()) {
@@ -121,7 +133,7 @@ std::string ska::NodeValue::convertString() const {
 			} else if constexpr (std::is_same<T, int>::value) {
 				result = std::to_string(arg);
 			} else if constexpr (std::is_same<T, double>::value) {
-				result = std::to_string(arg);
+				result = FormatNumber(arg);
 			} else if constexpr (std::is_same<T, VariableRef>::value) {
 				result = std::to_string(arg.variable);
 			} else if constexpr (std::is_same<T, ScriptVariableRef>::value) {

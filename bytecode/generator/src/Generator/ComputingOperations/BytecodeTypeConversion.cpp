@@ -89,6 +89,8 @@ namespace ska {
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::DIV_I>::enqueue(result, LogicalOperator::DIVIDE, ExpressionType::INT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::DIV_D>::enqueue(result, LogicalOperator::DIVIDE, ExpressionType::FLOAT, ExpressionType::FLOAT);
 
+			EnqueueConverterItem<OperationType::FULL_FIRST, Command::MOD_I>::enqueue(result, LogicalOperator::MODULO, ExpressionType::INT, ExpressionType::INT);
+
 			// Logic
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_I, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::INT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_EQ>::enqueue(result, LogicalOperator::EQUALITY, ExpressionType::FLOAT, ExpressionType::FLOAT);
@@ -121,10 +123,7 @@ namespace ska {
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_I, Command::TEST_LE>::enqueue(result, LogicalOperator::LESSER_OR_EQUAL, ExpressionType::INT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_LE>::enqueue(result, LogicalOperator::LESSER_OR_EQUAL, ExpressionType::FLOAT, ExpressionType::FLOAT);
 
-			// Conversions (split except for arrays)
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_I_STR, Command::ADD_STR>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::INT, ExpressionType::STRING);
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_D_STR, Command::ADD_STR>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::FLOAT, ExpressionType::STRING);
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_I_D, Command::ADD_D>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::INT, ExpressionType::FLOAT);
+			// Arrays : pushing an element (front / back), removing one
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::PUSH_F_ARR, Command::PUSH_B_ARR>>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::INT, ExpressionType::ARRAY);
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::PUSH_F_ARR, Command::PUSH_B_ARR>>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::STRING, ExpressionType::ARRAY);
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::PUSH_F_ARR, Command::PUSH_B_ARR>>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::FLOAT, ExpressionType::ARRAY);
@@ -132,14 +131,11 @@ namespace ska {
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::PUSH_F_ARR, Command::PUSH_B_ARR>>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::FUNCTION, ExpressionType::ARRAY);
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::PUSH_F_ARR, Command::PUSH_B_ARR>>::enqueue(result, LogicalOperator::ADDITION, ExpressionType::OBJECT, ExpressionType::ARRAY);
 
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_I_D, Command::SUB_D>::enqueue(result, LogicalOperator::SUBSTRACT, ExpressionType::INT, ExpressionType::FLOAT);
 			EnqueueConverterItemPack<OperationType::FULL_FIRST, CommandPackOr<Command::POP_F_ARR, Command::POP_B_ARR>>::enqueue(result, LogicalOperator::SUBSTRACT, ExpressionType::INT, ExpressionType::ARRAY);
 
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_I_D, Command::MUL_D>::enqueue(result, LogicalOperator::MULTIPLY, ExpressionType::INT, ExpressionType::FLOAT);
 			EnqueueConverterItemPack<OperationType::SPLIT, CommandPackOr<Command::MUL_I_ARR, Command::MUL_ARR_I>>::enqueue(result, LogicalOperator::MULTIPLY, ExpressionType::INT, ExpressionType::ARRAY);
 			EnqueueConverterItemPack<OperationType::SPLIT, CommandPackOr<Command::MUL_I_STR, Command::MUL_STR_I>>::enqueue(result, LogicalOperator::MULTIPLY, ExpressionType::INT, ExpressionType::STRING);
 
-			EnqueueConverterItem<OperationType::SPLIT, Command::CONV_I_D, Command::DIV_D>::enqueue(result, LogicalOperator::DIVIDE, ExpressionType::INT, ExpressionType::FLOAT);
 
 			return result;
 		}

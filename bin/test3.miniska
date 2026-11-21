@@ -6,12 +6,12 @@ run = function(parameters: string[]) do
     i = i + 1
     test = Point.Fcty(14 + i, 0-i)
 
-    IOLog.print("Test : " + test.x + ", " + test.y)
+    IOLog.print("Test : " + (test.x: string) + ", " + (test.y: string))
 
     i = i + 1
     test2 = Point.Fcty(14 + i, 0-i)
 
-    IOLog.print("Test : " + test.x + ", " + test.y)
-    IOLog.print("Test2 : " + test2.x + ", " + test2.y)
+    IOLog.print("Test : " + (test.x: string) + ", " + (test.y: string))
+    IOLog.print("Test2 : " + (test2.x: string) + ", " + (test2.y: string))
 
 end

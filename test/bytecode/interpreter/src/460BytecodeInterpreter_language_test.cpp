@@ -80,7 +80,7 @@ TEST_CASE("[BytecodeInterpreter] return : leaves the function right away, from a
 			if answer == 1
 				return "right"
 			end
-			return "left " + answer
+			return "left " + (answer: string)
 		end
 		branches = function(answer: int): string do
 			if answer == 1
@@ -98,7 +98,7 @@ TEST_CASE("[BytecodeInterpreter] return : leaves the function right away, from a
 			end
 			return found
 		end
-		out = early(1) + " " + early(0) + " " + branches(1) + " " + branches(2) + " " + inLoop([1, 5, 12, 30]) + " " + inLoop([1])
+		out = early(1) + " " + early(0) + " " + branches(1) + " " + branches(2) + " " + (inLoop([1, 5, 12, 30]): string) + " " + (inLoop([1]): string)
 	)script");
 	CHECK(*result.nodeval<ska::StringShared>() == "right left 0 one other 2 -1");
 }
@@ -170,8 +170,8 @@ TEST_CASE("[BytecodeInterpreter] negative numbers and negation") {
 			a = -1
 			b = 10 - -3
 			c = -2 * 3
-			d = -2.5 + 1
-			out = a + b * 100 + c * 10000 + ((d * 2): int) * 1000000
+			d = -2.5 + 1.0
+			out = a + b * 100 + c * 10000 + ((d * 2.0): int) * 1000000
 		)script");
 		CHECK(result.nodeval<long>() == -1 + 13 * 100 - 6 * 10000 - 3 * 1000000);
 	}
@@ -217,4 +217,48 @@ TEST_CASE("[BytecodeInterpreter] booleans comparison") {
 		out = count
 	)script");
 	CHECK(result.nodeval<long>() == 111);
+}
+
+TEST_CASE("[BytecodeInterpreter] modulo, and division by zero is an error") {
+	const auto result = Run(R"script(
+		out = 17 % 5 * 10 + -7 % 3
+	)script");
+	CHECK(result.nodeval<long>() == 2 * 10 + (-7 % 3));
+	CHECK_THROWS(Run("zero = 0\nout = 1 / zero\n"));
+	CHECK_THROWS(Run("zero = 0\nout = 1 % zero\n"));
+}
+
+TEST_CASE("[BytecodeInterpreter] logical operators : !, && and || (short-circuit)") {
+	const auto result = Run(R"script(
+		calls = 0
+		count = function(value: bool): bool do
+			calls = calls + 1
+			return value
+		end
+		a = true && count(true)
+		b = false && count(true)
+		c = true || count(false)
+		d = false || count(true)
+		e = !a
+		f = !(1 > 2) && 3 > 2 || false
+		g = 1 == 1 && 2 < 1
+		out = 0
+		if a
+			out = out + 1
+		end
+		if !b
+			out = out + 10
+		end
+		if c
+			out = out + 100
+		end
+		if d
+			out = out + 1000
+		end
+		if !e && f && !g
+			out = out + 10000
+		end
+		out = out + calls * 100000
+	)script");
+	CHECK(result.nodeval<long>() == 11111 + 2 * 100000);
 }

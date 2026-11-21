@@ -16,14 +16,16 @@ namespace ska {
 		constexpr auto TypeMapSize = static_cast<std::size_t>(ExpressionType::UNUSED_Last_Length);
 		using TypeMap = std::unordered_map<std::string, int(*)[TypeMapSize][TypeMapSize]>;
 		
+		// Strong typing : the operators only take operands of the same type (no implicit conversion : a conversion is
+		// explicit, with the converter ":"). Arrays : concatenation and pushing / removing an element.
 		const TypeMap& GetMap(const std::string& op) {
 			static int typeMapOperatorPlus[TypeMapSize][TypeMapSize] = {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 6, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 3, 4, 5, 6, 0 },
-				{ 0, 0, 0, 4, 4, 5, 6, 0 },
-				{ 0, 0, 0, 5, 0, 5, 6, 0 },
+				{ 0, 0, 0, 3, 0, 0, 6, 0 },
+				{ 0, 0, 0, 0, 4, 0, 6, 0 },
+				{ 0, 0, 0, 0, 0, 5, 6, 0 },
 				{ 0, 6, 0, 6, 6, 6, 6, 6 },
 				{ 0, 0, 0, 0, 0, 0, 6, 0 }
 			};
@@ -32,8 +34,8 @@ namespace ska {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 3, 4, 0, 0, 0 },
-				{ 0, 0, 0, 4, 4, 0, 0, 0 },
+				{ 0, 0, 0, 3, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 4, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 6, 0, 0, 6, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -43,8 +45,8 @@ namespace ska {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 3, 4, 5, 0, 0 },
-				{ 0, 0, 0, 4, 4, 0, 0, 0 },
+				{ 0, 0, 0, 3, 0, 5, 0, 0 },
+				{ 0, 0, 0, 0, 4, 0, 0, 0 },
 				{ 0, 0, 0, 5, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -54,20 +56,30 @@ namespace ska {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 3, 4, 0, 0, 0 },
-				{ 0, 0, 0, 4, 4, 0, 0, 0 },
+				{ 0, 0, 0, 3, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 4, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 }
 			};
 
+			static int typeMapOperatorModulo[TypeMapSize][TypeMapSize] = {
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 3, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0 }
+			};
 			static int typeMapOperatorEqual[TypeMapSize][TypeMapSize] = {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 1, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 2, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 3, 4, 5, 0, 0 },
-				{ 0, 0, 0, 3, 4, 5, 0, 0 },
-				{ 0, 0, 0, 3, 4, 5, 0, 0 },
+				{ 0, 0, 0, 3, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 4, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 5, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 6, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 7 }
 			};
@@ -87,9 +99,9 @@ namespace ska {
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 7, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 7, 7, 7, 0, 0 },
-				{ 0, 0, 0, 7, 7, 7, 0, 0 },
-				{ 0, 0, 0, 7, 7, 7, 0, 0 },
+				{ 0, 0, 0, 7, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 7, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 7, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 7, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 7 }
 			};
@@ -121,6 +133,7 @@ namespace ska {
 			typeMap.emplace("-", &typeMapOperatorMinus);
 			typeMap.emplace("*", &typeMapOperatorMul);
 			typeMap.emplace("/", &typeMapOperatorDiv);
+			typeMap.emplace("%", &typeMapOperatorModulo);
 			typeMap.emplace("=", &typeMapOperatorEqual);
 			typeMap.emplace(":", &typeMapOperatorConvert);
 			typeMap.emplace("==", &typeMapOperatorEquality);

@@ -38,6 +38,8 @@ namespace ska {
 	public:
 		// Operator of a negation ("-x") : a subtraction "0 - x" binding tighter than the other operators
 		static constexpr const char* NegationOperator = "u-";
+		// Operator of a logical not ("!x") : a comparison "false == x" binding tighter than the other operators
+		static constexpr const char* NotOperator = "u!";
 
 		void push(Operator&& op) {
 			operators.push(std::forward<Operator>(op));
@@ -161,6 +163,9 @@ namespace ska {
 				if (result.name() == NegationOperator) {
 					return Operator{ "-", TokenType::SYMBOL, result.position() };
 				}
+				if (result.name() == NotOperator) {
+					return Operator{ "==", TokenType::SYMBOL, result.position() };
+				}
 			}
 			return result;
 		}
@@ -181,6 +186,8 @@ namespace ska {
 	std::unordered_map<std::string, int> ska::expression_stack<Operator, Operand>::BuildPriorityMap() {
 		auto result = std::unordered_map<std::string, int>{};
 
+		result.emplace("||", 20);
+		result.emplace("&&", 30);
 		result.emplace("==", 40);
 		result.emplace("!=", 40);
 		result.emplace("<=", 40);
@@ -197,6 +204,8 @@ namespace ska {
 		result.emplace("-", 100);
 		result.emplace("*", 200);
 		result.emplace("/", 200);
+		result.emplace("%", 200);
+		result.emplace(NotOperator, 250);
 		result.emplace(NegationOperator, 250);
 		result.emplace(":", 300);
 

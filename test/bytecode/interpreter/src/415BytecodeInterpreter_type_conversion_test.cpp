@@ -33,35 +33,22 @@ TEST_CASE("[BytecodeInterpreter] explicit type conversion string => int + with c
 	CHECK(firstCellValue == 17);
 }
 
-TEST_CASE("[BytecodeInterpreter] type conversion + int => string") {
-	static constexpr auto progStr = "result = 7 + \"3\"\n";
-	auto [script, data] = Interpret(progStr);
-	auto& gen = data.generator->generate(*data.storage, std::move(script));
-	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
-	auto res = interpreted->variable(0);
-	auto firstCellValue = res.nodeval<ska::StringShared>();
-	CHECK(*firstCellValue == "73");
+TEST_CASE("[BytecodeInterpreter] no implicit conversion : int + string, float + string, float + int are rejected") {
+	CHECK_THROWS(Interpret("result = 7 + \"3\"\n"));
+	CHECK_THROWS(Interpret("result = \"3\" + 7\n"));
+	CHECK_THROWS(Interpret("result = 7.0 + \"3\"\n"));
+	CHECK_THROWS(Interpret("result = 7.0 + 3\n"));
+	CHECK_THROWS(Interpret("result = 3 < 7.0\n"));
+	CHECK_THROWS(Interpret("result = 3\n result = \"3\"\n"));
 }
 
-TEST_CASE("[BytecodeInterpreter] type conversion + float => string") {
-	static constexpr auto progStr = "result = 7.0 + \"3\"\n";
+TEST_CASE("[BytecodeInterpreter] explicit conversions") {
+	static constexpr auto progStr = "result = (7: string) + \"3\" + \"/\" + (7.5: string) + \"/\" + ((7.0 + (3: float)): string)\n";
 	auto [script, data] = Interpret(progStr);
 	auto& gen = data.generator->generate(*data.storage, std::move(script));
 	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
 	auto res = interpreted->variable(0);
-	auto firstCellValue = res.nodeval<ska::StringShared>();
-	CHECK(*firstCellValue == "7.0000003");
-}
-
-TEST_CASE("[BytecodeInterpreter] type conversion + int => float") {
-	static constexpr auto progStr = "result = 7.0 + 3\n";
-	auto [script, data] = Interpret(progStr);
-	auto& gen = data.generator->generate(*data.storage, std::move(script));
-	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
-	auto res = interpreted->variable(0);
-	auto firstCellValue = res.nodeval<double>();
-	const auto check = firstCellValue + 0.01 >= 10.0 && firstCellValue - 0.01 <= 10.0;
-  CHECK(check);
+	CHECK(*res.nodeval<ska::StringShared>() == "73/7.5/10");
 }
 
 TEST_CASE("[BytecodeInterpreter] type conversion + int => array (back)") {

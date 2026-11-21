@@ -21,6 +21,7 @@
 #include "Units/InterpreterCommandSubArr.h"
 #include "Units/InterpreterCommandCmpStr.h"
 #include "Units/InterpreterCommandCmpBool.h"
+#include "Units/InterpreterCommandModI.h"
 #include "Units/InterpreterCommandCmpArr.h"
 #include "Units/InterpreterCommandTestEq.h"
 #include "Units/InterpreterCommandTestG.h"
@@ -92,6 +93,7 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 
 	InterpreterCommandDeclare<Command::CMP_STR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CMP_BOOL>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MOD_I>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CMP_ARR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::TEST_EQ>(*this, result, generator);
 	InterpreterCommandDeclare<Command::TEST_G>(*this, result, generator);

@@ -33,7 +33,7 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation (field access)") {
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end\n"
 			"}\n"
@@ -56,7 +56,7 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation 2 (field function call)"
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end\n"
 			"}\n"
@@ -85,7 +85,7 @@ TEST_CASE("[BytecodeInterpreter] Custom object creation 3 (double field function
 			"return {"
 				"test = priv_test\n"
 				"say = function(more : string) : string do\n"
-					"s = \"lol\" + priv_test + more\n"
+					"s = \"lol\" + (priv_test: string) + more\n"
 					"return s\n"
 				"end\n"
 			"}\n"
@@ -284,7 +284,7 @@ TEST_CASE("[BytecodeInterpreter] object field named like a factory local is a di
 		titi = Fcty()
 		before = titi.test
 		titi.test = 5
-		out = "" + before + "/" + titi.test + "/" + titi.tata
+		out = (before: string) + "/" + (titi.test: string) + "/" + titi.tata
 	)script";
 
 	auto [script, data] = Interpret(progStr);

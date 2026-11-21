@@ -14,8 +14,8 @@ Fcty = function(id_: int) : var do
 		jump = function(test: int) do
 		end
 		move = function(direction: int, power: int, t: int, callback: Callback::Default) do
-			Log.print("defaultPos : " + defaultPos.x + ", " + defaultPos.y)
-			Log.print("Pos : " + pos.x + ", " + pos.y)
+			Log.print("defaultPos : " + (defaultPos.x: string) + ", " + (defaultPos.y: string))
+			Log.print("Pos : " + (pos.x: string) + ", " + (pos.y: string))
 			callback()
 			Log.print("after callback")
 		end

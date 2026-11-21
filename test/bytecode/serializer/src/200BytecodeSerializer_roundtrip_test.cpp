@@ -98,8 +98,8 @@ TEST_CASE("[BytecodeSerializer round trip] literals, operations and type convers
 		s = "a" + "b"
 		fromInt = i : string
 		fromString = "12" : int
-		out = s + "/" + fromInt + "/" + (fromString + i) + "/" + (f : string)
-	)script", "ab/10/22/3.000000");
+		out = s + "/" + fromInt + "/" + ((fromString + i) : string) + "/" + (f : string)
+	)script", "ab/10/22/3");
 }
 
 TEST_CASE("[BytecodeSerializer round trip] control flow and arrays") {
@@ -121,7 +121,7 @@ TEST_CASE("[BytecodeSerializer round trip] control flow and arrays") {
 		values | (value, index) do
 			sum = sum + value * index
 		end
-		out = label + "/" + total + "/" + values.size() + "/" + sum
+		out = label + "/" + (total: string) + "/" + (values.size(): string) + "/" + (sum: string)
 	)script", "big/10/4/20");
 }
 
@@ -139,7 +139,7 @@ TEST_CASE("[BytecodeSerializer round trip] functions and callbacks") {
 			callback()
 		end
 		callTwice(increment)
-		out = "" + add(2, 3) + "/" + counter
+		out = (add(2, 3): string) + "/" + (counter: string)
 	)script", "5/2");
 }
 
@@ -158,7 +158,7 @@ TEST_CASE("[BytecodeSerializer round trip] factory objects : fields, methods, fi
 		second = Position(10, 20)
 		before = first.x
 		first.x = 5
-		out = "" + before + "/" + first.x + "/" + first.y + "/" + second.x + "/" + second.sum()
+		out = (before: string) + "/" + (first.x: string) + "/" + (first.y: string) + "/" + (second.x: string) + "/" + (second.sum(): string)
 	)script", "1/5/2/10/30");
 }
 
@@ -208,7 +208,7 @@ TEST_CASE("[BytecodeSerializer round trip] self referencing factory") {
 		end
 		json = JSON("toto")
 		json.Add(JSON("titi"))
-		out = json.Get(0).Value() + json.Value() + json.Size()
+		out = json.Get(0).Value() + json.Value() + (json.Size(): string)
 	)script", "tititoto1");
 }
 
@@ -234,7 +234,7 @@ TEST_CASE("[BytecodeSerializer round trip] block scopes and more than 10 top lev
 		v9 = 9
 		v10 = 10
 		v11 = 11
-		out = "" + (v0 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11)
+		out = ((v0 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11): string)
 	)script", "66");
 }
 
@@ -244,7 +244,7 @@ TEST_CASE("[BytecodeSerializer round trip] imported external script") {
 		"player = Character.build(\"Player\")\n"
 		"enemy = Character.default\n"
 		"enemy.age = 99\n"
-		"out = player.name + \"/\" + player.age + \"/\" + enemy.name + \"/\" + Character.default.age\n",
+		"out = player.name + \"/\" + (player.age: string) + \"/\" + enemy.name + \"/\" + (Character.default.age: string)\n",
 		"Player/10/Default/99");
 }
 
@@ -271,7 +271,7 @@ TEST_CASE("[BytecodeSerializer round trip] call frames : recursion and nested cl
 				end
 			}
 		end
-		out = "" + fib(10) + "/" + Outer(100).Compute()
+		out = (fib(10): string) + "/" + (Outer(100).Compute(): string)
 	)script", "55/306");
 }
 
@@ -293,6 +293,6 @@ TEST_CASE("[BytecodeSerializer round trip] recursive structure : a method uses a
 				end
 			}
 		end
-		out = "" + Node(4).Count()
+		out = (Node(4).Count(): string)
 	)script", "31");
 }

@@ -23,7 +23,8 @@ namespace ska {
 			//     symbol tables keyed by child position, exact floating point values.
 			// 3 : "return" leaves the function where it is (RET generated for each return statement of a function).
 			// 4 : CMP_BOOL command (the commands after it are renumbered).
-			static constexpr std::size_t Version = 4;
+			// 5 : MOD_I command (the commands after it are renumbered).
+			static constexpr std::size_t Version = 5;
 
 			Serializer() = default;
 			// Reads and writes the given format version (tests of version mismatches)

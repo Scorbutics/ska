@@ -61,6 +61,8 @@ namespace ska {
 			PUSH_CELL,
 			// CMP_BOOL dest left right : 0 if both booleans are equal, 1 otherwise (followed by TEST_EQ / TEST_NEQ)
 			CMP_BOOL,
+			// MOD_I dest left right : remainder of the integer division
+			MOD_I,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -118,6 +120,7 @@ namespace ska {
 			"CELL",
 			"PUSH_CELL",
 			"CMP_BOOL",
+			"MOD_I",
 			"NOP",
 			""
 		};
