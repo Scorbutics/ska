@@ -16,9 +16,7 @@ namespace {
 			auto value = variables.find(var);
 			return value == variables.end() ? 0 : value->second;
 		}
-		std::string getComponentVariable(const std::string&) const override { return ""; }
 		void setGameVariable(const std::string& var, int value) override { variables[var] = value; }
-		void setComponentVariable(const std::string&, const std::string&) override {}
 		std::map<std::string, int> variables;
 	};
 

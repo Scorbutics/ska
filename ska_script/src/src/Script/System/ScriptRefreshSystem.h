@@ -10,7 +10,8 @@
 #include "Core/ECS/Basics/Physic/PositionComponent.h"
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/ECS/System.h"
-#include "ScriptAutoSystem.h"
+#include "Core/Data/Events/CollisionEvent.h"
+#include "Core/Data/Events/ScriptEvent.h"
 #include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
 #include "Base/Patterns/SubObserver.h"
 
@@ -42,11 +43,11 @@ namespace ska {
 		public SubObserver<ScriptEvent> {
 
 	public:
-		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg);
+		ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptPositionedGetter& spg);
 		~ScriptRefreshSystem() override = default;
 		void update(unsigned int ellapsedTime) override;
 
-		// The scripts with a file extension (ex : ".miniska") are run by another scripting system instead of the legacy one
+		// The scripts with a file extension (ex : ".miniska") are run by a scripting system (ScriptRunner)
 		void addScriptRunner(std::string fileExtension, ScriptRunner& runner);
 
 	protected:
@@ -63,7 +64,6 @@ namespace ska {
 
 		ScriptPositionSystem m_scriptPositionSystem;
 		ScriptPositionedGetter& m_scriptPositionedGetter;
-		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;
 		ska::EntityManager& m_entityManager;
 		std::vector<std::pair<std::string, ScriptRunner*>> m_scriptRunners;

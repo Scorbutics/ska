@@ -11,14 +11,13 @@
 #include "Core/Inputs/InputContextManager.h"
 #include "Core/Data/Events/ScriptEvent.h"
 
-ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptAutoSystem& scriptAutoSystem, ScriptPositionedGetter& spg) :
+ska::ScriptRefreshSystem::ScriptRefreshSystem(EntityManager& entityManager, GameEventDispatcher& ged, ScriptPositionedGetter& spg) :
 	ScriptRefreshSystemBase(entityManager),
 	SubObserver<InputKeyEvent>(std::bind(&ScriptRefreshSystem::onKeyEvent, this, std::placeholders::_1), ged),
 	SubObserver<CollisionEvent>(std::bind(&ScriptRefreshSystem::onCollisionEvent, this, std::placeholders::_1), ged),
 	SubObserver<ScriptEvent>(std::bind(&ScriptRefreshSystem::onScriptEvent, this, std::placeholders::_1), ged),
 	m_scriptPositionSystem(entityManager),
 	m_scriptPositionedGetter(spg),	
-	m_scriptAutoSystem(scriptAutoSystem),
 	m_action(false),
 	m_entityManager(entityManager) {
 }
@@ -217,7 +216,6 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		components.remove<ScriptSleepComponent>(targets);
 	}
 
-	m_scriptAutoSystem.update(ellapsedTime);
 	for (auto& runner : m_scriptRunners) {
 		runner.second->update(ellapsedTime);
 	}
@@ -238,7 +236,7 @@ bool ska::ScriptRefreshSystem::startScript(ScriptSleepComponent script, const En
 			return script.triggeringType == ScriptTriggerType::AUTO;
 		}
 	}
-	m_scriptAutoSystem.registerScript(script, origin);
+	SLOG(LogLevel::Error) << "No scripting system to run the script \"" << script.name << "\" (unknown file extension)";
 
 	//Auto scripts are "one shots"	
 	return script.triggeringType == ScriptTriggerType::AUTO;
