@@ -8,7 +8,6 @@
 #include "InputContextTest.h"
 #include "MoveableWindowTest.h"
 
-std::string ska::GUI::MENU_DEFAULT_THEME_PATH = "resources/Menu/default_theme/";
 
 template <class T>
 void printVector(std::vector<T>& v) {

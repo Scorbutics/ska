@@ -14,7 +14,6 @@
 #include "GraphicModule.h"
 #include "Base/IO/Readers/IniReader.h"
 
-std::string ska::SDLFont::DEFAULT_FONT_FILE = "Fonts/FiraSans-Medium.ttf";
 
 namespace ska {
 	class FileException;
