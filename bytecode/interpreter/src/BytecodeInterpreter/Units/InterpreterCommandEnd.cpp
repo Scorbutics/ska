@@ -4,7 +4,7 @@
 using InterpreterCommand = ska::bytecode::InterpreterCommand<ska::bytecode::Command::END>;
 
 
-SKA_LOGC_CONFIG(ska::LogLevel::Debug, InterpreterCommand);
+SKA_LOGC_CONFIG(ska::LogLevel::Disabled, InterpreterCommand);
 #define LOG_DEBUG SLOG_STATIC(ska::LogLevel::Debug, InterpreterCommand)
 
 

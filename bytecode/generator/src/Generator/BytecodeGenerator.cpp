@@ -25,7 +25,7 @@
 
 #include "GeneratorDeclarer.h"
 
-SKA_LOGC_CONFIG(ska::LogLevel::Debug, ska::bytecode::Generator);
+SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::Generator);
 #define LOG_DEBUG SLOG_STATIC(ska::LogLevel::Debug, ska::bytecode::Generator)
 #define LOG_INFO SLOG_STATIC(ska::LogLevel::Info, ska::bytecode::Generator)
 
