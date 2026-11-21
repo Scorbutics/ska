@@ -1,4 +1,5 @@
 #include "Config/LoggerConfigLang.h"
+#include "Service/LanguageHints.h"
 #include "MatcherFunction.h"
 
 #include "NodeValue/AST.h"
@@ -17,7 +18,7 @@ ska::ASTNodePtr ska::MatcherFunction::matchDeclaration(ScriptAST& input) {
 
 	const auto functionNameContext = input.contextOf(ParsingContextType::AFFECTATION);
 	if (functionNameContext == nullptr) {
-		throw std::runtime_error("trying to declare a function, but unable to find its affectation name");
+		throw std::runtime_error("trying to declare a function, but unable to find its affectation name : " + hints::NamedFunction());
 	}
 
 	const auto& functionName = *functionNameContext;
@@ -137,6 +138,9 @@ ska::ASTNodePtr ska::MatcherFunction::matchDeclarationParameter(ScriptAST& input
 }
 
 std::deque<ska::ASTNodePtr> ska::MatcherFunction::fillDeclarationParameters(ScriptAST& input) {
+	if (input.reader().expect(TokenType::IDENTIFIER)) {
+		throw std::runtime_error("a name after \"function\" : " + hints::NamedFunction());
+	}
 	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::PARENTHESIS_BEGIN>());
 
 	auto parameters = std::deque<ASTNodePtr>{};

@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "Config/LoggerConfigLang.h"
 #include "ExpressionTypeCrossBasic.h"
+#include "Service/LanguageHints.h"
 
 namespace ska {
 	namespace typedetail {
@@ -154,14 +155,14 @@ ska::ExpressionType ska::typedetail::ExpressionTypeCross(const std::string& op, 
 
 	if (typeMap.find(op) == typeMap.end()) {
         auto ss = std::stringstream{};
-        ss << "unknown operator " << op;
+        ss << "unknown operator " << op << hints::UnknownOperator(op);
         throw std::runtime_error(ss.str());
 	}
 
 	const auto typeIdResult = (*typeMap.at(op))[static_cast<std::size_t>(type1)][static_cast<std::size_t>(type2)];
 	if (typeIdResult == 0) {
 		auto ss = std::stringstream{};
-		ss << "Unable to use operator \"" << op << "\" on types \"" << ExpressionTypeSTR[static_cast<std::size_t>(type1)] << "\" and \"" << ExpressionTypeSTR[static_cast<std::size_t>(type2)] << "\"";
+		ss << "Unable to use operator \"" << op << "\" on types \"" << ExpressionTypeSTR[static_cast<std::size_t>(type1)] << "\" and \"" << ExpressionTypeSTR[static_cast<std::size_t>(type2)] << "\"" << (type1 != type2 ? hints::DifferentTypes() : "");
 		throw std::runtime_error(ss.str());
 	}
 	

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Config/LoggerConfigLang.h"
+#include "Service/LanguageHints.h"
 #include "ExpressionParser.h"
 #include "Service/StatementParser.h"
 #include "NodeValue/AST.h"
@@ -124,7 +125,7 @@ int ska::ExpressionParser::matchRange(ScriptAST& input, ExpressionStack& express
 	} return 0;
 
 	default:
-    	error("Unexpected token (range type) \"" + token.name() + "\"");
+    	error("Unexpected token (range type) \"" + token.name() + "\"" + (token.name() == "{" ? hints::BraceBlock() : ""));
 		return 0;
 	}
 }

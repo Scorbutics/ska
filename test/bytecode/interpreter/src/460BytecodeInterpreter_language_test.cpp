@@ -321,3 +321,26 @@ TEST_CASE("[BytecodeInterpreter] strings : size and characters") {
 		CHECK_THROWS(Interpret("a = [1, 2]\nout = a[true]\n"));
 	}
 }
+
+TEST_CASE("[BytecodeInterpreter] errors : the habits of other languages are explained") {
+	const auto hint = [](const std::string& progStr, const char* expected) {
+		CHECK_THROWS_WITH(Interpret(progStr), doctest::Contains(expected));
+	};
+	hint("x = null\n", "there is no null value");
+	hint("x = nil\n", "there is no null value");
+	hint("x = 1\nif x == 1\nx = 2\nelif x == 2\nx = 3\nend\n", "write \"else if\"");
+	hint("x = True\n", "\"true\" and \"false\"");
+	hint("x = true and false\n", "\"&&\", \"||\" and \"!\"");
+	hint("var x = 1\n", "a variable is declared by assigning it");
+	hint("x = \"a\" + 3\n", "no implicit conversion");
+	hint("x = 1.0 * 2\n", "no implicit conversion");
+	hint("for(i = 0; i < 3; i = i + 1) do\nend\n", "\";\" is not used");
+	hint("x = 'a'\n", "double quotes");
+	hint("i = 0\ni++\n", "write \"i = i + 1\"");
+	hint("i = 0\ni--\n", "write \"i = i - 1\"");
+	hint("x = 1\nx += 1\n", "no compound assignment");
+	hint("x = 1\nx -= 1\n", "no compound assignment");
+	hint("if true {\n}\n", "blocks are \"do ... end\"");
+	hint("function f() do\nend\n", "a function is a variable");
+	hint("f = function g() do\nend\n", "a function is a variable");
+}

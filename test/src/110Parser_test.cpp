@@ -14,7 +14,7 @@
 TEST_CASE("[Parser]") {
 	auto scriptCache = ska::ScriptCacheAST{};
 
-	const auto inputStr = std::string("for(i = 0\n i < 5\n i++) do lol\n \"mdr\"\n 12\n end");
+	const auto inputStr = std::string("for(i = 0\n i < 5\n i = i + 1) do lol\n \"mdr\"\n 12\n end");
 	const auto keywords = ska::ReservedKeywordsPool{};
 	auto t = ska::Tokenizer {keywords, inputStr};
 	auto tokens = t.tokenize();
@@ -45,9 +45,10 @@ TEST_CASE("[Parser]") {
 	CHECK(checkStatement[1].has(ska::Token { "5", ska::TokenType::DIGIT, {} }));
 
 	const auto& incrementStatement = tree[2];
-	CHECK(incrementStatement.op() == ska::Operator::UNARY);
+	CHECK(incrementStatement.op() == ska::Operator::DECLARATION);
 	CHECK(incrementStatement.size() == 1);
-	CHECK(incrementStatement[0].has(ska::Token { "i", ska::TokenType::IDENTIFIER, {} }));
+	CHECK(incrementStatement.has(ska::Token { "i", ska::TokenType::IDENTIFIER, {} }));
+	CHECK(incrementStatement[0].op() == ska::Operator::BINARY);
 
 	const auto& loopStatementBody = tree[3];
 	CHECK(loopStatementBody.op() == ska::Operator::BLOCK);

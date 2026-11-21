@@ -2,6 +2,7 @@
 #include <fstream>
 #include "Matcher/MatcherBlock.h"
 #include "Config/LoggerConfigLang.h"
+#include "Service/LanguageHints.h"
 #include "NodeValue/AST.h"
 #include "NodeValue/Operator.h"
 #include "Service/StatementParser.h"
@@ -112,7 +113,9 @@ ska::StatementParser::ASTNodePtr ska::StatementParser::matchReservedKeyword(Scri
 		return m_matcherIfElse.match(input);
 
 	case static_cast<std::size_t>(TokenGrammar::VARIABLE):
-		return m_matcherVar.matchDeclaration(input);
+		// "var" is a type (objects) : it does not start a statement
+		error(hints::VariableKeyword());
+		return nullptr;
 
 	case static_cast<std::size_t>(TokenGrammar::FUNCTION):
 		return expr(input);

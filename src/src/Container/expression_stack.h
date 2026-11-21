@@ -4,6 +4,7 @@
 #include <type_traits>
 #include "iterable_stack.h"
 #include "NodeValue/Token.h"
+#include "Service/LanguageHints.h"
 
 namespace ska {
 	namespace Group {
@@ -96,7 +97,7 @@ namespace ska {
 			const std::string topOperatorContent = (emptyOperator() || topOperator().name().empty()) ? "" : topOperator().name();
 			if (PRIORITY_MAP.find(tokenOperator) == PRIORITY_MAP.end()) {
 				auto ss = std::stringstream{};
-				ss << "syntax error : bad operator \"" << tokenOperator << "\"";
+				ss << "syntax error : bad operator \"" << tokenOperator << "\"" << hints::UnknownOperator(tokenOperator);
 				throw std::runtime_error(ss.str());
 			}
 
@@ -195,12 +196,7 @@ namespace ska {
 		result.emplace(">", 40);
 		result.emplace("<", 40);
 		result.emplace("=", 50);
-		result.emplace("-=", 50);
-		result.emplace("+=", 50);
-		result.emplace("*=", 50);
-		result.emplace("++", 100);
 		result.emplace("+", 100);
-		result.emplace("--", 100);
 		result.emplace("-", 100);
 		result.emplace("*", 200);
 		result.emplace("/", 200);

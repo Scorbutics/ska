@@ -1,4 +1,5 @@
 #include "Config/LoggerConfigLang.h"
+#include "Service/LanguageHints.h"
 #include <Base/Patterns/Observable.h>
 
 #include "SymbolTable.h"
@@ -262,7 +263,7 @@ bool ska::SymbolTable::match(VarTokenEvent& token) {
 			SLOG(ska::LogLevel::Info) << "Using variable : " << variableName;
 			const auto symbolTable = (*this)[variableName];
 			if(symbolTable == nullptr) {
-				throw std::runtime_error("Symbol not found : " + variableName);
+				throw std::runtime_error("Symbol not found : " + variableName + hints::UnknownSymbol(variableName));
 			}
 			token.rootNode().linkSymbol(*symbolTable);
 		}
