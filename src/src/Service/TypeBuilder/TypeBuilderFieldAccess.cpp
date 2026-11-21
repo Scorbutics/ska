@@ -12,6 +12,27 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::FIELD_ACCESS>::build(
 
 	const auto& fieldName = node.GetFieldNameNode().name();
 
+	// Built-in functions of maps : size(), has(key), keys()
+	if (typeObject == ExpressionType::MAP) {
+		auto type = Type::MakeCustom<ExpressionType::FUNCTION>(nullptr);
+		if (fieldName == "size") {
+			type.add(Type::MakeBuiltIn<ExpressionType::INT>());
+			return type;
+		}
+		if (fieldName == "has") {
+			type.add(Type::MakeBuiltIn<ExpressionType::STRING>());
+			type.add(Type::MakeBuiltIn<ExpressionType::BOOLEAN>());
+			return type;
+		}
+		if (fieldName == "keys") {
+			type.add(Type::MakeBuiltIn<ExpressionType::ARRAY>().add(Type::MakeBuiltIn<ExpressionType::STRING>()));
+			return type;
+		}
+		auto ss = std::stringstream{};
+		ss << "a map has no field \"" << fieldName << "\" (its functions : size(), has(key), keys())";
+		throw std::runtime_error(ss.str());
+	}
+
 	// Handling built-in direct fields
 	if (typeObject == ExpressionType::ARRAY || typeObject == ExpressionType::STRING) {
 		if (fieldName == "size") {

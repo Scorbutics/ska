@@ -18,6 +18,7 @@ ska::TypeCrosser::TypeCrossMap ska::TypeCrosser::typeCrossMap = ska::TypeCrosser
 ska::TypeCrosser::TypeCrossMap ska::TypeCrosser::BuildTypeCrossMap() {
 	auto result = TypeCrossMap{};
 	typedetail::TypeCrosserMakeCross<ExpressionType::ARRAY>(result);
+	typedetail::TypeCrosserMakeCross<ExpressionType::MAP>(result);
 	typedetail::TypeCrosserMakeCross<ExpressionType::OBJECT>(result);
 	typedetail::TypeCrosserMakeCross<ExpressionType::FUNCTION>(result);
 	return result;

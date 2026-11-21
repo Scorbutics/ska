@@ -128,6 +128,9 @@ bool ska::SemanticTypeChecker::matchIfElse(const IfElseTokenEvent& token) {
 bool ska::SemanticTypeChecker::matchArray(const ArrayTokenEvent& token) {
 	switch (token.type()) {
 	case ArrayTokenEventType::DECLARATION: {
+		if (token.rootNode().op() == Operator::MAP_DECLARATION) {
+			break;
+		}
 		// If and only if an explicit array type does not exists, we have array content. So semantic checks are required.
 		if (token.rootNode()[1].logicalEmpty()) {
 			auto arrayDeclarationOperation = OperationType<Operator::ARRAY_DECLARATION>{token.rootNode()[0]};
@@ -143,8 +146,8 @@ bool ska::SemanticTypeChecker::matchArray(const ArrayTokenEvent& token) {
 	} break;
 
 	case ArrayTokenEventType::EXPRESSION: {
-		// An array, or a string (its characters)
-		if(token.rootNode().type() != ExpressionType::ARRAY && token.rootNode().type() != ExpressionType::STRING) {
+		// An array, a map, or a string (its characters)
+		if(token.rootNode().type() != ExpressionType::ARRAY && token.rootNode().type() != ExpressionType::STRING && token.rootNode().type() != ExpressionType::MAP) {
 			auto ss = std::stringstream {};
 			ss << "expression is not an array (it's a \"" << token.rootNode().type().value_or(Type {}) << "\")";
 			throw std::runtime_error(ss.str());
@@ -153,6 +156,15 @@ bool ska::SemanticTypeChecker::matchArray(const ArrayTokenEvent& token) {
 
 	case ArrayTokenEventType::USE: {
 		const auto& index = token.rootNode()[1];
+		// The key of a map is a string
+		if (token.rootNode()[0].type() == ExpressionType::MAP) {
+			if (index.type() != ExpressionType::STRING) {
+				auto ss = std::stringstream {};
+				ss << "a map key is a \"string\" (not a \"" << index.type().value_or(Type {}) << "\")";
+				throw std::runtime_error(ss.str());
+			}
+			break;
+		}
 		if (index.type() != ExpressionType::INT) {
 			auto ss = std::stringstream {};
 			ss << "an index is an \"int\" (not a \"" << index.type().value_or(Type {}) << "\")";

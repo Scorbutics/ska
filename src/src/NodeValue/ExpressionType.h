@@ -16,6 +16,8 @@ namespace ska {
 		STRING,
 		ARRAY,
 		BOOLEAN,
+		// string keys, values of one type
+		MAP,
 		UNUSED_Last_Length
 	};
 
@@ -27,7 +29,8 @@ namespace ska {
 		"float",
 		"string",
 		"array",
-		"bool"
+		"bool",
+		"map"
 	};
 
 	static_assert(sizeof(ExpressionTypeSTR) / sizeof(ExpressionTypeSTR[0]) == static_cast<std::size_t>(ExpressionType::UNUSED_Last_Length));

@@ -439,3 +439,99 @@ TEST_CASE("[BytecodeInterpreter] binding templates : a \"bind:\" import can be r
 	CHECK_THROWS_WITH(Interpret("T = import \"bind:test.template\"\nr = T.twice(\"2\")\n"), doctest::Contains("Unable to use operator \"=\""));
 	CHECK_THROWS_WITH(Interpret("T = import \"bind:test.template\"\nr = T.unknown()\n"), doctest::Contains("undeclared field"));
 }
+
+TEST_CASE("[BytecodeInterpreter] maps : string keys, values of one type") {
+	SUBCASE("read, write, size, has, keys (sorted)") {
+		const auto result = Run(R"script(
+			stock = [:]: int
+			stock["potion"] = 3
+			stock["ball"] = 10
+			stock["potion"] = stock["potion"] + 1
+			keys = stock.keys()
+			out = keys[0] + "," + keys[1] + "/" + (stock["potion"]: string) + "/" + (stock.size(): string) + "/" + (stock.has("ball"): string) + "/" + (stock.has("key"): string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "ball,potion/4/2/true/false");
+	}
+	SUBCASE("a map is shared, given to a function, returned by a function") {
+		const auto result = Run(R"script(
+			fill = function(items: int[:]) do
+				items["a"] = 1
+			end
+			make = function(): int[:] do
+				m = [:]: int
+				m["b"] = 2
+				return m
+			end
+			m = make()
+			fill(m)
+			other = m
+			other["c"] = 3
+			total = 0
+			m.keys() | (key) do
+				total = total + m[key]
+			end
+			out = total
+		)script");
+		CHECK(result.nodeval<long>() == 6);
+	}
+	SUBCASE("values : arrays, objects, functions") {
+		const auto result = Run(R"script(
+			P = function(x: int): var do
+				return { x = x }
+			end
+			F = function(n: int): int do return 0 end
+			arrays = [:]: string[]
+			arrays["fire"] = ["charmander"]
+			arrays["fire"] = arrays["fire"] + "vulpix"
+			objects = [:]: P()
+			objects["a"] = P(7)
+			functions = [:]: F
+			functions["double"] = function(n: int): int do return n * 2 end
+			out = arrays["fire"].size() + objects["a"].x + functions["double"](10)
+		)script");
+		CHECK(result.nodeval<long>() == 2 + 7 + 20);
+	}
+	SUBCASE("a missing key is an error") {
+		CHECK_THROWS_WITH(Run("m = [:]: int\nout = m[\"missing\"]\n"), doctest::Contains("the map has no key \"missing\""));
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] maps : type errors") {
+	CHECK_THROWS_WITH(Interpret("m = [:]: int\nm[1] = 2\n"), doctest::Contains("a map key is a \"string\""));
+	CHECK_THROWS_WITH(Interpret("m = [:]: int\nm[\"a\"] = \"x\"\n"), doctest::Contains("Unable to use operator \"=\""));
+	CHECK_THROWS_WITH(Interpret("m = [:]: int\nm = [:]: string\n"), doctest::Contains("Unable to use operator \"=\""));
+	CHECK_THROWS_WITH(Interpret("m = [:]: int\nx = m.unknown()\n"), doctest::Contains("a map has no field \"unknown\""));
+	CHECK_THROWS_WITH(Interpret("m = [:]\n"), doctest::Contains("a map is declared with the type of its values"));
+	CHECK_THROWS_WITH(Interpret("f = function(x: string[:]) do end\nm = [:]: int\nf(m)\n"), doctest::Contains("Unable to use operator \"=\""));
+	CHECK_THROWS(Interpret("m = [:]: int\nn = [:]: int\nb = m == n\n"));
+}
+
+TEST_CASE("[BytecodeInterpreter] containers : an object stored in a cell or a field of the same factory") {
+	// The store was skipped when the value and the container cell had the same type symbol
+	const auto result = Run(R"script(
+		P = function(x: int): var do
+			return { x = x }
+		end
+		H = function(): var do
+			child = P(1)
+			return { child = child }
+		end
+		arr = [P(1)]
+		arr[0] = P(7)
+		h = H()
+		h.child = P(9)
+		out = arr[0].x + h.child.x
+	)script");
+	CHECK(result.nodeval<long>() == 16);
+}
+
+TEST_CASE("[BytecodeInterpreter] built-in fields : on any expression (an array element, a call result)") {
+	const auto result = Run("make = function(): int[] do return [1, 2, 3] end\nnested = [[1], [1, 2]]\nout = make().size() * 10 + nested[1].size()\n");
+	CHECK(result.nodeval<long>() == 32);
+}
+
+TEST_CASE("[BytecodeInterpreter] strings : a string literal with the text of a symbol or a keyword") {
+	// "," "end" "do" ended the expression
+	const auto result = Run("a = [\"x\", \"y\"]\nout = a[0] + \",\" + a[1] + \"end\" + \"do\" + \"|\"\n");
+	CHECK(*result.nodeval<ska::StringShared>() == "x,yenddo|");
+}

@@ -59,16 +59,20 @@ ska::ASTNodePtr ska::MatcherType::match(TokenReader& input, std::string* typeStr
 		nodes.push_back(ASTFactory::MakeEmptyNode());
 	}
 
-	//handle arrays
+	//handle arrays (T[]) and maps (T[:])
 	if (input.expect(TokenType::ARRAY)) {
 		const auto firstBracket = input.match(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_BEGIN>());
+		const auto isMap = input.expect(typeDelimiterToken);
+		if (isMap) {
+			input.match(typeDelimiterToken);
+		}
 		input.match(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>());
 
 		if (typeStr != nullptr) {
-			*typeStr += m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_BEGIN>().name() + m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>().name();
+			*typeStr += m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_BEGIN>().name() + (isMap ? typeDelimiterToken.name() : "") + m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>().name();
 		}
 
-		nodes.push_back(ASTFactory::MakeLogicalNode(Token{ "", TokenType::ARRAY, firstBracket.position()}));
+		nodes.push_back(ASTFactory::MakeLogicalNode(Token{ isMap ? ":" : "", TokenType::ARRAY, firstBracket.position()}));
 	} else {
 		nodes.push_back(ASTFactory::MakeEmptyNode());
 	}
@@ -111,6 +115,14 @@ ska::ASTNodePtr ska::MatcherType::match(const Type& input) {
 				nodes.push_back(match(input[0]));
 				nodes.push_back(ASTFactory::MakeEmptyNode());
 				nodes.push_back(ASTFactory::MakeLogicalNode(Token{ "", TokenType::ARRAY, {}}));
+				break;
+			case ExpressionType::MAP:
+				if(input.size() != 1) {
+					malformedType(input, " : bad type size in map type (should be 1)");
+				}
+				nodes.push_back(match(input[0]));
+				nodes.push_back(ASTFactory::MakeEmptyNode());
+				nodes.push_back(ASTFactory::MakeLogicalNode(Token{ ":", TokenType::ARRAY, {}}));
 				break;
 			case ExpressionType::FUNCTION:
 			case ExpressionType::OBJECT: {

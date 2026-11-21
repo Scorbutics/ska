@@ -33,8 +33,10 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::TYPE>::build(const Sc
 	   SLOG_STATIC(ska::LogLevel::Info, ska::TypeBuilderOperator<ska::Operator::TYPE>) << "Type-node is a built-in : \"" << node.GetName() << "\"";
    }
 
-	//handles array type
-	if (node.IsArray()) {
+	//handles array and map types
+	if (node.IsMap()) {
+		result = Type::MakeBuiltIn<ExpressionType::MAP>().add(result);
+	} else if (node.IsArray()) {
 		result = Type::MakeBuiltIn<ExpressionType::ARRAY>().add(result);
 	}
 

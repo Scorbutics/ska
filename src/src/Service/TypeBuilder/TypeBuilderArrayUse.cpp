@@ -12,5 +12,6 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::ARRAY_USE>::build(con
     if (node.GetArray().type() == ExpressionType::STRING) {
         return Type::MakeBuiltIn<ExpressionType::STRING>();
     }
+    // A value of a map, an element of an array
     return node.GetArraySubType();
 }

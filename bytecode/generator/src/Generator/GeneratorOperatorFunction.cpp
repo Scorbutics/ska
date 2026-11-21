@@ -2,6 +2,7 @@
 #include <string>
 #include "GeneratorOperatorFunction.h"
 #include "BytecodeCommand.h"
+#include "Operation/OperationTypeFieldAccess.h"
 #include "Generator/Value/BytecodeScriptGenerationHelper.h"
 #include "Generator/ComputingOperations/BytecodeNLengthOperations.h"
 
@@ -96,6 +97,25 @@ static bool IsInstructionCommandClosed(const ska::bytecode::InstructionOutput& p
 }
 
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FUNCTION_CALL>::generate(OperateOn node, GenerationContext& context) {
+	// Built-in functions of maps : size(), has(key), keys()
+	if (node.GetFunctionNameNode().op() == Operator::FIELD_ACCESS) {
+		auto fieldAccess = OperationType<Operator::FIELD_ACCESS>{ node.GetFunctionNameNode() };
+		if (fieldAccess.GetObjectType() == ExpressionType::MAP) {
+			const auto& fieldName = fieldAccess.GetFieldNameNode().name();
+			auto result = generateNext(context.next(fieldAccess.GetObjectNameNode()));
+			const auto map = result.operand();
+			if (fieldName == "has") {
+				auto key = generateNext(context.next(node.GetFunctionParameterValue(0)));
+				const auto keyOperand = key.operand();
+				result.push(std::move(key));
+				result.push(Instruction{ Command::MAP_HAS, context.queryNextRegister(), map, keyOperand });
+			} else {
+				result.push(Instruction{ fieldName == "keys" ? Command::MAP_KEYS : Command::MAP_SIZE, context.queryNextRegister(), map });
+			}
+			return result;
+		}
+	}
+
 	auto preCallValue = generateNext(context.next(node.GetFunctionNameNode()));
 	LOG_DEBUG << "Function call : "<< node.GetFunctionNameNode().name() << " of type " << node.GetFunctionType();
 

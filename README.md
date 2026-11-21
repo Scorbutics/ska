@@ -174,6 +174,7 @@ next = isOdd
  * Loops : `for(i = 0
  i < 10
  i = i + 1) do ... end`, `while condition do ... end`, and the filter `|` on arrays. Conditions : `if ... else if ... else ... end`.
+ * Maps : string keys, values of one type. `m = [:]: int`, `m["k"] = 1`, `m["k"]` (a missing key is an error), `m.has("k")`, `m.keys()` (sorted), `m.size()`. Type : `int[:]`.
  * A string has a size (`s.size()`) and characters (`s[0]` is a string). A string cannot be modified : a new one is built (`s + "!"`). An index is an `int`.
  * Mathematics : `Math = import "bind:std.native.math"` (`abs`, `min`, `max`, `clamp`, `sqrt`, `pow`, `floor`, `ceil`, `round`... the functions on floats have their own names : `absFloat`, `minFloat`, `maxFloat`).
  * The top level code of a script runs once : the following imports of the script only give its exports.

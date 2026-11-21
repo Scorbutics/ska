@@ -30,7 +30,9 @@ namespace ska {
 				const auto array = result.operand();
 				const auto index = indexComputing.operand();
 				result.push(std::move(indexComputing));
-				result.push(Instruction { Command::ARR_SET, array, index, value });
+				// A value of a map ("map[key] = value"), an array cell
+				const auto command = arrayUse.GetArray().type() == ExpressionType::MAP ? Command::MAP_SET : Command::ARR_SET;
+				result.push(Instruction { command, array, index, value });
 				return result;
 			}
 
@@ -48,7 +50,10 @@ namespace ska {
 		static InstructionOutput CommonGenerate(Generator& generator, const ASTNode& dest, const ska::ASTNode& node, GenerationContext& context) {
 			auto finalGroup = generator.generateNext(context.next(node));
 			auto operandDestination = finalGroup.operand();
-			if((dest.symbol() != node.symbol() || node.symbol() == nullptr) && !finalGroup.empty()) {
+			// No store for a variable assigned itself ; always for a container (array cell, map value, object field) :
+			// the value and the cell can have the same type symbol (ex : an object of the same factory)
+			const auto isContainer = dest.op() == Operator::ARRAY_USE || dest.op() == Operator::FIELD_ACCESS;
+			if((isContainer || dest.symbol() != node.symbol() || node.symbol() == nullptr) && !finalGroup.empty()) {
 				LOG_DEBUG << "Creating store instruction with operand group " << finalGroup;
 				finalGroup.push(GenerateStore(generator, dest, operandDestination, context));
 				LOG_DEBUG << "\tin operand " << operandDestination;

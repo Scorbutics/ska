@@ -98,6 +98,12 @@ namespace ska {
 					visitor(array);
 				}
 			}
+			if (std::holds_alternative<NodeValueMap>(m_variant)) {
+				const auto& map = std::get<NodeValueMap>(m_variant);
+				if (map != nullptr) {
+					visitor(map);
+				}
+			}
 		}
 
 		// Refered value if this is a cell reference, otherwise this value.

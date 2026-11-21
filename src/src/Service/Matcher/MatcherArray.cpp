@@ -14,6 +14,20 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::MatcherArray)
 ska::ASTNodePtr ska::MatcherArray::matchDeclaration(ScriptAST& input) {
 	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_BEGIN>());
 
+	// An empty map : [:]: T
+	if (input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>())) {
+		input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>());
+		input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>());
+		if (!input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>())) {
+			throw std::runtime_error("syntax error : a map is declared with the type of its values : \"[:]: int\"");
+		}
+		input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>());
+		auto mapNode = ASTFactory::MakeNode<ska::Operator::MAP_DECLARATION>(m_matcherType.match(input.reader()));
+		auto event = ArrayTokenEvent{ *mapNode, input, ArrayTokenEventType::DECLARATION };
+		m_parser.observable_priority_queue<ArrayTokenEvent>::notifyObservers(event);
+		return mapNode;
+	}
+
 	auto arrayNode = std::vector<ASTNodePtr>{};
 	auto isComma = true;
 	while (isComma) {
@@ -68,18 +82,14 @@ ska::ASTNodePtr ska::MatcherArray::matchUse(ScriptAST& input, ASTNodePtr nodeExp
 ska::ASTNodePtr ska::MatcherArray::match(ScriptAST& input, ExpressionStack& operands, char token, bool isDoingOperation) {
 	switch (token) {
 	case '[': {
-		if (input.reader().canReadPrevious(1)) {
-			auto lastToken = input.reader().readPrevious(1);
-			const auto& value = lastToken.name();
-			if (value != "=") {
-				auto arrayNode = operands.popOperandIfNoOperator(isDoingOperation);
-				if (arrayNode != nullptr) {
-					SLOG(ska::LogLevel::Debug) << "\tArray begin use (previous token \"" << value << "\")";
-					auto result = matchUse(input, std::move(arrayNode));
-					SLOG(ska::LogLevel::Debug) << "\tArray end";
-					return result;
-				}
-			}
+		// After an operand ("a[", "f()[", "a[0][") : an index of this operand. Where an operand is expected (beginning of
+		// the expression, after an operator) : an array declaration.
+		auto arrayNode = operands.expectsOperand() ? nullptr : operands.popOperandIfNoOperator(false);
+		if (arrayNode != nullptr) {
+			SLOG(ska::LogLevel::Debug) << "\tArray begin use";
+			auto result = matchUse(input, std::move(arrayNode));
+			SLOG(ska::LogLevel::Debug) << "\tArray end";
+			return result;
 		}
 		SLOG(ska::LogLevel::Debug) << "\tArray begin declare";
 		auto reservedNode = matchDeclaration(input);

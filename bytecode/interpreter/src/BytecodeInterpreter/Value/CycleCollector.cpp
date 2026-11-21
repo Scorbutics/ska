@@ -6,7 +6,7 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::CycleCollector);
 #define LOG_INFO SLOG_STATIC(ska::LogLevel::Info, ska::bytecode::CycleCollector)
 
 namespace {
-	enum class ObjectKind { Cell, Upvalues, Array };
+	enum class ObjectKind { Cell, Upvalues, Array, Map };
 
 	struct TrackedObject {
 		ObjectKind kind;
@@ -76,6 +76,11 @@ namespace {
 					visitValue(value);
 				}
 				break;
+			case ObjectKind::Map:
+				for (const auto& entry : *static_cast<const ska::NodeValueMap::element_type*>(object.object.get())) {
+					visitValue(entry.second);
+				}
+				break;
 			}
 		}
 	};
@@ -96,6 +101,11 @@ void ska::bytecode::CycleCollector::track(const NodeValueArray& array) {
 	m_trackedSinceLastCollection++;
 }
 
+void ska::bytecode::CycleCollector::track(const NodeValueMap& map) {
+	m_maps.push_back(map);
+	m_trackedSinceLastCollection++;
+}
+
 void ska::bytecode::CycleCollector::collectIfNeeded() {
 	if (m_trackedSinceLastCollection >= CollectionThreshold) {
 		collect();
@@ -109,6 +119,7 @@ std::size_t ska::bytecode::CycleCollector::collect() {
 	graph.add(ObjectKind::Cell, m_cells);
 	graph.add(ObjectKind::Upvalues, m_upvalues);
 	graph.add(ObjectKind::Array, m_arrays);
+	graph.add(ObjectKind::Map, m_maps);
 
 	// 1. Remove the references held by registered objects
 	for (const auto& object : graph.objects) {
@@ -152,6 +163,9 @@ std::size_t ska::bytecode::CycleCollector::collect() {
 			break;
 		case ObjectKind::Array:
 			static_cast<NodeValueArrayRaw*>(object.object.get())->clear();
+			break;
+		case ObjectKind::Map:
+			static_cast<NodeValueMap::element_type*>(object.object.get())->clear();
 			break;
 		}
 	}

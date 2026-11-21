@@ -69,6 +69,18 @@ namespace ska {
 			STR_ACCESS,
 			// CONV_B_STR dest bool : "true" or "false"
 			CONV_B_STR,
+			// MAP_NEW dest : a new empty map
+			MAP_NEW,
+			// MAP_ACCESS dest map key : value of the key (error when the map has no such key)
+			MAP_ACCESS,
+			// MAP_SET map key value : stores the value under the key
+			MAP_SET,
+			// MAP_HAS dest map key : true when the map has the key
+			MAP_HAS,
+			// MAP_KEYS dest map : the keys (string array, sorted)
+			MAP_KEYS,
+			// MAP_SIZE dest map : number of keys
+			MAP_SIZE,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -130,6 +142,12 @@ namespace ska {
 			"STR_LENGTH",
 			"STR_ACCESS",
 			"CONV_B_STR",
+			"MAP_NEW",
+			"MAP_ACCESS",
+			"MAP_SET",
+			"MAP_HAS",
+			"MAP_KEYS",
+			"MAP_SIZE",
 			"NOP",
 			""
 		};

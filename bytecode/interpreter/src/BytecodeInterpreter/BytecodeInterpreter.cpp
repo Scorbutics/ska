@@ -56,6 +56,12 @@
 #include "Units/InterpreterCommandCell.h"
 #include "Units/InterpreterCommandPushCell.h"
 #include "Units/InterpreterCommandConvBStr.h"
+#include "Units/InterpreterCommandMapNew.h"
+#include "Units/InterpreterCommandMapAccess.h"
+#include "Units/InterpreterCommandMapSet.h"
+#include "Units/InterpreterCommandMapHas.h"
+#include "Units/InterpreterCommandMapKeys.h"
+#include "Units/InterpreterCommandMapSize.h"
 #include "InterpreterDeclarer.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::Interpreter);
@@ -94,6 +100,12 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::CONV_STR_I>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CONV_STR_D>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CONV_B_STR>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_NEW>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_ACCESS>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_SET>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_HAS>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_KEYS>(*this, result, generator);
+	InterpreterCommandDeclare<Command::MAP_SIZE>(*this, result, generator);
 
 	InterpreterCommandDeclare<Command::CMP_STR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CMP_BOOL>(*this, result, generator);

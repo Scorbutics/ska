@@ -33,6 +33,8 @@ namespace ska {
 		SCRIPT_LINK,
 		SCRIPT_OBJECT,
 		TYPE,
+		// [:]: T, an empty map
+		MAP_DECLARATION,
 		UNUSED_Last_Length
 	};
 
@@ -65,7 +67,8 @@ namespace ska {
 		"RETURN",
 		"SCRIPT_LINK",
 		"SCRIPT_OBJECT",
-		"TYPE"
+		"TYPE",
+		"MAP_DECLARATION"
 	};
 
 	static_assert(sizeof(OperatorSTR) / sizeof(OperatorSTR[0]) == static_cast<std::size_t>(Operator::UNUSED_Last_Length));

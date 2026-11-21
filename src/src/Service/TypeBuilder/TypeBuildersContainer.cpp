@@ -20,6 +20,7 @@
 #include "Service/TypeBuilder/TypeBuilderLiteral.h"
 #include "Service/TypeBuilder/TypeBuilderFieldAccess.h"
 #include "Service/TypeBuilder/TypeBuilderType.h"
+#include "Service/TypeBuilder/TypeBuilderMapDeclaration.h"
 #include "Service/TypeBuilder/TypeBuilderUserDefinedObject.h"
 #include "Service/TypeBuilder/TypeBuilderFilterParameterDeclaration.h"
 #include "Service/TypeBuilder/TypeBuilderFactoryPrototypeDeclaration.h"
@@ -44,6 +45,7 @@ ska::TypeBuildersContainer ska::BuildTypeBuildersContainer(const TypeCrosser& ty
 	TypeBuilderMakeBuilder<Operator::ARRAY_TYPE_DECLARATION>(result);
 	TypeBuilderMakeBuilder<Operator::ARRAY_DECLARATION>(result);
 	TypeBuilderMakeBuilder<Operator::ARRAY_USE>(result);
+	TypeBuilderMakeBuilder<Operator::MAP_DECLARATION>(result);
 	TypeBuilderMakeBuilder<Operator::USER_DEFINED_OBJECT>(result);
 	TypeBuilderMakeBuilder<Operator::FUNCTION_CALL>(result);
 	TypeBuilderMakeBuilder<Operator::FUNCTION_PROTOTYPE_DECLARATION>(result);

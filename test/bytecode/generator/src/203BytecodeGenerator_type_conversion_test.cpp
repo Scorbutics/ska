@@ -135,3 +135,22 @@ TEST_CASE("[BytecodeGenerator] array cell assignment") {
 		{ska::bytecode::Command::ARR_SET, "V0", "1", "5"}
 	});
 }
+
+TEST_CASE("[BytecodeGenerator] maps") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator("m = [:]: int\nm[\"a\"] = 2\nv = m[\"a\"]\nh = m.has(\"a\")\nk = m.keys()\ns = m.size()\n");
+	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
+
+	BytecodeCompare(res, {
+		{ska::bytecode::Command::MAP_NEW, "R0"},
+		{ska::bytecode::Command::MOV, "V0", "R0"},
+		{ska::bytecode::Command::MAP_SET, "V0", "a", "2"},
+		{ska::bytecode::Command::MAP_ACCESS, "R1", "V0", "a"},
+		{ska::bytecode::Command::MOV, "V1", "R1"},
+		{ska::bytecode::Command::MAP_HAS, "R2", "V0", "a"},
+		{ska::bytecode::Command::MOV, "V2", "R2"},
+		{ska::bytecode::Command::MAP_KEYS, "R3", "V0"},
+		{ska::bytecode::Command::MOV, "V3", "R3"},
+		{ska::bytecode::Command::MAP_SIZE, "R4", "V0"},
+		{ska::bytecode::Command::MOV, "V4", "R4"}
+	});
+}

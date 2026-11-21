@@ -24,6 +24,7 @@ One page to write correct skalang (`.miniska`) scripts. Every example here compi
 | `string` | `"text"` | Immutable. `s.size()`, `s[0]` (a `string`). `+` concatenates two strings. |
 | `bool` | `true`, `false` | `&&`, `\|\|` (short-circuit), `!`. Compared with `==` and `!=`. |
 | arrays | `[1, 2]`, `[]: string` (empty) | `T[]` in a type. `a.size()`, `a[i]`, `a[i] = v`. An index is an `int`. |
+| maps | `[:]: int` (empty) | `T[:]` in a type. String keys : `m["k"] = v`, `m["k"]`, `m.has("k")`, `m.keys()` (sorted), `m.size()`. |
 | objects | `{ x = 1 }` after `return` | Type `var` as a return type. Type `Factory()` for a parameter (see Objects). |
 | functions | `function(a: int): int do ... end` | A function type is the name of a function variable with the same signature. |
 
@@ -143,6 +144,37 @@ n = total([a, Counter(10)])
 - Fields are read and assigned with `.` : `p.x`, `p.x = 7`. The fields of an object literal are separated by new lines.
 - Objects and arrays are shared, not copied : a function receiving an array or an object modifies the caller's one.
 - Arrays : `a = a + v` adds an element, `a = a + [v, w]` adds the elements of another array.
+
+## Maps
+
+A map associates string keys to values of one type. Reading a missing key is an error (no null value) : check it with `has`.
+
+```ruby
+stock = [:]: int
+stock["potion"] = 3
+stock["ball"] = 10
+if stock.has("potion")
+	stock["potion"] = stock["potion"] - 1
+end
+
+total = function(items: int[:]): int do
+	sum = 0
+	items.keys() | (name) do
+		sum = sum + items[name]
+	end
+	return sum
+end
+n = total(stock)
+
+# Values of any type : arrays, objects, functions
+types = [:]: string[]
+types["fire"] = ["charmander"]
+types["fire"] = types["fire"] + "vulpix"
+```
+
+- A map is shared, as an array : a function receiving a map modifies the caller's one.
+- `keys()` gives the keys sorted : the same order at each run.
+- A map is created empty (`[:]: T`), then filled. Maps cannot be compared (`==`).
 
 ## Scripts and modules
 

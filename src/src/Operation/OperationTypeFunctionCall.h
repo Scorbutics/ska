@@ -46,5 +46,9 @@ namespace ska {
 			return node.size() - 1;
 		}
 
+		inline const ASTNode& GetFunctionParameterValue(std::size_t index) const {
+			return node[index + 1];
+		}
+
 	};
 }

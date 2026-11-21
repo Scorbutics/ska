@@ -13,12 +13,7 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::GeneratorOperator<ska::O
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FIELD_ACCESS>::generate(OperateOn node, GenerationContext& context) {
 	const auto& fieldName = node.GetFieldNameNode().name();
 
-	const auto* objectTypeSymbolTable = node.GetObjectNameNode().symbolTable();
-	if (objectTypeSymbolTable == nullptr) {
-		throw std::runtime_error("unable to retrieve object type");
-	}
-
-	// Handling built-in direct fields
+	// Handling built-in direct fields (the object can be any expression : no symbol needed)
 	const auto typeObject = node.GetObjectType();
 	if (typeObject == ExpressionType::ARRAY || typeObject == ExpressionType::STRING) {
 		if (fieldName == "size") {
@@ -32,6 +27,9 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		throw std::runtime_error(ss.str());
 	}
 
+	if (node.GetObjectNameNode().symbolTable() == nullptr) {
+		throw std::runtime_error("unable to retrieve object type");
+	}
 	const auto index = FieldAccessIndex(node, context);
 	auto objectValue = generateNext(context.next(node.GetObjectNameNode()));
 

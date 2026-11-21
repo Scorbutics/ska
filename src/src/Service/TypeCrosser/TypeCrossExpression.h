@@ -45,5 +45,6 @@ namespace ska {
 }
 
 #include "TypeCrossExpressionArray.h"
+#include "TypeCrossExpressionMap.h"
 #include "TypeCrossExpressionObject.h"
 #include "TypeCrossExpressionFunction.h"

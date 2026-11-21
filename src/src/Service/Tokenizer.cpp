@@ -256,7 +256,8 @@ std::pair<ska::Cursor, ska::Token> ska::Tokenizer::tokenizeNext(const ska::Requi
 	auto tokenValueRawInput = finalizeRawToken(index, requiredToken, lastCursor);
 	auto finalTokenValue = requiredToken.current == TokenType::STRING ? tokenValueRawInput : rtrim(tokenValueRawInput);
 	
-	auto tokenGrammar = m_reserved.grammar(finalTokenValue);
+	// A string literal is never a keyword nor a symbol of the grammar (ex : "," or "end")
+	auto tokenGrammar = requiredToken.current == TokenType::STRING ? TokenGrammar::UNUSED_Last_Length : m_reserved.grammar(finalTokenValue);
 	auto nextCursor = computeTokenPositionCursor(index, tokenValueRawInput, tokenGrammar, requiredToken.required, lastCursor);
 	
 	Token token;

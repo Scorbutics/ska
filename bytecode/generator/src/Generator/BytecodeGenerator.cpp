@@ -49,6 +49,7 @@ std::vector<std::unique_ptr<ska::bytecode::GeneratorOperatorUnit>> ska::bytecode
 	GeneratorOperatorDeclare<ska::Operator::RETURN>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::ARRAY_TYPE_DECLARATION>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::ARRAY_USE>(*this, result);
+	GeneratorOperatorDeclare<ska::Operator::MAP_DECLARATION>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::IF>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::IF_ELSE>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::FOR_LOOP>(*this, result);

@@ -86,3 +86,31 @@ TEST_CASE("[BytecodeInterpreter] cycle collector : a collection does not alter r
 	const auto kept = executor->variable(gen.id());
 	CHECK(kept.nodeval<ska::NodeValueArray>()->size() == 1);
 }
+
+TEST_CASE("[BytecodeInterpreter] cycle collector : a map referenced by a closure it contains is collected") {
+	const auto progStr = std::string{ R"script(
+		Callback = function(): int do return 0 end
+		Make = function(): int do
+			callbacks = [:]: Callback
+			callbacks["size"] = function(): int do
+				return callbacks.size()
+			end
+			return callbacks["size"]()
+		end
+		total = 0
+		for(i = 0
+		i < 10
+		i = i + 1) do
+			total = total + Make()
+		end
+		out = total
+	)script" };
+
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto executor = data.interpreter->interpret(gen.id(), *data.storage);
+	CHECK(executor->variable(gen.id()).nodeval<long>() == 10);
+	// Each call left a cycle : the map, the closure, the cell of "callbacks"
+	CHECK(executor->collector().collect() > 0);
+	CHECK(executor->collector().collect() == 0);
+}

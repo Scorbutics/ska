@@ -337,3 +337,16 @@ TEST_CASE("[BytecodeSerializer round trip] while, else if, strings, modulo") {
 		out = reversed + "/" + kind + "/" + ((-n): string)
 	)script", "cba/one/-1");
 }
+
+TEST_CASE("[BytecodeSerializer round trip] maps") {
+	CheckRoundTrip(R"script(
+		stock = [:]: int
+		stock["potion"] = 3
+		stock["ball"] = 10
+		names = ""
+		stock.keys() | (key) do
+			names = names + key + "=" + (stock[key]: string) + ";"
+		end
+		out = names + (stock.has("ball"): string) + "/" + (stock.size(): string)
+	)script", "ball=10;potion=3;true/2");
+}
