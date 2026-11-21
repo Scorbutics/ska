@@ -98,7 +98,18 @@ void ska::SDLRenderer::load() {
 
 SDL_Texture* ska::SDLRenderer::createTextureTarget(const unsigned int width, const unsigned int height) const {
 	assert(m_renderer != nullptr && "Renderer is not loaded");
-	return ska::SDLLibrary::get().createTexture(*m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+	const auto& sdl = ska::SDLLibrary::get();
+	auto* texture = sdl.createTexture(*m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, static_cast<int>(width), static_cast<int>(height));
+	if (texture != nullptr) {
+		// SDL3 does not clear a new texture (its memory can hold old drawings) : it starts transparent
+		auto* previous = sdl.getRenderTarget(*m_renderer);
+		sdl.setRenderTarget(*m_renderer, texture);
+		sdl.setRenderDrawColor(*m_renderer, 0, 0, 0, 0);
+		sdl.renderClear(*m_renderer);
+		sdl.setRenderTarget(*m_renderer, previous);
+		sdl.setRenderDrawColor(*m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+	}
+	return texture;
 }
 
 void ska::SDLRenderer::setRenderDrawBlendMode(int blendMode) {
