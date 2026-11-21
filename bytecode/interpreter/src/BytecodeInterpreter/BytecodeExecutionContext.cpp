@@ -24,8 +24,11 @@ ska::bytecode::ScriptExecutionOutput ska::bytecode::ExecutionContext::generateEx
 	if(symbols == nullptr) {
 		auto result = std::make_shared<NodeValueArrayRaw>();
 		const auto& exportedSymbolsVariables = m_in.getExportedSymbols(scriptIndex);
+		// Exports are cells shared with the script variables (not a copy of their values when the script was run)
 		for (const auto& variable : exportedSymbolsVariables) {
-			result->push_back(getCell(variable.value().value));
+			const auto& operand = variable.value().value;
+			auto& owner = operand.type() == OperandType::VAR ? m_out.scriptOrThrow(operand.as<ScriptVariableRef>().script) : scriptExecution;
+			result->push_back(owner.shareVariable(operand));
 		}
 		scriptExecution.setExportsSection(result);
 		return result;

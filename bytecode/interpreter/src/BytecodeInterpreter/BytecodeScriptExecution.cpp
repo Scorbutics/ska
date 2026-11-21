@@ -51,5 +51,21 @@ const ska::PlainMemoryTable* ska::bytecode::ScriptExecution::selectMemory(const 
 
 ska::NodeValue ska::bytecode::ScriptExecution::lastVariable() const {
 	assert(!variables.empty());
-	return variables.back();
+	return variables.back().resolved();
+}
+
+ska::NodeValue ska::bytecode::ScriptExecution::shareVariable(const Operand& variable) {
+	if (variable.type() != OperandType::VAR) {
+		throw std::runtime_error("invalid export : only a script level variable can be exported");
+	}
+	const auto index = variable.as<ScriptVariableRef>().variable;
+	const auto* value = variables.get_if(index);
+	if (value == nullptr) {
+		throw std::runtime_error("invalid export : the script variable " + std::to_string(index) + " does not exist");
+	}
+	if (!value->isCellReference()) {
+		auto cell = std::make_shared<NodeValue>(*value);
+		variables.replace(index, NodeValue::CellReference(std::move(cell)));
+	}
+	return variables.raw(index);
 }

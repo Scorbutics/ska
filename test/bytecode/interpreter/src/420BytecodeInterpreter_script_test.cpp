@@ -100,8 +100,6 @@ TEST_CASE("[BytecodeInterpreter] Complex use of factory instances inside itself"
 
 TEST_CASE("[BytecodeInterpreter] Outside script variable modified inside its own function is still exported") {
 	// "count" is modified in "increment" body : it must still be an exported field of the script.
-	// Note : exports are a snapshot of the script variables taken when the script is first run,
-	// so calling "Counter.increment()" here would not be visible through "Counter.count" (known limitation).
 	constexpr auto progStr =
 		"Counter = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
 		"t = Counter.count\n";
@@ -111,4 +109,45 @@ TEST_CASE("[BytecodeInterpreter] Outside script variable modified inside its own
 	auto res = interpreted->variable(gen.id());
 	auto cellValue = res.nodeval<long>();
 	CHECK(cellValue == 0);
+}
+
+TEST_CASE("[BytecodeInterpreter] Outside script variable modified by its own function is visible from the importer") {
+	// Exports share the storage of the script variables (they are not a snapshot taken when the script was run)
+	constexpr auto progStr =
+		"Counter = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
+		"Counter.increment()\n"
+		"Counter.increment()\n"
+		"t = Counter.count\n";
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
+	auto res = interpreted->variable(gen.id());
+	CHECK(res.nodeval<long>() == 2);
+}
+
+TEST_CASE("[BytecodeInterpreter] Outside script variable modified by the importer is visible from the script functions") {
+	constexpr auto progStr =
+		"Counter = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
+		"Counter.count = 10\n"
+		"Counter.increment()\n"
+		"t = Counter.current()\n";
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
+	auto res = interpreted->variable(gen.id());
+	CHECK(res.nodeval<long>() == 11);
+}
+
+TEST_CASE("[BytecodeInterpreter] Outside script imported twice shares its variables") {
+	constexpr auto progStr =
+		"First = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
+		"Second = import \"" SKALANG_TEST_DIR "/src/resources/counter\"\n"
+		"First.increment()\n"
+		"Second.count = Second.count + 5\n"
+		"t = First.current()\n";
+	auto [script, data] = Interpret(progStr);
+	auto& gen = data.generator->generate(*data.storage, std::move(script));
+	auto interpreted = data.interpreter->interpret(gen.id(), *data.storage);
+	auto res = interpreted->variable(gen.id());
+	CHECK(res.nodeval<long>() == 6);
 }

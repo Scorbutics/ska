@@ -96,6 +96,11 @@ namespace ska {
 
 			NodeValue lastVariable() const;
 
+			// Makes a script level variable a cell shared with the script exports : the script and its importers then use the same
+			// storage (a modification done by a function of the script is visible from its importers, and the other way around).
+			// Returns the cell reference to export.
+			NodeValue shareVariable(const Operand& variable);
+
 			const NodeValueArray& exports() const { return m_exportsSection; }
 			void setExportsSection(NodeValueArray exportsSection) { m_exportsSection = std::move(exportsSection); }
 
