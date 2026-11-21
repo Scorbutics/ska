@@ -121,3 +121,29 @@ TEST_CASE("[BytecodeInterpreter] closure : local recursive function capturing it
 	)script");
 	CHECK(result.nodeval<long>() == 10);
 }
+
+TEST_CASE("[BytecodeInterpreter] typing : filter iterator over objects keeps the type of the elements") {
+	// The iterator "child" is passed to a function expecting the element type
+	const auto result = Run(R"script(
+		Node = function(depth: int): var do
+			kids = [] : Node()
+			if depth > 0
+				kids = kids + Node(depth - 1)
+				kids = kids + Node(depth - 1)
+			end
+			return {
+				children = kids
+			}
+		end
+		count = function(node: Node()): int do
+			total = 1
+			node.children | (child, index) do
+				total = total + count(child)
+			end
+			return total
+		end
+		out = count(Node(3))
+	)script");
+	CHECK(result.nodeval<long>() == 15);
+}
+

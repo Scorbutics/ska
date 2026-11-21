@@ -8,11 +8,13 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::FILTER_PARAMETER_DECL
 	auto collectionType = node.GetCollectionType();
 
 	if (collectionType == ExpressionType::VOID) {
-		return { Type::MakeBuiltIn<ExpressionType::INT>(), *script.symbols()[node.GetIteratorName()] };
+		return Type::MakeBuiltIn<ExpressionType::INT>();
 	}
 
 	if (collectionType == ExpressionType::ARRAY) {
-		return { collectionType[0], *script.symbols()[node.GetIteratorName()] };
+		// The iterator node is linked to its own variable symbol : the type of an object element keeps its class
+		// (the iterator variable then implements it, as any variable declared from an object value)
+		return TypeHierarchy{ collectionType[0] };
 	}
 
 	auto ss = std::stringstream{};

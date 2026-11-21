@@ -133,15 +133,17 @@ bool ska::SymbolTable::matchReturn(const ReturnTokenEvent& token) {
 	return true;
 }
 
-bool ska::SymbolTable::matchFilter(const FilterTokenEvent& event) {
+bool ska::SymbolTable::matchFilter(FilterTokenEvent& event) {
 	assert(m_currentTable != nullptr);
 	switch (event.type()) {
 	case FilterTokenEventType::DECLARATION: {
 		SLOG(ska::LogLevel::Info) << "\t\tNew filter-foreach-function : adding a nested unnamed symbol table";
 		m_currentTable = &m_currentTable->createNested();
-		m_currentTable->createNested(event.elementIterator().name());
+		// Iterators are variables of the filter scope : their nodes are linked to their symbols (as any declared variable),
+		// so that their type can be built as "implementing" the type of the collection elements
+		event.elementIterator().linkSymbol(m_currentTable->createNested(event.elementIterator().name()));
 		if (!event.indexIterator().logicalEmpty()) {
-			m_currentTable->createNested(event.indexIterator().name());
+			event.indexIterator().linkSymbol(m_currentTable->createNested(event.indexIterator().name()));
 		}
 	} break;
 

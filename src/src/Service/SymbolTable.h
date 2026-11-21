@@ -94,7 +94,7 @@ namespace ska {
 		bool matchReturn(const ReturnTokenEvent&);
 		bool matchImport(const ImportTokenEvent&);
 		bool matchScriptLink(const ScriptLinkTokenEvent&);
-		bool matchFilter(const FilterTokenEvent&);
+		bool matchFilter(FilterTokenEvent&);
 
 		void internalListenParser(StatementParser& parser);
 		void internalUnlistenParser();

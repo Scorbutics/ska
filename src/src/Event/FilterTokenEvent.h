@@ -39,6 +39,16 @@ namespace ska {
 			return node[1];
 		}
 
+		auto& elementIterator() {
+			assert(m_type != FilterTokenEventType::INIT_COLLECTION);
+			return node[0];
+		}
+
+		auto& indexIterator() {
+			assert(m_type != FilterTokenEventType::INIT_COLLECTION);
+			return node[1];
+		}
+
 	private:
 		ASTNode& node;
 		ScriptAST& m_script;
