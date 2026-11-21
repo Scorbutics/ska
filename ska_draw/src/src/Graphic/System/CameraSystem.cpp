@@ -70,7 +70,25 @@ const ska::Rectangle& ska::CameraSystem::getDisplay() const {
 	return m_cameraRect;
 }
 
+void ska::CameraSystem::shake(unsigned int duration, int intensity) {
+	m_shakeDuration = duration;
+	m_shakeElapsed = 0;
+	m_shakeIntensity = intensity < 0 ? -intensity : intensity;
+}
+
 void ska::CameraSystem::refresh(unsigned int ellapsedTime) {
 	auto[pos, entityId] = m_strategy->focus(getEntities());
 	focusOn(pos, entityId);
+
+	if (m_shakeElapsed < m_shakeDuration && m_shakeIntensity > 0) {
+		m_shakeElapsed += ellapsedTime;
+		// Less and less strong, until the end of the duration
+		const auto remaining = m_shakeElapsed >= m_shakeDuration ? 0.F : 1.F - static_cast<float>(m_shakeElapsed) / static_cast<float>(m_shakeDuration);
+		const auto amplitude = static_cast<int>(static_cast<float>(m_shakeIntensity) * remaining);
+		if (amplitude > 0) {
+			auto offset = std::uniform_int_distribution<int>{ -amplitude, amplitude };
+			m_cameraRect.x += offset(m_shakeRandom);
+			m_cameraRect.y += offset(m_shakeRandom);
+		}
+	}
 }

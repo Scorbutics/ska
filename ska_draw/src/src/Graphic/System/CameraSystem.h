@@ -1,4 +1,5 @@
 #pragma once
+#include <random>
 #include <unordered_set>
 #include "Core/Rectangle.h"
 #include "Core/ECS/System.h"
@@ -27,6 +28,8 @@ namespace ska {
 		Point<int> getScreenSize() const;
 		void changeStrategy(CameraStrategyPtr strategy);
 		const Rectangle& getDisplay() const;
+		// Shakes the camera during "duration" milliseconds : the display moves randomly up to "intensity" pixels, less and less
+		void shake(unsigned int duration, int intensity);
 
 		~CameraSystem() override = default;
 
@@ -42,5 +45,9 @@ namespace ska {
 
 	    bool onWorldEvent(ska::WorldEvent& we);
 		bool onGameEvent(ska::GameEvent& ge);
+		unsigned int m_shakeDuration = 0;
+		unsigned int m_shakeElapsed = 0;
+		int m_shakeIntensity = 0;
+		std::minstd_rand m_shakeRandom;
 	};
 }
