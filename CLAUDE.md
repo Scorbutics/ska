@@ -6,8 +6,10 @@
 
 ```sh
 cmake -S . -B build && cmake --build build -j8
-cd build/bin && ./ska_core_test && ./ska_scripting_test   # also ska_ai_test, ska_gui_test, ska_particle_test, ska_world_test
+build/bin/ska_core_test && build/bin/ska_scripting_test   # also ska_ai_test, ska_gui_test, ska_particle_test, ska_world_test
 ```
+
+Run the tests from the repository root: `ska_gui_test` loads `resources/Fonts` relative to the working directory (it needs a display: `xvfb-run` without one).
 
 Rerun `cmake -S . -B build` after adding a source file (the sources are globbed). The build also checks the module boundaries and the scripting test scripts.
 
