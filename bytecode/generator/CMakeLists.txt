@@ -20,4 +20,4 @@ add_library(skalang_bytecode_generator ${SOURCES})
 
 find_package(Threads REQUIRED)
 target_link_libraries(skalang_bytecode_generator skalang skalog skabase Threads::Threads)
-target_include_directories(skalang_bytecode_generator PUBLIC ../external/skabase/src/src PUBLIC ../external/skalog/src/src)
+target_include_directories(skalang_bytecode_generator PUBLIC ${SKA_BASE_DIR} PUBLIC ${SKA_LOG_DIR} PUBLIC ${SKALANG_BYTECODE_GEN_DIR}/src)
