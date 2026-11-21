@@ -166,7 +166,8 @@ bool ska::SymbolTable::matchFunction(FunctionTokenEvent& token) {
 
 	switch(token.type()) {
 	case FunctionTokenEventType::DECLARATION_NAME: {
-		m_currentTable = &m_currentTable->createNested(token.name(), nullptr, true);
+		// An anonymous function is not a variable of the script (not exported)
+		m_currentTable = &m_currentTable->createNested(token.name(), nullptr, !IsAnonymousFunctionName(token.name()));
 		SLOG(ska::LogLevel::Info) << "\t\tNew function : adding a nested symbol table named \"" << m_currentTable->name() << "\"";
 		token.rootNode().linkSymbol(*m_currentTable);
 	} break;

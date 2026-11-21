@@ -37,11 +37,12 @@ ska::ASTNodePtr ska::MatcherVar::matchAffectation(ScriptAST& input, ASTNodePtr v
 	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::AFFECTATION>());
 
 	const auto isVariableAffectation = varAffectedNode->size() == 0 && varAffectedNode->tokenType() == TokenType::IDENTIFIER;
-	if (isVariableAffectation) {
-		input.pushContext({ ParsingContextType::AFFECTATION, Token{ varAffectedNode->name(), varAffectedNode->tokenType(), varAffectedNode->positionInScript() } });
-	}
+	// A function declared as the value of a variable takes its name ("f = function() do ... end"), the other ones are anonymous
+	const auto namesFunction = isVariableAffectation && input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>());
+	input.pushContext({ namesFunction ? ParsingContextType::AFFECTATION : ParsingContextType::VALUE, Token{ varAffectedNode->name(), varAffectedNode->tokenType(), varAffectedNode->positionInScript() } });
 
 	auto expressionNode = input.expr(m_parser);
+	input.popContext();
 	if (expressionNode == nullptr) {
 		throw std::runtime_error("syntax error : Affectation incomplete : no expression");
 	}
@@ -54,7 +55,6 @@ ska::ASTNodePtr ska::MatcherVar::matchAffectation(ScriptAST& input, ASTNodePtr v
 
 		ASTFactory::MakeNode<Operator::FIELD_ACCESS>(std::move(objectAccessed), std::move(fieldAccessed));
 */
-		input.popContext();
 		auto nodeName = Token{ varAffectedNode->name(), varAffectedNode->tokenType(), varAffectedNode->positionInScript() };
 		affectationNode = ASTFactory::MakeNode<Operator::DECLARATION>(std::move(nodeName), std::move(expressionNode));
 		auto event = VarTokenEvent::template Make<VarTokenEventType::DECLARATION>(*affectationNode, input);

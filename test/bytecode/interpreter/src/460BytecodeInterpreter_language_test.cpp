@@ -371,3 +371,24 @@ TEST_CASE("[BytecodeInterpreter] conversions : a boolean converted to a string")
 	CHECK(*result.nodeval<ska::StringShared>() == "true false");
 	CHECK_THROWS(Run("x = (true: int)\n"));
 }
+
+TEST_CASE("[BytecodeInterpreter] anonymous functions : a function that is not the value of a variable has no name") {
+	constexpr auto apply = "Callback = function(n: int): int do return 0 end\napply = function(f: Callback, n: int): int do\nreturn f(n)\nend\n";
+	SUBCASE("call argument at the script level : the assigned variable keeps the returned type") {
+		const auto result = Run(std::string{ apply } + "out = apply(function(k: int): int do return k + 1 end, 1)\n");
+		CHECK(result.nodeval<long>() == 2);
+	}
+	SUBCASE("call argument in a function, capturing a variable") {
+		const auto result = Run(std::string{ apply } +
+			"compute = function(): int do\nbase = 10\nr = apply(function(k: int): int do return k + base end, 5)\nreturn r\nend\nout = compute()\n");
+		CHECK(result.nodeval<long>() == 15);
+	}
+	SUBCASE("array elements") {
+		const auto result = Run("fs = [function(k: int): int do return k + 1 end, function(k: int): int do return k * 3 end]\nout = fs[0](1) + fs[1](2)\n");
+		CHECK(result.nodeval<long>() == 8);
+	}
+	SUBCASE("a named function is still known in its body") {
+		const auto result = Run("fact = function(n: int): int do\nr = 1\nif n > 1\nr = n * fact(n - 1)\nend\nreturn r\nend\nout = fact(4)\n");
+		CHECK(result.nodeval<long>() == 24);
+	}
+}

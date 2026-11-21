@@ -14,14 +14,17 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::MatcherFunction)
 
 ska::ASTNodePtr ska::MatcherFunction::matchDeclaration(ScriptAST& input) {
 	SLOG(ska::LogLevel::Debug) << "function declaration";
-	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>());
+	const auto functionToken = input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>());
 
-	const auto functionNameContext = input.contextOf(ParsingContextType::AFFECTATION);
-	if (functionNameContext == nullptr) {
-		throw std::runtime_error("trying to declare a function, but unable to find its affectation name : " + hints::NamedFunction());
-	}
-
-	const auto& functionName = *functionNameContext;
+	// Named by the variable (or field) it is the value of : "f = function() do ... end".
+	// Otherwise (a call argument, an array element...), the function is anonymous : it gets a name that no script can use.
+	const auto* context = input.innermostContext({ ParsingContextType::AFFECTATION, ParsingContextType::VALUE,
+		ParsingContextType::FUNCTION_DECLARATION, ParsingContextType::FUNCTION_MEMBER_DECLARATION, ParsingContextType::FACTORY_DECLARATION });
+	const auto anonymous = context == nullptr || context->type != ParsingContextType::AFFECTATION;
+	const auto& position = functionToken.position();
+	const auto functionName = anonymous ?
+		Token{ AnonymousFunctionName(position), TokenType::IDENTIFIER, position } :
+		context->owner;
 
 	auto emptyNode = ASTFactory::MakeEmptyNode();
 	auto startEvent = FunctionTokenEvent{ *emptyNode, FunctionTokenEventType::DECLARATION_NAME, input, functionName.name() };

@@ -55,6 +55,8 @@ namespace ska {
 		void pushContext(ParsingContext context);
 		void popContext();
 		Token* contextOf(ParsingContextType type, std::size_t maxDepth = 0) const;
+		// The innermost context of one of the given types (nullptr if none)
+		const ParsingContext* innermostContext(std::initializer_list<ParsingContextType> types) const;
 
 		const ASTNode& rootNode() const;
 		ASTNode& rootNode();

@@ -80,9 +80,10 @@ ska::ASTNodePtr ska::MatcherReturn::matchBuiltIn(ScriptAST& input) {
 ska::ASTNodePtr ska::MatcherReturn::matchField(ScriptAST& input) {
     auto field = input.reader().match(TokenType::IDENTIFIER);
 
-    input.pushContext({ ParsingContextType::AFFECTATION, field });
-
     input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::AFFECTATION>());
+    // A function declared as the value of a field takes its name, the other ones are anonymous
+    const auto namesFunction = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>());
+    input.pushContext({ namesFunction ? ParsingContextType::AFFECTATION : ParsingContextType::VALUE, field });
     auto fieldValue = input.expr(m_parser);
 
     input.popContext();
