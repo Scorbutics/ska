@@ -56,6 +56,13 @@ include_directories(${SKALOG_DIR})
 
 add_subdirectory(external/skalog/src)
 add_subdirectory(external/skabase/src)
+
+# skalang scripting language (uses the skalog and skabase targets above)
+add_subdirectory(external/skalang)
+# Its standard library scripts are deployed next to the executables, in "std"
+add_custom_target(skalang_std_scripts ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${SKALANG_STD_SCRIPTS_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
+	COMMENT "Deploying the skalang standard library scripts")
 #add_subdirectory(external/SDL2_gif)
 set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
 add_subdirectory(external/chipmunk)
