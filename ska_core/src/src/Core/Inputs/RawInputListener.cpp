@@ -90,7 +90,7 @@ void ska::RawInputListener::update() {
                 break;
 		}
 
-		if(event.type == SDL_EVENT_WINDOW_RESIZED || event.type == SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED) {
+		if(event.type == SDL_EVENT_WINDOW_RESIZED) {
 			m_windowInput.setSize(event.window.data1, event.window.data2);
 		}
 	}

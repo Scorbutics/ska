@@ -37,6 +37,13 @@ void ska::DebugWindow::editText(ska::Label& w, std::string text) {
 bool ska::DebugWindow::onDebugGUIEvent(DebugGUIEvent& debugGuiEvent) {
 	const auto& name = "dbg_window_" + debugGuiEvent.text;
 	if (debugGuiEvent.type == DebugGUIEventType::ADD_DEBUG_INFO) {
+		// Already shown (ex : added again when the window is resized) : only its refresher changes
+		if (m_labels.find(name) != m_labels.end()) {
+			if (debugGuiEvent.refresher) {
+				m_debugEntries[name] = ska::DebugEntryLabel{ debugGuiEvent.text, std::move(debugGuiEvent.refresher), debugGuiEvent.delay };
+			}
+			return true;
+		}
 		if (debugGuiEvent.refresher) {
 			auto* label = &m_dbgWindow->addWidget<ska::Label>(" ", FONT_SIZE, ska::Point<int>{HORIZONTAL_OFFSET, static_cast<int>(m_labels.size() * (FONT_SIZE + 4) + VERTICAL_OFFSET + 16)});
 			label->setFontColor(255, 0, 127, 255);
