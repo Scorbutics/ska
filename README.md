@@ -22,7 +22,8 @@ I wanted a simple but coherent language.
  * Object paradigm, without classes (uses a prototyping approach), without polymorphism (uses the function compatibility feature)
  * Only "one way to do a thing", as Python philosophy
  * No "null" value or uninitialized variables (memory safety)
- * No manual memory management (reference counting system), but doesn't support cyclic references
+ * Functions are closures : they capture the variables of the functions enclosing them, and each function call has its own variables (recursion is supported)
+ * No manual memory management : reference counting, with a cycle collector for the reference cycles (closures capturing each other, objects stored in variables captured by their own methods...)
  * Includes a C++ binding
 
 ## Syntax
@@ -31,7 +32,7 @@ It can looks a little weird at first, but it is VERY consistent.
 For example, syntax follows some major rules on its use of symbols and keywords :
  * ':' is for the typing system, it explicitly specify a type for an expression. Double it ( '::' ) and it refers to a script namespace.
  * '{' and '}' are for object instanciation (and is used after the 'return' keyword) only
- * 'do' and 'end' are for statement blocks
+ * 'do' and 'end' are for statement blocks (functions, loops, filters... For an 'if', the 'do' after the condition is optional)
  * '(' and ')' have two uses, one for grouping expression (as in mathematics), and the other for function parameters definition and call
  * '|' is a pipe operator, in the same way as you can find in frameworks like Angular. It applies a lambda function on a collection.
  * '[' and ']' are used for array declaration and use
@@ -102,6 +103,65 @@ end
 end
  ```
 
+ * Closures : each object has its own state, shared by its methods (here, `a.Get()` returns 11 and `b.Get()` returns 100)
+
+```ruby
+Counter = function(start: int): var do
+	value = start
+	return {
+		Increment = function() do
+			value = value + 1
+		end
+		Get = function(): int do
+			return value
+		end
+	}
+end
+
+a = Counter(10)
+b = Counter(100)
+a.Increment()
+```
+
+ * Modules : the variables of a script are shared with the scripts importing it. With the script `counter.miniska` :
+
+```ruby
+count = 0
+increment = function() do
+	count = count + 1
+end
+```
+
+a script importing it sees the modifications done by its functions (here, `Counter.count` is 1 after the call) :
+
+```ruby
+Counter = import "counter"
+Counter.increment()
+```
+
+## Language rules worth knowing
+ * A name can only be used after its declaration (no forward reference). Two functions calling each other are written with a function variable assigned afterwards :
+```ruby
+next = function(i: int): bool do return false end
+isEven = function(i: int): bool do
+	r = true
+	if i > 0
+		r = next(i - 1)
+	end
+	return r
+end
+isOdd = function(i: int): bool do
+	r = false
+	if i > 0
+		r = isEven(i - 1)
+	end
+	return r
+end
+next = isOdd
+```
+ * Declaring a variable with the name of a variable of an enclosing function (or of the script) assigns this variable. Inside an object literal, a declaration always creates a new field.
+ * Inside the body of a function, the name of the function is the function itself (recursion) : it cannot be assigned there.
+
 
 ## Installation / Use
 The project uses CMake to compile and a C++17 (at least) compiler.
@@ -111,12 +171,13 @@ It has been tested sucessfully on Windows (10), Linux (18.04) and on an Android 
 Clone this repository with the external git submodules :
 `git clone --recurse-submodules git@github.com:Scorbutics/skalang.git`
 Then you just have to start CMake and compile the project from the root folder :
-`cmake .`
+`cmake -S . -B build`
 And
-`cmake --build .`
+`cmake --build build`
+(Recently checked with GCC 15 and CMake 4 on Linux.)
 As you might notice, the project is split up in several dynamic libraries, which are modules required by the skalang bytecode runner.
-To run an example script :
-`./bin/skalang_bytecode_runner example.miniska`
+To run an example script (it must declare a `run` function, receiving the command line parameters) :
+`./build/bin/skalang_bytecode_runner example.miniska`
 (If you build with MSVC, you will probably have to add a target folder (Debug / Release / RelWithDebInfo) after the "bin" folder)
 
 ### Advice: the environment of development for this C++ project
@@ -152,6 +213,12 @@ To contribute, you can either :
 		- Serialization (lib skalang_bytecode_serializer)
 		- Interpretation, by the virtual machine (VM) (lib skalang_bytecode_interpreter)
 		- Runner (facultative executable script starter)
+
+	Runtime model (VM)
+		- Each function call has its own call frame (local variables and registers). Script level variables are stored in the script.
+		- A local variable captured by a nested function lives in a shared cell : closures are function values carrying their captured cells.
+		- The exported variables of a script are cells shared with its importers.
+		- Memory is managed by reference counting, plus a cycle collector (CPython-like) for the reference cycles.
 
 ## Benchmarks
 No benchmarks on the interpreter (VM) have been done for now (I aim to add some to compare runtime executions with other known major scripting languages)
