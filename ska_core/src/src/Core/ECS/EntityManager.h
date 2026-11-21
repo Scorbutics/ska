@@ -109,8 +109,11 @@ namespace ska {
 			if (Component<T>::TYPE_ID() == -1) {
 				Component<T>::TYPE_ID() = m_componentHolders.size();
 				m_componentHolders.push_back(std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID()));
-			} else if (m_componentHolders.size() <= Component<T>::TYPE_ID()) {
-				m_componentHolders.resize(static_cast<const std::size_t>(Component<T>::TYPE_ID() * 1.5 + 1));
+			} else if (m_componentHolders.size() <= Component<T>::TYPE_ID() || m_componentHolders[Component<T>::TYPE_ID()] == nullptr) {
+				// The type ids are global : another entity manager can have created this type (its storage is created here)
+				if (m_componentHolders.size() <= Component<T>::TYPE_ID()) {
+					m_componentHolders.resize(static_cast<const std::size_t>(Component<T>::TYPE_ID() * 1.5 + 1));
+				}
 				m_componentHolders[Component<T>::TYPE_ID()] = std::make_unique<ComponentHandler<T>>(Component<T>::TYPE_ID());
 			}
 			

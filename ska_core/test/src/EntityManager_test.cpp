@@ -200,3 +200,28 @@ TEST_CASE("[EntityManager]") {
 		em2.addComponent<ComponentTest2>(entity, ComponentTest2());
 	}
 }
+struct ComponentTestShared1 {
+	int value = 0;
+};
+struct ComponentTestShared2 {
+	int value = 0;
+};
+SKA_DEFINE_COMPONENT(ComponentTestShared1);
+SKA_DEFINE_COMPONENT(ComponentTestShared2);
+
+TEST_CASE("[EntityManager] the component type ids are global : each entity manager has the storages of the types it uses") {
+	auto ged = ska::GameEventDispatcher {};
+	{
+		auto first = ska::EntityManager{ ged };
+		const auto entity = first.createEntity();
+		first.addComponent<ComponentTestShared1>(entity, ComponentTestShared1{ 1 });
+		first.addComponent<ComponentTestShared2>(entity, ComponentTestShared2{ 2 });
+	}
+	// Another entity manager uses the types in another order : the storage of the first type is created after the second one
+	auto second = ska::EntityManager{ ged };
+	const auto entity = second.createEntity();
+	second.addComponent<ComponentTestShared2>(entity, ComponentTestShared2{ 20 });
+	second.addComponent<ComponentTestShared1>(entity, ComponentTestShared1{ 10 });
+	CHECK(second.getComponent<ComponentTestShared1>(entity).value == 10);
+	CHECK(second.getComponent<ComponentTestShared2>(entity).value == 20);
+}
