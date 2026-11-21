@@ -198,6 +198,20 @@ cpBody& ska::cp::Space::getStaticBody() {
 	return *cpSpaceGetStaticBody(m_space);
 }
 
+bool ska::cp::Space::staticShapeIn(const cpBB& box) const {
+	auto found = false;
+	cpSpaceBBQuery(m_space, box, CP_SHAPE_FILTER_ALL, [](cpShape* shape, void* data) {
+		if (cpBodyGetType(cpShapeGetBody(shape)) == CP_BODY_TYPE_STATIC) {
+			*static_cast<bool*>(data) = true;
+		}
+	}, &found);
+	return found;
+}
+
+cpBB ska::cp::Space::shapeBox(std::size_t shapeIndex) const {
+	return cpShapeGetBB(&m_shapes[shapeIndex].shape());
+}
+
 void ska::cp::Space::load() {
 	free();
 	m_space = cpSpaceNew();
