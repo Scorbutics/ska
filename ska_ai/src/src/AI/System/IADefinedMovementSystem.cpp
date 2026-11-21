@@ -60,13 +60,19 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		auto finished = false;
 		if (TimeUtils::getTicks() - iamc.lastTimeStarted >= iamc.delay || directionChanged || collisioned) {
 
-			iamc.origin = iamc.directions[iamc.directionIndex];
+			// The next step starts from where the entity is
+			iamc.origin = Point<int>{ static_cast<int>(centerPos.x), static_cast<int>(centerPos.y) };
 			if (iamc.directionIndex+1 < iamc.directions.size()) {
 				iamc.directionIndex++;
 			} else if (iamc.loop) {
 				iamc.directionIndex = 0;
 			} else {
 				finished = true;
+				if (iamc.finished) {
+					auto onFinished = std::move(iamc.finished);
+					iamc.finished = {};
+					onFinished();
+				}
 				if (iamc.callbackActive) {
 					/* triggers callback */
 					const auto scriptEntity = createEntity();

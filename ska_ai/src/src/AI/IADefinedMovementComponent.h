@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "Core/ECS/Basics/Script/ScriptSleepComponent.h"
 #include "Core/Point.h"
 #include "Core/Utils/TimeUtils.h"
@@ -25,6 +26,8 @@ namespace ska {
 		bool callbackActive;
 		ScriptSleepComponent callback;
 		float speed;
+		// Called when the movement is over (target reached, world collision or time elapsed), before the component is removed
+		std::function<void()> finished;
 	};
 }
 
