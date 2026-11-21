@@ -1,0 +1,7 @@
+Engine = import "bind:ska.engine"
+
+run = function(args: string[]) do
+	Engine.wait(10)
+	Engine.setVariable("failing", args.size())
+	Engine.setVariable("failing", (args[5]: int))
+end

@@ -1,0 +1,13 @@
+Engine = import "bind:ska.engine"
+
+run = function(args: string[]) do
+	hero = Engine.entity("hero")
+	if hero == 0 - 1
+		Engine.setVariable("found", 0)
+		return
+	end
+	Engine.setVariable("found", 1)
+	Engine.disableComponent(hero, "InputComponent")
+	Engine.wait(10)
+	Engine.enableComponent(hero, "InputComponent")
+end

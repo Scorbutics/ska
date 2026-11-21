@@ -36,6 +36,7 @@ set(SKA_PHYSIC_HOME_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_physic_homemade/src/src)
 set(SKA_WORLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_world/src/src)
 set(SKA_PARTICLE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_particle/src/src)
 set(SKA_SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_script/src/src)
+set(SKA_SCRIPTING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/src)
 
 #External
 set(SKA_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skabase/src/src)
@@ -59,9 +60,10 @@ add_subdirectory(external/skabase/src)
 
 # skalang scripting language (uses the skalog and skabase targets above)
 add_subdirectory(external/skalang)
-# Its standard library scripts are deployed next to the executables, in "std"
+# Its standard library scripts, and the engine bindings ones, are deployed next to the executables, in "std"
 add_custom_target(skalang_std_scripts ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${SKALANG_STD_SCRIPTS_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/scripts ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
 	COMMENT "Deploying the skalang standard library scripts")
 #add_subdirectory(external/SDL2_gif)
 set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
@@ -78,5 +80,6 @@ add_subdirectory(ska_world)
 add_subdirectory(ska_physic_chipmunk)
 add_subdirectory(ska_physic_homemade)
 add_subdirectory(ska_script)
+add_subdirectory(ska_scripting)
 
 

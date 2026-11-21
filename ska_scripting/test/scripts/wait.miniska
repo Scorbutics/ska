@@ -1,0 +1,9 @@
+Engine = import "bind:ska.engine"
+
+run = function(args: string[]) do
+	Engine.setVariable("step", 1)
+	Engine.wait(100)
+	Engine.setVariable("step", 2)
+	Engine.wait(50)
+	Engine.setVariable("step", 3)
+end

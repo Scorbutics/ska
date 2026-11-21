@@ -1,0 +1,24 @@
+# Engine functions available to the scripts : Engine = import "bind:ska.engine"
+
+# Suspends the script for a duration (milliseconds)
+wait = function(milliseconds: int) do end
+log = function(message: string) do end
+# Random number between 0 and max - 1
+random = function(max: int) : int do return 0 end
+
+# Entity that triggered the script (-1 if none)
+origin = function() : int do return 0 end
+# Entity with the given name (ex : "trainer"), -1 if not found
+entity = function(name: string) : int do return 0 end
+
+# Removes a component of an entity (ex : "InputComponent" : it stops reacting to the player inputs),
+# until "enableComponent" puts it back as it was
+disableComponent = function(entity: int, component: string) do end
+enableComponent = function(entity: int, component: string) do end
+
+# Game variables, saved with the game
+variable = function(name: string) : int do return 0 end
+setVariable = function(name: string, value: int) do end
+
+# Starts another script (it runs on its own : this script does not wait for it)
+script = function(file: string, arguments: string[]) do end
