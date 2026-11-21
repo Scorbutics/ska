@@ -274,3 +274,25 @@ TEST_CASE("[BytecodeSerializer round trip] call frames : recursion and nested cl
 		out = "" + fib(10) + "/" + Outer(100).Compute()
 	)script", "55/306");
 }
+
+TEST_CASE("[BytecodeSerializer round trip] recursive structure : a method uses a method of another instance of its factory") {
+	CheckRoundTrip(R"script(
+		Node = function(depth: int): var do
+			children = [] : Node()
+			if depth > 0
+				children = children + Node(depth - 1)
+				children = children + Node(depth - 1)
+			end
+			return {
+				Count = function(): int do
+					total = 1
+					children | (child) do
+						total = total + child.Count()
+					end
+					return total
+				end
+			}
+		end
+		out = "" + Node(4).Count()
+	)script", "31");
+}

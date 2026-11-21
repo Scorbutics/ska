@@ -147,3 +147,26 @@ TEST_CASE("[BytecodeInterpreter] typing : filter iterator over objects keeps the
 	CHECK(result.nodeval<long>() == 15);
 }
 
+TEST_CASE("[BytecodeInterpreter] typing : a method uses a method of another instance of its own factory") {
+	// "child.Count()" is typed and generated while "Count" and "Node" are still being declared
+	const auto result = Run(R"script(
+		Node = function(depth: int): var do
+			children = [] : Node()
+			if depth > 0
+				children = children + Node(depth - 1)
+				children = children + Node(depth - 1)
+			end
+			return {
+				Count = function(): int do
+					total = 1
+					children | (child) do
+						total = total + child.Count()
+					end
+					return total
+				end
+			}
+		end
+		out = Node(3).Count()
+	)script");
+	CHECK(result.nodeval<long>() == 15);
+}

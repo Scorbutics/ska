@@ -14,11 +14,10 @@ SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::GeneratorOperator<ska::O
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::USER_DEFINED_OBJECT>::generate(OperateOn node, GenerationContext& context) {
 	auto objectResult = InstructionOutput{ };
 
-	auto fieldGroups = std::vector<InstructionOutput>{};
+	// Fields are registered before generating their values : a method can access a field of another instance of the same
+	// object type (ex : a recursive structure), including itself, while it is generated.
 	std::size_t childIndex = 0;
 	for(auto& field: node) {
-		auto valueGroup = generateNext(context.next(*field, 1));
-
 		auto* oldSymbolInfo = context.getSymbolInfo(*field);
 		auto symbolInfo = SymbolInfo { context.scope() + 1, field->name(), context.scriptIndex() };
 		if (oldSymbolInfo != nullptr) {
@@ -29,8 +28,12 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		LOG_INFO << "%12cRegistering symbol info " << symbolInfo << " for field node " << *field << " (this symbol is not exported)";
 
 		context.setSymbolInfo(*field, std::move(symbolInfo));
-		fieldGroups.push_back(std::move(valueGroup));
 		childIndex++;
+	}
+
+	auto fieldGroups = std::vector<InstructionOutput>{};
+	for(auto& field: node) {
+		fieldGroups.push_back(generateNext(context.next(*field, 1)));
 	}
 
 	// Fields are pushed once all of them are generated : a field captured by a method of the object (ex : read in a getter)

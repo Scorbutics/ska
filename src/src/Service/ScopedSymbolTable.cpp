@@ -139,7 +139,7 @@ static Table* HierarchicalLookup(Table* classTable, const Table& current, Childr
 }
 
 template<class Children, class Table>
-static Table* DirectLookup(Table* classTable, Children& children, const std::string& key) {
+static Table* DirectLookup(Table* classTable, const std::string& name, Children& children, const std::string& key) {
 	// First, direct lookup in parent class table, if it exists
 	if (classTable != nullptr) {
 		auto result = (*classTable)(key);
@@ -150,7 +150,20 @@ static Table* DirectLookup(Table* classTable, Children& children, const std::str
 
 	// Then look into direct children symbols
 	auto valueIt = children.find(key);
-	return valueIt == children.end() || *valueIt == nullptr ? nullptr : (*valueIt).get();
+	if (valueIt != children.end() && *valueIt != nullptr) {
+		return (*valueIt).get();
+	}
+
+	// A factory function table is linked to its returned object table (its class table) only once the factory is
+	// fully declared. Until then (ex : a method using another instance of the same factory), the fields are looked up
+	// directly in the returned object table : the child table named after the factory (see SymbolTable::matchReturn).
+	if (classTable == nullptr && !name.empty()) {
+		auto objectIt = children.find(name);
+		if (objectIt != children.end() && *objectIt != nullptr && (*objectIt)->name() == name) {
+			return (**objectIt)(key);
+		}
+	}
+	return nullptr;
 }
 
 const ska::ScopedSymbolTable* ska::ScopedSymbolTable::operator[](const std::string& key) const {
@@ -181,11 +194,11 @@ ska::ScopedSymbolTable* ska::ScopedSymbolTable::operator[](std::size_t index) {
 }
 
 const ska::ScopedSymbolTable* ska::ScopedSymbolTable::operator()(const std::string& key) const {
-	return DirectLookup(m_classTable, m_children, key);
+	return DirectLookup(m_classTable, name(), m_children, key);
 }
 
 ska::ScopedSymbolTable* ska::ScopedSymbolTable::operator()(const std::string& key) {
-	return DirectLookup(m_classTable, m_children, key);
+	return DirectLookup(m_classTable, name(), m_children, key);
 }
 
 std::optional<std::size_t> ska::ScopedSymbolTable::id(const Symbol& field) const {
