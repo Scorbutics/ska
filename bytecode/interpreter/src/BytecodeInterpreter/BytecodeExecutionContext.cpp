@@ -62,8 +62,19 @@ ska::NodeValue ska::bytecode::ExecutionContext::getCell(const Operand &variable)
 	return m_out.resolveValue(variable, *m_current);
 }
 
+void ska::bytecode::ExecutionContext::moveTo(const ScriptVariableRef& address) {
+	m_current = &m_out.scriptOrNew(m_in, address.script);
+	m_current->jumpAbsolute(address.variable);
+}
+
 void ska::bytecode::ExecutionContext::jumpReturn() {
 	const auto whereToGo = m_out.returnFromCall();
+	if (whereToGo == HostReturnAddress) {
+		// Return of a function called by the host (coroutine) : the execution ends there
+		LOG_DEBUG << "Returning to the host";
+		m_current = nullptr;
+		return;
+	}
 	LOG_DEBUG << "Returning to instruction index " << whereToGo.variable << " in script " << whereToGo.script;
 	auto context = buildContextForScript(whereToGo);
 	m_current = context.m_current;

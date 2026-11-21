@@ -1,5 +1,6 @@
 #include "Config/LoggerConfigLang.h"
 #include "InterpreterCommandJumpBind.h"
+#include "BytecodeInterpreter/BytecodeInterpreter.h"
 
 using InterpreterCommand = ska::bytecode::InterpreterCommand<ska::bytecode::Command::BIND>;
 
@@ -32,6 +33,10 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(BIND)(ExecutionContext& context, co
 	/* Calling function */
 	const auto& nativeFunction = context.getBinding(bindingIndex);
 	auto result = nativeFunction.function(nativeFunction.passThrough ? parametersAsVector : std::move(parametersAsVector));
+	if (!nativeFunction.passThrough && m_interpreter.suspensionRequested()) {
+		// The native function suspended the coroutine : its returned value is the one given when resuming it
+		return {};
+	}
 
 	/* Handling return */
 	SetupStackParametersAndReturnValue(context, std::move(parametersAsVector), std::move(result), nativeFunction.passThrough);

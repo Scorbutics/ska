@@ -122,6 +122,28 @@ namespace ska {
 			return std::get<T>(m_variant);
 		}
 
+		// The value holds a T (the value of the cell for a cell reference)
+		template<class T>
+		bool is() const {
+			if (m_cell != nullptr) {
+				return static_cast<const NodeValue&>(*m_cell).is<T>();
+			}
+			if (m_emptyVariant) {
+				return false;
+			}
+			return std::visit([](const auto& value) {
+				using ValueT = std::decay_t<decltype(value)>;
+				if constexpr (std::is_same_v<ValueT, T>) {
+					return true;
+				} else if constexpr (std::is_same_v<ValueT, TokenVariant>) {
+					// Token values (numbers, strings, functions...) are an inner variant
+					return std::visit([](const auto& token) { return std::is_same_v<std::decay_t<decltype(token)>, T>; }, value);
+				} else {
+					return false;
+				}
+			}, m_variant);
+		}
+
 		double convertNumeric() const;
 		bool empty() const { return m_cell != nullptr ? m_cell->empty() : m_emptyVariant; }
 		std::string convertString() const;

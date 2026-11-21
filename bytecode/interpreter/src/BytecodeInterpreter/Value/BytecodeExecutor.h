@@ -1,12 +1,16 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <limits>
 #include "BytecodeInterpreter/BytecodeScriptExecution.h"
 #include "CycleCollector.h"
 
 namespace ska {
 	namespace bytecode {
 		class ScriptGeneration;
+
+		// Return address of a function called by the host (the start of a coroutine) : returning there ends the execution
+		inline const ScriptVariableRef HostReturnAddress { std::numeric_limits<std::size_t>::max(), std::numeric_limits<std::size_t>::max() };
 
 		// Activation record of a function call, or of the top level code of a script.
 		struct CallFrame {
@@ -19,6 +23,13 @@ namespace ska {
 			// Where to go back when the function returns
 			ScriptVariableRef returnAddress;
 			bool scriptLevel = false;
+		};
+
+		// Execution state proper to a coroutine : its call frames and its value stack.
+		// The other parts of the interpretation state (the scripts and their variables) are shared by all the coroutines.
+		struct ExecutionThread {
+			std::vector<CallFrame> frames;
+			std::vector<NodeValue> stack;
 		};
 
 		// Runtime state of an interpretation : scripts (with their script level variables), the call frames and the value stack.
@@ -49,6 +60,8 @@ namespace ska {
 					stack.pop_back();
 				}
 			}
+
+			bool stackEmpty() const { return stack.empty(); }
 
 			template <class ... Items>
 			void push(Items&& ... items) {
@@ -128,6 +141,16 @@ namespace ska {
 				return *scripts[scriptIndex];
 			}
 
+			// Exchanges the current call frames and value stack with the ones of a coroutine
+			void swapThread(ExecutionThread& thread) {
+				std::swap(frames, thread.frames);
+				std::swap(stack, thread.stack);
+			}
+
+			// Coroutine running on this executor (one at a time)
+			bool coroutineRunning() const { return m_coroutineRunning; }
+			void setCoroutineRunning(bool running) { m_coroutineRunning = running; }
+
 			ScriptExecution& scriptOrThrow(std::size_t scriptIndex) {
 				if (scriptIndex >= scripts.size() || scripts[scriptIndex] == nullptr) {
 					throw std::runtime_error("not a valid script at index " + std::to_string(scriptIndex));
@@ -147,6 +170,7 @@ namespace ska {
 			std::vector<CallFrame> frames;
 			ScriptExecutionContainer scripts;
 			std::vector<NodeValue> stack;
+			bool m_coroutineRunning = false;
 			// Declared last : destroyed after the interpretation state was released
 			CycleCollector m_collector;
 

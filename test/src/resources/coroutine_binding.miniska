@@ -1,0 +1,3 @@
+wait = function(duration: int) do end
+choice = function(question: string) : int do return 0 end
+event = function(name: string) do end

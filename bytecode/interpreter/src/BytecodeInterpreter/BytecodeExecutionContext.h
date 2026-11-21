@@ -36,6 +36,12 @@ namespace ska {
 				return m_current->name();
 			}
 
+			ScriptExecution* currentScript() { return m_current; }
+			ScriptVariableRef currentAddress() const { return m_current->currentAddress(); }
+
+			// Continues the execution at the given instruction (the next one executed is the following instruction)
+			void moveTo(const ScriptVariableRef& address);
+
 			bool incInstruction() { return m_current == nullptr ? false : m_current->incInstruction(); }
 
 			NodeValue getCell(const Operand& v) const;

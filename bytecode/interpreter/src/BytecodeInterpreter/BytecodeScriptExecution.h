@@ -101,6 +101,11 @@ namespace ska {
 			// Returns the cell reference to export.
 			NodeValue shareVariable(const Operand& variable);
 
+			// The top level code of a script runs once : the following imports only use its exports
+			// (the execution pointer of the script then moves in its functions, when they are called).
+			bool topLevelExecuted() const { return m_topLevelExecuted; }
+			void setTopLevelExecuted() { m_topLevelExecuted = true; }
+
 			const NodeValueArray& exports() const { return m_exportsSection; }
 			void setExportsSection(NodeValueArray exportsSection) { m_exportsSection = std::move(exportsSection); }
 
@@ -130,6 +135,7 @@ namespace ska {
 			const GenerationOutput& instructions;
 			const std::size_t scriptIndex = 0;
 			std::size_t executionPointer = 0;
+			bool m_topLevelExecuted = false;
 
 			NodeValueArray m_exportsSection;
 			// Script level variables (VAR operands). Function locals and registers live in call frames.
