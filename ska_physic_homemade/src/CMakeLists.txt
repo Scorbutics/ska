@@ -1,6 +1,6 @@
 project(ska_physic_homemade)
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_BASE_DIR})
 include_directories(${SKA_PHYSIC_HOME_DIR})

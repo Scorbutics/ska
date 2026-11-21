@@ -3,8 +3,9 @@
 # ska engine
 ska engine, a light and basic 2D engine to build simple games.
 
-ska uses **SDL2**, with **SDL2_image**, **SDL2_ttf**, **SDL2_mixer**, all under _zlib_ license.
-ska also uses **SDL2_giflib_sa**, an unofficial extension based on SDL in order to provide GIF animation support (credits : drx a.k.a. Cédric Van Den Bussche, see more at https://github.com/theMealena/SDL2_giflib_sa) under _LGPL3_ license.
+ska uses **SDL3** (3.4 or later), with **SDL3_image**, **SDL3_ttf**, **SDL3_mixer**, all under _zlib_ license. Their headers are in `external/SDL3`, the libraries are loaded at run time (`libSDL3`, `libSDL3_image`, `libSDL3_ttf`, `libSDL3_mixer`). On Linux : `apt install libsdl3-dev libsdl3-image-dev libsdl3-ttf-dev` ; when SDL3_mixer is not installed, the build makes it from its sources (in the `lib` directory of the build).
+
+The renderer uses the `gpu` render driver of SDL3 when it can (Vulkan, Metal, Direct3D 12), else the best other one ; the environment variable `SDL_RENDER_DRIVER` chooses another one.
 
 For the physics, ska uses **Chipmunk2D** under the _MIT_ license.
 

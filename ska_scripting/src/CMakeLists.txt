@@ -1,7 +1,7 @@
 project(ska_scripting)
 
 # Scripting with the skalang language : script virtual machine and engine bindings
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_SCRIPTING_DIR})
 include_directories(${SKA_BASE_DIR})

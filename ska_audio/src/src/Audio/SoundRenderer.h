@@ -7,8 +7,7 @@
 #include "Base/Patterns/SubObserver.h"
 
 extern "C" {
-    struct _Mix_Music;
-    typedef _Mix_Music Mix_Music;
+	typedef struct MIX_Audio MIX_Audio;
 }
 
 namespace ska {
@@ -18,14 +17,14 @@ namespace ska {
 		public SubObserver<WorldEvent> {
 	public:
 		explicit SoundRenderer(GameEventDispatcher& em);
-		void play(Mix_Music* m_instance);
+		void play(MIX_Audio* m_instance);
 		void setMusicVolume(float volPcts) const;
 		bool handleSoundEvent(SoundEvent& se);
 		bool handleWorldEvent(WorldEvent& we);
 		virtual ~SoundRenderer() = default;
 
 	private:
-		Mix_Music* m_currentPlayed;
+		MIX_Audio* m_currentPlayed;
 	};
 
 }

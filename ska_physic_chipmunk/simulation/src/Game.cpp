@@ -35,7 +35,7 @@ namespace ska {
 
 		static constexpr auto tailleblocFenetre = 32;
 		auto window = std::make_unique<SDLWindow>("ska physics", widthBlocks * tailleblocFenetre, heightBlocks * tailleblocFenetre);
-		auto renderer = std::make_unique<SDLRenderer>(*window, -1, SDL_RENDERER_ACCELERATED);
+		auto renderer = std::make_unique<SDLRenderer>(*window);
 		auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);
 
 		using GameConf = ska::GameConfiguration<ska::ExtensibleGameEventDispatcher<>, CoreModule<ska::EntityManager>, GraphicModule>;

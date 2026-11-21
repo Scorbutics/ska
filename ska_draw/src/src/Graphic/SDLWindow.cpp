@@ -1,4 +1,4 @@
-#include <SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLWindow.h"
 #include "Core/Exceptions/IllegalArgumentException.h"
@@ -20,11 +20,8 @@ ska::SDLWindow::SDLWindow(const std::string& title, unsigned int w, unsigned int
 }
 
 void ska::SDLWindow::lazyInit() {
-	m_screen = SDLLibrary::get().createWindow(m_wName.c_str(),
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
-		m_width, m_height,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+	// The renderer chooses its graphics API (Vulkan, OpenGL...) : no API flag here
+	m_screen = SDLLibrary::get().createWindow(m_wName, static_cast<int>(m_width), static_cast<int>(m_height), SDL_WINDOW_HIDDEN);
 
 	if (m_screen == nullptr) {
 		auto str = ("Bad instanciation : screen is null (" + std::string(SDLLibrary::get().getError()) + ")");
@@ -50,7 +47,7 @@ void ska::SDLWindow::setWindowIcon(const std::string& filename) {
 
 void ska::SDLWindow::showMessageBox(uint32_t flags, const std::string& title, const std::string& message) const {
 	assert(m_screen != nullptr && "Screen must be loaded");
-	SDLLibrary::get().showSimpleMessageBox(flags,
+	SDLLibrary::get().showSimpleMessageBox(static_cast<SDL_MessageBoxFlags>(flags),
             title,
             message,
             m_screen);

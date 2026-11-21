@@ -13,7 +13,7 @@ namespace ska {
 		template <class SM>
 		explicit SoundModule(const std::string& moduleName, SM&& ged) :
             m_soundManager(std::forward<SM>(ged)) {
-            if (SDLMixerLibrary::get().openAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
+            if (SDLMixerLibrary::get().openAudio() != 0) {
                 SLOG(ska::LogLevel::Error) << "Impossible d'initialiser SDL_mixer : " << ska::SDLLibrary::get().getError();
             }
         }

@@ -2,8 +2,7 @@
 #include <string>
 
 extern "C" {
-    struct _Mix_Music;
-    typedef _Mix_Music Mix_Music;
+	typedef struct MIX_Audio MIX_Audio;
 }
 
 namespace ska {
@@ -15,7 +14,7 @@ namespace ska {
 		virtual ~SDLMusic();
 
 	private:
-		Mix_Music* m_instance;
+		MIX_Audio* m_instance;
 		float m_volume;
 	};
 }

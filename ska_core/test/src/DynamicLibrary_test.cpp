@@ -1,6 +1,6 @@
 /*
 #include <doctest.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "Exceptions/ExceptionTrigger.h"
 #include "Utils/DynamicLibrary.h"
 #include "SDLLibrary.h"

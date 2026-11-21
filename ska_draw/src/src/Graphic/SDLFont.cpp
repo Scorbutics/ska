@@ -1,4 +1,4 @@
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "SDLFont.h"

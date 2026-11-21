@@ -1,6 +1,6 @@
 #undef main
 #include <iostream>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "LoggerConfig.h"
 #include "BenchmarkerCore.h"
 #include "Logging/Logger.h"
@@ -30,7 +30,7 @@
 BenchmarkerCore::BenchmarkerCore(GameConf&& gc) :
 	m_window("ska Particle Benchmark", 1500, 900),
 	m_particles(400, 70000),
-	m_renderer(m_window, 0, SDL_RENDERER_ACCELERATED) {
+	m_renderer(m_window) {
 	m_renderer.setRenderColor(ska::Color(0, 0, 0, 255));
 	{
 		ska::Point<int> origin(950, 500);
@@ -184,7 +184,7 @@ int main(int argc, char* argv[]) {
 	GameConf gc;
 	auto& core = gc.requireModule<ska::CoreModule<ska::EntityManager>>("Core", ska::EntityManager{gc.getEventDispatcher()}, gc.getEventDispatcher());
 	auto window = std::make_unique<ska::SDLWindow>("Particle benchmark", 1500, 900);
-	auto renderer = std::make_unique<ska::SDLRenderer>(*window, 0, SDL_RENDERER_ACCELERATED);
+	auto renderer = std::make_unique<ska::SDLRenderer>(*window);
 	auto dc = std::make_unique<ska::VectorDrawableContainer>(*renderer);
 
 	gc.requireModule<ska::GraphicModule>("Graphics", gc.getEventDispatcher(), std::move(dc), std::move(renderer), std::move(window));

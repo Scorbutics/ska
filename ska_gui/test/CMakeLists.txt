@@ -3,7 +3,7 @@ project(ska_gui_test)
 link_directories(${EXTERNAL_LIB_DIR})
 link_directories(${LIB_DIR})
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${DOCTEST_DIR})
 include_directories(${FAKEIT_DIR})
 include_directories(${SKA_CORE_DIR})

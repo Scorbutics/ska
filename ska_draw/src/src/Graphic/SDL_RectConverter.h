@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "Core/Rectangle.h"
 
 inline SDL_Rect ToSDL_Rect(const ska::Rectangle& r) {

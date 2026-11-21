@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "KeyboardInputMapContext.h"
 
 //TODO move to an SDL specific module
@@ -32,10 +32,10 @@ void ska::KeyboardInputMapContext::buildCodeMap(std::unordered_map<int, InputAct
 
 	/* Mouse click */
 	/* Left */
-	toggles[SDL_NUM_SCANCODES + 0] = MoveTo;
+	toggles[SDL_SCANCODE_COUNT + 0] = MoveTo;
 
 	/* Right */
-	codeMap[SDL_NUM_SCANCODES + 1] = PathfindTo;
+	codeMap[SDL_SCANCODE_COUNT + 1] = PathfindTo;
 }
 
 ska::KeyboardInputMapContext::~KeyboardInputMapContext() {

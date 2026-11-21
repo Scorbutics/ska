@@ -2,8 +2,8 @@
 #include <string>
 
 extern "C" {
-    struct _TTF_Font;
-    typedef _TTF_Font TTF_Font;
+	typedef struct TTF_Font TTF_Font;
+    
 }
 
 namespace ska {

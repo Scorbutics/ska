@@ -8,6 +8,21 @@
 #include "Graphic/Animation.h"
 #include "Core/SDLLibrary.h"
 
+namespace {
+	// The colors of the collision image of a tileset : white and light gray can be walked on, light and dark gray are animated
+	constexpr uint8_t White = 0xFF;
+	constexpr uint8_t LightGray = 0xAA;
+	constexpr uint8_t DarkGray = 0x46;
+
+	bool Gray(const ska::Color& color, uint8_t value) {
+		return color.r == value && color.g == value && color.b == value;
+	}
+
+	bool Walkable(const ska::Color& color) {
+		return Gray(color, White) || Gray(color, LightGray);
+	}
+}
+
 ska::SDLSurface LoadTilesetImage(const std::string& tilesetName) {
 	ska::SDLSurface result;
 	result.load32(tilesetName + ".png");
@@ -47,10 +62,7 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 	m_tilesetName(std::move(tilesetName)),
 	m_sChipset(LoadTilesetImage(m_tilesetName)),
 	m_sCol(LoadTilesetImageCollisions(m_tilesetName)),
-	m_sProperties(LoadTilesetImageProperties(m_tilesetName)),
-	m_lightColor(0xAAAAAA),
-	m_darkColor(0x464646),
-	m_whiteColor(0xFFFFFF) {
+	m_sProperties(LoadTilesetImageProperties(m_tilesetName)) {
 	checkSizes();
 }
 
@@ -62,8 +74,7 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 	tiles.resize(width, height);
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
-			const auto colPixel = m_sCol.getPixel32(x, y);
-			const auto col = (colPixel == m_whiteColor || colPixel == m_lightColor) ? TileCollision::No : TileCollision::Yes;
+			const auto col = Walkable(m_sCol.getPixel32Color(x, y)) ? TileCollision::No : TileCollision::Yes;
 
 			const auto tileProperties = TileProperties{};
 
@@ -88,8 +99,8 @@ ska::Vector2<ska::TileAnimation> ska::TilesetLoaderImage::loadAnimations(unsigne
 	tiles.resize(width, height);
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
-            const auto colPixel = m_sCol.getPixel32(x, y);
-			const auto autoAnim = colPixel == m_darkColor || colPixel == m_lightColor;
+			const auto color = m_sCol.getPixel32Color(x, y);
+			const auto autoAnim = Gray(color, DarkGray) || Gray(color, LightGray);
 			tiles[x][y].animated = autoAnim;
 			
 			const auto r = ska::Rectangle{

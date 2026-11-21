@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "World/__internalConfig/LoggerConfig.h"
 #include "LayerLoaderImage.h"
 #include "Core/Exceptions/FileException.h"

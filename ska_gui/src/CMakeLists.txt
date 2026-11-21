@@ -1,6 +1,6 @@
 project(ska_gui)
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_GUI_DIR})
 include_directories(${SKA_BASE_DIR})

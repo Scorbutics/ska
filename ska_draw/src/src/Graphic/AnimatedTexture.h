@@ -3,7 +3,6 @@
 #include "Texture.h"
 #include "Core/Rectangle.h"
 #include "Core/Point.h"
-#include "GifTexture.h"
 #include "Core/Draw/Renderable.h"
 
 namespace ska {
@@ -52,8 +51,6 @@ namespace ska {
 		Point<int> m_relativePos;
 		Animation m_anim;
 
-		bool m_gifMode;
-		GifTexture m_gif;
 		Texture m_sprite;
 	};
 }

@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
-#include <SDL_mixer.h>
+
+extern "C" {
+	typedef struct MIX_Audio MIX_Audio;
+}
 
 namespace ska {
 	class SDLSound {
@@ -9,6 +12,6 @@ namespace ska {
 		virtual ~SDLSound();
 
 	private:
-		Mix_Chunk* m_instance;
+		MIX_Audio* m_instance;
 	};
 }

@@ -1,5 +1,5 @@
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <cassert>
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "Core/SDLLibrary.h"
@@ -18,10 +18,6 @@ SDL_Color ColorToNative(const ska::Color& c){
 
 ska::SDLSurface::SDLSurface() : m_a(255) {
 	m_surface = nullptr;
-}
-
-const SDL_PixelFormat * ska::SDLSurface::getFormat() const {
-	return m_surface == nullptr ? nullptr : m_surface->format;
 }
 
 SDL_Surface* ska::SDLSurface::getInstance() const {
@@ -60,7 +56,7 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 		return;
 	}
 
-	m_surface = SDLLibrary::get().createRGBSurface(0, rect.w, rect.h, 32, rmask, gmask, bmask, amask);
+	m_surface = SDLLibrary::get().createRGBSurface(rect.w, rect.h, rmask, gmask, bmask, amask);
 
 	if (!checkSurfaceValidity("(Rectangle)")) {
 		return;
@@ -72,10 +68,10 @@ void ska::SDLSurface::loadFromColoredRect(const Color& color, const SDL_Rect& re
 
 	if (outlineColor != nullptr) {
 		const auto sRectOutline = SDL_Rect { 0, 0, rect.w, rect.h };
-		SDLLibrary::get().fillRect(*m_surface, &sRectOutline, SDLLibrary::get().mapRGBA(*m_surface->format, outlineColor->r, outlineColor->g, outlineColor->b, outlineColor->a));
+		SDLLibrary::get().fillRect(*m_surface, &sRectOutline, SDLLibrary::get().mapRGBA(*m_surface, outlineColor->r, outlineColor->g, outlineColor->b, outlineColor->a));
 	}
 
-	SDLLibrary::get().fillRect(*m_surface, &sRect, SDLLibrary::get().mapRGBA(*m_surface->format, color.r, color.g, color.b, color.a));
+	SDLLibrary::get().fillRect(*m_surface, &sRect, SDLLibrary::get().mapRGBA(*m_surface, color.r, color.g, color.b, color.a));
 }
 
 void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
@@ -88,7 +84,7 @@ void ska::SDLSurface::load(const std::string& file, Color const* colorKey) {
 
 	if (colorKey != nullptr) {
 		colorKey->fill(m_r, m_g, m_b, &m_a);
-		SDLLibrary::get().setColorKey(*m_surface, SDL_TRUE, SDLLibrary::get().mapRGBA(*m_surface->format, m_r, m_g, m_b, m_a));
+		SDLLibrary::get().setColorKey(*m_surface, true, SDLLibrary::get().mapRGBA(*m_surface, m_r, m_g, m_b, m_a));
 	}
 
 	if (m_a < 255) {
@@ -125,7 +121,7 @@ void ska::SDLSurface::load32(const std::string& file) {
 	m_surface = nullptr;
 	const auto imageRam = SDLImageLibrary::get().load(file);
 	if (imageRam != nullptr) {
-		m_surface = SDLLibrary::get().createRGBSurface(0, imageRam->w, imageRam->h, 32, 0, 0, 0, 0);
+		m_surface = SDLLibrary::get().createRGBSurface(imageRam->w, imageRam->h, 0, 0, 0, 0);
 		if (m_surface == nullptr) {
 			goto loadImage32Free;
 		}
@@ -147,9 +143,11 @@ ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 		return Color{};
 	}
 
+	// Whatever the format of the surface
 	Color c;
-	const auto pix = getPixel32(x, y);
-	SDLLibrary::get().getRGB(pix, *getFormat(), &c.r, &c.g, &c.b);
+	if (SDLLibrary::get().readPixel(*m_surface, x, y, &c.r, &c.g, &c.b, &c.a) != 0) {
+		return Color{};
+	}
 	return c;
 }
 

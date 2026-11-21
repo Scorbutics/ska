@@ -1,16 +1,16 @@
 #pragma once
 #include "Base/DynamicLibrary/DynamicLibrary.h"
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <gsl/pointers>
 
 namespace ska {
-	
 		template<int Id>
 		struct TTFIdNamedFunction {
 			static constexpr auto id = Id;
 			static std::string name;
 		};
 
+		// The SDL3_ttf functions used by the engine, loaded at run time (libSDL3_ttf)
 		enum TTFCalls {
 			TTF_INIT,
 			TTF_QUIT,
@@ -22,11 +22,11 @@ namespace ska {
 	#define SKA_TTF_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
 			SKA_LIB_CALLS_DEFINE(TTFIdNamedFunction, ENUM, FUNCTION)
 
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_INIT, int());
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_INIT, bool());
 		SKA_TTF_LIB_CALLS_DEFINE(TTF_QUIT, void());
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_OPEN_FONT, TTF_Font*(const char*, int));
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_OPEN_FONT, TTF_Font*(const char*, float));
 		SKA_TTF_LIB_CALLS_DEFINE(TTF_CLOSE_FONT, void(TTF_Font*));
-		SKA_TTF_LIB_CALLS_DEFINE(TTF_RENDER_TEXT_BLENDED, SDL_Surface*(TTF_Font *, const char *, SDL_Color));
+		SKA_TTF_LIB_CALLS_DEFINE(TTF_RENDER_TEXT_BLENDED, SDL_Surface*(TTF_Font *, const char *, size_t, SDL_Color));
 
 		using SDLTFFDynLib = ska::DynamicLibrary <
 			TTFIdNamedFunction<TTFCalls::TTF_INIT>,
@@ -35,12 +35,12 @@ namespace ska {
 			TTFIdNamedFunction<TTFCalls::TTF_CLOSE_FONT>,
 			TTFIdNamedFunction<TTFCalls::TTF_RENDER_TEXT_BLENDED>
 		>;
-	
 
 	class SDLTTFLibrary : public SDLTFFDynLib {
 	public:
+		// 0 on success
 		int init() const {
-			return call<TTFIdNamedFunction<TTF_INIT>>();
+			return call<TTFIdNamedFunction<TTF_INIT>>() ? 0 : -1;
 		}
 
 		void quit() const {
@@ -48,20 +48,37 @@ namespace ska {
 		}
 
 		gsl::owner<TTF_Font*> openFont(const std::string& file, int ptsize) const {
-			return call<TTFIdNamedFunction<TTF_OPEN_FONT>>(file.c_str(), std::move(ptsize));
+			return call<TTFIdNamedFunction<TTF_OPEN_FONT>>(file.c_str(), static_cast<float>(ptsize));
 		}
 
 		void closeFont(gsl::owner<TTF_Font*> font) const {
 			call<TTFIdNamedFunction<TTF_CLOSE_FONT>>(std::move(font));
 		}
 
+		// The texts of the engine are Latin-1 (as SDL2_ttf read them) : SDL3_ttf reads UTF-8, they are converted
 		gsl::owner<SDL_Surface*> renderTextBlended(TTF_Font& font, const std::string& text, SDL_Color color) const {
-			return call<TTFIdNamedFunction<TTF_RENDER_TEXT_BLENDED>>(&font, text.c_str(), std::move(color));
+			const auto utf8 = Latin1ToUtf8(text);
+			return call<TTFIdNamedFunction<TTF_RENDER_TEXT_BLENDED>>(&font, utf8.c_str(), utf8.size(), std::move(color));
 		}
-		
+
+		static std::string Latin1ToUtf8(const std::string& text) {
+			auto result = std::string{};
+			result.reserve(text.size());
+			for (const auto c : text) {
+				const auto code = static_cast<unsigned char>(c);
+				if (code < 0x80) {
+					result += c;
+				} else {
+					result += static_cast<char>(0xC0 | (code >> 6));
+					result += static_cast<char>(0x80 | (code & 0x3F));
+				}
+			}
+			return result;
+		}
+
 		static const SDLTTFLibrary& get();
 
 	private:
-		SDLTTFLibrary() : SDLTFFDynLib("SDL2_ttf") {}
+		SDLTTFLibrary() : SDLTFFDynLib("SDL3_ttf") {}
 	};
 }

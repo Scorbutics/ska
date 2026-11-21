@@ -1,5 +1,5 @@
 #include "Core/__internalConfig/LoggerConfig.h"
-#include <SDL_timer.h>
+#include <SDL3/SDL_timer.h>
 #include "../SDLLibrary.h"
 #include "TimeUtils.h"
 

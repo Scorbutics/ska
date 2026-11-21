@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <string>
 #include "Core/Draw/Color.h"
 #include "Base/Values/MovableNonCopyable.h"
@@ -31,7 +31,6 @@ namespace ska {
 		Color getPixel32Color(int x, int y) const;
 		uint32_t getPixel32(int x, int y) const;
 		uint32_t getPixel32(int pixIndex) const;
-		const SDL_PixelFormat * getFormat() const;
 
 		SDL_Surface* getInstance() const;
 

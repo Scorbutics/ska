@@ -25,9 +25,5 @@ namespace ska {
 		const SDLSurface m_sCol;
 		const SDLSurface m_sProperties;
 
-		const uint32_t m_darkColor{};
-		const uint32_t m_whiteColor{};
-		const uint32_t m_lightColor{};
-
 	};
 }

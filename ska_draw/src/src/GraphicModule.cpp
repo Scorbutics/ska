@@ -1,6 +1,6 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <string>
 
 #include "Graphic/__internalConfig/LoggerConfig.h"
@@ -27,19 +27,6 @@ ska::GraphicModule::GraphicModule(const std::string& moduleName, GameEventDispat
 
 	if (SDLLibrary::get().init(SDL_INIT_VIDEO) < 0) {
 		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de la SDL : " + std::string(SDLLibrary::get().getError()));
-	}
-
-	/* Fix GDB Bug with named thread on windows (Mixer raises an exception when init) */
-	if (!SDLLibrary::get().setHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1")) {
-		SLOG(LogLevel::Warn) << "Attention : Windows nomme actuellement les threads créés par l'application alors que le programme tente de désactiver cette fonctionnalité.";
-	}
-
-	if (!SDLLibrary::get().setHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
-		SLOG(LogLevel::Warn) << "Attention : Linear texture filtering impossible à activer.";
-	}
-
-	if (!(SDLImageLibrary::get().init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-		ExceptionTrigger<ska::IllegalStateException>("Erreur lors de l'initialisation de SDL_image : " + std::string(SDLLibrary::get().getError()));
 	}
 
 	if (SDLTTFLibrary::get().init() == -1) {
@@ -74,6 +61,5 @@ void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& s
 
 ska::GraphicModule::~GraphicModule() {
 	SDLTTFLibrary::get().quit();
-	SDLImageLibrary::get().quit();
 	SDLLibrary::get().quit();
 }

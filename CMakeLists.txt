@@ -42,12 +42,11 @@ set(SKA_SCRIPTING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/src)
 set(SKA_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skabase/src/src)
 set(SKALOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/skalog/src/src)
 set(GSL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/gsl)
-set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2)
-set(SDL2GIF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2_gif/src)
+# SDL3 headers (the libraries are loaded at run time : libSDL3, libSDL3_image, libSDL3_ttf, libSDL3_mixer)
+set(SDL3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL3/include)
 set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/doctest)
 set(CHIPMUNK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/chipmunk/include)
 set(FAKEIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/fakeit)
-set(SDL2_GIF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/SDL2_gif/src)
 
 #Linking
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -67,7 +66,19 @@ add_custom_target(skalang_std_scripts ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${SKALANG_STD_SCRIPTS_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/scripts ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
 	COMMENT "Deploying the skalang standard library scripts")
-#add_subdirectory(external/SDL2_gif)
+# SDL3_mixer (loaded at run time by ska_audio) is not packaged everywhere : when it is not installed, it is built here
+# (with its built-in decoders : mp3, ogg vorbis, wav, flac), next to the engine libraries
+find_library(SKA_SDL3_MIXER_LIBRARY NAMES SDL3_mixer)
+if(NOT SKA_SDL3_MIXER_LIBRARY)
+	message(STATUS "SDL3_mixer is not installed : it is built from its sources")
+	include(FetchContent)
+	FetchContent_Declare(SDL3_mixer GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git GIT_TAG release-3.2.4 GIT_SHALLOW TRUE)
+	foreach(option SDLMIXER_TESTS SDLMIXER_EXAMPLES SDLMIXER_VENDORED SDLMIXER_FLAC_LIBFLAC SDLMIXER_GME SDLMIXER_MOD SDLMIXER_MIDI SDLMIXER_OPUS SDLMIXER_MP3_MPG123 SDLMIXER_VORBIS_VORBISFILE SDLMIXER_WAVPACK SDLMIXER_INSTALL)
+		set(${option} OFF CACHE BOOL "" FORCE)
+	endforeach()
+	FetchContent_MakeAvailable(SDL3_mixer)
+endif()
+
 set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
 add_subdirectory(external/chipmunk)
 

@@ -1,8 +1,7 @@
 project(ska_world_test)
 
 include_directories(${GSL_DIR})
-include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2_GIF_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_BASE_DIR})
 include_directories(${DOCTEST_DIR})

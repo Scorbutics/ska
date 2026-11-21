@@ -10,15 +10,11 @@ ska::SoundRenderer::SoundRenderer(ska::GameEventDispatcher& ged) :
 	ska::SubObserver<SoundEvent>(std::bind(&SoundRenderer::handleSoundEvent, this, std::placeholders::_1), ged),
 	ska::SubObserver<WorldEvent>(std::bind(&SoundRenderer::handleWorldEvent, this, std::placeholders::_1), ged),
 	m_currentPlayed(nullptr) {
-
-	if(SDLMixerLibrary::get().allocateChannels(10) != static_cast<int>(10)) {
-		SLOG(LogLevel::Error) << "SoundManager error : " << ska::SDLLibrary::get().getError();
-	}
 }
 
-void ska::SoundRenderer::play(Mix_Music* m_instance) {
-	SDLMixerLibrary::get().pauseMusic();
-	if(SDLMixerLibrary::get().playMusic(m_instance, -1) == -1) {
+void ska::SoundRenderer::play(MIX_Audio* m_instance) {
+	SDLMixerLibrary::get().stopMusic();
+	if(SDLMixerLibrary::get().playMusic(m_instance, -1) != 0) {
 		SLOG(LogLevel::Error) << "SoundManager error : " << ska::SDLLibrary::get().getError();
 		m_currentPlayed = nullptr;
 	} else {
@@ -28,7 +24,7 @@ void ska::SoundRenderer::play(Mix_Music* m_instance) {
 
 void ska::SoundRenderer::setMusicVolume(float volPcts) const{
 	if (m_currentPlayed != nullptr) {
-		SDLMixerLibrary::get().volumeMusic(static_cast<int>((volPcts * MIX_MAX_VOLUME) / 100));
+		SDLMixerLibrary::get().setMusicVolume(volPcts / 100.F);
 	}
 }
 

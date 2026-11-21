@@ -2,7 +2,7 @@
 #include "Core/Draw/Renderer.h"
 #include "Core/Point.h"
 #include "Core/Draw/Color.h"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace ska {
 	class SDLWindow;
@@ -15,7 +15,9 @@ namespace ska {
 	*/
 	class SDLRenderer : public Renderer {
 	public:
-		SDLRenderer(SDLWindow& window, int index, Uint32 flags);
+		// The "gpu" render driver when it can be used (the shaders need it), else the best one of SDL. The environment
+		// variable SDL_RENDER_DRIVER chooses another one
+		explicit SDLRenderer(SDLWindow& window);
 
 		SDLRenderer(SDLRenderer&& r) = default;
 		SDLRenderer& operator=(SDLRenderer&& r) = default;
@@ -57,7 +59,7 @@ namespace ska {
 		void load() override;
 
 	private:
-		void load(SDL_Window * window, int index, Uint32 flags);
+		void load(SDL_Window* window);
 	    void free();
 		void renderPresent() const;
 		void renderClear() const;
@@ -65,8 +67,6 @@ namespace ska {
 		SDL_Renderer* m_renderer;
 		Color m_currentRenderColor;
 		SDLWindow& m_window;
-		int m_index;
-		uint32_t m_flags;
 
 	};
 }

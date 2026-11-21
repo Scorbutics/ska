@@ -1,121 +1,144 @@
 #pragma once
 #include "Base/DynamicLibrary/DynamicLibrary.h"
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <gsl/pointers>
 
 namespace ska {
-
 	template<int Id>
 	struct MixerIdNamedFunction {
 		static constexpr auto id = Id;
 		static std::string name;
 	};
 
+	// The SDL3_mixer functions used by the engine, loaded at run time (libSDL3_mixer)
 	enum class MixerCalls {
-		SDL_MIXER_INIT,
-		SDL_MIXER_OPEN_AUDIO,
-		SDL_MIXER_CLOSE_AUDIO,
-		SDL_MIXER_QUIT,
-		SDL_MIXER_ALLOCATE_CHANNELS,
-		SDL_MIXER_LOAD_MUSIC,
-		SDL_MIXER_PLAY_MUSIC,
-		SDL_MIXER_PAUSE_MUSIC,
-		SDL_MIXER_VOLUME_MUSIC,
-		SDL_MIXER_FREE_MUSIC,
-		SDL_MIXER_WAV_RW,
-		SDL_MIXER_FREE_CHUNK
+		MIX_INIT,
+		MIX_QUIT,
+		MIX_CREATE_MIXER_DEVICE,
+		MIX_DESTROY_MIXER,
+		MIX_LOAD_AUDIO,
+		MIX_DESTROY_AUDIO,
+		MIX_CREATE_TRACK,
+		MIX_DESTROY_TRACK,
+		MIX_SET_TRACK_AUDIO,
+		MIX_SET_TRACK_LOOPS,
+		MIX_PLAY_TRACK,
+		MIX_STOP_TRACK,
+		MIX_SET_TRACK_GAIN
 	};
 
 #define SKA_MIXER_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
 			SKA_LIB_CALLS_DEFINE(MixerIdNamedFunction, static_cast<int>(MixerCalls::ENUM), FUNCTION)
 
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_INIT, int(int));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_OPEN_AUDIO, int(int, Uint16, int, int));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_CLOSE_AUDIO, void());
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_QUIT, void());
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_ALLOCATE_CHANNELS, int(int));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_LOAD_MUSIC, Mix_Music*(const char*));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_PLAY_MUSIC, int(Mix_Music *, int));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_PAUSE_MUSIC, void());
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_VOLUME_MUSIC, int(int));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_FREE_MUSIC, void(Mix_Music*));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_WAV_RW, Mix_Chunk*(SDL_RWops* src, int freesrc));
-	SKA_MIXER_LIB_CALLS_DEFINE(SDL_MIXER_FREE_CHUNK, void(Mix_Chunk*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_INIT, bool());
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_QUIT, void());
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_CREATE_MIXER_DEVICE, MIX_Mixer*(SDL_AudioDeviceID, const SDL_AudioSpec*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_DESTROY_MIXER, void(MIX_Mixer*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_LOAD_AUDIO, MIX_Audio*(MIX_Mixer*, const char*, bool));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_DESTROY_AUDIO, void(MIX_Audio*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_CREATE_TRACK, MIX_Track*(MIX_Mixer*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_DESTROY_TRACK, void(MIX_Track*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_TRACK_AUDIO, bool(MIX_Track*, MIX_Audio*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_TRACK_LOOPS, bool(MIX_Track*, int));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_PLAY_TRACK, bool(MIX_Track*, SDL_PropertiesID));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_STOP_TRACK, bool(MIX_Track*, Sint64));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_TRACK_GAIN, bool(MIX_Track*, float));
 
-#define SKA_MIXER_DYN_LIB_NAME_ENTRY(ENUM) MixerIdNamedFunction<static_cast<int>(MixerCalls::ENUM)>
+	#define SKA_MIXER_DYN_LIB_NAME_ENTRY(ENUM) MixerIdNamedFunction<static_cast<int>(MixerCalls::ENUM)>
 
-	using SDLMixerDynLib = ska::DynamicLibrary <
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_INIT),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_OPEN_AUDIO),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_CLOSE_AUDIO),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_QUIT),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_ALLOCATE_CHANNELS),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_LOAD_MUSIC),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_PLAY_MUSIC),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_PAUSE_MUSIC),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_VOLUME_MUSIC),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_FREE_MUSIC),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_WAV_RW),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(SDL_MIXER_FREE_CHUNK)
+	using SDLMixerDynLib = DynamicLibrary <
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_INIT),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_QUIT),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_CREATE_MIXER_DEVICE),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_DESTROY_MIXER),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_LOAD_AUDIO),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_DESTROY_AUDIO),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_CREATE_TRACK),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_DESTROY_TRACK),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_AUDIO),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_LOOPS),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_TRACK),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_STOP_TRACK),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_GAIN)
 	>;
 
-
+	// The audio of the engine (SDL3_mixer) : a mixer on the default audio device, a track playing the music
 	class SDLMixerLibrary : public SDLMixerDynLib {
 	#define callMixer(enumIndex) call<SKA_MIXER_DYN_LIB_NAME_ENTRY(enumIndex)>
 	public:
-		inline int init(int flags) const {
-			return callMixer(SDL_MIXER_INIT)(flags);
-		}
-
-		inline int openAudio(int frequency, Uint16 format, int channels, int chunksize) const {
-			return callMixer(SDL_MIXER_OPEN_AUDIO)(frequency, format, channels, chunksize);
-		}
-
-		inline int allocateChannels(int numchans) const {
-			return callMixer(SDL_MIXER_ALLOCATE_CHANNELS)(numchans);
-		}
-
-		inline int playMusic(Mix_Music* music, int loops) const {
-			return callMixer(SDL_MIXER_PLAY_MUSIC)(music, loops);
-		}
-
-		inline void pauseMusic() const {
-			callMixer(SDL_MIXER_PAUSE_MUSIC)();
-		}
-
-		inline int volumeMusic(int volume) const {
-			return callMixer(SDL_MIXER_VOLUME_MUSIC)(volume);
-		}
-
-		inline Mix_Music* loadMusic(const std::string& file) const {
-			return callMixer(SDL_MIXER_LOAD_MUSIC)(file.c_str());
-		}
-
-		inline void quit() const {
-			callMixer(SDL_MIXER_QUIT)();
+		// 0 on success
+		inline int openAudio() const {
+			if (!callMixer(MIX_INIT)()) {
+				return -1;
+			}
+			m_mixer = callMixer(MIX_CREATE_MIXER_DEVICE)(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+			if (m_mixer == nullptr) {
+				return -1;
+			}
+			m_music = callMixer(MIX_CREATE_TRACK)(m_mixer);
+			return m_music == nullptr ? -1 : 0;
 		}
 
 		inline void closeAudio() const {
-			callMixer(SDL_MIXER_CLOSE_AUDIO)();
+			if (m_music != nullptr) {
+				callMixer(MIX_DESTROY_TRACK)(m_music);
+				m_music = nullptr;
+			}
+			if (m_mixer != nullptr) {
+				callMixer(MIX_DESTROY_MIXER)(m_mixer);
+				m_mixer = nullptr;
+			}
 		}
 
-		inline void freeMusic(Mix_Music* music) const {
-			callMixer(SDL_MIXER_FREE_MUSIC)(music);
+		inline void quit() const {
+			callMixer(MIX_QUIT)();
 		}
 
-		inline Mix_Chunk* loadWavRW(SDL_RWops* src, int freesrc) const {
-			return callMixer(SDL_MIXER_WAV_RW)(src, freesrc);
+		// A music, read while it is played (nullptr : no audio device, or an error)
+		inline MIX_Audio* loadMusic(const std::string& file) const {
+			return m_mixer == nullptr ? nullptr : callMixer(MIX_LOAD_AUDIO)(m_mixer, file.c_str(), false);
 		}
 
-		inline void freeChunk(Mix_Chunk* chunk) const {
-			callMixer(SDL_MIXER_FREE_CHUNK)(chunk);
+		// A sound, decoded when it is loaded
+		inline MIX_Audio* loadSound(const std::string& file) const {
+			return m_mixer == nullptr ? nullptr : callMixer(MIX_LOAD_AUDIO)(m_mixer, file.c_str(), true);
+		}
+
+		inline void freeAudio(MIX_Audio* audio) const {
+			if (audio != nullptr) {
+				callMixer(MIX_DESTROY_AUDIO)(audio);
+			}
+		}
+
+		// "loops" : -1 for ever. 0 on success
+		inline int playMusic(MIX_Audio* music, int loops) const {
+			if (m_music == nullptr || music == nullptr || !callMixer(MIX_SET_TRACK_AUDIO)(m_music, music)) {
+				return -1;
+			}
+			callMixer(MIX_SET_TRACK_LOOPS)(m_music, loops);
+			return callMixer(MIX_PLAY_TRACK)(m_music, 0) ? 0 : -1;
+		}
+
+		inline void stopMusic() const {
+			if (m_music != nullptr) {
+				callMixer(MIX_STOP_TRACK)(m_music, 0);
+			}
+		}
+
+		// From 0 to 1
+		inline void setMusicVolume(float volume) const {
+			if (m_music != nullptr) {
+				callMixer(MIX_SET_TRACK_GAIN)(m_music, volume);
+			}
 		}
 
 		static const SDLMixerLibrary& get();
 
 	private:
-		SDLMixerLibrary() : SDLMixerDynLib("SDL2_mixer") {}
+		SDLMixerLibrary() : SDLMixerDynLib("SDL3_mixer") {}
+		mutable MIX_Mixer* m_mixer = nullptr;
+		mutable MIX_Track* m_music = nullptr;
 	#undef callMixer
 	};
 }

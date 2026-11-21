@@ -1,10 +1,10 @@
 #include "InputContextTest.h"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 
 void InputContextTest::queryActions(ska::InputActionContainer& actions) {
 	for (auto it = m_actionsMapper.begin(); it != m_actionsMapper.end(); ++it) {
-		if (it->first < SDL_NUM_SCANCODES) {
+		if (it->first < SDL_SCANCODE_COUNT) {
 			actions[it->second] = keys.trigger(it->first);
 		}
 	}
@@ -22,7 +22,7 @@ void InputContextTest::queryRanges(ska::InputRangeContainer& ranges) {
 
 void InputContextTest::queryToggles(ska::InputToggleContainer& toggles) {
 	for (auto it = m_togglesMapper.begin(); it != m_togglesMapper.end(); ++it) {
-		if (it->first < SDL_NUM_SCANCODES) {
+		if (it->first < SDL_SCANCODE_COUNT) {
 			toggles[it->second] = keys.toggle(it->first);
 		}
 	}
@@ -42,10 +42,10 @@ void InputContextTest::buildCodeMap(std::unordered_map< int, ska::InputAction>& 
 
 	/* Mouse click */
 	/* Left */
-	codeMap[SDL_NUM_SCANCODES + 0] = ska::LClic;
-	toggles[SDL_NUM_SCANCODES + 0] = ska::MoveWindow;
+	codeMap[SDL_SCANCODE_COUNT + 0] = ska::LClic;
+	toggles[SDL_SCANCODE_COUNT + 0] = ska::MoveWindow;
 
 	/* Right */
-	codeMap[SDL_NUM_SCANCODES + 1] = ska::RClic;
+	codeMap[SDL_SCANCODE_COUNT + 1] = ska::RClic;
 
 }

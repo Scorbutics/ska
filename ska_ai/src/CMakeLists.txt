@@ -1,6 +1,6 @@
 project(ska_ai)
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL3_INCLUDE_DIR})
 include_directories(${SKA_CORE_DIR})
 include_directories(${SKA_AI_DIR})
 include_directories(${SKA_BASE_DIR})

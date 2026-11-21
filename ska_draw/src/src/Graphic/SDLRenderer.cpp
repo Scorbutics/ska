@@ -7,14 +7,13 @@
 #include "AnimatedTexture.h"
 #include "SDL_RectConverter.h"
 #include <cassert>
+#include <cstdlib>
 #include "SDL_PointConverter.h"
 #include "Core/SDLLibrary.h"
 
-ska::SDLRenderer::SDLRenderer(SDLWindow& window, int index, Uint32 flags) :
+ska::SDLRenderer::SDLRenderer(SDLWindow& window) :
     m_renderer(nullptr),
-	m_window(window),
-	m_index(index),
-	m_flags(flags) {
+	m_window(window) {
 }
 
 void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
@@ -22,18 +21,29 @@ void ska::SDLRenderer::setRenderColor(const ska::Color & c) {
 	SDLLibrary::get().setRenderDrawColor(*m_renderer, c.r, c.g, c.b, c.a);
 }
 
-void ska::SDLRenderer::load(SDL_Window* window, int index, Uint32 flags) {
+void ska::SDLRenderer::load(SDL_Window* window) {
     if(m_renderer != nullptr) {
         free();
     }
 
-    m_renderer = SDLLibrary::get().createRenderer(*window, index, flags);
-	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
+	const auto& sdl = SDLLibrary::get();
+	// The "gpu" driver runs the shaders : chosen first, unless SDL_RENDER_DRIVER asks for another one
+	if (std::getenv("SDL_RENDER_DRIVER") == nullptr) {
+		m_renderer = sdl.createRenderer(*window, "gpu");
+		if (m_renderer == nullptr) {
+			SLOG(LogLevel::Warn) << "No \"gpu\" renderer (" << sdl.getError() << ") : the shaders cannot be used";
+		}
+	}
+	if (m_renderer == nullptr) {
+		m_renderer = sdl.createRenderer(*window, nullptr);
+	}
 
     if(m_renderer == nullptr) {
-		SLOG(LogLevel::Error) << "Erreur lors de la creation de la fenetre SDL (renderer) : " << SDLLibrary::get().getError();
+		SLOG(LogLevel::Error) << "Erreur lors de la creation de la fenetre SDL (renderer) : " << sdl.getError();
         ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
+	SLOG(LogLevel::Info) << "Renderer : " << sdl.rendererName(*m_renderer);
+	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 }
 
 SDL_Renderer * ska::SDLRenderer::unwrap() const {
@@ -83,7 +93,7 @@ void ska::SDLRenderer::update() const {
 }
 
 void ska::SDLRenderer::load() {
-	load(m_window.getInstance(), m_index, m_flags);
+	load(m_window.getInstance());
 }
 
 SDL_Texture* ska::SDLRenderer::createTextureTarget(const unsigned int width, const unsigned int height) const {
@@ -122,7 +132,7 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		SDL_Point pRotationCenter;
 		if(rotationCenter != nullptr) { pRotationCenter = ToSDL_Point(*rotationCenter); }
 		if (m_effect == nullptr) {
-			assert(SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE) == 0);
+			SDLLibrary::get().renderCopyEx(*m_renderer, *instance->m_texture, clip != nullptr ? &rClip : nullptr, &destBuf, angle, rotationCenter != nullptr ? &pRotationCenter : nullptr, SDL_FLIP_NONE);
 			return;
 		}
 
@@ -171,19 +181,7 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 
 	auto tmp = at.m_anim.getCurrentFrame();
 
-	if(at.m_gifMode) {
-		at.m_gif.refresh();
-
-		tmp.x = posX + at.m_relativePos.x;
-		tmp.y = posY + at.m_relativePos.y;
-
-		auto rTmp = ToSDL_Rect(tmp);
-		SDL_Rect rClip;
-		if (clip != nullptr) { rClip = ToSDL_Rect(*clip); }
-		SDLLibrary::get().renderCopy(*m_renderer, *at.m_gif.m_actTexture, clip != nullptr ? &rClip : nullptr, &rTmp);
-	} else {
-		render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp, angle, rotationCenter);
-	}
+	render(at.m_sprite, posX + at.m_relativePos.x, posY + at.m_relativePos.y, &tmp, angle, rotationCenter);
 
 
 }

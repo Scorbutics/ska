@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "Core/__internalConfig/LoggerConfig.h"
 #include "RawInputListener.h"
 #include "../Exceptions/TerminateProcessException.h"
@@ -32,74 +32,66 @@ void ska::RawInputListener::update() {
 
 	while(SDLLibrary::get().pollEvent(event)) {
 		switch (event.type) {
-            case SDL_APP_TERMINATING:
+            case SDL_EVENT_TERMINATING:
                 /* Terminate the app.
                    Shut everything down before returning from this function.
                 */
                 break;
-            case SDL_APP_LOWMEMORY:
+            case SDL_EVENT_LOW_MEMORY:
                 /* You will get this when your app is paused and iOS wants more memory.
                    Release as much memory as possible.
                 */
                 break;
-            case SDL_APP_WILLENTERBACKGROUND:
+            case SDL_EVENT_WILL_ENTER_BACKGROUND:
                 /* Prepare your app to go into the background.  Stop loops, etc.
                    This gets called when the user hits the home button, or gets a call.
                 */
                 break;
-            case SDL_APP_DIDENTERBACKGROUND:
+            case SDL_EVENT_DID_ENTER_BACKGROUND:
                 /* This will get called if the user accepted whatever sent your app to the background.
                    If the user got a phone call and canceled it, you'll instead get an    SDL_APP_DIDENTERFOREGROUND event and restart your loops.
                    When you get this, you have 5 seconds to save all your state or the app will be terminated.
                    Your app is NOT active at this point.
                 */
                 break;
-            case SDL_APP_WILLENTERFOREGROUND:
+            case SDL_EVENT_WILL_ENTER_FOREGROUND:
                 /* This call happens when your app is coming back to the foreground.
                     Restore all your state here.
                 */
                 break;
-            case SDL_APP_DIDENTERFOREGROUND:
+            case SDL_EVENT_DID_ENTER_FOREGROUND:
                 /* Restart your loops here.
                    Your app is interactive and getting CPU again.
                 */
                 break;
-            case SDL_KEYDOWN:
-                m_keyIn.setKeyState(event.key.keysym.scancode, true);
+            case SDL_EVENT_KEY_DOWN:
+                m_keyIn.setKeyState(event.key.scancode, true);
                 break;
-            case SDL_KEYUP:
-				m_keyIn.setKeyState(event.key.keysym.scancode, false);
+            case SDL_EVENT_KEY_UP:
+				m_keyIn.setKeyState(event.key.scancode, false);
                 break;
-            case SDL_MOUSEMOTION:
-				m_mouseIn.setMousePos(ska::Point<int>(event.motion.x, event.motion.y), ska::Point<int>(event.motion.xrel, event.motion.yrel));
+            case SDL_EVENT_MOUSE_MOTION:
+				m_mouseIn.setMousePos(ska::Point<int>(static_cast<int>(event.motion.x), static_cast<int>(event.motion.y)), ska::Point<int>(static_cast<int>(event.motion.xrel), static_cast<int>(event.motion.yrel)));
                 break;
-            case SDL_MOUSEBUTTONDOWN:
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
 				m_mouseIn.setMouseState(event.button.button, 1);
                 break;
-            case SDL_MOUSEBUTTONUP:
+            case SDL_EVENT_MOUSE_BUTTON_UP:
 				m_mouseIn.setMouseState(event.button.button, 0);
                 break;
-			case SDL_TEXTEDITING:
+			case SDL_EVENT_TEXT_EDITING:
 				break;
-			case SDL_TEXTINPUT:
-				m_textInput += StringUtils::toUTF8(event.edit.text);
+			case SDL_EVENT_TEXT_INPUT:
+				m_textInput += StringUtils::toUTF8(event.text.text);
 				break;
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
 				ExceptionTrigger<TerminateProcessException>("Program quitted");
 		default:
                 break;
 		}
 
-		if(event.type == SDL_WINDOWEVENT) {
-			switch(event.window.event) {
-				case SDL_WINDOWEVENT_RESIZED:
-				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					m_windowInput.setSize(event.window.data1, event.window.data2);
-					break;
-
-				default:
-					break;
-			}
+		if(event.type == SDL_EVENT_WINDOW_RESIZED || event.type == SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED) {
+			m_windowInput.setSize(event.window.data1, event.window.data2);
 		}
 	}
 
