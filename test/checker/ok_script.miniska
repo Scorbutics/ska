@@ -1,0 +1,6 @@
+Template = import "bind:test.template"
+Helper = import "wd:sub/helper"
+run = function(args: string[]) do
+	total = Template.twice(Helper.double(args.size()))
+	label = Template.name() + (total: string)
+end

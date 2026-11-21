@@ -1,0 +1,4 @@
+# Module : only imported by the other scripts
+double = function(value: int): int do
+	return value * 2
+end

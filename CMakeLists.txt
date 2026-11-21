@@ -81,5 +81,10 @@ if(SKALANG_BUILD_CHECKER)
 	add_subdirectory(${SKALANG_BYTECODE_CHECK_DIR})
 	# skalang_check_scripts(...) : static check of scripts in a build
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SkalangCheck.cmake)
+	if(SKALANG_BUILD_TESTS)
+		# skalang_check tests : ctest
+		enable_testing()
+		add_subdirectory(test/checker)
+	endif()
 endif()
 

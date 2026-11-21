@@ -1,0 +1,3 @@
+run = function(args: string[]) do
+	label = "count : " + args.size()
+end

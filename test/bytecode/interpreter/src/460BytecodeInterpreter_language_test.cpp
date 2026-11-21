@@ -2,6 +2,7 @@
 #include <tuple>
 #include "Config/LoggerConfigLang.h"
 #include "BytecodeInterpreterTest.h"
+#include "Service/ScriptNameBuilder.h"
 
 namespace {
 	ska::NodeValue Run(const std::string& progStr) {
@@ -391,4 +392,50 @@ TEST_CASE("[BytecodeInterpreter] anonymous functions : a function that is not th
 		const auto result = Run("fact = function(n: int): int do\nr = 1\nif n > 1\nr = n * fact(n - 1)\nend\nreturn r\nend\nout = fact(4)\n");
 		CHECK(result.nodeval<long>() == 24);
 	}
+}
+
+TEST_CASE("[BytecodeInterpreter] anonymous functions : an imported script with function literals keeps its exported variables") {
+	// The function literals of the script are not variables of the script : the variables declared after them are still exported
+	const auto result = Run(
+		"Imported = import \"" SKALANG_TEST_DIR "/src/resources/anonymous_functions\"\n"
+		"out = Imported.before + Imported.handlers[0](2) + Imported.after\n");
+	CHECK(result.nodeval<long>() == 2 + 20 + 42);
+}
+
+TEST_CASE("[BytecodeInterpreter] anonymous functions : the value of a field or of an array cell") {
+	SUBCASE("object field") {
+		const auto result = Run(R"script(
+			Op = function(n: int): int do return 0 end
+			Holder = function(): var do
+				op = function(n: int): int do return n end
+				return {
+					op = op
+				}
+			end
+			h = Holder()
+			h.op = function(n: int): int do return n * 3 end
+			out = h.op(5)
+		)script");
+		CHECK(result.nodeval<long>() == 15);
+	}
+	SUBCASE("array cell") {
+		const auto result = Run("fs = [function(k: int): int do return k end]\nfs[0] = function(k: int): int do return k + 100 end\nout = fs[0](1)\n");
+		CHECK(result.nodeval<long>() == 101);
+	}
+	SUBCASE("a variable assigned with a call taking a function keeps the returned type") {
+		// The variable was typed as a function : using it as an int was a type error
+		CHECK_NOTHROW(Interpret("Action = function() do end\napply = function(f: Action, n: int): int do\nreturn n\nend\nr = apply(function() do end, 1)\nr = r + 1\n"));
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] binding templates : a \"bind:\" import can be read from a template file") {
+	// skalang_check compiles scripts this way : the template declares the functions bound by the host program
+	struct AliasesGuard {
+		~AliasesGuard() { ska::ScriptNameBindingAliases().clear(); }
+	} guard;
+	ska::ScriptNameBindingAliases()["test.template"] = SKALANG_TEST_DIR "/src/resources/bind/test.template.miniska";
+
+	CHECK_NOTHROW(Interpret("T = import \"bind:test.template\"\nr = T.twice(2) + 1\ns = T.name() + \"!\"\n"));
+	CHECK_THROWS_WITH(Interpret("T = import \"bind:test.template\"\nr = T.twice(\"2\")\n"), doctest::Contains("Unable to use operator \"=\""));
+	CHECK_THROWS_WITH(Interpret("T = import \"bind:test.template\"\nr = T.unknown()\n"), doctest::Contains("undeclared field"));
 }

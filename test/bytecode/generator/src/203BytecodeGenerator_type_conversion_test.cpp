@@ -108,3 +108,30 @@ TEST_CASE("[BytecodeGenerator] type conversion + int => array (front)") {
 		{ska::bytecode::Command::MOV, "V0", "R1"}
 	});
 }
+
+TEST_CASE("[BytecodeGenerator] type conversion (explicit) bool => string") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator("result = true: string\n");
+	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
+
+	BytecodeCompare(res, {
+		{ska::bytecode::Command::CONV_B_STR, "R0", "1"},
+		{ska::bytecode::Command::MOV, "V0", "R0"}
+	});
+}
+
+TEST_CASE("[BytecodeGenerator] type conversion (explicit) bool => int is not supported") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator("result = true: int\n");
+	CHECK_THROWS_WITH(data.generator->generate(*data.storage, std::move(astPtr)), doctest::Contains("unable to convert type \"bool\" to \"int\""));
+}
+
+TEST_CASE("[BytecodeGenerator] array cell assignment") {
+	auto [astPtr, data] = ASTFromInputBytecodeGenerator("values = [1, 2]\nvalues[1] = 5\n");
+	auto& res = data.generator->generate(*data.storage, std::move(astPtr));
+
+	BytecodeCompare(res, {
+		{ska::bytecode::Command::PUSH, "1", "2"},
+		{ska::bytecode::Command::POP_IN_ARR, "R0", "2"},
+		{ska::bytecode::Command::MOV, "V0", "R0"},
+		{ska::bytecode::Command::ARR_SET, "V0", "1", "5"}
+	});
+}

@@ -1,0 +1,4 @@
+Template = import "bind:test.template"
+run = function(args: string[]) do
+	total = Template.twice("2")
+end

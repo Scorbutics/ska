@@ -296,3 +296,44 @@ TEST_CASE("[BytecodeSerializer round trip] recursive structure : a method uses a
 		out = (Node(4).Count(): string)
 	)script", "31");
 }
+
+TEST_CASE("[BytecodeSerializer round trip] anonymous functions, array cells, boolean conversion") {
+	CheckRoundTrip(R"script(
+		Callback = function(n: int): int do return 0 end
+		apply = function(f: Callback, n: int): int do
+			return f(n)
+		end
+		first = apply(function(k: int): int do return k + 1 end, 1)
+		fs = [function(k: int): int do return k * 10 end]
+		compute = function(): int do
+			base = 100
+			return apply(function(k: int): int do return k + base end, 5)
+		end
+		values = [1, 2, 3]
+		values[1] = 20
+		ok = values[1] == 20
+		out = (first: string) + "/" + (fs[0](2): string) + "/" + (compute(): string) + "/" + (values[1]: string) + "/" + (ok: string)
+	)script", "2/20/105/20/true");
+}
+
+TEST_CASE("[BytecodeSerializer round trip] while, else if, strings, modulo") {
+	CheckRoundTrip(R"script(
+		s = "abc"
+		reversed = ""
+		i = s.size() - 1
+		while i >= 0 do
+			reversed = reversed + s[i]
+			i = i - 1
+		end
+		kind = "none"
+		n = 7 % 3
+		if n == 0
+			kind = "zero"
+		else if n == 1
+			kind = "one"
+		else
+			kind = "other"
+		end
+		out = reversed + "/" + kind + "/" + ((-n): string)
+	)script", "cba/one/-1");
+}

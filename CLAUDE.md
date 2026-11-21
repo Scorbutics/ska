@@ -18,11 +18,13 @@ Read [doc/LANGUAGE.md](doc/LANGUAGE.md) before writing or reviewing a script: th
 ```sh
 cmake -S . -B build && cmake --build build -j8
 cd build/bin && ./skalang_test && ./skalang_bytecode_generator_test && ./skalang_bytecode_serializer_test && ./skalang_bytecode_interpreter_test
+cd build && ctest   # skalang_check tests (test/checker)
 ```
 
 - Rerun `cmake -S . -B build` after adding a source file: the sources are globbed.
 - Run the test executables with a timeout: a code generation bug can make a script loop forever.
 - Language features are tested with scripts in `test/bytecode/interpreter/src/460BytecodeInterpreter_language_test.cpp` (`Run` compiles and runs, `Interpret` only parses and type checks).
+- Serialization of a feature: a round trip test in `test/bytecode/serializer/src/200BytecodeSerializer_roundtrip_test.cpp`.
 - Generator tests compare the exact bytecode: when the generated registers change, check that the new code is equivalent before updating them.
 
 ## Code map
