@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "Service/ReservedKeywordsPool.h"
@@ -139,6 +140,7 @@ namespace ska {
 			lang::IOLogModule<bytecode::Interpreter> m_logModule;
 
 			std::unordered_map<std::string, std::size_t> m_compiledScripts;
+			std::unordered_set<std::string> m_failedScripts;
 			std::vector<std::unique_ptr<RunningScript>> m_suspended;
 			std::vector<PendingStart> m_pendingStarts;
 			bool m_scriptRunning = false;

@@ -52,16 +52,27 @@ std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& 
 		return compiled->second;
 	}
 
+	if (m_failedScripts.find(name) != m_failedScripts.end()) {
+		// Already reported (a script can be triggered at each frame)
+		return {};
+	}
+
 	auto file = std::ifstream{ name };
 	if (file.fail()) {
 		LOG_ERROR << "Script file not found : \"" << scriptFile << "\"";
 		return {};
 	}
-	auto ast = m_parser.subParse(m_scriptCache.astCache, name, file);
-	const auto& generated = m_generator.generate(m_scriptCache, bytecode::ScriptGenerationHelper{ m_scriptCache, *ast });
-	const auto index = generated.id();
-	m_compiledScripts.emplace(name, index);
-	return index;
+	try {
+		auto ast = m_parser.subParse(m_scriptCache.astCache, name, file);
+		const auto& generated = m_generator.generate(m_scriptCache, bytecode::ScriptGenerationHelper{ m_scriptCache, *ast });
+		const auto index = generated.id();
+		m_compiledScripts.emplace(name, index);
+		return index;
+	} catch (std::exception& e) {
+		LOG_ERROR << "Script \"" << scriptFile << "\" could not be compiled : " << e.what();
+		m_failedScripts.insert(name);
+		return {};
+	}
 }
 
 bool ska::scripting::ScriptVM::start(const std::string& scriptFile, std::vector<std::string> arguments, ScriptContext context) {
