@@ -4,6 +4,13 @@
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::Executor);
 #define LOG_DEBUG SLOG_STATIC(ska::LogLevel::Debug, ska::bytecode::Executor)
 
+ska::bytecode::Executor::~Executor() {
+	frames.clear();
+	stack.clear();
+	scripts.clear();
+	m_collector.collect();
+}
+
 void ska::bytecode::Executor::enterScriptLevel() {
 	auto frame = CallFrame{};
 	frame.scriptLevel = true;
@@ -84,10 +91,12 @@ void ska::bytecode::Executor::makeCell(const Operand& local) {
 	if (local.type() != OperandType::LOCAL) {
 		throw std::runtime_error("invalid bytecode : only a local variable can be made a cell");
 	}
-	frame().locals.replace(index(local), NodeValue::CellReference(std::make_shared<NodeValue>()));
+	auto cell = std::make_shared<NodeValue>();
+	m_collector.track(cell);
+	frame().locals.replace(index(local), NodeValue::CellReference(std::move(cell)));
 }
 
-ska::NodeValue ska::bytecode::Executor::cellReference(const Operand& operand) const {
+ska::NodeValue ska::bytecode::Executor::cellReference(const Operand& operand) {
 	switch (operand.type()) {
 	case OperandType::LOCAL: {
 		const auto* value = frame().locals.get_if(index(operand));
@@ -101,7 +110,11 @@ ska::NodeValue ska::bytecode::Executor::cellReference(const Operand& operand) co
 	case OperandType::SELF:
 		// A nested function using the name of the running function : it captures a cell holding the running function value
 		// (the running function itself does not capture anything, so there is no reference cycle)
-		return NodeValue::CellReference(std::make_shared<NodeValue>(frame().function));
+	{
+		auto cell = std::make_shared<NodeValue>(frame().function);
+		m_collector.track(cell);
+		return NodeValue::CellReference(std::move(cell));
+	}
 	default:
 		throw std::runtime_error("invalid bytecode : only a local variable or an upvalue can be captured");
 	}

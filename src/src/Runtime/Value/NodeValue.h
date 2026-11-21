@@ -79,8 +79,26 @@ namespace ska {
 		bool isCellReference() const { return m_cell != nullptr; }
 		const Cell& cell() const { return m_cell; }
 
-		void setUpvalues(std::shared_ptr<const Upvalues> upvalues) { m_upvalues = std::move(upvalues); }
+		void setUpvalues(std::shared_ptr<Upvalues> upvalues) { m_upvalues = std::move(upvalues); }
 		const Upvalues* upvalues() const;
+
+		// Calls "visitor" with each heap object directly referenced by this value (a cell, a list of captured cells, an array).
+		// Used by the cycle collector : each call is exactly one strong reference held by this value.
+		template <class Visitor>
+		void visitReferences(Visitor&& visitor) const {
+			if (m_cell != nullptr) {
+				visitor(m_cell);
+			}
+			if (m_upvalues != nullptr) {
+				visitor(m_upvalues);
+			}
+			if (std::holds_alternative<NodeValueArray>(m_variant)) {
+				const auto& array = std::get<NodeValueArray>(m_variant);
+				if (array != nullptr) {
+					visitor(array);
+				}
+			}
+		}
 
 		// Refered value if this is a cell reference, otherwise this value.
 		// Shallow : strings, arrays and objects are shared handles, only their reference count changes.
@@ -139,7 +157,7 @@ namespace ska {
 		// Non null when this value is a cell reference
 		Cell m_cell;
 		// Cells captured by a function value (closure)
-		std::shared_ptr<const Upvalues> m_upvalues;
+		std::shared_ptr<Upvalues> m_upvalues;
 	};
 
 	bool operator==(const NodeValue& lhs, const NodeValue& rhs);

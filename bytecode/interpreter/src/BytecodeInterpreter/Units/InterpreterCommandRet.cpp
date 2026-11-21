@@ -12,5 +12,7 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(RET)(ExecutionContext& context, con
 	LOG_DEBUG << "Returning " << returnedValue.convertString();
 	context.jumpReturn();
 	context.push(std::move(returnedValue));
+	// The frame of the call was released : a good time to collect reference cycles, from time to time
+	context.collectCyclesIfNeeded();
 	return {};
 }

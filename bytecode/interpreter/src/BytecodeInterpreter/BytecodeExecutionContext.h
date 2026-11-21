@@ -47,6 +47,11 @@ namespace ska {
 			void makeCell(const Operand& local) { m_out.makeCell(local); }
 			NodeValue cellReference(const Operand& operand) const { return m_out.cellReference(operand); }
 
+			// Registers a heap object for the cycle collection / runs a collection if enough objects were registered
+			template <class HeapObject>
+			void track(const HeapObject& object) { m_out.collector().track(object); }
+			void collectCyclesIfNeeded() { m_out.collector().collectIfNeeded(); }
+
 			// Calls a function (new call frame) / returns from the current function call
 			void jumpAbsolute(const NodeValue& function);
 			void jumpRelative(long value) { m_current->jumpRelative(value); }

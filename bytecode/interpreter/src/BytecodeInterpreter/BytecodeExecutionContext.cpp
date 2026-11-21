@@ -28,8 +28,13 @@ ska::bytecode::ScriptExecutionOutput ska::bytecode::ExecutionContext::generateEx
 		for (const auto& variable : exportedSymbolsVariables) {
 			const auto& operand = variable.value().value;
 			auto& owner = operand.type() == OperandType::VAR ? m_out.scriptOrThrow(operand.as<ScriptVariableRef>().script) : scriptExecution;
-			result->push_back(owner.shareVariable(operand));
+			auto exported = owner.shareVariable(operand);
+			if (exported.isCellReference()) {
+				m_out.collector().track(exported.cell());
+			}
+			result->push_back(std::move(exported));
 		}
+		m_out.collector().track(result);
 		scriptExecution.setExportsSection(result);
 		return result;
 	}

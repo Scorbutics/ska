@@ -43,6 +43,7 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(SUB_ARR)(ExecutionContext& context,
   	container->push_back(leftSide[i]);
 	}
   }
+	context.track(container);
 	return container;
 
 }

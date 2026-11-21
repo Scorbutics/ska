@@ -23,6 +23,7 @@ SKALANG_BYTECODE_INTERPRETER_COMMAND_DECLARE(END)(ExecutionContext& context, con
 			}
 			(*upvalues)[static_cast<std::size_t>(index)] = cellReference.cell();
 		}
+		context.track(upvalues);
 		function.setUpvalues(std::move(upvalues));
 	}
 	LOG_DEBUG << "End of function " << function;

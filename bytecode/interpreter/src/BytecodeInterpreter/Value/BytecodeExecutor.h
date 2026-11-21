@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include "BytecodeInterpreter/BytecodeScriptExecution.h"
+#include "CycleCollector.h"
 
 namespace ska {
 	namespace bytecode {
@@ -24,6 +25,16 @@ namespace ska {
 		class Executor {
 		public:
 			using ScriptExecutionContainer = std::vector<std::unique_ptr<ScriptExecution>>;
+
+			Executor() = default;
+			Executor(Executor&&) = delete;
+			Executor(const Executor&) = delete;
+			Executor& operator=(Executor&&) = delete;
+			Executor& operator=(const Executor&) = delete;
+			// Releases the interpretation state, then collects the reference cycles left
+			~Executor();
+
+			CycleCollector& collector() { return m_collector; }
 
 			void pop(NodeValue& dest) {
 				assert(!stack.empty());
@@ -68,7 +79,7 @@ namespace ska {
 			// Makes a local variable a cell (the variable is captured by a closure)
 			void makeCell(const Operand& local);
 			// Cell reference of a captured variable : a local variable made a cell, or an upvalue of the current closure
-			NodeValue cellReference(const Operand& operand) const;
+			NodeValue cellReference(const Operand& operand);
 
 			template<class T>
 			void set(const Operand& dest, ScriptExecution& current, T&& src) {
@@ -136,6 +147,8 @@ namespace ska {
 			std::vector<CallFrame> frames;
 			ScriptExecutionContainer scripts;
 			std::vector<NodeValue> stack;
+			// Declared last : destroyed after the interpretation state was released
+			CycleCollector m_collector;
 
 			void pushIfNotEmpty(NodeValue value) {
 				if (!value.empty()) {
