@@ -20,6 +20,8 @@ namespace ska {
 		SymbolTable& symbols() { return m_symbols; }
 
 		bool hasRootNode() const { return m_ast != nullptr; }
+		// The parsing of the script failed : it has no AST, it cannot be used
+		bool failed() const { return m_failed; }
 		ASTNode& rootNode() { assert(m_ast != nullptr); return *m_ast; }
 		const ASTNode& rootNode() const { assert(m_ast != nullptr); return *m_ast; }
 
@@ -38,6 +40,7 @@ namespace ska {
 		SymbolTable m_symbols;
 		ASTNodePtr m_ast;
 		bool m_bridged = false;
+		bool m_failed = false;
 		std::size_t m_id = -1;
 	};
 

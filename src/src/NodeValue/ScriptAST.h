@@ -48,6 +48,8 @@ namespace ska {
 
 		const std::string& name() const;
 		bool isBridged() const;
+		bool failed() const;
+		void setFailed();
 		std::size_t id() const;
 
 		void pushContext(ParsingContext context);

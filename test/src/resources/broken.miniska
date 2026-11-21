@@ -1,0 +1,3 @@
+f = function() do
+	this is not a script
+end

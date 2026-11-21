@@ -151,7 +151,11 @@ ska::ScriptASTPtr ska::StatementParser::subParse(ScriptCacheAST& scriptCache, co
 	const auto scriptAlreadyExists = scriptCache.find(name) != scriptCache.end();
 	SLOG(ska::LogLevel::Info) << "SubParsing script " << name << " : " << (scriptAlreadyExists ? "not " : "") << "in cache";
 	if (scriptAlreadyExists) {
-		return std::make_unique<ScriptAST>(scriptCache.at(name));
+		auto existing = std::make_unique<ScriptAST>(scriptCache.at(name));
+		if (existing->failed()) {
+			throw std::runtime_error("the script \"" + name + "\" could not be compiled");
+		}
+		return existing;
 	}
 
 	// The last statement of a script file ends with the end of the file, even without a final line break
@@ -161,7 +165,13 @@ ska::ScriptASTPtr ska::StatementParser::subParse(ScriptCacheAST& scriptCache, co
 	auto tokenizer = Tokenizer{ m_reservedKeywordsPool, std::move(content) };
 	auto tokens = tokenizer.tokenize();
 	auto script = ScriptASTPtr{std::make_unique<ScriptAST>( scriptCache, name, tokens )};
-	script->parse(*this);
+	try {
+		script->parse(*this);
+	} catch (...) {
+		// The script stays in the cache (it has an index) : it is marked as failed, not used again
+		script->setFailed();
+		throw;
+	}
 	return script;
 }
 

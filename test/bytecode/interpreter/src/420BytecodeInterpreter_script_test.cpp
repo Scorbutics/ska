@@ -151,3 +151,15 @@ TEST_CASE("[BytecodeInterpreter] Outside script imported twice shares its variab
 	auto res = interpreted->variable(gen.id());
 	CHECK(res.nodeval<long>() == 6);
 }
+
+TEST_CASE("[BytecodeInterpreter] a script that could not be compiled is reported again when imported again (no crash)") {
+	const auto program = std::string{ "Broken = import \"" SKALANG_TEST_DIR "/src/resources/broken\"\n" };
+	auto data = BytecodeInterpreterDataTestContainer{};
+	ASTFromInputBytecodeInterpreterNoParse(program, data);
+	CHECK_THROWS(readerI->parse(*data.parser));
+
+	// Another script of the same cache imports it
+	auto otherTokens = ska::Tokenizer{ reservedKeywords, program }.tokenize();
+	auto other = ska::ScriptAST{ data.storage->astCache, "other", otherTokens };
+	CHECK_THROWS(other.parse(*data.parser));
+}

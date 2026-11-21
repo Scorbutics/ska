@@ -164,3 +164,7 @@ void ska::ScriptAST::rewind() {
 }
 
 ska::TokenReader& ska::ScriptAST::reader() { return m_handle->m_input; }
+
+bool ska::ScriptAST::failed() const { return m_handle != nullptr && m_handle->m_failed; }
+
+void ska::ScriptAST::setFailed() { m_handle->m_failed = true; }
