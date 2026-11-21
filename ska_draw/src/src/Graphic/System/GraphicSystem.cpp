@@ -1,4 +1,5 @@
 #include <limits>
+#include <cmath>
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
@@ -27,7 +28,12 @@ void ska::GraphicSystem::refresh(unsigned int) {
 	for (const auto& entityId : processed) {
 		auto& gc = m_componentAccessor.get<ska::GraphicComponent>(entityId);
 		auto& hc = m_componentAccessor.get<ska::HitboxComponent>(entityId);
-		auto& pos = m_componentAccessor.get<ska::PositionComponent>(entityId);
+		auto& logicPos = m_componentAccessor.get<ska::PositionComponent>(entityId);
+		const auto drawn = gc.drawnPosition(logicPos);
+		auto pos = logicPos;
+		pos.x = static_cast<long>(std::lround(drawn.x));
+		pos.y = static_cast<long>(std::lround(drawn.y));
+		pos.z = static_cast<long>(std::lround(drawn.z));
 
 		const auto& absPos = ska::Point<int> { pos.x - static_cast<int>(hc.width / 2) + hc.xOffset / 2, pos.y - static_cast<int>(hc.height / 2) - 5 };
 		const auto& relPosX = static_cast<int>(absPos.x - camera.x);

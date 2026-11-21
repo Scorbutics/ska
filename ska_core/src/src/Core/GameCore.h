@@ -3,6 +3,7 @@
 
 #include "State/StateHolder.h"
 #include "Core/Utils/TimeUtils.h"
+#include "Core/Draw/FrameClock.h"
 #include "GameApp.h"
 
 namespace ska {
@@ -61,7 +62,9 @@ namespace ska {
     private:
 		bool reduceAccumulatorAndEventUpdate(float& accumulator, float ti) {
 			while (accumulator >= ti) {
-				if(eventUpdate(static_cast<unsigned int>(ti)) || m_accumulatorReset) { m_accumulatorReset = false; return true; }
+				const auto stateChange = eventUpdate(static_cast<unsigned int>(ti));
+				FrameClock::logicUpdated();
+				if(stateChange || m_accumulatorReset) { m_accumulatorReset = false; return true; }
 				accumulator -= ti;
 			}
 			return false;
@@ -79,10 +82,13 @@ namespace ska {
 
 				accumulator += ellapsedTime;
 				if(reduceAccumulatorAndEventUpdate(accumulator, ti)) {
+					FrameClock::drawing(1.F);
 					graphicUpdate(ellapsedTime);
 					break;
 				}
 
+				// The moving things are drawn between their last two logic states (FrameClock)
+				FrameClock::drawing(accumulator / ti);
 				graphicUpdate(ellapsedTime);
 			}
 	

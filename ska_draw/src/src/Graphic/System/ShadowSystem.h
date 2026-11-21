@@ -3,6 +3,7 @@
 #include "Core/ECS/Basics/Physic/PositionComponent.h"
 #include "Core/ECS/System.h"
 #include "../HasShadowComponent.h"
+#include "../GraphicComponent.h"
 #include "Core/ECS/Basics/Physic/HitboxComponent.h"
 #include "AbstractGraphicSystem.h"
 #include "../AnimatedTexture.h"
@@ -10,7 +11,7 @@
 namespace ska {
     class ShadowSystem :
         public AbstractGraphicSystem,
-        public System< RequiredComponent<PositionComponent, HitboxComponent, HasShadowComponent>, PossibleComponent<>> {
+        public System< RequiredComponent<PositionComponent, HitboxComponent, HasShadowComponent>, PossibleComponent<GraphicComponent>> {
     public:
 		ShadowSystem(EntityManager& entityManager, CameraSystem& camera);
         ShadowSystem& operator=(const ShadowSystem&) = delete;

@@ -1,5 +1,6 @@
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "ShadowSystem.h"
+#include <cmath>
 #include "Core/Utils/SpritePath.h"
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
@@ -21,7 +22,14 @@ void ska::ShadowSystem::refresh(unsigned int) {
 	
 	const auto& processed = getEntities();
 	for (auto entityId : processed) {
-		auto& pos = m_componentAccessor.get<PositionComponent>(entityId);
+		auto pos = m_componentAccessor.get<PositionComponent>(entityId);
+		// Drawn under the sprite (between the logic positions as the sprite)
+		auto* graphic = m_componentPossibleAccessor.get<GraphicComponent>(entityId);
+		if (graphic != nullptr) {
+			const auto drawn = graphic->drawnPosition(pos);
+			pos.x = static_cast<long>(std::lround(drawn.x));
+			pos.y = static_cast<long>(std::lround(drawn.y));
+		}
 		auto& hc = m_componentAccessor.get<HitboxComponent>(entityId);
 
 		const auto relPosX = static_cast<int>(pos.x + 12 - camera.x);

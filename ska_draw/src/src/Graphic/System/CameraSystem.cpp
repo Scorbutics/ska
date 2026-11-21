@@ -1,5 +1,6 @@
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
+#include <cmath>
 #include "Core/Rectangle.h"
 #include "../GraphicComponent.h"
 
@@ -67,7 +68,13 @@ void ska::CameraSystem::focusOn(Rectangle& pos, EntityId* entityId) {
 
 
 const ska::Rectangle& ska::CameraSystem::getDisplay() const {
-	return m_cameraRect;
+	// A jump of the camera (another map, a teleport) is not smoothed
+	constexpr auto snapDistance = 96.F;
+	const auto display = m_displayInterpolation.sample({ static_cast<float>(m_cameraRect.x), static_cast<float>(m_cameraRect.y), 0.F }, snapDistance);
+	m_displayRect = m_cameraRect;
+	m_displayRect.x = static_cast<int>(std::lround(display.x));
+	m_displayRect.y = static_cast<int>(std::lround(display.y));
+	return m_displayRect;
 }
 
 void ska::CameraSystem::shake(unsigned int duration, int intensity) {

@@ -9,6 +9,7 @@
 #include "../GraphicComponent.h"
 #include "Base/Patterns/SubObserver.h"
 #include "CameraStrategy.h"
+#include "Core/Draw/FrameClock.h"
 
 namespace ska {
 	template <class T>
@@ -27,6 +28,7 @@ namespace ska {
 
 		Point<int> getScreenSize() const;
 		void changeStrategy(CameraStrategyPtr strategy);
+		// The display to draw : between its last two logic positions (FrameClock), as the drawn entities
 		const Rectangle& getDisplay() const;
 		// Shakes the camera during "duration" milliseconds : the display moves randomly up to "intensity" pixels, less and less
 		void shake(unsigned int duration, int intensity);
@@ -38,6 +40,8 @@ namespace ska {
 
 		unsigned int m_worldW, m_worldH;
 		Rectangle m_cameraRect{};
+		mutable Rectangle m_displayRect{};
+		mutable Interpolated m_displayInterpolation;
 
 		CameraStrategyPtr m_strategy;
 
