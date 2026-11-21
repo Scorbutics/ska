@@ -1,5 +1,7 @@
 #pragma once
 #include <stdexcept>
+#include <string>
+#include <unordered_map>
 #include "Base/IO/Files/FileUtils.h"
 
 #define SKALANG_SCRIPT_EXT "miniska"
@@ -14,6 +16,9 @@ namespace ska {
 	};
 
 	std::string& ScriptNameStandardLibraryPath();
+
+	// "bind:<name>" scripts read from a file instead of a native binding (ex : a checker compiling scripts with the templates of the bindings)
+	std::unordered_map<std::string, std::string>& ScriptNameBindingAliases();
 
 	//Execution relative path (based on current working directory)
 	inline std::string ScriptNameCurrentWorkingDirectory(const std::string& scriptCalled) {

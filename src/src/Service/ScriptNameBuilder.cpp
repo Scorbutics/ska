@@ -12,6 +12,11 @@ std::string& ska::ScriptNameStandardLibraryPath() {
 	return prefix;
 }
 
+std::unordered_map<std::string, std::string>& ska::ScriptNameBindingAliases() {
+	static auto aliases = std::unordered_map<std::string, std::string>{};
+	return aliases;
+}
+
 std::string ska::ScriptNameDeduce(const std::string& scriptCaller, const std::string& scriptCalled, const std::string& stdPath) {
 	if(ska::FileUtils::isAbsolutePath(scriptCalled)) {
 		const auto lastDotPos = scriptCalled.find_last_of('.');
@@ -31,6 +36,11 @@ std::string ska::ScriptNameDeduce(const std::string& scriptCaller, const std::st
 		} else if(namespace_ == "wd") {
 			strategy = ska::ScriptNameStrategy::WORKING_DIRECTORY;
 		} else if (namespace_ == "bind") {
+			const auto& aliases = ScriptNameBindingAliases();
+			const auto alias = aliases.find(scriptCalled.substr(namespaceSeparatorPosition + 1));
+			if (alias != aliases.end()) {
+				return ska::FileUtils::getCanonicalPath(alias->second);
+			}
 			strategy = ska::ScriptNameStrategy::RELATIVE_TO_RUNNER;
 		} else {
 			throw std::runtime_error("undefined namespace \"" + namespace_ + "\"used in script declaration \"" + scriptCalled + "\"");

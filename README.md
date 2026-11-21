@@ -209,6 +209,22 @@ To run an example script (it must declare a `run` function, receiving the comman
 `./build/bin/skalang_bytecode_runner example.miniska`
 (If you build with MSVC, you will probably have to add a target folder (Debug / Release / RelWithDebInfo) after the "bin" folder)
 
+### Checking scripts without running them
+`skalang_check` compiles scripts (parsing, type checking, bytecode generation) without running them, and prints their errors :
+`./build/bin/skalang_check --bind game.dialog=scripts/game.dialog.miniska --wd game --module game/Levels/story.miniska game/Levels/intro.miniska`
+ * `--bind <name>=<file>` : the `bind:<name>` imports read this template file (declaring the functions that the host program binds at run time)
+ * `--wd <directory>` : directory of the `wd:` imports
+ * `--module <file>` : a script only imported by other scripts (the other files must declare `run = function(args: string[]) do ... end`)
+
+In a CMake project embedding skalang, `skalang_check_scripts` (see `cmake/SkalangCheck.cmake`) runs this check during the build :
+```cmake
+skalang_check_scripts(game_scripts_check
+	SCRIPTS ${LEVEL_SCRIPTS}
+	MODULES ${CMAKE_SOURCE_DIR}/Levels/story.miniska
+	BIND_DIRECTORIES ${CMAKE_SOURCE_DIR}/src/scripts
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+```
+
 ### Advice: the environment of development for this C++ project
 
 This is a really complex topic and usually a hot one. While some people are advocating from using vi, emacs... I think this is important to get less friction as possible from using a development environement daily.

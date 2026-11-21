@@ -42,3 +42,4 @@ LogError.txt
 *.swp
 compile_commands.json
 
+!/cmake/*.cmake
