@@ -114,7 +114,10 @@ ska::State& ska::StateBase::addSubState(StatePtr s) {
 
 ska::WorkNode<ska::StateBase>& ska::StateBase::scheduleRemoveSubState(State& subState) {
 	m_tasks.queueTask(ska::RunnableLambda([&]() {
-		removeSubState(subState);
+		// The substate is removed once it is unloaded : its unloading transitions can last several frames
+		if (!removeSubState(subState)) {
+			return true;
+		}
 		m_callbackSubstateRemoved.executeAndPop(*this);
 		return false;
 	}));
@@ -127,12 +130,12 @@ bool ska::StateBase::removeSubState(State& subState) {
 	});
 
 	if(it == m_subStates.end()) {
-		return false;
+		return true;
 	}
 
-	auto removedState = std::move(*it);
-	if (m_active && removedState != nullptr) {
-		removedState->unload();
+	// Still unloading : it stays a substate (refreshed) until it is unloaded
+	if (m_active && *it != nullptr && (*it)->unload()) {
+		return false;
 	}
 	m_subStates.erase(it);
 	return true;

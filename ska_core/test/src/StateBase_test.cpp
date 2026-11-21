@@ -83,6 +83,22 @@ TEST_CASE("[StateBase]") {
 			sbt.eventUpdate(0);
 			Verify(Method(mockState, unload));
 		}
+
+		SUBCASE("a substate unloading during several updates is removed once unloaded (its transitions run)") {
+			sbt.loadBefore(nullptr);
+			sbt.loadAfter(nullptr);
+			// unload returns true while it is still unloading
+			fakeit::When(Method(mockState, unload)).Return(true, true, false);
+			auto removed = false;
+			sbt.scheduleRemoveSubState(*addedSubstate).then([&removed](ska::StateBase&) { removed = true; });
+			sbt.eventUpdate(0);
+			CHECK(!removed);
+			sbt.eventUpdate(0);
+			CHECK(!removed);
+			sbt.eventUpdate(0);
+			CHECK(removed);
+			Verify(Method(mockState, unload)).Exactly(3);
+		}
 	}
 
 	SUBCASE("loading") {

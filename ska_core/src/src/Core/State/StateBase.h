@@ -83,6 +83,7 @@ namespace ska {
 
 
     private:
+		// Unloads a substate, then removes it : false while it is still unloading
 		bool removeSubState(State& subState);
 
 		void addPriorizedLogic(std::vector<ISystemPtr>& logics, const int priority, ISystemPtr system) const;
