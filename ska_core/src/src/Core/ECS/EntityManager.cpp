@@ -70,6 +70,13 @@ ska::EntityId ska::EntityManager::createEntity() {
 	return createEntityNoThrow();
 }
 
+void ska::EntityManager::setName(const EntityId& entity, const std::string& name) {
+	auto ecsEvent = ECSEvent{ ECSEventType::ENTITY_NAMED };
+	ecsEvent.entities.push_back(entity);
+	ecsEvent.names.push_back(name);
+	m_ged.ska::Observable<ECSEvent>::notifyObservers(ecsEvent);
+}
+
 void ska::EntityManager::removeEntity(const EntityId& entity) {
 	auto ecsEvent = ECSEvent{ ECSEventType::ENTITIES_REMOVED };
 	innerRemoveEntity(entity, ecsEvent);

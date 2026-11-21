@@ -48,6 +48,8 @@ namespace ska {
 		EntityId createEntity();
 
 		void removeEntity(const EntityId& entity);
+		// Names an entity : it can then be found by name (EntityLocator)
+		void setName(const EntityId& entity, const std::string& name);
 		void removeEntities(const std::unordered_set<EntityId>& exceptions = std::unordered_set<ska::EntityId>{});
 		void refreshEntity(const EntityId& entity);
 		void refreshEntities();

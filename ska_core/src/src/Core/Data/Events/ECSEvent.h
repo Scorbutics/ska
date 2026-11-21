@@ -1,11 +1,15 @@
 #pragma once
 #include <unordered_map>
+#include <string>
+#include <vector>
 #include "../../ECS/ECSDefines.h"
 
 namespace ska {
 	enum class ECSEventType {
 		ENTITIES_REMOVED,
-		ENTITIES_ADDED
+		ENTITIES_ADDED,
+		// An entity was given a name (to be found by name, ex : from scripts)
+		ENTITY_NAMED
 	};
 
 	/**
@@ -18,5 +22,7 @@ namespace ska {
 
 		const ECSEventType ecsEventType;
 		std::vector<EntityId> entities;
+		// ENTITY_NAMED : name of each entity of "entities"
+		std::vector<std::string> names;
 	};
 }

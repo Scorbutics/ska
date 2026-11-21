@@ -17,6 +17,7 @@ namespace ska {
 
 	private:
 		bool onECSEvent(ECSEvent& ecsEvent);
+		void forget(EntityId entity);
 
 		std::array<std::string, SKA_ECS_MAX_ENTITIES> m_entitiesReverseNameMap;
 		std::unordered_map<std::string, EntityId> m_entitiesNameMap;
