@@ -9,35 +9,35 @@ ska::CommandLogical::CommandLogical(EntityManager& entityManager) :
 	//TODO gestion des parenthèses
 	static const constexpr char* Operators[] = { "&&", "||", "!=", "==", "<=", "<", ">", ">=" };
 
-	m_operators.emplace(Operators[0], LogicalOperator { [](auto op1, auto op2) {
+	m_operators.emplace(Operators[0], ScriptLogicalOperator { [](auto op1, auto op2) {
 		return op1 && op2;
 	}, 100 });
 
-	m_operators.emplace(Operators[1], LogicalOperator { [](auto op1, auto op2) {
+	m_operators.emplace(Operators[1], ScriptLogicalOperator { [](auto op1, auto op2) {
 		return op1 || op2;
 	}, 50 });
 
-	m_operators.emplace(Operators[2], LogicalOperator { [](auto op1, auto op2) {
+	m_operators.emplace(Operators[2], ScriptLogicalOperator { [](auto op1, auto op2) {
 		return op1 != op2;
 	}, 0 });
 
-	m_operators.emplace(Operators[3], LogicalOperator { [](auto op1, auto op2) {
+	m_operators.emplace(Operators[3], ScriptLogicalOperator { [](auto op1, auto op2) {
 		return op1 == op2;
 	}, 0 });
 
-	m_operators.emplace(Operators[4], LogicalOperator { [](auto op1, auto op2) {
+	m_operators.emplace(Operators[4], ScriptLogicalOperator { [](auto op1, auto op2) {
 		return op1 <= op2;
 	}, 1000 });
 
-	m_operators.emplace(Operators[5], LogicalOperator{ [](auto op1, auto op2) {
+	m_operators.emplace(Operators[5], ScriptLogicalOperator{ [](auto op1, auto op2) {
 		return op1 < op2;
 	}, 1000 });
 
-	m_operators.emplace(Operators[6], LogicalOperator{ [](auto op1, auto op2) {
+	m_operators.emplace(Operators[6], ScriptLogicalOperator{ [](auto op1, auto op2) {
 		return op1 > op2;
 	}, 1000 });
 
-	m_operators.emplace(Operators[7], LogicalOperator{ [](auto op1, auto op2) {
+	m_operators.emplace(Operators[7], ScriptLogicalOperator{ [](auto op1, auto op2) {
 		return op1 >= op2;
 	}, 1000 });
 }
@@ -46,7 +46,7 @@ int ska::CommandLogical::argumentsNumber() {
 	return -1;
 }
 namespace ska {
-	void BuildAST(ASTNode& node, const std::vector<std::string>& expressionParts, const std::unordered_map<std::string, LogicalOperator>& operators) {
+	void BuildAST(ScriptLogicalNode& node, const std::vector<std::string>& expressionParts, const std::unordered_map<std::string, ScriptLogicalOperator>& operators) {
 		auto maxPriorityLogicalOperator = std::string{};
 		auto maxPriorityLogicalOperatorValue = -1;
 		auto maxPriorityLogicalOperatorIndex = -1;
@@ -66,11 +66,11 @@ namespace ska {
 		if (maxPriorityLogicalOperatorIndex >= 0 && static_cast<std::size_t>(maxPriorityLogicalOperatorIndex) < expressionParts.size()) {
 			node.type = OperatorType::Logical;
 			node.operator_ = maxPriorityLogicalOperator;
-			node.childLeft = std::make_unique<ASTNode>();
+			node.childLeft = std::make_unique<ScriptLogicalNode>();
 			node.childLeft->rangeMin = node.rangeMin;
 			node.childLeft->rangeMax = maxPriorityLogicalOperatorIndex - 1;
 
-			node.childRight = std::make_unique<ASTNode>();
+			node.childRight = std::make_unique<ScriptLogicalNode>();
 			node.childRight->rangeMin = maxPriorityLogicalOperatorIndex + 1;
 			node.childRight->rangeMax = node.rangeMax;
 			BuildAST(*node.childLeft, expressionParts, operators);
@@ -81,13 +81,13 @@ namespace ska {
 		}
 	}
 
-	ASTNode CreateAST(const std::vector<std::string>& expressionParts, const std::unordered_map<std::string, LogicalOperator>& operators) {
-		auto root = ASTNode{};
+	ScriptLogicalNode CreateAST(const std::vector<std::string>& expressionParts, const std::unordered_map<std::string, ScriptLogicalOperator>& operators) {
+		auto root = ScriptLogicalNode{};
 		BuildAST(root, expressionParts, operators);
 		return root;
 	}
 
-	int InterpretAST(const ASTNode& ast, const ScriptComponent& script, const MemoryScript& memory, const std::unordered_map<std::string, LogicalOperator>& operators) {
+	int InterpretAST(const ScriptLogicalNode& ast, const ScriptComponent& script, const MemoryScript& memory, const std::unordered_map<std::string, ScriptLogicalOperator>& operators) {
 		if (ast.type == OperatorType::Logical) {
 			assert(ast.childLeft != nullptr);
 			auto left = InterpretAST(*ast.childLeft, script, memory, operators);
