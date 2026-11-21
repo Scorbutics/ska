@@ -21,6 +21,10 @@ ska::ASTNodePtr ska::MatcherIfElse::match(ScriptAST& input) {
     {
         auto conditionExpression = input.expr(m_parser);
         SLOG(ska::LogLevel::Debug) << "Matching if - expression done";
+        // Optional "do" after the condition ("if condition do ... end"), as for the other blocks of the language
+        if (!input.reader().empty() && input.reader().actual().grammar() == TokenGrammar::BLOCK_BEGIN) {
+            input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::BLOCK_BEGIN>());
+        }
 
         const auto elseToken = m_reservedKeywordsPool.pattern<TokenGrammar::ELSE>();
         const auto endToken = m_reservedKeywordsPool.pattern<TokenGrammar::BLOCK_END>();

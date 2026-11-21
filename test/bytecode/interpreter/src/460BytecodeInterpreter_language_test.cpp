@@ -56,3 +56,20 @@ TEST_CASE("[BytecodeInterpreter] syntax : an imported script does not need a fin
 		"out = Imported.value\n");
 	CHECK(result.nodeval<long>() == 42);
 }
+
+TEST_CASE("[BytecodeInterpreter] syntax : optional \"do\" after an if condition") {
+	const auto result = Run(R"script(
+		total = 0
+		if 1 > 0 do
+			total = total + 1
+		end
+		if 1 > 2 do
+			total = total + 10
+		else
+			total = total + 100
+		end
+		if total == 101 do total = total + 1000 end
+		out = total
+	)script");
+	CHECK(result.nodeval<long>() == 1101);
+}
