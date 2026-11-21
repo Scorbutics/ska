@@ -55,6 +55,7 @@
 #include "Units/InterpreterCommandArrSet.h"
 #include "Units/InterpreterCommandCell.h"
 #include "Units/InterpreterCommandPushCell.h"
+#include "Units/InterpreterCommandConvBStr.h"
 #include "InterpreterDeclarer.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::Interpreter);
@@ -92,6 +93,7 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::CONV_D_STR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CONV_STR_I>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CONV_STR_D>(*this, result, generator);
+	InterpreterCommandDeclare<Command::CONV_B_STR>(*this, result, generator);
 
 	InterpreterCommandDeclare<Command::CMP_STR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CMP_BOOL>(*this, result, generator);

@@ -34,6 +34,7 @@ namespace ska {
 		template <> struct CommandComplex<Command::CONV_D_I> : std::true_type {};
 		template <> struct CommandComplex<Command::CONV_I_STR> : std::true_type {};
 		template <> struct CommandComplex<Command::CONV_D_STR> : std::true_type {};
+		template <> struct CommandComplex<Command::CONV_B_STR> : std::true_type {};
 
 		static void EnqueueConverterItemFunc(TypeConvertToInstructionContainer& container, LogicalOperator op, ExpressionType t1, ExpressionType t2, TypeToInstructionConverter value) {
 			container[static_cast<std::size_t>(op)][static_cast<std::size_t>(t1)][static_cast<std::size_t>(t2)] = std::move(value);
@@ -104,6 +105,7 @@ namespace ska {
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_STR_I>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::STRING, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_D_STR>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::FLOAT, ExpressionType::STRING);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_STR_D>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::STRING, ExpressionType::FLOAT);
+			EnqueueConverterItem<OperationType::FULL_FIRST, Command::CONV_B_STR>::enqueue(result, LogicalOperator::EQUAL, ExpressionType::BOOLEAN, ExpressionType::STRING);
 
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_I, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::INT, ExpressionType::INT);
 			EnqueueConverterItem<OperationType::FULL_FIRST, Command::SUB_D, Command::TEST_NEQ>::enqueue(result, LogicalOperator::INEQUALITY, ExpressionType::FLOAT, ExpressionType::FLOAT);

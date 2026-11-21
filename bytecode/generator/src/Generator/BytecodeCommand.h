@@ -67,6 +67,8 @@ namespace ska {
 			STR_LENGTH,
 			// STR_ACCESS dest string index : character of a string (a string)
 			STR_ACCESS,
+			// CONV_B_STR dest bool : "true" or "false"
+			CONV_B_STR,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -127,6 +129,7 @@ namespace ska {
 			"MOD_I",
 			"STR_LENGTH",
 			"STR_ACCESS",
+			"CONV_B_STR",
 			"NOP",
 			""
 		};

@@ -261,7 +261,8 @@ bool ska::SemanticTypeChecker::matchVariable(const VarTokenEvent& variable) {
 			throw std::runtime_error("a string cannot be modified (its characters cannot be assigned)");
 		}
 
-		if (variable.var().symbol() == nullptr) {
+		// An array cell has no symbol, but can be assigned
+		if (variable.var().symbol() == nullptr && variable.var().op() != Operator::ARRAY_USE) {
 			auto ss = std::stringstream{};
 			ss << "The left part of assignation is a read-only value, therefore cannot be assigned";
 			throw std::runtime_error(ss.str());

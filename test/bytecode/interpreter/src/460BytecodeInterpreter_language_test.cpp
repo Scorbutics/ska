@@ -344,3 +344,30 @@ TEST_CASE("[BytecodeInterpreter] errors : the habits of other languages are expl
 	hint("function f() do\nend\n", "a function is a variable");
 	hint("f = function g() do\nend\n", "a function is a variable");
 }
+
+TEST_CASE("[BytecodeInterpreter] arrays : a cell can be assigned") {
+	SUBCASE("int") {
+		const auto result = Run("a = [1, 2]\na[1] = 5\nout = a[0] + a[1]\n");
+		CHECK(result.nodeval<long>() == 6);
+	}
+	SUBCASE("nested") {
+		const auto result = Run("a = [[1, 2], [3]]\na[0][1] = 7\nout = a[0][1]\n");
+		CHECK(result.nodeval<long>() == 7);
+	}
+	SUBCASE("an array is shared : a function modifies the array given") {
+		const auto result = Run("set = function(values: string[]) do\nvalues[0] = \"b\"\nend\na = [\"a\"]\nset(a)\nout = a[0]\n");
+		CHECK(*result.nodeval<ska::StringShared>() == "b");
+	}
+	SUBCASE("the type of the cell is kept") {
+		CHECK_THROWS(Interpret("a = [1]\na[0] = \"b\"\n"));
+	}
+	SUBCASE("out of range") {
+		CHECK_THROWS(Run("a = [1]\na[1] = 2\n"));
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] conversions : a boolean converted to a string") {
+	const auto result = Run("ok = 1 < 2\nout = (ok: string) + \" \" + (false: string)\n");
+	CHECK(*result.nodeval<ska::StringShared>() == "true false");
+	CHECK_THROWS(Run("x = (true: int)\n"));
+}

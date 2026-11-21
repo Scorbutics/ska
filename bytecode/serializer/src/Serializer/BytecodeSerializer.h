@@ -25,7 +25,8 @@ namespace ska {
 			// 4 : CMP_BOOL command (the commands after it are renumbered).
 			// 5 : MOD_I command (the commands after it are renumbered).
 			// 6 : "while" keyword (the grammar tokens after it are renumbered), STR_LENGTH and STR_ACCESS commands.
-			static constexpr std::size_t Version = 6;
+			// 7 : CONV_B_STR command.
+			static constexpr std::size_t Version = 7;
 
 			Serializer() = default;
 			// Reads and writes the given format version (tests of version mismatches)
