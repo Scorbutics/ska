@@ -1,5 +1,6 @@
 #include "__internalConfig/LoggerConfig.h"
 #include <fstream>
+#include <algorithm>
 #include "ScriptVM.h"
 #include "Base/IO/Files/FileUtils.h"
 #include "Service/ScriptNameBuilder.h"
@@ -87,15 +88,15 @@ bool ska::scripting::ScriptVM::startNow(PendingStart script) {
 		auto run = m_interpreter.exported(m_executor, *scriptIndex, m_scriptCache, "run");
 
 		auto arguments = std::make_shared<NodeValueArrayRaw>();
-		for (auto& argument : script.arguments) {
-			arguments->push_back(NodeValue{ std::make_shared<std::string>(std::move(argument)) });
+		for (const auto& argument : script.arguments) {
+			arguments->push_back(NodeValue{ std::make_shared<std::string>(argument) });
 		}
 
 		LOG_INFO << "Starting script \"" << script.context.name << "\"";
 		auto coroutine = runStep(script.context, [&]() {
 			return m_interpreter.start(m_executor, m_scriptCache, run, { NodeValue{ std::move(arguments) } });
 		});
-		auto running = std::make_unique<RunningScript>(RunningScript{ std::move(coroutine), std::move(script.context), {}, {} });
+		auto running = std::make_unique<RunningScript>(RunningScript{ std::move(coroutine), std::move(script.context), Key(script.scriptFile, script.arguments), {}, {} });
 		if (afterStep(*running)) {
 			m_suspended.push_back(std::move(running));
 		}
@@ -175,4 +176,29 @@ void ska::scripting::ScriptVM::suspendUntil(std::function<bool()> ready, std::fu
 void ska::scripting::ScriptVM::wait(unsigned int milliseconds) {
 	const auto end = m_time + milliseconds;
 	suspendUntil([this, end]() { return m_time >= end; });
+}
+
+std::string ska::scripting::ScriptVM::Key(const std::string& scriptFile, const std::vector<std::string>& arguments) {
+	auto key = FileUtils::getCanonicalPath(scriptFile);
+	for (const auto& argument : arguments) {
+		key += '\0' + argument;
+	}
+	return key;
+}
+
+bool ska::scripting::ScriptVM::running(const std::string& scriptFile, const std::vector<std::string>& arguments) const {
+	const auto key = Key(scriptFile, arguments);
+	return std::any_of(m_suspended.begin(), m_suspended.end(), [&key](const auto& script) {
+		return script->key == key && script->coroutine.suspended();
+	});
+}
+
+void ska::scripting::ScriptVM::start(const ScriptSleepComponent& script, EntityId origin) {
+	if (running(script.name, script.args)) {
+		return;
+	}
+	auto context = ScriptContext{};
+	context.name = script.name;
+	context.origin = origin;
+	start(script.name, script.args, std::move(context));
 }

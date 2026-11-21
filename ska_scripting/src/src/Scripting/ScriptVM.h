@@ -22,6 +22,7 @@
 #include "std/module/io/log.h"
 
 #include "Core/ECS/ECSDefines.h"
+#include "Core/ECS/Basics/Script/ScriptRunner.h"
 
 namespace ska {
 	namespace scripting {
@@ -41,13 +42,13 @@ namespace ska {
 		//     run = function(args: string[]) do ... end
 		// A script runs until it ends, or until a native function suspends it (ex : "wait") : it is then resumed by "update",
 		// once its waiting condition is satisfied. All the scripts share the same script modules (imported once).
-		class ScriptVM {
+		class ScriptVM : public ScriptRunner {
 		public:
 			using Modules = lang::ModuleConfiguration<bytecode::Interpreter>;
 
 			// "standardLibraryPath" : directory of the standard library and engine bindings scripts ("std:" imports)
 			explicit ScriptVM(std::string standardLibraryPath = DefaultStandardLibraryPath());
-			~ScriptVM();
+			~ScriptVM() override;
 			ScriptVM(const ScriptVM&) = delete;
 			ScriptVM& operator=(const ScriptVM&) = delete;
 
@@ -62,7 +63,12 @@ namespace ska {
 			bool start(const std::string& scriptFile, std::vector<std::string> arguments = {}, ScriptContext context = {});
 
 			// Resumes the suspended scripts that are ready to continue
-			void update(unsigned int elapsedTime);
+			void update(unsigned int elapsedTime) override;
+
+			// Starts a script triggered by the engine (ScriptRunner) : not started when the same script, with the same arguments,
+			// is still running (ex : the action key kept pressed, a block walked on again during the script)
+			void start(const ScriptSleepComponent& script, EntityId origin) override;
+			bool running(const std::string& scriptFile, const std::vector<std::string>& arguments) const;
 
 			// Number of suspended scripts
 			std::size_t suspendedScripts() const { return m_suspended.size(); }
@@ -82,9 +88,12 @@ namespace ska {
 			void wait(unsigned int milliseconds);
 
 		private:
+			static std::string Key(const std::string& scriptFile, const std::vector<std::string>& arguments);
+
 			struct RunningScript {
 				bytecode::Coroutine coroutine;
 				ScriptContext context;
+				std::string key;
 				std::function<bool()> ready;
 				std::function<NodeValue()> value;
 			};

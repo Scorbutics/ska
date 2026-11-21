@@ -218,13 +218,26 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 	}
 
 	m_scriptAutoSystem.update(ellapsedTime);
+	for (auto& runner : m_scriptRunners) {
+		runner.second->update(ellapsedTime);
+	}
 }
 
 void ska::ScriptRefreshSystem::update(unsigned int ellapsedTime) {
 	ScriptRefreshSystemBase::update(ellapsedTime);
 }
 
+void ska::ScriptRefreshSystem::addScriptRunner(std::string fileExtension, ScriptRunner& runner) {
+	m_scriptRunners.emplace_back(std::move(fileExtension), &runner);
+}
+
 bool ska::ScriptRefreshSystem::startScript(ScriptSleepComponent script, const EntityId origin) {
+	for (const auto& [extension, runner] : m_scriptRunners) {
+		if (script.name.size() >= extension.size() && script.name.compare(script.name.size() - extension.size(), extension.size(), extension) == 0) {
+			runner->start(script, origin);
+			return script.triggeringType == ScriptTriggerType::AUTO;
+		}
+	}
 	m_scriptAutoSystem.registerScript(script, origin);
 
 	//Auto scripts are "one shots"	

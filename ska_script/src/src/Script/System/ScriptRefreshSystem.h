@@ -1,4 +1,8 @@
 #pragma once
+#include <string>
+#include <utility>
+#include <vector>
+#include "Core/ECS/Basics/Script/ScriptRunner.h"
 #include <unordered_set>
 #include <vector>
 #include <optional>
@@ -42,6 +46,9 @@ namespace ska {
 		~ScriptRefreshSystem() override = default;
 		void update(unsigned int ellapsedTime) override;
 
+		// The scripts with a file extension (ex : ".miniska") are run by another scripting system instead of the legacy one
+		void addScriptRunner(std::string fileExtension, ScriptRunner& runner);
+
 	protected:
 		void refresh(unsigned int ellapsedTime) override;
 	
@@ -59,6 +66,7 @@ namespace ska {
 		ScriptAutoSystem& m_scriptAutoSystem;
 		bool m_action;
 		ska::EntityManager& m_entityManager;
+		std::vector<std::pair<std::string, ScriptRunner*>> m_scriptRunners;
 	};
 
 }

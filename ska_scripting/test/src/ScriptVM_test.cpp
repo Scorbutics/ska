@@ -133,3 +133,26 @@ TEST_CASE("[ScriptVM] errors : a broken script is not started, a failing script 
 	test.vm.update(50);
 	CHECK(test.variable("step") == 3);
 }
+
+TEST_CASE("[ScriptVM] started by the engine triggers : not started again while still running with the same arguments") {
+	auto test = ScriptingTest{};
+	auto script = ska::ScriptSleepComponent{};
+	script.name = Script("wait");
+	ska::ScriptRunner& runner = test.vm;
+
+	runner.start(script, 3);
+	runner.start(script, 3);
+	CHECK(test.vm.suspendedScripts() == 1);
+
+	script.args.push_back("other");
+	runner.start(script, 3);
+	CHECK(test.vm.suspendedScripts() == 2);
+
+	runner.update(100);
+	runner.update(50);
+	CHECK(test.vm.suspendedScripts() == 0);
+	// Done : it can be started again
+	script.args.clear();
+	runner.start(script, 3);
+	CHECK(test.vm.suspendedScripts() == 1);
+}
