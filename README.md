@@ -140,6 +140,9 @@ Counter = import "counter"
 Counter.increment()
 ```
 
+## Language reference
+[doc/LANGUAGE.md](doc/LANGUAGE.md) : the whole language on one page (types, statements, functions, objects, modules, common errors), with the rules that differ from other languages.
+
 ## Language rules worth knowing
  * A name can only be used after its declaration (no forward reference). Two functions calling each other are written with a function variable assigned afterwards :
 ```ruby
