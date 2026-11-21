@@ -21,6 +21,7 @@
 #include "BytecodeInterpreter/Value/BytecodeInterpreterTypes.h"
 #include "Runtime/Value/ModuleConfiguration.h"
 #include "std/module/io/log.h"
+#include "std/module/math.h"
 
 #include "Core/ECS/ECSDefines.h"
 #include "Core/ECS/Basics/Script/ScriptRunner.h"
@@ -138,6 +139,7 @@ namespace ska {
 			// The executor outlives the coroutines started on it
 			bytecode::Executor m_executor;
 			lang::IOLogModule<bytecode::Interpreter> m_logModule;
+			lang::MathModule<bytecode::Interpreter> m_mathModule;
 
 			std::unordered_map<std::string, std::size_t> m_compiledScripts;
 			std::unordered_set<std::string> m_failedScripts;

@@ -157,3 +157,9 @@ TEST_CASE("[ScriptVM] started by the engine triggers : not started again while s
 	runner.start(script, 3);
 	CHECK(test.vm.suspendedScripts() == 1);
 }
+
+TEST_CASE("[ScriptVM] the standard library modules are available (math)") {
+	auto test = ScriptingTest{};
+	CHECK(test.vm.start(Script("math")));
+	CHECK(test.variable("math") == 73);
+}

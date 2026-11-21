@@ -1,0 +1,6 @@
+Engine = import "bind:ska.engine"
+Math = import "bind:std.native.math"
+
+run = function(args: string[]) do
+	Engine.setVariable("math", Math.max(Math.abs(-7), 3) * 10 + Math.round(2.6))
+end

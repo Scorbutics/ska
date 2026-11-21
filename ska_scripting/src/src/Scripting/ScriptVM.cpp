@@ -27,7 +27,8 @@ ska::scripting::ScriptVM::ScriptVM(std::string standardLibraryPath) :
 	m_generator(m_reservedKeywords),
 	m_interpreter(m_parser, m_generator, m_reservedKeywords),
 	m_modules(m_scriptCache.astCache, m_typeBuilder, m_typeChecker, m_reservedKeywords, m_parser, m_scriptCache, m_interpreter),
-	m_logModule(WithStandardLibraryPath(m_modules, std::move(standardLibraryPath))) {
+	m_logModule(WithStandardLibraryPath(m_modules, std::move(standardLibraryPath))),
+	m_mathModule(m_modules) {
 }
 
 ska::scripting::ScriptVM::Modules& ska::scripting::ScriptVM::WithStandardLibraryPath(Modules& modules, std::string standardLibraryPath) {
