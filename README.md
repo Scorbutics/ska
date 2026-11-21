@@ -25,6 +25,7 @@ I wanted a simple but coherent language.
  * Functions are closures : they capture the variables of the functions enclosing them, and each function call has its own variables (recursion is supported)
  * No manual memory management : reference counting, with a cycle collector for the reference cycles (closures capturing each other, objects stored in variables captured by their own methods...)
  * Includes a C++ binding
+ * Coroutines : a native (C++) function can suspend the script calling it, the host program resumes it later (ex : a game "wait" or "message" command)
 
 ## Syntax
 The syntax is a cross between Ruby and Javascript.
@@ -36,6 +37,7 @@ For example, syntax follows some major rules on its use of symbols and keywords 
  * '(' and ')' have two uses, one for grouping expression (as in mathematics), and the other for function parameters definition and call
  * '|' is a pipe operator, in the same way as you can find in frameworks like Angular. It applies a lambda function on a collection.
  * '[' and ']' are used for array declaration and use
+ * '#' starts a comment, until the end of the line
 
 ## Code examples
  * Basic parameters use
@@ -161,6 +163,24 @@ next = isOdd
 ```
  * Declaring a variable with the name of a variable of an enclosing function (or of the script) assigns this variable. Inside an object literal, a declaration always creates a new field.
  * Inside the body of a function, the name of the function is the function itself (recursion) : it cannot be assigned there.
+ * `return` leaves the function right away. In a function without returned value, `return` alone leaves it.
+ * The top level code of a script runs once : the following imports of the script only give its exports.
+
+## Host API (C++) : calling script functions, coroutines
+```cpp
+auto executor = ska::bytecode::Executor{};
+// Runs the top level code of the script (once) and gives its exported "run" function
+auto run = interpreter.exported(executor, scriptIndex, scriptCache, "run");
+// Calls it with its arguments, until it returns or is suspended
+auto coroutine = interpreter.start(executor, scriptCache, run, { ska::NodeValue{ 3L } });
+// In a native function : interpreter.suspend() suspends the calling script once the native function returned
+while (coroutine.suspended()) {
+	// ... later (ex : next game frame), with the value returned by the native function that suspended it
+	interpreter.resume(coroutine, ska::NodeValue{ 1L });
+}
+auto result = coroutine.result();
+```
+The coroutines started on an executor share its scripts and their variables : each coroutine only has its own call frames and value stack.
 
 
 ## Installation / Use
@@ -219,6 +239,7 @@ To contribute, you can either :
 		- A local variable captured by a nested function lives in a shared cell : closures are function values carrying their captured cells.
 		- The exported variables of a script are cells shared with its importers.
 		- Memory is managed by reference counting, plus a cycle collector (CPython-like) for the reference cycles.
+		- A coroutine owns its call frames and its value stack, swapped in the executor while it runs (one at a time).
 
 ## Benchmarks
 No benchmarks on the interpreter (VM) have been done for now (I aim to add some to compare runtime executions with other known major scripting languages)
