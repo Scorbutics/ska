@@ -8,7 +8,6 @@
 #include "BytecodeScriptBody.h"
 #include "BytecodeScriptExternalReferences.h"
 
-static constexpr std::size_t SERIALIZER_VERSION = 1;
 
 SKA_LOGC_CONFIG(ska::LogLevel::Error, ska::bytecode::Serializer);
 
@@ -20,7 +19,7 @@ bool ska::bytecode::Serializer::serialize(SerializationContext& context) const {
 	try {
 		auto partIndexes = std::deque<std::size_t>{};
 		do {
-			partIndexes.push_back(context.writeHeader(SERIALIZER_VERSION));
+			partIndexes.push_back(context.writeHeader(m_version));
 
 			if (!context.currentScriptBridged()) {
 				auto [instructionIndex, linkedScripts] = context.writeInstructions();
@@ -54,6 +53,12 @@ std::vector<std::string> ska::bytecode::Serializer::deserialize(DeserializationC
 		*scriptSerializationContext >> script.header;
 
 		LOG_INFO << "[Serializer script version " << script.header.serializerVersion << "], script " << script.header.scriptName() << " refered as id " << script.header.scriptId << " when it was compiled";
+
+		if (script.header.serializerVersion != m_version) {
+			LOG_INFO << "Script " << scriptName << " was serialized with the format version " << script.header.serializerVersion << " instead of " << m_version << ". Added to queue.";
+			failedScripts.push_back(scriptName);
+			return failedScripts;
+		}
 
 		if (!script.header.scriptBridged) {
 			*scriptSerializationContext >> script.references;

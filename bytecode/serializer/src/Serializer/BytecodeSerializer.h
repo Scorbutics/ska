@@ -17,7 +17,15 @@ namespace ska {
 
 		class Serializer {
 		public:
+			// Version of the serialized bytecode format : a script serialized with another version is not deserialized
+			// (it is reported as a failed script, to be rebuilt from its source).
+			// 2 : call frames (LOCAL, UPVAL, SELF operands, CELL, PUSH_CELL, ARR_SET commands), serialized "exported" symbol flags,
+			//     symbol tables keyed by child position, exact floating point values.
+			static constexpr std::size_t Version = 2;
+
 			Serializer() = default;
+			// Reads and writes the given format version (tests of version mismatches)
+			explicit Serializer(std::size_t version) : m_version(version) {}
 			~Serializer() = default;
 
 			bool serialize(SerializationContext& context) const;
@@ -27,6 +35,8 @@ namespace ska {
 
 		private:
 			std::vector<std::string> deserialize(DeserializationContext& context, const std::string& scriptName, const std::unordered_set<std::string>& blacklist) const;
+
+			std::size_t m_version = Version;
 		};
 	}
 }

@@ -211,3 +211,23 @@ TEST_CASE("[BytecodeSerializer] external script use other stack triggers rebuild
 		CHECK(data.storage->size() == 3);
 	}
 }
+
+TEST_CASE("[BytecodeSerializer] a script serialized with another format version is not deserialized") {
+	ska::SerializerValidator::DisableAbort();
+	auto streams = std::unordered_map<std::string, std::stringstream>{};
+
+	auto [scriptIn, dataIn] = Serialize("toto = 4\n");
+	dataIn.generator->generate(*dataIn.storage, std::move(scriptIn));
+	const auto oldFormatSerializer = ska::bytecode::Serializer{ ska::bytecode::Serializer::Version - 1 };
+	CHECK(oldFormatSerializer.serialize(*dataIn.storage, [&streams](const std::string& scriptName) -> std::ostream& {
+		return streams[scriptName];
+	}));
+
+	auto [scriptOut, dataOut] = Serialize("");
+	const auto failedScripts = dataOut.serializer->deserialize(*dataOut.storage, "main", [&streams](const std::string& scriptName) -> std::istream& {
+		return streams[scriptName];
+	});
+	// Reported as failed (to be rebuilt from its source) instead of being misread
+	REQUIRE(failedScripts.size() == 1);
+	CHECK(failedScripts[0] == "main");
+}
