@@ -15,6 +15,7 @@ Games are scripted with [skalang](https://github.com/Scorbutics/skalang) (`.mini
 * Scripts are started by the script triggers of the engine (map events, tiles, characters : `ScriptRefreshSystem`), through the `ScriptRunner` interface. The `ska_scripting` module provides the runner : the script VM (`ScriptVM`).
 * A script waits without blocking the game : a native function suspends it (ex : `Engine.wait(500)`, a movement, a message) and the VM resumes it when the action is over. All the scripts share their modules (a module is run once).
 * Engine functions : `Engine = import "bind:ska.engine"` (`ska_scripting/src/scripts/ska.engine.miniska`). The skalang standard library modules are available too (`bind:std.native.io.log`, `bind:std.native.math`). A game adds its own functions (modules based on `lang::Module`, with a script template deployed in the `std` directory next to the executables).
+* Static check : a game checks its scripts during its build with `skalang_check_scripts` (skalang `cmake/SkalangCheck.cmake`), giving `${SKA_SCRIPT_TEMPLATES_DIR}` and its own templates as `BIND_DIRECTORIES`. The scripts are compiled (syntax, types, calls of the bound functions) without running them.
 
 Module boundaries, checked at each build (`cmake/CheckBoundaries.cmake`) : the engine modules know nothing about the scripting (they only use `ScriptRunner`), and `ska_scripting` only depends on `ska_core`.
 

@@ -60,6 +60,8 @@ add_subdirectory(external/skabase/src)
 
 # skalang scripting language (uses the skalog and skabase targets above)
 add_subdirectory(external/skalang)
+# Templates of the engine bindings ("bind:ska.engine") : for the static check of the scripts of a game (skalang_check_scripts)
+set(SKA_SCRIPT_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_scripting/src/scripts CACHE INTERNAL "Templates of the ska scripting bindings")
 # Its standard library scripts, and the engine bindings ones, are deployed next to the executables, in "std"
 add_custom_target(skalang_std_scripts ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${SKALANG_STD_SCRIPTS_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/std
