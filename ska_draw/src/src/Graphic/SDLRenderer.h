@@ -83,6 +83,8 @@ namespace ska {
 		SDL_Texture* m_worldTarget = nullptr;
 		int m_worldTargetWidth = 0;
 		int m_worldTargetHeight = 0;
+		// The part of the world texture drawn this frame (the texture can be larger : it is not created again at each zoom)
+		SDL_Rect m_worldArea{};
 		bool m_inWorld = false;
 
 	};

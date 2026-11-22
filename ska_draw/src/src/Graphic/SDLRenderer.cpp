@@ -106,19 +106,25 @@ void ska::SDLRenderer::beginWorld(float zoom) {
 	const auto& sdl = SDLLibrary::get();
 	const auto width = std::max(1, static_cast<int>(std::ceil(static_cast<float>(m_window.getWidth()) / zoom)));
 	const auto height = std::max(1, static_cast<int>(std::ceil(static_cast<float>(m_window.getHeight()) / zoom)));
-	if (m_worldTarget == nullptr || width != m_worldTargetWidth || height != m_worldTargetHeight) {
+	// A zoom changing at each frame (a moving camera) does not create a texture at each frame : the texture only grows
+	// (with a margin), the world is drawn in its top left part
+	if (m_worldTarget == nullptr || width > m_worldTargetWidth || height > m_worldTargetHeight) {
 		if (m_worldTarget != nullptr) {
 			sdl.destroyTexture(m_worldTarget);
 		}
-		m_worldTarget = createTextureTarget(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+		const auto targetWidth = std::max(width, m_worldTargetWidth) + 64;
+		const auto targetHeight = std::max(height, m_worldTargetHeight) + 64;
+		m_worldTarget = createTextureTarget(static_cast<unsigned int>(targetWidth), static_cast<unsigned int>(targetHeight));
 		if (m_worldTarget == nullptr) {
+			m_worldTargetWidth = m_worldTargetHeight = 0;
 			return;
 		}
 		// Pixel art : sharp when it is stretched, without stairs between the pixels
 		sdl.setTextureScaleMode(*m_worldTarget, SDL_SCALEMODE_PIXELART);
-		m_worldTargetWidth = width;
-		m_worldTargetHeight = height;
+		m_worldTargetWidth = targetWidth;
+		m_worldTargetHeight = targetHeight;
 	}
+	m_worldArea = SDL_Rect{ 0, 0, width, height };
 	sdl.setRenderTarget(*m_renderer, m_worldTarget);
 	sdl.setRenderDrawColor(*m_renderer, 0, 0, 0, 255);
 	renderClear();
@@ -133,7 +139,7 @@ void ska::SDLRenderer::endWorld() {
 	m_inWorld = false;
 	const auto& sdl = SDLLibrary::get();
 	sdl.setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
-	sdl.renderCopy(*m_renderer, *m_worldTarget, nullptr, nullptr);
+	sdl.renderCopy(*m_renderer, *m_worldTarget, &m_worldArea, nullptr);
 }
 
 void ska::SDLRenderer::prepareScreenTarget() const {
