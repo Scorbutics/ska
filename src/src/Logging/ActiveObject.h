@@ -5,6 +5,21 @@
 
 #include "SharedFifo.h"
 
+#if defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__)
+// The web without threads : the commands run at once, in the thread that sends them
+namespace ska {
+	template <class Command>
+	class ActiveObject {
+	public:
+		void send(Command callback) {
+			callback();
+		}
+
+		void terminate() {
+		}
+	};
+}
+#else
 namespace ska {
 	template <class Command>
     class ActiveObject;
@@ -72,3 +87,4 @@ namespace ska {
         std::unique_ptr<ActiveObjectInner<Command>> inner;
     };
 }
+#endif
