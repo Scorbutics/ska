@@ -1,0 +1,38 @@
+# Build and tests on Linux. SDL3 is loaded at run time : its libraries are needed by the tests only (SDL3_mixer, not
+# packaged, is built by the CMake project). The drawing tests run on a virtual display (xvfb) with the "gpu" render
+# driver on Vulkan (lavapipe : mesa-vulkan-drivers)
+name: Linux
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ubuntu:26.04
+    steps:
+      - name: Dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates git cmake make g++ \
+            libsdl3-dev libsdl3-image-dev libsdl3-ttf-dev glslang-tools mesa-vulkan-drivers xvfb xauth
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          cmake -S . -B build
+          cmake --build build -j"$(nproc)"
+
+      # From the repository root (resources/Fonts), on a virtual display
+      - name: Tests
+        env:
+          SDL_AUDIO_DRIVER: dummy
+        run: |
+          for test in build/bin/*_test; do
+            echo "== $test"
+            xvfb-run -a timeout 600 "$test"
+          done
