@@ -9,7 +9,7 @@ namespace ska {
 		CameraFixedStrategy(const ska::Point<int>& pos);
 		~CameraFixedStrategy() override = default;
 		
-		std::pair<Rectangle, EntityId*> focus(const std::unordered_set<EntityId>& processed) override;
+		std::pair<Rectangle, const EntityId*> focus(const std::unordered_set<EntityId>& processed) override;
 	
 	private:
 		ska::Point<int> m_pos;

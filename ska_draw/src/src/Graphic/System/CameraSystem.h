@@ -42,7 +42,7 @@ namespace ska {
 		~CameraSystem() override = default;
 
 	private:
-		void focusOn(Rectangle& pos, EntityId* optionalEntityId);
+		void focusOn(Rectangle& pos, const EntityId* optionalEntityId);
 
 		unsigned int m_worldW, m_worldH;
 		Rectangle m_cameraRect{};

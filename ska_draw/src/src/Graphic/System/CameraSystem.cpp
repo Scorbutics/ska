@@ -60,7 +60,7 @@ void ska::CameraSystem::changeStrategy(ska::CameraStrategyPtr strategy) {
 	assert(m_strategy != nullptr && "Cannot use a null camera strategy : pick one");
 }
 
-void ska::CameraSystem::focusOn(Rectangle& pos, EntityId* entityId) {
+void ska::CameraSystem::focusOn(Rectangle& pos, const EntityId* entityId) {
 	m_cameraRect.x = pos.x - m_cameraRect.w / 2;
 	m_cameraRect.y = pos.y - m_cameraRect.h / 2;
 

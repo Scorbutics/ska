@@ -9,7 +9,7 @@ namespace ska {
 	public:
 		CameraStrategy() = default;
 		virtual ~CameraStrategy() = default;
-		virtual std::pair<Rectangle, EntityId*> focus(const std::unordered_set<EntityId>& processed) = 0;
+		virtual std::pair<Rectangle, const EntityId*> focus(const std::unordered_set<EntityId>& processed) = 0;
 	};
 	using CameraStrategyPtr = std::unique_ptr<CameraStrategy>;
 }

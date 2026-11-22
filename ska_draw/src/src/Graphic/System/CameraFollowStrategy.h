@@ -11,7 +11,7 @@ namespace ska {
 		CameraFollowStrategy(ska::EntityManager& em);
 		~CameraFollowStrategy() override = default;
 		
-		std::pair<Rectangle, EntityId*> focus(const std::unordered_set<EntityId>& processed) override;
+		std::pair<Rectangle, const EntityId*> focus(const std::unordered_set<EntityId>& processed) override;
 	
 	private:
 		EntityManager& m_entityManager;
