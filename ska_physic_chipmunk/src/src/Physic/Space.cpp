@@ -208,6 +208,14 @@ bool ska::cp::Space::staticShapeIn(const cpBB& box) const {
 	return found;
 }
 
+bool ska::cp::Space::shapeIn(const cpBB& box) const {
+	auto found = false;
+	cpSpaceBBQuery(m_space, box, CP_SHAPE_FILTER_ALL, [](cpShape*, void* data) {
+		*static_cast<bool*>(data) = true;
+	}, &found);
+	return found;
+}
+
 cpBB ska::cp::Space::shapeBox(std::size_t shapeIndex) const {
 	return cpShapeGetBB(&m_shapes[shapeIndex].shape());
 }

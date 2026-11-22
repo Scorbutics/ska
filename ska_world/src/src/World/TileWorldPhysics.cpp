@@ -1,4 +1,5 @@
 #include <unordered_set>
+#include <map>
 
 #include "TileAgglomerate.h"
 #include "Core/Utils/RectangleUtils.h"
@@ -123,4 +124,42 @@ std::vector<ska::Rectangle> ska::GenerateContourTileMap(const std::vector<PointA
 
 std::vector<ska::Rectangle> ska::detail::GenerateAgglomeratedTileMapBasic(const std::size_t layerMax, const ska::CollisionProfile& world) {
 	return TileAgglomerate(layerMax, world);
+}
+std::vector<ska::Rectangle> ska::GenerateFilledTileMap(const std::size_t layerMax, const CollisionProfile& world, const MarchingSquarePredicate& pred) {
+	const auto width = static_cast<int>(world.getBlocksX());
+	const auto height = static_cast<int>(world.getBlocksY());
+	const auto blockSize = static_cast<int>(world.getBlockSize());
+
+	std::vector<Rectangle> result;
+	// The rectangles still growing down, by their columns (first block, number of blocks)
+	auto open = std::map<std::pair<int, int>, Rectangle>{};
+	for (auto y = 0; y <= height; y++) {
+		auto next = std::map<std::pair<int, int>, Rectangle>{};
+		auto x = 0;
+		while (y < height && x < width) {
+			if (pred(world.getHighestBlockOnPredicate(layerMax, x, y, pred)) != TileCollision::Yes) {
+				x++;
+				continue;
+			}
+			const auto start = x;
+			while (x < width && pred(world.getHighestBlockOnPredicate(layerMax, x, y, pred)) == TileCollision::Yes) {
+				x++;
+			}
+			const auto columns = std::make_pair(start, x - start);
+			const auto above = open.find(columns);
+			if (above != open.end()) {
+				above->second.h += blockSize;
+				next.emplace(columns, above->second);
+				open.erase(above);
+			} else {
+				next.emplace(columns, Rectangle{ start * blockSize, y * blockSize, (x - start) * blockSize, blockSize });
+			}
+		}
+		// The rectangles not continued on this line are finished
+		for (const auto& finished : open) {
+			result.push_back(finished.second);
+		}
+		open = std::move(next);
+	}
+	return result;
 }

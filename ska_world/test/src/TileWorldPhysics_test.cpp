@@ -451,3 +451,64 @@ TEST_CASE("[TileWorldPhysics] GenerateAgglomeratedTileMap : Custom predicate") {
 		CHECK(contourMap[1].pointList.size() == 14);
 	}
 }
+
+TEST_CASE("[TileWorldPhysics] GenerateFilledTileMap") {
+	// The area covered by the rectangles, block by block : each block of the predicate once, no other block
+	const auto covered = [](const std::vector<ska::Rectangle>& rectangles, int blockSize, int width, int height) {
+		auto count = std::vector<int>(static_cast<std::size_t>(width * height), 0);
+		for (const auto& r : rectangles) {
+			for (auto y = r.y / blockSize; y < (r.y + r.h) / blockSize; y++) {
+				for (auto x = r.x / blockSize; x < (r.x + r.w) / blockSize; x++) {
+					count[static_cast<std::size_t>(y * width + x)]++;
+				}
+			}
+		}
+		return count;
+	};
+
+	SUBCASE("a filled block of walls is one rectangle, its inside included") {
+		static constexpr auto width = 4u;
+		const auto collisions = ska::Vector2<char>{ width,
+		 { 0, 0, 0, 0,
+		   0,'#','#','#',
+		   0,'#','#','#',
+		   0,'#','#','#' } };
+		const auto profile = TileWorldPhysics::BuildCollisionProfile(collisions);
+		const auto rectangles = ska::GenerateFilledTileMap(0, profile);
+		const auto blockSize = static_cast<int>(profile.getBlockSize());
+		REQUIRE(rectangles.size() == 1);
+		CHECK(rectangles[0] == ska::Rectangle{ blockSize, blockSize, 3 * blockSize, 3 * blockSize });
+	}
+
+	SUBCASE("any shape : every block of the walls once, nothing else") {
+		static constexpr auto width = 5u;
+		const auto collisions = ska::Vector2<char>{ width,
+		 { '#','#', 0, '#','#',
+		   '#','#','#','#', 0,
+		    0, '#', 0, '#', 0,
+		   '#','#','#','#','#' } };
+		const auto profile = TileWorldPhysics::BuildCollisionProfile(collisions);
+		const auto rectangles = ska::GenerateFilledTileMap(0, profile);
+		const auto blockSize = static_cast<int>(profile.getBlockSize());
+		const auto count = covered(rectangles, blockSize, 5, 4);
+		for (auto y = 0u; y < 4; y++) {
+			for (auto x = 0u; x < width; x++) {
+				CHECK(count[y * width + x] == (collisions[x][y] == '#' ? 1 : 0));
+			}
+		}
+		CHECK(rectangles.size() < 10);
+	}
+
+	SUBCASE("custom predicate") {
+		static constexpr auto width = 2u;
+		const auto collisions = ska::Vector2<char>{ width, { '#','#', '#', 0 } };
+		const auto properties = ska::Vector2<int>{ width, { 1, 1, 0, 0 } };
+		const auto profile = TileWorldPhysics::BuildCollisionProfile(collisions, properties);
+		const auto rectangles = ska::GenerateFilledTileMap(0, profile, [](const ska::Tile* t) {
+			return t != nullptr && t->properties.bitMask == 1 ? ska::TileCollision::Yes : ska::TileCollision::No;
+		});
+		const auto blockSize = static_cast<int>(profile.getBlockSize());
+		REQUIRE(rectangles.size() == 1);
+		CHECK(rectangles[0] == ska::Rectangle{ 0, 0, 2 * blockSize, blockSize });
+	}
+}

@@ -56,6 +56,8 @@ namespace ska {
 			cpBody& getStaticBody();
 			// True when a shape of the static body (the walls of the map) overlaps the box
 			bool staticShapeIn(const cpBB& box) const;
+			// True when any shape (a wall, a character...) overlaps the box
+			bool shapeIn(const cpBB& box) const;
 			// Bounding box of a shape
 			cpBB shapeBox(std::size_t shapeIndex) const;
 			
