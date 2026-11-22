@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <vector>
+#include <algorithm>
 #include "FileUtilsUnix.h"
 
 ska::FileUtilsUnix::FileUtilsUnix() {
@@ -34,6 +35,10 @@ void ska::FileUtilsUnix::createDirectory(const std::string& directoryName) {
 }
 
 std::string ska::FileUtilsUnix::getExecutablePath() {
+#if defined(SKA_PLATFORM_WEB)
+  // The web : a virtual file system, the files next to the executable are packed in "/bin"
+  return "/bin/game";
+#endif
   std::vector<char> buf(1024, 0);
   size_t size = buf.size();
   auto havePath = false;

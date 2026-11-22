@@ -12,7 +12,12 @@ namespace ska {
 
 SKA_LOGC_CONFIG(LogLevel::Disabled, DynamicLibraryTag)
 
-#if defined(SKA_PLATFORM_WIN)
+#if defined(SKA_PLATFORM_WEB)
+#include "OSSpecific/DynamicLibraryStatic.h"
+namespace ska {
+	using DynamicLibraryInstance = DynamicLibraryStatic;
+}
+#elif defined(SKA_PLATFORM_WIN)
 #include "OSSpecific/DynamicLibraryWindows.h"
 namespace ska {
 	using DynamicLibraryInstance = DynamicLibraryWindows;
