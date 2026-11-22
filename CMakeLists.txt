@@ -84,6 +84,13 @@ endif()
 
 set(BUILD_DEMOS OFF CACHE BOOL "No demo for chipmunk" FORCE )
 add_subdirectory(external/chipmunk)
+# Chipmunk adds -ffast-math to its Release flags : its sleeping bodies (islands) compare with INFINITY (static bodies,
+# idle times), which fast math assumes never happens. cpSpaceStep loops forever in Release (cpBodyActivate)
+foreach(chipmunk_target chipmunk chipmunk_static)
+	if(TARGET ${chipmunk_target})
+		target_compile_options(${chipmunk_target} PRIVATE -fno-fast-math)
+	endif()
+endforeach()
 
 add_subdirectory(ska_ai)
 add_subdirectory(ska_audio)
