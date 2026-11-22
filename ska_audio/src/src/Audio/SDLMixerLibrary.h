@@ -25,7 +25,8 @@ namespace ska {
 		MIX_SET_TRACK_LOOPS,
 		MIX_PLAY_TRACK,
 		MIX_STOP_TRACK,
-		MIX_SET_TRACK_GAIN
+		MIX_SET_TRACK_GAIN,
+		MIX_PLAY_AUDIO
 	};
 
 #define SKA_MIXER_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -44,6 +45,7 @@ namespace ska {
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_PLAY_TRACK, bool(MIX_Track*, SDL_PropertiesID));
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_STOP_TRACK, bool(MIX_Track*, Sint64));
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_TRACK_GAIN, bool(MIX_Track*, float));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_PLAY_AUDIO, bool(MIX_Mixer*, MIX_Audio*));
 
 	#define SKA_MIXER_DYN_LIB_NAME_ENTRY(ENUM) MixerIdNamedFunction<static_cast<int>(MixerCalls::ENUM)>
 
@@ -60,7 +62,8 @@ namespace ska {
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_LOOPS),
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_TRACK),
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_STOP_TRACK),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_GAIN)
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_GAIN),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_AUDIO)
 	>;
 
 	// The audio of the engine (SDL3_mixer) : a mixer on the default audio device, a track playing the music
@@ -131,6 +134,14 @@ namespace ska {
 			if (m_music != nullptr) {
 				callMixer(MIX_SET_TRACK_GAIN)(m_music, volume);
 			}
+		}
+
+		// A sound played once, over the music and the other sounds. 0 on success
+		inline int playSound(MIX_Audio* sound) const {
+			if (m_mixer == nullptr || sound == nullptr) {
+				return -1;
+			}
+			return callMixer(MIX_PLAY_AUDIO)(m_mixer, sound) ? 0 : -1;
 		}
 
 		static const SDLMixerLibrary& get();

@@ -9,3 +9,7 @@ ska::SDLSound::SDLSound(const std::string& soundName) : m_instance(nullptr) {
 ska::SDLSound::~SDLSound() {
 	SDLMixerLibrary::get().freeAudio(m_instance);
 }
+
+void ska::SDLSound::play() const {
+	SDLMixerLibrary::get().playSound(m_instance);
+}

@@ -17,6 +17,7 @@ SKA_MIXER_LIB_NAME_DEFINE(MIX_SET_TRACK_LOOPS, "MIX_SetTrackLoops");
 SKA_MIXER_LIB_NAME_DEFINE(MIX_PLAY_TRACK, "MIX_PlayTrack");
 SKA_MIXER_LIB_NAME_DEFINE(MIX_STOP_TRACK, "MIX_StopTrack");
 SKA_MIXER_LIB_NAME_DEFINE(MIX_SET_TRACK_GAIN, "MIX_SetTrackGain");
+SKA_MIXER_LIB_NAME_DEFINE(MIX_PLAY_AUDIO, "MIX_PlayAudio");
 
 const ska::SDLMixerLibrary& ska::SDLMixerLibrary::get() {
 	static const SDLMixerLibrary instance;
