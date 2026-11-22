@@ -72,7 +72,8 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SkaShaders.cmake)
 # SDL3_mixer (loaded at run time by ska_audio) is not packaged everywhere : when it is not installed, it is built here
 # (with its built-in decoders : mp3, ogg vorbis, wav, flac), next to the engine libraries
 find_library(SKA_SDL3_MIXER_LIBRARY NAMES SDL3_mixer)
-if(NOT SKA_SDL3_MIXER_LIBRARY)
+# The web : the SDL3 libraries are built by tools/web/build_deps.sh, linked in the page (cmake/SkaWeb.cmake)
+if(NOT SKA_SDL3_MIXER_LIBRARY AND NOT EMSCRIPTEN)
 	message(STATUS "SDL3_mixer is not installed : it is built from its sources")
 	include(FetchContent)
 	FetchContent_Declare(SDL3_mixer GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git GIT_TAG release-3.2.4 GIT_SHALLOW TRUE)

@@ -5,6 +5,10 @@
 #include "Core/Utils/TimeUtils.h"
 #include "Core/Draw/FrameClock.h"
 #include "GameApp.h"
+#include "Core/Exceptions/TerminateProcessException.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
 
 namespace ska {
 	/**
@@ -38,10 +42,26 @@ namespace ska {
          * \brief Loop on an internal refresh to know if we need to continue to run the application or not.
          */
         void run() override {
-            auto continuer = true;
-            while (continuer) {
-                continuer = refreshInternal();
-            }
+#if defined(__EMSCRIPTEN__)
+			// The browser calls a frame at each refresh of the display : the loop cannot block it. run does not return
+			// (the C++ stack is unwound : the game is not on it)
+			emscripten_set_main_loop_arg([](void* core) {
+				auto& self = *static_cast<GameCore*>(core);
+				try {
+					self.frame();
+				} catch (TerminateProcessException& tpe) {
+					emscripten_cancel_main_loop();
+					self.onTerminate(tpe);
+				} catch (GenericException& e) {
+					emscripten_cancel_main_loop();
+					self.onException(e);
+				}
+			}, this, 0, true);
+#else
+			for (;;) {
+				frame();
+			}
+#endif
         }
 
         /**
@@ -70,30 +90,31 @@ namespace ska {
 			return false;
 		}
 
-        bool refreshInternal() {
-  	        unsigned long t0 = TimeUtils::getTicks();
+		// One frame : the logic updates due since the last frame (fixed time steps), then the drawing
+		void frame() {
 			const auto ti = ticksWanted();
-			auto accumulator = ti;
-
-			for (;;) {
-				const unsigned long t = TimeUtils::getTicks();
-				const auto ellapsedTime = t - t0;
-				t0 = t;
-
-				accumulator += ellapsedTime;
-				if(reduceAccumulatorAndEventUpdate(accumulator, ti)) {
-					FrameClock::drawing(1.F);
-					graphicUpdate(ellapsedTime);
-					break;
-				}
-
-				// The moving things are drawn between their last two logic states (FrameClock)
-				FrameClock::drawing(accumulator / ti);
-				graphicUpdate(ellapsedTime);
+			if (!m_frameStarted) {
+				// The start, or a new state : the time starts again
+				m_frameTime = TimeUtils::getTicks();
+				m_accumulator = ti;
+				m_frameStarted = true;
 			}
-	
-			return true;
-        }
+			const unsigned long t = TimeUtils::getTicks();
+			const auto ellapsedTime = t - m_frameTime;
+			m_frameTime = t;
+
+			m_accumulator += ellapsedTime;
+			if (reduceAccumulatorAndEventUpdate(m_accumulator, ti)) {
+				FrameClock::drawing(1.F);
+				graphicUpdate(ellapsedTime);
+				m_frameStarted = false;
+				return;
+			}
+
+			// The moving things are drawn between their last two logic states (FrameClock)
+			FrameClock::drawing(m_accumulator / ti);
+			graphicUpdate(ellapsedTime);
+		}
 
         void graphicUpdate(unsigned int ellapsedTime) {
 			m_gameConfig->graphicUpdate(ellapsedTime, m_stateHolder);
@@ -108,6 +129,9 @@ namespace ska {
 
 		GameConfPtr m_gameConfig;
 		bool m_accumulatorReset = false;
+		bool m_frameStarted = false;
+		unsigned long m_frameTime = 0;
+		float m_accumulator = 0.F;
     protected:
         EventDispatcher& m_eventDispatcher;
 		void resetAccumulator() {

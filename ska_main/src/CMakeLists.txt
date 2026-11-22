@@ -7,6 +7,13 @@ file(GLOB_RECURSE SOURCES
 
 string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
+# The web : no dynamic library, the launcher is linked with the game in its page (ska_web_executable, cmake/SkaWeb.cmake)
+if(EMSCRIPTEN)
+	add_library(ska_main OBJECT ${SOURCES})
+	target_include_directories(ska_main PUBLIC ../../external/skabase/src/src PUBLIC ../../external/skalog/src/src)
+	return()
+endif()
+
 add_executable(ska_main ${SOURCES})
 
 find_package(Threads REQUIRED)

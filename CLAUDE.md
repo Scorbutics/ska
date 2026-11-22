@@ -11,6 +11,8 @@ build/bin/ska_core_test && build/bin/ska_scripting_test   # also ska_ai_test, sk
 
 Run the tests from the repository root: `ska_gui_test` loads `resources/Fonts` relative to the working directory (it needs a display: `xvfb-run` without one).
 
+Web (Emscripten): `cmake/SkaWeb.cmake` (`ska_web_executable`: the game, the engine and SDL linked in one page; the functions loaded by name are found in a generated table, `DynamicLibraryStatic` in skabase), `tools/web/build_deps.sh <prefix>` builds the SDL3 libraries for it. On the web `SKA_PLATFORM_WEB` is defined (with `SKA_PLATFORM_LINUX`), there is no thread (the logger runs its commands at once) and the browser calls each frame (`GameCore::run`, `frame`).
+
 Linux CI: `.github/workflows/linux.yml` (an Ubuntu 26.04 container: its SDL3 packages, lavapipe for the `gpu` renderer, xvfb).
 
 Rerun `cmake -S . -B build` after adding a source file (the sources are globbed). The build also checks the module boundaries and the scripting test scripts.
