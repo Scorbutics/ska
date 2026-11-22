@@ -56,7 +56,6 @@ namespace ska {
 	private:
 		bool onKeyEvent(InputKeyEvent & ike);
 		bool onCollisionEvent(CollisionEvent& ce);
-		void triggerChangeBlockScripts(const ScriptEvent& se);
 		bool onScriptEvent(ScriptEvent& se);
 		void createScriptFromSleeping(std::vector<ScriptSleepComponent> sleepings, const EntityId& parent);
 		std::optional<EntityId> findNearScriptComponentEntity(const PositionComponent& entityPos, EntityId script, unsigned int distance = 48) const;

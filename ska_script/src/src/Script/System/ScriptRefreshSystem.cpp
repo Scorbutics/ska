@@ -90,38 +90,9 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 	return true;
 }
 
-void ska::ScriptRefreshSystem::triggerChangeBlockScripts(const ScriptEvent& se) {
-	auto worldScripts = std::vector<ScriptSleepComponent>{};
-
-	auto tmpOut = std::move(m_scriptPositionedGetter.getScripts(se.oldPos, se.newPos, ScriptTriggerType::MOVE_OUT));
-	if (!tmpOut.empty()) {
-		SLOG(LogLevel::Error) << "Chipset script MOVE_OUT";
-	}
-	
-	for (auto& script : tmpOut) {
-		worldScripts.push_back(std::move(script));
-	}
-
-	auto tmpIn = std::move(m_scriptPositionedGetter.getScripts(se.oldPos, se.newPos, ScriptTriggerType::MOVE_IN));
-	if (!tmpIn.empty()) {
-		SLOG(LogLevel::Error) << "Chipset script MOVE_IN";
-	}
-	
-	for (auto& script : tmpIn) {
-		worldScripts.push_back(std::move(script));
-	}
-
-	createScriptFromSleeping(std::move(worldScripts), se.parent);
-}
-
 bool ska::ScriptRefreshSystem::onScriptEvent(ScriptEvent& se) {
 	for (const auto& type : se.type) {
 		switch (type) {
-		case ScriptEventType::EntityChangeBlockProperty:
-		case ScriptEventType::EntityChangeBlockId:
-			triggerChangeBlockScripts(se);
-			break;
-
 		case ScriptEventType::ScriptCreate:
 			startScript(std::move(se.scriptSleep), se.parent);		
 			break;
@@ -164,18 +135,25 @@ void ska::ScriptRefreshSystem::refresh(unsigned int ellapsedTime) {
 		const auto& hc = components.get<HitboxComponent>(entityId);
 		const auto& pos = PositionComponent::getCenterPosition(pc, hc);
 		auto& sac = components.get<ScriptAwareComponent>(entityId);
-		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
-		{
-			auto tmp = std::move(m_scriptPositionedGetter.getScripts(oldCenterPos, pos, ScriptTriggerType::MOVE_IN));
+		// Once when the entity enters a block (not at each frame while it stays on it : ex a door would teleport again
+		// and again) : MOVE_OUT for the block it leaves, MOVE_IN for the block it enters
+		const auto blockSize = static_cast<int>(m_scriptPositionedGetter.getBlockSize());
+		const auto center = Point<int>{ static_cast<int>(pos.x), static_cast<int>(pos.y) };
+		const auto block = Point<int>{ center.x / blockSize, center.y / blockSize };
+		if (blockSize > 0 && block != sac.enteredBlock) {
+			const auto left = sac.enteredBlock;
+			sac.enteredBlock = block;
+			const auto leftPos = Point<int>{ left.x * blockSize, left.y * blockSize };
+			if (left.x >= 0 && left.y >= 0) {
+				auto tmp = m_scriptPositionedGetter.getScripts(leftPos, center, ScriptTriggerType::MOVE_OUT);
+				for (auto& script : tmp) {
+					startScript(std::move(script), entityId);
+				}
+			}
+			auto tmp = m_scriptPositionedGetter.getScripts(left.x >= 0 && left.y >= 0 ? leftPos : center, center, ScriptTriggerType::MOVE_IN);
 			for (auto& script : tmp) {
 				startScript(std::move(script), entityId);
-			}
-		}
-		{
-			auto tmp = m_scriptPositionedGetter.getScripts(oldCenterPos, pos, ScriptTriggerType::MOVE_OUT);
-			for (auto& script : tmp) {
-				startScript(std::move(script), entityId);	
 			}
 		}
 
