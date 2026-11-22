@@ -6,6 +6,7 @@
 #include "Core/ECS/Basics/Physic/MovementComponent.h"
 #include "Core/Utils/RectangleUtils.h"
 #include "Core/ECS/Basics/Graphic/AnimationComponent.h"
+#include "Core/Utils/TimeUtils.h"
 
 ska::JumpAnimationStateMachine::JumpAnimationStateMachine(EntityManager& em) :
 	m_entityManager(em) {
@@ -27,7 +28,9 @@ void ska::JumpAnimationStateMachine::update(ska::AnimationComponent& ac, const E
 	const auto xMove = NumberUtils::round(mov.vx);
 	const auto yMove = NumberUtils::round(mov.vy);
 
-	if (xMove != 0 || yMove != 0) {
+	// Driven by the movement of the game (ex : block by block) : its direction, not the physics velocity
+	const auto driven = ac.drivenUntil > TimeUtils::getTicks();
+	if (!driven && (xMove != 0 || yMove != 0)) {
 		ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
 	}
 

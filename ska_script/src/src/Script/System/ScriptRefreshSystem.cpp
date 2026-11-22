@@ -1,6 +1,8 @@
 #include <limits>
 #include "Script/__internalConfig/LoggerConfig.h"
 #include "ScriptRefreshSystem.h"
+#include <cmath>
+#include "Core/Utils/PhysicUtils.h"
 #include "Core/CodeDebug/CodeDebug.h"
 #include "Core/ECS/EntityManager.h"
 #include "Core/ECS/Basics/Physic/WorldCollisionComponent.h"
@@ -34,7 +36,15 @@ bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 			const auto& hc = components.get<HitboxComponent>(entityId);
 			const auto& dac = components.get<AnimationComponent>(entityId);
 			
-			const Point<int>& frontPos = PositionComponent::getFrontPosition(pc, hc, dac);
+			// The block in front of the entity (the direction it looks to), from the block of its center : a character or a
+			// tile on it answers
+			const auto blockSize = static_cast<int>(m_scriptPositionedGetter.getBlockSize());
+			const auto center = PositionComponent::getCenterPosition(pc, hc);
+			const auto look = PhysicUtils::getMovement(dac.state, 1.F);
+			const auto lookVector = Point<float>::cartesian(look.power, look.angle);
+			const auto frontBlock = Point<int>{ static_cast<int>(center.x) / blockSize + static_cast<int>(std::lround(lookVector.x)),
+				static_cast<int>(center.y) / blockSize + static_cast<int>(std::lround(lookVector.y)) };
+			const auto frontPos = Point<int>{ frontBlock.x * blockSize + blockSize / 2, frontBlock.y * blockSize + blockSize / 2 };
 			const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
 			auto tmp = std::move(m_scriptPositionedGetter.getScripts(oldCenterPos, frontPos, ScriptTriggerType::ACTION));
@@ -46,9 +56,12 @@ bool ska::ScriptRefreshSystem::onKeyEvent(InputKeyEvent& ike) {
 
 			const auto& entities = m_scriptPositionSystem.getEntities();
 			for (const auto& e : entities) {
-				auto scriptEntity = findNearScriptComponentEntity(pc, e);
-				if (scriptEntity.has_value()) {
-					auto ssc = m_entityManager.getComponent<ska::ScriptSleepComponent>(*scriptEntity);
+				const auto& scriptPc = m_entityManager.getComponent<PositionComponent>(e);
+				const auto scriptCenter = m_entityManager.hasComponent<HitboxComponent>(e) ?
+					PositionComponent::getCenterPosition(scriptPc, m_entityManager.getComponent<HitboxComponent>(e)) :
+					Point<float>{ static_cast<float>(scriptPc.x), static_cast<float>(scriptPc.y) };
+				if (static_cast<int>(scriptCenter.x) / blockSize == frontBlock.x && static_cast<int>(scriptCenter.y) / blockSize == frontBlock.y) {
+					auto ssc = m_entityManager.getComponent<ska::ScriptSleepComponent>(e);
 					startScript(std::move(ssc), e);
 				}
 			}

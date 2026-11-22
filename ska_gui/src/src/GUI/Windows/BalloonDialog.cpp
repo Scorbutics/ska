@@ -10,7 +10,7 @@ ska::BalloonDialog::BalloonDialog(ska::WidgetPanel& parent, const ska::Rectangle
 	m_delay(delay) {
 	setWidth(box.w);
 	setHeight(box.h);
-	addWidget<ska::ScrollingMultiLineLabel>(message, fontSize, 2.F, ska::Point<int>(16, 16));
+	addWidget<ska::ScrollingMultiLineLabel>(message, fontSize, 40.F, ska::Point<int>(16, 16));
 	m_startTime = ska::TimeUtils::getTicks();
 }
 

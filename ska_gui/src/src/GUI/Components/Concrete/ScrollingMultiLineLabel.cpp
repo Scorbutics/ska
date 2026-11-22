@@ -2,44 +2,66 @@
 #include "Label.h"
 #include "Base/Values/Strings/StringUtils.h"
 
+namespace {
+	// The length of the text up to the next character (a UTF-8 character is one or several bytes)
+	std::size_t NextCharacter(const std::string& text, std::size_t length) {
+		length++;
+		while (length < text.size() && (static_cast<unsigned char>(text[length]) & 0xC0) == 0x80) {
+			length++;
+		}
+		return length;
+	}
+}
 
-ska::ScrollingMultiLineLabel::ScrollingMultiLineLabel(WidgetPanel& parent, const std::string& text, int fontSize, float scrollSpeed, Point<int> relativePos) :
-	WidgetPanelInteractive(parent, relativePos), m_displayingArea({ 0, 0, 0, 0 }), m_currentLine(0),
+ska::ScrollingMultiLineLabel::ScrollingMultiLineLabel(WidgetPanel& parent, const std::string& text, int fontSize, float charactersPerSecond, Point<int> relativePos) :
+	WidgetPanelInteractive(parent, relativePos), m_currentLine(0),
 	m_fontSize(fontSize),
-	m_scrollSpeed(scrollSpeed < 1.F ? 1.F : scrollSpeed), m_stopped(false) {
+	m_charactersPerSecond(charactersPerSecond < 1.F ? 1.F : charactersPerSecond), m_stopped(false) {
 
 	buildTextLines(text);
 
 	Widget::setHeight(static_cast<unsigned int>(m_textLines.size() * fontSize));
 
-	auto& firstLineLabel = addWidget<Label>(m_textLines.empty() ? " " : m_textLines[m_currentLine], m_fontSize, Point<int>());
-	addHandler<TimeEventListener>([&](Widget*, TimeEvent&) {
-		refresh();
+	// The first line, empty : its letters appear one by one
+	addWidget<Label>(" ", m_fontSize, Point<int>());
+	addHandler<TimeEventListener>([&](Widget*, TimeEvent& te) {
+		refresh(te.getEllapsedTime());
 	});
-	m_displayingArea.h = firstLineLabel.getBox().h;
 }
 
-void ska::ScrollingMultiLineLabel::refresh() {
+void ska::ScrollingMultiLineLabel::refresh(unsigned int ellapsedTime) {
 	if(m_stopped) {
 		return;
 	}
-	auto currentLabelLine = static_cast<Label*>(getWidget(m_currentLine));
-
-	m_displayingArea.w += static_cast<int>(m_scrollSpeed);
-	const auto percentsWidth = static_cast<float>(m_displayingArea.w) * 100 / currentLabelLine->getBox().w;
-	if(percentsWidth >= 100.F) {
+	if (m_textLines.empty()) {
+		m_stopped = true;
+		return;
+	}
+	m_time += static_cast<float>(ellapsedTime);
+	const auto delay = 1000.F / m_charactersPerSecond;
+	auto changed = false;
+	while (m_time >= delay && !m_stopped) {
+		m_time -= delay;
+		const auto& line = m_textLines[m_currentLine];
+		if (m_shown < line.size()) {
+			m_shown = NextCharacter(line, m_shown);
+			changed = true;
+			continue;
+		}
+		// The line is complete : the next one
 		if (m_currentLine + 1 >= m_textLines.size()) {
 			m_stopped = true;
-			return;
+			break;
 		}
-		m_displayingArea.w = 0;
-		currentLabelLine->setClip(nullptr);
-
 		m_currentLine++;
-		addWidget<Label>(m_textLines.empty() ? " " : m_textLines[m_currentLine], m_fontSize, Point<int>(0, m_fontSize * (m_currentLine)));
-		currentLabelLine = static_cast<Label*>(getWidget(m_currentLine));
+		m_shown = 0;
+		addWidget<Label>(" ", m_fontSize, Point<int>(0, m_fontSize * static_cast<int>(m_currentLine)));
 	}
-	currentLabelLine->setClip(&m_displayingArea);
+	if (changed || m_shown == 0) {
+		const auto& line = m_textLines[m_currentLine];
+		auto& label = static_cast<Label&>(*getWidget(m_currentLine));
+		label.modifyText(m_shown == 0 ? std::string{ " " } : line.substr(0, m_shown));
+	}
 }
 
 void ska::ScrollingMultiLineLabel::buildTextLines(const std::string& cs) {

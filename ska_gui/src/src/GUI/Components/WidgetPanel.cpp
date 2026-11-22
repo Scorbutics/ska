@@ -6,12 +6,10 @@ void ska::WidgetPanel::render(Renderer& renderer) const {
 	if (!isVisible()) {
 		return;
 	}
+	// The hidden widgets are skipped (ex : a hidden window : the bag, the windows after it, as the dialogs, are drawn)
 	for (auto& w : m_globalList) {
 		if (w->isVisible()) {
 			w->render(renderer);
-		} else {
-			//First invisible widget found : we stop
-			break;
 		}
 	}
 }
@@ -42,8 +40,10 @@ bool ska::WidgetPanel::notifyChildren(IWidgetEvent& e) {
 	auto stopped = false;
 	std::size_t cursor = 0;
 	for (auto& w : m_handledWidgets) {
-		if (!w->isVisible() && !m_handledWidgets.isVisibleAtIndex(cursor)) {
-			break;
+		// A hidden widget is skipped : a widget added after it (ex : a dialog, after a hidden window) gets the events
+		if (!w->isVisible()) {
+			cursor++;
+			continue;
 		}
 
 		const auto nextNotify = w->notify(e);

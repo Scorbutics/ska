@@ -2,6 +2,7 @@
 #include <bitset>
 #include <tuple>
 #include <array>
+#include <utility>
 
 #include "Widget.h"
 #include "../Events/IWidgetEvent.h"
@@ -53,7 +54,6 @@ namespace ska {
 	class HandledWidgetTrait : 
 		public HandledWidgetMask {
 	private:
-		static constexpr auto DefaultMaskIndex = sizeof ...(HL) - 1;
 	public:
 
 		template<class L, class EH>
@@ -74,10 +74,11 @@ namespace ska {
 		
 	protected:
 		HandledWidgetTrait() :
-			m_target(*static_cast<W*>(this)),
-			m_currentMaskIndex(DefaultMaskIndex),
-			m_handlers(std::make_tuple<HL...>(instantiateHandler<HL>()...)) {
+			m_target(*static_cast<W*>(this)) {
 			static_assert(std::is_base_of<Widget, W>::value, "Must be derived from Widget");
+			// The handler of a listener is the element of m_handlers at the position of the listener in HL (the order of
+			// evaluation of function arguments is not specified : it was reversed with clang)
+			indexHandlers(std::index_sequence_for<HL...>{});
 			/* Bracket initializer trick */
 			int _[] = { 0, (buildMask<HL>(), 0)... };
 			(void)_;
@@ -103,18 +104,15 @@ namespace ska {
 		}
 
 	private:
-		int m_currentMaskIndex {};
 		std::array<std::size_t, SKA_GUI_MAX_WIDGET_EVENT_LISTENER> m_maskHandlerIndexes {};
 		ListenerMask m_mask;
 		std::tuple<HL...> m_handlers;
 		W& m_target;
 
-		template<class T>
-		T instantiateHandler() {
-			const MaskUnit& mu = WidgetMaskEvent<T>::MASK_ID();
-			m_maskHandlerIndexes[mu] = m_currentMaskIndex;
-			m_currentMaskIndex--;
-			return T();
+		template <std::size_t ... Index>
+		void indexHandlers(std::index_sequence<Index...>) {
+			int _[] = { 0, (m_maskHandlerIndexes[WidgetMaskEvent<HL>::MASK_ID()] = Index, 0)... };
+			(void)_;
 		}
 
 		template <class T>

@@ -32,8 +32,18 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		}
 		auto& hc = m_componentAccessor.get<HitboxComponent>(entityId);
 
-		const auto relPosX = static_cast<int>(pos.x + 12 - camera.x);
-		const auto relPosY = static_cast<int>(pos.y + hc.yOffset / 2 - camera.y - m_shadow.getHeight()/2);
+		// Under the feet of the sprite : the sprite is drawn as GraphicSystem does, the feet of the characters are on the
+		// bottom row of their block (row 64 of a 72 px frame, Sprites/Charsets). The shadow stays on the ground when the
+		// character jumps.
+		auto spriteSize = Point<int>{ 72, 72 };
+		if (graphic != nullptr && !graphic->animatedSprites.empty()) {
+			spriteSize = Point<int>{ static_cast<int>(graphic->animatedSprites[0].getWidth()), static_cast<int>(graphic->animatedSprites[0].getHeight()) };
+		}
+		const auto spriteX = static_cast<int>(pos.x) - static_cast<int>(hc.width / 2) + hc.xOffset / 2;
+		const auto spriteY = static_cast<int>(pos.y) - static_cast<int>(hc.height / 2) - 5;
+		const auto feetY = spriteY + spriteSize.y * 8 / 9 - 6;
+		const auto relPosX = spriteX + spriteSize.x / 2 - static_cast<int>(m_shadow.getWidth()) / 2 - camera.x;
+		const auto relPosY = feetY - static_cast<int>(m_shadow.getHeight()) / 2 - camera.y;
 
 		const auto priority = static_cast<int>(10);
 		if (!((((static_cast<int>(relPosX + m_shadow.getWidth())) < 0) || (relPosX >= camera.w)) ||
