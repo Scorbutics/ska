@@ -59,6 +59,8 @@ namespace ska {
 
 		void load() override;
 		void setScreenShader(const Shader* shader) override;
+		void beginWorld(float zoom) override;
+		void endWorld() override;
 
 	private:
 		void load(SDL_Window* window);
@@ -77,6 +79,11 @@ namespace ska {
 		// The frame being drawn goes in the texture (the shader is used from the next frame)
 		mutable bool m_frameInTarget = false;
 		void prepareScreenTarget() const;
+		// The world zoomed : drawn in this texture (the size of the screen divided by the zoom)
+		SDL_Texture* m_worldTarget = nullptr;
+		int m_worldTargetWidth = 0;
+		int m_worldTargetHeight = 0;
+		bool m_inWorld = false;
 
 	};
 }

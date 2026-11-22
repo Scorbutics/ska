@@ -8,6 +8,7 @@
 #include "SDL_RectConverter.h"
 #include <cassert>
 #include <cstdlib>
+#include <cmath>
 #include <algorithm>
 #include "SDL_PointConverter.h"
 #include "Core/SDLLibrary.h"
@@ -88,6 +89,10 @@ void ska::SDLRenderer::free() {
 		SDLLibrary::get().destroyTexture(m_screenTarget);
 		m_screenTarget = nullptr;
 	}
+	if (m_worldTarget != nullptr) {
+		SDLLibrary::get().destroyTexture(m_worldTarget);
+		m_worldTarget = nullptr;
+	}
 	SDLLibrary::get().destroyRenderer(m_renderer);
 	m_renderer = nullptr;
 }
@@ -95,6 +100,40 @@ void ska::SDLRenderer::free() {
 void ska::SDLRenderer::setScreenShader(const Shader* shader) {
 	// From the next frame (it can be changed while a frame is drawn)
 	m_screenShader = shader;
+}
+
+void ska::SDLRenderer::beginWorld(float zoom) {
+	const auto& sdl = SDLLibrary::get();
+	const auto width = std::max(1, static_cast<int>(std::ceil(static_cast<float>(m_window.getWidth()) / zoom)));
+	const auto height = std::max(1, static_cast<int>(std::ceil(static_cast<float>(m_window.getHeight()) / zoom)));
+	if (m_worldTarget == nullptr || width != m_worldTargetWidth || height != m_worldTargetHeight) {
+		if (m_worldTarget != nullptr) {
+			sdl.destroyTexture(m_worldTarget);
+		}
+		m_worldTarget = createTextureTarget(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+		if (m_worldTarget == nullptr) {
+			return;
+		}
+		// Pixel art : sharp when it is stretched, without stairs between the pixels
+		sdl.setTextureScaleMode(*m_worldTarget, SDL_SCALEMODE_PIXELART);
+		m_worldTargetWidth = width;
+		m_worldTargetHeight = height;
+	}
+	sdl.setRenderTarget(*m_renderer, m_worldTarget);
+	sdl.setRenderDrawColor(*m_renderer, 0, 0, 0, 255);
+	renderClear();
+	sdl.setRenderDrawColor(*m_renderer, m_currentRenderColor.r, m_currentRenderColor.g, m_currentRenderColor.b, m_currentRenderColor.a);
+	m_inWorld = true;
+}
+
+void ska::SDLRenderer::endWorld() {
+	if (!m_inWorld || m_worldTarget == nullptr) {
+		return;
+	}
+	m_inWorld = false;
+	const auto& sdl = SDLLibrary::get();
+	sdl.setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
+	sdl.renderCopy(*m_renderer, *m_worldTarget, nullptr, nullptr);
 }
 
 void ska::SDLRenderer::prepareScreenTarget() const {
@@ -170,8 +209,8 @@ void ska::SDLRenderer::setRenderTarget(Texture* t) {
 	if (t != nullptr && t->getInstance() != nullptr) {
 		t->getInstance()->asTarget(*m_renderer);
 	} else {
-		// Back to the frame : the screen, or the texture of the post-processing
-		ska::SDLLibrary::get().setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
+		// Back to the frame : the world zoomed, the screen, or the texture of the post-processing
+		ska::SDLLibrary::get().setRenderTarget(*m_renderer, m_inWorld ? m_worldTarget : (m_frameInTarget ? m_screenTarget : nullptr));
 	}
 }
 

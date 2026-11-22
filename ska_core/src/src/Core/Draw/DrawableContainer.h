@@ -27,6 +27,15 @@ namespace ska {
 		 */
 		virtual void clear() = 0;
 
+		/**
+		 * \brief The world is drawn zoomed : the drawings of a priority below "interfacePriority" (the world), the others
+		 * (the interface) are not zoomed. 1 : no zoom. Set at each frame (ex : by the state drawing the world).
+		 */
+		void setWorldZoom(float zoom, int interfacePriority) {
+			m_worldZoom = zoom;
+			m_interfacePriority = interfacePriority;
+		}
+
 		virtual ~DrawableContainer() = default;
 
 
@@ -68,6 +77,10 @@ namespace ska {
 
 	protected:
 		virtual void push(const Drawable& d) = 0;
+	protected:
+		float m_worldZoom = 1.F;
+		int m_interfacePriority = std::numeric_limits<int>::max();
+
     private:
 		int m_topPriority2D;
 		int m_topPriority;

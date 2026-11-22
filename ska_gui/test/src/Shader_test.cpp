@@ -115,3 +115,25 @@ TEST_CASE("[Shader] a fragment shader runs on a drawing") {
 		CHECK(color.r == 255);
 	}
 }
+
+TEST_CASE("[Renderer] the world is drawn zoomed, the interface is not") {
+	auto window = ska::SDLWindow{ "zoom test", 480, 416 };
+	window.load();
+	auto renderer = ska::SDLRenderer{ window };
+	renderer.load();
+	auto square = ska::Texture{};
+	square.loadFromColoredRect(8, 8, ska::Color{ 255, 255, 255, 255 });
+
+	// A square of 8 pixels at (10, 10) in the world, zoom 2 : from (20, 20) to (36, 36) on the screen
+	renderer.beginWorld(2.F);
+	renderer.render(square, 10, 10, nullptr, 0., nullptr);
+	renderer.endWorld();
+	// The interface : the same square at (100, 10), not zoomed
+	renderer.render(square, 100, 10, nullptr, 0., nullptr);
+
+	CHECK(ReadPixel(renderer, 34, 34).r == 255);
+	CHECK(ReadPixel(renderer, 18, 18).r == 0);
+	CHECK(ReadPixel(renderer, 38, 22).r == 0);
+	CHECK(ReadPixel(renderer, 106, 16).r == 255);
+	CHECK(ReadPixel(renderer, 110, 16).r != 255);
+}

@@ -72,6 +72,11 @@ namespace ska {
 		// A fragment shader run on the whole screen (post-processing) at each frame, nullptr : none
 		virtual void setScreenShader(const Shader*) {}
 
+		// The world drawn zoomed (the camera, DrawableContainer::setWorldZoom) : its drawings are done in a smaller texture
+		// (the size of the screen divided by the zoom), stretched on the screen at the end of the world
+		virtual void beginWorld(float) {}
+		virtual void endWorld() {}
+
 		// The effect applied to the next renderings, until it is reset (nullptr)
 		void setEffect(const RenderEffect* effect) const {
 			m_effect = effect != nullptr && effect->active() ? effect : nullptr;

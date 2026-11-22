@@ -1,6 +1,7 @@
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include <cmath>
+#include <algorithm>
 #include "Core/Rectangle.h"
 #include "../GraphicComponent.h"
 
@@ -13,8 +14,9 @@ ska::CameraSystem::CameraSystem(EntityManager& entityManager, GameEventDispatche
 	assert(m_strategy != nullptr && "Cannot use a null camera strategy : pick one");
 	
 	worldResized(screenW, screenH);
-	m_cameraRect.w = screenW;
-	m_cameraRect.h = screenH;
+	m_screenWidth = static_cast<int>(screenW);
+	m_screenHeight = static_cast<int>(screenH);
+	resizeDisplay();
 }
 
 void ska::CameraSystem::worldResized(const unsigned int worldW, const unsigned int worldH) {
@@ -23,12 +25,28 @@ void ska::CameraSystem::worldResized(const unsigned int worldW, const unsigned i
 }
 
 ska::Point<int> ska::CameraSystem::getScreenSize() const {
-	return ska::Point<int>(m_cameraRect.w, m_cameraRect.h);
+	return ska::Point<int>(m_screenWidth, m_screenHeight);
+}
+
+void ska::CameraSystem::resizeDisplay() {
+	m_cameraRect.w = static_cast<int>(std::ceil(static_cast<float>(m_screenWidth) / m_zoom));
+	m_cameraRect.h = static_cast<int>(std::ceil(static_cast<float>(m_screenHeight) / m_zoom));
+}
+
+void ska::CameraSystem::zoomTo(float zoom, float speed) {
+	m_targetZoom = std::max(0.25F, zoom);
+	m_zoomSpeed = speed;
+}
+
+void ska::CameraSystem::setZoom(float zoom) {
+	m_targetZoom = m_zoom = std::max(0.25F, zoom);
+	resizeDisplay();
 }
 
 bool ska::CameraSystem::onGameEvent(ska::GameEvent& ge) {
-	m_cameraRect.w = ge.windowWidth;
-	m_cameraRect.h = ge.windowHeight;
+	m_screenWidth = static_cast<int>(ge.windowWidth);
+	m_screenHeight = static_cast<int>(ge.windowHeight);
+	resizeDisplay();
 	return true;
 }
 
@@ -84,6 +102,15 @@ void ska::CameraSystem::shake(unsigned int duration, int intensity) {
 }
 
 void ska::CameraSystem::refresh(unsigned int ellapsedTime) {
+	// The zoom goes to its target smoothly
+	if (m_zoom != m_targetZoom) {
+		const auto step = 1.F - std::exp(-m_zoomSpeed * static_cast<float>(ellapsedTime) / 1000.F);
+		m_zoom += (m_targetZoom - m_zoom) * step;
+		if (std::abs(m_targetZoom - m_zoom) < 0.002F) {
+			m_zoom = m_targetZoom;
+		}
+		resizeDisplay();
+	}
 	auto[pos, entityId] = m_strategy->focus(getEntities());
 	focusOn(pos, entityId);
 

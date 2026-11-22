@@ -26,7 +26,13 @@ namespace ska {
 
 		void refresh(unsigned int ellapsedTime) override;
 
+		// The size of the screen (pixels) ; the display (getDisplay) is the world seen : this size divided by the zoom
 		Point<int> getScreenSize() const;
+		// Zoom of the world (1 : none, 2 : twice bigger). zoomTo goes to it smoothly ("speed" : the part of the way done
+		// each second, 3 : quick), setZoom at once
+		void zoomTo(float zoom, float speed = 3.F);
+		void setZoom(float zoom);
+		float getZoom() const { return m_zoom; }
 		void changeStrategy(CameraStrategyPtr strategy);
 		// The display to draw : between its last two logic positions (FrameClock), as the drawn entities
 		const Rectangle& getDisplay() const;
@@ -40,6 +46,12 @@ namespace ska {
 
 		unsigned int m_worldW, m_worldH;
 		Rectangle m_cameraRect{};
+		int m_screenWidth = 0;
+		int m_screenHeight = 0;
+		float m_zoom = 1.F;
+		float m_targetZoom = 1.F;
+		float m_zoomSpeed = 3.F;
+		void resizeDisplay();
 		mutable Rectangle m_displayRect{};
 		mutable Interpolated m_displayInterpolation;
 
