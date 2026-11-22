@@ -5,6 +5,7 @@
 #include "Core/ECS/Basics/Physic/MovementComponent.h"
 #include "Core/Utils/RectangleUtils.h"
 #include "Core/ECS/Basics/Graphic/AnimationComponent.h"
+#include "Core/Utils/TimeUtils.h"
 
 ska::WalkAnimationStateMachine::WalkAnimationStateMachine(EntityManager& em) :
     AnimationStateMachine(),
@@ -32,20 +33,38 @@ void ska::WalkAnimationStateMachine::update(ska::AnimationComponent& ac, const E
 	auto& texture = gc.animatedSprites[0];
 	auto spritePos = texture.getOffsetBase();
 
-	const auto xMove = ska::NumberUtils::round(mov.vx - mov.ax);
-	const auto yMove = ska::NumberUtils::round(mov.vy - mov.ay);
-
-	if (xMove == 0 && yMove == 0) {
-		texture.stop(true);
-		texture.reset();
+	if (ac.drivenUntil > TimeUtils::getTicks()) {
+		// Driven by its movement (ex : block by block) : its direction and its steps, not the physics velocity
+		const auto animated = ac.walking || ac.animatedWhenStill;
+		if (animated) {
+			texture.setDelay(ac.walking ? ac.walkDelay : 220);
+			if (!ac.walkShown) {
+				// A step starts with a foot forward
+				texture.nextFrame();
+			}
+			texture.stop(false);
+		} else {
+			texture.stop(true);
+			texture.reset();
+		}
+		ac.walkShown = animated;
 	} else {
-		texture.stop(false);
-	}
+		const auto xMove = ska::NumberUtils::round(mov.vx - mov.ax);
+		const auto yMove = ska::NumberUtils::round(mov.vy - mov.ay);
 
-	if (xMove != 0 || yMove != 0) {
-		ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
-		const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
-		texture.setDelay(delay > 200 ? 200 : static_cast<unsigned int>(delay));		
+		if ((xMove == 0 && yMove == 0) && !ac.animatedWhenStill) {
+			texture.stop(true);
+			texture.reset();
+		} else {
+			texture.stop(false);
+		}
+
+		if (xMove != 0 || yMove != 0) {
+			ac.state = RectangleUtils::getDirectionFromPos(Point<int>(0, 0), Point<int>(xMove, yMove));
+			const auto& delay = 700 / ska::NumberUtils::squareroot(xMove * xMove + yMove * yMove);
+			texture.setDelay(delay > 200 ? 200 : static_cast<unsigned int>(delay));
+		}
+		ac.walkShown = false;
 	}
 
 	const auto spriteHeight = texture.getHeight();

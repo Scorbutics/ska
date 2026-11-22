@@ -16,6 +16,16 @@ namespace ska {
 
 		long state;
 
+		// Set by a movement system (ex : block by block) : the character walks ("walking") in the direction "state", with
+		// a frame each "walkDelay" ms, whatever its physics velocity. Valid until "drivenUntil" (ticks)
+		unsigned int drivenUntil = 0;
+		bool walking = false;
+		unsigned int walkDelay = 0;
+		// The animation goes on when the character does not move (ex : bobbing on the water)
+		bool animatedWhenStill = false;
+		// The walk animation is running (its first frame is shown when it starts)
+		bool walkShown = false;
+
 	private:
 		IAnimationStateMachine* animationFiniteStateMachine;		
 	};
