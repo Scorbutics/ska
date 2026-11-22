@@ -43,12 +43,12 @@ namespace ska {
 		public:
 		template<Operator o, class ... Node>
 		static ASTNodePtr MakeNode(std::unique_ptr<Node>&& ... children) {
-			return ASTFactory::template MakeNode<o>(Token{}, ASTFactory::template BuildVectorFromNodePack(std::move(children)...));
+			return ASTFactory::template MakeNode<o>(Token{}, ASTFactory::BuildVectorFromNodePack(std::move(children)...));
 		}
 
 		template<Operator o, class ... Node>
 		static ASTNodePtr MakeNode(Token token, std::unique_ptr<Node>&& ... children) {
-			return ASTFactory::template MakeNode<o>(std::move(token), ASTFactory::template BuildVectorFromNodePack(std::move(children)...));
+			return ASTFactory::template MakeNode<o>(std::move(token), ASTFactory::BuildVectorFromNodePack(std::move(children)...));
 		}
 
 		template<Operator o>
