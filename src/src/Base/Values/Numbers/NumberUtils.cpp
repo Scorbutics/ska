@@ -9,13 +9,30 @@
 class RandomGeneratorHolder {
 public:
     RandomGeneratorHolder() {
-        rng.seed(std::random_device()());
+        const auto* value = std::getenv("SKA_SEED");
+        fromEnvironment = value != nullptr && *value != '\0';
+        seed = fromEnvironment ? static_cast<unsigned int>(std::strtoul(value, nullptr, 10)) : std::random_device()();
+        rng.seed(seed);
     }
 
+    unsigned int seed;
+    bool fromEnvironment;
     std::mt19937 rng;
 };
 
 RandomGeneratorHolder RGH;
+
+unsigned int ska::NumberUtils::seed() {
+	return RGH.seed;
+}
+
+bool ska::NumberUtils::seedFromEnvironment() {
+	return RGH.fromEnvironment;
+}
+
+unsigned int ska::NumberUtils::newSeed() {
+	return static_cast<unsigned int>(RGH.rng());
+}
 
 int ska::NumberUtils::random(int min, int max) {
 	std::uniform_int_distribution<int> dist(min, max);

@@ -23,6 +23,11 @@ namespace ska{
 
 		static float exponential(float i);
 		static int random(int min, int max);
+		// The seed of the random draws : SKA_SEED (environment) when set, else one picked at the start. The same seed
+		// gives the same draws (ska-run --seed). Other generators take theirs from "newSeed" to follow it.
+		static unsigned int seed();
+		static bool seedFromEnvironment();
+		static unsigned int newSeed();
 		static double arctan(float x, float y);
 
 		template <typename T>
