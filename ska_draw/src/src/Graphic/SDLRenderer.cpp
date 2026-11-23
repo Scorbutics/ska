@@ -2,6 +2,8 @@
 #include "Core/Exceptions/IllegalArgumentException.h"
 #include "Core/Exceptions/ExceptionTrigger.h"
 #include "SDLRenderer.h"
+#include "Core/Dev/DevConsole.h"
+#include "SDLImageLibrary.h"
 #include "Logging/Logger.h"
 #include "SDLWindow.h"
 #include "AnimatedTexture.h"
@@ -174,6 +176,7 @@ void ska::SDLRenderer::update() const {
 			sdl.setGPURenderState(*m_renderer, nullptr);
 		}
 	}
+	takeConsoleShots();
 	renderPresent();
 	m_frameInTarget = m_screenShader != nullptr;
 	if (m_frameInTarget) {
@@ -302,4 +305,25 @@ void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rec
 
 ska::SDLRenderer::~SDLRenderer() {
     free();
+}
+
+void ska::SDLRenderer::takeConsoleShots() const {
+	auto& console = DevConsole::get();
+	if (!console.shotRequested()) {
+		return;
+	}
+	// The frame as it is shown : the screen (the window target), after the screen shader
+	const auto& sdl = SDLLibrary::get();
+	auto* frame = sdl.readPixels(*m_renderer, nullptr);
+	const auto readError = frame == nullptr ? std::string{ sdl.getError() } : std::string{};
+	console.takeShots(frame, [](SDL_Surface& surface, const std::string& path, std::string& error) {
+		if (!SDLImageLibrary::get().savePNG(surface, path)) {
+			error = SDLLibrary::get().getError();
+			return false;
+		}
+		return true;
+	}, readError);
+	if (frame != nullptr) {
+		sdl.freeSurface(frame);
+	}
 }

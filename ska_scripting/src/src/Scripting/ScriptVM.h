@@ -28,6 +28,7 @@
 #include "NodeValue/Symbol.h"
 #include "Core/ECS/ECSDefines.h"
 #include "Core/ECS/Basics/Script/ScriptRunner.h"
+#include "Core/Dev/DevConsole.h"
 
 namespace ska {
 	namespace scripting {
@@ -40,14 +41,19 @@ namespace ska {
 			std::optional<EntityId> origin;
 			// Entity targeted by the script, if any
 			std::optional<EntityId> target;
+			// Text answered to the development console (Dev.reply), for a script started by the console
+			std::shared_ptr<std::string> reply;
 		};
+
+		class DevModule;
 
 		// Runs skalang scripts for the engine.
 		// A script file declares a "run" function, called with the script arguments :
 		//     run = function(args: string[]) do ... end
 		// A script runs until it ends, or until a native function suspends it (ex : "wait") : it is then resumed by "update",
 		// once its waiting condition is satisfied. All the scripts share the same script modules (imported once).
-		class ScriptVM : public ScriptRunner {
+		// It is also the evaluator of the development console (DevConsole, tools/ska-console) : "eval" and "run".
+		class ScriptVM : public ScriptRunner, public DevConsoleEvaluator {
 		public:
 			using Modules = lang::ModuleConfiguration<bytecode::Interpreter>;
 
@@ -77,6 +83,17 @@ namespace ska {
 
 			// Number of suspended scripts
 			std::size_t suspendedScripts() const { return m_suspended.size(); }
+
+			/* Development console (tools/ska-console) */
+
+			// When a started script ends : "ok" false with the error, or true with the text of the value returned by "run"
+			using EndCallback = std::function<void(bool ok, const std::string& text)>;
+			// Starts a script as "start", and calls "ended" when it is over (at once when it does not wait)
+			bool start(const std::string& scriptFile, std::vector<std::string> arguments, ScriptContext context, EndCallback ended);
+			// A line put before the code sent to the console (ex : Engine = import "bind:ska.engine") : the modules of the game
+			void addConsolePrelude(std::string line);
+			void eval(const std::string& code, DevReplier reply) override;
+			void run(const std::string& file, std::vector<std::string> arguments, DevReplier reply) override;
 
 			/* Synchronous calls : the engine asks a script for a value (ex : a formula, a decision) */
 
@@ -139,6 +156,8 @@ namespace ska {
 				std::string key;
 				std::function<bool()> ready;
 				std::function<NodeValue()> value;
+				EndCallback ended;
+				bool failed = false;
 			};
 			// A script file to run (its "run" function with string arguments), or a function value (hook) with its arguments
 			struct PendingStart {
@@ -147,6 +166,7 @@ namespace ska {
 				ScriptContext context;
 				NodeValue function;
 				std::vector<NodeValue> values;
+				EndCallback ended;
 			};
 			struct Hook {
 				std::size_t id;
@@ -158,7 +178,9 @@ namespace ska {
 				std::function<NodeValue()> value;
 			};
 
-			std::optional<std::size_t> compile(const std::string& scriptFile);
+			std::optional<std::size_t> compile(const std::string& scriptFile, bool quiet = false);
+			std::string writeConsoleScript(const std::string& body);
+			std::string endText(RunningScript& script);
 			bool startNow(PendingStart script);
 			// Records the waiting condition of a coroutine that just ran : returns false when it is not suspended anymore
 			bool afterStep(RunningScript& script);
@@ -201,6 +223,10 @@ namespace ska {
 			std::vector<Hook> m_hooks;
 			std::unordered_set<std::string> m_events;
 			std::size_t m_nextHook = 1;
+			std::string m_lastCompileError;
+			std::vector<std::string> m_consolePrelude;
+			std::size_t m_consoleScripts = 0;
+			std::unique_ptr<DevModule> m_devModule;
 		};
 
 		template <> struct ScriptVM::ReturnedType<void> { static constexpr auto type = ExpressionType::VOID; };

@@ -13,5 +13,7 @@ namespace ska {
 	
 		virtual unsigned int remove(const EntityId& entityId) = 0;
 		virtual unsigned int addEmpty(const EntityId& entityId) = 0;
+		// Name of the component type (ex : "PositionComponent")
+		virtual const std::string& typeName() const = 0;
 	};
 }

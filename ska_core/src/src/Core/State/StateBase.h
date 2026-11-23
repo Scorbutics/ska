@@ -45,6 +45,9 @@ namespace ska {
 		State& addSubState(StatePtr s);
 		ska::WorkNode<ska::StateBase>& scheduleRemoveSubState(State& subState);
 
+		// The sub states (ex : a map state in a world state)
+		const std::vector<StatePtr>& subStates() const { return m_subStates; }
+
 		virtual ~StateBase() = default;
 
     protected:

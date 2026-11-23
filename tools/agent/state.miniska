@@ -1,0 +1,9 @@
+# The game now : its states, its logic step, paused or not. Usage : ska-console run external/ska/tools/agent/state.miniska
+Engine = import "bind:ska.engine"
+Dev = import "bind:ska.dev"
+
+run = function(args: string[]) do
+	Dev.reply("states=" + Dev.states())
+	Dev.reply("step=" + (Dev.steps(): string))
+	Dev.reply("paused=" + (Dev.paused(): string))
+end

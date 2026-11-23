@@ -66,6 +66,8 @@ namespace ska {
 		void load(SDL_Window* window);
 	    void free();
 		void renderPresent() const;
+		// Screenshots asked by the development console
+		void takeConsoleShots() const;
 		void renderClear() const;
 
 		SDL_Renderer* m_renderer;

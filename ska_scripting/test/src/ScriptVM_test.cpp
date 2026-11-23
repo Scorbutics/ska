@@ -312,3 +312,67 @@ TEST_CASE("[ScriptVM] entity handles : a handle of a removed entity is not valid
 		CHECK_THROWS(test.handles.entity(static_cast<long>(hero) + 65536L));
 	}
 }
+
+/* Development console : the ScriptVM is the evaluator of "eval" and "run" (tools/ska-console) */
+
+namespace {
+	struct ConsoleAnswer {
+		bool answered = false;
+		ska::DevReply reply;
+	};
+	ska::DevReplier Answer(ConsoleAnswer& answer) {
+		return [&answer](ska::DevReply reply) { answer.answered = true; answer.reply = std::move(reply); };
+	}
+}
+
+TEST_CASE("[ScriptVM] console eval : an expression answers its value, with the engine functions") {
+	auto test = ScriptingTest{};
+	test.savegame.setGameVariable("step", 3);
+	auto answer = ConsoleAnswer{};
+	test.vm.eval("Engine.variable(\"step\") + 1", Answer(answer));
+	CHECK(answer.answered);
+	CHECK(answer.reply.ok);
+	CHECK(answer.reply.value == "4");
+}
+
+TEST_CASE("[ScriptVM] console eval : statements that wait answer once they are over") {
+	auto test = ScriptingTest{};
+	auto answer = ConsoleAnswer{};
+	test.vm.eval("Engine.wait(100)\nEngine.setVariable(\"done\", 1)\nDev.reply(\"done\")", Answer(answer));
+	CHECK(!answer.answered);
+	test.vm.update(60);
+	CHECK(!answer.answered);
+	test.vm.update(60);
+	CHECK(answer.answered);
+	CHECK(answer.reply.ok);
+	CHECK(answer.reply.value == "done");
+	CHECK(test.variable("done") == 1);
+}
+
+TEST_CASE("[ScriptVM] console eval : a code that does not compile, or that fails, answers the error") {
+	auto test = ScriptingTest{};
+	auto answer = ConsoleAnswer{};
+	test.vm.eval("Nope.call()", Answer(answer));
+	CHECK(answer.answered);
+	CHECK(!answer.reply.ok);
+	CHECK(answer.reply.error.find("Nope") != std::string::npos);
+
+	auto failed = ConsoleAnswer{};
+	test.vm.eval("a = [1]\nb = a[5]", Answer(failed));
+	CHECK(failed.answered);
+	CHECK(!failed.reply.ok);
+}
+
+TEST_CASE("[ScriptVM] console run : a script file with its arguments, answered by Dev.reply") {
+	auto test = ScriptingTest{};
+	auto answer = ConsoleAnswer{};
+	test.vm.run(Script("console_reply"), { "a", "b" }, Answer(answer));
+	CHECK(answer.answered);
+	CHECK(answer.reply.ok);
+	CHECK(answer.reply.value == "2 arguments\na");
+
+	auto missing = ConsoleAnswer{};
+	test.vm.run(Script("no_such_script"), {}, Answer(missing));
+	CHECK(missing.answered);
+	CHECK(!missing.reply.ok);
+}

@@ -5,6 +5,7 @@
 	SKA_LIB_NAME_DEFINE(ska::SDLImageIdNamedFunction, static_cast<int>(ska::SDLImageCalls::ENUM), NAME)
 
 SKA_IMG_LIB_NAME_DEFINE(IMG_LOAD, "IMG_Load");
+SKA_IMG_LIB_NAME_DEFINE(IMG_SAVE_PNG, "IMG_SavePNG");
 
 const ska::SDLImageLibrary& ska::SDLImageLibrary::get() {
 	static SDLImageLibrary instance;

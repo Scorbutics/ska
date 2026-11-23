@@ -1,4 +1,6 @@
 #pragma once
+#include <cstdlib>
+#include <iostream>
 #include "Base/DynamicLibrary/DynamicLibrary.h"
 #include <SDL3/SDL.h>
 
@@ -73,7 +75,8 @@ namespace ska {
 		SDL_CREATE_GPU_RENDER_STATE,
 		SDL_SET_GPU_RENDER_STATE,
 		SDL_SET_GPU_RENDER_STATE_FRAGMENT_UNIFORMS,
-		SDL_DESTROY_GPU_RENDER_STATE
+		SDL_DESTROY_GPU_RENDER_STATE,
+		SDL_GET_SCANCODE_FROM_NAME
 	};
 
 #define SKA_SDL_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -141,6 +144,7 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_GPU_RENDER_STATE, bool(SDL_Renderer*, SDL_GPURenderState*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_GPU_RENDER_STATE_FRAGMENT_UNIFORMS, bool(SDL_GPURenderState*, Uint32, const void*, Uint32));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_DESTROY_GPU_RENDER_STATE, void(SDL_GPURenderState*));
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_SCANCODE_FROM_NAME, SDL_Scancode(const char*));
 
 	#define SKA_SDL_DYN_LIB_NAME_ENTRY(ENUM) SDLIdNamedFunction<static_cast<int>(SDLCalls::ENUM)>
 
@@ -206,7 +210,8 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_CREATE_GPU_RENDER_STATE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_GPU_RENDER_STATE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_GPU_RENDER_STATE_FRAGMENT_UNIFORMS),
-		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_DESTROY_GPU_RENDER_STATE)
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_DESTROY_GPU_RENDER_STATE),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_SCANCODE_FROM_NAME)
 	>;
 
 	// The SDL3 calls of the engine. The functions keep the conventions of the engine (written for SDL2) : those returning
@@ -224,6 +229,8 @@ namespace ska {
 		inline const char* getError() const { return callSDL(SDL_GET_ERROR)(); }
 		inline Uint32 getTicks() const { return static_cast<Uint32>(callSDL(SDL_GET_TICKS)()); }
 		inline void delay(Uint32 milliseconds) const { callSDL(SDL_DELAY)(milliseconds); }
+		// SDL_SCANCODE_UNKNOWN (0) for an unknown name
+		inline int getScancodeFromName(const std::string& name) const { return static_cast<int>(callSDL(SDL_GET_SCANCODE_FROM_NAME)(name.c_str())); }
 		inline void setMainReady() const { callSDL(SDL_SET_MAIN_READY)(); }
 		// 1 when an event was read
 		inline int pollEvent(SDL_Event& event) const { return callSDL(SDL_POLL_EVENT)(&event) ? 1 : 0; }
@@ -314,7 +321,13 @@ namespace ska {
 		inline void setWindowIcon(SDL_Window& window, SDL_Surface* icon) const { callSDL(SDL_SET_WINDOW_ICON)(&window, icon); }
 		inline void showWindow(SDL_Window& window) const { callSDL(SDL_SHOW_WINDOW)(&window); }
 		inline void destroyWindow(SDL_Window* window) const { callSDL(SDL_DESTROY_WINDOW)(window); }
+		// SKA_HEADLESS (environment, set by tools/ska-run) : the message goes to the error output, no box waits for a click
 		inline void showSimpleMessageBox(SDL_MessageBoxFlags flags, const std::string& title, const std::string& message, SDL_Window* window) const {
+			const auto* headless = std::getenv("SKA_HEADLESS");
+			if (headless != nullptr && *headless != '\0') {
+				std::cerr << "[message box] " << title << " : " << message << std::endl;
+				return;
+			}
 			callSDL(SDL_SHOW_SIMPLE_MESSAGE_BOX)(flags, title.c_str(), message.c_str(), window);
 		}
 		inline void showCursor(bool show) const {

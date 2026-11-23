@@ -1,0 +1,6 @@
+Dev = import "bind:ska.dev"
+
+run = function(args: string[]) do
+	Dev.reply((args.size(): string) + " arguments")
+	Dev.reply(args[0])
+end

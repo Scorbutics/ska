@@ -4,6 +4,9 @@
 #include "Core/ECS/EntityLocator.h"
 #include "Core/Data/MemoryScript.h"
 #include "Core/ECS/Basics/Input/InputComponent.h"
+#include "Core/ECS/Basics/Physic/PositionComponent.h"
+#include <sstream>
+#include "Base/Values/Numbers/NumberUtils.h"
 
 namespace ska {
 	namespace scripting {
@@ -24,10 +27,12 @@ ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityMa
 	m_vm(vm),
 	m_entityManager(entityManager),
 	m_handles(handles),
-	m_random(std::random_device{}()),
+	m_random(NumberUtils::newSeed()),
 	m_builder(BridgeBuilder<bytecode::Interpreter> { m_bridge }) {
 
 	registerComponent<InputComponent>("InputComponent");
+	// The code sent to the development console sees the engine functions
+	vm.addConsolePrelude("Engine = import \"bind:ska.engine\"");
 
 	m_builder.bindField("wait", [this](std::vector<NodeValue> params) {
 		const auto duration = params[0].nodeval<long>();
@@ -55,6 +60,35 @@ ska::scripting::EngineModule::EngineModule(ScriptVM& vm, EntityManager& entityMa
 	m_builder.bindField("entity", [this, &locator](std::vector<NodeValue> params) {
 		const auto* entity = locator.getEntityId(StringParameter(params[0]));
 		return NodeValue{ entity == nullptr ? -1L : m_handles.handle(*entity) };
+	});
+
+	m_builder.bindField("describe", [this, &locator](std::vector<NodeValue> params) {
+		const auto entity = m_handles.entity(params[0].nodeval<long>());
+		auto text = std::stringstream{};
+		const auto name = locator.getName(entity);
+		text << "#" << params[0].nodeval<long>();
+		if (!name.empty()) {
+			text << " \"" << name << "\"";
+		}
+		if (m_entityManager.hasComponent<PositionComponent>(entity)) {
+			const auto& position = m_entityManager.getComponent<PositionComponent>(entity);
+			text << " at (" << static_cast<int>(position.x) << "," << static_cast<int>(position.y) << ")";
+		}
+		text << " components:";
+		for (const auto& component : m_entityManager.componentNames(entity)) {
+			text << " " << (component.compare(0, 5, "ska::") == 0 ? component.substr(5) : component);
+		}
+		return NodeValue{ std::make_shared<std::string>(text.str()) };
+	});
+
+	m_builder.bindField("variables", [savegame](std::vector<NodeValue>) {
+		auto names = std::make_shared<NodeValueArrayRaw>();
+		if (savegame != nullptr) {
+			for (const auto& [name, value] : savegame->getGameVariables()) {
+				names->push_back(NodeValue{ std::make_shared<std::string>(name + "=" + std::to_string(value)) });
+			}
+		}
+		return NodeValue{ std::move(names) };
 	});
 
 	m_builder.bindField("exists", [this](std::vector<NodeValue> params) {

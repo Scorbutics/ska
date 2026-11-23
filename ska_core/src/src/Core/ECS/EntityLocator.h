@@ -14,6 +14,15 @@ namespace ska {
 		~EntityLocator() = default;
 
 		const EntityId* getEntityId(const std::string& name) const;
+		// The name of an entity ("" when it has none)
+		std::string getName(EntityId entity) const {
+			for (const auto& [name, id] : m_entitiesNameMap) {
+				if (id == entity) {
+					return name;
+				}
+			}
+			return "";
+		}
 
 	private:
 		bool onECSEvent(ECSEvent& ecsEvent);

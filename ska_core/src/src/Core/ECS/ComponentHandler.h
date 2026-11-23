@@ -61,6 +61,10 @@ namespace ska {
 			return m_mask;
 		}
 
+		const std::string& typeName() const override {
+			return Component<T>::TYPE_NAME();
+		}
+
 		virtual ~ComponentHandler() = default;
 
 	private:

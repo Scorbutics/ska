@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tools/ska-run:*)",
+      "Bash(tools/ska-console:*)",
+      "Bash(ska-run:*)",
+      "Bash(ska-console:*)"
+    ]
+  }
+}

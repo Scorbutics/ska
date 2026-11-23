@@ -1,0 +1,19 @@
+# Development console verbs : Dev = import "bind:ska.dev"
+# For the scripts run by tools/ska-console (eval, run tools/agent/*.miniska). Not for the game content.
+
+# Adds a line to the answer of the console request that started this script
+reply = function(text: string) do end
+# Logic steps since the start of the game (60 per second)
+steps = function() : int do return 0 end
+# The current states, ex : "WorldState > StateMap"
+states = function() : string do return "" end
+# Saves the next frame as a PNG file and waits for it : returns the path ("" when it failed, or without the console)
+shot = function(path: string) : string do return "" end
+# Presses a key (SDL key name : "Return", "Space", "Escape", "Up", "Left", "A", "1"...) during some logic steps, and waits
+press = function(key: string, steps: int) do end
+# The clock : paused, the logic runs only the steps asked
+pause = function() do end
+resume = function() do end
+paused = function() : bool do return false end
+# Waits for some logic steps (runs them when paused)
+step = function(steps: int) do end

@@ -1,0 +1,18 @@
+# Named entities : handle, position (pixels), components. Usage : ska-console run external/ska/tools/agent/entities.miniska trainer npc-3_0
+Engine = import "bind:ska.engine"
+Dev = import "bind:ska.dev"
+
+run = function(args: string[]) do
+	if args.size() == 0
+		Dev.reply("usage : entities.miniska <name>...")
+		return
+	end
+	args | (name) do
+		entity = Engine.entity(name)
+		if entity == -1
+			Dev.reply(name + " : not found")
+		else
+			Dev.reply(Engine.describe(entity))
+		end
+	end
+end

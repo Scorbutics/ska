@@ -82,6 +82,28 @@ namespace ska {
 			commonRemoveComponent(entity, components);
 		}
 
+		// Names of the component types of an entity (for the tools : the development console)
+		std::vector<std::string> componentNames(EntityId entity) const {
+			auto names = std::vector<std::string>{};
+			if (m_entities.find(entity) == m_entities.end()) {
+				return names;
+			}
+			for (const auto& holder : m_componentHolders) {
+				if (holder == nullptr) {
+					continue;
+				}
+				auto& handler = *holder;
+				// The mask bit of a component type is its type id : its index in m_componentHolders
+				const auto index = static_cast<std::size_t>(&holder - &m_componentHolders[0]);
+				if (index < SKA_ECS_MAX_COMPONENTS && m_componentMask[entity][index]) {
+					names.push_back(handler.typeName());
+				}
+			}
+			return names;
+		}
+		// Every entity alive
+		const std::unordered_set<EntityId>& entities() const { return m_entities; }
+
 		template <class T>
 		unsigned int getMask() {
 			ComponentHandler<T>& components = this->template getComponents<T>();

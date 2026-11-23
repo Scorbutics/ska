@@ -11,6 +11,8 @@ random = function(max: int) : int do return 0 end
 origin = function() : int do return 0 end
 # Entity with the given name (ex : "trainer"), -1 if not found
 entity = function(name: string) : int do return 0 end
+# A line about an entity, for the tools : its handle, its name, its position (pixels), its components
+describe = function(entity: int) : string do return "" end
 # True when the entity was not removed (false for -1)
 exists = function(entity: int) : bool do return false end
 
@@ -22,6 +24,8 @@ enableComponent = function(entity: int, component: string) do end
 # Game variables, saved with the game
 variable = function(name: string) : int do return 0 end
 setVariable = function(name: string, value: int) do end
+# Every game variable, "name=value", sorted by name
+variables = function() : string[] do return []: string end
 
 # Starts another script (it runs on its own : this script does not wait for it)
 script = function(file: string, arguments: string[]) do end

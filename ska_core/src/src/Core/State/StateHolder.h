@@ -64,6 +64,9 @@ namespace ska {
          */
         bool update();
 
+		// The current state (nullptr before the first one)
+		const State* current() const { return m_currentState.get(); }
+
 	private:
 		StatePtr m_nextState;
 		GameEventDispatcher& m_eventDispatcher;

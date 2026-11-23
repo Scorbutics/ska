@@ -24,6 +24,18 @@ endif()
 
 MESSAGE("++ " ${CMAKE_BUILD_TYPE} " build type")
 
+# Development console (tools/ska-console : remote eval, screenshots, input, clock) : compiled in the native builds, opened
+# only when the environment variable SKA_CONSOLE gives its socket path (tools/ska-run). Not on the web. OFF for a shipped build.
+if(EMSCRIPTEN)
+	set(SKA_DEV_CONSOLE_DEFAULT OFF)
+else()
+	set(SKA_DEV_CONSOLE_DEFAULT ON)
+endif()
+option(SKA_DEV_CONSOLE "Development console (SKA_CONSOLE socket)" ${SKA_DEV_CONSOLE_DEFAULT})
+if(SKA_DEV_CONSOLE)
+	add_compile_definitions(SKA_DEV_CONSOLE)
+endif()
+
 #Internal
 set(SKA_DIR ${CMAKE_BINARY_DIR})
 set(SKA_AI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ska_ai/src/src)

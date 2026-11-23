@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include "Core/__internalConfig/LoggerConfig.h"
 #include "RawInputListener.h"
+#include "Core/Dev/DevConsole.h"
 #include "../Exceptions/TerminateProcessException.h"
 #include "../Exceptions/ExceptionTrigger.h"
 #include "Base/Values/Strings/StringUtils.h"
@@ -95,4 +96,6 @@ void ska::RawInputListener::update() {
 		}
 	}
 
+	// Keys pressed by the development console (tools/ska-console press)
+	DevConsole::get().applyInput(m_keyIn);
 }

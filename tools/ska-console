@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""ska-console : looks and acts inside a running ska game (a run of tools/ska-run), through its development console.
+
+  ska-console [--run ID] [--timeout S] [--raw] <command> [arguments...]
+
+  ping                    the game answers : its states, its logic step, paused or not
+  eval CODE               runs skalang in the game (CODE "-" : read on the standard input). One expression : its value
+                          is the answer (Engine.variable("x")); else statements, ended when the code ends (it can wait).
+                          The modules of the game are imported (Engine, Dev, and those the game adds)
+  run FILE [ARGS...]      runs the "run" function of a script file (tools/agent/*.miniska); Dev.reply(text) answers
+  shot NAME|PATH          saves the next frame as a PNG (NAME : <run folder>/shots/NAME.png)
+  press KEY [STEPS]       presses a key during STEPS logic steps (SDL names : Return, Space, Escape, Up, Left, A, 1...)
+  pause | resume          the clock of the game : paused, the logic runs only the steps asked
+  step N                  runs N logic steps (paused), answers once done
+  quit                    the game exits (ska-run down does it)
+  scripts                 the agent scripts available (tools/agent/*.miniska of the engine and of the game)
+
+One JSON line : {"ok":true,"value":"...","frames":N} (frames : logic steps between the request and the answer).
+Exit code : 0 ok, 1 the game answered an error, 2 no answer (no run, no console). --raw prints only the value.
+The run : --run ID, else $SKA_RUN, else the only run alive.
+"""
+import json
+import os
+import socket
+import sys
+import time
+from pathlib import Path
+
+ENGINE_AGENT = Path(__file__).resolve().parent / "agent"
+
+
+def runs_root():
+    return Path(os.environ.get("SKA_RUNS_DIR") or f"/tmp/ska-runs-{os.getuid()}")
+
+
+def alive(pid):
+    try:
+        os.kill(pid, 0)
+        return True
+    except (ProcessLookupError, TypeError):
+        return False
+    except PermissionError:
+        return True
+
+
+def find_run(run_id):
+    root = runs_root()
+    if run_id:
+        path = root / run_id / "run.json"
+        if not path.exists():
+            fail(f"no run {run_id!r} (ska-run ps)")
+        return json.loads(path.read_text())
+    records = []
+    if root.exists():
+        for path in root.glob("*/run.json"):
+            record = json.loads(path.read_text())
+            if alive(record.get("pid")):
+                records.append(record)
+    if len(records) != 1:
+        fail("no run alive (ska-run up)" if not records else
+             "several runs alive : --run " + " | --run ".join(r["run"] for r in records))
+    return records[0]
+
+
+def fail(message, code=2):
+    print(json.dumps({"ok": False, "error": message}))
+    sys.exit(code)
+
+
+def scripts(record):
+    folders = [ENGINE_AGENT]
+    if record:
+        folders.insert(0, Path(record["cwd"]) / "tools" / "agent")
+    for folder in folders:
+        for path in sorted(folder.glob("*.miniska")):
+            first = ""
+            for line in path.read_text(errors="replace").splitlines():
+                if line.startswith("#"):
+                    first = line.lstrip("# ").strip()
+                    break
+            print(f"{path}  —  {first}")
+
+
+def main():
+    argv = sys.argv[1:]
+    run_id = os.environ.get("SKA_RUN")
+    timeout = 120.0
+    raw = False
+    while argv and argv[0].startswith("--"):
+        option = argv.pop(0)
+        if option == "--run" and argv:
+            run_id = argv.pop(0)
+        elif option == "--timeout" and argv:
+            timeout = float(argv.pop(0))
+        elif option == "--raw":
+            raw = True
+        elif option in ("--help", "-h"):
+            print(__doc__)
+            return 0
+        else:
+            fail(f"unknown option {option}")
+    if not argv:
+        print(__doc__)
+        try:
+            scripts(find_run(run_id) if run_id else None)
+        except SystemExit:
+            pass
+        return 0
+
+    command, arguments = argv[0], argv[1:]
+    if command == "scripts":
+        record = None
+        try:
+            record = find_run(run_id)
+        except SystemExit:
+            pass
+        scripts(record)
+        return 0
+    record = find_run(run_id)
+    folder = Path(record["folder"])
+
+    if command == "eval":
+        if not arguments:
+            fail("eval : no code", 1)
+        code = sys.stdin.read() if arguments[0] == "-" else " ".join(arguments)
+        # One request is one line : the new lines of the code travel as \x1f
+        fields = [code.rstrip("\n").replace("\n", "\x1f")]
+    elif command == "run":
+        if not arguments:
+            fail("run : no script file", 1)
+        script = Path(arguments[0])
+        # Relative to here when it exists here, else to the working directory of the game
+        if not script.is_absolute() and script.exists():
+            script = script.resolve()
+        fields = [str(script)] + arguments[1:]
+    elif command == "shot":
+        if not arguments:
+            fail("shot : a name or a path", 1)
+        target = arguments[0]
+        if "/" not in target:
+            target = str(folder / "shots" / (target if target.endswith(".png") else target + ".png"))
+        else:
+            target = str(Path(target).resolve())
+        fields = [target]
+    else:
+        fields = arguments
+    line = "\t".join([command] + fields)
+
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+            s.settimeout(timeout)
+            s.connect(record["console"])
+            s.sendall(line.encode() + b"\n")
+            data = b""
+            while not data.endswith(b"\n"):
+                chunk = s.recv(65536)
+                if not chunk:
+                    break
+                data += chunk
+    except socket.timeout:
+        fail(f"no answer after {timeout} s (the script still runs in the game?)")
+    except OSError as e:
+        fail(f"cannot reach the console of run {record['run']!r} ({e}) : is it alive? (ska-run ps)")
+    if not data:
+        fail("the game closed the connection without an answer (did it exit? ska-run logs " + record["run"] + ")")
+    answer = json.loads(data.decode())
+    if raw and answer.get("ok"):
+        print(answer.get("value", ""))
+    else:
+        print(json.dumps(answer, ensure_ascii=False))
+    return 0 if answer.get("ok") else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -6,6 +6,7 @@
 #include "Core/Draw/FrameClock.h"
 #include "GameApp.h"
 #include "Core/Exceptions/TerminateProcessException.h"
+#include "Core/Dev/DevConsole.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -49,6 +50,8 @@ namespace ska {
 				auto& self = *static_cast<GameCore*>(core);
 				try {
 					self.frame();
+					// The frames drawn, for the tools driving the page (tools/web/sad-web : the game is ready)
+					EM_ASM({ Module.skaFrames = (Module.skaFrames || 0) + 1; });
 				} catch (TerminateProcessException& tpe) {
 					emscripten_cancel_main_loop();
 					self.onTerminate(tpe);
@@ -90,9 +93,32 @@ namespace ska {
 			return false;
 		}
 
-		// One frame : the logic updates due since the last frame (fixed time steps), then the drawing
+		// One frame : the requests of the development console, the logic updates due since the last frame (fixed time
+		// steps), then the drawing
 		void frame() {
 			const auto ti = ticksWanted();
+			auto& console = DevConsole::get();
+			console.frame(m_stateHolder);
+
+			// Paused by the console, or SKA_FIXED_STEP : the time moves only by logic steps (one per frame, or the steps
+			// asked when paused). Same steps, same seed (SKA_SEED) : same game.
+			if (console.paused() || TimeUtils::fixedStep()) {
+				const auto stepNow = console.paused() ? console.takeStep() : true;
+				auto stateChange = false;
+				if (stepNow) {
+					TimeUtils::advance(static_cast<unsigned int>(ti));
+					stateChange = eventUpdate(static_cast<unsigned int>(ti));
+					FrameClock::logicUpdated();
+				}
+				FrameClock::drawing(1.F);
+				graphicUpdate(stepNow ? static_cast<unsigned int>(ti) : 0u);
+				m_accumulatorReset = false;
+				(void)stateChange;
+				// The real time starts again on resume
+				m_frameStarted = false;
+				return;
+			}
+
 			if (!m_frameStarted) {
 				// The start, or a new state : the time starts again
 				m_frameTime = TimeUtils::getTicks();
@@ -124,6 +150,7 @@ namespace ska {
 			const auto stateChange = m_stateHolder.update();
 			m_stateHolder.eventUpdate(ellapsedTime);
 			m_gameConfig->eventUpdate(ellapsedTime);
+			DevConsole::get().logicStepped();
 			return stateChange;
         }
 

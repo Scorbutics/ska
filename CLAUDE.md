@@ -1,5 +1,7 @@
 # ska engine
 
+How to reach the running game (launch, remote eval in skalang, screenshots, replays): @AGENTS.md
+
 2D game engine (SDL3, Chipmunk2D), ECS based, scripted with skalang (`external/skalang`). Games (ex: Smash & Dash) embed it as a submodule and are libraries loaded by the `ska_main` launcher.
 
 ## Build and tests

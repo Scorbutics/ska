@@ -1,0 +1,358 @@
+#!/usr/bin/env python3
+"""ska-run : runs a ska game unattended, in its own run folder.
+
+Each run has an id and a folder ($SKA_RUNS_DIR, default /tmp/ska-runs-<uid>/<id>) holding its console socket, its logs,
+its screenshots and its process record. The game runs on its own virtual display (Xvfb) without sound, never on the
+human's screen; the development console (tools/ska-console) is ready when "up" returns.
+
+  ska-run up <id> [options] -- <command> [arguments...]
+      --cwd DIR          working directory of the game (its data root), default : the current one
+      --env KEY=VALUE    environment of the game (repeatable); "{run}" in VALUE is the run folder
+      --copy SRC:DEST    copies SRC (file or folder, relative to --cwd) to <run folder>/DEST before the start (repeatable)
+      --seed N           SKA_SEED : the same random draws at each run
+      --fixed-step       SKA_FIXED_STEP : one logic step per frame, a virtual clock (with --seed : the same game at each run)
+      --pause-at N       SKA_PAUSE_AT : the game pauses itself at logic step N (then : requests, ska-console resume) :
+                         with --seed and --fixed-step, a replay starts its requests at the same step
+      --ready eval       waits until the console runs skalang (the game has created its script VM), not only "ping"
+      --display          on the current display (to watch it), not a virtual one
+      --audio            with sound
+      --timeout S        readiness timeout in seconds (default 60)
+  ska-run down <id>      stops it through the console ("quit"), else SIGTERM; prints its exit code
+  ska-run ps             the runs, alive or not
+  ska-run logs <id> [--grep REGEX] [--tail N] [--file NAME] [--strip]   the logs of the run (*.log.txt, stdout.log);
+                         --strip : without the colors and the clock time (to diff two runs)
+  ska-run path <id>      the run folder
+  ska-run rm <id>        removes the folder of a stopped run
+"""
+import argparse
+import json
+import os
+import re
+import shutil
+import signal
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+
+def runs_root():
+    return Path(os.environ.get("SKA_RUNS_DIR") or f"/tmp/ska-runs-{os.getuid()}")
+
+
+def run_dir(run_id):
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", run_id):
+        sys.exit(f"ska-run: bad run id {run_id!r} (letters, digits, _ . -)")
+    return runs_root() / run_id
+
+
+def read_record(run_id):
+    path = run_dir(run_id) / "run.json"
+    if not path.exists():
+        sys.exit(f"ska-run: no run {run_id!r} (ska-run ps)")
+    return json.loads(path.read_text())
+
+
+def alive(pid):
+    if not pid:
+        return False
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    # A zombie is not alive
+    try:
+        with open(f"/proc/{pid}/stat") as stat:
+            return stat.read().split(") ", 1)[1].split()[0] != "Z"
+    except OSError:
+        return True
+
+
+def console_request(sock_path, line, timeout):
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+        s.settimeout(timeout)
+        s.connect(str(sock_path))
+        s.sendall(line.encode() + b"\n")
+        data = b""
+        while not data.endswith(b"\n"):
+            chunk = s.recv(65536)
+            if not chunk:
+                break
+            data += chunk
+    return json.loads(data.decode())
+
+
+def exit_code(folder):
+    path = folder / "exit"
+    if path.exists():
+        text = path.read_text().strip()
+        return int(text) if text.lstrip("-").isdigit() else text
+    return None
+
+
+def start_xvfb(folder):
+    if not shutil.which("Xvfb"):
+        sys.exit("ska-run: Xvfb is not installed (apt install xvfb), or use --display")
+    read_fd, write_fd = os.pipe()
+    log = open(folder / "xvfb.log", "w")
+    proc = subprocess.Popen(
+        ["Xvfb", "-displayfd", str(write_fd), "-screen", "0", "1600x1000x24", "-nolisten", "tcp", "-noreset"],
+        pass_fds=(write_fd,), stdout=log, stderr=log, start_new_session=True)
+    os.close(write_fd)
+    number = b""
+    deadline = time.time() + 10
+    with os.fdopen(read_fd, "rb", buffering=0) as pipe:
+        while not number.endswith(b"\n") and time.time() < deadline:
+            chunk = pipe.read(16)
+            if not chunk:
+                break
+            number += chunk
+    if not number.strip():
+        proc.terminate()
+        sys.exit(f"ska-run: Xvfb did not start (see {folder / 'xvfb.log'})")
+    return proc.pid, ":" + number.decode().strip()
+
+
+def cmd_up(args):
+    folder = run_dir(args.id)
+    if folder.exists():
+        record = json.loads((folder / "run.json").read_text()) if (folder / "run.json").exists() else {}
+        if alive(record.get("pid")):
+            sys.exit(f"ska-run: run {args.id!r} is alive (pid {record['pid']}) : ska-run down {args.id}")
+        shutil.rmtree(folder)
+    if not args.command:
+        sys.exit("ska-run: no command (ska-run up <id> -- <command>)")
+    cwd = Path(args.cwd or os.getcwd()).resolve()
+    (folder / "logs").mkdir(parents=True)
+    (folder / "shots").mkdir()
+
+    for copy in args.copy:
+        source, _, dest = copy.partition(":")
+        source_path = (cwd / source).resolve()
+        dest_path = folder / (dest or Path(source).name)
+        if not source_path.exists():
+            sys.exit(f"ska-run: --copy : {source_path} does not exist")
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
+        if source_path.is_dir():
+            shutil.copytree(source_path, dest_path)
+        else:
+            shutil.copy2(source_path, dest_path)
+
+    env = dict(os.environ)
+    record = {"run": args.id, "folder": str(folder), "cwd": str(cwd), "command": args.command,
+              "console": str(folder / "console.sock"), "logs": str(folder / "logs"), "started": time.time()}
+    if args.display:
+        record["display"] = env.get("DISPLAY") or env.get("WAYLAND_DISPLAY") or "current"
+    else:
+        xvfb_pid, display = start_xvfb(folder)
+        record["xvfb_pid"] = xvfb_pid
+        record["display"] = display
+        env["DISPLAY"] = display
+        env.pop("WAYLAND_DISPLAY", None)
+        env["SDL_VIDEO_DRIVER"] = "x11"
+    if not args.audio:
+        env["SDL_AUDIO_DRIVER"] = "dummy"
+    env["SKA_CONSOLE"] = record["console"]
+    env["SKA_LOG_DIR"] = record["logs"]
+    env["SKA_HEADLESS"] = "1"
+    if args.seed is not None:
+        env["SKA_SEED"] = str(args.seed)
+        record["seed"] = args.seed
+    if args.fixed_step:
+        env["SKA_FIXED_STEP"] = "1"
+        record["fixed_step"] = True
+    if args.pause_at is not None:
+        env["SKA_PAUSE_AT"] = str(args.pause_at)
+        record["pause_at"] = args.pause_at
+    extra = {}
+    for pair in args.env:
+        key, sep, value = pair.partition("=")
+        if not sep:
+            sys.exit(f"ska-run: --env {pair!r} : KEY=VALUE")
+        extra[key] = value.replace("{run}", str(folder))
+    env.update(extra)
+    if extra:
+        record["env"] = extra
+
+    # A shell keeps the exit code of the game in the run folder
+    stdout = open(folder / "stdout.log", "w")
+    proc = subprocess.Popen(["/bin/sh", "-c", '"$@"; echo $? > "$SKA_RUN_EXIT"', "ska-run", *args.command],
+                            cwd=cwd, env={**env, "SKA_RUN_EXIT": str(folder / "exit")},
+                            stdout=stdout, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
+    record["pid"] = proc.pid
+    (folder / "run.json").write_text(json.dumps(record, indent=1))
+
+    # Ready : the console answers (and runs skalang with --ready eval)
+    started = time.time()
+    deadline = started + args.timeout
+    last = None
+    while time.time() < deadline:
+        if proc.poll() is not None:
+            tail = (folder / "stdout.log").read_text(errors="replace").splitlines()[-15:]
+            stop_xvfb(record)
+            time.sleep(0.2)
+            print(json.dumps({"run": args.id, "ok": False, "error": f"the game exited ({exit_code(folder)}) before it was ready",
+                              "stdout_tail": tail}))
+            return 1
+        try:
+            last = console_request(record["console"], "ping", 2)
+            if last.get("ok") and (args.ready != "eval" or last.get("evaluator")) \
+                    and (args.pause_at is None or last.get("paused")):
+                break
+        except (OSError, ValueError):
+            pass
+        time.sleep(0.1)
+    else:
+        print(json.dumps({"run": args.id, "ok": False, "error": f"not ready after {args.timeout} s"
+                          + ("" if last else " (the console never answered : was the game built with SKA_DEV_CONSOLE?)"),
+                          "folder": str(folder)}))
+        return 1
+    out = {"run": args.id, "pid": proc.pid, "display": record["display"], "console": record["console"],
+           "logs": record["logs"], "state": last.get("state", ""), "ready_ms": int((time.time() - started) * 1000)}
+    for key in ("seed", "fixed_step", "pause_at", "env"):
+        if key in record:
+            out[key] = record[key]
+    print(json.dumps(out))
+    return 0
+
+
+def stop_xvfb(record):
+    pid = record.get("xvfb_pid")
+    if pid and alive(pid):
+        os.kill(pid, signal.SIGTERM)
+
+
+def cmd_down(args):
+    record = read_record(args.id)
+    folder = Path(record["folder"])
+    pid = record.get("pid")
+    stopped_by = "already stopped"
+    if alive(pid):
+        stopped_by = "console quit"
+        try:
+            console_request(record["console"], "quit", 5)
+        except (OSError, ValueError):
+            stopped_by = "SIGTERM"
+            os.killpg(pid, signal.SIGTERM)
+        deadline = time.time() + args.timeout
+        while alive(pid) and time.time() < deadline:
+            time.sleep(0.1)
+        if alive(pid):
+            if stopped_by != "SIGTERM":
+                os.killpg(pid, signal.SIGTERM)
+                stopped_by = "SIGTERM (no exit after quit)"
+                deadline = time.time() + 5
+                while alive(pid) and time.time() < deadline:
+                    time.sleep(0.1)
+            if alive(pid):
+                os.killpg(pid, signal.SIGKILL)
+                stopped_by = "SIGKILL"
+    stop_xvfb(record)
+    # The shell writes the exit code once the game is gone
+    deadline = time.time() + 2
+    while exit_code(folder) is None and time.time() < deadline:
+        time.sleep(0.05)
+    print(json.dumps({"run": args.id, "exit": exit_code(folder), "stopped_by": stopped_by}))
+    return 0
+
+
+def cmd_ps(args):
+    root = runs_root()
+    if not root.exists():
+        return 0
+    for folder in sorted(root.iterdir()):
+        path = folder / "run.json"
+        if not path.exists():
+            continue
+        record = json.loads(path.read_text())
+        pid = record.get("pid")
+        up = time.time() - record.get("started", time.time())
+        status = f"up {int(up // 3600):02d}:{int(up % 3600 // 60):02d}:{int(up % 60):02d}" if alive(pid) else f"exited ({exit_code(folder)})"
+        print(f"{record['run']}  pid {pid}  {status}  {record.get('display', '')}  {' '.join(record['command'])}")
+    return 0
+
+
+def cmd_logs(args):
+    record = read_record(args.id)
+    folder = Path(record["folder"])
+    files = sorted((folder / "logs").glob("*.txt")) + [folder / "stdout.log"]
+    if args.file:
+        files = [f for f in files if f.name == args.file or f.name.startswith(args.file)]
+        if not files:
+            sys.exit(f"ska-run: no log file {args.file!r} in {folder / 'logs'}")
+    pattern = re.compile(args.grep) if args.grep else None
+    colors = re.compile(r"\x1b\[[0-9;]*m")
+    prefix = re.compile(r"^\[[0-9:]+\]")
+    lines = []
+    for f in files:
+        if not f.exists():
+            continue
+        for line in f.read_text(errors="replace").splitlines():
+            if args.strip:
+                line = prefix.sub("", colors.sub("", line))
+            if pattern is None or pattern.search(line):
+                lines.append(f"{f.name}: {line}" if len(files) > 1 else line)
+    for line in lines[-args.tail:] if args.tail else lines:
+        print(line)
+    return 0
+
+
+def cmd_path(args):
+    print(read_record(args.id)["folder"])
+    return 0
+
+
+def cmd_rm(args):
+    record = read_record(args.id)
+    if alive(record.get("pid")):
+        sys.exit(f"ska-run: run {args.id!r} is alive : ska-run down {args.id}")
+    shutil.rmtree(record["folder"])
+    return 0
+
+
+def main():
+    argv = sys.argv[1:]
+    command = []
+    if "--" in argv:
+        index = argv.index("--")
+        argv, command = argv[:index], argv[index + 1:]
+    parser = argparse.ArgumentParser(prog="ska-run", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="action")
+    up = sub.add_parser("up")
+    up.add_argument("id")
+    up.add_argument("--cwd")
+    up.add_argument("--env", action="append", default=[])
+    up.add_argument("--copy", action="append", default=[])
+    up.add_argument("--seed", type=int)
+    up.add_argument("--fixed-step", action="store_true")
+    up.add_argument("--pause-at", type=int)
+    up.add_argument("--ready", choices=["ping", "eval"], default="ping")
+    up.add_argument("--display", action="store_true")
+    up.add_argument("--audio", action="store_true")
+    up.add_argument("--timeout", type=float, default=60)
+    down = sub.add_parser("down")
+    down.add_argument("id")
+    down.add_argument("--timeout", type=float, default=10)
+    sub.add_parser("ps")
+    logs = sub.add_parser("logs")
+    logs.add_argument("id")
+    logs.add_argument("--grep")
+    logs.add_argument("--tail", type=int, default=50)
+    logs.add_argument("--file")
+    logs.add_argument("--strip", action="store_true")
+    for name in ("path", "rm"):
+        sub.add_parser(name).add_argument("id")
+    args = parser.parse_args(argv)
+    if args.action is None:
+        print(__doc__)
+        return 0
+    if args.action == "up":
+        args.command = command
+    return {"up": cmd_up, "down": cmd_down, "ps": cmd_ps, "logs": cmd_logs, "path": cmd_path, "rm": cmd_rm}[args.action](args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -7,6 +7,11 @@
 #include "Service/ScriptNameBuilder.h"
 #include "NodeValue/ScriptAST.h"
 #include "Generator/Value/BytecodeScriptGenerationHelper.h"
+#include "DevModule.h"
+#include <cstdlib>
+#include <regex>
+#include <filesystem>
+#include <unistd.h>
 
 namespace ska {
 	namespace scripting {
@@ -30,6 +35,9 @@ ska::scripting::ScriptVM::ScriptVM(std::string standardLibraryPath) :
 	m_modules(m_scriptCache.astCache, m_typeBuilder, m_typeChecker, m_reservedKeywords, m_parser, m_scriptCache, m_interpreter),
 	m_logModule(WithStandardLibraryPath(m_modules, std::move(standardLibraryPath))),
 	m_mathModule(m_modules) {
+	m_devModule = std::make_unique<DevModule>(*this);
+	addConsolePrelude("Dev = import \"bind:ska.dev\"");
+	DevConsole::get().setEvaluator(this);
 }
 
 ska::scripting::ScriptVM::Modules& ska::scripting::ScriptVM::WithStandardLibraryPath(Modules& modules, std::string standardLibraryPath) {
@@ -39,6 +47,7 @@ ska::scripting::ScriptVM::Modules& ska::scripting::ScriptVM::WithStandardLibrary
 }
 
 ska::scripting::ScriptVM::~ScriptVM() {
+	DevConsole::get().removeEvaluator(this);
 	// The coroutines are released before the executor they run on
 	m_suspended.clear();
 }
@@ -47,7 +56,7 @@ const ska::scripting::ScriptContext& ska::scripting::ScriptVM::context() const {
 	return m_runningContext;
 }
 
-std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& scriptFile) {
+std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& scriptFile, bool quiet) {
 	const auto name = FileUtils::getCanonicalPath(scriptFile);
 	auto compiled = m_compiledScripts.find(name);
 	if (compiled != m_compiledScripts.end()) {
@@ -61,6 +70,7 @@ std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& 
 
 	auto file = std::ifstream{ name };
 	if (file.fail()) {
+		m_lastCompileError = "script file not found : \"" + scriptFile + "\"";
 		LOG_ERROR << "Script file not found : \"" << scriptFile << "\"";
 		return {};
 	}
@@ -71,7 +81,10 @@ std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& 
 		m_compiledScripts.emplace(name, index);
 		return index;
 	} catch (std::exception& e) {
-		LOG_ERROR << "Script \"" << scriptFile << "\" could not be compiled : " << e.what();
+		m_lastCompileError = e.what();
+		if (!quiet) {
+			LOG_ERROR << "Script \"" << scriptFile << "\" could not be compiled : " << e.what();
+		}
 		m_failedScripts.insert(name);
 		return {};
 	}
@@ -81,7 +94,14 @@ bool ska::scripting::ScriptVM::start(const std::string& scriptFile, std::vector<
 	if (context.name.empty()) {
 		context.name = scriptFile;
 	}
-	auto script = PendingStart{ scriptFile, std::move(arguments), std::move(context) };
+	return start(scriptFile, std::move(arguments), std::move(context), EndCallback{});
+}
+
+bool ska::scripting::ScriptVM::start(const std::string& scriptFile, std::vector<std::string> arguments, ScriptContext context, EndCallback ended) {
+	if (context.name.empty()) {
+		context.name = scriptFile;
+	}
+	auto script = PendingStart{ scriptFile, std::move(arguments), std::move(context), NodeValue{}, {}, std::move(ended) };
 	if (m_scriptRunning) {
 		// A coroutine cannot start another one : it starts after the current step of the running script
 		m_pendingStarts.push_back(std::move(script));
@@ -100,6 +120,9 @@ bool ska::scripting::ScriptVM::startNow(PendingStart script) {
 			// A script file : its "run" function, with the string arguments
 			const auto scriptIndex = compile(script.scriptFile);
 			if (!scriptIndex.has_value()) {
+				if (script.ended) {
+					script.ended(false, "\"" + script.scriptFile + "\" could not be compiled : " + m_lastCompileError);
+				}
 				return false;
 			}
 			function = m_interpreter.exported(m_executor, *scriptIndex, m_scriptCache, "run");
@@ -115,14 +138,19 @@ bool ska::scripting::ScriptVM::startNow(PendingStart script) {
 		auto coroutine = runStep(script.context, [&]() {
 			return m_interpreter.start(m_executor, m_scriptCache, function, std::move(values));
 		});
-		auto running = std::make_unique<RunningScript>(RunningScript{ std::move(coroutine), std::move(script.context), Key(script.scriptFile, script.arguments), {}, {} });
+		auto running = std::make_unique<RunningScript>(RunningScript{ std::move(coroutine), std::move(script.context), Key(script.scriptFile, script.arguments), {}, {}, std::move(script.ended) });
 		if (afterStep(*running)) {
 			m_suspended.push_back(std::move(running));
+		} else if (running->ended) {
+			running->ended(true, endText(*running));
 		}
 		return true;
 	} catch (std::exception& e) {
 		m_wait.reset();
 		LOG_ERROR << "Error in script \"" << script.context.name << "\" : " << e.what();
+		if (script.ended) {
+			script.ended(false, std::string{ "error in script \"" } + script.context.name + "\" : " + e.what());
+		}
 		return false;
 	}
 }
@@ -176,12 +204,21 @@ void ska::scripting::ScriptVM::update(unsigned int elapsedTime) {
 		} catch (std::exception& e) {
 			m_wait.reset();
 			LOG_ERROR << "Error in script \"" << script->context.name << "\" : " << e.what();
+			script->failed = true;
+			if (script->ended) {
+				script->ended(false, std::string{ "error in script \"" } + script->context.name + "\" : " + e.what());
+				script->ended = {};
+			}
 		}
 		afterStep(*script);
+		if (!script->coroutine.suspended() && script->ended) {
+			script->ended(true, endText(*script));
+			script->ended = {};
+		}
 	}
 
 	m_suspended.erase(std::remove_if(m_suspended.begin(), m_suspended.end(), [](const auto& script) {
-		return !script->coroutine.suspended();
+		return script->failed || !script->coroutine.suspended();
 	}), m_suspended.end());
 
 	startPendingScripts();
@@ -354,7 +391,7 @@ std::size_t ska::scripting::ScriptVM::emit(const std::string& event, std::vector
 	auto started = std::vector<PendingStart>{};
 	for (const auto& hook : m_hooks) {
 		if (hook.event == event) {
-			started.push_back(PendingStart{ "", {}, context, hook.function, arguments });
+			started.push_back(PendingStart{ "", {}, context, hook.function, arguments, {} });
 		}
 	}
 	for (auto& hook : started) {
@@ -364,4 +401,100 @@ std::size_t ska::scripting::ScriptVM::emit(const std::string& event, std::vector
 		startPendingScripts();
 	}
 	return started.size();
+}
+
+/* Development console */
+
+namespace {
+	std::string ValueText(const ska::NodeValue& value) {
+		if (value.is<ska::StringShared>()) { return *value.nodeval<ska::StringShared>(); }
+		if (value.is<long>()) { return std::to_string(value.nodeval<long>()); }
+		if (value.is<double>()) { auto text = std::stringstream{}; text << value.nodeval<double>(); return text.str(); }
+		if (value.is<bool>()) { return value.nodeval<bool>() ? "true" : "false"; }
+		return "";
+	}
+}
+
+std::string ska::scripting::ScriptVM::endText(RunningScript& script) {
+	auto text = std::string{};
+	try {
+		text = ValueText(script.coroutine.result());
+	} catch (std::exception&) {
+		// No value returned
+	}
+	if (text.empty() && script.context.reply != nullptr) {
+		text = *script.context.reply;
+	}
+	return text;
+}
+
+void ska::scripting::ScriptVM::addConsolePrelude(std::string line) {
+	if (std::find(m_consolePrelude.begin(), m_consolePrelude.end(), line) == m_consolePrelude.end()) {
+		m_consolePrelude.push_back(std::move(line));
+	}
+}
+
+std::string ska::scripting::ScriptVM::writeConsoleScript(const std::string& body) {
+	// Next to the console socket (the run folder of tools/ska-run), else in the temporary directory
+	auto directory = std::filesystem::path{};
+	const auto* socket = std::getenv("SKA_CONSOLE");
+	if (socket != nullptr && *socket != '\0') {
+		directory = std::filesystem::path{ socket }.parent_path() / "eval";
+	} else {
+		directory = std::filesystem::temp_directory_path() / ("ska-eval-" + std::to_string(::getpid()));
+	}
+	std::filesystem::create_directories(directory);
+	const auto file = directory / ("eval_" + std::to_string(++m_consoleScripts) + ".miniska");
+	auto out = std::ofstream{ file };
+	for (const auto& line : m_consolePrelude) {
+		out << line << "\n";
+	}
+	out << body;
+	return file.string();
+}
+
+void ska::scripting::ScriptVM::eval(const std::string& code, DevReplier reply) {
+	auto context = ScriptContext{};
+	context.name = "console";
+	context.reply = std::make_shared<std::string>();
+	auto ended = [reply](bool ok, const std::string& text) {
+		reply(ok ? DevReply::Value(text) : DevReply::Error(text));
+	};
+
+	// One line : maybe an expression, its value is the answer
+	if (code.find('\n') == std::string::npos) {
+		const auto expression = writeConsoleScript("run = function(args: string[]): string do\nreturn ((" + code + "): string)\nend\n");
+		if (compile(expression, true).has_value()) {
+			start(expression, {}, context, ended);
+			return;
+		}
+	}
+	// Statements
+	const auto statements = writeConsoleScript("run = function(args: string[]) do\n" + code + "\nend\n");
+	if (!compile(statements, true).has_value()) {
+		// The lines of the error : those of the code sent (after the prelude and the "run" line)
+		const auto offset = static_cast<long>(m_consolePrelude.size()) + 1;
+		auto error = std::string{};
+		const auto line = std::regex{ "\\(l\\.([0-9]+)" };
+		auto last = std::sregex_iterator{};
+		auto position = m_lastCompileError.cbegin();
+		for (auto match = std::sregex_iterator{ m_lastCompileError.begin(), m_lastCompileError.end(), line }; match != last; ++match) {
+			error.append(position, (*match)[0].first);
+			error += "(l." + std::to_string(std::stol((*match)[1].str()) - offset);
+			position = (*match)[0].second;
+		}
+		error.append(position, m_lastCompileError.cend());
+		reply(DevReply::Error("does not compile : " + error));
+		return;
+	}
+	start(statements, {}, context, ended);
+}
+
+void ska::scripting::ScriptVM::run(const std::string& file, std::vector<std::string> arguments, DevReplier reply) {
+	auto context = ScriptContext{};
+	context.name = file;
+	context.reply = std::make_shared<std::string>();
+	start(file, std::move(arguments), std::move(context), [reply](bool ok, const std::string& text) {
+		reply(ok ? DevReply::Value(text) : DevReply::Error(text));
+	});
 }
