@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "Base/IO/Files/LogFilePath.h"
 #include "LoggerConfigLang.h"
 
 ska::detail::SkaLangLogger& ska::detail::LangLogger() {
@@ -20,7 +21,7 @@ namespace ska {
 	}
 }
 ska::detail::SkaLangLogger ska::detail::BuildLangLogger(const char * filename) {
-	static auto TypeBuilderLogFileOutput = std::ofstream { filename };
+	static auto TypeBuilderLogFileOutput = ska::OpenLogFile(filename);
 	auto logger = SkaLangLogger{};
 #ifndef NDEBUG
 	logger.get<0>().addOutputTarget(TypeBuilderLogFileOutput);
