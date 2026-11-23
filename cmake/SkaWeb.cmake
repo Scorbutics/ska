@@ -75,7 +75,7 @@ ${entries}		{ \"init\", reinterpret_cast<ska::ska_default_function_ptr>(&init) }
 
 	# The memory grows as needed ; the scripts (skalang) need a larger stack than the default one
 	set(options -sALLOW_MEMORY_GROWTH=1 -sSTACK_SIZE=8MB -sFORCE_FILESYSTEM=1 -lidbfs.js -sEXIT_RUNTIME=0
-		"-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,addRunDependency,removeRunDependency")
+		"-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,ENV,addRunDependency,removeRunDependency")
 	if(NOT WEB_ASSETS_ROOT)
 		set(WEB_ASSETS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 	endif()
