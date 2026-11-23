@@ -30,7 +30,7 @@ namespace ska {
 			heightBlocks = reader.get<int>("Window height_blocks");
 			title = reader.get<std::string>("Window title");
 		}
-		catch (FileException& fe) {
+		catch (std::exception& fe) {
 			std::cerr << "Error while loading game settings : " << fe.what() << std::endl;
 		}
 
@@ -65,7 +65,7 @@ Game::Game(ska::EntityManager& em, GameConfPtr&& gc) :
 
 	LogsConfiguration();
 
-	ska::SDLFont::DEFAULT_FONT_FILE = "./Resources/Fonts/FiraSans-Medium.ttf";
+	ska::SDLFont::DEFAULT_FONT_FILE = "./resources/Fonts/FiraSans-Medium.ttf";
 	navigateToState<StateSandbox>(m_entityManager, m_eventDispatcher);
 }
 
@@ -77,12 +77,19 @@ int Game::onTerminate(ska::TerminateProcessException& tpe) {
 int Game::onException(ska::GenericException& e) {
 	/* Handles Generics Game exceptions */
 	std::cerr << e.what() << std::endl;
-	return 0;
+	return 1;
 }
 
 #undef main
 int main(int argc, char* argv[]) {
 	auto app = ska::GameAppGet();
-	app->run();
+	// The game ends with an exception : a quit (the window closed, the console) or an error
+	try {
+		app->run();
+	} catch (ska::TerminateProcessException& tpe) {
+		return app->onTerminate(tpe);
+	} catch (ska::GenericException& e) {
+		return app->onException(e);
+	}
 	return 0;
 }

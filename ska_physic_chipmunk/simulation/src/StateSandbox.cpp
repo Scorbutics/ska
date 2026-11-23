@@ -72,10 +72,10 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 		addLogic(std::make_unique<ska::InputSystem>(m_entityManager, m_eventDispatcher));
 		addLogic(std::make_unique<ska::cp::MovementSystem>(m_entityManager, m_space));
 
-		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
+		const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "resources/Chipsets/chipset_platform" };
 		auto tileset = ska::Tileset{ BLOCKSIZE, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
-		const auto mapper = ska::TilesetCorrespondanceMapper {"Resources/Chipsets/corr.png"};
-		const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
+		const auto mapper = ska::TilesetCorrespondanceMapper {"resources/Chipsets/corr.png"};
+		const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "resources/Levels/new_level");
 
 		const auto world = ska::TileWorld { m_eventDispatcher, tileset, levelLoader };
 
@@ -84,7 +84,7 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 
 		//m_space.setGravity({ 0., 300 });
 
-		m_ballTexture.load("Resources/Sprites/2.png");
+		m_ballTexture.load("resources/Sprites/2.PNG");
 
 		for (const auto& r : contourRectangleTile) {
 			m_space.addShape(nullptr, ska::cp::Shape::fromBox(m_space.getStaticBody(), r));

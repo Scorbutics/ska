@@ -21,11 +21,11 @@
 #include "World/LayerLoaderImage.h"
 #include "Base/IO/Files/FileUtils.h"
 
-constexpr const char* RESOURCES_FOLDER_RAW = "./Resources/Sprites/";
+constexpr const char* RESOURCES_FOLDER_RAW = "./resources/Sprites/";
 #define RESOURCES_FOLDER std::string(RESOURCES_FOLDER_RAW)
 
 ska::Tileset BuildTileset() {
-    const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "Resources/Chipsets/chipset_platform" };
+    const ska::TilesetCompleteLoader<ska::TilesetLoaderImage, ska::TilesetEventLoaderText> tilesetLoader { "resources/Chipsets/chipset_platform" };
     return { 48, tilesetLoader.tilesetLoader, tilesetLoader.tilesetEventLoader };
 }
 
@@ -44,7 +44,7 @@ ska::TileWorldLoaderAggregate BuildTileWorldLoaderImageAndText(const ska::Tilese
 }
 
 ska::TileWorld BuildTileWorld(const ska::TilesetCorrespondanceMapper& mapper, ska::ExtensibleGameEventDispatcher<>& ed, ska::Tileset& tileset) {
-    const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "Resources/Levels/new_level");
+    const auto levelLoader = BuildTileWorldLoaderImageAndText(mapper, "resources/Levels/new_level");
     return { ed, tileset, levelLoader };
 }
 
@@ -56,7 +56,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_debugEntityCollision(ed, em),
 	m_entityCollision(ed, em),
 	m_debugWorldCollision(ed, em),
-	m_mapper {"Resources/Chipsets/corr.png"},
+	m_mapper {"resources/Chipsets/corr.png"},
 	m_tileset {BuildTileset()},
 	m_world (std::move(BuildTileWorld(m_mapper, ed, m_tileset))),
 	m_worldCollisionResponse(m_world, ed, em),
@@ -71,9 +71,9 @@ ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const st
 	auto& at = gc.animatedSprites[0];
 	//at.load(RESOURCES_FOLDER + "giphy.gif");
 	if (spritesheet) {
-		at.load(RESOURCES_FOLDER + sprite + ".png", 4, 8, 3);
+		at.load(RESOURCES_FOLDER + sprite, 4, 8, 3);
 	} else {
-		at.load(RESOURCES_FOLDER + sprite + ".png");
+		at.load(RESOURCES_FOLDER + sprite);
 	}
 	m_entityManager.addComponent<ska::GraphicComponent>(entity, std::move(gc));
 	m_entityManager.addComponent<ska::GravityAffectedComponent>(entity, ska::GravityAffectedComponent());
@@ -134,9 +134,9 @@ bool StateSandbox::onGameEvent(ska::GameEvent& ge) {
 			return ska::NumberUtils::absolute(mov.vz) <= 0.1;
 		});
 
-		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100), "1", true);
-		createPhysicAABBEntity(ska::Point<int>(350, 150), "0", false);
-		auto blockC = createPhysicAABBEntity(ska::Point<int>(200, 300), "0", false);
+		auto blockA = createPhysicAABBEntity(ska::Point<int>(100, 100), "1.png", true);
+		createPhysicAABBEntity(ska::Point<int>(350, 150), "0.PNG", false);
+		auto blockC = createPhysicAABBEntity(ska::Point<int>(200, 300), "0.PNG", false);
 
 		auto& graphicComponentC = m_entityManager.getComponent<ska::GraphicComponent>(blockC);
 		auto& asC = graphicComponentC.animatedSprites[0];
