@@ -42,7 +42,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(absPos.y + camera.h * pos.z);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(absPos.y, pos.z, camera.h);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
 			m_pgd.back().setEffect(gc.effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
@@ -54,7 +54,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			sprite.update();
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min();
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : static_cast<int>(absPos.y + camera.h * pos.z);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(absPos.y, pos.z, camera.h);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
 			m_pgd.back().setEffect(gc.effect);
@@ -86,6 +86,18 @@ void ska::GraphicSystem::refresh(unsigned int) {
 
 void ska::GraphicSystem::update(unsigned int ellapsedTime) {
 	System::update(ellapsedTime);
+}
+
+void ska::GraphicSystem::setAirLayer(const long height, const int priority) {
+	m_airHeight = height;
+	m_airPriority = priority;
+}
+
+int ska::GraphicSystem::spritePriority(const long groundY, const long z, const int cameraHeight) const {
+	if (m_airHeight <= 0) {
+		return static_cast<int>(groundY + cameraHeight * z);
+	}
+	return static_cast<int>(z >= m_airHeight ? m_airPriority + groundY : groundY);
 }
 
 int ska::GraphicSystem::getTopLayerPriority() const {
