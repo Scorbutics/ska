@@ -35,7 +35,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 		pos.y = static_cast<long>(std::lround(drawn.y));
 		pos.z = static_cast<long>(std::lround(drawn.z));
 
-		const auto& absPos = ska::Point<int> { pos.x - static_cast<int>(hc.width / 2) + hc.xOffset / 2, pos.y - static_cast<int>(hc.height / 2) - 5 };
+		const auto absPos = gc.spriteOrigin(pos.x, pos.y, hc);
 		const auto& relPosX = static_cast<int>(absPos.x - camera.x);
 		const auto& relPosY = static_cast<int>(absPos.y - camera.y - pos.z);
 		// Its feet : the bottom of its hitbox

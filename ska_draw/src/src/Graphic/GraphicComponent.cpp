@@ -11,7 +11,13 @@ ska::GraphicComponent& ska::GraphicComponent::operator=(const GraphicComponent& 
     desiredPriority = gc.desiredPriority;
 	m_drawn = gc.m_drawn;
 	effect = gc.effect;
+	drawOffset = gc.drawOffset;
 	return *this;
+}
+
+ska::Point<int> ska::GraphicComponent::spriteOrigin(const long x, const long y, const HitboxComponent& hitbox) const {
+	return { static_cast<int>(x) - static_cast<int>(hitbox.width / 2) + hitbox.xOffset / 2 + drawOffset.x,
+		static_cast<int>(y) - static_cast<int>(hitbox.height / 2) - 5 + drawOffset.y };
 }
 
 ska::Interpolated::Value ska::GraphicComponent::drawnPosition(const PositionComponent& position) {

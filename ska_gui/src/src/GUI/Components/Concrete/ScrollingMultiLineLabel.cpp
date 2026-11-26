@@ -20,7 +20,7 @@ ska::ScrollingMultiLineLabel::ScrollingMultiLineLabel(WidgetPanel& parent, const
 
 	buildTextLines(text);
 
-	Widget::setHeight(static_cast<unsigned int>(m_textLines.size() * fontSize));
+	Widget::setHeight(static_cast<unsigned int>(static_cast<int>(m_textLines.size()) * lineHeight()));
 
 	// The first line, empty : its letters appear one by one
 	addWidget<Label>(" ", m_fontSize, Point<int>());
@@ -55,13 +55,18 @@ void ska::ScrollingMultiLineLabel::refresh(unsigned int ellapsedTime) {
 		}
 		m_currentLine++;
 		m_shown = 0;
-		addWidget<Label>(" ", m_fontSize, Point<int>(0, m_fontSize * static_cast<int>(m_currentLine)));
+		addWidget<Label>(" ", m_fontSize, Point<int>(0, lineHeight() * static_cast<int>(m_currentLine)));
 	}
 	if (changed || m_shown == 0) {
 		const auto& line = m_textLines[m_currentLine];
 		auto& label = static_cast<Label&>(*getWidget(m_currentLine));
 		label.modifyText(m_shown == 0 ? std::string{ " " } : line.substr(0, m_shown));
 	}
+}
+
+int ska::ScrollingMultiLineLabel::lineHeight() const {
+	// A quarter of the size between two lines : the letters going down of a line (g, p, q) do not touch the next one
+	return m_fontSize + m_fontSize / 4;
 }
 
 void ska::ScrollingMultiLineLabel::buildTextLines(const std::string& cs) {

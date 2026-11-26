@@ -53,8 +53,10 @@ void ska::LayerDepthRenderable::graphicUpdate(const Rectangle& cameraPos, Drawab
 }
 
 void ska::LayerDepthRenderable::BaseRow::render(Renderer& renderer) const {
-	const auto cameraX = NumberUtils::absolute(m_camera.x);
-	const auto cameraY = NumberUtils::absolute(m_camera.y);
+	// Signed : a tile partly out of the left or top of the screen is at a negative position (NumberUtils::absolute gives an
+	// unsigned int : the subtraction wrapped around, the tile was culled, the blocks along those edges were left black)
+	const auto cameraX = static_cast<int>(NumberUtils::absolute(m_camera.x));
+	const auto cameraY = static_cast<int>(NumberUtils::absolute(m_camera.y));
 	const auto size = static_cast<int>(m_blockSize);
 	for (const auto& [block, animation] : m_tiles) {
 		const auto x = block.x * size - cameraX;

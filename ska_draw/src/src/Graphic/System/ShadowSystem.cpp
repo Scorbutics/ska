@@ -38,8 +38,9 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		if (graphic != nullptr && !graphic->animatedSprites.empty()) {
 			spriteSize = Point<int>{ static_cast<int>(graphic->animatedSprites[0].getWidth()), static_cast<int>(graphic->animatedSprites[0].getHeight()) };
 		}
-		const auto spriteX = static_cast<int>(pos.x) - static_cast<int>(hc.width / 2) + hc.xOffset / 2;
-		const auto spriteY = static_cast<int>(pos.y) - static_cast<int>(hc.height / 2) - 5;
+		const auto origin = graphic != nullptr ? graphic->spriteOrigin(pos.x, pos.y, hc) : GraphicComponent{}.spriteOrigin(pos.x, pos.y, hc);
+		const auto spriteX = origin.x;
+		const auto spriteY = origin.y;
 		const auto feetY = hc.height > 0 ? static_cast<int>(pos.y) + hc.yOffset + static_cast<int>(hc.height) - 6 : spriteY + spriteSize.y * 8 / 9 - 6;
 		const auto relPosX = spriteX + spriteSize.x / 2 - static_cast<int>(m_shadow.getWidth()) / 2 - camera.x;
 		const auto relPosY = feetY - static_cast<int>(m_shadow.getHeight()) / 2 - camera.y;
