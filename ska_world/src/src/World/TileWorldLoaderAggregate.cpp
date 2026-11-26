@@ -5,7 +5,7 @@
 #include "LayerRenderable.h"
 #include "TileWorld.h"
 #include "LayerEventLoaderText.h"
-#include "LayerYIndexRenderable.h"
+#include "LayerDepthRenderable.h"
 
 ska::TileWorldLoaderAggregate::TileWorldLoaderAggregate(
                                                 std::string levelPath,
@@ -32,19 +32,20 @@ ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tilese
 
 std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
 	std::vector<LayerRenderablePtr> renderables;
-	if(m_loaders.empty()) {
-		return renderables;
+	for (auto index = 0u; index < m_loaders.size(); index++) {
+		const auto& loader = *m_loaders[index];
+		// The base of each tile (its properties in the tileset) ; in the layers after the fixed ones, a tile with no base
+		// (a tileset with no depth in its properties) stands on its own block : drawn sorted with the characters by its row
+		const auto tiles = loader.loadPhysics(tileset);
+		auto bases = Vector2<int>{};
+		bases.reserve(tiles.lineSize(), tiles.lineSize() == 0 ? 0 : tiles.size() / tiles.lineSize());
+		for (const auto& tile : tiles) {
+			const auto base = tile.has_value() ? tile->properties.base : -1;
+			bases.push_back(base < 0 && tile.has_value() && index >= m_layerFixed ? 0 : base);
+		}
+		renderables.push_back(std::make_unique<LayerDepthRenderable>(loader.loadAnimations(tileset), bases, tileset.getTexture(), blockSize,
+			FlatLayersPriority + static_cast<int>(index), m_sortedLayersPriority + static_cast<int>(index)));
 	}
-
-	auto index = 0u;
-	while (index < m_layerFixed) {
-		renderables.push_back(std::make_unique<LayerMonoRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize));
-	}
-	while (index < m_loaders.size()) {
-		auto layer = std::make_unique<LayerYIndexRenderable>(m_loaders[index++]->loadAnimations(tileset), tileset.getTexture(), blockSize, static_cast<unsigned int>(m_sortedLayersPriority) + index);
-		renderables.push_back(std::move(layer));
-	}
-
 	return renderables;
 }
 

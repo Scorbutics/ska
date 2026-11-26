@@ -16,17 +16,15 @@ namespace ska {
 		GraphicSystem(EntityManager& entityManager, ska::GameEventDispatcher& ged, CameraSystem& camera);
         GraphicSystem& operator=(const GraphicSystem&) = delete;
         int getTopLayerPriority() const;
-		// The priority of a sprite (the drawing order) : its position on the ground (y : the bottom of the sprite, its feet),
-		// and its height (z). A sprite at "height" or higher (in the air, ex : flying) is drawn from "priority" (+ y) : over
-		// the layers of the map drawn over the characters (tree tops...). Lower (on the ground, a hop), it is sorted on the
-		// ground by its y, plus its depth (setSpriteDepth).
+		// The priority of a sprite (the drawing order) : its ground line, the bottom of its hitbox (its feet : the same for
+		// any size of sprite ; without a hitbox, the bottom of the sprite : an effect, a thrown ball). It is sorted with the
+		// standing tiles of the maps by their base line (ska::LayerDepthRenderable) : drawn behind an object whose base is
+		// in front of its feet, whatever the height of the object.
+		// A sprite at "height" or higher (in the air, ex : flying over the tree tops) is drawn from "priority" (+ its ground
+		// line) : over the standing tiles. Lower (a hop, a landing), it is sorted on the ground.
 		// Without an air layer (height 0), the height is added to the priority (camera height * z).
 		void setAirLayer(long height, int priority);
-		// Added to the priority of a sprite on the ground, from the middle of its bottom (x, y) : ex, a character standing
-		// under a tile of a layer sorted with the characters is sorted behind it
-		using SpriteDepth = std::function<int(long x, long bottom)>;
-		void setSpriteDepth(SpriteDepth depth);
-		int spritePriority(long x, long bottom, long z, int cameraHeight) const;
+		int spritePriority(long ground, long z, int cameraHeight) const;
         virtual void update(unsigned int ellapsedTime) override;
         virtual ~GraphicSystem();
     protected:
@@ -36,6 +34,5 @@ namespace ska {
         int m_topLayerPriority;
 		long m_airHeight = 0;
 		int m_airPriority = 0;
-		SpriteDepth m_spriteDepth;
     };
 }

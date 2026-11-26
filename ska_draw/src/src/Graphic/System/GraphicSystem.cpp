@@ -38,11 +38,13 @@ void ska::GraphicSystem::refresh(unsigned int) {
 		const auto& absPos = ska::Point<int> { pos.x - static_cast<int>(hc.width / 2) + hc.xOffset / 2, pos.y - static_cast<int>(hc.height / 2) - 5 };
 		const auto& relPosX = static_cast<int>(absPos.x - camera.x);
 		const auto& relPosY = static_cast<int>(absPos.y - camera.y - pos.z);
+		// Its feet : the bottom of its hitbox
+		const auto feet = pos.y + hc.yOffset + static_cast<long>(hc.height);
 
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(absPos.x + static_cast<int>(sprite.getWidth()) / 2, absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
 			m_pgd.back().setEffect(gc.effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
@@ -54,7 +56,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			sprite.update();
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min();
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(absPos.x + static_cast<int>(sprite.getWidth()) / 2, absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
 			m_pgd.back().setEffect(gc.effect);
@@ -93,19 +95,14 @@ void ska::GraphicSystem::setAirLayer(const long height, const int priority) {
 	m_airPriority = priority;
 }
 
-void ska::GraphicSystem::setSpriteDepth(SpriteDepth depth) {
-	m_spriteDepth = std::move(depth);
-}
-
-int ska::GraphicSystem::spritePriority(const long x, const long bottom, const long z, const int cameraHeight) const {
+int ska::GraphicSystem::spritePriority(const long ground, const long z, const int cameraHeight) const {
 	if (m_airHeight > 0 && z >= m_airHeight) {
-		return static_cast<int>(m_airPriority + bottom);
+		return static_cast<int>(m_airPriority + ground);
 	}
-	const auto depth = m_spriteDepth ? m_spriteDepth(x, bottom) : 0;
 	if (m_airHeight <= 0) {
-		return static_cast<int>(bottom + cameraHeight * z) + depth;
+		return static_cast<int>(ground + cameraHeight * z);
 	}
-	return static_cast<int>(bottom) + depth;
+	return static_cast<int>(ground);
 }
 
 int ska::GraphicSystem::getTopLayerPriority() const {

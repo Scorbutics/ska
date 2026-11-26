@@ -20,7 +20,8 @@ void ska::VectorDrawableContainer::reserve(const unsigned int size) {
 }
 
 void ska::VectorDrawableContainer::draw() {
-	sort(m_data.begin(), m_data.end(), Drawable::staticOperatorInf);
+	// Stable : the drawables of the same priority keep the order they were added in (ex : the layers of a map)
+	std::stable_sort(m_data.begin(), m_data.end(), Drawable::staticOperatorInf);
 	// The world zoomed (the camera), then the interface over it
 	auto inWorld = m_worldZoom != 1.F;
 	if (inWorld) {

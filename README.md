@@ -16,6 +16,13 @@ Fragment shaders run on the drawings (`RenderEffect::shader`, ex: a sprite of an
 * A shader receives the color of the drawing (`layout(location = 0) in vec4`), its texture coordinates (`location = 1`, `vec2`), the texture (`layout(set = 2, binding = 0) uniform sampler2D`) and its uniforms (`layout(set = 3, binding = 0) uniform`, given with `Shader::setUniforms`, or for one drawing with `RenderEffect::shaderParameters`).
 * `ska::Shader shader{ "Shaders/name", true }` loads `Shaders/name.frag.spv` (true : it has uniforms) the first time it is drawn.
 
+# Maps and tilesets
+A map (`ska::TileWorld`) is layers of blocks, each block a cell of the tileset of the map (`<tileset>.png`). Three images give the cells of the tileset their properties (`TilesetLoaderImage`), a pixel per cell :
+
+* `<tileset>.png.col` : the collisions. White and light gray (`0xAA`) are walked on, black and dark gray (`0x46`) block ; the grays are animated (4 frames, down the tileset).
+* `<tileset>.png.prop` : the properties. Its green is the depth of the cell (`TileProperties::base`) : 0, a flat tile (a ground, a carpet : drawn under every character) ; n + 1, a tile standing with the base of its object n blocks lower (a sign : 1 ; the lantern of a lamp on its post : 2 ; the roof of a building of 5 rows : 5).
+* The drawing order (`LayerDepthRenderable`) : the flat tiles of each layer first, then the standing tiles sorted with the sprites by their ground line : a tile at the base line of its object (the middle of the block it stands on, `TileWorldLoaderAggregate`'s priority), a sprite at the bottom of its hitbox (its feet ; without a hitbox, the bottom of the sprite : `GraphicSystem`). So a character behind an object, whatever its height, is hidden by it, in front of it is drawn over it. In the layers after the fixed ones (`TileWorldLoaderAggregate`), a tile with no depth stands on its own block (the tilesets with no depth in their properties).
+
 # Scripting
 Games are scripted with [skalang](https://github.com/Scorbutics/skalang) (`.miniska` scripts), built with the engine (`external/skalang`).
 

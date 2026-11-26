@@ -76,7 +76,10 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 		for (auto y = 0; y < height; y++) {
 			const auto col = Walkable(m_sCol.getPixel32Color(x, y)) ? TileCollision::No : TileCollision::Yes;
 
-			const auto tileProperties = TileProperties{};
+			auto tileProperties = TileProperties{};
+			// The green of the properties image : 0 a flat tile, n + 1 a tile standing with its base n blocks lower
+			const auto property = m_sProperties.getPixel32Color(x, y);
+			tileProperties.base = static_cast<int>(property.g) - 1;
 
 			//TODO propriétés (exemple : vent) ?
 			//m_sProperties.getPixel32Color(x, y).r ==
