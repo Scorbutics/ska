@@ -15,6 +15,10 @@ Read [doc/LANGUAGE.md](doc/LANGUAGE.md) before writing or reviewing a script: th
 
 ## Build and tests
 
+skalang is a folder of the ska engine (`external/skalang`, no longer a git repository of its own : commit in ska). Built
+alone, from this folder, it uses skalog and skabase next to it (`../skalog`, `../skabase`); the ska CI builds it so and
+runs its tests.
+
 ```sh
 cmake -S . -B build && cmake --build build -j8
 cd build/bin && ./skalang_test && ./skalang_bytecode_generator_test && ./skalang_bytecode_serializer_test && ./skalang_bytecode_interpreter_test

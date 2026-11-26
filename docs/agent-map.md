@@ -21,7 +21,7 @@
 - Grill
 - Noticed in passing
 
-**Shape(s):** game engine (2D, SDL3, ECS) + embedded scripting host (skalang) · **Repos covered:** ska (`external/ska` in Smash & Dash; submodules skabase, skalog, skalang read for evidence) · **Mapped by:** Claude (toolsmith map), not grilled yet
+**Shape(s):** game engine (2D, SDL3, ECS) + embedded scripting host (skalang) · **Repos covered:** ska (`external/ska` in Smash & Dash; skabase, skalog, skalang (folders of ska) read for evidence) · **Mapped by:** Claude (toolsmith map), not grilled yet
 
 **Variants:**
 - native (Linux, Windows build script `build_vs2019_win32.bat`): `ska_main` loads the game library, a `for(;;)` loop calls `GameCore::frame` (`ska_core/src/src/Core/GameCore.h:61`).

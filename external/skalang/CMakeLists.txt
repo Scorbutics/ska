@@ -29,15 +29,16 @@ MinSizeRel."
        FORCE )
 endif()
 
-# skalog and skabase : the host ones are used when the host already provides them (same targets names)
-# (skabase sources need their own include directory, given by the including directory)
+# skalog and skabase : next to skalang in the ska engine (external/skalog, external/skabase) ; the host ones are used when
+# the host already provides them (same targets names). skabase sources need their own include directory, given by the
+# including directory
 if(NOT TARGET skalog)
-	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/skalog/src/src)
-	add_subdirectory(external/skalog/src)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../skalog/src/src)
+	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../skalog/src skalog)
 endif()
 if(NOT TARGET skabase)
-	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/skabase/src/src)
-	add_subdirectory(external/skabase/src)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../skabase/src/src)
+	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../skabase/src skabase)
 endif()
 get_target_property(SKA_LOG_TARGET_DIR skalog SOURCE_DIR)
 get_target_property(SKA_BASE_TARGET_DIR skabase SOURCE_DIR)

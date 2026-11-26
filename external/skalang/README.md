@@ -201,9 +201,8 @@ The project uses CMake to compile and a C++17 (at least) compiler.
 It has **no** dependency excluding the C++ standard library, excluding my own skalog and skabase project, used respectively as logging lib and common programming tools.
 It has been tested sucessfully on Windows (10), Linux (18.04) and on an Android (5+) based device with the Termux app to have an in-device terminal.
 
-Clone this repository with the external git submodules :
-`git clone --recurse-submodules git@github.com:Scorbutics/skalang.git`
-Then you just have to start CMake and compile the project from the root folder :
+skalang lives in the ska engine (`external/skalang` of `git@github.com:Scorbutics/ska.git`), next to skalog and skabase
+(`external/skalog`, `external/skabase`). Built alone, from its folder :
 `cmake -S . -B build`
 And
 `cmake --build build`

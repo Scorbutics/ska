@@ -49,3 +49,5 @@ CMakeCache.txt
 /external/chipmunk/src/Debug
 # The build (cmake -S . -B build)
 /build/
+# skalang built alone (cmake -S external/skalang -B build-skalang : the CI)
+/build-skalang/

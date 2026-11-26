@@ -15,4 +15,4 @@ string(REGEX REPLACE "[^;]*CMakeFiles/[^;]+;?" "" SOURCES "${SOURCES}")
 
 add_library(skabase ${SOURCES})
 target_link_libraries(skabase skalog)
-target_include_directories(skabase PUBLIC ../external/skalog/src/src)
+target_include_directories(skabase PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../skalog/src/src)
