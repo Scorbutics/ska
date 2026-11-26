@@ -6,6 +6,8 @@ namespace ska {
 	};
 
 	struct TileProperties {
+		// Bits of properties (TILE_PROPERTY_WATER ; the game gives a meaning to the others) : the red of the properties
+		// image of the tileset (TilesetLoaderImage), and Tileset::setPropertiesBitMask
 		unsigned int bitMask {};
 		// Where the object the tile is a part of stands on the ground, in blocks under the tile : -1, the tile is flat
 		// (a ground, a carpet : drawn under the characters) ; 0, it stands on its own block (a sign, a trunk) ; n, the
