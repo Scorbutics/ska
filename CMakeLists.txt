@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska)
 
-set(BUILD_SHARED_LIBS TRUE)
+# Shared libraries (the game is a library loaded by ska_main) ; on the web, all static, linked in one page (a CMake with
+# its own Emscripten platform would build shared ones : the page cannot link them)
+if(EMSCRIPTEN)
+	set(BUILD_SHARED_LIBS FALSE)
+else()
+	set(BUILD_SHARED_LIBS TRUE)
+endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
