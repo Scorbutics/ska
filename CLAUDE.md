@@ -11,6 +11,8 @@ cmake -S . -B build && cmake --build build -j8
 build/bin/ska_core_test && build/bin/ska_scripting_test   # also ska_ai_test, ska_gui_test, ska_particle_test, ska_world_test
 ```
 
+Options: `SKA_BUILD_DEMOS` (the physics demos; on when the engine is built alone, off in a game), `SKA_PHYSIC_HOMEMADE` (the homemade physics, deprecated, off: `ska_physic_chipmunk` replaces it), `SKA_PRECOMPILED_HEADERS` (the C++ standard headers precompiled for every C++ target, `cmake/SkaPrecompiledHeaders.cmake`; off on the web). ccache is used when it is installed (`cmake/SkaCompilerCache.cmake`, also included by the games).
+
 Run the tests from the repository root: `ska_gui_test` loads `resources/Fonts` relative to the working directory (it needs a display: `xvfb-run` without one).
 
 Web (Emscripten): `cmake/SkaWeb.cmake` (`ska_web_executable`: the game, the engine and SDL linked in one page; the functions loaded by name are found in a generated table, `DynamicLibraryStatic` in skabase), `tools/web/build_deps.sh <prefix>` builds the SDL3 libraries for it. On the web `SKA_PLATFORM_WEB` is defined (with `SKA_PLATFORM_LINUX`), there is no thread (the logger runs its commands at once) and the browser calls each frame (`GameCore::run`, `frame`).

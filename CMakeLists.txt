@@ -1,6 +1,18 @@
 cmake_minimum_required(VERSION 3.9)
 project(ska)
 
+# The engine built alone (its tests, its demos), or in a game (add_subdirectory : the game builds what it uses)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+	set(SKA_STANDALONE ON)
+else()
+	set(SKA_STANDALONE OFF)
+endif()
+option(SKA_BUILD_DEMOS "The physics demos (ska_physic_simulation_*)" ${SKA_STANDALONE})
+option(SKA_PHYSIC_HOMEMADE "The homemade physics (deprecated : ska_physic_chipmunk replaces it)" OFF)
+# ccache, when installed : a file compiled before with the same flags is not compiled again
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SkaCompilerCache.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SkaPrecompiledHeaders.cmake)
+
 # Shared libraries (the game is a library loaded by ska_main) ; on the web, all static, linked in one page (a CMake with
 # its own Emscripten platform would build shared ones : the page cannot link them)
 if(EMSCRIPTEN)
@@ -106,6 +118,12 @@ if(EMSCRIPTEN)
 	# On the web : its static library only (a shared one would be a side module loaded by the page at run time)
 	set(BUILD_SHARED OFF CACHE BOOL "Chipmunk shared library" FORCE)
 	set(BUILD_STATIC ON CACHE BOOL "Chipmunk static library" FORCE)
+else()
+	# On the desktop : its shared library only (nothing links the static one : it would be compiled twice)
+	set(BUILD_SHARED ON CACHE BOOL "Chipmunk shared library" FORCE)
+	set(BUILD_STATIC OFF CACHE BOOL "Chipmunk static library" FORCE)
+	# (installing the static library would build it again)
+	set(INSTALL_STATIC OFF CACHE BOOL "Chipmunk static library installed" FORCE)
 endif()
 add_subdirectory(external/chipmunk)
 # Chipmunk adds -ffast-math to its Release flags : its sleeping bodies (islands) compare with INFINITY (static bodies,
@@ -128,9 +146,15 @@ add_subdirectory(ska_gui)
 add_subdirectory(ska_particle)
 add_subdirectory(ska_world)
 add_subdirectory(ska_physic_chipmunk)
-add_subdirectory(ska_physic_homemade)
+if(SKA_PHYSIC_HOMEMADE)
+	add_subdirectory(ska_physic_homemade)
+endif()
 add_subdirectory(ska_script)
 add_subdirectory(ska_scripting)
+
+ska_precompile_std(skalog skabase skalang skalang_std skalang_bytecode_generator skalang_bytecode_interpreter
+	skalang_bytecode_serializer ska_ai ska_audio ska_core ska_draw ska_gui ska_main ska_particle ska_physic_chipmunk
+	ska_physic_homemade ska_script ska_scripting ska_world)
 
 # Module boundaries (see cmake/CheckBoundaries.cmake), checked at each build
 add_custom_target(check_boundaries ALL
@@ -138,6 +162,9 @@ add_custom_target(check_boundaries ALL
 	COMMENT "Checking the module boundaries")
 # Only ska_scripting links skalang
 foreach(ENGINE_MODULE ska_ai ska_audio ska_core ska_draw ska_gui ska_main ska_particle ska_physic_chipmunk ska_physic_homemade ska_script ska_world)
+	if(NOT TARGET ${ENGINE_MODULE})
+		continue()
+	endif()
 	get_target_property(ENGINE_MODULE_LIBRARIES ${ENGINE_MODULE} LINK_LIBRARIES)
 	foreach(LIBRARY ${ENGINE_MODULE_LIBRARIES})
 		if(LIBRARY MATCHES "^skalang|^ska_scripting$")

@@ -25,5 +25,5 @@ add_executable(ska_physic_simulation_chipmunk ${SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${SKA_DIR}")
 find_package(Threads REQUIRED)
-set(ALL_DEPS ska_world ska_physic_chipmunk ska_physic_homemade ska_gui ska_draw ska_core skalog chipmunk Threads::Threads)
+set(ALL_DEPS ska_world ska_physic_chipmunk ska_gui ska_draw ska_core skalog chipmunk Threads::Threads)
 target_link_libraries(ska_physic_simulation_chipmunk ${ALL_DEPS})
