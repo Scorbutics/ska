@@ -1,0 +1,10 @@
+Test = import "test317_2"
+Character = import "character"
+
+actualCharacter = Character.build("")
+
+callback = function() do
+	actualCharacter = Character.build("test317")
+end
+
+Test.run(callback)

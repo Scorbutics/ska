@@ -1,0 +1,37 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "functional": "cpp",
+        "sstream": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "optional": "cpp",
+        "variant": "cpp",
+        "bit": "cpp",
+        "bitset": "cpp",
+        "set": "cpp",
+        "random": "cpp",
+        "fstream": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "mutex": "cpp",
+        "ostream": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "tuple": "cpp",
+        "compare": "cpp",
+        "*.def": "cpp",
+        "stdexcept": "cpp",
+        "system_error": "cpp"
+    },
+    "cmake.debugConfig": {
+        "type": "lldb"
+    },
+    "cmake.buildDirectory": "${workspaceFolder}",
+    "testMate.cpp.test.executables": "{build,Build,BUILD,out,Out,OUT,bin}/**/*{test,Test,TEST}*",
+    "cmake.options.statusBarVisibility": "visible",
+}

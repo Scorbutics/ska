@@ -1,0 +1,38 @@
+FctyString = function() : var do
+	array_ = [""]
+  size_ = 1
+	return {
+		add = function(str: string) do
+			array_ = array_ + str
+			size_ = size_ + 1
+		end
+		get = function(index: int) : string do return array_[index + 1] end
+		size = function() : int do return size_ - 1 end
+	}
+end
+
+FctyFloat = function() : var do
+	array_ = [0.0]
+  size_ = 1
+	return {
+		add = function(v: float) do
+			array_ = array_ + v
+			size_ = size_ + 1
+		end
+		get = function(index: int) : float do return array_[index + 1] end
+		size = function() : int do return size_ - 1 end
+	}
+end
+
+FctyInteger = function() : var do
+	array_ = [0]
+  size_ = 1
+	return {
+		add = function(v: int) do
+			array_ = array_ + v
+			size_ = size_ + 1
+		end
+		get = function(index: int) : int do return array_[index + 1] end
+		size = function() : int do return size_ - 1 end
+	}
+end

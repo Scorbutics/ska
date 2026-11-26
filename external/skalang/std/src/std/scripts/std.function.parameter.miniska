@@ -1,0 +1,3 @@
+Get = function(scriptname: string) : string[] do
+	return []: string
+end

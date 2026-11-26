@@ -1,0 +1,23 @@
+IO = import "bind:std.native.io.log"
+Character = import "character"
+
+run = function(parameters: string[]) do
+	origin = Character.Fcty(447)
+	jumpDirection = parameters[0]: int
+	blockId = parameters[1]: int
+
+	IO.print(parameters[0])
+	IO.print(parameters[1])	
+
+	emptyCallback = function() do
+		IO.print("test")
+	end
+
+	origin.input.remove()
+	IO.print("17")
+	origin.move(jumpDirection, 30, 1, emptyCallback)
+	IO.print("19")
+	origin.jump(14)
+	origin.move(jumpDirection, 60, 1, origin.input.restore)
+end
+

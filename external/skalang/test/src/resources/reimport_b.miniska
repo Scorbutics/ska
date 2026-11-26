@@ -1,0 +1,4 @@
+A = import "reimport_a"
+g = function() : int do
+	return A.f() + 1
+end

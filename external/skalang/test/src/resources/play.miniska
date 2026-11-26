@@ -1,0 +1,6 @@
+Character = import "character"
+
+run = function(ch: Character::build()) do
+	ch.age
+end
+

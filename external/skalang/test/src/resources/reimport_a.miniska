@@ -1,0 +1,5 @@
+Binding = import "bind:test.coroutine"
+Binding.event("a top level")
+f = function() : int do
+	return 1
+end

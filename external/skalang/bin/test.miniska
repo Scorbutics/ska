@@ -1,0 +1,29 @@
+IOLog = import "bind:std.native.io.log"
+
+JSON = function(v: string): var do
+    child = []: JSON()
+    
+    return {
+        Size = function(): int do
+            return child.size()
+        end
+        Get = function(key: int): JSON() do
+            return child[key]
+        end
+        Add = function(c: JSON()) do
+            child = child + c
+        end
+        Value = function(): string do
+            return v
+        end
+    }
+end
+
+run = function(parameters: string[]) do
+    data = JSON("name")
+    data.Add(JSON("Inja"))
+    
+    IOLog.print(data.Value())
+    IOLog.print(data.Get(0).Value())
+
+end

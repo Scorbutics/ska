@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Runner Launch",
+            "type": "lldb",
+            "program": "./bin/skalang_bytecode_runner",
+            "args": ["${fileBasename}"],
+            "request": "launch",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+        "name": "C++ Launch test.miniska",
+        "type": "lldb",
+        "program": "./bin/skalang_bytecode_runner",
+        "args": ["test.miniska"],
+        "request": "launch",
+        "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+print = function(str: string) do end

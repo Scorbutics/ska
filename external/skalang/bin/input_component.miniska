@@ -1,0 +1,24 @@
+
+
+Fcty = function(characterId: int): var do
+	movePower_ = 25
+	jumpPower_ = 20
+	return {
+		movePower = function(): int do
+			return movePower_
+		end
+		jumpPower = function(): int do
+			return jumpPower_
+		end
+		setMovePower = function(movePow: int) do
+			movePower_ = movePow
+		end
+		setJumpPower = function(jumpPow: int) do
+			jumpPower_ = jumpPow
+		end
+		remove = function() do
+		end
+		restore = function() do
+		end
+	}
+end

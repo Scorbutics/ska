@@ -1,0 +1,21 @@
+IOLog = import "bind:std.native.io.log"
+
+Default = function() do end
+
+call = function(deferedArray: Default[]) do
+	deferedArray | (defered) do
+		defered()
+	end
+end
+
+run = function(parameters: string[]) do
+	callback = function() do
+		IOLog.print("defer test")
+	end
+
+	callback2 = function() do
+		IOLog.print("defer test 2")
+	end
+
+	call([callback, callback2])
+end

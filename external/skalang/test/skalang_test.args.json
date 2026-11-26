@@ -1,0 +1,14 @@
+{
+  "FileVersion": 2,
+  "Id": "421018ed-4d35-31d0-9092-1f90a624c1f0",
+  "Items": [
+    {
+      "Id": "91d3a098-6b64-4a3a-aa43-aad3c643197f",
+      "Command": "-tc=\"[SemanticTypeChecker]\""
+    },
+    {
+      "Id": "ed79aa21-1fa5-469f-8b62-88a598e9cfa3",
+      "Command": "-tc=\"[SemanticTypeChecker Complex] using a parameter of the wrong type without return variable affectation (to a void function)\""
+    }
+  ]
+}

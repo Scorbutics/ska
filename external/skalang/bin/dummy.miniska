@@ -1,0 +1,5 @@
+Fcty = function() : var do
+	return {
+		data = 0
+	}
+end

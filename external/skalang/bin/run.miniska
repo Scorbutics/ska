@@ -1,0 +1,25 @@
+Log = import "bind:std.native.io.log"
+PathFcty = import "bind:std.native.io.path"
+
+run = function (parameters: string[]) do
+	if parameters.size() > 0
+		path = PathFcty.Fcty(parameters[0])
+		Log.print(path.canonical())
+
+		all = []: int
+		parameters | (parameter, index) do
+			if index > 0
+				all = all + (parameter: int + index * index)
+			end
+		end
+
+		all | (element) do
+			Log.print((element: string))
+		end
+
+		Log.print("size : " + (all.size(): string))
+
+	else
+		Log.print("No argument provided")
+	end
+end

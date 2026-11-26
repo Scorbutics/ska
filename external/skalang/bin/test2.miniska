@@ -1,0 +1,16 @@
+IOLog = import "bind:std.native.io.log"
+
+run = function(parameters: string[]) do
+    TestFcty = function(value_: string): var do
+        return {
+            value = function(): string do
+                return value_
+            end
+        }
+    end
+
+    toto = TestFcty("toto")
+    titi = TestFcty("titi")
+
+    IOLog.print(toto.value() + titi.value())
+end

@@ -1,0 +1,7 @@
+# A fake (later bind directory) overrides the template
+Test = import "bind:std.native.test"
+Template = import "bind:test.template"
+run = function(args: string[]) do
+	Test.equal((Template.twice(21): string), "42", "the fake doubles")
+	Test.equal(Template.name(), "fake", "the fake name")
+end

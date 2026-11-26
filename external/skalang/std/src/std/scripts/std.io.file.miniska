@@ -1,0 +1,9 @@
+Path = import "std:std.native.io.path"
+
+Fcty = function(filePath: string) : var do
+	path_ Path.Fcty(filePath)
+
+	return {
+		path = function() : Path::Fcty() do return path_ end
+	}
+end

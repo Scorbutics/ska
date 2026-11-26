@@ -1,0 +1,5 @@
+Fcty = function(path: string) : var do
+	return {
+		canonical = function() : string do return "" end
+	}
+end

@@ -1,0 +1,3 @@
+Unknown = import "bind:test.unknown"
+run = function(args: string[]) do
+end

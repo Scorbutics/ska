@@ -1,0 +1,25 @@
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "toto"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "function toto (var toto)" is being serialized with 1 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.098) 		Child type var toto
+(32:49)[I](BytecodeSymbolTableSerial l.099) 		with Raw type : var
+(32:49)[I](BytecodeSymbolTableSerial l.100) 		with 0 children
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "var toto" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : toto with key : 0.0
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : toto with key : 0.0
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "test"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "int" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : test with key : 0.0.0
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "test"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "int test" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : test with key : 0.0.1.0
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "tata"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "string" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : tata with key : 0.0.1.1
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "tata"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "int" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : tata with key : 0.1
+(32:49)[I](BytecodeSymbolTableSerial l.036) Writing symbol "titi"
+(32:49)[I](BytecodeSymbolTableSerial l.083) Type "var toto" is being serialized with 0 compound types
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : titi with key : 0.2
+(32:49)[I](BytecodeSymbolTableSerial l.130) 	with master : toto
+(32:49)[I](BytecodeSymbolTableSerial l.118) Symbol Name refered : toto with key : 0.0

@@ -1,0 +1,8 @@
+# A function literal at the script level, before and after exported variables : it is not a variable of the script
+Callback = function(n: int): int do return 0 end
+apply = function(f: Callback, n: int): int do
+	return f(n)
+end
+before = apply(function(k: int): int do return k + 1 end, 1)
+handlers = [function(k: int): int do return k * 10 end]
+after = 42

@@ -1,0 +1,3 @@
+# Template of a native module : the functions declared here are bound by the host program
+twice = function(value: int): int do return 0 end
+name = function(): string do return "" end

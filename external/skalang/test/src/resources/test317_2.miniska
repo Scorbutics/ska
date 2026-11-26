@@ -1,0 +1,5 @@
+Callback = import "callback"
+
+run = function(callback: Callback::Default) do
+	callback()
+end

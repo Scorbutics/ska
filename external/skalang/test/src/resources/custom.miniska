@@ -1,0 +1,14 @@
+Character = import "custom_base"
+
+player = Character.build("Player")
+enemy = Character.default
+
+totalAge = 0
+
+for(i = 0
+	i < enemy.age
+	i = i + 1) do
+	totalAge = totalAge + 1
+end
+
+totalAge = totalAge + enemy.age + player.age

@@ -1,0 +1,2 @@
+Binding = import "bind:test.coroutine"
+Binding.wait(1)

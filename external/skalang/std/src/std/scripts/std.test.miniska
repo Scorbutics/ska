@@ -1,0 +1,9 @@
+# Assertions of the test scripts : Test = import "bind:std.native.test"
+# A failed assertion stops the test with an error (the test fails), with the message.
+
+# Fails when the condition is false
+check = function(condition: bool, message: string) do end
+# Fails when the two values differ (convert the values to strings to compare numbers : (value: string))
+equal = function(actual: string, expected: string, message: string) do end
+# Fails right away
+fail = function(message: string) do end

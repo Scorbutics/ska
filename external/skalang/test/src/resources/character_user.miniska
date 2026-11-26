@@ -1,0 +1,4 @@
+Character = import "character"
+
+player = Character.build("Player")
+enemy = Character.default
