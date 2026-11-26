@@ -346,6 +346,33 @@ TEST_CASE("[BytecodeInterpreter] errors : the habits of other languages are expl
 	hint("f = function g() do\nend\n", "a function is a variable");
 }
 
+TEST_CASE("[BytecodeInterpreter] arrays : an entry beginning with a symbol") {
+	SUBCASE("a negative number") {
+		const auto result = Run("a = [0, -1, 2]\nout = a[1] * 10 + a.size()\n");
+		CHECK(result.nodeval<long>() == -7);
+	}
+	SUBCASE("the first entry") {
+		const auto result = Run("a = [-1]\nout = a[0]\n");
+		CHECK(result.nodeval<long>() == -1);
+	}
+	SUBCASE("a negated variable") {
+		const auto result = Run("b = 3\na = [1, -b]\nout = a[1]\n");
+		CHECK(result.nodeval<long>() == -3);
+	}
+	SUBCASE("a logical not") {
+		const auto result = Run("b = true\na = [!b, b]\nout = a[0]\n");
+		CHECK(result.nodeval<bool>() == false);
+	}
+	SUBCASE("an empty entry is an error") {
+		CHECK_THROWS_WITH(Interpret("a = [1, , 2]\n"), doctest::Contains("an empty entry"));
+		CHECK_THROWS_WITH(Interpret("a = [1, ]\n"), doctest::Contains("an empty entry"));
+	}
+	SUBCASE("the empty array") {
+		const auto result = Run("a = []: int\nout = a.size()\n");
+		CHECK(result.nodeval<long>() == 0);
+	}
+}
+
 TEST_CASE("[BytecodeInterpreter] arrays : a cell can be assigned") {
 	SUBCASE("int") {
 		const auto result = Run("a = [1, 2]\na[1] = 5\nout = a[0] + a[1]\n");

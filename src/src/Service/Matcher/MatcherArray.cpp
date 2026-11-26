@@ -31,17 +31,17 @@ ska::ASTNodePtr ska::MatcherArray::matchDeclaration(ScriptAST& input) {
 	auto arrayNode = std::vector<ASTNodePtr>{};
 	auto isComma = true;
 	while (isComma) {
-		if (!input.reader().expect(TokenType::SYMBOL)) {
-			SLOG(ska::LogLevel::Debug) << "array entry detected, reading expression : ";
-			
-			auto expression = input.expr(m_parser);
-			if (expression != nullptr) {
-				arrayNode.push_back(std::move(expression));
-			}
-			isComma = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
-			if (isComma) {
-				input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
-			}
+		// An entry may begin with a symbol ("-1", "!b") ; "[]" : no entry
+		SLOG(ska::LogLevel::Debug) << "array entry detected, reading expression : ";
+		auto expression = input.expr(m_parser);
+		isComma = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
+		if (expression != nullptr) {
+			arrayNode.push_back(std::move(expression));
+		} else if (isComma || !arrayNode.empty()) {
+			throw std::runtime_error("syntax error : an empty entry in an array declaration (\"[1, , 2]\", \"[1, ]\")");
+		}
+		if (isComma) {
+			input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
 		}
 	}
     
