@@ -7,6 +7,7 @@
 #include "Graphic/Texture.h"
 #include "Graphic/Animation.h"
 #include "Core/SDLLibrary.h"
+#include <fstream>
 
 namespace {
 	// The colors of the collision image of a tileset : white and light gray can be walked on, light and dark gray are animated
@@ -51,6 +52,15 @@ ska::SDLSurface LoadTilesetImageProperties(const std::string& tilesetName) {
 }
 
 
+// Optional : none (an empty surface) without the file
+ska::SDLSurface LoadTilesetImageMask(const std::string& tilesetName) {
+	ska::SDLSurface result;
+	if (std::ifstream{ tilesetName + ".png.mask" }.good()) {
+		result.load32(tilesetName + ".png.mask");
+	}
+	return result;
+}
+
 void ska::TilesetLoaderImage::checkSizes() const {
 	if(!AllEquals(m_sCol.getInstance()->w, m_sProperties.getInstance()->w) ||
 	   !AllEquals(m_sCol.getInstance()->h, m_sProperties.getInstance()->h)) {
@@ -62,7 +72,8 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 	m_tilesetName(std::move(tilesetName)),
 	m_sChipset(LoadTilesetImage(m_tilesetName)),
 	m_sCol(LoadTilesetImageCollisions(m_tilesetName)),
-	m_sProperties(LoadTilesetImageProperties(m_tilesetName)) {
+	m_sProperties(LoadTilesetImageProperties(m_tilesetName)),
+	m_sMask(LoadTilesetImageMask(m_tilesetName)) {
 	checkSizes();
 }
 
@@ -72,6 +83,9 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 
 	auto tiles = Vector2<Tile>{};
 	tiles.resize(width, height);
+	// The masks of the tiles, when the tileset has them (as many tiles as its collision image)
+	const auto masks = m_sMask.getInstance() != nullptr && m_sMask.getInstance()->w == width * Tile::MaskCells &&
+		m_sMask.getInstance()->h == height * Tile::MaskCells;
 	for (auto x = 0; x < width; x++) {
 		for (auto y = 0; y < height; y++) {
 			const auto col = Walkable(m_sCol.getPixel32Color(x, y)) ? TileCollision::No : TileCollision::Yes;
@@ -87,6 +101,17 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 			//m_sProperties.getPixel32Color(x, y).r ==
 
 			tiles[x][y] = Tile{ { x, y }, tileProperties, col };
+			if (masks) {
+				auto bits = std::uint16_t{ 0 };
+				for (auto cy = 0; cy < Tile::MaskCells; cy++) {
+					for (auto cx = 0; cx < Tile::MaskCells; cx++) {
+						if (m_sMask.getPixel32Color(x * Tile::MaskCells + cx, y * Tile::MaskCells + cy).r > 127) {
+							bits = static_cast<std::uint16_t>(bits | (1u << (cy * Tile::MaskCells + cx)));
+						}
+					}
+				}
+				tiles[x][y].mask = bits;
+			}
 		}
 	}
 	return tiles;

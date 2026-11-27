@@ -12,13 +12,32 @@ void ska::CollisionProfile::calculate() {
 
 	if (m_blocksX != 0 && m_blocksY != 0) {
 		m_collisions.resize(m_layers.size());
+		m_cells.resize(m_layers.size());
 		auto index = 0u;
 		for (auto& col : m_collisions) {
 			col.resize(m_blocksX, m_blocksY);
+			auto& cells = m_cells[index];
+			cells.resize(m_blocksX, m_blocksY);
 			for (auto x = 0u; x < m_blocksX; x++) {
 				for (auto y = 0u; y < m_blocksY; y++) {
 					const auto collision = getHighestCollidingBlock(index, x, y);
 					col[x][y] = collision == nullptr ? TileCollision::No : TileCollision::Yes;
+					// The solid cells : the union of the colliding tiles of the layers ; a void tile under nothing : all of it
+					auto solid = std::uint16_t{ 0 };
+					auto colliding = false;
+					for (auto layer = 0u; layer <= index; layer++) {
+						auto& l = *m_layers[layer];
+						if (l.getCollision(x, y) == TileCollision::Yes) {
+							const auto* block = l.getBlock(x, y);
+							solid = static_cast<std::uint16_t>(solid | (block != nullptr ? block->mask : Tile::FullMask));
+							colliding = true;
+						}
+					}
+					// (A colliding tile may have no solid cell : ex the foliage of a tree, walked behind)
+					if (collision != nullptr && !colliding) {
+						solid = Tile::FullMask;
+					}
+					cells[x][y] = solid;
 				}
 			}
 			index++;
@@ -42,10 +61,25 @@ ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, std::vecto
 }
 
 bool ska::CollisionProfile::collide(const std::size_t layerMax, const std::size_t blockX, const std::size_t blockY) const {
-	if(layerMax >= m_collisions.size()) {
+	return (solidCells(layerMax, blockX, blockY) & StandCells) != 0;
+}
+
+std::uint16_t ska::CollisionProfile::solidCells(const std::size_t layerMax, const std::size_t blockX, const std::size_t blockY) const {
+	if (layerMax >= m_cells.size() || !m_cells[layerMax].has(blockX, blockY)) {
+		return Tile::FullMask;
+	}
+	return m_cells[layerMax][blockX][blockY];
+}
+
+bool ska::CollisionProfile::solidAt(const std::size_t layerMax, const int x, const int y) const {
+	if (x < 0 || y < 0 || m_blockSize == 0) {
 		return true;
 	}
-	return !m_collisions[layerMax].has(blockX, blockY) || m_collisions[layerMax][blockX][blockY] == TileCollision::Yes;
+	const auto size = static_cast<int>(m_blockSize);
+	const auto cells = solidCells(layerMax, static_cast<std::size_t>(x / size), static_cast<std::size_t>(y / size));
+	const auto cx = (x % size) * Tile::MaskCells / size;
+	const auto cy = (y % size) * Tile::MaskCells / size;
+	return ((cells >> (cy * Tile::MaskCells + cx)) & 1u) != 0;
 }
 
 const ska::Tile* ska::CollisionProfile::getBlock(const std::size_t layer, const std::size_t blockX, const std::size_t blockY) const {

@@ -129,30 +129,64 @@ std::vector<ska::Rectangle> ska::GenerateFilledTileMap(const std::size_t layerMa
 	const auto width = static_cast<int>(world.getBlocksX());
 	const auto height = static_cast<int>(world.getBlocksY());
 	const auto blockSize = static_cast<int>(world.getBlockSize());
+	// The solid parts of the blocks (Tile::mask) : a grid of cells, Tile::MaskCells a block side (a block size that is not a
+	// multiple of it : whole blocks)
+	const auto split = blockSize % Tile::MaskCells == 0 ? Tile::MaskCells : 1;
+	const auto cellSize = blockSize / split;
+	const auto columns = width * split;
+	const auto rows = height * split;
+	auto solid = std::vector<std::uint16_t>(static_cast<std::size_t>(width) * static_cast<std::size_t>(height), 0);
+	for (auto y = 0; y < height; y++) {
+		for (auto x = 0; x < width; x++) {
+			// The union of the tiles of the layers that collide by the predicate ; a void one under nothing : all of it
+			auto mask = std::uint16_t{ 0 };
+			auto colliding = false;
+			for (auto layer = std::size_t{ 0 }; layer <= layerMax && layer < world.layers(); layer++) {
+				const auto* block = world.getBlock(layer, static_cast<std::size_t>(x), static_cast<std::size_t>(y));
+				if (pred(block) == TileCollision::Yes) {
+					mask = static_cast<std::uint16_t>(mask | (block != nullptr ? block->mask : Tile::FullMask));
+					colliding = true;
+				}
+			}
+			// A void tile under the others (no colliding one) : all of it. A colliding tile may have no solid cell (the
+			// foliage of a tree)
+			if (!colliding && world.getHighestBlockOnPredicate(layerMax, static_cast<std::size_t>(x), static_cast<std::size_t>(y), pred) != nullptr) {
+				mask = Tile::FullMask;
+			}
+			solid[static_cast<std::size_t>(y * width + x)] = mask;
+		}
+	}
+	const auto cell = [&](int cx, int cy) {
+		const auto mask = solid[static_cast<std::size_t>((cy / split) * width + cx / split)];
+		if (split == 1) {
+			return mask != 0;
+		}
+		return ((mask >> ((cy % split) * Tile::MaskCells + cx % split)) & 1u) != 0;
+	};
 
 	std::vector<Rectangle> result;
-	// The rectangles still growing down, by their columns (first block, number of blocks)
+	// The rectangles still growing down, by their columns of cells (first cell, number of cells)
 	auto open = std::map<std::pair<int, int>, Rectangle>{};
-	for (auto y = 0; y <= height; y++) {
+	for (auto y = 0; y <= rows; y++) {
 		auto next = std::map<std::pair<int, int>, Rectangle>{};
 		auto x = 0;
-		while (y < height && x < width) {
-			if (pred(world.getHighestBlockOnPredicate(layerMax, x, y, pred)) != TileCollision::Yes) {
+		while (y < rows && x < columns) {
+			if (!cell(x, y)) {
 				x++;
 				continue;
 			}
 			const auto start = x;
-			while (x < width && pred(world.getHighestBlockOnPredicate(layerMax, x, y, pred)) == TileCollision::Yes) {
+			while (x < columns && cell(x, y)) {
 				x++;
 			}
-			const auto columns = std::make_pair(start, x - start);
-			const auto above = open.find(columns);
+			const auto run = std::make_pair(start, x - start);
+			const auto above = open.find(run);
 			if (above != open.end()) {
-				above->second.h += blockSize;
-				next.emplace(columns, above->second);
+				above->second.h += cellSize;
+				next.emplace(run, above->second);
 				open.erase(above);
 			} else {
-				next.emplace(columns, Rectangle{ start * blockSize, y * blockSize, (x - start) * blockSize, blockSize });
+				next.emplace(run, Rectangle{ start * cellSize, y * cellSize, (x - start) * cellSize, cellSize });
 			}
 		}
 		// The rectangles not continued on this line are finished

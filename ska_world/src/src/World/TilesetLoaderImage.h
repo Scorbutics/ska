@@ -24,6 +24,9 @@ namespace ska {
 		const SDLSurface m_sChipset;
 		const SDLSurface m_sCol;
 		const SDLSurface m_sProperties;
+		// The collision masks (<tileset>.png.mask, Tile::MaskCells pixels a tile side, white a solid cell) : optional, else
+		// a blocking tile is solid all over
+		const SDLSurface m_sMask;
 
 	};
 }

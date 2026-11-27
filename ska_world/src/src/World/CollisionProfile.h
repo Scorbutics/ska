@@ -23,7 +23,16 @@ namespace ska {
 		bool empty() const;
 		std::size_t layers() const;
 
+		// The block cannot be stood on : the cells under a character (StandCells : the middle of its lower half) are solid
 		bool collide(std::size_t layerMax, std::size_t blockX, std::size_t blockY) const;
+		// The solid cells of a block (Tile::mask) : the union of the colliding tiles of the layers up to layerMax (out of the
+		// map : all)
+		std::uint16_t solidCells(std::size_t layerMax, std::size_t blockX, std::size_t blockY) const;
+		// A point (pixels) is in a solid cell
+		bool solidAt(std::size_t layerMax, int x, int y) const;
+		// The cells where a character stands on its block (Tile::MaskCells x Tile::MaskCells) : the middle columns of the lower
+		// half
+		static constexpr std::uint16_t StandCells = (1u << 9) | (1u << 10) | (1u << 13) | (1u << 14);
 		Rectangle placeOnNearestPracticableBlock(std::size_t layerMax, const Rectangle& hitBox, unsigned int radius) const;
 		Point<int> alignOnBlock(const Rectangle& hitbox) const;
 		
@@ -38,6 +47,7 @@ namespace ska {
 		void calculate();
 
 		std::vector<Vector2<TileCollision>> m_collisions;
+		std::vector<Vector2<std::uint16_t>> m_cells;
 		
 		std::vector<LayerPtr> m_layers;
 

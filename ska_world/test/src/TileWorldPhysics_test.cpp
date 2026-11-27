@@ -512,3 +512,50 @@ TEST_CASE("[TileWorldPhysics] GenerateFilledTileMap") {
 		CHECK(rectangles[0] == ska::Rectangle{ 0, 0, 2 * blockSize, blockSize });
 	}
 }
+
+TEST_CASE("[TileWorldPhysics] the masks of the tiles : the walls are their solid cells") {
+	// Blocks of 48 pixels : cells of 12 pixels. A rim along the top of a block (row 0), a post at the left of the next
+	// one (column 0), a trunk in the middle of the third (columns 1 and 2), a full block
+	static constexpr auto blockSize = 48;
+	static constexpr auto cell = blockSize / ska::Tile::MaskCells;
+	// and the foliage of a tree : blocking, no solid cell (walked behind)
+	const auto collisions = ska::Vector2<char>{ 5u, { '#', '#', '#', '#', '#' } };
+	const auto masks = ska::Vector2<int>{ 5u, { 0x000F, 0x1111, 0x6666, 0xFFFF, 0x0000 } };
+	const auto profile = TileWorldPhysics::BuildMaskedCollisionProfile(collisions, masks, blockSize);
+
+	SUBCASE("a block is stood on when the cells under a character are free") {
+		CHECK(!profile.collide(0, 0, 0));
+		CHECK(!profile.collide(0, 1, 0));
+		CHECK(profile.collide(0, 2, 0));
+		CHECK(profile.collide(0, 3, 0));
+		CHECK(!profile.collide(0, 4, 0));
+		CHECK(profile.collide(0, 5, 0));
+		CHECK(profile.solidCells(0, 0, 0) == 0x000F);
+		CHECK(profile.solidCells(0, 4, 0) == 0);
+	}
+
+	SUBCASE("a point is in a solid cell") {
+		CHECK(profile.solidAt(0, 5, 5));
+		CHECK(!profile.solidAt(0, 24, 30));
+		CHECK(profile.solidAt(0, blockSize + 3, 40));
+		CHECK(!profile.solidAt(0, blockSize + 20, 40));
+		CHECK(profile.solidAt(0, 2 * blockSize + 20, 40));
+	}
+
+	SUBCASE("the rectangles cover the solid cells once, nothing else") {
+		const auto rectangles = ska::GenerateFilledTileMap(0, profile);
+		for (auto cy = 0; cy < ska::Tile::MaskCells; cy++) {
+			for (auto cx = 0; cx < 5 * ska::Tile::MaskCells; cx++) {
+				const auto x = cx * cell + cell / 2;
+				const auto y = cy * cell + cell / 2;
+				auto inside = 0;
+				for (const auto& r : rectangles) {
+					inside += x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h ? 1 : 0;
+				}
+				INFO("cell " << cx << ", " << cy);
+				CHECK(inside == (profile.solidAt(0, x, y) ? 1 : 0));
+			}
+		}
+		CHECK(rectangles.size() < 8);
+	}
+}
