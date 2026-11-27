@@ -25,6 +25,10 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		auto pos = m_componentAccessor.get<PositionComponent>(entityId);
 		// Drawn under the sprite (between the logic positions as the sprite)
 		auto* graphic = m_componentPossibleAccessor.get<GraphicComponent>(entityId);
+		// The shadow of an invisible sprite (ex : a Pokemon recalled in its pokeball) is not drawn, it fades with it
+		if (graphic != nullptr && graphic->effect.alpha == 0) {
+			continue;
+		}
 		if (graphic != nullptr) {
 			const auto drawn = graphic->drawnPosition(pos);
 			pos.x = static_cast<long>(std::lround(drawn.x));
@@ -49,6 +53,11 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		if (!((((static_cast<int>(relPosX + m_shadow.getWidth())) < 0) || (relPosX >= camera.w)) ||
 			((static_cast<int>(relPosY + m_shadow.getHeight()) < 0) || (relPosY >= camera.h)))) {
 			m_pgd.emplace_back(m_shadow, relPosX, relPosY, priority, priority);
+			if (graphic != nullptr && graphic->effect.alpha != 255) {
+				auto effect = RenderEffect{};
+				effect.alpha = graphic->effect.alpha;
+				m_pgd.back().setEffect(effect);
+			}
 		}
 	}
 

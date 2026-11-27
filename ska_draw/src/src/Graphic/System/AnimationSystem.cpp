@@ -15,7 +15,7 @@ void ska::AnimationSystem::refresh(unsigned int) {
 	for (auto entityId : processed) {
 		auto& ac = m_componentAccessor.get<AnimationComponent>(entityId);
 		if(ac.indexAnimationFiniteStateMachine >= static_cast<int>(m_animationFSM.size())) {
-            throw ska::IllegalStateException("Dépassement d'index dans les machines d'état d'animation");
+            throw ska::IllegalStateException("DÃ©passement d'index dans les machines d'Ã©tat d'animation");
 		}
 		m_animationFSM[ac.indexAnimationFiniteStateMachine]->animate(entityId, ac);
 	}

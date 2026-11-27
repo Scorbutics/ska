@@ -46,7 +46,7 @@ float ska::FormalCalculator::interpretFormalCalculation(const std::string& s)
 	}
 	else
 	{
-		//On se trouve ici si la chaîne entrée ne contient plus de parenthèse
+		//On se trouve ici si la chaÃ®ne entrÃ©e ne contient plus de parenthÃ¨se
 		result = interpretSimpleCalculation(subStr);
 
 	}
@@ -55,7 +55,7 @@ float ska::FormalCalculator::interpretFormalCalculation(const std::string& s)
 }
 
 /*
-ligne de calcul sans parenthèse
+ligne de calcul sans parenthÃ¨se
 */
 float ska::FormalCalculator::interpretSimpleCalculation(const std::string& s)
 {
@@ -94,7 +94,7 @@ float ska::FormalCalculator::interpretSimpleCalculation(const std::string& s)
 	return result;
 }
 
-//ligne de calcul à une seule opération sans parenthèse
+//ligne de calcul Ã  une seule opÃ©ration sans parenthÃ¨se
 float ska::FormalCalculator::interpretSingleCalculation(size_t operatorPos, std::string* result)
 {
 	const std::string& s = *result;
@@ -146,7 +146,7 @@ int ska::FormalCalculator::positionOfAnyFirstOperator(const std::string& s) {
 
 void ska::FormalCalculator::calculSyntaxError(const std::string& s)
 {
-	ExceptionTrigger<ScriptSyntaxError>(("La ligne suivante est impossible à traduire en calcul formel : \"" + s + "\"").c_str());
+	ExceptionTrigger<ScriptSyntaxError>(("La ligne suivante est impossible Ã  traduire en calcul formel : \"" + s + "\"").c_str());
 }
 
 ska::FormalCalculator::~FormalCalculator()

@@ -126,10 +126,10 @@ TEST_CASE("[HandledWidget]Parentes (isAParent)") {
 */
 
 TEST_CASE("[HandledWidget]Propagation d'evenements avec liens de parente") {
-	//Ici il faut montrer que le lien de parenté n'est PAS un lien d'appartenance,
-	//c'est à dire que la notion de widget fils est seulement utile par exemple
-	//pour les positions relatives et la durée de vie d'un widget
-	//Il est donc normal que seulement le widget parent (car c'est sur celui-ci qu'on envoi l'évènement) qui soit notifié.
+	//Ici il faut montrer que le lien de parentÃ© n'est PAS un lien d'appartenance,
+	//c'est Ã  dire que la notion de widget fils est seulement utile par exemple
+	//pour les positions relatives et la durÃ©e de vie d'un widget
+	//Il est donc normal que seulement le widget parent (car c'est sur celui-ci qu'on envoi l'Ã©vÃ¨nement) qui soit notifiÃ©.
 
 	ska::WidgetPanelInteractive<ska::ClickEventListener> parent;
 	ska::Point<int> pParent(0, 0);
@@ -154,7 +154,7 @@ TEST_CASE("[HandledWidget]Propagation d'evenements avec liens de parente") {
 	});
 
 	SUBCASE("directNotify dans parent") {
-		//On clique à la fois dans le parent et l'enfant
+		//On clique Ã  la fois dans le parent et l'enfant
 		ska::Point<int> pClickEvent(1, 1);
 		ska::ClickEvent ce(ska::MouseEventType::MOUSE_CLICK, pClickEvent);
 
@@ -164,7 +164,7 @@ TEST_CASE("[HandledWidget]Propagation d'evenements avec liens de parente") {
 	}
 
 	SUBCASE("notify dans parent") {
-		//On clique à la fois dans le parent et l'enfant
+		//On clique Ã  la fois dans le parent et l'enfant
 		ska::Point<int> pClickEvent(1, 1);
 		ska::ClickEvent ce(ska::MouseEventType::MOUSE_CLICK, pClickEvent);
 

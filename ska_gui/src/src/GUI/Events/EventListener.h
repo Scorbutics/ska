@@ -39,7 +39,7 @@ namespace ska {
 			}
 
 			for (auto& eh : m_callbacks) {
-				/* Si un callback indique à l'évènement qu'il est totalement stoppé, on stoppe la chaîne des callbacks*/
+				/* Si un callback indique Ã  l'Ã©vÃ¨nement qu'il est totalement stoppÃ©, on stoppe la chaÃ®ne des callbacks*/
 				eh(&tthis, e);
 				if (e.stopped() == STOP_CALLBACK) {
 					e.stopPropagation(NOT_STOPPED);

@@ -93,7 +93,7 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 		CHECK(tileMap[1].pointList.size() == 8);
 
 		{
-			//Anti-horaire (extérieur)
+			//Anti-horaire (extÃ©rieur)
 			auto collisionPath = std::vector<ska::Point<int>>{};
 			collisionPath.reserve(tileMap[0].pointList.size());
 			std::copy(std::begin(tileMap[0].pointList), std::end(tileMap[0].pointList), std::back_inserter(collisionPath));
@@ -121,7 +121,7 @@ TEST_CASE("[TileWorldPhysics] GenerateTileMap") {
 			}
 		}
 		{
-			//Anti-horaire (intérieur)
+			//Anti-horaire (intÃ©rieur)
 			auto collisionPath = std::vector<ska::Point<int>>{};
 			collisionPath.reserve(tileMap[1].pointList.size());
 			std::copy(std::begin(tileMap[1].pointList), std::end(tileMap[1].pointList), std::back_inserter(collisionPath));

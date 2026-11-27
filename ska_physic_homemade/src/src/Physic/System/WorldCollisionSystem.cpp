@@ -122,7 +122,7 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 		}
 
 		/*
-		 TODO ne pas utiliser l'ECS ici pour simplifier les dialogues par évènement avec le moteur
+		 TODO ne pas utiliser l'ECS ici pour simplifier les dialogues par Ã©vÃ¨nement avec le moteur
 
 		 WorldCollisionComponent::BlockCollisionContainer lastBlockColPosX;
 		WorldCollisionComponent::BlockCollisionContainer lastBlockColPosY;
@@ -134,9 +134,9 @@ void ska::WorldCollisionSystem::refresh(unsigned int) {
 			//SKA_LOG_DEBUG("Suppression collision monde ", entityId);
 			m_componentAccessor.remove<WorldCollisionComponent>(entityId);
 			
-			//Il faut rafraîchir l'ensemble des systèmes directement ici (au travers de l'EntityManager),
-			//car il est possible de créer un autre WorldCollisionComponent dans le même tour de boucle.
-			//Si le refresh n'est pas fait, il sera supprimé par le prochain rafraîchissement de l'EntityManager
+			//Il faut rafraÃ®chir l'ensemble des systÃ¨mes directement ici (au travers de l'EntityManager),
+			//car il est possible de crÃ©er un autre WorldCollisionComponent dans le mÃªme tour de boucle.
+			//Si le refresh n'est pas fait, il sera supprimÃ© par le prochain rafraÃ®chissement de l'EntityManager
 			refreshEntity(entityId);
 		}
 

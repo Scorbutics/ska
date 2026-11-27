@@ -8,7 +8,7 @@ EventListener<FocusEvent>() {
 
 bool ska::FocusEventListener::notify(Widget& tthis, FocusEvent& e) {
 	const auto& result = EventListener<FocusEvent>::notify(tthis, e);
-	/* Evenement géré par le widget. On le stoppe totalement */
+	/* Evenement gÃ©rÃ© par le widget. On le stoppe totalement */
 	//e.stopPropagation(StopType::STOP_WIDGET);
 	return result;
 }

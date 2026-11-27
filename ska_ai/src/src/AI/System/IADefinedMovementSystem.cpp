@@ -92,7 +92,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 			SLOG(LogLevel::Debug) << "IA Movement (" << finalMovement.x << " : " << finalMovement.y << ")";
 			fc.x = finalMovement.x;
 			fc.y = finalMovement.y;
-			//TODO dans un autre système ?
+			//TODO dans un autre systÃ¨me ?
 			auto& entityShape = m_space.getShape(hcChipmunk.shapeIndex);
 			entityShape.setFilter(CP_SHAPE_FILTER_NONE.group, CP_SHAPE_FILTER_NONE.categories, CP_SHAPE_FILTER_NONE.mask);
 			mc.ay = 0;
@@ -105,7 +105,7 @@ void ska::IADefinedMovementSystem::refresh(unsigned int) {
 		} 
 		
 		if (finished) {
-			//TODO dans un autre système ?
+			//TODO dans un autre systÃ¨me ?
 			auto& entityShape = m_space.getShape(hcChipmunk.shapeIndex);
 			entityShape.setFilter(CP_SHAPE_FILTER_ALL.group, CP_SHAPE_FILTER_ALL.categories, CP_SHAPE_FILTER_ALL.mask);
 			cc.ghost = false;

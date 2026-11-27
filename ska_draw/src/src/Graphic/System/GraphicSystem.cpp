@@ -38,8 +38,13 @@ void ska::GraphicSystem::refresh(unsigned int) {
 		const auto absPos = gc.spriteOrigin(pos.x, pos.y, hc);
 		const auto& relPosX = static_cast<int>(absPos.x - camera.x);
 		const auto& relPosY = static_cast<int>(absPos.y - camera.y - pos.z);
-		// Its feet : the bottom of its hitbox
-		const auto feet = pos.y + hc.yOffset + static_cast<long>(hc.height);
+		// Its feet : the bottom of its hitbox (for the depth : from its position on the grid of its sortStep)
+		auto sortY = pos.y;
+		if (gc.sortStep > 0) {
+			const auto step = static_cast<long>(gc.sortStep);
+			sortY = (pos.y >= 0 ? pos.y / step : -((-pos.y + step - 1) / step)) * step;
+		}
+		const auto feet = sortY + hc.yOffset + static_cast<long>(hc.height);
 
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);

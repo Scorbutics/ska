@@ -83,7 +83,7 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 			tileProperties.bitMask = property.r;
 			tileProperties.base = static_cast<int>(property.g) - 1;
 
-			//TODO propriétés (exemple : vent) ?
+			//TODO propriÃ©tÃ©s (exemple : vent) ?
 			//m_sProperties.getPixel32Color(x, y).r ==
 
 			tiles[x][y] = Tile{ { x, y }, tileProperties, col };

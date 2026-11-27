@@ -5,7 +5,7 @@
 
 TEST_CASE("[ClickEventListener]") {
 
-	//Pas besoin de définir la compatibilité avec ClickEventListener car le handler (callback) sera sur le listener externe
+	//Pas besoin de dÃ©finir la compatibilitÃ© avec ClickEventListener car le handler (callback) sera sur le listener externe
 	HandledWidgetTest<> parent;
 	ska::Point<int> pParent(0, 0);
 	parent.move(pParent);

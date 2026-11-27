@@ -61,7 +61,7 @@ StateSandbox::StateSandbox(ska::EntityManager& em, ska::ExtensibleGameEventDispa
 	m_world (std::move(BuildTileWorld(m_mapper, ed, m_tileset))),
 	m_worldCollisionResponse(m_world, ed, em),
 	m_walkASM(nullptr) {
-	//TODO faire en sorte que l'ajout de système puisse se faire après la création d'entités
+	//TODO faire en sorte que l'ajout de systÃ¨me puisse se faire aprÃ¨s la crÃ©ation d'entitÃ©s
 }
 
 ska::EntityId StateSandbox::createPhysicAABBEntity(ska::Point<int> pos, const std::string& sprite, bool spritesheet) const {

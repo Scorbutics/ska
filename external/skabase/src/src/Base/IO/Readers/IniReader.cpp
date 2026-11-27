@@ -42,14 +42,14 @@ bool ska::IniReader::load(const std::string& inifilename) {
 
 		auto posVar = line.find('=');
 
-		//suppression des espaces non nécessaires si présents
+		//suppression des espaces non nÃ©cessaires si prÃ©sents
 		if (posVar == std::string::npos)
 			line.erase( remove( line.begin(), line.end(), ' ' ), line.end() );
 		else
 			line.erase( remove( line.begin(), line.begin()+posVar, ' ' ), line.begin()+posVar );
 
 
-		//pour être valide, on oblige le fichier ".ini" à contenir les blocs entre crochets en DEBUT de ligne (caractère numéro 0, d'où posBlockStart = 0)
+		//pour Ãªtre valide, on oblige le fichier ".ini" Ã  contenir les blocs entre crochets en DEBUT de ligne (caractÃ¨re numÃ©ro 0, d'oÃ¹ posBlockStart = 0)
 		std::size_t posBlockStart = 0; 
 		std::size_t posBlockEnd = line.find(']');
 		posVar = line.find('=');
@@ -82,7 +82,7 @@ void ska::IniReader::save(const std::string& inifilename) {
 
 
 	if(iniFile.fail()) {
-		std::cerr << "Erreur (classe IniReader) : impossible de créer le fichier " + inifilename << std::endl;
+		std::cerr << "Erreur (classe IniReader) : impossible de crÃ©er le fichier " + inifilename << std::endl;
 		return;
 	}
 
@@ -93,7 +93,7 @@ void ska::IniReader::save(const std::string& inifilename) {
 	}
 
 
-	//écriture de la liste dans le fichier
+	//Ã©criture de la liste dans le fichier
 	for (std::list<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
 		iniFile << *it << std::endl;
 	}
@@ -113,7 +113,7 @@ void ska::IniReader::clear() {
 }
 
 
-//Insère ou modifie (si le chemin existe déjà) le contenu content du chemin path dans la liste lines
+//InsÃ¨re ou modifie (si le chemin existe dÃ©jÃ ) le contenu content du chemin path dans la liste lines
 void IniListSet(std::list<std::string>& lines, const std::string& path, const std::string& content) {
 	std::string currentBlock;
 	std::string blockPath, varPath;
@@ -140,7 +140,7 @@ void IniListSet(std::list<std::string>& lines, const std::string& path, const st
 }
 
 
-//retourne l'iterateur dans la liste correspondant au chemin cherché, et lines.end() s'il n'est pas trouvé
+//retourne l'iterateur dans la liste correspondant au chemin cherchÃ©, et lines.end() s'il n'est pas trouvÃ©
 std::list<std::string>::iterator IniListSearchPath(std::list<std::string>& lines, const std::string& path) {
 	std::string blockPath, varPath;
 
@@ -152,23 +152,23 @@ std::list<std::string>::iterator IniListSearchPath(std::list<std::string>& lines
 		size_t posBlockEnd = it->find(']');
 		size_t posValue = it->find('=');
 
-		//Si on arrive au bloc suivant, alors on n'a rien trouvé !
+		//Si on arrive au bloc suivant, alors on n'a rien trouvÃ© !
 		if ((*it)[posBlockStart] == '[' && posBlockEnd != std::string::npos) {
 			return lines.end();
 		}
 
-		//sinon, on teste si la variable cherchée est trouvée
+		//sinon, on teste si la variable cherchÃ©e est trouvÃ©e
 		if (varPath == it->substr(0, posValue)) {
 			return it;
 		}
 		
 	}
 
-	//si on arrive à la fin de la liste, alors on n'a rien trouvé !
+	//si on arrive Ã  la fin de la liste, alors on n'a rien trouvÃ© !
 	return lines.end();
 }
 
-//retourne l'iterateur dans la liste correspondant au bloc cherché, et lines.end() s'il n'est pas trouvé
+//retourne l'iterateur dans la liste correspondant au bloc cherchÃ©, et lines.end() s'il n'est pas trouvÃ©
 std::list<std::string>::iterator IniListSearchBlock(std::list<std::string>& lines, const std::string& block) {
 	std::string currentBlock;
 
@@ -176,7 +176,7 @@ std::list<std::string>::iterator IniListSearchBlock(std::list<std::string>& line
 		size_t posBlockStart = 0; 
 		size_t posBlockEnd = it->find(']');
 
-		//On vérifie que le chemin n'existe pas
+		//On vÃ©rifie que le chemin n'existe pas
 		if ((*it)[posBlockStart] == '[' && posBlockEnd != std::string::npos) {
 			currentBlock = it->substr(posBlockStart+1, posBlockEnd-1);
 			if (currentBlock == block) {

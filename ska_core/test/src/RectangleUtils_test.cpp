@@ -48,7 +48,7 @@ TEST_CASE("[RectangleUtils] Union de plusieurs box") {
 
 	ska::Rectangle box{ 0, 4, 14, 24 };
 
-	SUBCASE("Union x rectangles collés") {
+	SUBCASE("Union x rectangles collÃ©s") {
 		ska::Rectangle box2{ 14, 4, 14, 24 };
 		auto resultRect = ska::RectangleUtils::unionRect(box, box2);
 		CHECK(resultRect.x == 0);
@@ -57,7 +57,7 @@ TEST_CASE("[RectangleUtils] Union de plusieurs box") {
 		CHECK(resultRect.h == 24);
 	}
 
-	SUBCASE("Union y rectangles collés") {
+	SUBCASE("Union y rectangles collÃ©s") {
 		ska::Rectangle box2{ 0, 28, 14, 24 };
 		auto resultRect = ska::RectangleUtils::unionRect(box, box2);
 		CHECK(resultRect.x == 0);

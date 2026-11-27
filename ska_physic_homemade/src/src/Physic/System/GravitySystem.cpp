@@ -14,11 +14,11 @@ void ska::GravitySystem::refresh(unsigned int) {
 		auto& moveComponent = m_componentAccessor.get<MovementComponent>(entityId);
 
 		//PFD selon x et y avec la force de frottements fluides
-		//( en comptant qu'au préalable on a peut-être déjà appliqué une ou plusieurs force(s) )
+		//( en comptant qu'au prÃ©alable on a peut-Ãªtre dÃ©jÃ  appliquÃ© une ou plusieurs force(s) )
 		forceComponent.x -= gaComponent.friction * (moveComponent.vx + moveComponent.ax);
 		forceComponent.y -= gaComponent.friction * (moveComponent.vy + moveComponent.ay);
 
-		//EARTH_GRAVITY trop élevée
+		//EARTH_GRAVITY trop Ã©levÃ©e
 		forceComponent.z -= (EARTH_GRAVITY / 10.0F) * forceComponent.weight;
 	}
 }

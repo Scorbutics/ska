@@ -55,25 +55,9 @@ namespace ska {
 			call<TTFIdNamedFunction<TTF_CLOSE_FONT>>(std::move(font));
 		}
 
-		// The texts of the engine are Latin-1 (as SDL2_ttf read them) : SDL3_ttf reads UTF-8, they are converted
+		// The texts of the engine are UTF-8
 		gsl::owner<SDL_Surface*> renderTextBlended(TTF_Font& font, const std::string& text, SDL_Color color) const {
-			const auto utf8 = Latin1ToUtf8(text);
-			return call<TTFIdNamedFunction<TTF_RENDER_TEXT_BLENDED>>(&font, utf8.c_str(), utf8.size(), std::move(color));
-		}
-
-		static std::string Latin1ToUtf8(const std::string& text) {
-			auto result = std::string{};
-			result.reserve(text.size());
-			for (const auto c : text) {
-				const auto code = static_cast<unsigned char>(c);
-				if (code < 0x80) {
-					result += c;
-				} else {
-					result += static_cast<char>(0xC0 | (code >> 6));
-					result += static_cast<char>(0x80 | (code & 0x3F));
-				}
-			}
-			return result;
+			return call<TTFIdNamedFunction<TTF_RENDER_TEXT_BLENDED>>(&font, text.c_str(), text.size(), std::move(color));
 		}
 
 		static const SDLTTFLibrary& get();

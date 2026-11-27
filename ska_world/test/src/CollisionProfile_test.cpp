@@ -227,7 +227,7 @@ TEST_CASE("[CollisionProfile]"){
 		    }
 		}
 
-		//TODO tests sur les collisions quand TileCollision est à Void
+		//TODO tests sur les collisions quand TileCollision est Ã  Void
 		//TODO placeOnNearestPracticableBlock
 	}
 }

@@ -31,7 +31,7 @@ bool ska::WorldCollisionResponse::onWorldCollision(CollisionEvent& colE) {
 	//usually 0.01 to 0.1
 	static const auto slope = 0.01F;
 	/*
-	 TODO sans utiliser d'ECS pour simplifier les dialogues par évènements avec le moteur de jeu
+	 TODO sans utiliser d'ECS pour simplifier les dialogues par Ã©vÃ¨nements avec le moteur de jeu
 	 
 	if (wcol.xaxis) {
 		for (const auto& p : wcol.blockColPosX) {

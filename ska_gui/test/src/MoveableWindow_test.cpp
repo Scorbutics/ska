@@ -9,16 +9,16 @@ class ObservableTest : public ska::MouseObservable, public ska::KeyObservable {
 };
 
 
-TEST_CASE("[MoveableWindow]Déplacement") {
+TEST_CASE("[MoveableWindow]DÃ©placement") {
 	ObservableTest obs;
 	MoveableWindowTest<> dw(obs, obs, ska::Rectangle{ 1, 1, 100, 20 });
 
-	//Clic sur la barre de titre pour "grab" la fenêtre
+	//Clic sur la barre de titre pour "grab" la fenÃªtre
 	ska::Point<int> cePoint(5, 2);
 	ska::ClickEvent ce(ska::MouseEventType::MOUSE_CLICK, cePoint);
 	obs.ska::ClickObservable::notifyObservers(ce);
 
-	//Déplacement de la fenêtre selon l'axe horizontal positif (pixel par pixel)
+	//DÃ©placement de la fenÃªtre selon l'axe horizontal positif (pixel par pixel)
 	ska::Point<int> finalPosition(20, 1);
 	ska::Point<int> heRelativePoint(5, 2);
 	for(auto i = heRelativePoint.x; i < 20 + heRelativePoint.x; i++) {
@@ -30,7 +30,7 @@ TEST_CASE("[MoveableWindow]Déplacement") {
 	CHECK(dw.getBox().x == finalPosition.x);
 	CHECK(dw.getBox().y == finalPosition.y);
 
-	//TODO test avec MOUSE_RELEASE (vérifier cette fois que la fenêtre ne bouge plus)
+	//TODO test avec MOUSE_RELEASE (vÃ©rifier cette fois que la fenÃªtre ne bouge plus)
 }
 
 TEST_CASE("[MoveableWindow]Clic sur le bouton de fermeture") {

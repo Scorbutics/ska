@@ -9,7 +9,7 @@ namespace ska {
 
 	public:
 		static T& getInstance() { static T w; return w; }
-		//(On a accès à l'instance uniquement avec cette méthode, 
-		//cela évite l'appel au constructeur possible plusieurs fois).
+		//(On a accÃ¨s Ã  l'instance uniquement avec cette mÃ©thode, 
+		//cela Ã©vite l'appel au constructeur possible plusieurs fois).
 	};
 }

@@ -14,8 +14,8 @@ TEST_CASE("[SortedWidgetVector]organize") {
 	v.push_back(&hwt3);
 	v.push_back(&hwt4);
 
-	//hwt2 devient invisible et sera donc placé à la fin.
-	//hwt4 est le dernier élément et sera donc échangé avec lui
+	//hwt2 devient invisible et sera donc placÃ© Ã  la fin.
+	//hwt4 est le dernier Ã©lÃ©ment et sera donc Ã©changÃ© avec lui
 	hwt2.show(false);
 
 	ska::SortedWidgetVector<ska::Widget*> expected;

@@ -51,7 +51,7 @@ ska::GUI::~GUI() {
 bool ska::GUI::refreshKeyboard(InputKeyEvent& ike) {
 	const auto& playerIcm = ike.icm;
 	const auto& textTyped = playerIcm.getTextInput();
-    //TODO réécrire
+    //TODO rÃ©Ã©crire
 	const auto& isDeleting = playerIcm.getActions()[DeleteChar];
 	if (isDeleting) {
 		KeyEvent ke(KEY_DOWN, L"", SDL_SCANCODE_BACKSPACE);
@@ -82,8 +82,8 @@ bool ska::GUI::refreshMouse(InputMouseEvent& ime) {
 		m_mouseCursor.move(mousePos);
 
 		/* Toujours utiliser lastMousePos et non pas mousePos pour les hover :
-		*  on considère mousePos comme la prochaine position de la souris en terme d'évènements.
-		*  On a donc un retard d'une frame sur tous les évènements déclenchés, mais cela permet de pouvoir réagir
+		*  on considÃ¨re mousePos comme la prochaine position de la souris en terme d'Ã©vÃ¨nements.
+		*  On a donc un retard d'une frame sur tous les Ã©vÃ¨nements dÃ©clenchÃ©s, mais cela permet de pouvoir rÃ©agir
 		*  aux changements brusques de position de souris */
 		HoverEvent he(MOUSE_ENTER, lastMousePos, mousePos, mousePos - lastMousePos);
 		HoverObservable::notifyObservers(he);
@@ -174,7 +174,7 @@ void ska::GUI::refresh(unsigned int ellapsedTime) {
 }
 
 
-//Reset des informations de notre pokémon (à chaque refresh)
+//Reset des informations de notre pokÃ©mon (Ã  chaque refresh)
 //TODO
 void ska::GUI::hide(bool x) {
     m_hide = x;

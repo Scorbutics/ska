@@ -21,6 +21,11 @@ namespace ska {
 		RenderEffect effect;
 		// Moves the drawing (pixels) from where its hitbox places it (ex : a character centred on its block)
 		Point<int> drawOffset{};
+		// Sorted with the drawings of the map as if its position were on a grid of this step (pixels, 0 : its position) :
+		// a character walking block by block keeps the depth of the upper of its two blocks (walking down : the block it
+		// leaves until it arrives ; walking up : the block it goes to, at once), as the objects of the map in front of it
+		// (ex : the leaves of the tall grass) cover it during all of its step
+		int sortStep = 0;
 
 		// The top left corner of the drawing in the world, its height (z) left out : placed by the hitbox, moved by
 		// drawOffset. The GraphicSystem draws it there ; what follows a drawing (its shadow, a mark over it) uses it too
