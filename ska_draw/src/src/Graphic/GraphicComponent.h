@@ -29,6 +29,9 @@ namespace ska {
 		// Pixels of its bottom not drawn (ex : its legs in tall grass), over its effect (which the game may reset at each
 		// frame : a fighter)
 		int cropBottom = 0;
+		// Hidden behind something (the game decides) : drawn again over the world (GraphicSystem::setSilhouettePriority), dark,
+		// with this opacity (0 : no silhouette)
+		unsigned char silhouette = 0;
 
 		// The top left corner of the drawing in the world, its height (z) left out : placed by the hitbox, moved by
 		// drawOffset. The GraphicSystem draws it there ; what follows a drawing (its shadow, a mark over it) uses it too

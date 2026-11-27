@@ -24,6 +24,8 @@ namespace ska {
 		// line) : over the standing tiles. Lower (a hop, a landing), it is sorted on the ground.
 		// Without an air layer (height 0), the height is added to the priority (camera height * z).
 		void setAirLayer(long height, int priority);
+		// The priority of the silhouettes (GraphicComponent::silhouette) : over the world, under its interface
+		void setSilhouettePriority(int priority) { m_silhouettePriority = priority; }
 		int spritePriority(long ground, long z, int cameraHeight) const;
         virtual void update(unsigned int ellapsedTime) override;
         virtual ~GraphicSystem();
@@ -34,5 +36,6 @@ namespace ska {
         int m_topLayerPriority;
 		long m_airHeight = 0;
 		int m_airPriority = 0;
+		int m_silhouettePriority = 0;
     };
 }

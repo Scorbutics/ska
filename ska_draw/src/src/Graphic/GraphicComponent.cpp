@@ -14,6 +14,7 @@ ska::GraphicComponent& ska::GraphicComponent::operator=(const GraphicComponent& 
 	drawOffset = gc.drawOffset;
 	sortStep = gc.sortStep;
 	cropBottom = gc.cropBottom;
+	silhouette = gc.silhouette;
 	return *this;
 }
 

@@ -71,6 +71,16 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
 			}
+			// Hidden behind something : its silhouette over the world (the same shape : its scale, its crop), a flat dark
+			// shape (the flash would add the colors of the sprite : it would look seen through what hides it)
+			if (gc.silhouette > 0 && m_silhouettePriority != 0) {
+				auto shape = effect;
+				shape.red = shape.green = shape.blue = 0;
+				shape.flash = 0;
+				shape.alpha = static_cast<unsigned char>(static_cast<int>(effect.alpha) * gc.silhouette / 255);
+				m_pgd.emplace_back(sprite, relPosX, relPosY, m_silhouettePriority, m_topLayerPriority);
+				m_pgd.back().setEffect(shape);
+			}
 		}
 
 		const auto& dcPtr = m_componentPossibleAccessor.get<DialogComponent>(entityId);
