@@ -88,6 +88,7 @@ ska::WorldCollisionComponent ska::cp::SpaceCollisionEventSender::createWorldColl
 		wcc.blockContacts.push_back(blockPoint * blockSize);
 	}
 	wcc.lastBlockDirection = lastBlockDirection;
+	wcc.fromPhysics = true;
 	wcc.normal = ska::Point<float>{
 		static_cast<float>(normal.x),
 		static_cast<float>(normal.y)

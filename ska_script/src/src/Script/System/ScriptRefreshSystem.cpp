@@ -84,6 +84,9 @@ bool ska::ScriptRefreshSystem::onCollisionEvent(CollisionEvent& ce) {
 		}
 
 		auto& sac = m_entityManager.getComponent<ScriptAwareComponent>(entityId);
+		if (ce.wcollisionComponent->fromPhysics && !sac.physicsTouches) {
+			return false;
+		}
 
 		const auto oldCenterPos = Point<int>(sac.lastBlockPos);
 
