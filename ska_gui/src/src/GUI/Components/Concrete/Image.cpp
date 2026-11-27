@@ -28,7 +28,7 @@ void ska::Image::setWidth(unsigned int w) {
 	if (m_clip.has_value()) {
 		m_clip->w = w;
 	}
-	m_img.resize(w, m_img.getHeight());
+	resizeOwn(w, m_img.getHeight());
 }
 
 void ska::Image::setHeight(unsigned int h) {
@@ -36,7 +36,18 @@ void ska::Image::setHeight(unsigned int h) {
 	if (m_clip.has_value()) {
 		m_clip->h = h;
 	}
-	m_img.resize(m_img.getWidth(), h);
+	resizeOwn(m_img.getWidth(), h);
+}
+
+void ska::Image::resizeOwn(unsigned int w, unsigned int h) {
+	if (m_img.getWidth() == w && m_img.getHeight() == h) {
+		return;
+	}
+	// The texture of an image is shared by every texture of the same file (Texture : ManagedResource) : resized, it is
+	// its own (else every sprite of the file, created after, would have this size : ex a Pokemon of the team shown in a
+	// slot of 64 x 64, every Pokemon of its kind on the map drawn from frames of 10 x 8 pixels, unseen)
+	m_img.lifetimeSeparation();
+	m_img.resize(w, h);
 }
 
 void ska::Image::render(Renderer& renderer) const {

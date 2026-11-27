@@ -16,6 +16,9 @@ namespace ska {
 		bool notify(IWidgetEvent& e) override { return false; }
 
 	private:
+		// Its texture at a size : its own (the shared one keeps the size of its file)
+		void resizeOwn(unsigned int w, unsigned int h);
+
 		Texture m_img;
 		std::optional<Rectangle> m_clip;
 	};
