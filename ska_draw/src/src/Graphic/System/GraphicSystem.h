@@ -26,6 +26,8 @@ namespace ska {
 		void setAirLayer(long height, int priority);
 		// The priority of the silhouettes (GraphicComponent::silhouette) : over the world, under its interface
 		void setSilhouettePriority(int priority) { m_silhouettePriority = priority; }
+		// The entity is drawn by this system (it has the components it needs : a debug view)
+		bool draws(EntityId entity) const { return getEntities().count(entity) > 0; }
 		int spritePriority(long ground, long z, int cameraHeight) const;
         virtual void update(unsigned int ellapsedTime) override;
         virtual ~GraphicSystem();
