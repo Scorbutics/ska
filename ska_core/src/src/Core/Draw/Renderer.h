@@ -35,6 +35,8 @@ namespace ska {
 		// Moves the drawing (pixels), ex : a sprite lunging forward
 		int offsetX = 0;
 		int offsetY = 0;
+		// Pixels of the texture not drawn at its bottom (its top stays in place) : ex a character standing in tall grass
+		int cropBottom = 0;
 		// A fragment shader for this drawing (Graphic/Shader.h), nullptr : none. "shaderParameters" : its uniforms for this
 		// drawing only (two vec4 at most, "shaderParameterCount" floats), else the uniforms given to the shader are used.
 		// Changing the uniforms between drawings costs a flush of the drawings of the shader
@@ -43,7 +45,7 @@ namespace ska {
 		unsigned int shaderParameterCount = 0;
 
 		bool active() const {
-			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || shader != nullptr;
+			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || cropBottom > 0 || shader != nullptr;
 		}
 	};
 

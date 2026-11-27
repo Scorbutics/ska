@@ -1,11 +1,20 @@
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "ShadowSystem.h"
+#include <algorithm>
 #include <cmath>
 #include "Core/Utils/SpritePath.h"
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
 #include "../PositionnedGraphicDrawable.h"
 #include "Core/Utils/SkaConstants.h"
+
+namespace {
+	// The pixels of its bottom hidden (GraphicComponent::cropBottom) from which its shadow is not drawn
+	constexpr int ShadowCropFade = 12;
+	// The height (pixels) from which its shadow fades, and from which it is not drawn
+	constexpr long ShadowAirStart = 24;
+	constexpr long ShadowAirFade = 120;
+}
 
 ska::ShadowSystem::ShadowSystem(ska::EntityManager& entityManager, ska::CameraSystem& camera) :
     AbstractGraphicSystem(camera),
@@ -53,9 +62,14 @@ void ska::ShadowSystem::refresh(unsigned int) {
 		if (!((((static_cast<int>(relPosX + m_shadow.getWidth())) < 0) || (relPosX >= camera.w)) ||
 			((static_cast<int>(relPosY + m_shadow.getHeight()) < 0) || (relPosY >= camera.h)))) {
 			m_pgd.emplace_back(m_shadow, relPosX, relPosY, priority, priority);
-			if (graphic != nullptr && graphic->effect.alpha != 255) {
+			// Its feet hidden (cropped : ex in tall grass), high in the air (ex : a bird flying in, drawn out of the screen) :
+			// its shadow fades out
+			const auto feetHidden = graphic != nullptr ? std::min(1.F, static_cast<float>(graphic->cropBottom) / static_cast<float>(ShadowCropFade)) : 0.F;
+			const auto high = std::clamp(static_cast<float>(pos.z - ShadowAirStart) / static_cast<float>(ShadowAirFade - ShadowAirStart), 0.F, 1.F);
+			const auto alpha = static_cast<float>(graphic != nullptr ? graphic->effect.alpha : 255) * (1.F - feetHidden) * (1.F - high);
+			if (alpha < 255.F) {
 				auto effect = RenderEffect{};
-				effect.alpha = graphic->effect.alpha;
+				effect.alpha = static_cast<unsigned char>(alpha);
 				m_pgd.back().setEffect(effect);
 			}
 		}

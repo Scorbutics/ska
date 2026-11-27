@@ -255,9 +255,24 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		destBuf.h = height;
 		destBuf.x += effect.offsetX;
 		destBuf.y += effect.offsetY;
+		// The bottom of the texture not drawn : the part of the source and of the destination under the crop line
+		auto cropped = clip != nullptr;
+		if (effect.cropBottom > 0) {
+			if (!cropped) {
+				rClip = SDL_Rect{ 0, 0, static_cast<int>(t.getWidth()), static_cast<int>(t.getHeight()) };
+				cropped = true;
+			}
+			const auto sourceHeight = rClip.h;
+			const auto crop = std::min(effect.cropBottom, sourceHeight);
+			if (crop >= sourceHeight) {
+				return;
+			}
+			rClip.h -= crop;
+			destBuf.h = static_cast<int>(static_cast<float>(destBuf.h) * static_cast<float>(rClip.h) / static_cast<float>(sourceHeight) + 0.5F);
+		}
 
 		const auto& sdl = SDLLibrary::get();
-		auto clipPointer = clip != nullptr ? &rClip : nullptr;
+		auto clipPointer = cropped ? &rClip : nullptr;
 		auto centerPointer = rotationCenter != nullptr ? &pRotationCenter : nullptr;
 		Uint8 red = 255, green = 255, blue = 255, alpha = 255;
 		auto blendMode = SDL_BLENDMODE_BLEND;

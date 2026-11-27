@@ -13,6 +13,7 @@ ska::GraphicComponent& ska::GraphicComponent::operator=(const GraphicComponent& 
 	effect = gc.effect;
 	drawOffset = gc.drawOffset;
 	sortStep = gc.sortStep;
+	cropBottom = gc.cropBottom;
 	return *this;
 }
 

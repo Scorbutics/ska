@@ -26,6 +26,9 @@ namespace ska {
 		// leaves until it arrives ; walking up : the block it goes to, at once), as the objects of the map in front of it
 		// (ex : the leaves of the tall grass) cover it during all of its step
 		int sortStep = 0;
+		// Pixels of its bottom not drawn (ex : its legs in tall grass), over its effect (which the game may reset at each
+		// frame : a fighter)
+		int cropBottom = 0;
 
 		// The top left corner of the drawing in the world, its height (z) left out : placed by the hitbox, moved by
 		// drawOffset. The GraphicSystem draws it there ; what follows a drawing (its shadow, a mark over it) uses it too

@@ -1,5 +1,6 @@
 #include <limits>
 #include <cmath>
+#include <algorithm>
 #include "Graphic/__internalConfig/LoggerConfig.h"
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
@@ -45,13 +46,15 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			sortY = (pos.y >= 0 ? pos.y / step : -((-pos.y + step - 1) / step)) * step;
 		}
 		const auto feet = sortY + hc.yOffset + static_cast<long>(hc.height);
+		auto effect = gc.effect;
+		effect.cropBottom = std::max(effect.cropBottom, gc.cropBottom);
 
 		for (auto& sprite : gc.sprites) {
 			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
 			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
-			m_pgd.back().setEffect(gc.effect);
+			m_pgd.back().setEffect(effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
 			}
@@ -64,7 +67,7 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
-			m_pgd.back().setEffect(gc.effect);
+			m_pgd.back().setEffect(effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
 				m_pgd.back().rotateOnItself(NumberUtils::fastAtan2(pos.rotationY, pos.rotationX));
 			}
