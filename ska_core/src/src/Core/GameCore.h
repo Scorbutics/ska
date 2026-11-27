@@ -7,6 +7,7 @@
 #include "GameApp.h"
 #include "Core/Exceptions/TerminateProcessException.h"
 #include "Core/Dev/DevConsole.h"
+#include "Core/Dev/Profiler.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -63,7 +64,9 @@ namespace ska {
 #else
 			for (;;) {
 				const auto start = TimeUtils::getTicks();
+				const auto profiled = std::chrono::steady_clock::now();
 				frame();
+				Profiler::frame(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - profiled).count());
 				FrameClock::drawn(TimeUtils::getTicks());
 				// Without V-sync, the frames are not drawn faster than the display shows them (a core, the GPU, the battery)
 				if (FrameClock::pacing() == FrameClock::Pacing::Wait && !TimeUtils::frozen()) {
@@ -159,6 +162,7 @@ namespace ska {
 			const auto stateChange = m_stateHolder.update();
 			m_stateHolder.eventUpdate(ellapsedTime);
 			m_gameConfig->eventUpdate(ellapsedTime);
+			Profiler::logicStep();
 			DevConsole::get().logicStepped();
 			return stateChange;
         }

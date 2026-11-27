@@ -2,6 +2,14 @@
 #include "StateBase.h"
 #include "../Draw/IGraphicSystem.h"
 #include "Base/Task/WorkNode.h"
+#include "Core/Dev/Profiler.h"
+
+namespace {
+	const std::string& NotProfiled() {
+		static const auto none = std::string{};
+		return none;
+	}
+}
 
 ska::StateBase::StateBase():
 	m_state(0), 
@@ -18,6 +26,7 @@ void ska::StateBase::graphicUpdate(const unsigned int ellapsedTime, DrawableCont
 
 	for (auto& s : m_graphics) {
 		s->setDrawables(drawables);
+		const auto scope = Profiler::Scope{ Profiler::enabled() ? Profiler::name(typeid(*s)) : NotProfiled() };
 		s->update(ellapsedTime);
 	}	
 }
@@ -32,6 +41,7 @@ void ska::StateBase::eventUpdate(const unsigned int ellapsedTime){
 	}
 
 	for (auto& s : m_logics) {
+		const auto scope = Profiler::Scope{ Profiler::enabled() ? Profiler::name(typeid(*s)) : NotProfiled() };
 		s->update(ellapsedTime);
 	}
 }

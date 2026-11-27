@@ -1,3 +1,4 @@
+#include "Core/Dev/Profiler.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -52,10 +53,17 @@ bool ska::GraphicModule::onStateEvent(StateEvent& se) {
 }
 
 void ska::GraphicModule::graphicUpdate(unsigned int ellapsedTime, StateHolder& sh) {
-    sh.graphicUpdate(ellapsedTime, *m_drawables);
+	static const auto states = std::string{ "graphic states" };
+	static const auto present = std::string{ "present" };
+	{
+		const auto scope = Profiler::Scope{ states };
+		sh.graphicUpdate(ellapsedTime, *m_drawables);
+	}
     m_drawables->draw();
 
     m_drawables->clear();
+	// The end of the drawing on the GPU, the wait of the V-sync
+	const auto scope = Profiler::Scope{ present };
     m_renderer->update();
 }
 

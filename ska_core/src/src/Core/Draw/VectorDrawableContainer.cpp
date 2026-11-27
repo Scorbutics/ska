@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "VectorDrawableContainer.h"
 #include "Renderer.h"
+#include "Core/Dev/Profiler.h"
 
 
 ska::VectorDrawableContainer::VectorDrawableContainer(Renderer& renderer):
@@ -32,7 +33,14 @@ void ska::VectorDrawableContainer::draw() {
 			m_renderer.endWorld();
 			inWorld = false;
 		}
-		d->render(m_renderer);
+		if (Profiler::enabled()) {
+			static const auto prefix = std::string{ "draw " };
+			const auto part = prefix + Profiler::name(typeid(*d));
+			const auto scope = Profiler::Scope{ part };
+			d->render(m_renderer);
+		} else {
+			d->render(m_renderer);
+		}
 	}
 	if (inWorld) {
 		m_renderer.endWorld();
