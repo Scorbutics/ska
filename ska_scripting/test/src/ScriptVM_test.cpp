@@ -1,5 +1,9 @@
 #include <doctest.h>
+#include <chrono>
+#include <filesystem>
+#include <fstream>
 #include <map>
+#include <unistd.h>
 #include "Scripting/__internalConfig/LoggerConfig.h"
 #include "Scripting/ScriptVM.h"
 #include "Scripting/EngineModule.h"
@@ -375,4 +379,42 @@ TEST_CASE("[ScriptVM] console run : a script file with its arguments, answered b
 	test.vm.run(Script("no_such_script"), {}, Answer(missing));
 	CHECK(missing.answered);
 	CHECK(!missing.reply.ok);
+}
+
+TEST_CASE("[ScriptVM] console run : a script file changed since its last run is compiled again") {
+	auto test = ScriptingTest{};
+	const auto directory = std::filesystem::temp_directory_path() / ("ska-console-run-" + std::to_string(::getpid()));
+	std::filesystem::create_directories(directory);
+	const auto file = directory / "edited.miniska";
+	auto write = [&file](const std::string& body, int seconds) {
+		std::ofstream{ file } << body;
+		// A later write (the file systems do not always tell apart two writes in the same second)
+		std::filesystem::last_write_time(file, std::filesystem::file_time_type::clock::now() + std::chrono::seconds(seconds));
+	};
+	std::ofstream{ directory / "edited_helper.miniska" } << "word = function() : string do return \"helper\" end\n";
+	auto run = [&test, &file]() {
+		auto answer = ConsoleAnswer{};
+		test.vm.run(file.string(), {}, Answer(answer));
+		CHECK(answer.answered);
+		return answer.reply;
+	};
+
+	write("Dev = import \"bind:ska.dev\"\nrun = function(args: string[]) do\nDev.reply(\"first\")\nend\n", 1);
+	CHECK(run().value == "first");
+	CHECK(run().value == "first");
+
+	SUBCASE("edited : the new version, its relative imports still found") {
+		write("Dev = import \"bind:ska.dev\"\nHelper = import \"edited_helper\"\nrun = function(args: string[]) do\nDev.reply(\"second \" + Helper.word())\nend\n", 2);
+		CHECK(run().value == "second helper");
+	}
+
+	SUBCASE("a version that does not compile, then fixed") {
+		write("run = function(args: string[]) do\nNope.call()\nend\n", 2);
+		const auto broken = run();
+		CHECK(!broken.ok);
+		CHECK(broken.error.find("Nope") != std::string::npos);
+		write("Dev = import \"bind:ska.dev\"\nrun = function(args: string[]) do\nDev.reply(\"fixed\")\nend\n", 3);
+		CHECK(run().value == "fixed");
+	}
+	std::filesystem::remove_all(directory);
 }

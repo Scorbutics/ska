@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <functional>
 #include <type_traits>
 #include <memory>
@@ -93,6 +94,8 @@ namespace ska {
 			// A line put before the code sent to the console (ex : Engine = import "bind:ska.engine") : the modules of the game
 			void addConsolePrelude(std::string line);
 			void eval(const std::string& code, DevReplier reply) override;
+			// A script file changed since its last run is compiled again (the compiled scripts are kept by their name :
+			// a new version gets a new name, "<path>~<version>", in the same directory for its relative imports)
 			void run(const std::string& file, std::vector<std::string> arguments, DevReplier reply) override;
 
 			/* Synchronous calls : the engine asks a script for a value (ex : a formula, a decision) */
@@ -214,6 +217,14 @@ namespace ska {
 
 			std::unordered_map<std::string, std::size_t> m_compiledScripts;
 			std::unordered_set<std::string> m_failedScripts;
+			// The script files run by the console : when they were written, the version compiled. The source file of
+			// each new version (its name is not a file)
+			struct ConsoleRun {
+				std::filesystem::file_time_type written;
+				unsigned int version = 0;
+			};
+			std::unordered_map<std::string, ConsoleRun> m_consoleRuns;
+			std::unordered_map<std::string, std::string> m_sources;
 			std::vector<std::unique_ptr<RunningScript>> m_suspended;
 			std::vector<PendingStart> m_pendingStarts;
 			bool m_scriptRunning = false;

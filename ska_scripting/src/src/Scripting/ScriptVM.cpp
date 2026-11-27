@@ -68,7 +68,9 @@ std::optional<std::size_t> ska::scripting::ScriptVM::compile(const std::string& 
 		return {};
 	}
 
-	auto file = std::ifstream{ name };
+	// A new version of a script file run by the console : its name, its file
+	const auto source = m_sources.find(name);
+	auto file = std::ifstream{ source != m_sources.end() ? source->second : name };
 	if (file.fail()) {
 		m_lastCompileError = "script file not found : \"" + scriptFile + "\"";
 		LOG_ERROR << "Script file not found : \"" << scriptFile << "\"";
@@ -491,10 +493,30 @@ void ska::scripting::ScriptVM::eval(const std::string& code, DevReplier reply) {
 }
 
 void ska::scripting::ScriptVM::run(const std::string& file, std::vector<std::string> arguments, DevReplier reply) {
+	// Changed since its last run (edited while the game runs) : a new version
+	auto scriptFile = file;
+	const auto path = FileUtils::getCanonicalPath(file);
+	auto error = std::error_code{};
+	const auto written = std::filesystem::last_write_time(path, error);
+	if (!error) {
+		auto known = m_consoleRuns.find(path);
+		if (known == m_consoleRuns.end()) {
+			m_consoleRuns.emplace(path, ConsoleRun{ written, 0 });
+		} else {
+			if (known->second.written != written) {
+				known->second.written = written;
+				known->second.version++;
+			}
+			if (known->second.version > 0) {
+				scriptFile = path + "~" + std::to_string(known->second.version);
+				m_sources[scriptFile] = path;
+			}
+		}
+	}
 	auto context = ScriptContext{};
 	context.name = file;
 	context.reply = std::make_shared<std::string>();
-	start(file, std::move(arguments), std::move(context), [reply](bool ok, const std::string& text) {
+	start(scriptFile, std::move(arguments), std::move(context), [reply](bool ok, const std::string& text) {
 		reply(ok ? DevReply::Value(text) : DevReply::Error(text));
 	});
 }
