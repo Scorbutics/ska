@@ -62,6 +62,8 @@
 #include "Units/InterpreterCommandMapHas.h"
 #include "Units/InterpreterCommandMapKeys.h"
 #include "Units/InterpreterCommandMapSize.h"
+#include "Units/InterpreterCommandArrHas.h"
+#include "Units/InterpreterCommandEnumCheck.h"
 #include "InterpreterDeclarer.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::Interpreter);
@@ -106,6 +108,8 @@ ska::bytecode::Interpreter::CommandInterpreter ska::bytecode::Interpreter::build
 	InterpreterCommandDeclare<Command::MAP_HAS>(*this, result, generator);
 	InterpreterCommandDeclare<Command::MAP_KEYS>(*this, result, generator);
 	InterpreterCommandDeclare<Command::MAP_SIZE>(*this, result, generator);
+	InterpreterCommandDeclare<Command::ARR_HAS>(*this, result, generator);
+	InterpreterCommandDeclare<Command::ENUM_CHECK>(*this, result, generator);
 
 	InterpreterCommandDeclare<Command::CMP_STR>(*this, result, generator);
 	InterpreterCommandDeclare<Command::CMP_BOOL>(*this, result, generator);

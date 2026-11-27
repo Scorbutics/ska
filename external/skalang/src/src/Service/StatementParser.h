@@ -58,6 +58,8 @@ namespace ska {
 	public:
 		StatementParser(const ReservedKeywordsPool& reservedKeywordsPool);
 		ScriptASTPtr subParse(ScriptCacheAST& scriptCache, const std::string& name, std::ifstream& file);
+		// The key of an entry of a map literal ("k": v) : an expression ending at ":"
+		ASTNodePtr exprMapKey(ScriptAST& input);
 
 	private:
 		ASTNodePtr parse(ScriptAST& input);

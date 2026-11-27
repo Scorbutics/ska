@@ -53,7 +53,9 @@ namespace ska {
 			// No store for a variable assigned itself ; always for a container (array cell, map value, object field) :
 			// the value and the cell can have the same type symbol (ex : an object of the same factory)
 			const auto isContainer = dest.op() == Operator::ARRAY_USE || dest.op() == Operator::FIELD_ACCESS;
-			if((isContainer || dest.symbol() != node.symbol() || node.symbol() == nullptr) && !finalGroup.empty()) {
+			// An enum declaration has the symbol of its variable (as a function), but does not store itself
+			const auto isEnum = node.op() == Operator::ENUM_DECLARATION;
+			if((isContainer || isEnum || dest.symbol() != node.symbol() || node.symbol() == nullptr) && !finalGroup.empty()) {
 				LOG_DEBUG << "Creating store instruction with operand group " << finalGroup;
 				finalGroup.push(GenerateStore(generator, dest, operandDestination, context));
 				LOG_DEBUG << "\tin operand " << operandDestination;

@@ -81,6 +81,10 @@ namespace ska {
 			MAP_KEYS,
 			// MAP_SIZE dest map : number of keys
 			MAP_SIZE,
+			// ARR_HAS dest array value : true when an element of the array is equal to the value
+			ARR_HAS,
+			// ENUM_CHECK dest string names : the string, when it is one of the names (string array) of an enum, an error otherwise
+			ENUM_CHECK,
 			NOP,
 			UNUSED_Last_Length
 		};
@@ -148,6 +152,8 @@ namespace ska {
 			"MAP_HAS",
 			"MAP_KEYS",
 			"MAP_SIZE",
+			"ARR_HAS",
+			"ENUM_CHECK",
 			"NOP",
 			""
 		};

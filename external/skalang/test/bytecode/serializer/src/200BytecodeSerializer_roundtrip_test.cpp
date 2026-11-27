@@ -350,3 +350,18 @@ TEST_CASE("[BytecodeSerializer round trip] maps") {
 		out = names + (stock.has("ball"): string) + "/" + (stock.size(): string)
 	)script", "ball=10;potion=3;true/2");
 }
+
+TEST_CASE("[BytecodeSerializer round trip] map literals, enums, match, get, contains") {
+	CheckRoundTrip(R"script(
+		Status = enum none, poison, burn end
+		stun = ["poison": 1, "burn": 2]
+		speed = function(s: Status): int do
+			return match s
+				when Status.poison, Status.burn then 60
+				when Status.none then 100
+			end
+		end
+		s = ("burn": Status)
+		out = (speed(s): string) + (stun.get("none", 0): string) + ([Status.burn].contains(s): string)
+	)script", "600true");
+}

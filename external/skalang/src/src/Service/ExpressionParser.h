@@ -30,6 +30,8 @@ namespace ska {
 	public:
 		ExpressionParser(const ReservedKeywordsPool& reservedKeywordsPool, StatementParser& parser);
 		ASTNodePtr parse(ScriptAST& input);
+		// The key of an entry of a map literal : the expression ends at a ":" outside of parentheses ("k": v)
+		ASTNodePtr parseMapKey(ScriptAST& input);
 
 	private:
 		std::pair<bool, int> parseTokenExpression(ScriptAST& input, ExpressionStack& expressions, const Token& token, bool isDoingOperation);
@@ -44,7 +46,10 @@ namespace ska {
 
 		bool isAtEndOfExpression(ScriptAST& input) const;
 
-		ASTNodePtr expression(ScriptAST& input, ExpressionStack& expressions);
+		ASTNodePtr expression(ScriptAST& input, ExpressionStack& expressions, bool stopAtTypeDelimiter = false);
+		ASTNodePtr matchEnum(ScriptAST& input);
+		ASTNodePtr matchMatch(ScriptAST& input);
+		void skipLineBreaks(ScriptAST& input);
 
 		static void error(const std::string& message);
 

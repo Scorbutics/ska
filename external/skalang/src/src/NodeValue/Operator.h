@@ -35,6 +35,14 @@ namespace ska {
 		TYPE,
 		// [:]: T, an empty map
 		MAP_DECLARATION,
+		// ["k": v, ...], a map with its entries (children : key, value, key, value...)
+		MAP_LITERAL,
+		// enum a, b end (children : the names of the values)
+		ENUM_DECLARATION,
+		// match subject when v, w then x ... else y end (children : subject, branches, optional else value)
+		MATCH,
+		// when v, w then x (children : the result x, then the values v, w)
+		MATCH_BRANCH,
 		UNUSED_Last_Length
 	};
 
@@ -68,7 +76,11 @@ namespace ska {
 		"SCRIPT_LINK",
 		"SCRIPT_OBJECT",
 		"TYPE",
-		"MAP_DECLARATION"
+		"MAP_DECLARATION",
+		"MAP_LITERAL",
+		"ENUM_DECLARATION",
+		"MATCH",
+		"MATCH_BRANCH"
 	};
 
 	static_assert(sizeof(OperatorSTR) / sizeof(OperatorSTR[0]) == static_cast<std::size_t>(Operator::UNUSED_Last_Length));

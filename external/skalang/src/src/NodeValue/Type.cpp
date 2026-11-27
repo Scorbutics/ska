@@ -54,6 +54,11 @@ const ska::Type *ska::Type::getParentClass() const {
 
 bool ska::Type::operator==(const Type& t) const {
 	if (m_symbolTable != nullptr && t.m_symbolTable != nullptr) {
+		// An enum declaration (one compound type : its values) is not one of its values
+		if ((m_type == ExpressionType::ENUM || t.m_type == ExpressionType::ENUM) &&
+			(m_type != t.m_type || m_compound.size() != t.m_compound.size())) {
+			return false;
+		}
 		return *m_symbolTable->symbol() == *t.m_symbolTable->symbol();
 	}
 

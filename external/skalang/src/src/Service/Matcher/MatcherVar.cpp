@@ -38,7 +38,9 @@ ska::ASTNodePtr ska::MatcherVar::matchAffectation(ScriptAST& input, ASTNodePtr v
 
 	const auto isVariableAffectation = varAffectedNode->size() == 0 && varAffectedNode->tokenType() == TokenType::IDENTIFIER;
 	// A function declared as the value of a variable takes its name ("f = function() do ... end"), the other ones are anonymous
-	const auto namesFunction = isVariableAffectation && input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>());
+	// An enum takes the name of its variable too ("Status = enum none, poison end")
+	const auto namesFunction = isVariableAffectation && (input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::FUNCTION>()) ||
+		input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::ENUM>()));
 	input.pushContext({ namesFunction ? ParsingContextType::AFFECTATION : ParsingContextType::VALUE, Token{ varAffectedNode->name(), varAffectedNode->tokenType(), varAffectedNode->positionInScript() } });
 
 	auto expressionNode = input.expr(m_parser);

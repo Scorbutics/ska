@@ -128,7 +128,7 @@ bool ska::SemanticTypeChecker::matchIfElse(const IfElseTokenEvent& token) {
 bool ska::SemanticTypeChecker::matchArray(const ArrayTokenEvent& token) {
 	switch (token.type()) {
 	case ArrayTokenEventType::DECLARATION: {
-		if (token.rootNode().op() == Operator::MAP_DECLARATION) {
+		if (token.rootNode().op() == Operator::MAP_DECLARATION || token.rootNode().op() == Operator::MAP_LITERAL) {
 			break;
 		}
 		// If and only if an explicit array type does not exists, we have array content. So semantic checks are required.
@@ -305,6 +305,10 @@ bool ska::SemanticTypeChecker::matchConverter(const ConverterTokenEvent& token) 
 	const auto& sourceType = token.object().type().value();
 	const auto& destinationType = token.type().type().value();
 
+	// A string converted to a value of an enum : checked when the script runs (its text must be one of the names)
+	if (sourceType == ExpressionType::STRING && destinationType == ExpressionType::ENUM && destinationType.size() == 0) {
+		return true;
+	}
 	if (ExpressionTypeIsBuiltIn(sourceType.type()) && !ExpressionTypeIsBuiltIn(destinationType.type())) {
 		auto ss = std::stringstream{};
 		ss << "invalid conversion from a built-in type \"" << sourceType << "\" to type \"" << destinationType << "\"";

@@ -27,7 +27,9 @@ namespace ska {
 			// 6 : "while" keyword (the grammar tokens after it are renumbered), STR_LENGTH and STR_ACCESS commands.
 			// 7 : CONV_B_STR command.
 			// 8 : maps (MAP_* commands, "map" type).
-			static constexpr std::size_t Version = 8;
+			// 9 : "enum", "match", "when", "then" keywords (the grammar tokens after them are renumbered), "enum" type,
+			//     ARR_HAS and ENUM_CHECK commands.
+			static constexpr std::size_t Version = 9;
 
 			Serializer() = default;
 			// Reads and writes the given format version (tests of version mismatches)

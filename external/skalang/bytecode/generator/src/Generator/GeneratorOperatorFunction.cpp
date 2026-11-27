@@ -97,14 +97,38 @@ static bool IsInstructionCommandClosed(const ska::bytecode::InstructionOutput& p
 }
 
 ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator::FUNCTION_CALL>::generate(OperateOn node, GenerationContext& context) {
-	// Built-in functions of maps : size(), has(key), keys()
+	// Built-in functions of maps : size(), has(key), keys(), get(key, default) ; of arrays : contains(value)
 	if (node.GetFunctionNameNode().op() == Operator::FIELD_ACCESS) {
 		auto fieldAccess = OperationType<Operator::FIELD_ACCESS>{ node.GetFunctionNameNode() };
+		if (fieldAccess.GetObjectType() == ExpressionType::ARRAY && fieldAccess.GetFieldNameNode().name() == "contains") {
+			auto result = generateNext(context.next(fieldAccess.GetObjectNameNode()));
+			const auto array = result.operand();
+			auto value = generateNext(context.next(node.GetFunctionParameterValue(0)));
+			const auto valueOperand = value.operand();
+			result.push(std::move(value));
+			result.push(Instruction{ Command::ARR_HAS, context.queryNextRegister(), array, valueOperand });
+			return result;
+		}
 		if (fieldAccess.GetObjectType() == ExpressionType::MAP) {
 			const auto& fieldName = fieldAccess.GetFieldNameNode().name();
 			auto result = generateNext(context.next(fieldAccess.GetObjectNameNode()));
 			const auto map = result.operand();
-			if (fieldName == "has") {
+			if (fieldName == "get") {
+				// The default value, replaced by the value of the key when the map has it
+				auto key = generateNext(context.next(node.GetFunctionParameterValue(0)));
+				const auto keyOperand = key.operand();
+				result.push(std::move(key));
+				auto defaultValue = generateNext(context.next(node.GetFunctionParameterValue(1)));
+				const auto defaultOperand = defaultValue.operand();
+				result.push(std::move(defaultValue));
+				const auto valueRegister = context.queryNextRegister();
+				const auto hasRegister = context.queryNextRegister();
+				result.push(Instruction{ Command::MOV, valueRegister, defaultOperand });
+				result.push(Instruction{ Command::MAP_HAS, hasRegister, map, keyOperand });
+				result.push(Instruction{ Command::JUMP_NIF, Operand { 1L, OperandType::PURE }, hasRegister });
+				result.push(Instruction{ Command::MAP_ACCESS, valueRegister, map, keyOperand });
+				result.push(valueRegister);
+			} else if (fieldName == "has") {
 				auto key = generateNext(context.next(node.GetFunctionParameterValue(0)));
 				const auto keyOperand = key.operand();
 				result.push(std::move(key));

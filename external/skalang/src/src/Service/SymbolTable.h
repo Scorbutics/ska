@@ -71,6 +71,10 @@ namespace ska {
 			return *m_currentTable;
 		}
 
+		ScopedSymbolTable& current() {
+			return *m_currentTable;
+		}
+
 		std::size_t size() const {
 			return m_currentTable->size();
 		}

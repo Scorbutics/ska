@@ -18,6 +18,8 @@ namespace ska {
 		BOOLEAN,
 		// string keys, values of one type
 		MAP,
+		// a value of an enum (its symbol table is the one of the enum declaration)
+		ENUM,
 		UNUSED_Last_Length
 	};
 
@@ -30,7 +32,8 @@ namespace ska {
 		"string",
 		"array",
 		"bool",
-		"map"
+		"map",
+		"enum"
 	};
 
 	static_assert(sizeof(ExpressionTypeSTR) / sizeof(ExpressionTypeSTR[0]) == static_cast<std::size_t>(ExpressionType::UNUSED_Last_Length));

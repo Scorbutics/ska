@@ -562,3 +562,142 @@ TEST_CASE("[BytecodeInterpreter] strings : a string literal with the text of a s
 	const auto result = Run("a = [\"x\", \"y\"]\nout = a[0] + \",\" + a[1] + \"end\" + \"do\" + \"|\"\n");
 	CHECK(*result.nodeval<ska::StringShared>() == "x,yenddo|");
 }
+
+TEST_CASE("[BytecodeInterpreter] map literals, get, contains") {
+	SUBCASE("a map literal, on several lines, read with get (default value)") {
+		const auto result = Run(R"script(
+			stun = [
+				"flinch": 450,
+				"paralysis": 500
+			]
+			stun["sleep"] = 0
+			out = (stun.get("flinch", 1): string) + "/" + (stun.get("burn", 1): string) + "/" + (stun.size(): string) + "/" + stun.keys()[2]
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "450/1/3/sleep");
+	}
+	SUBCASE("map literal : keys are expressions, values of any type") {
+		const auto result = Run(R"script(
+			prefix = "k"
+			F = function(n: int): int do return 0 end
+			arrays = [prefix + "1": [1, 2], (2: string): [3]]
+			functions = ["double": function(n: int): int do return n * 2 end]
+			out = arrays["k1"].size() + arrays["2"][0] + functions["double"](10)
+		)script");
+		CHECK(result.nodeval<long>() == 2 + 3 + 20);
+	}
+	SUBCASE("contains : ints, strings, floats, bools ; multi-line array") {
+		const auto result = Run(R"script(
+			names = [
+				"poison",
+				"burn"
+			]
+			out = (names.contains("burn"): string) + (names.contains("sleep"): string) + ([1, 2].contains(2): string) + ([1.5].contains(2.0): string) + ([true].contains(true): string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "truefalsetruefalsetrue");
+	}
+	SUBCASE("errors") {
+		CHECK_THROWS_WITH(Interpret("m = [\"a\": 1, \"b\": \"x\"]\n"), doctest::Contains("map literal has not uniform types"));
+		CHECK_THROWS_WITH(Interpret("m = [1: 1]\n"), doctest::Contains("a map key is a \"string\""));
+		CHECK_THROWS_WITH(Interpret("m = [\"a\": 1]\nx = m.get(\"a\", \"x\")\n"), doctest::Contains("Unable to use operator \"=\""));
+		CHECK_THROWS_WITH(Interpret("m = [\"a\": 1, 2]\n"), doctest::Contains("an entry of a map literal is"));
+		CHECK_THROWS_WITH(Interpret("a = [[1]]\nx = a.contains([1])\n"), doctest::Contains("contains(value) compares the elements"));
+		CHECK_THROWS_WITH(Interpret("a = [1]\nx = a.contains(\"1\")\n"), doctest::Contains("Unable to use operator \"=\""));
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] enums") {
+	SUBCASE("values, comparison, conversions, arrays, parameters and returns") {
+		const auto result = Run(R"script(
+			Status = enum
+				none, poison
+				burn
+			end
+			worse = function(s: Status): Status do
+				if s == Status.none
+					return Status.poison
+				end
+				return Status.burn
+			end
+			lasting = [Status.poison, Status.burn]
+			fromText = ("burn": Status)
+			out = (worse(Status.none): string) + "/" + (worse(fromText): string) + "/" + (lasting.contains(fromText): string) + "/" + ((fromText != Status.poison): string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "poison/burn/true/true");
+	}
+	SUBCASE("a text that is not a value is an error") {
+		CHECK_THROWS_WITH(Run("Status = enum none, poison end\ns = (\"posion\": Status)\n"), doctest::Contains("\"posion\" is not a value of the enum (its values : none, poison)"));
+	}
+	SUBCASE("errors") {
+		CHECK_THROWS_WITH(Interpret("Status = enum none, poison end\ns = Status.posion\n"), doctest::Contains("\"posion\" is not a value of the enum \"Status\" (its values : none, poison)"));
+		CHECK_THROWS_WITH(Interpret("Status = enum none end\nOther = enum none end\nb = Status.none == Other.none\n"), doctest::Contains("two different enums"));
+		CHECK_THROWS_WITH(Interpret("Status = enum none end\nb = Status.none == \"none\"\n"), doctest::Contains("Unable to use operator \"==\""));
+		CHECK_THROWS_WITH(Interpret("Status = enum none end\ns = Status.none\ns = \"none\"\n"), doctest::Contains("Unable to use operator \"=\""));
+		CHECK_THROWS_WITH(Interpret("Status = enum none, none end\n"), doctest::Contains("has the value \"none\" twice"));
+		CHECK_THROWS_WITH(Interpret("f = function(e: int) do end\nf(enum a end)\n"), doctest::Contains("an enum is declared as the value of a variable"));
+	}
+}
+
+TEST_CASE("[BytecodeInterpreter] match") {
+	SUBCASE("on ints, strings ; several values in a branch ; else") {
+		const auto result = Run(R"script(
+			label = function(n: int): string do
+				return match n
+					when 1, 2 then "few"
+					when 3 then "three"
+					else "many"
+				end
+			end
+			chance = function(event: string): int do
+				return match event
+					when "attack", "hit" then 30
+					when "hurt" then 40
+					else 100
+				end
+			end
+			out = label(1) + label(2) + label(3) + label(9) + (chance("hit"): string) + (chance("hurt"): string) + (chance("start"): string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "fewfewthreemany3040100");
+	}
+	SUBCASE("on an enum : every value named, no else") {
+		const auto result = Run(R"script(
+			Status = enum none, paralysis, burn end
+			speed = function(s: Status): int do
+				return match s
+					when Status.paralysis then 60
+					when Status.none, Status.burn then 100
+				end
+			end
+			x = match Status.burn
+				when Status.burn then 1
+				else 2
+			end
+			out = speed(Status.paralysis) + speed(Status.burn) + x
+		)script");
+		CHECK(result.nodeval<long>() == 161);
+	}
+	SUBCASE("the values are evaluated in order, only until one matches") {
+		const auto result = Run(R"script(
+			calls = 0
+			value = function(n: int): int do
+				calls = calls + 1
+				return n
+			end
+			r = match 2
+				when value(1), value(2), value(3) then "a"
+				when value(4) then "b"
+				else "c"
+			end
+			out = r + (calls: string)
+		)script");
+		CHECK(*result.nodeval<ska::StringShared>() == "a2");
+	}
+	SUBCASE("errors") {
+		CHECK_THROWS_WITH(Interpret("x = match 1\nwhen 1 then 2\nend\n"), doctest::Contains("a match needs an \"else\""));
+		CHECK_THROWS_WITH(Interpret("S = enum a, b end\nx = match S.a\nwhen S.a then 2\nend\n"), doctest::Contains("the values of the enum \"S\" b are not matched"));
+		CHECK_THROWS_WITH(Interpret("x = match 1\nwhen 1 then 2\nelse \"x\"\nend\n"), doctest::Contains("the branches of a match give values of one type"));
+		CHECK_THROWS_WITH(Interpret("x = match 1\nwhen \"1\" then 2\nelse 3\nend\n"), doctest::Contains("a value of a match is a \"string\""));
+		CHECK_THROWS_WITH(Interpret("x = match 1\nelse 3\nwhen 1 then 2\nend\n"), doctest::Contains("\"else\" is the last branch of a match"));
+		CHECK_THROWS_WITH(Interpret("x = match 1\nwhen 1 2\nelse 3\nend\n"), doctest::Contains("\"then\" is missing"));
+		CHECK_THROWS_WITH(Interpret("x = match [1]\nwhen [1] then 2\nelse 3\nend\n"), doctest::Contains("a match compares its value with \"==\""));
+	}
+}

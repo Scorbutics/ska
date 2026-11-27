@@ -61,6 +61,10 @@ namespace ska {
 		}
 
 		static Type Override(Type t, const ScopedSymbolTable* symbolTable) {
+			// The symbol table of an enum type is the enum itself (not the symbol of a value of it)
+			if (t.m_type == ExpressionType::ENUM && t.m_symbolTable != nullptr) {
+				return t;
+			}
 			t.m_symbolTable = symbolTable;
 			return t;
 		}

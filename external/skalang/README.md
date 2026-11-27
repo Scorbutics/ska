@@ -174,7 +174,10 @@ next = isOdd
  * Loops : `for(i = 0
  i < 10
  i = i + 1) do ... end`, `while condition do ... end`, and the filter `|` on arrays. Conditions : `if ... else if ... else ... end`.
- * Maps : string keys, values of one type. `m = [:]: int`, `m["k"] = 1`, `m["k"]` (a missing key is an error), `m.has("k")`, `m.keys()` (sorted), `m.size()`. Type : `int[:]`.
+ * Maps : string keys, values of one type. `m = [:]: int`, `m = ["a": 1, "b": 2]` (a literal, its type from its values), `m["k"] = 1`, `m["k"]` (a missing key is an error), `m.get("k", 0)` (the value, or a default value), `m.has("k")`, `m.keys()` (sorted), `m.size()`. Type : `int[:]`.
+ * `a.contains(v)` : an element of an array (of `int`, `float`, `string`, `bool` or enum values) equal to `v`. An array or a map literal can be written on several lines.
+ * Enums : `Status = enum none, poison, burn end` (commas or line breaks), its values `Status.poison` of the type `Status` (a misspelled value is a compile error), compared with `==` and `!=` to the values of the same enum only, converted with `:` to a `string` (its name) and from one (an error when the running script gives a text that is not one of the names). At runtime a value is its name : a native function gives or takes it as a string.
+ * `match` : a value chosen by cases, `match v when a, b then x when c then y else z end` (one branch a line). The values are compared to `v` with `==`, in order ; the branches give values of one type ; `else` is needed unless the branches name every value of an enum.
  * A string has a size (`s.size()`) and characters (`s[0]` is a string). A string cannot be modified : a new one is built (`s + "!"`). An index is an `int`.
  * Mathematics : `Math = import "bind:std.native.math"` (`abs`, `min`, `max`, `clamp`, `sqrt`, `pow`, `floor`, `ceil`, `round`... the functions on floats have their own names : `absFloat`, `minFloat`, `maxFloat`).
  * The top level code of a script runs once : the following imports of the script only give its exports.

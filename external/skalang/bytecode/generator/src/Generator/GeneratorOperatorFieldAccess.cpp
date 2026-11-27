@@ -6,6 +6,7 @@
 #include "Service/ScopedSymbolTable.h"
 #include "BytecodeCommand.h"
 #include "Generator/Value/BytecodeScriptGenerationHelper.h"
+#include "GeneratorOperatorLanguageValues.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::bytecode::GeneratorOperator<ska::Operator::FIELD_ACCESS>);
 #define LOG_DEBUG SLOG_STATIC(ska::LogLevel::Debug, ska::bytecode::GeneratorOperator<ska::Operator::FIELD_ACCESS>)
@@ -25,6 +26,11 @@ ska::bytecode::InstructionOutput ska::bytecode::GeneratorOperator<ska::Operator:
 		auto ss = std::stringstream{};
 		ss << "trying to access an undeclared built-in field \"" << fieldName << "\" of the type \"" << typeObject << "\"";
 		throw std::runtime_error(ss.str());
+	}
+
+	// A value of an enum : its name
+	if (typeObject == ExpressionType::ENUM) {
+		return InstructionOutput{ OperandUse{ StringConstant(fieldName) } };
 	}
 
 	if (node.GetObjectNameNode().symbolTable() == nullptr) {

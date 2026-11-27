@@ -20,6 +20,12 @@ ska::TypeHierarchy ska::TypeBuilderOperator<ska::Operator::TYPE>::build(const Sc
 				result = Type::MakeCustom<ExpressionType::OBJECT>(resultSymbolTable);
 			} else {
 				result = resultSymbolTable->symbol()->type();
+				// The name of an enum is the type of its values
+				if (result == ExpressionType::ENUM && result.size() == 1) {
+					// (not linked to the symbol of the enum : the variable typed is not the enum)
+					result = result[0];
+					resultSymbolTable = nullptr;
+				}
 			}
 		} else if (node.IsArray()) {
 			result = node.GetType();

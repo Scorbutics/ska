@@ -28,12 +28,23 @@ ska::ASTNodePtr ska::MatcherArray::matchDeclaration(ScriptAST& input) {
 		return mapNode;
 	}
 
+	// The entries may be on several lines
+	skipLineBreaks(input);
+	// The first entry : "k": v is a map literal
+	auto firstEntry = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>()) ? nullptr : m_parser.exprMapKey(input);
+	if (firstEntry != nullptr && input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>())) {
+		return matchMapLiteral(input, std::move(firstEntry));
+	}
+
 	auto arrayNode = std::vector<ASTNodePtr>{};
 	auto isComma = true;
+	auto isFirst = true;
 	while (isComma) {
 		// An entry may begin with a symbol ("-1", "!b") ; "[]" : no entry
 		SLOG(ska::LogLevel::Debug) << "array entry detected, reading expression : ";
-		auto expression = input.expr(m_parser);
+		auto expression = isFirst ? std::move(firstEntry) : input.expr(m_parser);
+		isFirst = false;
+		skipLineBreaks(input);
 		isComma = input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
 		if (expression != nullptr) {
 			arrayNode.push_back(std::move(expression));
@@ -42,6 +53,7 @@ ska::ASTNodePtr ska::MatcherArray::matchDeclaration(ScriptAST& input) {
 		}
 		if (isComma) {
 			input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>());
+			skipLineBreaks(input);
 		}
 	}
     
@@ -57,6 +69,46 @@ ska::ASTNodePtr ska::MatcherArray::matchDeclaration(ScriptAST& input) {
 	auto event = ArrayTokenEvent{ *declarationNode, input, ArrayTokenEventType::DECLARATION };
 	m_parser.observable_priority_queue<ArrayTokenEvent>::notifyObservers(event);
 	return declarationNode;
+}
+
+void ska::MatcherArray::skipLineBreaks(ScriptAST& input) {
+	const auto& lineBreak = m_reservedKeywordsPool.pattern<TokenGrammar::STATEMENT_END>();
+	while (input.reader().expect(lineBreak)) {
+		input.reader().match(lineBreak);
+	}
+}
+
+// ["poison": 1, "burn": 2] : a map with its entries (keys : strings, values : one type). Children : key, value, key, value...
+ska::ASTNodePtr ska::MatcherArray::matchMapLiteral(ScriptAST& input, ASTNodePtr firstKey) {
+	const auto& typeDelimiter = m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>();
+	const auto& comma = m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>();
+	auto entries = std::vector<ASTNodePtr>{};
+	auto key = std::move(firstKey);
+	while (true) {
+		input.reader().match(typeDelimiter);
+		auto value = input.expr(m_parser);
+		if (value == nullptr) {
+			throw std::runtime_error("syntax error : an entry of a map literal is \"key: value\" (the value is missing)");
+		}
+		entries.push_back(std::move(key));
+		entries.push_back(std::move(value));
+		skipLineBreaks(input);
+		if (!input.reader().expect(comma)) {
+			break;
+		}
+		input.reader().match(comma);
+		skipLineBreaks(input);
+		key = m_parser.exprMapKey(input);
+		if (key == nullptr || !input.reader().expect(typeDelimiter)) {
+			throw std::runtime_error("syntax error : an entry of a map literal is \"key: value\" (\"[\"a\": 1, \"b\": 2]\")");
+		}
+	}
+	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::BRACKET_END>());
+
+	auto mapNode = ASTFactory::MakeNode<ska::Operator::MAP_LITERAL>(std::move(entries));
+	auto event = ArrayTokenEvent{ *mapNode, input, ArrayTokenEventType::DECLARATION };
+	m_parser.observable_priority_queue<ArrayTokenEvent>::notifyObservers(event);
+	return mapNode;
 }
 
 ska::ASTNodePtr ska::MatcherArray::matchUse(ScriptAST& input, ASTNodePtr nodeExpressionArrayAffected) {

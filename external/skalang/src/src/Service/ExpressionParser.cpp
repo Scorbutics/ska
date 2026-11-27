@@ -7,6 +7,8 @@
 #include "ReservedKeywordsPool.h"
 #include "Service/ASTFactory.h"
 #include "NodeValue/ScriptAST.h"
+#include "Service/SymbolTable.h"
+#include "Service/ScopedSymbolTable.h"
 
 SKA_LOGC_CONFIG(ska::LogLevel::Disabled, ska::ExpressionParser)
 
@@ -24,6 +26,11 @@ ska::ExpressionParser::ExpressionParser(const ReservedKeywordsPool& reservedKeyw
 ska::ASTNodePtr ska::ExpressionParser::parse(ScriptAST& input) {
 	auto data = expression_stack<Token, ASTNodePtr>{};
 	return expression(input, data);
+}
+
+ska::ASTNodePtr ska::ExpressionParser::parseMapKey(ScriptAST& input) {
+	auto data = expression_stack<Token, ASTNodePtr>{};
+	return expression(input, data, true);
 }
 
 ska::ASTNodePtr ska::ExpressionParser::matchVariable(ScriptAST& input, const Token& token) {
@@ -240,14 +247,17 @@ bool ska::ExpressionParser::isAtEndOfExpression(ScriptAST& input) const {
 		TokenGrammar::BLOCK_END,
 		TokenGrammar::OBJECT_BLOCK_END,
 		TokenGrammar::FILTER,
-		TokenGrammar::BRACKET_END
+		TokenGrammar::BRACKET_END,
+		TokenGrammar::THEN
 	});
 }
 
-ska::ASTNodePtr ska::ExpressionParser::expression(ScriptAST& input, ExpressionStack& expressions) {
+ska::ASTNodePtr ska::ExpressionParser::expression(ScriptAST& input, ExpressionStack& expressions, bool stopAtTypeDelimiter) {
 	auto rangeCounter = 0;
 	auto isDoingOperation = false;
-	while (!isAtEndOfExpression(input) && rangeCounter >= 0) {
+	const auto& typeDelimiter = m_reservedKeywordsPool.pattern<TokenGrammar::TYPE_DELIMITER>();
+	while (!isAtEndOfExpression(input) && rangeCounter >= 0 &&
+		!(stopAtTypeDelimiter && rangeCounter == 0 && input.reader().expect(typeDelimiter))) {
 		SLOG(ska::LogLevel::Debug) << "\tRange counter " << rangeCounter;
 
 		rangeCounter += input.reader().expect(m_reservedKeywordsPool.pattern<TokenGrammar::PARENTHESIS_BEGIN>()) ? 1 : 0;
@@ -279,6 +289,14 @@ ska::ASTNodePtr ska::ExpressionParser::matchReserved(ScriptAST& input) {
 			return m_matcherFunction.matchDeclaration(input);
 		case static_cast<std::size_t>(TokenGrammar::IMPORT) :
 			return m_matcherImport.matchImport(input);
+		case static_cast<std::size_t>(TokenGrammar::ENUM):
+			return matchEnum(input);
+		case static_cast<std::size_t>(TokenGrammar::MATCH):
+			return matchMatch(input);
+		case static_cast<std::size_t>(TokenGrammar::WHEN):
+		case static_cast<std::size_t>(TokenGrammar::THEN):
+			error("\"" + std::string{ TokenGrammarSTR[std::get<std::size_t>(result.content())] } + "\" is only used in a match (match value when a, b then x else y end) ; an if is \"if condition\" (optional \"do\"), the statements, then \"end\"");
+			return nullptr;
 		default:
 			return nullptr;
 	}
@@ -290,3 +308,143 @@ void ska::ExpressionParser::error(const std::string& message) {
 
 
 
+
+void ska::ExpressionParser::skipLineBreaks(ScriptAST& input) {
+	const auto& lineBreak = m_reservedKeywordsPool.pattern<TokenGrammar::STATEMENT_END>();
+	while (input.reader().expect(lineBreak)) {
+		input.reader().match(lineBreak);
+	}
+}
+
+// Status = enum none, poison, burn end : the values are separated by commas or line breaks.
+// The enum is a symbol table named after its variable (as a function), its values are its children : a value is
+// "Status.poison", of the type "Status" (ENUM, with the symbol table of the enum). At runtime, a value is its name.
+ska::ASTNodePtr ska::ExpressionParser::matchEnum(ScriptAST& input) {
+	const auto enumToken = input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::ENUM>());
+	const auto* context = input.innermostContext({ ParsingContextType::AFFECTATION, ParsingContextType::VALUE,
+		ParsingContextType::FUNCTION_DECLARATION, ParsingContextType::FUNCTION_MEMBER_DECLARATION, ParsingContextType::FACTORY_DECLARATION });
+	if (context == nullptr || context->type != ParsingContextType::AFFECTATION) {
+		error("an enum is declared as the value of a variable : \"Status = enum none, poison end\"");
+	}
+	const auto enumName = context->owner.name();
+
+	auto emptyNode = ASTFactory::MakeEmptyNode();
+	auto startEvent = FunctionTokenEvent{ *emptyNode, FunctionTokenEventType::DECLARATION_NAME, input, enumName };
+	m_parser.observable_priority_queue<FunctionTokenEvent>::notifyObservers(startEvent);
+
+	auto& enumTable = input.symbols().current();
+	const auto valueType = Type::MakeBuiltIn(ExpressionType::ENUM, &enumTable);
+
+	const auto& endToken = m_reservedKeywordsPool.pattern<TokenGrammar::BLOCK_END>();
+	const auto& comma = m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>();
+	auto values = std::vector<ASTNodePtr>{};
+	skipLineBreaks(input);
+	while (!input.reader().expect(endToken)) {
+		if (!input.reader().expect(TokenType::IDENTIFIER)) {
+			error("the values of an enum are names, separated by commas or line breaks, until \"end\" (\"Status = enum none, poison end\")");
+		}
+		auto valueToken = input.reader().match(TokenType::IDENTIFIER);
+		if (enumTable(valueToken.name()) != nullptr) {
+			error("the enum \"" + enumName + "\" has the value \"" + valueToken.name() + "\" twice");
+		}
+		auto& valueTable = enumTable.createNested(valueToken.name());
+		valueTable.changeTypeIfRequired(valueType);
+		auto valueNode = ASTFactory::MakeLogicalNode(std::move(valueToken));
+		valueNode->updateType(valueType);
+		values.push_back(std::move(valueNode));
+		if (input.reader().expect(comma)) {
+			input.reader().match(comma);
+		}
+		skipLineBreaks(input);
+	}
+	input.reader().match(endToken);
+	if (values.empty()) {
+		error("the enum \"" + enumName + "\" has no value");
+	}
+
+	auto enumNode = ASTFactory::MakeNode<Operator::ENUM_DECLARATION>(std::move(values));
+	auto endEvent = FunctionTokenEvent{ *enumNode, FunctionTokenEventType::FACTORY_DECLARATION_STATEMENT, input, enumName };
+	m_parser.observable_priority_queue<FunctionTokenEvent>::notifyObservers(endEvent);
+	return enumNode;
+}
+
+// match subject
+//     when a, b then x
+//     else y
+// end
+// A value : the result of the first branch with a value equal to the subject, otherwise of "else" (needed, unless the
+// branches name every value of an enum). Node : the subject, then a MATCH_BRANCH per branch (the result, then the
+// values), the else branch last (a MATCH_BRANCH without value).
+ska::ASTNodePtr ska::ExpressionParser::matchMatch(ScriptAST& input) {
+	input.reader().match(m_reservedKeywordsPool.pattern<TokenGrammar::MATCH>());
+	auto subject = input.expr(m_parser);
+	if (subject == nullptr) {
+		error("a match needs a value to match (\"match status\" then its branches)");
+	}
+
+	const auto& endToken = m_reservedKeywordsPool.pattern<TokenGrammar::BLOCK_END>();
+	const auto& whenToken = m_reservedKeywordsPool.pattern<TokenGrammar::WHEN>();
+	const auto& thenToken = m_reservedKeywordsPool.pattern<TokenGrammar::THEN>();
+	const auto& elseToken = m_reservedKeywordsPool.pattern<TokenGrammar::ELSE>();
+	const auto& comma = m_reservedKeywordsPool.pattern<TokenGrammar::ARGUMENT_DELIMITER>();
+
+	auto children = std::vector<ASTNodePtr>{};
+	children.push_back(std::move(subject));
+	auto hasElse = false;
+	skipLineBreaks(input);
+	while (!input.reader().expect(endToken)) {
+		if (hasElse) {
+			error("\"else\" is the last branch of a match");
+		}
+		auto branch = std::vector<ASTNodePtr>{};
+		if (input.reader().expect(whenToken)) {
+			input.reader().match(whenToken);
+			auto values = std::vector<ASTNodePtr>{};
+			auto isComma = true;
+			while (isComma) {
+				auto value = input.expr(m_parser);
+				if (value == nullptr) {
+					error("a branch of a match is \"when a, b then x\"");
+				}
+				values.push_back(std::move(value));
+				isComma = input.reader().expect(comma);
+				if (isComma) {
+					input.reader().match(comma);
+				}
+			}
+			if (!input.reader().expect(thenToken)) {
+				error("a branch of a match is \"when a, b then x\" (\"then\" is missing)");
+			}
+			input.reader().match(thenToken);
+			auto result = input.expr(m_parser);
+			if (result == nullptr) {
+				error("a branch of a match gives a value after \"then\"");
+			}
+			branch.push_back(std::move(result));
+			for (auto& value : values) {
+				branch.push_back(std::move(value));
+			}
+		} else if (input.reader().expect(elseToken)) {
+			input.reader().match(elseToken);
+			auto result = input.expr(m_parser);
+			if (result == nullptr) {
+				error("the else branch of a match gives a value (\"else x\")");
+			}
+			branch.push_back(std::move(result));
+			hasElse = true;
+		} else {
+			error("a match has branches \"when a, b then x\", an optional \"else y\", and ends with \"end\"");
+		}
+		children.push_back(ASTFactory::MakeNode<Operator::MATCH_BRANCH>(std::move(branch)));
+		skipLineBreaks(input);
+	}
+	input.reader().match(endToken);
+	if (children.size() == 1) {
+		error("a match has at least one branch (\"when a, b then x\")");
+	}
+
+	auto matchNode = ASTFactory::MakeNode<Operator::MATCH>(std::move(children));
+	auto event = ExpressionTokenEvent{ *matchNode, input };
+	m_parser.observable_priority_queue<ExpressionTokenEvent>::notifyObservers(event);
+	return matchNode;
+}

@@ -22,6 +22,7 @@
 #include "GeneratorOperatorFilter.h"
 #include "GeneratorOperatorConverterCall.h"
 #include "GeneratorOperatorFactory.h"
+#include "GeneratorOperatorLanguageValues.h"
 
 #include "GeneratorDeclarer.h"
 
@@ -50,6 +51,9 @@ std::vector<std::unique_ptr<ska::bytecode::GeneratorOperatorUnit>> ska::bytecode
 	GeneratorOperatorDeclare<ska::Operator::ARRAY_TYPE_DECLARATION>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::ARRAY_USE>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::MAP_DECLARATION>(*this, result);
+	GeneratorOperatorDeclare<ska::Operator::MAP_LITERAL>(*this, result);
+	GeneratorOperatorDeclare<ska::Operator::ENUM_DECLARATION>(*this, result);
+	GeneratorOperatorDeclare<ska::Operator::MATCH>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::IF>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::IF_ELSE>(*this, result);
 	GeneratorOperatorDeclare<ska::Operator::FOR_LOOP>(*this, result);

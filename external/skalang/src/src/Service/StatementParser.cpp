@@ -136,6 +136,10 @@ ska::StatementParser::ASTNodePtr ska::StatementParser::expr(ScriptAST& input) {
 	return m_expressionParser.parse(input);
 }
 
+ska::StatementParser::ASTNodePtr ska::StatementParser::exprMapKey(ScriptAST& input) {
+	return m_expressionParser.parseMapKey(input);
+}
+
 void ska::StatementParser::error(const std::string& message) {
 	throw std::runtime_error("syntax error : " + message);
 }

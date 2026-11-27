@@ -32,6 +32,10 @@ bool ska::Symbol::operator==(const Symbol& sym) const {
 }
 
 bool ska::Symbol::changeTypeIfRequired(const Type& type) {
+	// The symbol of an enum declaration keeps its type (a node typed with one of its values can be linked to it)
+	if (m_category == ExpressionType::ENUM && m_category.size() == 1 && type.size() == 0) {
+		return false;
+	}
 	if (m_category == ExpressionType::VOID || m_category.type() == type.type()) {
 		m_category = type;
 		return true;

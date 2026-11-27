@@ -27,6 +27,12 @@ ska::TypeCrosser::TypeCrossMap ska::TypeCrosser::BuildTypeCrossMap() {
 ska::Type ska::TypeCrosser::cross(const std::string& op, const Type& type1, const Type& type2) const {
 	SLOG(ska::LogLevel::Info) << "Crossing types between \"" << type1 << " and \"" << type2 << "\" with operator \"" << op << "\"";
 	const auto basicComputedExpressionType = typedetail::ExpressionTypeCross(op, type1.type(), type2.type());
+	// The values of two different enums are not compared, assigned or converted to each other
+	if (type1 == ExpressionType::ENUM && type2 == ExpressionType::ENUM && type1 != type2) {
+		auto ss = std::stringstream{};
+		ss << "Unable to use operator \"" << op << "\" on the values of two different enums \"" << type1.name() << "\" and \"" << type2.name() << "\"";
+		throw std::runtime_error(ss.str());
+	}
 	SLOG(ska::LogLevel::Info) << "Crossing types basic result = \"" << Type{basicComputedExpressionType} << "\"";
 	const auto& complexTypeCrosser = typeCrossMap[static_cast<std::size_t>(basicComputedExpressionType)];
 	if(complexTypeCrosser != nullptr) {

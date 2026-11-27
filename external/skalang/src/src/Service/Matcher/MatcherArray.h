@@ -27,6 +27,8 @@ namespace ska {
 	private:
 		ASTNodePtr matchUse(ScriptAST& input, ASTNodePtr identifierArrayAffected);
 		ASTNodePtr matchDeclaration(ScriptAST& input);
+		ASTNodePtr matchMapLiteral(ScriptAST& input, ASTNodePtr firstKey);
+		void skipLineBreaks(ScriptAST& input);
 
 		const ReservedKeywordsPool& m_reservedKeywordsPool;
 		StatementParser& m_parser;
