@@ -31,7 +31,8 @@ void ska::MouseCursor::basic(){
 ska::MouseCursor::~MouseCursor(){}
 
 void ska::MouseCursor::render(Renderer& renderer) const{
-	if (m_currentCursor != nullptr) {
+	// Not drawn while the mouse is out of the window (ex : the pointer of a virtual display, tools/ska-run)
+	if (m_currentCursor != nullptr && SDLLibrary::get().hasMouseFocus()) {
 		renderer.render(*m_currentCursor, m_mousePos.x, m_mousePos.y, nullptr);
 	}
 }

@@ -113,7 +113,31 @@ def start_xvfb(folder):
     if not number.strip():
         proc.terminate()
         sys.exit(f"ska-run: Xvfb did not start (see {folder / 'xvfb.log'})")
-    return proc.pid, ":" + number.decode().strip()
+    display = ":" + number.decode().strip()
+    park_pointer(display)
+    return proc.pid, display
+
+
+def park_pointer(display):
+    # The pointer of Xvfb starts at the center of its screen : over the middle of the window (centered), where the
+    # game would draw its mouse cursor. Moved to the bottom right corner, out of the window (libX11, no tool needed)
+    try:
+        import ctypes, ctypes.util
+        x11 = ctypes.CDLL(ctypes.util.find_library("X11") or "libX11.so.6")
+        x11.XOpenDisplay.restype = ctypes.c_void_p
+        x11.XOpenDisplay.argtypes = [ctypes.c_char_p]
+        x11.XDefaultRootWindow.restype = ctypes.c_ulong
+        x11.XDefaultRootWindow.argtypes = [ctypes.c_void_p]
+        x11.XWarpPointer.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong] + [ctypes.c_int] * 2 + [ctypes.c_uint] * 2 + [ctypes.c_int] * 2
+        x11.XFlush.argtypes = x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+        dpy = x11.XOpenDisplay(display.encode())
+        if not dpy:
+            return
+        x11.XWarpPointer(dpy, 0, x11.XDefaultRootWindow(dpy), 0, 0, 0, 0, 1599, 999)
+        x11.XFlush(dpy)
+        x11.XCloseDisplay(dpy)
+    except OSError:
+        pass
 
 
 def cmd_up(args):

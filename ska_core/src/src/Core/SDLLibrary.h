@@ -62,6 +62,7 @@ namespace ska {
 		SDL_IO_FROM_FILE,
 		SDL_START_TEXT_INPUT,
 		SDL_GET_KEYBOARD_FOCUS,
+		SDL_GET_MOUSE_FOCUS,
 		SDL_SET_RENDER_DRAW_BLEND_MODE,
 		SDL_GET_TEXTURE_COLOR_MOD,
 		SDL_GET_TEXTURE_ALPHA_MOD,
@@ -130,6 +131,7 @@ namespace ska {
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_IO_FROM_FILE, SDL_IOStream*(const char*, const char*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_START_TEXT_INPUT, bool(SDL_Window*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_KEYBOARD_FOCUS, SDL_Window*());
+	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_MOUSE_FOCUS, SDL_Window*());
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_SET_RENDER_DRAW_BLEND_MODE, bool(SDL_Renderer*, SDL_BlendMode));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TEXTURE_COLOR_MOD, bool(SDL_Texture*, Uint8*, Uint8*, Uint8*));
 	SKA_SDL_LIB_CALLS_DEFINE(SDL_GET_TEXTURE_ALPHA_MOD, bool(SDL_Texture*, Uint8*));
@@ -197,6 +199,7 @@ namespace ska {
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_IO_FROM_FILE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_START_TEXT_INPUT),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_KEYBOARD_FOCUS),
+		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_MOUSE_FOCUS),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_SET_RENDER_DRAW_BLEND_MODE),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_TEXTURE_COLOR_MOD),
 		SKA_SDL_DYN_LIB_NAME_ENTRY(SDL_GET_TEXTURE_ALPHA_MOD),
@@ -333,6 +336,8 @@ namespace ska {
 		inline void showCursor(bool show) const {
 			if (show) callSDL(SDL_SHOW_CURSOR)(); else callSDL(SDL_HIDE_CURSOR)();
 		}
+		// The mouse is over a window of the game
+		inline bool hasMouseFocus() const { return callSDL(SDL_GET_MOUSE_FOCUS)() != nullptr; }
 		// The text typed in the window with the keyboard focus
 		inline void startTextInput() const {
 			auto* window = callSDL(SDL_GET_KEYBOARD_FOCUS)();
