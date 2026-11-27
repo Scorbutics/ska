@@ -18,7 +18,10 @@ namespace ska {
 	public:
 		explicit SoundRenderer(GameEventDispatcher& em);
 		void play(MIX_Audio* m_instance);
+		// The volumes (percents) : of everything, of the music, of the sounds. They stay for what is played next
+		void setMasterVolume(float volPcts) const;
 		void setMusicVolume(float volPcts) const;
+		void setSoundVolume(float volPcts) const;
 		bool handleSoundEvent(SoundEvent& se);
 		bool handleWorldEvent(WorldEvent& we);
 		virtual ~SoundRenderer() = default;

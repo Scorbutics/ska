@@ -1,5 +1,6 @@
 #pragma once
 #include "Base/DynamicLibrary/DynamicLibrary.h"
+#include <array>
 #include <SDL3/SDL.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <gsl/pointers>
@@ -26,7 +27,9 @@ namespace ska {
 		MIX_PLAY_TRACK,
 		MIX_STOP_TRACK,
 		MIX_SET_TRACK_GAIN,
-		MIX_PLAY_AUDIO
+		MIX_PLAY_AUDIO,
+		MIX_SET_MASTER_GAIN,
+		MIX_TRACK_PLAYING
 	};
 
 #define SKA_MIXER_LIB_CALLS_DEFINE(ENUM, FUNCTION) \
@@ -46,6 +49,8 @@ namespace ska {
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_STOP_TRACK, bool(MIX_Track*, Sint64));
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_TRACK_GAIN, bool(MIX_Track*, float));
 	SKA_MIXER_LIB_CALLS_DEFINE(MIX_PLAY_AUDIO, bool(MIX_Mixer*, MIX_Audio*));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_SET_MASTER_GAIN, bool(MIX_Mixer*, float));
+	SKA_MIXER_LIB_CALLS_DEFINE(MIX_TRACK_PLAYING, bool(MIX_Track*));
 
 	#define SKA_MIXER_DYN_LIB_NAME_ENTRY(ENUM) MixerIdNamedFunction<static_cast<int>(MixerCalls::ENUM)>
 
@@ -63,10 +68,14 @@ namespace ska {
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_TRACK),
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_STOP_TRACK),
 		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_TRACK_GAIN),
-		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_AUDIO)
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_PLAY_AUDIO),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_SET_MASTER_GAIN),
+		SKA_MIXER_DYN_LIB_NAME_ENTRY(MIX_TRACK_PLAYING)
 	>;
 
-	// The audio of the engine (SDL3_mixer) : a mixer on the default audio device, a track playing the music
+	// The audio of the engine (SDL3_mixer) : a mixer on the default audio device (its gain : the master volume), a track
+	// playing the music (its gain : the volume of the music), tracks for the sounds played at once (their gain : the
+	// volume of the sounds). The volumes stay, whatever is played next
 	class SDLMixerLibrary : public SDLMixerDynLib {
 	#define callMixer(enumIndex) call<SKA_MIXER_DYN_LIB_NAME_ENTRY(enumIndex)>
 	public:
@@ -80,10 +89,24 @@ namespace ska {
 				return -1;
 			}
 			m_music = callMixer(MIX_CREATE_TRACK)(m_mixer);
-			return m_music == nullptr ? -1 : 0;
+			if (m_music == nullptr) {
+				return -1;
+			}
+			for (auto& track : m_sounds) {
+				track = callMixer(MIX_CREATE_TRACK)(m_mixer);
+			}
+			callMixer(MIX_SET_MASTER_GAIN)(m_mixer, m_masterGain);
+			callMixer(MIX_SET_TRACK_GAIN)(m_music, m_musicGain);
+			return 0;
 		}
 
 		inline void closeAudio() const {
+			for (auto& track : m_sounds) {
+				if (track != nullptr) {
+					callMixer(MIX_DESTROY_TRACK)(track);
+					track = nullptr;
+				}
+			}
 			if (m_music != nullptr) {
 				callMixer(MIX_DESTROY_TRACK)(m_music);
 				m_music = nullptr;
@@ -129,19 +152,47 @@ namespace ska {
 			}
 		}
 
-		// From 0 to 1
+		// The volumes, from 0 to 1
+		inline void setMasterVolume(float volume) const {
+			m_masterGain = volume;
+			if (m_mixer != nullptr) {
+				callMixer(MIX_SET_MASTER_GAIN)(m_mixer, volume);
+			}
+		}
+
 		inline void setMusicVolume(float volume) const {
+			m_musicGain = volume;
 			if (m_music != nullptr) {
 				callMixer(MIX_SET_TRACK_GAIN)(m_music, volume);
 			}
 		}
 
-		// A sound played once, over the music and the other sounds. 0 on success
+		inline void setSoundVolume(float volume) const {
+			m_soundGain = volume;
+		}
+
+		// A sound played once, over the music and the other sounds (a free track of the sounds, else the next one : the
+		// oldest sound stops). 0 on success
 		inline int playSound(MIX_Audio* sound) const {
 			if (m_mixer == nullptr || sound == nullptr) {
 				return -1;
 			}
-			return callMixer(MIX_PLAY_AUDIO)(m_mixer, sound) ? 0 : -1;
+			auto* track = static_cast<MIX_Track*>(nullptr);
+			for (auto* candidate : m_sounds) {
+				if (candidate != nullptr && !callMixer(MIX_TRACK_PLAYING)(candidate)) {
+					track = candidate;
+					break;
+				}
+			}
+			if (track == nullptr) {
+				track = m_sounds[m_nextSound];
+				m_nextSound = (m_nextSound + 1) % m_sounds.size();
+			}
+			if (track == nullptr || !callMixer(MIX_SET_TRACK_AUDIO)(track, sound)) {
+				return -1;
+			}
+			callMixer(MIX_SET_TRACK_GAIN)(track, m_soundGain);
+			return callMixer(MIX_PLAY_TRACK)(track, 0) ? 0 : -1;
 		}
 
 		static const SDLMixerLibrary& get();
@@ -150,6 +201,11 @@ namespace ska {
 		SDLMixerLibrary() : SDLMixerDynLib("SDL3_mixer") {}
 		mutable MIX_Mixer* m_mixer = nullptr;
 		mutable MIX_Track* m_music = nullptr;
+		mutable std::array<MIX_Track*, 12> m_sounds{};
+		mutable std::size_t m_nextSound = 0;
+		mutable float m_masterGain = 1.F;
+		mutable float m_musicGain = 1.F;
+		mutable float m_soundGain = 1.F;
 	#undef callMixer
 	};
 }

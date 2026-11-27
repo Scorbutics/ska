@@ -27,10 +27,16 @@ void ska::SoundRenderer::play(MIX_Audio* m_instance) {
 	}
 }
 
-void ska::SoundRenderer::setMusicVolume(float volPcts) const{
-	if (m_currentPlayed != nullptr) {
-		SDLMixerLibrary::get().setMusicVolume(volPcts / 100.F);
-	}
+void ska::SoundRenderer::setMasterVolume(float volPcts) const {
+	SDLMixerLibrary::get().setMasterVolume(volPcts / 100.F);
+}
+
+void ska::SoundRenderer::setMusicVolume(float volPcts) const {
+	SDLMixerLibrary::get().setMusicVolume(volPcts / 100.F);
+}
+
+void ska::SoundRenderer::setSoundVolume(float volPcts) const {
+	SDLMixerLibrary::get().setSoundVolume(volPcts / 100.F);
 }
 
 bool ska::SoundRenderer::handleSoundEvent(SoundEvent& se) {
