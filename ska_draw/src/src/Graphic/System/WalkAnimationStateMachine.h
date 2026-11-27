@@ -5,9 +5,11 @@
 
 namespace ska {
     class EntityManager;
+	class RunAnimationStateMachine;
+	class PoseAnimationStateMachine;
 
     class WalkAnimationStateMachine :
-		public AnimationStateMachine<JumpAnimationStateMachine> {
+		public AnimationStateMachine<JumpAnimationStateMachine, RunAnimationStateMachine, PoseAnimationStateMachine> {
 	public:
 		explicit WalkAnimationStateMachine(EntityManager& em);
 	    virtual ~WalkAnimationStateMachine() = default;

@@ -25,6 +25,9 @@ namespace ska {
 		bool animatedWhenStill = false;
 		// The walk animation is running (its first frame is shown when it starts)
 		bool walkShown = false;
+		// The column of the single frame shown by PoseAnimationStateMachine (a pose between two animations, ex : setting
+		// off), -1 : none
+		int pose = -1;
 
 	private:
 		IAnimationStateMachine* animationFiniteStateMachine;		
