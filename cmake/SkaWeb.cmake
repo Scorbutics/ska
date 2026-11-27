@@ -74,8 +74,11 @@ ${entries}		{ \"init\", reinterpret_cast<ska::ska_default_function_ptr>(&init) }
 	target_include_directories(${NAME} PRIVATE ${SKA_WEB_DIR}/external/skabase/src/src ${SKA_WEB_DIR}/external/skalog/src/src)
 
 	# The memory grows as needed ; the scripts (skalang) need a larger stack than the default one
+	# An uncaught C++ exception reaches the page as a WebAssembly.Exception : its type and message (getExceptionMessage, exported with
+	# EXCEPTION_STACK_TRACES), the stack where it was thrown (its "stack")
 	set(options -sALLOW_MEMORY_GROWTH=1 -sSTACK_SIZE=8MB -sFORCE_FILESYSTEM=1 -lidbfs.js -sEXIT_RUNTIME=0
-		"-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,ENV,addRunDependency,removeRunDependency")
+		-sEXCEPTION_STACK_TRACES=1
+		"-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,ENV,addRunDependency,removeRunDependency,getExceptionMessage")
 	if(NOT WEB_ASSETS_ROOT)
 		set(WEB_ASSETS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 	endif()
