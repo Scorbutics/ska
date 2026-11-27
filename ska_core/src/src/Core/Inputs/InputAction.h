@@ -24,10 +24,12 @@ namespace ska {
 		DeleteChar,
 		// An item chosen in a slot (ex : the item of the trainer in a battle) : used, the next one chosen
 		UseItem,
-		NextItem
+		NextItem,
+		// A special move (ex : the attack of the bond between a trainer and its Pokemon in a battle)
+		Special
 	};
 
-#define INPUT_MAX_ACTION 19
+#define INPUT_MAX_ACTION 20
 
 	typedef std::bitset<INPUT_MAX_ACTION> InputActionContainer;
 }

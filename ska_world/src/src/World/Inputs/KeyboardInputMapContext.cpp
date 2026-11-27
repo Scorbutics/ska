@@ -26,6 +26,7 @@ void ska::KeyboardInputMapContext::buildCodeMap(std::unordered_map<int, InputAct
 	// The same keys on the QWERTY and AZERTY keyboards
 	codeMap[SDL_SCANCODE_E] = UseItem;
 	codeMap[SDL_SCANCODE_R] = NextItem;
+	codeMap[SDL_SCANCODE_F] = Special;
 
 	codeMap[SDL_SCANCODE_1] = ShotSkill1;
 	codeMap[SDL_SCANCODE_2] = ShotSkill2;
