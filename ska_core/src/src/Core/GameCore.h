@@ -62,7 +62,16 @@ namespace ska {
 			}, this, 0, true);
 #else
 			for (;;) {
+				const auto start = TimeUtils::getTicks();
 				frame();
+				FrameClock::drawn(TimeUtils::getTicks());
+				// Without V-sync, the frames are not drawn faster than the display shows them (a core, the GPU, the battery)
+				if (FrameClock::pacing() == FrameClock::Pacing::Wait && !TimeUtils::frozen()) {
+					const auto spent = TimeUtils::getTicks() - start;
+					if (spent < FrameClock::FallbackFrameTime) {
+						TimeUtils::wait(FrameClock::FallbackFrameTime - spent);
+					}
+				}
 			}
 #endif
         }

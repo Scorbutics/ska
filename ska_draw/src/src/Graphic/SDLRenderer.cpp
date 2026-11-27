@@ -15,6 +15,9 @@
 #include "SDL_PointConverter.h"
 #include "Core/SDLLibrary.h"
 #include "Shader.h"
+#include <string>
+#include "Core/Draw/FrameClock.h"
+#include "Core/Utils/TimeUtils.h"
 
 ska::SDLRenderer::SDLRenderer(SDLWindow& window) :
     m_renderer(nullptr),
@@ -48,6 +51,27 @@ void ska::SDLRenderer::load(SDL_Window* window) {
         ExceptionTrigger<IllegalArgumentException>("Bad instanciation : renderer cannot be null");
     }
 	SLOG(LogLevel::Info) << "Renderer : " << sdl.rendererName(*m_renderer);
+	// The frames at the pace of the display (V-sync), else the game loop waits (FrameClock::Pacing). As fast as possible
+	// with SKA_VSYNC=0 (to measure) or SKA_FIXED_STEP ; SKA_VSYNC=wait : the wait without V-sync (a driver with a broken one) (the agents, the replays : the logic steps are not real time)
+#if defined(__EMSCRIPTEN__)
+	// The browser calls a frame at each refresh of the display
+	FrameClock::setPacing(FrameClock::Pacing::Display);
+#else
+	const auto* vsync = std::getenv("SKA_VSYNC");
+	if ((vsync != nullptr && std::string{ vsync } == "0") || TimeUtils::fixedStep()) {
+		FrameClock::setPacing(FrameClock::Pacing::None);
+		SLOG(LogLevel::Info) << "Frames : not paced";
+	} else if (vsync != nullptr && std::string{ vsync } == "wait") {
+		FrameClock::setPacing(FrameClock::Pacing::Wait);
+		SLOG(LogLevel::Info) << "Frames : " << FrameClock::FallbackFrameTime << " ms a frame at least (SKA_VSYNC=wait)";
+	} else if (sdl.setRenderVSync(*m_renderer, 1) == 0) {
+		FrameClock::setPacing(FrameClock::Pacing::Display);
+		SLOG(LogLevel::Info) << "Frames : V-sync";
+	} else {
+		FrameClock::setPacing(FrameClock::Pacing::Wait);
+		SLOG(LogLevel::Info) << "Frames : no V-sync (" << sdl.getError() << "), " << FrameClock::FallbackFrameTime << " ms a frame at least";
+	}
+#endif
 	setRenderColor(ska::Color(0xFF, 0xFF, 0xFF, 0xFF));
 }
 

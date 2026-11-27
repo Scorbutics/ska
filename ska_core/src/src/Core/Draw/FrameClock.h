@@ -20,7 +20,18 @@ namespace ska {
 		static void logicUpdated();
 		static void drawing(float alpha);
 
+		// How the frames are paced (native : the browser paces them on the web) : by the display (V-sync, set by the
+		// renderer), by a wait in the game loop (no V-sync : FallbackFrameTime ms a frame at least), not at all (SKA_VSYNC=0,
+		// SKA_FIXED_STEP : as fast as possible)
+		enum class Pacing { Display, Wait, None };
+		static constexpr unsigned int FallbackFrameTime = 16;
+		static void setPacing(Pacing pacing) { m_pacing = pacing; }
+		static Pacing pacing() { return m_pacing; }
+		// A frame was drawn at "now" (ms) : the frames per second are logged every 5 s (Core.log.txt, "Frames : ...")
+		static void drawn(unsigned int now);
+
 	private:
+		static inline Pacing m_pacing = Pacing::Wait;
 		static unsigned long m_tick;
 		static float m_alpha;
 	};
