@@ -10,6 +10,6 @@ ska::SDLSound::~SDLSound() {
 	SDLMixerLibrary::get().freeAudio(m_instance);
 }
 
-void ska::SDLSound::play() const {
-	SDLMixerLibrary::get().playSound(m_instance);
+void ska::SDLSound::play(float gain) const {
+	SDLMixerLibrary::get().playSound(m_instance, gain);
 }

@@ -172,8 +172,8 @@ namespace ska {
 		}
 
 		// A sound played once, over the music and the other sounds (a free track of the sounds, else the next one : the
-		// oldest sound stops). 0 on success
-		inline int playSound(MIX_Audio* sound) const {
+		// oldest sound stops), at "gain" (0 .. 1) times the volume of the sounds. 0 on success
+		inline int playSound(MIX_Audio* sound, float gain = 1.F) const {
 			if (m_mixer == nullptr || sound == nullptr) {
 				return -1;
 			}
@@ -191,7 +191,7 @@ namespace ska {
 			if (track == nullptr || !callMixer(MIX_SET_TRACK_AUDIO)(track, sound)) {
 				return -1;
 			}
-			callMixer(MIX_SET_TRACK_GAIN)(track, m_soundGain);
+			callMixer(MIX_SET_TRACK_GAIN)(track, m_soundGain * gain);
 			return callMixer(MIX_PLAY_TRACK)(track, 0) ? 0 : -1;
 		}
 
