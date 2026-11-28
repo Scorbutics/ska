@@ -4,7 +4,7 @@
 #include "Graphic/Texture.h"
 #include "Base/Values/Numbers/NumberUtils.h"
 
-ska::LayerDepthRenderable::LayerDepthRenderable(Vector2<TileAnimation*> blocks, const Vector2<int>& bases, const Texture& tileset, const unsigned int blockSize, const int flatPriority, const int basePriority) :
+ska::LayerDepthRenderable::LayerDepthRenderable(Vector2<TileAnimation*> blocks, const Vector2<int>& bases, const Texture& tileset, const unsigned int blockSize, const int flatPriority, const int basePriority, const Point<int> origin) :
 	m_blockSize(blockSize) {
 	const auto width = blocks.lineSize();
 	const auto height = width == 0 ? 0 : blocks.size() / width;
@@ -16,7 +16,7 @@ ska::LayerDepthRenderable::LayerDepthRenderable(Vector2<TileAnimation*> blocks, 
 			flat.push_back(base < 0 ? blocks[x][y] : nullptr);
 		}
 	}
-	m_flat = std::make_unique<LayerMonoRenderable>(std::move(flat), tileset, blockSize);
+	m_flat = std::make_unique<LayerMonoRenderable>(std::move(flat), tileset, blockSize, origin);
 	m_flat->setPriority(flatPriority);
 
 	// A row per base row (an object may stand under the bottom of the map : its rows are there too)
@@ -31,12 +31,13 @@ ska::LayerDepthRenderable::LayerDepthRenderable(Vector2<TileAnimation*> blocks, 
 	m_rows.reserve(lowest);
 	for (auto row = 0u; row < lowest; row++) {
 		m_rows.emplace_back(tileset, blockSize);
-		m_rows.back().setPriority(basePriority + static_cast<int>(row * blockSize));
+		m_rows.back().setPriority(basePriority + origin.y + static_cast<int>(row * blockSize));
 	}
 	for (auto y = 0u; y < height; y++) {
 		for (auto x = 0u; x < width; x++) {
 			if (bases.has(x, y) && bases[x][y] >= 0 && blocks[x][y] != nullptr) {
-				m_rows[y + static_cast<std::size_t>(bases[x][y])].add({ static_cast<int>(x), static_cast<int>(y) }, blocks[x][y]);
+				m_rows[y + static_cast<std::size_t>(bases[x][y])].add({ static_cast<int>(x) + origin.x / static_cast<int>(blockSize),
+					static_cast<int>(y) + origin.y / static_cast<int>(blockSize) }, blocks[x][y]);
 			}
 		}
 	}

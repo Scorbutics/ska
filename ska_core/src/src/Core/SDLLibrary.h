@@ -300,6 +300,9 @@ namespace ska {
 			const auto floatDst = dst == nullptr ? SDL_FRect{} : ToFloat(*dst);
 			return Result(callSDL(SDL_RENDER_COPY)(&renderer, &texture, src == nullptr ? nullptr : &floatSrc, dst == nullptr ? nullptr : &floatDst));
 		}
+		inline int renderCopyF(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_FRect& src, const SDL_FRect& dst) const {
+			return Result(callSDL(SDL_RENDER_COPY)(&renderer, &texture, &src, &dst));
+		}
 		inline int renderCopyEx(SDL_Renderer& renderer, SDL_Texture& texture, const SDL_Rect* src, const SDL_Rect* dst, double angle, const SDL_Point* center, SDL_FlipMode flip) const {
 			const auto floatSrc = src == nullptr ? SDL_FRect{} : ToFloat(*src);
 			const auto floatDst = dst == nullptr ? SDL_FRect{} : ToFloat(*dst);

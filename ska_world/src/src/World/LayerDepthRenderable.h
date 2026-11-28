@@ -21,7 +21,8 @@ namespace ska {
 		public LayerRenderable {
 	public:
 		// bases : the base of each block of the layer (TileProperties::base, -1 for a flat tile or none)
-		LayerDepthRenderable(Vector2<TileAnimation*> blocks, const Vector2<int>& bases, const Texture& tileset, unsigned int blockSize, int flatPriority, int basePriority);
+		// origin : where the layer is in the world (pixels) : the rows are sorted by their row in the world
+		LayerDepthRenderable(Vector2<TileAnimation*> blocks, const Vector2<int>& bases, const Texture& tileset, unsigned int blockSize, int flatPriority, int basePriority, Point<int> origin = {});
 		void graphicUpdate(const Rectangle& cameraPos, DrawableContainer& drawables) override;
 		~LayerDepthRenderable() override = default;
 
@@ -30,6 +31,7 @@ namespace ska {
 		class BaseRow : public DrawableFixedPriority {
 		public:
 			BaseRow(const Texture& tileset, unsigned int blockSize) : m_tileset(&tileset), m_blockSize(blockSize) {}
+			// block : its position in the world
 			void add(Point<int> block, TileAnimation* animation) { m_tiles.push_back({ block, animation }); }
 			bool empty() const { return m_tiles.empty(); }
 			void setCamera(const Rectangle& camera) { m_camera = camera; }

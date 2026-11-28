@@ -47,6 +47,7 @@ namespace ska {
 		* \brief Makes the renderer renders
 		*/
 		void render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const override;
+		void renderRegion(const Texture& t, float x, float y, float w, float h, const Rectangle& destination) const override;
 
 		/**
 		* \brief Makes the renderer renders

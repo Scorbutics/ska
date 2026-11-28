@@ -138,13 +138,48 @@ void ska::SDLSurface::load32(const std::string& file) {
 
 }
 
+void ska::SDLSurface::loadFromRgb(const uint8_t* rgb, const int width, const int height, Color const* colorKey) {
+	free();
+	// Zero masks : red, green, blue, alpha bytes in this order
+	m_surface = SDLLibrary::get().createRGBSurface(width, height, 0, 0, 0, 0);
+	if (!checkSurfaceValidity("(Pixels)", true)) {
+		return;
+	}
+	for (auto y = 0; y < height; y++) {
+		auto* row = static_cast<uint8_t*>(m_surface->pixels) + static_cast<std::size_t>(y) * static_cast<std::size_t>(m_surface->pitch);
+		const auto* source = rgb + static_cast<std::size_t>(y) * static_cast<std::size_t>(width) * 3;
+		for (auto x = 0; x < width; x++) {
+			row[x * 4] = source[x * 3];
+			row[x * 4 + 1] = source[x * 3 + 1];
+			row[x * 4 + 2] = source[x * 3 + 2];
+			row[x * 4 + 3] = 255;
+		}
+	}
+	if (colorKey != nullptr) {
+		colorKey->fill(m_r, m_g, m_b, &m_a);
+		SDLLibrary::get().setColorKey(*m_surface, true, SDLLibrary::get().mapRGBA(*m_surface, m_r, m_g, m_b, 255));
+	}
+}
+
 ska::Color ska::SDLSurface::getPixel32Color(int x, int y) const {
 	if (m_surface == nullptr) {
 		return Color{};
 	}
 
-	// Whatever the format of the surface
 	Color c;
+	// The 32 bits surfaces of the engine (load32, loadFromRgb) : read at once (a map reads hundreds of thousands)
+	if (m_surface->format == SDL_PIXELFORMAT_RGBA32 && !SDL_MUSTLOCK(m_surface)) {
+		if (x < 0 || y < 0 || x >= m_surface->w || y >= m_surface->h) {
+			return c;
+		}
+		const auto* pixel = static_cast<const uint8_t*>(m_surface->pixels) + static_cast<std::size_t>(y) * static_cast<std::size_t>(m_surface->pitch) + static_cast<std::size_t>(x) * 4;
+		c.r = pixel[0];
+		c.g = pixel[1];
+		c.b = pixel[2];
+		c.a = pixel[3];
+		return c;
+	}
+	// Whatever the format of the surface
 	if (SDLLibrary::get().readPixel(*m_surface, x, y, &c.r, &c.g, &c.b, &c.a) != 0) {
 		return Color{};
 	}

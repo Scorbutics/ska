@@ -12,6 +12,8 @@ namespace ska {
 
 		const Rectangle& getCurrentFrame() const;
 		const Rectangle& updateFrame();
+		// The frame of a time (ms) : the same one for all the animations of the same delay and frames, forth and back
+		void syncFrame(unsigned int time);
 
 		void switchToFrame(unsigned int number);
 		const Rectangle& getOffsetBase() const;

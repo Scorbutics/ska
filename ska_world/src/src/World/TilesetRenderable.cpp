@@ -1,5 +1,6 @@
 #include "TilesetRenderable.h"
 #include "TilesetLoader.h"
+#include "Core/Utils/TimeUtils.h"
 
 ska::TilesetRenderable::TilesetRenderable(const unsigned int tileSize, const TilesetLoader& loader) :
 	m_tilesetName(loader.getName()),
@@ -20,8 +21,10 @@ const ska::TileAnimation& ska::TilesetRenderable::getAnimation(const Point<int>&
 }
 
 void ska::TilesetRenderable::update() {
+	// From the time of the game : the tilesets of the chunks of a world, loaded at different times, animate together
+	const auto ticks = TimeUtils::getTicks();
 	for (auto& anim : m_animatedAnimations) {
-		anim.get().updateFrame();
+		anim.get().syncFrame(ticks);
 	}
 }
 

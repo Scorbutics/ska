@@ -17,6 +17,8 @@ namespace ska {
 	public:
 		
 		explicit SDLTexture(TextureData& p);
+		// From an image already in memory
+		explicit SDLTexture(SDLSurface&& surface);
 
 		SDLTexture(SDLTexture&) = delete;
 		SDLTexture& operator=(const SDLTexture&) = delete;

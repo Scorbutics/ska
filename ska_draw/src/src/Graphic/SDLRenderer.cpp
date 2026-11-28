@@ -332,6 +332,17 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 	}
 }
 
+void ska::SDLRenderer::renderRegion(const Texture& t, const float x, const float y, const float w, const float h, const Rectangle& destination) const {
+	auto instance = t.getInstance();
+	if (instance == nullptr) {
+		return;
+	}
+	instance->load(*this);
+	const auto source = SDL_FRect{ x, y, w, h };
+	const auto target = SDL_FRect{ static_cast<float>(destination.x), static_cast<float>(destination.y), static_cast<float>(destination.w), static_cast<float>(destination.h) };
+	SDLLibrary::get().renderCopyF(*m_renderer, *instance->m_texture, source, target);
+}
+
 void ska::SDLRenderer::render(const AnimatedTexture& at, int posX, int posY, Rectangle const* clip, double angle, Point<int> const* rotationCenter) const {
 	at.refresh();
 

@@ -59,6 +59,10 @@ namespace ska {
 		virtual void render(const Texture& t, int posX, int posY, Rectangle const* clip, double angle = 0., Point<int> const* rotationCenter = nullptr) const = 0;
 		virtual void render(const AnimatedTexture& at, int x, int y, Rectangle const* clip, double angle = 0., Point<int> const* rotationCenter = nullptr) const = 0;
 
+		// A part of the image of a texture (in its own pixels, whatever the size it is resized to ; fractions allowed : the
+		// pixels around it blend in, linear filtering) stretched over a rectangle of the screen
+		virtual void renderRegion(const Texture&, float, float, float, float, const Rectangle&) const {}
+
 		virtual SDL_Texture* createTextureFromSurface(const SDLSurface& surface) const = 0;
 		virtual SDL_Texture* createTextureTarget(unsigned int width, unsigned int height) const = 0;
 		

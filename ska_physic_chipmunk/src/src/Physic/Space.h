@@ -73,6 +73,11 @@ namespace ska {
 			Shape& getShape(std::size_t index);
 			Constraint& getConstaint(std::size_t index);
 
+			// A shape, a body (with its shapes and its constraints) taken out of the space : the indices of the others stay,
+			// the next ones added take the places left
+			void removeShape(std::size_t index);
+			void removeBody(std::size_t index);
+			// The bodies from firstIndex to lastIndex (excluded ; 0 : all after it)
 			void eraseBodies(std::size_t firstIndex, std::size_t lastIndex = 0);
 
 			void setIterations(int iterations);
@@ -98,27 +103,7 @@ namespace ska {
 			void addWildcardCollisionHandler(unsigned int collisionType, CollisionHandlerData collisionHandlerData);
 
 		private:
-			template <class Container>
-			void eraseShapes(const Container& containerSrcSorted) {
-				auto iteration = 0u;
-				for (const auto& index : containerSrcSorted) {
-					auto it = m_shapes.begin() + (index - iteration);
-					cpSpaceRemoveShape(m_space, &it->shape());
-					m_shapes.erase(it);
-					iteration++;
-				}
-			}
-
-			template <class Container>
-			void eraseConstraints(const Container& containerSrcSorted) {
-				auto iteration = 0u;			
-				for (const auto& index : containerSrcSorted) {
-					auto it = m_constraints.begin() + (index - iteration);
-					cpSpaceRemoveConstraint(m_space, &it->constraint());
-					m_constraints.erase(it);
-					iteration++;
-				}
-			}
+			void removeConstraint(std::size_t index);
 
 			void addDefaultCollisionHandler(CollisionHandlerData collisionHandlerData);
 
@@ -129,6 +114,10 @@ namespace ska {
 			std::vector<Shape> m_shapes;
 			std::vector<Body> m_bodies;
 			std::vector<Constraint> m_constraints;
+			// The places left by the removed ones
+			std::vector<std::size_t> m_freeShapes;
+			std::vector<std::size_t> m_freeBodies;
+			std::vector<std::size_t> m_freeConstraints;
 			gsl::owner<cpSpace*> m_space;
 		};
 	}

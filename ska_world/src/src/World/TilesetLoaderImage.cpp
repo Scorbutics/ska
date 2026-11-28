@@ -77,6 +77,15 @@ ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName) :
 	checkSizes();
 }
 
+ska::TilesetLoaderImage::TilesetLoaderImage(std::string tilesetName, SDLSurface chipset, SDLSurface collisions, SDLSurface properties, SDLSurface mask) :
+	m_tilesetName(std::move(tilesetName)),
+	m_sChipset(std::move(chipset)),
+	m_sCol(std::move(collisions)),
+	m_sProperties(std::move(properties)),
+	m_sMask(std::move(mask)) {
+	checkSizes();
+}
+
 ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 	const auto width = m_sCol.getInstance()->w;
 	const auto height = m_sCol.getInstance()->h;
@@ -118,7 +127,13 @@ ska::Vector2<ska::Tile> ska::TilesetLoaderImage::loadPhysics() const {
 }
 
 ska::Texture ska::TilesetLoaderImage::loadGraphics() const {
-	return Texture { m_tilesetName + ".png"};
+	const auto file = m_tilesetName + ".png";
+	if (m_sChipset.getInstance() == nullptr) {
+		return Texture { file };
+	}
+	auto texture = Texture{};
+	texture.load(file, std::move(m_sChipset));
+	return texture;
 }
 
 ska::Vector2<ska::TileAnimation> ska::TilesetLoaderImage::loadAnimations(unsigned int blockSize) const {

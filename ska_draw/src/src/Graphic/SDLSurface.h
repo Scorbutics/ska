@@ -25,6 +25,9 @@ namespace ska {
 
 		void load(const std::string& file, Color const* colorKey);
 		void load32(const std::string& file);
+		// From the pixels of an image already read : width x height, 3 bytes a pixel (red, green, blue), by rows. colorKey :
+		// the color not drawn (as load)
+		void loadFromRgb(const uint8_t* rgb, int width, int height, Color const* colorKey = nullptr);
 		void loadFromText(const Font& font, const std::string& text, Color c);
 		void loadFromColoredRect(const Color& color, const SDL_Rect& rect, const Color* outlineColor);
 

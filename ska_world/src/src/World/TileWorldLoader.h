@@ -10,7 +10,8 @@ namespace ska {
 	class TileWorldLoader : public MovableNonCopyable {
 	public:
 		virtual CollisionProfile loadPhysics(Tileset& tileset) const = 0;
-		virtual std::vector<LayerRenderablePtr> loadGraphics(Tileset& tileset, unsigned int blockSize) const = 0;
+		// origin : where the layers are in the world (pixels)
+		virtual std::vector<LayerRenderablePtr> loadGraphics(Tileset& tileset, unsigned int blockSize, Point<int> origin) const = 0;
 		virtual std::vector<LayerEventPtr> loadEvents(unsigned int widthLayer, unsigned int heightLayer) const = 0;
 		virtual const std::string& getName() const = 0;
 	};

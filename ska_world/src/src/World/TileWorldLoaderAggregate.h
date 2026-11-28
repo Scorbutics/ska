@@ -20,7 +20,7 @@ namespace ska {
 						int sortedLayersPriority = 0);
 
 		CollisionProfile loadPhysics(Tileset& tileset) const override;
-		std::vector<LayerRenderablePtr> loadGraphics(Tileset& tileset, unsigned int blockSize) const override;
+		std::vector<LayerRenderablePtr> loadGraphics(Tileset& tileset, unsigned int blockSize, Point<int> origin) const override;
 		std::vector<LayerEventPtr> loadEvents(unsigned int widthLayer, unsigned int heightLayer) const override;
 		const std::string& getName() const override;
 

@@ -30,7 +30,7 @@ ska::CollisionProfile ska::TileWorldLoaderAggregate::loadPhysics(Tileset& tilese
 	return CollisionProfile{ tileset.getTileSize(), std::move(layers) };
 }
 
-std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize) const {
+std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics(Tileset& tileset, const unsigned int blockSize, const Point<int> origin) const {
 	std::vector<LayerRenderablePtr> renderables;
 	for (auto index = 0u; index < m_loaders.size(); index++) {
 		const auto& loader = *m_loaders[index];
@@ -44,7 +44,7 @@ std::vector<ska::LayerRenderablePtr> ska::TileWorldLoaderAggregate::loadGraphics
 			bases.push_back(base < 0 && tile.has_value() && index >= m_layerFixed ? 0 : base);
 		}
 		renderables.push_back(std::make_unique<LayerDepthRenderable>(loader.loadAnimations(tileset), bases, tileset.getTexture(), blockSize,
-			FlatLayersPriority + static_cast<int>(index), m_sortedLayersPriority + static_cast<int>(index)));
+			FlatLayersPriority + static_cast<int>(index), m_sortedLayersPriority + static_cast<int>(index), origin));
 	}
 	return renderables;
 }

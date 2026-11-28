@@ -8,6 +8,7 @@
 
 namespace ska {
 	class Renderer;
+	class SDLSurface;
 	class Texture :
 		public ManagedResource<SDLTexture, TextureData>,
 		public Renderable {
@@ -25,6 +26,9 @@ namespace ska {
 		void loadFromText(unsigned int fontSize, std::string text, Color c);
 		void loadFromColoredRect(unsigned int width, unsigned int height, Color c, const Color* outlineColor = nullptr);
 		void load(const std::string& id, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
+		// An image already in memory, shared under the name "id" with the textures loaded from it (default colour key : the
+		// surface carries its own)
+		void load(const std::string& id, SDLSurface&& surface, int r = DEFAULT_T_RED, int g = DEFAULT_T_GREEN, int b = DEFAULT_T_BLUE, int a = -1);
 		void loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height);
 		virtual ~Texture() = default;
 

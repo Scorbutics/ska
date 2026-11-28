@@ -14,6 +14,8 @@ namespace ska {
 
 		LayerLoaderImage(LayerLoaderImage&&) = default;
 		explicit LayerLoaderImage(const TilesetCorrespondanceMapper& correspondanceMapper, const std::string& layerFilename);
+		// From a layer image already read
+		LayerLoaderImage(const TilesetCorrespondanceMapper& correspondanceMapper, SDLSurface layer);
 
 		Vector2<std::optional<Tile>> loadPhysics(const Tileset& chipset) const override;
 		Vector2<TileAnimation*> loadAnimations(Tileset& chipset) const override;

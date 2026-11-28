@@ -11,6 +11,12 @@ namespace ska {
 	public:
 		explicit CollisionProfile(unsigned int blockSize);
 		CollisionProfile(unsigned int blockSize, std::vector<LayerPtr> layers);
+		// The profile of a world made of chunks (a grid of chunksX x chunksY chunks of chunkBlocksX x chunkBlocksY
+		// blocks) : the queries take blocks of the world and are answered by the profile of their chunk (setChunk). A
+		// block of a chunk that is not there is solid, and has no tile
+		CollisionProfile(unsigned int blockSize, std::size_t chunksX, std::size_t chunksY, std::size_t chunkBlocksX, std::size_t chunkBlocksY, std::size_t layers);
+		// The profile of a chunk (kept by the caller while it is set), nullptr : the chunk leaves
+		void setChunk(std::size_t chunkX, std::size_t chunkY, const CollisionProfile* chunk);
 		
 		CollisionProfile(CollisionProfile&&) = default;
 		CollisionProfile& operator=(CollisionProfile&&) = default;
@@ -45,6 +51,9 @@ namespace ska {
 	private:
 		std::pair<std::size_t, std::size_t> safeGetSizes() const;
 		void calculate();
+		bool composite() const { return m_chunkBlocksX != 0; }
+		// The chunk of a block of the world and the block in it ; nullptr : out of the world, or the chunk is not there
+		const CollisionProfile* chunkAt(std::size_t& blockX, std::size_t& blockY) const;
 
 		std::vector<Vector2<TileCollision>> m_collisions;
 		std::vector<Vector2<std::uint16_t>> m_cells;
@@ -54,5 +63,12 @@ namespace ska {
 		std::size_t m_blocksX{};
 		std::size_t m_blocksY{};
 		unsigned int m_blockSize;
+
+		// A world of chunks : their profiles, by rows
+		std::vector<const CollisionProfile*> m_chunks;
+		std::size_t m_chunksX{};
+		std::size_t m_chunkBlocksX{};
+		std::size_t m_chunkBlocksY{};
+		std::size_t m_compositeLayers{};
 	};
 }

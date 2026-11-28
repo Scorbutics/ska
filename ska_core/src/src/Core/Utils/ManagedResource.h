@@ -23,6 +23,18 @@ namespace ska {
 			}
 		}
 
+		// A resource built by the caller (not from its key), shared under the key : the one already there if any
+		template <class Builder>
+		void loadFromKey(const Key& key, Builder&& build) {
+			m_key = key;
+			const auto found = m_container.find(m_key);
+			m_value = found == m_container.end() ? nullptr : found->second.lock();
+			if (m_value == nullptr) {
+				m_value = build(m_key);
+				m_container[m_key] = m_value;
+			}
+		}
+
 		void lifetimeSeparation() {
 			m_value = std::make_shared<Value>(m_key);
 		}

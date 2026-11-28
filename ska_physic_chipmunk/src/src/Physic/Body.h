@@ -42,6 +42,7 @@ namespace ska {
 
 			void linkConstraint(std::size_t constraintSpaceIndex);
 			void linkShape(std::size_t shapeSpaceIndex);
+			void unlinkConstraint(std::size_t constraintSpaceIndex);
 
 			const std::vector<std::size_t>& getConstraints() const;
 			const std::vector<std::size_t>& getShapes() const;

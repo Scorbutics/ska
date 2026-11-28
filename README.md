@@ -17,7 +17,7 @@ Fragment shaders run on the drawings (`RenderEffect::shader`, ex: a sprite of an
 * `ska::Shader shader{ "Shaders/name", true }` loads `Shaders/name.frag.spv` (true : it has uniforms) the first time it is drawn.
 
 # Maps and tilesets
-A map (`ska::TileWorld`) is layers of blocks, each block a cell of the tileset of the map (`<tileset>.png`). Three images give the cells of the tileset their properties (`TilesetLoaderImage`), a pixel per cell :
+A map (`ska::TileWorld`) is layers of blocks, each block a cell of the tileset of the map (`<tileset>.png`). A large world is a grid of such maps, its chunks, each with its tileset (`TileWorld::reset`, then `addChunk` and `removeChunk` while it is played): the blocks, the collisions (`getCollisionProfile`: a block of a chunk that is not there is solid), the events and the drawing are those of the whole world. Three images give the cells of the tileset their properties (`TilesetLoaderImage`), a pixel per cell :
 
 * `<tileset>.png.col` : the collisions. White and light gray (`0xAA`) are walked on, black and dark gray (`0x46`) block ; the grays are animated (4 frames, down the tileset).
 * `<tileset>.png.mask` (optional) : the solid parts of the blocking cells, 4 x 4 pixels a cell (`Tile::mask`, white : a solid quarter of a quarter of the block). The walls are made of these parts (`GenerateFilledTileMap`) : a rim along the edge of a block, a trunk in its middle, the foliage of a tree (no solid part : walked behind). A block can be stood on when the middle of its lower half is free (`CollisionProfile::collide`, `StandCells`). Without the file, a blocking cell is solid all over.

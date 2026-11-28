@@ -43,6 +43,20 @@ ska::SDLTexture::SDLTexture(TextureData& data) :
 }
 
 
+ska::SDLTexture::SDLTexture(SDLSurface&& surface) :
+	m_surface(std::make_unique<SDLSurface>(std::move(surface))),
+	m_texture(nullptr),
+	m_w(0),
+	m_h(0),
+	m_whenLoadedTasks(std::make_unique<TaskQueue>()) {
+	if (m_surface->getInstance() != nullptr) {
+		m_w = m_surface->getInstance()->w;
+		m_h = m_surface->getInstance()->h;
+	} else {
+		m_surface = nullptr;
+	}
+}
+
 void ska::SDLTexture::loadFromRenderer(const Renderer& renderer) {
 	free();
 

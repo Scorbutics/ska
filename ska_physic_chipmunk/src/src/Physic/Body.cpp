@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Body.h"
 #include "Vect.h"
 
@@ -21,6 +22,13 @@ ska::cp::Body& ska::cp::Body::operator=(Body&& b) noexcept{
 	std::swap(m_entity, b.m_entity);
 	std::swap(m_constraints, b.m_constraints);
 	std::swap(m_shapes, b.m_shapes);
+	// The body of chipmunk points to the entity of its wrapper
+	if (m_body != nullptr) {
+		cpBodySetUserData(m_body, &m_entity);
+	}
+	if (b.m_body != nullptr) {
+		cpBodySetUserData(b.m_body, &b.m_entity);
+	}
 	return *this;
 }
 
@@ -75,6 +83,10 @@ ska::cp::Body ska::cp::Body::fromKinematic() {
 	auto body = Body{};
 	body.loadFromKinematic();
 	return body;
+}
+
+void ska::cp::Body::unlinkConstraint(const std::size_t constraintIndex) {
+	m_constraints.erase(std::remove(m_constraints.begin(), m_constraints.end(), constraintIndex), m_constraints.end());
 }
 
 void ska::cp::Body::linkConstraint(const std::size_t constraintIndex) {

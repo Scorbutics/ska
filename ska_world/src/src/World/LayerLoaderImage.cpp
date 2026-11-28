@@ -77,3 +77,9 @@ ska::LayerLoaderImage::LayerLoaderImage(const TilesetCorrespondanceMapper& corre
 	m_fileHeight(m_file.getInstance()->h) {
 }
 
+ska::LayerLoaderImage::LayerLoaderImage(const TilesetCorrespondanceMapper& correspondanceMapper, SDLSurface layer) :
+	m_colorMapper(correspondanceMapper),
+	m_file(std::move(layer)),
+	m_fileWidth(m_file.getInstance() == nullptr ? 0 : m_file.getInstance()->w),
+	m_fileHeight(m_file.getInstance() == nullptr ? 0 : m_file.getInstance()->h) {
+}

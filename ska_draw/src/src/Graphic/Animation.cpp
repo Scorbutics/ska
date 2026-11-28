@@ -110,3 +110,18 @@ const ska::Rectangle& ska::Animation::updateFrame() {
     return m_offset;
 }
 
+
+void ska::Animation::syncFrame(const unsigned int time) {
+	if (!m_active || m_countMAX == 0 || m_frameNumber < 2) {
+		return;
+	}
+	// 0 .. n - 1 and back : a period of 2 (n - 1) frames
+	const auto period = 2 * (static_cast<unsigned int>(m_frameNumber) - 1);
+	const auto step = (time / m_countMAX) % period;
+	m_position = static_cast<int>(step < static_cast<unsigned int>(m_frameNumber) ? step : period - step);
+	if (m_isVertical) {
+		m_offset.y = m_offsetBase.y + m_position * m_offsetBase.h;
+	} else {
+		m_offset.x = m_offsetBase.x + m_position * m_offsetBase.w;
+	}
+}

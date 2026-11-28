@@ -60,11 +60,43 @@ ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, std::vecto
 	calculate();
 }
 
+ska::CollisionProfile::CollisionProfile(const unsigned int blockSize, const std::size_t chunksX, const std::size_t chunksY, const std::size_t chunkBlocksX, const std::size_t chunkBlocksY, const std::size_t layers) :
+	m_blocksX(chunksX * chunkBlocksX),
+	m_blocksY(chunksY * chunkBlocksY),
+	m_blockSize(blockSize),
+	m_chunks(chunksX * chunksY, nullptr),
+	m_chunksX(chunksX),
+	m_chunkBlocksX(chunkBlocksX),
+	m_chunkBlocksY(chunkBlocksY),
+	m_compositeLayers(layers) {
+}
+
+void ska::CollisionProfile::setChunk(const std::size_t chunkX, const std::size_t chunkY, const CollisionProfile* chunk) {
+	assert(composite() && chunkX < m_chunksX && chunkY * m_chunksX + chunkX < m_chunks.size());
+	m_chunks[chunkY * m_chunksX + chunkX] = chunk;
+}
+
+const ska::CollisionProfile* ska::CollisionProfile::chunkAt(std::size_t& blockX, std::size_t& blockY) const {
+	if (blockX >= m_blocksX || blockY >= m_blocksY) {
+		return nullptr;
+	}
+	const auto* chunk = m_chunks[(blockY / m_chunkBlocksY) * m_chunksX + blockX / m_chunkBlocksX];
+	blockX %= m_chunkBlocksX;
+	blockY %= m_chunkBlocksY;
+	return chunk;
+}
+
 bool ska::CollisionProfile::collide(const std::size_t layerMax, const std::size_t blockX, const std::size_t blockY) const {
 	return (solidCells(layerMax, blockX, blockY) & StandCells) != 0;
 }
 
 std::uint16_t ska::CollisionProfile::solidCells(const std::size_t layerMax, const std::size_t blockX, const std::size_t blockY) const {
+	if (composite()) {
+		auto x = blockX;
+		auto y = blockY;
+		const auto* chunk = chunkAt(x, y);
+		return chunk == nullptr ? Tile::FullMask : chunk->solidCells(layerMax, x, y);
+	}
 	if (layerMax >= m_cells.size() || !m_cells[layerMax].has(blockX, blockY)) {
 		return Tile::FullMask;
 	}
@@ -83,6 +115,12 @@ bool ska::CollisionProfile::solidAt(const std::size_t layerMax, const int x, con
 }
 
 const ska::Tile* ska::CollisionProfile::getBlock(const std::size_t layer, const std::size_t blockX, const std::size_t blockY) const {
+	if (composite()) {
+		auto x = blockX;
+		auto y = blockY;
+		const auto* chunk = chunkAt(x, y);
+		return chunk == nullptr ? nullptr : chunk->getBlock(layer, x, y);
+	}
 	return 	m_layers[layer]->getBlock(blockX, blockY);
 }
 
@@ -91,7 +129,7 @@ bool ska::CollisionProfile::empty() const {
 }
 
 std::size_t ska::CollisionProfile::layers() const {
-	return m_layers.size();
+	return composite() ? m_compositeLayers : m_layers.size();
 }
 
 ska::Rectangle ska::CollisionProfile::placeOnNearestPracticableBlock(const std::size_t layerMax, const Rectangle& hitBox, unsigned int radius) const {
@@ -179,6 +217,12 @@ std::size_t ska::CollisionProfile::getBlocksY() const {
 }
 
 const ska::Tile* ska::CollisionProfile::getHighestBlockOnPredicate(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY, const MarchingSquarePredicate& pred) const {
+	if (composite()) {
+		auto x = blockX;
+		auto y = blockY;
+		const auto* chunk = chunkAt(x, y);
+		return chunk == nullptr ? nullptr : chunk->getHighestBlockOnPredicate(layerTop, x, y, pred);
+	}
 	const Tile* voidCollidingTile = nullptr;
 	if (layerTop >= m_layers.size()) {
 		return nullptr;
@@ -208,6 +252,12 @@ const ska::Tile* ska::CollisionProfile::getHighestBlockOnPredicate(const std::si
 }
 
 const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
+	if (composite()) {
+		auto x = blockX;
+		auto y = blockY;
+		const auto* chunk = chunkAt(x, y);
+		return chunk == nullptr ? nullptr : chunk->getHighestCollidingBlock(layerTop, x, y);
+	}
 	const Tile* voidCollidingTile = nullptr;
 	if(layerTop >= m_layers.size()) {
 		return nullptr;
@@ -237,6 +287,12 @@ const ska::Tile* ska::CollisionProfile::getHighestCollidingBlock(const std::size
 }
 
 const ska::Tile* ska::CollisionProfile::getHighestNonCollidingBlock(const std::size_t layerTop, const std::size_t blockX, const std::size_t blockY) const {
+	if (composite()) {
+		auto x = blockX;
+		auto y = blockY;
+		const auto* chunk = chunkAt(x, y);
+		return chunk == nullptr ? nullptr : chunk->getHighestNonCollidingBlock(layerTop, x, y);
+	}
 	const Tile* voidCollidingTile = nullptr;
 	if (layerTop >= m_layers.size()) {
 		return nullptr;

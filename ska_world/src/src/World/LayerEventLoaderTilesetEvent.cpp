@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include "LayerEventLoaderTilesetEvent.h"
 #include "Layer.h"
 #include "CollisionProfile.h"
@@ -23,16 +24,25 @@ ska::Vector2<ska::ScriptPack> ska::LayerEventLoaderTilesetEvent::loadPositioned(
 	auto events = ska::Vector2<ScriptPack>{};
 	events.resize(width, height);
 
+	// By tile : looked up once, the blocks of a map share a few tiles
+	auto byTile = std::unordered_map<Point<int>, ScriptPack>{};
 	for (auto x = 0u; x < width; x++ ) {
 		for (auto y = 0u; y < height; y++) {
 			const auto& b = m_collisionProfile.getBlock(m_layer, x, y);
-			if (b != nullptr) {
+			if (b == nullptr) {
+				continue;
+			}
+			auto found = byTile.find(b->id);
+			if (found == byTile.end()) {
+				found = byTile.emplace(b->id, ScriptPack{}).first;
 				for (const auto& scriptType : allValidScriptTypes) {
-					auto scripts = m_tilesetEvent.getScript(scriptType, b->id);
-					for (const auto& s : scripts) {
-						events[x][y].push_back(s);
+					for (const auto& s : m_tilesetEvent.getScript(scriptType, b->id)) {
+						found->second.push_back(s);
 					}
 				}
+			}
+			if (!found->second.empty()) {
+				events[x][y] = found->second;
 			}
 		}
 	}

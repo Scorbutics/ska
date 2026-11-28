@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "SDLSurface.h"
 #include "Core/Draw/Color.h"
 #include "Core/Draw/Renderer.h"
 #include "TextureData.h"
@@ -15,6 +16,18 @@ void ska::Texture::load(const std::string& id, int r, int g, int b, int a) {
 	finalColor.r = static_cast<Uint8>(r);
 
 	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, EnumTextureType::SPRITE, 0));
+}
+
+void ska::Texture::load(const std::string& id, SDLSurface&& surface, int r, int g, int b, int a) {
+	Color finalColor;
+	finalColor.a = static_cast<Uint8>(a);
+	finalColor.b = static_cast<Uint8>(b);
+	finalColor.g = static_cast<Uint8>(g);
+	finalColor.r = static_cast<Uint8>(r);
+
+	loadFromKey(TextureData(id, finalColor, ska::Rectangle{}, EnumTextureType::SPRITE, 0), [&surface](const TextureData&) {
+		return std::make_shared<SDLTexture>(std::move(surface));
+	});
 }
 
 void ska::Texture::loadAsTarget(const Renderer& renderer, const unsigned int width, const unsigned int height) {
