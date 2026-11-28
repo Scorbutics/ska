@@ -60,6 +60,8 @@ namespace ska {
 
 		void load() override;
 		void setScreenShader(const Shader* shader) override;
+		void setWorldShader(const Shader* shader) override { m_worldShader = shader; }
+		bool hasWorldShader() const override { return m_worldShader != nullptr; }
 		void beginWorld(float zoom) override;
 		void endWorld() override;
 
@@ -76,6 +78,7 @@ namespace ska {
 		SDLWindow& m_window;
 		// Post-processing : the frame is drawn in this texture, then on the screen with the shader
 		const Shader* m_screenShader = nullptr;
+		const Shader* m_worldShader = nullptr;
 		mutable SDL_Texture* m_screenTarget = nullptr;
 		mutable int m_screenTargetWidth = 0;
 		mutable int m_screenTargetHeight = 0;

@@ -81,6 +81,11 @@ namespace ska {
 		// A fragment shader run on the whole screen (post-processing) at each frame, nullptr : none
 		virtual void setScreenShader(const Shader*) {}
 
+		// A fragment shader run on the world when it goes on the screen (the interface over it is not), nullptr : none.
+		// With it the world is drawn in its texture even when it is not zoomed
+		virtual void setWorldShader(const Shader*) {}
+		virtual bool hasWorldShader() const { return false; }
+
 		// The world drawn zoomed (the camera, DrawableContainer::setWorldZoom) : its drawings are done in a smaller texture
 		// (the size of the screen divided by the zoom), stretched on the screen at the end of the world
 		virtual void beginWorld(float) {}

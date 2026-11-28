@@ -165,7 +165,15 @@ void ska::SDLRenderer::endWorld() {
 	m_inWorld = false;
 	const auto& sdl = SDLLibrary::get();
 	sdl.setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
+	// Through the world shader (as it is when it cannot be used)
+	auto* state = m_worldShader != nullptr ? m_worldShader->use(*m_renderer) : nullptr;
+	if (state != nullptr) {
+		sdl.setGPURenderState(*m_renderer, state);
+	}
 	sdl.renderCopy(*m_renderer, *m_worldTarget, &m_worldArea, nullptr);
+	if (state != nullptr) {
+		sdl.setGPURenderState(*m_renderer, nullptr);
+	}
 }
 
 void ska::SDLRenderer::prepareScreenTarget() const {
