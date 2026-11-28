@@ -308,6 +308,11 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		if (blendMode == SDL_BLENDMODE_NONE) {
 			sdl.setTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
 		}
+		auto scaleMode = SDL_SCALEMODE_LINEAR;
+		if (effect.pixelArt) {
+			sdl.getTextureScaleMode(*texture, &scaleMode);
+			sdl.setTextureScaleMode(*texture, SDL_SCALEMODE_PIXELART);
+		}
 		auto* shaderState = effect.shader == nullptr ? nullptr : (effect.shaderParameterCount > 0 ?
 			effect.shader->use(*m_renderer, effect.shaderParameters, std::min(8u, effect.shaderParameterCount) * sizeof(float)) :
 			effect.shader->use(*m_renderer));
@@ -328,6 +333,9 @@ void ska::SDLRenderer::render(const Texture& t, int posX, int posY, Rectangle co
 		}
 		sdl.setTextureColorMod(*texture, red, green, blue);
 		sdl.setTextureAlphaMod(*texture, alpha);
+		if (effect.pixelArt) {
+			sdl.setTextureScaleMode(*texture, scaleMode);
+		}
 		sdl.setTextureBlendMode(*texture, blendMode);
 	}
 }

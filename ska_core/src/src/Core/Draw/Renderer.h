@@ -37,6 +37,9 @@ namespace ska {
 		int offsetY = 0;
 		// Pixels of the texture not drawn at its bottom (its top stays in place) : ex a character standing in tall grass
 		int cropBottom = 0;
+		// Stretched as pixel art : its pixels stay sharp (else smoothed : the transparent pixels and, in a tileset, the
+		// neighbour tiles show as thin lines at the edges)
+		bool pixelArt = false;
 		// A fragment shader for this drawing (Graphic/Shader.h), nullptr : none. "shaderParameters" : its uniforms for this
 		// drawing only (two vec4 at most, "shaderParameterCount" floats), else the uniforms given to the shader are used.
 		// Changing the uniforms between drawings costs a flush of the drawings of the shader
@@ -45,7 +48,7 @@ namespace ska {
 		unsigned int shaderParameterCount = 0;
 
 		bool active() const {
-			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || cropBottom > 0 || shader != nullptr;
+			return red != 255 || green != 255 || blue != 255 || alpha != 255 || flash != 0 || scaleX != 1.F || scaleY != 1.F || offsetX != 0 || offsetY != 0 || cropBottom > 0 || pixelArt || shader != nullptr;
 		}
 	};
 

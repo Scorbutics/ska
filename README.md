@@ -9,6 +9,8 @@ The renderer uses the `gpu` render driver of SDL3 when it can (Vulkan, Metal, Di
 
 For the physics, ska uses **Chipmunk2D** under the _MIT_ license.
 
+A drawing stretched keeps its pixels sharp with `RenderEffect::pixelArt` (else it is smoothed : the transparent pixels and, in a tileset, the neighbour tiles show as thin lines at the edges).
+
 # Shaders
 Fragment shaders run on the drawings (`RenderEffect::shader`, ex: a sprite of an entity with `GraphicComponent::effect`) or on the whole screen (`Renderer::setScreenShader`, post-processing). They need the `gpu` render driver of SDL3 : with another one, the drawings are done without them (a warning is logged).
 
