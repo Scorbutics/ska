@@ -26,10 +26,15 @@ namespace ska {
 		UseItem,
 		NextItem,
 		// A special move (ex : the attack of the bond between a trainer and its Pokemon in a battle)
-		Special
+		Special,
+		// The menu of the game (opened, closed) ; back, cancel (in a menu)
+		Menu,
+		Cancel,
+		// The tools of the developers (ex : the debug panel)
+		Debug
 	};
 
-#define INPUT_MAX_ACTION 20
+#define INPUT_MAX_ACTION 23
 
 	typedef std::bitset<INPUT_MAX_ACTION> InputActionContainer;
 }

@@ -225,3 +225,59 @@ TEST_CASE("[EntityManager] the component type ids are global : each entity manag
 	CHECK(second.getComponent<ComponentTestShared1>(entity).value == 10);
 	CHECK(second.getComponent<ComponentTestShared2>(entity).value == 20);
 }
+
+TEST_CASE("[EntityManager] A component held by several owners") {
+	auto ged = ska::GameEventDispatcher{};
+	auto em = ska::EntityManager{ ged };
+	const auto entity = em.createEntity();
+	em.addComponent<ComponentTest1>(entity, ComponentTest1{ 42 });
+
+	SUBCASE("Held : taken away, kept aside, back as it was when released") {
+		em.hold<ComponentTest1>(entity);
+		CHECK(!em.hasComponent<ComponentTest1>(entity));
+		CHECK(em.held<ComponentTest1>(entity));
+		REQUIRE(em.find<ComponentTest1>(entity) != nullptr);
+		CHECK(em.find<ComponentTest1>(entity)->t == 42);
+		em.release<ComponentTest1>(entity);
+		CHECK(em.hasComponent<ComponentTest1>(entity));
+		CHECK(!em.held<ComponentTest1>(entity));
+		CHECK(em.getComponent<ComponentTest1>(entity).t == 42);
+	}
+
+	SUBCASE("Two owners : back at the last release only") {
+		em.hold<ComponentTest1>(entity);
+		em.hold<ComponentTest1>(entity);
+		em.release<ComponentTest1>(entity);
+		CHECK(!em.hasComponent<ComponentTest1>(entity));
+		em.release<ComponentTest1>(entity);
+		CHECK(em.hasComponent<ComponentTest1>(entity));
+		CHECK(em.getComponent<ComponentTest1>(entity).t == 42);
+	}
+
+	SUBCASE("Released too many times : nothing") {
+		em.release<ComponentTest1>(entity);
+		CHECK(em.hasComponent<ComponentTest1>(entity));
+	}
+
+	SUBCASE("Without the component : nothing to put back") {
+		const auto other = em.createEntity();
+		em.hold<ComponentTest1>(other);
+		CHECK(em.held<ComponentTest1>(other));
+		CHECK(em.find<ComponentTest1>(other) == nullptr);
+		em.release<ComponentTest1>(other);
+		CHECK(!em.hasComponent<ComponentTest1>(other));
+	}
+
+	SUBCASE("Added again while held : that one is kept") {
+		em.hold<ComponentTest1>(entity);
+		em.addComponent<ComponentTest1>(entity, ComponentTest1{ 7 });
+		em.release<ComponentTest1>(entity);
+		CHECK(em.getComponent<ComponentTest1>(entity).t == 7);
+	}
+
+	SUBCASE("The entity removed : its held components are dropped") {
+		em.hold<ComponentTest1>(entity);
+		em.removeEntity(entity);
+		CHECK(!em.held<ComponentTest1>(entity));
+	}
+}

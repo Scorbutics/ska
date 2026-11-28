@@ -4,6 +4,7 @@
 #include <random>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "BytecodeInterpreter/BytecodeScript.h"
 #include "BytecodeInterpreter/Value/BytecodeInterpreterTypes.h"
@@ -30,23 +31,22 @@ namespace ska {
 			// Starts the hooks of an event (declared with ScriptVM::declareEvent) about an entity (hook : function(entity: int))
 			std::size_t emit(const std::string& event, const std::optional<EntityId>& entity);
 
-			// Makes a component type removable by the scripts (disableComponent / enableComponent), under a name
+			// Makes a component type removable by the scripts (disableComponent / enableComponent), under a name : the script
+			// holds it (EntityManager::hold : the game can hold it too, it comes back when every owner released it). A script
+			// disables it once (a second disable does nothing), its enable releases it
 			template <class Component>
 			void registerComponent(const std::string& name) {
-				auto removed = std::make_shared<std::unordered_map<EntityId, Component>>();
+				auto disabled = std::make_shared<std::unordered_set<EntityId>>();
 				auto& entityManager = m_entityManager;
 				m_components[name] = ComponentAccess {
-					[&entityManager, removed](EntityId entity) {
-						if (entityManager.hasComponent<Component>(entity)) {
-							(*removed)[entity] = entityManager.getComponent<Component>(entity);
-							entityManager.removeComponent<Component>(entity);
+					[&entityManager, disabled](EntityId entity) {
+						if (disabled->insert(entity).second) {
+							entityManager.hold<Component>(entity);
 						}
 					},
-					[&entityManager, removed](EntityId entity) {
-						auto component = removed->find(entity);
-						if (component != removed->end()) {
-							entityManager.addComponent<Component>(entity, std::move(component->second));
-							removed->erase(component);
+					[&entityManager, disabled](EntityId entity) {
+						if (disabled->erase(entity) > 0) {
+							entityManager.release<Component>(entity);
 						}
 					}
 				};

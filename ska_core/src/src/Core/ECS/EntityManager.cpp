@@ -94,6 +94,10 @@ void ska::EntityManager::innerRemoveEntity(const EntityId& entity, ECSEvent& ecs
 	}
 
 	m_entities.erase(entity);
+	// Its held components (hold) are gone with it
+	for (auto& [type, pool] : m_held) {
+		pool->drop(entity);
+	}
 
 	m_deletedEntities.push_back(entity);
 

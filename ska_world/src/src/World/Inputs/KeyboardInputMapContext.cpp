@@ -7,7 +7,10 @@ ska::KeyboardInputMapContext::KeyboardInputMapContext(ska::RawInputListener& ril
 
 void ska::KeyboardInputMapContext::buildCodeMap(std::unordered_map<int, InputAction>& codeMap, std::unordered_map<int, InputToggle>& toggles) {
 	
-	codeMap[SDL_SCANCODE_ESCAPE] = Quit;
+	codeMap[SDL_SCANCODE_ESCAPE] = Cancel;
+	codeMap[SDL_SCANCODE_TAB] = Menu;
+	codeMap[SDL_SCANCODE_M] = Menu;
+	codeMap[SDL_SCANCODE_F3] = Debug;
 	toggles[SDL_SCANCODE_LSHIFT] = Run;
 	codeMap[SDL_SCANCODE_RETURN] = DoAction;
 	codeMap[SDL_SCANCODE_SPACE] = Jump;
