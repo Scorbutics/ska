@@ -1,6 +1,10 @@
 #pragma once
 
 namespace ska {
+	// The drawings sorted by their ground line (the characters, the standing tiles of the maps) : by their pixels from the
+	// top of the camera, from this priority (a world of any size : the same priorities ; a drawing a little above the
+	// camera stays over the ones under DepthPriority, ex : the flat tiles, a battleground)
+	constexpr int DepthPriority = 4096;
     //TODO refacto avec DrawableFixedPriority
     class Priorized {
     public:

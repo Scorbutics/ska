@@ -45,8 +45,14 @@ namespace ska {
 		// The same, with uniforms for one drawing (RenderEffect::shaderParameters)
 		SDL_GPURenderState* use(SDL_Renderer& renderer, const void* uniforms, std::size_t size) const;
 
+		// The web (WebGL : no SDL gpu renderer) : the program of "<path>.frag.es" (cmake/SkaShaderEs.cmake), 0 when it
+		// cannot be used ; its uniforms given to it (the texture drawn : texture unit 0, its size in pixels)
+		unsigned int webProgram() const;
+		void applyWebUniforms(float textureWidth, float textureHeight) const;
+
 	private:
 		bool load(SDL_Renderer& renderer) const;
+		bool loadWeb() const;
 		void release() const;
 
 		std::string m_path;
@@ -58,5 +64,11 @@ namespace ska {
 		mutable SDL_GPUDevice* m_device = nullptr;
 		mutable SDL_GPUShader* m_shader = nullptr;
 		mutable SDL_GPURenderState* m_state = nullptr;
+		// The web : the program, the uniforms of the block (their GL location, type : 1 .. 4 floats, their std140 offset)
+		struct WebUniform { int location; int floats; std::size_t offset; };
+		mutable unsigned int m_webProgram = 0;
+		mutable int m_webTexture = -1;
+		mutable int m_webTextureSize = -1;
+		mutable std::vector<WebUniform> m_webUniforms;
 	};
 }

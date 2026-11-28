@@ -6,6 +6,7 @@
 #include "TileAnimation.h"
 #include "Base/Containers/Vector2.h"
 #include "Core/Draw/DrawableFixedPriority.h"
+#include "Core/Priorized.h"
 #include "Core/Point.h"
 #include "Core/Rectangle.h"
 
@@ -36,6 +37,8 @@ namespace ska {
 			bool empty() const { return m_tiles.empty(); }
 			void setCamera(const Rectangle& camera) { m_camera = camera; }
 			void render(Renderer& renderer) const override;
+			// Its ground line in the world (its priority : from the top of the camera)
+			int ground = 0;
 		private:
 			const Texture* m_tileset;
 			unsigned int m_blockSize;

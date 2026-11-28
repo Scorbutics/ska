@@ -5,6 +5,7 @@
 #include "CameraSystem.h"
 #include "Core/Draw/DrawableContainer.h"
 #include "GraphicSystem.h"
+#include "Core/Priorized.h"
 #include "../PositionnedGraphicDrawable.h"
 #include "Core/ECS/Basics/Graphic/DialogComponent.h"
 #include "Base/Values/Numbers/NumberUtils.h"
@@ -45,14 +46,16 @@ void ska::GraphicSystem::refresh(unsigned int) {
 			const auto step = static_cast<long>(gc.sortStep);
 			sortY = (pos.y >= 0 ? pos.y / step : -((-pos.y + step - 1) / step)) * step;
 		}
-		const auto feet = sortY + hc.yOffset + static_cast<long>(hc.height);
+		// (from the top of the camera : Priorized.h DepthPriority)
+		const auto feet = sortY + hc.yOffset + static_cast<long>(hc.height) - camera.y + DepthPriority;
+		const auto depthY = absPos.y - camera.y + DepthPriority;
 		auto effect = gc.effect;
 		effect.cropBottom = std::max(effect.cropBottom, gc.cropBottom);
 
 		for (auto& sprite : gc.sprites) {
-			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
+			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(depthY), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min(); 
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : depthY + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			m_pgd.emplace_back(sprite, relPosX, relPosY, priority, m_topLayerPriority);
 			m_pgd.back().setEffect(effect);
 			if(!NumberUtils::isLowValue(pos.rotationY, 0.01) || !NumberUtils::isLowValue(pos.rotationX, 0.01)) {
@@ -62,9 +65,9 @@ void ska::GraphicSystem::refresh(unsigned int) {
 
 		for (auto& sprite : gc.animatedSprites) {
 			sprite.update();
-			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(absPos.y), m_topLayerPriority);
+			m_topLayerPriority = NumberUtils::maximum<int>(static_cast<int>(depthY), m_topLayerPriority);
 			constexpr auto minInt = std::numeric_limits<int>::min();
-			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : absPos.y + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
+			const auto priority = gc.desiredPriority > minInt ? gc.desiredPriority : spritePriority(hc.height > 0 ? feet : depthY + static_cast<int>(sprite.getHeight()), pos.z, camera.h);
 			const PositionnedGraphicDrawable pgd( sprite, relPosX, relPosY, priority, m_topLayerPriority );
 			m_pgd.push_back(pgd);
 			m_pgd.back().setEffect(effect);

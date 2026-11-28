@@ -165,6 +165,11 @@ void ska::SDLRenderer::endWorld() {
 	m_inWorld = false;
 	const auto& sdl = SDLLibrary::get();
 	sdl.setRenderTarget(*m_renderer, m_frameInTarget ? m_screenTarget : nullptr);
+#ifdef __EMSCRIPTEN__
+	if (m_worldShader != nullptr && drawThroughWeb(*m_worldTarget, &m_worldArea, *m_worldShader, m_frameInTarget ? m_screenTarget : nullptr)) {
+		return;
+	}
+#endif
 	// Through the world shader (as it is when it cannot be used)
 	auto* state = m_worldShader != nullptr ? m_worldShader->use(*m_renderer) : nullptr;
 	if (state != nullptr) {
@@ -197,6 +202,14 @@ void ska::SDLRenderer::update() const {
 	const auto& sdl = SDLLibrary::get();
 	if (m_frameInTarget) {
 		// The frame, drawn in the texture, goes on the screen through the shader (as it is when it cannot be used)
+#ifdef __EMSCRIPTEN__
+		sdl.setRenderTarget(*m_renderer, nullptr);
+		renderClear();
+		const auto web = m_screenShader != nullptr && drawThroughWeb(*m_screenTarget, nullptr, *m_screenShader, nullptr);
+		if (!web) {
+			sdl.renderCopy(*m_renderer, *m_screenTarget, nullptr, nullptr);
+		}
+#else
 		auto* state = m_screenShader != nullptr ? m_screenShader->use(*m_renderer) : nullptr;
 		sdl.setRenderTarget(*m_renderer, nullptr);
 		renderClear();
@@ -207,6 +220,7 @@ void ska::SDLRenderer::update() const {
 		if (state != nullptr) {
 			sdl.setGPURenderState(*m_renderer, nullptr);
 		}
+#endif
 	}
 	takeConsoleShots();
 	renderPresent();
@@ -227,7 +241,13 @@ void ska::SDLRenderer::load() {
 SDL_Texture* ska::SDLRenderer::createTextureTarget(const unsigned int width, const unsigned int height) const {
 	assert(m_renderer != nullptr && "Renderer is not loaded");
 	const auto& sdl = ska::SDLLibrary::get();
-	auto* texture = sdl.createTexture(*m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, static_cast<int>(width), static_cast<int>(height));
+#ifdef __EMSCRIPTEN__
+	// The bytes of WebGL (RGBA in memory) : sampled as they are by the shaders (drawThroughWeb)
+	constexpr auto format = SDL_PIXELFORMAT_ABGR8888;
+#else
+	constexpr auto format = SDL_PIXELFORMAT_RGBA8888;
+#endif
+	auto* texture = sdl.createTexture(*m_renderer, format, SDL_TEXTUREACCESS_TARGET, static_cast<int>(width), static_cast<int>(height));
 	if (texture != nullptr) {
 		// SDL3 does not clear a new texture (its memory can hold old drawings) : it starts transparent
 		auto* previous = sdl.getRenderTarget(*m_renderer);
@@ -393,3 +413,72 @@ void ska::SDLRenderer::takeConsoleShots() const {
 		sdl.freeSurface(frame);
 	}
 }
+
+#ifdef __EMSCRIPTEN__
+#include <GLES2/gl2.h>
+
+bool ska::SDLRenderer::drawThroughWeb(SDL_Texture& texture, const SDL_Rect* area, const Shader& shader, SDL_Texture* target) const {
+	const auto program = shader.webProgram();
+	if (program == 0) {
+		return false;
+	}
+	// What SDL was given is drawn first ; SDL sets its state again at its next drawing (its program, its texture, its
+	// blending, its viewport, its clipping : SDL_FlushRenderer forgets them)
+	SDL_FlushRenderer(m_renderer);
+	const auto glTexture = static_cast<GLuint>(SDL_GetNumberProperty(SDL_GetTextureProperties(&texture), SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_NUMBER, 0));
+	if (glTexture == 0) {
+		return false;
+	}
+	auto textureWidth = 0.F, textureHeight = 0.F;
+	SDL_GetTextureSize(&texture, &textureWidth, &textureHeight);
+	auto width = 0, height = 0;
+	if (target != nullptr) {
+		auto w = 0.F, h = 0.F;
+		SDL_GetTextureSize(target, &w, &h);
+		width = static_cast<int>(w);
+		height = static_cast<int>(h);
+	} else {
+		SDL_GetCurrentRenderOutputSize(m_renderer, &width, &height);
+	}
+	const auto source = area != nullptr ? *area : SDL_Rect{ 0, 0, static_cast<int>(textureWidth), static_cast<int>(textureHeight) };
+	const auto u0 = static_cast<float>(source.x) / textureWidth;
+	const auto u1 = static_cast<float>(source.x + source.w) / textureWidth;
+	// The textures of SDL hold their first row at v = 0 (the top of the image) ; the window has its top at y = 1, a
+	// texture target (SDL draws in it upside down) at y = -1
+	const auto vTop = static_cast<float>(source.y) / textureHeight;
+	const auto vBottom = static_cast<float>(source.y + source.h) / textureHeight;
+	const auto top = target != nullptr ? -1.F : 1.F;
+	const float vertices[] = {
+		-1.F, top, u0, vTop,
+		1.F, top, u1, vTop,
+		-1.F, -top, u0, vBottom,
+		1.F, -top, u1, vBottom,
+	};
+	static GLuint buffer = 0;
+	if (buffer == 0) {
+		glGenBuffers(1, &buffer);
+	}
+	glViewport(0, 0, width, height);
+	glDisable(GL_SCISSOR_TEST);
+	glDisable(GL_BLEND);
+	glUseProgram(program);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, glTexture);
+	shader.applyWebUniforms(textureWidth, textureHeight);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STREAM_DRAW);
+	// The attributes of SDL : its color (1) left out of this drawing, given back after
+	glDisableVertexAttribArray(1);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<const void*>(2 * sizeof(float)));
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glEnableVertexAttribArray(1);
+	return true;
+}
+#else
+bool ska::SDLRenderer::drawThroughWeb(SDL_Texture&, const SDL_Rect*, const Shader&, SDL_Texture*) const {
+	return false;
+}
+#endif

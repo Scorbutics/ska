@@ -31,7 +31,7 @@ ska::LayerDepthRenderable::LayerDepthRenderable(Vector2<TileAnimation*> blocks, 
 	m_rows.reserve(lowest);
 	for (auto row = 0u; row < lowest; row++) {
 		m_rows.emplace_back(tileset, blockSize);
-		m_rows.back().setPriority(basePriority + origin.y + static_cast<int>(row * blockSize));
+		m_rows.back().ground = basePriority + origin.y + static_cast<int>(row * blockSize);
 	}
 	for (auto y = 0u; y < height; y++) {
 		for (auto x = 0u; x < width; x++) {
@@ -48,6 +48,8 @@ void ska::LayerDepthRenderable::graphicUpdate(const Rectangle& cameraPos, Drawab
 	for (auto& row : m_rows) {
 		if (!row.empty()) {
 			row.setCamera(cameraPos);
+			// From the top of the camera, as the characters (Priorized.h DepthPriority)
+			row.setPriority(row.ground - cameraPos.y + DepthPriority);
 			drawables.add(row);
 		}
 	}

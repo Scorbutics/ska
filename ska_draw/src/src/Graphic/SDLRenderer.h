@@ -77,6 +77,10 @@ namespace ska {
 		Color m_currentRenderColor;
 		SDLWindow& m_window;
 		// Post-processing : the frame is drawn in this texture, then on the screen with the shader
+		// The web (WebGL) : a texture (its area, all of it : nullptr) drawn over the whole target of the renderer through a
+		// shader (Shader::webProgram) ; false when it cannot be (drawn as it is then)
+		bool drawThroughWeb(SDL_Texture& texture, const SDL_Rect* area, const Shader& shader, SDL_Texture* target) const;
+
 		const Shader* m_screenShader = nullptr;
 		const Shader* m_worldShader = nullptr;
 		mutable SDL_Texture* m_screenTarget = nullptr;
